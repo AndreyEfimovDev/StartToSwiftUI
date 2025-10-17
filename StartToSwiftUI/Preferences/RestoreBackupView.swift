@@ -16,7 +16,7 @@ struct RestoreBackupView: View {
     
     
     @State var isBackuped: Bool = false
-    @State var isPerformeBackup: Bool = false
+    @State var isPerformBackup: Bool = false
     @State private var postCount: Int = 0
     
     var body: some View {
@@ -30,43 +30,17 @@ struct RestoreBackupView: View {
             
             """)
             .managingPostsTextFormater()
-//            .font(.callout)
-//            .foregroundStyle(Color.mycolor.accent)
-//            .multilineTextAlignment(.center)
-//            .padding(20)
-//            .frame(maxWidth: .infinity)
-//            .background(.ultraThinMaterial)
-//            .clipShape(RoundedRectangle(cornerRadius: 15))
-//            .overlay(
-//                RoundedRectangle(cornerRadius: 15)
-//                    .stroke(Color.mycolor.accent.opacity(0.3), lineWidth: 1)
-//            )
-            
+
             CapsuleButtonView(
                 primaryTitle: "Restore Backup",
                 secondaryTitle: "\(postCount) Posts Restored!",
                 isToChangeTitile: isBackuped) {
-                    isPerformeBackup.toggle()
+                    isPerformBackup.toggle()
                 }
-            
-//            Button {
-//                isPerformeBackup = true
-//            } label: {
-//                Text(isBackuped ? "Backup Restored!" : "Restore Backup")
-//                    .font(.body)
-//                    .fontWeight(.semibold)
-//                    .foregroundColor(Color.mycolor.background)
-//                    .frame(height: 55)
-//                    .frame(maxWidth: .infinity)
-//                    .background(isBackuped ? Color.mycolor.green : Color.mycolor.blue)
-//                    .cornerRadius(30)
-//                    .padding(.top, 30)
-//
-//            }
             .disabled(isBackuped)
             .padding(.top, 30)
             .fileImporter(
-                isPresented: $isPerformeBackup,
+                isPresented: $isPerformBackup,
                 allowedContentTypes: [.json],
                 allowsMultipleSelection: false
             ) { result in
