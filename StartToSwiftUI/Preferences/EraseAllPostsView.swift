@@ -83,7 +83,7 @@ struct EraseAllPostsView: View {
         .padding(.top, 30)
         .padding(30)
         .onAppear {
-            HapticManager.shared.notification(type: .warning)
+            hapticManager.notification(type: .warning)
         }
     }
 }
