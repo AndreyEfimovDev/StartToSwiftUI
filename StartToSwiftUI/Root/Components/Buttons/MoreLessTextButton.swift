@@ -20,7 +20,7 @@ struct MoreLessTextButton: View {
             Text(showText ? "less... \(Image(systemName: "arrow.up.to.line.compact"))" : "...more \(Image(systemName: "arrow.down.to.line.compact"))")
                 .font(.subheadline)
                 .fontWeight(.semibold)
-                .foregroundStyle(Color.mycolor.secondaryText)
+                .foregroundStyle(Color.mycolor.mySecondaryText)
                 .frame(minWidth: 60, alignment: .leading)
                 .padding(8)
         } // label

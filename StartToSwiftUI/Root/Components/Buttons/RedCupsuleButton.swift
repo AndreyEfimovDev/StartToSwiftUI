@@ -18,8 +18,8 @@ struct RedCupsuleButton: View {
             .fontWeight(.semibold)
             .frame(height: 55)
             .frame(maxWidth: .infinity)
-            .background(Color.mycolor.red)
-            .foregroundColor(Color.mycolor.background)
+            .background(Color.mycolor.myRed)
+            .foregroundColor(Color.mycolor.myBackground)
             .cornerRadius(30)
             .padding(.horizontal, 55)
     }

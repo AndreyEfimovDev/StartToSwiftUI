@@ -14,9 +14,9 @@ struct StartToSwiftUIApp: App {
     @StateObject private var vm = PostsViewModel()
     
     init() { // to set a colour for the magnifying class in the search bar
-        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor : UIColor(Color.mycolor.accent)]
-        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor(Color.mycolor.accent)]
-        UINavigationBar.appearance().tintColor = UIColor(Color.mycolor.accent)
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor : UIColor(Color.mycolor.myAccent)]
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor(Color.mycolor.myAccent)]
+        UINavigationBar.appearance().tintColor = UIColor(Color.mycolor.myAccent)
         UITableView.appearance().backgroundColor = UIColor.clear
     }
     

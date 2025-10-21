@@ -26,10 +26,10 @@ struct FiltersSheetView: View {
         VStack {
             ZStack {
                 Capsule()
-                    .fill(Color.mycolor.background)
+                    .fill(Color.mycolor.myBackground)
                     .overlay(
                         Capsule()
-                            .stroke(Color.mycolor.accent.opacity(0.5), lineWidth: 1)
+                            .stroke(Color.mycolor.myAccent.opacity(0.5), lineWidth: 1)
                     )
                     .frame(width: 100, height: 3)
                     .frame(height: 30, alignment: .top)
@@ -65,7 +65,7 @@ struct FiltersSheetView: View {
                 resetAllFiltersButton
                 resetAllFiltersAndExitButton
             }
-            .foregroundStyle(Color.mycolor.accent)
+            .foregroundStyle(Color.mycolor.myAccent)
             .padding(.top, -40)
             .padding()
             Spacer()
@@ -90,9 +90,9 @@ struct FiltersSheetView: View {
                 allItems: StudyLevel.allCases,
                 titleForCase: { $0.displayName },
                 selectedFont: selectedFont,
-                selectedTextColor: Color.mycolor.background,
-                unselectedTextColor: Color.mycolor.accent,
-                selectedBackground: Color.mycolor.blue,
+                selectedTextColor: Color.mycolor.myBackground,
+                unselectedTextColor: Color.mycolor.myAccent,
+                selectedBackground: Color.mycolor.myBlue,
                 unselectedBackground: .clear,
                 showNilOption: true,
                 nilTitle: "All"
@@ -126,9 +126,9 @@ struct FiltersSheetView: View {
                 allItems: FavoriteChoice.allCases,
                 titleForCase: { $0.displayName },
                 selectedFont: selectedFont,
-                selectedTextColor: Color.mycolor.background,
-                unselectedTextColor: Color.mycolor.accent,
-                selectedBackground: Color.mycolor.blue,
+                selectedTextColor: Color.mycolor.myBackground,
+                unselectedTextColor: Color.mycolor.myAccent,
+                selectedBackground: Color.mycolor.myBlue,
                 unselectedBackground: .clear,
                 showNilOption: true,
                 nilTitle: "All"
@@ -161,9 +161,9 @@ struct FiltersSheetView: View {
                 allItems: LanguageOptions.allCases,
                 titleForCase: { $0.displayName },
                 selectedFont: selectedFont,
-                selectedTextColor: Color.mycolor.background,
-                unselectedTextColor: Color.mycolor.accent,
-                selectedBackground: Color.mycolor.blue,
+                selectedTextColor: Color.mycolor.myBackground,
+                unselectedTextColor: Color.mycolor.myAccent,
+                selectedBackground: Color.mycolor.myBlue,
                 unselectedBackground: .clear,
                 showNilOption: true,
                 nilTitle: "All"
@@ -183,9 +183,9 @@ struct FiltersSheetView: View {
                 allItems: Platform.allCases,
                 titleForCase: { $0.displayName },
                 selectedFont: selectedFont,
-                selectedTextColor: Color.mycolor.background,
-                unselectedTextColor: Color.mycolor.accent,
-                selectedBackground: Color.mycolor.blue,
+                selectedTextColor: Color.mycolor.myBackground,
+                unselectedTextColor: Color.mycolor.myAccent,
+                selectedBackground: Color.mycolor.myBlue,
                 unselectedBackground: .clear,
                 showNilOption: true,
                 nilTitle: "All"
@@ -221,9 +221,9 @@ struct FiltersSheetView: View {
                     allItems: list,
                     titleForCase: { $0 },
                     selectedFont: selectedFont,
-                    selectedTextColor: Color.mycolor.background,
-                    unselectedTextColor: Color.mycolor.accent,
-                    selectedBackground: Color.mycolor.blue,
+                    selectedTextColor: Color.mycolor.myBackground,
+                    unselectedTextColor: Color.mycolor.myAccent,
+                    selectedBackground: Color.mycolor.myBlue,
                     unselectedBackground: .clear,
                     showNilOption: true,
                     nilTitle: "All"
@@ -243,7 +243,7 @@ struct FiltersSheetView: View {
         } label: {
             Text("Reset All Filters")
                 .font(.headline)
-                .foregroundColor(Color.mycolor.red)
+                .foregroundColor(Color.mycolor.myRed)
                 .padding(.vertical, 8)
                 .frame(height: 55)
                 .frame(maxWidth: .infinity)
@@ -251,7 +251,7 @@ struct FiltersSheetView: View {
                 .clipShape(Capsule())
                 .overlay(
                     Capsule()
-                        .stroke(Color.mycolor.blue, lineWidth: 1)
+                        .stroke(Color.mycolor.myBlue, lineWidth: 1)
                 )
         }
         .padding(.horizontal, 55)
@@ -268,7 +268,7 @@ struct FiltersSheetView: View {
         } label: {
             Text("Reset All Filters and Exit")
                 .font(.headline)
-                .foregroundColor(Color.mycolor.red)
+                .foregroundColor(Color.mycolor.myRed)
                 .padding(.vertical, 8)
                 .frame(height: 55)
                 .frame(maxWidth: .infinity)
@@ -276,7 +276,7 @@ struct FiltersSheetView: View {
                 .clipShape(Capsule())
                 .overlay(
                     Capsule()
-                        .stroke(Color.mycolor.blue, lineWidth: 1)
+                        .stroke(Color.mycolor.myBlue, lineWidth: 1)
                 )
         }
         .padding(.horizontal, 55)
@@ -288,7 +288,7 @@ fileprivate struct FiltersSheetPreview: View {
     var body: some View {
         
         ZStack {
-            Color.mycolor.accent
+            Color.mycolor.myAccent
                 .ignoresSafeArea()
             FiltersSheetView(
                 isFilterButtonPressed: .constant(true)

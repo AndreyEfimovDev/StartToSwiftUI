@@ -20,11 +20,11 @@ struct ShareButton: View {
                     VStack(spacing: 8) {
                                 Image(systemName: "square.and.arrow.up")
                                     .font(.title)
-                                    .foregroundStyle(Color.mycolor.accent)
+                                    .foregroundStyle(Color.mycolor.myAccent)
 
                                 Text("Share")
                                     .font(.caption)
-                                    .foregroundStyle(Color.mycolor.secondaryText)
+                                    .foregroundStyle(Color.mycolor.mySecondaryText)
                             }
                     .padding(8)
                     .padding(.horizontal, 14)
@@ -35,13 +35,13 @@ struct ShareButton: View {
             else {
                 Text("File is no found")
                     .font(.headline)
-                    .foregroundStyle(Color.mycolor.red)
+                    .foregroundStyle(Color.mycolor.myRed)
                     .frame(width: 200, height: 100)
                     .background(.ultraThinMaterial)
                     .cornerRadius(15)
                     .overlay {
                         RoundedRectangle(cornerRadius: 15)
-                            .stroke(Color.mycolor.accent.opacity(0.1), lineWidth: 1)
+                            .stroke(Color.mycolor.myAccent.opacity(0.1), lineWidth: 1)
                     }
             }
         }

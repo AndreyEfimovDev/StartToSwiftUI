@@ -17,15 +17,15 @@ extension Color {
 
 struct MyColors {
     
-    let accent = Color("AccentColor")
-    let background = Color("BackgroundColor")
-    let blue = Color("BlueColor")
-    let green = Color("GreenColor")
-    let yellow = Color("YellowColor")
-    let middle = Color("Middle")
-    let orange = Color("OrangeColor")
-    let red = Color("RedColor")
-    let secondaryText = Color("SecondaryTextColor")
+    let myAccent = Color("AppAccentColor")
+    let myBackground = Color("AppBackgroundColor")
+    let myBlue = Color("AppBlueColor")
+    let myGreen = Color("AppGreenColor")
+    let myYellow = Color("AppYellowColor")
+    let middle = Color("AppMiddle")
+    let myOrange = Color("AppOrangeColor")
+    let myRed = Color("AppRedColor")
+    let mySecondaryText = Color("AppSecondaryTextColor")
 }
 
 

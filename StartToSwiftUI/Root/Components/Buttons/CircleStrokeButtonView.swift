@@ -27,8 +27,8 @@ struct CircleStrokeButtonView: View {
         iconName: String,
         iconFont: Font = .headline,
         isIconColorToChange: Bool = false,
-        imageColorPrimary: Color = Color.mycolor.secondaryText,
-        imageColorSecondary: Color = Color.mycolor.blue,
+        imageColorPrimary: Color = Color.mycolor.mySecondaryText,
+        imageColorSecondary: Color = Color.mycolor.myBlue,
         buttonBackground: Color = .clear,
         widthIn: CGFloat = 30,
         heightIn: CGFloat = 30,
@@ -80,14 +80,14 @@ struct CircleStrokeButtonView: View {
                 CircleStrokeButtonView(iconName: "lines.measurement.horizontal") {
                     
                 }
-                CircleStrokeButtonView(iconName: "plus", isIconColorToChange: true, imageColorPrimary: Color.mycolor.blue, imageColorSecondary: Color.mycolor.red) {
+                CircleStrokeButtonView(iconName: "plus", isIconColorToChange: true, imageColorPrimary: Color.mycolor.myBlue, imageColorSecondary: Color.mycolor.myRed) {
                     
                 }
-                CircleStrokeButtonView(iconName: "plus", isIconColorToChange: false, imageColorPrimary: Color.mycolor.blue, imageColorSecondary: Color.mycolor.red) {
+                CircleStrokeButtonView(iconName: "plus", isIconColorToChange: false, imageColorPrimary: Color.mycolor.myBlue, imageColorSecondary: Color.mycolor.myRed) {
                     
                 }
                 
-                CircleStrokeButtonView(iconName: "arrow.up", isIconColorToChange: false, imageColorPrimary: Color.mycolor.blue, imageColorSecondary: Color.mycolor.red, widthIn: 55, heightIn: 55) {
+                CircleStrokeButtonView(iconName: "arrow.up", isIconColorToChange: false, imageColorPrimary: Color.mycolor.myBlue, imageColorSecondary: Color.mycolor.myRed, widthIn: 55, heightIn: 55) {
                     
                 }
                 

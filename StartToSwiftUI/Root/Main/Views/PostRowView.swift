@@ -27,7 +27,7 @@ struct PostRowView: View {
                 author
                 level
             }
-            .foregroundStyle(Color.mycolor.accent)
+            .foregroundStyle(Color.mycolor.myAccent)
             .padding(.horizontal, 16)
         }
         .padding(.vertical, 4)
@@ -49,7 +49,7 @@ struct PostRowView: View {
                 .lineLimit(1)
             Spacer()
             Image(systemName: "star.fill")
-                .foregroundStyle(post.favoriteChoice == .yes ? Color.mycolor.yellow : Color.mycolor.secondaryText)
+                .foregroundStyle(post.favoriteChoice == .yes ? Color.mycolor.myYellow : Color.mycolor.mySecondaryText)
         }
     }
     

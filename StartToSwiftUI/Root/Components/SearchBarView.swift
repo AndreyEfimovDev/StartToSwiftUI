@@ -18,10 +18,10 @@ struct SearchBarView: View {
         HStack {
             Image(systemName: "magnifyingglass")
                 .foregroundStyle(
-                    searchText.isEmpty ? Color.mycolor.secondaryText : Color.mycolor.accent
+                    searchText.isEmpty ? Color.mycolor.mySecondaryText : Color.mycolor.myAccent
                 )
             TextField("Search here ...", text: $searchText)
-                .foregroundStyle(Color.mycolor.accent)
+                .foregroundStyle(Color.mycolor.myAccent)
                 .autocorrectionDisabled(true)
                 .frame(height: isFocusedOnSearchBar ? 40 : 20)
                 .focused($isFocusedOnSearchBar)
@@ -29,7 +29,7 @@ struct SearchBarView: View {
                 .overlay(
                     Image(systemName: "xmark")
                         .imageScale(.large)
-                        .foregroundStyle(Color.mycolor.red)
+                        .foregroundStyle(Color.mycolor.myRed)
                         .frame(width: 55, height: isFocusedOnSearchBar ? 55 : 35)
                         .background(.black.opacity(0.001))
                         .offset(x: 8)
@@ -49,7 +49,7 @@ struct SearchBarView: View {
 //                    .fill(.ultraThickMaterial)
                 Capsule()
                     .stroke(
-                        searchText.isEmpty ? Color.mycolor.accent.opacity(0.3) : Color.mycolor.accent,
+                        searchText.isEmpty ? Color.mycolor.myAccent.opacity(0.3) : Color.mycolor.myAccent,
                         lineWidth: 1
                     )
             }

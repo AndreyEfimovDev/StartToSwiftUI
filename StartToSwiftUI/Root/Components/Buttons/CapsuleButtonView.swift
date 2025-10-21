@@ -19,8 +19,8 @@ struct CapsuleButtonView: View {
     init(
         primaryTitle: String,
         secondaryTitle: String = "",
-        buttonColorPrimary: Color = Color.mycolor.blue,
-        buttonColorSecondary: Color = Color.mycolor.green,
+        buttonColorPrimary: Color = Color.mycolor.myBlue,
+        buttonColorSecondary: Color = Color.mycolor.myGreen,
         isToChangeTitile: Bool = false,
         action: @escaping () -> Void
     ) {
@@ -40,7 +40,7 @@ struct CapsuleButtonView: View {
             Text(isToChangeTitile ? secondaryTitle : primaryTitle)
                 .font(.body)
                 .fontWeight(.semibold)
-                .foregroundColor(Color.mycolor.background)
+                .foregroundColor(Color.mycolor.myBackground)
                 .frame(height: 55)
                 .frame(maxWidth: .infinity)
                 .background(isToChangeTitile ? buttonColorSecondary : buttonColorPrimary, in: .capsule)

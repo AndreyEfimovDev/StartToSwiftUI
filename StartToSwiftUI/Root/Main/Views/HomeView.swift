@@ -166,7 +166,7 @@ struct HomeView: View {
                                         print("Favourite button tapped for post: \(post.title)")
                                         vm.favoriteToggle(post: post)
                                     }
-                                    .tint(post.favoriteChoice == .yes ? Color.mycolor.secondaryText : Color.mycolor.yellow)
+                                    .tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondaryText : Color.mycolor.myYellow)
                                 } //swipeActions
                         } // ForEach
                     } // List
@@ -176,7 +176,7 @@ struct HomeView: View {
                         CircleStrokeButtonView(
                             iconName: "control", // control arrow.up
                             iconFont: .title,
-                            imageColorPrimary: Color.mycolor.blue,
+                            imageColorPrimary: Color.mycolor.myBlue,
                             widthIn: 55,
                             heightIn: 55) {
                                 withAnimation {
