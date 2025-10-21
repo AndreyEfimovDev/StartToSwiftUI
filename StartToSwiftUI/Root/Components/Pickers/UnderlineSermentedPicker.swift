@@ -94,8 +94,8 @@ fileprivate struct UnderlineSermentedPickerPreview: View {
                     selection: $theme,
                     allItems: Theme.allCases,
                     titleForCase: { $0.displayName },
-                    selectedTextColor: Color.mycolor.blue,
-                    unselectedTextColor: Color.mycolor.secondaryText,
+                    selectedTextColor: Color.mycolor.myBlue,
+                    unselectedTextColor: Color.mycolor.mySecondaryText,
                     showNilOption: true,
                     nilTitle: "None"
                 )

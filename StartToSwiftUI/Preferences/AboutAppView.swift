@@ -74,7 +74,7 @@ struct AboutAppView: View {
                 .padding(.horizontal)
                 Spacer()
             }
-            .foregroundStyle(Color.mycolor.accent)
+            .foregroundStyle(Color.mycolor.myAccent)
             .navigationTitle("About App")
         }
     }

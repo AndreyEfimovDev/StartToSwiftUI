@@ -66,8 +66,8 @@ struct EraseAllPostsView: View {
             CapsuleButtonView(
                 primaryTitle: "Erase All Posts",
                 secondaryTitle: "\(postCount) Posts Erased!",
-                buttonColorPrimary: Color.mycolor.red,
-                buttonColorSecondary: Color.mycolor.green,
+                buttonColorPrimary: Color.mycolor.myRed,
+                buttonColorSecondary: Color.mycolor.myGreen,
                 isToChangeTitile: isDeleted) {
                     vm.eraseAllPosts{
                         isDeleted.toggle()

@@ -31,8 +31,8 @@ struct ManagingPostsView: View {
             CircleStrokeButtonView(
                 iconName: "xmark",
                 isIconColorToChange: true,
-                imageColorPrimary: Color.mycolor.blue,
-                imageColorSecondary: Color.mycolor.red) {
+                imageColorPrimary: Color.mycolor.myBlue,
+                imageColorSecondary: Color.mycolor.myRed) {
                     action()
                 }
                 .padding(8)
@@ -49,10 +49,10 @@ struct ManagingPostsView: View {
                     } label: {
                         HStack(spacing: 8) {
                             Text("Load Persisted Posts")
-                                .foregroundColor(Color.mycolor.accent)
+                                .foregroundColor(Color.mycolor.myAccent)
                             Spacer()
                             Image(systemName: "icloud.and.arrow.down")
-                                .foregroundStyle(Color.mycolor.orange)
+                                .foregroundStyle(Color.mycolor.myOrange)
                         }
                         .padding()
                         .font(.headline)
@@ -61,7 +61,7 @@ struct ManagingPostsView: View {
                         .clipShape(Capsule())
                         .overlay(
                             Capsule()
-                                .stroke(Color.mycolor.blue, lineWidth: 1)
+                                .stroke(Color.mycolor.myBlue, lineWidth: 1)
                         )
                     }
                     
@@ -70,10 +70,10 @@ struct ManagingPostsView: View {
                     } label: {
                         HStack(spacing: 8) {
                             Text("Share/Store Posts")
-                                .foregroundColor(Color.mycolor.accent)
+                                .foregroundColor(Color.mycolor.myAccent)
                             Spacer()
                             Image(systemName: "square.and.arrow.up")
-                                .foregroundStyle(Color.mycolor.blue)
+                                .foregroundStyle(Color.mycolor.myBlue)
                         }
                         .padding()
                         .font(.headline)
@@ -82,7 +82,7 @@ struct ManagingPostsView: View {
                         .clipShape(Capsule())
                         .overlay(
                             Capsule()
-                                .stroke(Color.mycolor.blue, lineWidth: 1)
+                                .stroke(Color.mycolor.myBlue, lineWidth: 1)
                         )
                     }
                     
@@ -117,10 +117,10 @@ struct ManagingPostsView: View {
                     } label: {
                         HStack(spacing: 8) {
                             Text("Restore Backup")
-                                .foregroundColor(Color.mycolor.accent)
+                                .foregroundColor(Color.mycolor.myAccent)
                             Spacer()
                             Image(systemName: "tray.and.arrow.up.fill")
-                                .foregroundStyle(Color.mycolor.green)
+                                .foregroundStyle(Color.mycolor.myGreen)
                         }
                         .padding()
                         .font(.headline)
@@ -129,7 +129,7 @@ struct ManagingPostsView: View {
                         .clipShape(Capsule())
                         .overlay(
                             Capsule()
-                                .stroke(Color.mycolor.blue, lineWidth: 1)
+                                .stroke(Color.mycolor.myBlue, lineWidth: 1)
                         )
                     }
                     
@@ -141,10 +141,10 @@ struct ManagingPostsView: View {
                         
                         HStack(spacing: 8) {
                             Text("Erase All Posts")
-                                .foregroundColor(Color.mycolor.accent)
+                                .foregroundColor(Color.mycolor.myAccent)
                             Spacer()
                             Image(systemName: "trash")
-                                .foregroundStyle(Color.mycolor.red)
+                                .foregroundStyle(Color.mycolor.myRed)
                         }
                         .padding()
                         .font(.headline)
@@ -153,7 +153,7 @@ struct ManagingPostsView: View {
                         .clipShape(Capsule())
                         .overlay(
                             Capsule()
-                                .stroke(Color.mycolor.blue, lineWidth: 1)
+                                .stroke(Color.mycolor.myBlue, lineWidth: 1)
                         )
                     }
                     

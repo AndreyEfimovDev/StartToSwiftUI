@@ -58,7 +58,7 @@ struct PostDetailsView: View {
                     )
                     .opacity(validPost.additionalText.isEmpty ? 0 : 1)
             }
-            .foregroundStyle(Color.mycolor.accent)
+            .foregroundStyle(Color.mycolor.myAccent)
             .padding(.top, 15)
             .padding(.horizontal)
             .navigationBarBackButtonHidden(true)
@@ -75,7 +75,7 @@ struct PostDetailsView: View {
                     ShareLink(item: validPost.urlString) {
                         Image(systemName: "square.and.arrow.up")
                             .font(.title2)
-                            .foregroundStyle(Color.mycolor.accent)
+                            .foregroundStyle(Color.mycolor.myAccent)
                     }
                 }
                 ToolbarItemGroup(placement: .topBarTrailing) {
@@ -83,7 +83,7 @@ struct PostDetailsView: View {
                         iconName: validPost.favoriteChoice == .yes ? "star.fill" : "star",
                         iconFont: .headline,
                         isIconColorToChange: validPost.favoriteChoice == .yes ? true : false,
-                        imageColorSecondary: Color.mycolor.yellow,
+                        imageColorSecondary: Color.mycolor.myYellow,
                         isShownCircle: false)
                     {
                         vm.favoriteToggle(post: validPost)

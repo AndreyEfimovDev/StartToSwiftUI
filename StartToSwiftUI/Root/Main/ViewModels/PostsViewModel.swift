@@ -158,7 +158,7 @@ class PostsViewModel: ObservableObject {
     func addPost(_ newPost: Post) {
 //        
 //        if !checkNewPostForUniqueTitle(newPost.title) {
-            print("FUNC: Adding a new post")
+            print("VM(addPost): Adding a new post")
             allPosts.append(newPost)
             fileManager.savePosts(allPosts)
 //        } else {
@@ -168,12 +168,12 @@ class PostsViewModel: ObservableObject {
     
     func updatePost(_ updatedPost: Post) {
         if let index = allPosts.firstIndex(where: { $0.id == updatedPost.id }) {
-            print("FUNC: Updating a current post")
+            print("VM(updatePost): Updating a current post")
         allPosts[index] = updatedPost
         listOfYearsInPosts = getListOfPostedYearsOfPosts()
         fileManager.savePosts(allPosts)
         } else {
-            print("❌ Can't find the index")
+            print("❌ VM(updatePost): Can't find the index")
         }
     }
     
@@ -211,14 +211,25 @@ class PostsViewModel: ObservableObject {
     
     func importPostsFromURL(_ url: URL, completion: @escaping () -> ()) {
         do {
+            
+            // Gaining access to security-scoped resource
+            guard url.startAccessingSecurityScopedResource() else {
+                print("❌ VM: No access to JSON file")
+                return
+            }
+            
+            defer {
+                url.stopAccessingSecurityScopedResource()
+            }
+            
             let data = try Data(contentsOf: url)
             let posts = try JSONDecoder().decode([Post].self, from: data)
             allPosts = posts
             fileManager.savePosts(posts)
-            print("✅ Imported \(posts.count) posts from \(url.lastPathComponent)")
+            print("✅ VM: Imported \(posts.count) posts from \(url.lastPathComponent)")
             completion()
         } catch {
-            print("❌ Error import: \(error.localizedDescription)")
+            print("❌ VM: Error import: \(error.localizedDescription)")
         }
     }
     

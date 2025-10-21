@@ -22,7 +22,7 @@ class FileStorageManager: ObservableObject {
                 .urls(for: .documentDirectory, in: .userDomainMask)
                 .first?
                 .appendingPathComponent(fileName) else {
-            print("❌ Error getting path.")
+            print("❌ FM: Error getting path.")
             return nil
         }
         return path
@@ -39,7 +39,7 @@ class FileStorageManager: ObservableObject {
                 .urls(for: .documentDirectory, in: .userDomainMask)
                 .first?
                 .appendingPathComponent(fileName) else {
-            print("❌ Error getting path.")
+            print("❌ FM: rror getting path.")
             return nil
         }
         return path
@@ -53,9 +53,9 @@ class FileStorageManager: ObservableObject {
         do {
             let jsonData = try JSONEncoder().encode(posts)
             try jsonData.write(to: url)
-            print("✅ Successfully saved в \(url)")
+            print("✅ FM: Successfully saved в \(url)")
         } catch {
-            print("❌ Error in saving posts: \(error)")
+            print("❌ FM: Error in saving posts: \(error)")
         }
     }
     
@@ -67,10 +67,10 @@ class FileStorageManager: ObservableObject {
         do {
             let data = try Data(contentsOf: url)
             let posts = try JSONDecoder().decode([Post].self, from: data)
-            print("✅ Successfully uploaded \(posts.count) posts")
+            print("✅ FM: Successfully uploaded \(posts.count) posts")
             return posts
         } catch {
-            print("☑️ There are no saved posts on the device.: \(error)")
+            print("☑️ FM: There are no saved posts on the device.: \(error)")
             return []
         }
     }

@@ -60,7 +60,7 @@ struct AddEditPostSheet: View {
     
     private let fontSubheader: Font = .caption
     private let fontTextInput: Font = .callout
-    private let colorSubheader: Color = Color.mycolor.secondaryText
+    private let colorSubheader: Color = Color.mycolor.mySecondaryText
     
     private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date()
     private let endingDate: Date = Date()
@@ -99,7 +99,7 @@ struct AddEditPostSheet: View {
                     favoviteChoiceSection
                     addInforSection
                 } // ScrollView
-                .foregroundStyle(Color.mycolor.accent)
+                .foregroundStyle(Color.mycolor.myAccent)
                 .padding(.horizontal, 8)
             } // VStack
             .navigationTitle(viewTitle)
@@ -124,7 +124,7 @@ struct AddEditPostSheet: View {
                     CircleStrokeButtonView(
                         iconName: "xmark",
                         isIconColorToChange: true,
-                        imageColorSecondary: Color.mycolor.red,
+                        imageColorSecondary: Color.mycolor.myRed,
                         isShownCircle: false)
                     {
                         dismiss()
@@ -140,7 +140,7 @@ struct AddEditPostSheet: View {
                                 CircleStrokeButtonView(
                                     iconName: "keyboard.chevron.compact.down",
                                     iconFont: .title2,
-                                    imageColorPrimary: Color.mycolor.blue,
+                                    imageColorPrimary: Color.mycolor.myBlue,
                                     widthIn: 55,
                                     heightIn: 55) {
                                         withAnimation {
@@ -264,7 +264,7 @@ struct AddEditPostSheet: View {
                 textEditorRightButton(
                     text: editedPost.title,
                     iconName: "xmark",
-                    iconColor: Color.mycolor.red) {
+                    iconColor: Color.mycolor.myRed) {
                         editedPost.title = ""
                     }
                     .background(.ultraThickMaterial,
@@ -293,7 +293,7 @@ struct AddEditPostSheet: View {
                     textEditorRightButton(
                         text: editedPost.intro,
                         iconName: "xmark",
-                        iconColor: Color.mycolor.red) {
+                        iconColor: Color.mycolor.myRed) {
                             editedPost.intro = ""
                         }
                         .background(.ultraThickMaterial,
@@ -302,7 +302,7 @@ struct AddEditPostSheet: View {
                     textEditorRightButton(
                         text: editedPost.intro,
                         iconName: "arrow.turn.right.down",
-                        iconColor: Color.mycolor.blue) {
+                        iconColor: Color.mycolor.myBlue) {
                             focusedField = .author
                         }
                         .frame(maxHeight: .infinity, alignment: .bottom)
@@ -332,7 +332,7 @@ struct AddEditPostSheet: View {
                 textEditorRightButton(
                     text: editedPost.author,
                     iconName: "xmark",
-                    iconColor: Color.mycolor.red) {
+                    iconColor: Color.mycolor.myRed) {
                         editedPost.author = ""
                     }
                     .background(.ultraThickMaterial,
@@ -392,7 +392,7 @@ struct AddEditPostSheet: View {
                 textEditorRightButton(
                     text: editedPost.urlString,
                     iconName: "xmark",
-                    iconColor: Color.mycolor.red) {
+                    iconColor: Color.mycolor.myRed) {
                         editedPost.urlString = ""
                     }
                     .background(.ultraThickMaterial,
@@ -415,7 +415,7 @@ struct AddEditPostSheet: View {
                 allItems: Platform.allCases,
                 titleForCase: { $0.displayName },
                 selectedTextColor: Color.blue,
-                unselectedTextColor: Color.mycolor.secondaryText
+                unselectedTextColor: Color.mycolor.mySecondaryText
             )
             .frame(height: 50)
             .sectionBackgroundInAddEditView()
@@ -434,7 +434,7 @@ struct AddEditPostSheet: View {
                 in: startingDate...endingDate,
                 displayedComponents: .date
             )
-            .tint(Color.mycolor.blue)
+            .tint(Color.mycolor.myBlue)
             .padding(.trailing, 4)
             .frame(height: 50)
             .sectionBackgroundInAddEditView()
@@ -454,8 +454,8 @@ struct AddEditPostSheet: View {
                 selection: $editedPost.studyLevel,
                 allItems: StudyLevel.allCases,
                 titleForCase: { $0.displayName },
-                selectedTextColor: Color.mycolor.blue,
-                unselectedTextColor: Color.mycolor.secondaryText
+                selectedTextColor: Color.mycolor.myBlue,
+                unselectedTextColor: Color.mycolor.mySecondaryText
             )
             .frame(height: 50)
             .sectionBackgroundInAddEditView()
@@ -472,8 +472,8 @@ struct AddEditPostSheet: View {
                 selection: $editedPost.favoriteChoice,
                 allItems: FavoriteChoice.allCases,
                 titleForCase: { $0.displayName },
-                selectedTextColor: Color.mycolor.blue,
-                unselectedTextColor: Color.mycolor.secondaryText
+                selectedTextColor: Color.mycolor.myBlue,
+                unselectedTextColor: Color.mycolor.mySecondaryText
             )
             .frame(height: 50)
             .sectionBackgroundInAddEditView()
@@ -503,7 +503,7 @@ struct AddEditPostSheet: View {
                     textEditorRightButton(
                         text: editedPost.additionalText,
                         iconName: "xmark",
-                        iconColor: Color.mycolor.red) {
+                        iconColor: Color.mycolor.myRed) {
                             editedPost.additionalText = ""
                         }
                         .background(.ultraThickMaterial,
@@ -512,7 +512,7 @@ struct AddEditPostSheet: View {
                     textEditorRightButton(
                         text: editedPost.additionalText,
                         iconName: "arrow.turn.right.down",
-                        iconColor: Color.mycolor.blue) {
+                        iconColor: Color.mycolor.myBlue) {
                             focusedField = nil
                         }
                         .frame(maxHeight: .infinity, alignment: .bottom)

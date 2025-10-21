@@ -61,9 +61,9 @@ enum StudyLevel: String, CaseIterable, Codable {
     
     var color: Color {
         switch self {
-        case .beginner: return Color.mycolor.green
+        case .beginner: return Color.mycolor.myGreen
         case .middle: return Color.mycolor.middle
-        case .advanced: return Color.mycolor.red
+        case .advanced: return Color.mycolor.myRed
         }
     }
 }
@@ -71,7 +71,7 @@ enum StudyLevel: String, CaseIterable, Codable {
 enum Platform: String, CaseIterable, Codable {
     case youtube = "YouTube"
     case website = "WebSite"
-    case others
+    case others = "Others"
     
     var displayName: String {
         switch self {

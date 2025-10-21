@@ -16,7 +16,7 @@ extension View {
     func myBackground(colorScheme: ColorScheme) -> some View {
         self
             .background(
-                Color.mycolor.background
+                Color.mycolor.myBackground
                 
 //                
 //                Image("Swift_Icon_RGB_Portret")
@@ -34,7 +34,7 @@ extension View {
     func managingPostsTextFormater() -> some View {
         self
             .font(.callout)
-            .foregroundStyle(Color.mycolor.accent)
+            .foregroundStyle(Color.mycolor.myAccent)
             .multilineTextAlignment(.center)
             .padding(20)
             .frame(maxWidth: .infinity)
@@ -42,7 +42,7 @@ extension View {
             .clipShape(RoundedRectangle(cornerRadius: 15))
             .overlay(
                 RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color.mycolor.accent.opacity(0.3), lineWidth: 1)
+                    .stroke(Color.mycolor.myAccent.opacity(0.3), lineWidth: 1)
             )
     }
 }

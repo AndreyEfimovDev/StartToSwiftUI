@@ -24,7 +24,7 @@ struct PreferencesView: View {
         NavigationStack {
             Form {
                 Section(header: Text("Settings")
-                        .foregroundStyle(Color.mycolor.accent)
+                        .foregroundStyle(Color.mycolor.myAccent)
                 ) {
                     HStack{
                         Image(systemName: "bell")
@@ -36,7 +36,7 @@ struct PreferencesView: View {
                 } //Section "Settings"
                 
                 Section(header: Text("Managing Posts (\(vm.allPosts.count))")
-                        .foregroundStyle(Color.mycolor.accent)
+                        .foregroundStyle(Color.mycolor.myAccent)
                 ) {
                     HStack {
                         Image(systemName: "icloud.and.arrow.down")
@@ -103,7 +103,7 @@ struct PreferencesView: View {
                     }
                 } //Section "About APP"
             } // Form
-            .foregroundStyle(Color.mycolor.accent)
+            .foregroundStyle(Color.mycolor.myAccent)
             .navigationTitle("Preferences")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
