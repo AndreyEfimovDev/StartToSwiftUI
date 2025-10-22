@@ -18,9 +18,10 @@ struct HomeView: View {
     @State private var selectedPost: Post?
     
     @State private var showDetailView: Bool = false
-    @State private var showOnTopButton: Bool = false
     @State private var showPreferancesView: Bool = false
     @State private var showAddPostView: Bool = false
+    
+    @State private var showOnTopButton: Bool = false
     @State private var isFilterButtonPressed: Bool = false
     
     let hiderText: String = "SwiftUI posts"
@@ -85,9 +86,10 @@ struct HomeView: View {
                 }
             // toolbar button "preferances"
                 .fullScreenCover(isPresented: $showPreferancesView) {
-                    PreferencesView {
-                        showPreferancesView.toggle()
-                    }
+                    PreferencesView()
+//                    {
+//                        showPreferancesView.toggle()
+//                    }
                 }
             // toolbar button "+"
                 .fullScreenCover(isPresented: $showAddPostView, content: {

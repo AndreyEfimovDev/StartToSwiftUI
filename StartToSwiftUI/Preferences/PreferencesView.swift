@@ -14,11 +14,11 @@ struct PreferencesView: View {
     
     let iconWidth: CGFloat = 18
 
-    let action: () -> Void
-    
-    init(action: @escaping () -> Void) {
-        self.action = action
-    }
+//    let action: () -> Void
+//    
+//    init(action: @escaping () -> Void) {
+//        self.action = action
+//    }
     
     var body: some View {
         NavigationStack {
@@ -33,7 +33,7 @@ struct PreferencesView: View {
                         Toggle("Notification", isOn: $vm.isNotification)
                             .tint(.blue)
                     }
-                } //Section "Settings"
+                }
                 
                 Section(header: Text("Managing Posts (\(vm.allPosts.count))")
                         .foregroundStyle(Color.mycolor.myAccent)
@@ -67,11 +67,10 @@ struct PreferencesView: View {
                             .frame(width: iconWidth)
                             .foregroundStyle(Color.mycolor.middle)
                         NavigationLink("Erase All Posts") {
-                            //                        HapticManager.shared.notification(type: .warning)
                             EraseAllPostsView()
                         }
                     }
-                } //Section "Managing Posts"
+                }
                 
                 Section {
                     HStack {
@@ -83,9 +82,8 @@ struct PreferencesView: View {
                         }
                     }
                     HStack {
-                        
                         Image(systemName: "envelope") // envelope.open.fill envelope.fill
-                            .frame(width: 15)
+                            .frame(width: iconWidth)
                             .foregroundStyle(Color.mycolor.middle)
 
                         Button("Contact Developer") {
@@ -107,7 +105,9 @@ struct PreferencesView: View {
             .navigationTitle("Preferences")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) { action()
+                    CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+//                        action()
+                        dismiss()
                     }
                 }
             }
@@ -130,8 +130,6 @@ struct PreferencesView: View {
 
 
 #Preview {
-    PreferencesView{
-        
-    }
+    PreferencesView ()
     .environmentObject(PostsViewModel())
 }

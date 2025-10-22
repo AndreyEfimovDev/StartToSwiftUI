@@ -209,29 +209,38 @@ class PostsViewModel: ObservableObject {
         completion()
     }
     
-    func importPostsFromURL(_ url: URL, completion: @escaping () -> ()) {
-        do {
-            
-            // Gaining access to security-scoped resource
-            guard url.startAccessingSecurityScopedResource() else {
-                print("❌ VM: No access to JSON file")
-                return
-            }
-            
-            defer {
-                url.stopAccessingSecurityScopedResource()
-            }
-            
-            let data = try Data(contentsOf: url)
-            let posts = try JSONDecoder().decode([Post].self, from: data)
-            allPosts = posts
-            fileManager.savePosts(posts)
-            print("✅ VM: Imported \(posts.count) posts from \(url.lastPathComponent)")
-            completion()
-        } catch {
-            print("❌ VM: Error import: \(error.localizedDescription)")
-        }
-    }
+//    func importPostsFromURL(_ url: URL, completion: @escaping () -> ()) {
+//        do {
+//            
+////            // Gaining access to security-scoped resource
+////            guard url.startAccessingSecurityScopedResource() else {
+////                print("❌ VM: No access to JSON file")
+////                return
+////            }
+////            
+////            defer {
+////                url.stopAccessingSecurityScopedResource()
+////            }
+//            
+//            
+//            
+//            
+//            
+//            let data = try Data(contentsOf: url)
+//            let posts = try JSONDecoder().decode([Post].self, from: data)
+//            
+//            // skip posts with the same title - make posts unique by title
+//            let newPosts = posts.filter { newPost in
+//                !allPosts.contains(where: { $0.title == newPost.title })
+//            }
+//            allPosts.append(contentsOf: newPosts)
+//            fileManager.savePosts(newPosts)
+//            print("✅ VM: Imported \(newPosts.count) posts from \(url.lastPathComponent)")
+//            completion()
+//        } catch {
+//            print("❌ VM: Error import: \(error.localizedDescription)")
+//        }
+//    }
     
     /// Checks if a title of a post is unique.
     ///

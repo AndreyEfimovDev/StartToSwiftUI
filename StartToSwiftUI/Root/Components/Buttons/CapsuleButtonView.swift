@@ -44,7 +44,6 @@ struct CapsuleButtonView: View {
                 .frame(height: 55)
                 .frame(maxWidth: .infinity)
                 .background(isToChangeTitile ? buttonColorSecondary : buttonColorPrimary, in: .capsule)
-//                .cornerRadius(30)
         }
     }
 }
