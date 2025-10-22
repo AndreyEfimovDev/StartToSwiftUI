@@ -21,15 +21,12 @@
 		4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773545A2E65C470001DEDEE /* CapsulesSegmentedPicker.swift */; };
 		4773545D2E65D03A001DEDEE /* FiltersSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */; };
 		4791CD862E6ED58B00687126 /* ShrinkIconButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CD852E6ED58B00687126 /* ShrinkIconButtonStyle.swift */; };
-		4791CD8A2E6F371400687126 /* FileManagerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CD892E6F371400687126 /* FileManagerService.swift */; };
 		4791CD8C2E6F4BDA00687126 /* ShareStorePostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CD8B2E6F4BDA00687126 /* ShareStorePostsView.swift */; };
 		4791CDAF2E70187E00687126 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDAE2E70187E00687126 /* PreferencesView.swift */; };
 		4791CDB12E701D7F00687126 /* RestoreBackupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDB02E701D7E00687126 /* RestoreBackupView.swift */; };
 		4791CDBB2E702E9700687126 /* EraseAllPostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */; };
 		4791CDBD2E70306D00687126 /* LoadPersistentPostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDBC2E70306D00687126 /* LoadPersistentPostsView.swift */; };
-		4791CDBF2E70890A00687126 /* ShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDBE2E70890A00687126 /* ShareButton.swift */; };
 		4791CDC12E708E1300687126 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDC02E708E1000687126 /* DocumentPicker.swift */; };
-		4791CDC32E70943000687126 /* ManagingPostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDC22E70943000687126 /* ManagingPostsView.swift */; };
 		4791CDC52E70B70000687126 /* ContentUnavailableViewBootcamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDC42E70B70000687126 /* ContentUnavailableViewBootcamp.swift */; };
 		4791CDC72E70B7D800687126 /* AlertBootcamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDC62E70B7D800687126 /* AlertBootcamp.swift */; };
 		4791CDEA2E72E8CC00687126 /* Arrays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDE92E72E8CC00687126 /* Arrays.swift */; };
@@ -40,9 +37,7 @@
 		4791CDFC2E746FF100687126 /* EmailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDFB2E746FF100687126 /* EmailService.swift */; };
 		4791CDFE2E747AC100687126 /* FileStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDFD2E747AC100687126 /* FileStorageManager.swift */; };
 		4791CE002E747B2E00687126 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDFF2E747B2E00687126 /* HapticManager.swift */; };
-		4791CE022E748A4000687126 /* ToolbarsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE012E748A4000687126 /* ToolbarsView.swift */; };
 		4791CE042E748DA200687126 /* AddEditPostSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE032E748DA200687126 /* AddEditPostSheet.swift */; };
-		4791CE062E75765500687126 /* EmbedPickerInFocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE052E75765500687126 /* EmbedPickerInFocusView.swift */; };
 		4791CE082E75AAB000687126 /* UnderlineSermentedPickerNotOptional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE072E75AAAF00687126 /* UnderlineSermentedPickerNotOptional.swift */; };
 		4791CE0A2E75DA0400687126 /* CardsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE092E75DA0400687126 /* CardsListView.swift */; };
 		47AE6C7F2E7CB3BD006230DA /* AboutAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AE6C7E2E7CB3BD006230DA /* AboutAppView.swift */; };
@@ -76,15 +71,12 @@
 		4773545A2E65C470001DEDEE /* CapsulesSegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsulesSegmentedPicker.swift; sourceTree = "<group>"; };
 		4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersSheetView.swift; sourceTree = "<group>"; };
 		4791CD852E6ED58B00687126 /* ShrinkIconButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShrinkIconButtonStyle.swift; sourceTree = "<group>"; };
-		4791CD892E6F371400687126 /* FileManagerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerService.swift; sourceTree = "<group>"; };
 		4791CD8B2E6F4BDA00687126 /* ShareStorePostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareStorePostsView.swift; sourceTree = "<group>"; };
 		4791CDAE2E70187E00687126 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		4791CDB02E701D7E00687126 /* RestoreBackupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreBackupView.swift; sourceTree = "<group>"; };
 		4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EraseAllPostsView.swift; sourceTree = "<group>"; };
 		4791CDBC2E70306D00687126 /* LoadPersistentPostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadPersistentPostsView.swift; sourceTree = "<group>"; };
-		4791CDBE2E70890A00687126 /* ShareButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareButton.swift; sourceTree = "<group>"; };
 		4791CDC02E708E1000687126 /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
-		4791CDC22E70943000687126 /* ManagingPostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagingPostsView.swift; sourceTree = "<group>"; };
 		4791CDC42E70B70000687126 /* ContentUnavailableViewBootcamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentUnavailableViewBootcamp.swift; sourceTree = "<group>"; };
 		4791CDC62E70B7D800687126 /* AlertBootcamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertBootcamp.swift; sourceTree = "<group>"; };
 		4791CDE92E72E8CC00687126 /* Arrays.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arrays.swift; sourceTree = "<group>"; };
@@ -95,9 +87,7 @@
 		4791CDFB2E746FF100687126 /* EmailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailService.swift; sourceTree = "<group>"; };
 		4791CDFD2E747AC100687126 /* FileStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorageManager.swift; sourceTree = "<group>"; };
 		4791CDFF2E747B2E00687126 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
-		4791CE012E748A4000687126 /* ToolbarsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarsView.swift; sourceTree = "<group>"; };
 		4791CE032E748DA200687126 /* AddEditPostSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditPostSheet.swift; sourceTree = "<group>"; };
-		4791CE052E75765500687126 /* EmbedPickerInFocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbedPickerInFocusView.swift; sourceTree = "<group>"; };
 		4791CE072E75AAAF00687126 /* UnderlineSermentedPickerNotOptional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineSermentedPickerNotOptional.swift; sourceTree = "<group>"; };
 		4791CE092E75DA0400687126 /* CardsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsListView.swift; sourceTree = "<group>"; };
 		47AE6C7E2E7CB3BD006230DA /* AboutAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAppView.swift; sourceTree = "<group>"; };
@@ -169,8 +159,6 @@
 				4791CDC62E70B7D800687126 /* AlertBootcamp.swift */,
 				4791CDEB2E73339100687126 /* SheetView.swift */,
 				4791CE092E75DA0400687126 /* CardsListView.swift */,
-				4791CE052E75765500687126 /* EmbedPickerInFocusView.swift */,
-				4791CE012E748A4000687126 /* ToolbarsView.swift */,
 				4791CDEE2E737B3600687126 /* 0427_SFSymbolsView.swift */,
 			);
 			path = StartToSwiftUI;
@@ -255,9 +243,9 @@
 		4791CDAD2E70186100687126 /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
+				4791CDBC2E70306D00687126 /* LoadPersistentPostsView.swift */,
 				4791CD8B2E6F4BDA00687126 /* ShareStorePostsView.swift */,
 				4791CDB02E701D7E00687126 /* RestoreBackupView.swift */,
-				4791CDBC2E70306D00687126 /* LoadPersistentPostsView.swift */,
 				4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */,
 				47AE6C7E2E7CB3BD006230DA /* AboutAppView.swift */,
 				4791CDAE2E70187E00687126 /* PreferencesView.swift */,
@@ -268,9 +256,6 @@
 		4791CDE72E70D38100687126 /* Not Used */ = {
 			isa = PBXGroup;
 			children = (
-				4791CDC22E70943000687126 /* ManagingPostsView.swift */,
-				4791CD892E6F371400687126 /* FileManagerService.swift */,
-				4791CDBE2E70890A00687126 /* ShareButton.swift */,
 			);
 			path = "Not Used";
 			sourceTree = "<group>";
@@ -396,12 +381,10 @@
 				47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */,
 				47BAF0A42E60613200287F10 /* SearchBarView.swift in Sources */,
 				4791CD862E6ED58B00687126 /* ShrinkIconButtonStyle.swift in Sources */,
-				4791CDBF2E70890A00687126 /* ShareButton.swift in Sources */,
 				47BAF0F22E646A6300287F10 /* FilterModel.swift in Sources */,
 				4791CDC72E70B7D800687126 /* AlertBootcamp.swift in Sources */,
 				4773545D2E65D03A001DEDEE /* FiltersSheetView.swift in Sources */,
 				47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */,
-				4791CDC32E70943000687126 /* ManagingPostsView.swift in Sources */,
 				47BAF0F82E64A77A00287F10 /* Enums.swift in Sources */,
 				4791CDBD2E70306D00687126 /* LoadPersistentPostsView.swift in Sources */,
 				475997552E5C7F81008E20F0 /* PreviewData.swift in Sources */,
@@ -417,7 +400,6 @@
 				47BAF0FA2E64CC8700287F10 /* UnderlineSermentedPicker.swift in Sources */,
 				4791CDEF2E737B3600687126 /* 0427_SFSymbolsView.swift in Sources */,
 				4759975D2E5C8F4B008E20F0 /* PostRowView.swift in Sources */,
-				4791CE022E748A4000687126 /* ToolbarsView.swift in Sources */,
 				47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */,
 				4791CDF12E7428EE00687126 /* CircleShadowButtonView.swift in Sources */,
 				4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */,
@@ -431,8 +413,6 @@
 				4791CDAF2E70187E00687126 /* PreferencesView.swift in Sources */,
 				4759975F2E5CA789008E20F0 /* CountingLinesInTextBlock.swift in Sources */,
 				4791CE042E748DA200687126 /* AddEditPostSheet.swift in Sources */,
-				4791CD8A2E6F371400687126 /* FileManagerService.swift in Sources */,
-				4791CE062E75765500687126 /* EmbedPickerInFocusView.swift in Sources */,
 				4791CDEC2E73339100687126 /* SheetView.swift in Sources */,
 				47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */,
 				4791CDC12E708E1300687126 /* DocumentPicker.swift in Sources */,

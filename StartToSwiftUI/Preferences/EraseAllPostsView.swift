@@ -22,35 +22,7 @@ struct EraseAllPostsView: View {
     
     var body: some View {
         VStack {
-            VStack(spacing: 12) {
-                Text("""
-                You are about to delete all posts.
-                
-                What you can do next:
-                """
-                )
-                //                .multilineTextAlignment(.center)
-                
-                Text("""
-                - create a single post,
-                - load persistent App posts, or
-                - load back-up from your device.
-                """
-                )
-                .multilineTextAlignment(.leading)
-                
-                Text("""
-                ***
-                It is recommended to
-                Backup Posts before
-                erasing them.
-                ***
-                """)
-                .foregroundStyle(.red)
-                .bold()
-                
-                //                .multilineTextAlignment(.center)
-            }
+            textSection
             .managingPostsTextFormater()
             
             CapsuleButtonView(
@@ -73,8 +45,9 @@ struct EraseAllPostsView: View {
                         isDeleted.toggle()
                     }
                 }
-                .onChange(of: vm.allPosts.count, { oldValue, newValue in
+                .onChange(of: vm.allPosts.count, { oldValue, _ in
                     postCount = oldValue
+                    hapticManager.notification(type: .success)
                 })
                 .disabled(isDeleted)
             Spacer()
@@ -84,6 +57,33 @@ struct EraseAllPostsView: View {
         .padding(30)
         .onAppear {
             hapticManager.notification(type: .warning)
+        }
+    }
+    
+    private var textSection: some View {
+        VStack(spacing: 12) {
+            Text("""
+            You are about to delete all posts.
+            
+            What you can do after:
+            """
+            )
+            
+            Text("""
+            - create a single post,
+            - load persistent App posts, or
+            - restore backup from your device.
+            """
+            )
+            .multilineTextAlignment(.leading)
+            
+            Text("""
+            It is recommended to
+            backup posts before
+            erasing them.
+            """)
+            .foregroundStyle(.red)
+            .bold()
         }
     }
 }

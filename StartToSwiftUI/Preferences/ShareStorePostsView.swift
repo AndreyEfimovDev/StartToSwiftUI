@@ -16,15 +16,7 @@ struct ShareStorePostsView: View {
 
     var body: some View {
         VStack {
-            Text("""
-                You are about to share/backup posts from App.
-                
-                Posts in JSON format can be
-                stored on your device or
-                shared directly via
-                AirDop / Mail / Messenger / etc.
-                
-                """)
+            textSection
             .managingPostsTextFormater()
 
             if let fileURL = fileManager.getFileURL(fileName: fileManager.fileName) {
@@ -59,6 +51,17 @@ struct ShareStorePostsView: View {
         .padding(.horizontal, 30)
         .padding(.top, 30)
         .padding(30)
+    }
+    
+    private var textSection: some View {
+        Text("""
+            You are about to store posts
+            in JSON format
+            on your local device or
+            share directly via
+            AirDop / Mail / Messenger / etc.
+            
+            """)
     }
 }
 

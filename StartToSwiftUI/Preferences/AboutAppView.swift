@@ -64,12 +64,28 @@ struct AboutAppView: View {
                 .padding()
                 
                 Text("""
-            You are about to restored posts from backup on the device.
+            Dear fellow learner,
             
-            The posts from backup will replace
-            all current posts in App.
+            The StartToSwiftUI app is designed to help beginners learn SwiftUI from the ground up.
+            
+            When I first started learning SwiftUI, I was overwhelmed by the variety of options available. Gradually, I began collecting articles from open sources with high-quality explanations of SwiftUI functionality. Later, I realised that I needed to revisit these articles several times to gain a deeper understanding of particular topics. I found it helpful to store and organise them for self-study so I could quickly find and use the information. As a result, I decided to create an app for this purpose. Creating my own app also helped me to put my theoretical knowledge into practice, moving it from my head to my heart.
+            
+            The app offers the following features:
+            - You can load pre-loaded articles (collected from available open sources) and work with them as you wish. You will receive a notification when a new version of the pre-loaded content is ready to download, allowing you to access new material. We strive to keep the pre-loaded articles up to date, though this cannot be guaranteed at all times.
+            - You can add your own articles to create a personal library for learning SwiftUI.
+            - You can edit and delete articles.
+            - You can share all articles stored in the app or save them for backup and recovery purposes.
+            
+            If you find this app useful, I would be very happy to hear from you.
+            
+            Good luck with mastering SwiftUI!
+            
+            Warmly,
+            Andrey
+            
             
             """)
+                .multilineTextAlignment(.leading)
                 .managingPostsTextFormater()
                 .padding(.horizontal)
                 Spacer()
