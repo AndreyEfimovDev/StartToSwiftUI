@@ -146,7 +146,7 @@ struct HomeView: View {
                                 .listRowSeparator(.hidden)
                                 .listRowBackground(Color.clear)
                                 .listRowInsets(
-                                    EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0)
+                                    EdgeInsets(top: 0, leading: 0, bottom: 1, trailing: 0)
                                 )
                                 .onTapGesture {
                                     selectedPostId = post.id

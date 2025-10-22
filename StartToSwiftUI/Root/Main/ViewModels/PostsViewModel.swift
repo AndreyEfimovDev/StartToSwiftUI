@@ -48,7 +48,7 @@ class PostsViewModel: ObservableObject {
     
 
     private var cancellables = Set<AnyCancellable>()
-    private let fileManager = FileStorageManager.shared
+    private let fileManager = FileStorageService.shared
     
     
     // MARK: INIT() SECTION

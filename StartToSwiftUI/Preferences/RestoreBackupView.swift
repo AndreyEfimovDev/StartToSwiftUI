@@ -12,7 +12,7 @@ struct RestoreBackupView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     
-    private let fileManager = FileStorageManager.shared
+    private let fileManager = FileStorageService.shared
     private let hapticManager = HapticManager.shared
     
     @State var isBackedUp: Bool = false // disabel a "Restore Backup" burtton when done

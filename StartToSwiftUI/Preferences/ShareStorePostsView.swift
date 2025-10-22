@@ -12,7 +12,7 @@ struct ShareStorePostsView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     
-    private let fileManager = FileStorageManager.shared
+    private let fileManager = FileStorageService.shared
 
     var body: some View {
         VStack {

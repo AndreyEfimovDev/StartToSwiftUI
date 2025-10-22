@@ -35,7 +35,7 @@
 		4791CDF12E7428EE00687126 /* CircleShadowButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDF02E7428EE00687126 /* CircleShadowButtonView.swift */; };
 		4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDF92E744AD400687126 /* CapsuleButtonView.swift */; };
 		4791CDFC2E746FF100687126 /* EmailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDFB2E746FF100687126 /* EmailService.swift */; };
-		4791CDFE2E747AC100687126 /* FileStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDFD2E747AC100687126 /* FileStorageManager.swift */; };
+		4791CDFE2E747AC100687126 /* FileStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDFD2E747AC100687126 /* FileStorageService.swift */; };
 		4791CE002E747B2E00687126 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDFF2E747B2E00687126 /* HapticManager.swift */; };
 		4791CE042E748DA200687126 /* AddEditPostSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE032E748DA200687126 /* AddEditPostSheet.swift */; };
 		4791CE082E75AAB000687126 /* UnderlineSermentedPickerNotOptional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE072E75AAAF00687126 /* UnderlineSermentedPickerNotOptional.swift */; };
@@ -52,6 +52,7 @@
 		47BAF0F62E6485B000287F10 /* SegmentedOneLinePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF0F52E6485B000287F10 /* SegmentedOneLinePicker.swift */; };
 		47BAF0F82E64A77A00287F10 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF0F72E64A77A00287F10 /* Enums.swift */; };
 		47BAF0FA2E64CC8700287F10 /* UnderlineSermentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF0F92E64CC8700287F10 /* UnderlineSermentedPicker.swift */; };
+		47E439B72EA9290E007001AD /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E439B62EA9290E007001AD /* NetworkService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,7 +86,7 @@
 		4791CDF02E7428EE00687126 /* CircleShadowButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleShadowButtonView.swift; sourceTree = "<group>"; };
 		4791CDF92E744AD400687126 /* CapsuleButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleButtonView.swift; sourceTree = "<group>"; };
 		4791CDFB2E746FF100687126 /* EmailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailService.swift; sourceTree = "<group>"; };
-		4791CDFD2E747AC100687126 /* FileStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorageManager.swift; sourceTree = "<group>"; };
+		4791CDFD2E747AC100687126 /* FileStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorageService.swift; sourceTree = "<group>"; };
 		4791CDFF2E747B2E00687126 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		4791CE032E748DA200687126 /* AddEditPostSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditPostSheet.swift; sourceTree = "<group>"; };
 		4791CE072E75AAAF00687126 /* UnderlineSermentedPickerNotOptional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineSermentedPickerNotOptional.swift; sourceTree = "<group>"; };
@@ -102,6 +103,7 @@
 		47BAF0F52E6485B000287F10 /* SegmentedOneLinePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedOneLinePicker.swift; sourceTree = "<group>"; };
 		47BAF0F72E64A77A00287F10 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		47BAF0F92E64CC8700287F10 /* UnderlineSermentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineSermentedPicker.swift; sourceTree = "<group>"; };
+		47E439B62EA9290E007001AD /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,8 +217,9 @@
 			isa = PBXGroup;
 			children = (
 				4759976D2E5D933C008E20F0 /* SafariWebService.swift */,
-				4791CDFD2E747AC100687126 /* FileStorageManager.swift */,
+				4791CDFD2E747AC100687126 /* FileStorageService.swift */,
 				4791CDFF2E747B2E00687126 /* HapticManager.swift */,
+				47E439B62EA9290E007001AD /* NetworkService.swift */,
 			);
 			path = ManagersServices;
 			sourceTree = "<group>";
@@ -403,7 +406,7 @@
 				47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */,
 				4791CDF12E7428EE00687126 /* CircleShadowButtonView.swift in Sources */,
 				4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */,
-				4791CDFE2E747AC100687126 /* FileStorageManager.swift in Sources */,
+				4791CDFE2E747AC100687126 /* FileStorageService.swift in Sources */,
 				4791CDC52E70B70000687126 /* ContentUnavailableViewBootcamp.swift in Sources */,
 				475997512E5C6C9D008E20F0 /* Post.swift in Sources */,
 				4791CE082E75AAB000687126 /* UnderlineSermentedPickerNotOptional.swift in Sources */,
@@ -416,6 +419,7 @@
 				4791CDEC2E73339100687126 /* SheetView.swift in Sources */,
 				47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */,
 				4791CDC12E708E1300687126 /* DocumentPicker.swift in Sources */,
+				47E439B72EA9290E007001AD /* NetworkService.swift in Sources */,
 				4791CDBB2E702E9700687126 /* EraseAllPostsView.swift in Sources */,
 				4791CDB12E701D7F00687126 /* RestoreBackupView.swift in Sources */,
 				4791CDFC2E746FF100687126 /* EmailService.swift in Sources */,

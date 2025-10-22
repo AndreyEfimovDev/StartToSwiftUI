@@ -13,7 +13,7 @@ struct PostDetailsView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject private var vm: PostsViewModel
     
-    private let fileManager = FileStorageManager.shared
+    private let fileManager = FileStorageService.shared
 
     @State private var showSafariView = false
     @State private var showFullIntro: Bool = false
