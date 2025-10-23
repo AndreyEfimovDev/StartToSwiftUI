@@ -51,7 +51,6 @@ struct RestoreBackupView: View {
         .padding(.horizontal, 30)
         .padding(.top, 30)
         .padding(30)
-//        .onAppear { print("✅ Started: 🚀 RestoreBackupView") }
         .sheet(isPresented: $showDocumentPicker) {
             DocumentPicker(
                 onDocumentPicked: { url in

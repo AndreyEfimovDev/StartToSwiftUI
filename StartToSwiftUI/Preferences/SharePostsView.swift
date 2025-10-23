@@ -18,8 +18,6 @@ struct SharePostsView: View {
     let fileName = Constants.localFileName
 
     @State private var showActivityView = false
-    @State private var shareResult: ActivityResult?
-    @State private var showResultAlert = false
     @State private var isShareCompleted = false
     @State private var isInProgress = false
         
@@ -54,12 +52,6 @@ struct SharePostsView: View {
         .sheet(isPresented: $showActivityView) {
             if let fileURL = fileManager.getFileURL(fileName: fileName) {
                 ActivityView(activityItems: [fileURL], applicationActivities: nil) { result in
-//                    shareResult = result
-//                    showResultAlert = true // Show result message
-//                    isShareCompleted = true // Change Share Button status and disable it
-//                    isInProgress = false // Stop ProgressView
-//                    showActivityView = false // Close sheet after sharing completion
-                    
                     if result.completed {
                         // Successful sharing
                         isInProgress = false // Stop ProgressView
@@ -70,28 +62,15 @@ struct SharePostsView: View {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                             dismiss()
                         }
-
                     } else {
                         // Sharing is cancelled
                         isInProgress = false // Stop ProgressView
                         hapticManager.impact(style: .light)
+                        print("✅ Shared is cancelled.")
                     }
                 }
             }
         }
-//        .alert("Sharing Result", isPresented: $showResultAlert) {
-//            Button("OK", role: .cancel) {
-//                handleShareResult()
-//            }
-//        } message: { // Result message
-//            if let result = shareResult {
-//                if result.completed {
-//                    Text("Successfully shared via \(result.activityName)")
-//                } else {
-//                    Text("Sharing was cancelled")
-//                }
-//            }
-//        }
     }
     
     private var textSection: some View {
@@ -104,24 +83,6 @@ struct SharePostsView: View {
             
             """)
     }
-
-    
-//    private func handleShareResult() {
-//        guard let result = shareResult else { return }
-//        
-//        if result.completed {
-//            // Successful sharing
-//            hapticManager.notification(type: .success)
-//            print("✅ Shared via: \(result.activityName)")
-//        } else {
-//            // Sharing is cancelled
-//            hapticManager.impact(style: .light)
-//        }
-//        
-//        // Сбрасываем результат
-//        shareResult = nil
-//    }
-    
 }
 
 #Preview {
