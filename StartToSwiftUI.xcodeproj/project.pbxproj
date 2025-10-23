@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */; };
+		474007E12EA979EE00C4C9B8 /* DocumentPickerView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474007E02EA979ED00C4C9B8 /* DocumentPickerView2.swift */; };
 		4759974D2E5C690B008E20F0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 475997492E5C690B008E20F0 /* Assets.xcassets */; };
 		4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */; };
 		475997512E5C6C9D008E20F0 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997502E5C6C9D008E20F0 /* Post.swift */; };
@@ -25,7 +26,6 @@
 		4791CDAF2E70187E00687126 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDAE2E70187E00687126 /* PreferencesView.swift */; };
 		4791CDB12E701D7F00687126 /* RestoreBackupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDB02E701D7E00687126 /* RestoreBackupView.swift */; };
 		4791CDBB2E702E9700687126 /* EraseAllPostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */; };
-		4791CDBD2E70306D00687126 /* LoadPersistentPostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDBC2E70306D00687126 /* LoadPersistentPostsView.swift */; };
 		4791CDC12E708E1300687126 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDC02E708E1000687126 /* DocumentPicker.swift */; };
 		4791CDC52E70B70000687126 /* ContentUnavailableViewBootcamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDC42E70B70000687126 /* ContentUnavailableViewBootcamp.swift */; };
 		4791CDC72E70B7D800687126 /* AlertBootcamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDC62E70B7D800687126 /* AlertBootcamp.swift */; };
@@ -40,6 +40,8 @@
 		4791CE042E748DA200687126 /* AddEditPostSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE032E748DA200687126 /* AddEditPostSheet.swift */; };
 		4791CE082E75AAB000687126 /* UnderlineSermentedPickerNotOptional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE072E75AAAF00687126 /* UnderlineSermentedPickerNotOptional.swift */; };
 		4791CE0A2E75DA0400687126 /* CardsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE092E75DA0400687126 /* CardsListView.swift */; };
+		47AA55862EA936AF000AF4E9 /* CloudImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AA55852EA936AF000AF4E9 /* CloudImportView.swift */; };
+		47AA558A2EA9741D000AF4E9 /* DocumentPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AA55892EA9741D000AF4E9 /* DocumentPickerView.swift */; };
 		47AE6C7F2E7CB3BD006230DA /* AboutAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AE6C7E2E7CB3BD006230DA /* AboutAppView.swift */; };
 		47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AE6C802E7D7FD0006230DA /* Modifiers.swift */; };
 		47B465802E6867930059CCB7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B4657F2E6867930059CCB7 /* HomeView.swift */; };
@@ -58,6 +60,7 @@
 /* Begin PBXFileReference section */
 		470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleStrokeButtonView.swift; sourceTree = "<group>"; };
 		471BEF4F2EA793880093F962 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		474007E02EA979ED00C4C9B8 /* DocumentPickerView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPickerView2.swift; sourceTree = "<group>"; };
 		4759973B2E5C6901008E20F0 /* StartToSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StartToSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		475997492E5C690B008E20F0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartToSwiftUIApp.swift; sourceTree = "<group>"; };
@@ -76,7 +79,6 @@
 		4791CDAE2E70187E00687126 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		4791CDB02E701D7E00687126 /* RestoreBackupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreBackupView.swift; sourceTree = "<group>"; };
 		4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EraseAllPostsView.swift; sourceTree = "<group>"; };
-		4791CDBC2E70306D00687126 /* LoadPersistentPostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadPersistentPostsView.swift; sourceTree = "<group>"; };
 		4791CDC02E708E1000687126 /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
 		4791CDC42E70B70000687126 /* ContentUnavailableViewBootcamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentUnavailableViewBootcamp.swift; sourceTree = "<group>"; };
 		4791CDC62E70B7D800687126 /* AlertBootcamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertBootcamp.swift; sourceTree = "<group>"; };
@@ -91,6 +93,8 @@
 		4791CE032E748DA200687126 /* AddEditPostSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditPostSheet.swift; sourceTree = "<group>"; };
 		4791CE072E75AAAF00687126 /* UnderlineSermentedPickerNotOptional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineSermentedPickerNotOptional.swift; sourceTree = "<group>"; };
 		4791CE092E75DA0400687126 /* CardsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsListView.swift; sourceTree = "<group>"; };
+		47AA55852EA936AF000AF4E9 /* CloudImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudImportView.swift; sourceTree = "<group>"; };
+		47AA55892EA9741D000AF4E9 /* DocumentPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPickerView.swift; sourceTree = "<group>"; };
 		47AE6C7E2E7CB3BD006230DA /* AboutAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAppView.swift; sourceTree = "<group>"; };
 		47AE6C802E7D7FD0006230DA /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
 		47B4657F2E6867930059CCB7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -149,10 +153,10 @@
 			children = (
 				4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */,
 				471BEF4F2EA793880093F962 /* Info.plist */,
-				475997712E5D9B1A008E20F0 /* Support */,
 				475997622E5CF0C3008E20F0 /* ThirdPartComponents */,
-				4759976C2E5D931F008E20F0 /* ManagersServices */,
+				475997712E5D9B1A008E20F0 /* Support */,
 				475997722E5DA436008E20F0 /* Extensions */,
+				4759976C2E5D931F008E20F0 /* ManagersServices */,
 				475997582E5C86B7008E20F0 /* Root */,
 				4791CDAD2E70186100687126 /* Preferences */,
 				4791CDE72E70D38100687126 /* Not Used */,
@@ -246,11 +250,13 @@
 		4791CDAD2E70186100687126 /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
-				4791CDBC2E70306D00687126 /* LoadPersistentPostsView.swift */,
+				47AA55852EA936AF000AF4E9 /* CloudImportView.swift */,
 				4791CD8B2E6F4BDA00687126 /* ShareStorePostsView.swift */,
 				4791CDB02E701D7E00687126 /* RestoreBackupView.swift */,
 				4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */,
 				47AE6C7E2E7CB3BD006230DA /* AboutAppView.swift */,
+				47AA55892EA9741D000AF4E9 /* DocumentPickerView.swift */,
+				474007E02EA979ED00C4C9B8 /* DocumentPickerView2.swift */,
 				4791CDAE2E70187E00687126 /* PreferencesView.swift */,
 			);
 			path = Preferences;
@@ -389,7 +395,7 @@
 				4773545D2E65D03A001DEDEE /* FiltersSheetView.swift in Sources */,
 				47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */,
 				47BAF0F82E64A77A00287F10 /* Enums.swift in Sources */,
-				4791CDBD2E70306D00687126 /* LoadPersistentPostsView.swift in Sources */,
+				474007E12EA979EE00C4C9B8 /* DocumentPickerView2.swift in Sources */,
 				475997552E5C7F81008E20F0 /* PreviewData.swift in Sources */,
 				4791CE0A2E75DA0400687126 /* CardsListView.swift in Sources */,
 				4791CD8C2E6F4BDA00687126 /* ShareStorePostsView.swift in Sources */,
@@ -410,6 +416,7 @@
 				4791CDC52E70B70000687126 /* ContentUnavailableViewBootcamp.swift in Sources */,
 				475997512E5C6C9D008E20F0 /* Post.swift in Sources */,
 				4791CE082E75AAB000687126 /* UnderlineSermentedPickerNotOptional.swift in Sources */,
+				47AA55862EA936AF000AF4E9 /* CloudImportView.swift in Sources */,
 				4791CDEA2E72E8CC00687126 /* Arrays.swift in Sources */,
 				470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */,
 				47BAF0F62E6485B000287F10 /* SegmentedOneLinePicker.swift in Sources */,
@@ -420,6 +427,7 @@
 				47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */,
 				4791CDC12E708E1300687126 /* DocumentPicker.swift in Sources */,
 				47E439B72EA9290E007001AD /* NetworkService.swift in Sources */,
+				47AA558A2EA9741D000AF4E9 /* DocumentPickerView.swift in Sources */,
 				4791CDBB2E702E9700687126 /* EraseAllPostsView.swift in Sources */,
 				4791CDB12E701D7F00687126 /* RestoreBackupView.swift in Sources */,
 				4791CDFC2E746FF100687126 /* EmailService.swift in Sources */,

@@ -13,7 +13,7 @@ struct CapsuleButtonView: View {
     let secondaryTitle: String
     let buttonColorPrimary: Color
     let buttonColorSecondary: Color
-    let isToChangeTitile: Bool
+    let isToChangeTitle: Bool
     let action: () -> ()
     
     init(
@@ -28,7 +28,7 @@ struct CapsuleButtonView: View {
         self.secondaryTitle = secondaryTitle
         self.buttonColorPrimary = buttonColorPrimary
         self.buttonColorSecondary = buttonColorSecondary
-        self.isToChangeTitile = isToChangeTitile
+        self.isToChangeTitle = isToChangeTitile
         self.action = action
     }
         
@@ -37,13 +37,13 @@ struct CapsuleButtonView: View {
         Button {
             action()
         } label: {
-            Text(isToChangeTitile ? secondaryTitle : primaryTitle)
+            Text(isToChangeTitle ? secondaryTitle : primaryTitle)
                 .font(.body)
                 .fontWeight(.semibold)
                 .foregroundColor(Color.mycolor.myBackground)
                 .frame(height: 55)
                 .frame(maxWidth: .infinity)
-                .background(isToChangeTitile ? buttonColorSecondary : buttonColorPrimary, in: .capsule)
+                .background(isToChangeTitle ? buttonColorSecondary : buttonColorPrimary, in: .capsule)
         }
     }
 }

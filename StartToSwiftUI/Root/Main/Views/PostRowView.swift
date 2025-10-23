@@ -30,7 +30,7 @@ struct PostRowView: View {
 //                    .padding(.bottom, 4)
             }
             .foregroundStyle(Color.mycolor.myAccent)
-            .padding(.leading, 8)
+            .padding(.horizontal, 8)
 //            .padding(.vertical, 8)
         }
         .padding(.vertical, 8)

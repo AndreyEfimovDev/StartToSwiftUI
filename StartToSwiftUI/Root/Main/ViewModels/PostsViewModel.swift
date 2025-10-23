@@ -49,7 +49,12 @@ class PostsViewModel: ObservableObject {
 
     private var cancellables = Set<AnyCancellable>()
     private let fileManager = FileStorageService.shared
-    
+    private let hapticManager = HapticManager.shared
+
+    private let networkService = NetworkService()
+    @Published var isLoadingFromCloud = false
+    @Published var cloudImportError: String?
+    @Published var showCloudImportAlert = false
     
     // MARK: INIT() SECTION
     
@@ -207,6 +212,64 @@ class PostsViewModel: ObservableObject {
         allPosts.append(contentsOf: newPosts)
         fileManager.savePosts(allPosts)
         completion()
+    }
+    
+    func importPostsFromCloud(urlString: String, completion: @escaping () -> Void = {}) {
+
+        isLoadingFromCloud = true
+        cloudImportError = nil
+        
+        networkService.fetchPostsFromURL(urlString) { [weak self] result in
+            DispatchQueue.main.async { [self] in
+                
+                self?.isLoadingFromCloud = false
+                
+                switch result {
+                case .success(let receivedPosts):
+                    
+                    let newPosts = receivedPosts.filter { newPost in
+                        !(self?.allPosts.contains(where: { $0.title == newPost.title }) ?? false)
+                    }
+                    self?.allPosts.append(contentsOf: newPosts)
+                    self?.fileManager.savePosts(self?.allPosts ?? [])
+                    self?.cloudImportError = nil
+                    self?.hapticManager.notification(type: .success)
+
+//                    let generator = UINotificationFeedbackGenerator()
+//                    generator.notificationOccurred(.success)
+                    
+                    print("✅ Successfully imported \(newPosts.count) posts from cloud")
+
+                case .failure(let error):
+                    self?.cloudImportError = error.localizedDescription
+                    self?.showCloudImportAlert = true
+                    self?.hapticManager.notification(type: .error)
+//                    let generator = UINotificationFeedbackGenerator()
+//                    generator.notificationOccurred(.error)
+                    
+                    print("❌ Cloud import error: \(error.localizedDescription)")
+                }
+                completion()
+            }
+        }
+    }
+    
+    func checkCloudForUpdates(completion: @escaping (Bool) -> Void) {
+        // Можно добавить логику проверки, есть ли новые посты в облаке
+        // Например, сравнивая даты или количество постов
+        networkService.fetchPostsFromURL(Constants.cloudPostsURL) { [weak self] result in
+            switch result {
+            case .success(let cloudPosts):
+                let hasUpdates = cloudPosts.count > (self?.allPosts.count ?? 0)
+                DispatchQueue.main.async {
+                    completion(hasUpdates)
+                }
+            case .failure:
+                DispatchQueue.main.async {
+                    completion(false)
+                }
+            }
+        }
     }
     
 //    func importPostsFromURL(_ url: URL, completion: @escaping () -> ()) {

@@ -15,8 +15,8 @@ struct RestoreBackupView: View {
     private let fileManager = FileStorageService.shared
     private let hapticManager = HapticManager.shared
     
-    @State var isBackedUp: Bool = false // disabel a "Restore Backup" burtton when done
-    @State var isPerformingBackup: Bool = false // to launch .fileImporter
+    @State private var isRestored: Bool = false // disabel a "Restore Backup" burtton when done
+    @State private var isToPerformFileImporter: Bool = false // to launch .fileImporter
     @State private var postCount: Int = 0 // show how many posts restored
     @State private var showErrorAlert = false // handle error messages
     @State private var errorMessage = ""
@@ -26,19 +26,20 @@ struct RestoreBackupView: View {
         
         VStack {
             textSection
-            .managingPostsTextFormater()
-
+                .managingPostsTextFormater()
+            
             CapsuleButtonView(
-                primaryTitle: "Restore Backup",
+                primaryTitle: "Restore from Backup",
                 secondaryTitle: "\(postCount) Posts Restored",
-                isToChangeTitile: isBackedUp
+                isToChangeTitile: isRestored
             ) {
-                isPerformingBackup.toggle()
+                isInProgress.toggle()
+                isToPerformFileImporter.toggle()
             }
-            .disabled(isBackedUp || isInProgress)
+            .disabled(isRestored)
             .padding(.top, 30)
             .fileImporter(
-                isPresented: $isPerformingBackup,
+                isPresented: $isToPerformFileImporter,
                 allowedContentTypes: [.json],
                 allowsMultipleSelection: false
             ) { result in
@@ -46,11 +47,7 @@ struct RestoreBackupView: View {
             }
             
             Spacer()
-        }
-        .padding(.horizontal, 30)
-        .padding(.top, 30)
-        .padding(30)
-        .overlay {
+            
             if isInProgress {
                 ProgressView("Restoring posts...")
                     .padding()
@@ -58,6 +55,9 @@ struct RestoreBackupView: View {
                     .cornerRadius(10)
             }
         }
+        .padding(.horizontal, 30)
+        .padding(.top, 30)
+        .padding(30)
         .alert("Error", isPresented: $showErrorAlert) {
             Button("OK", role: .cancel) { }
         } message: {
@@ -86,16 +86,14 @@ struct RestoreBackupView: View {
         switch result {
         case .success(let urls):
             if let url = urls.first {
-                importPosts(from: url)
+                restorePosts(from: url)
             }
         case .failure(let error):
             showError("Restore: File selection error: \(error.localizedDescription)")
         }
     }
     
-    private func importPosts(from url: URL) {
-        
-        isInProgress = true
+    private func restorePosts(from url: URL) {
         
         // Tracking url for debug
         print("Restore: Selected file URL: \(url)")
@@ -110,7 +108,7 @@ struct RestoreBackupView: View {
         // Revoking access to security-scoped resource when finished
         defer {
             url.stopAccessingSecurityScopedResource()
-            isInProgress = false
+            print("✅ The access to security-scoped is revoked")
         }
         
         do {
@@ -121,6 +119,7 @@ struct RestoreBackupView: View {
                 showError("❌ Restore: The selected file is empty")
                 return
             }
+            print("✅ The selected file is not empty")
             
             // Checking JSON structure
             let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
@@ -128,49 +127,44 @@ struct RestoreBackupView: View {
                 showError("❌ Restore: Invalid JSON format: expected array of posts")
                 return
             }
+            print("✅ JSON file structure checked")
             
             // Decoding posts
             let posts = try JSONDecoder().decode([Post].self, from: data)
+            print("✅ Decoded \(posts.count) posts from \(url.lastPathComponent)")
             
-            // Updating posts in VM
-            //            DispatchQueue.main.async {
-            
-            // avoding posts with dublicated titles
-//            let newPosts = posts.filter { newPost in
-//                !vm.allPosts.contains(where: { $0.title == newPost.title })
-//            }
             vm.allPosts = posts
-            fileManager.savePosts(posts)
+            fileManager.savePosts(vm.allPosts)
             postCount = posts.count
-            
-            isBackedUp = true
-            print("✅ Restore: Imported \(postCount) posts from \(url.lastPathComponent)")
-            
+            isInProgress = false
+            isRestored = true
             hapticManager.notification(type: .success)
-            //            }
+            
+            print("✅ Restored \(postCount) posts from \(url.lastPathComponent)")
+            
             
         } catch let decodingError as DecodingError {
             handleDecodingError(decodingError)
         } catch {
-            showError("❌ Restore: Failed to import: \(error.localizedDescription)")
+            showError("❌ Failed to restore: \(error.localizedDescription)")
         }
     }
-
+    
     private func handleDecodingError(_ error: DecodingError) {
-            switch error {
-            case .dataCorrupted(let context):
-                showError("Invalid JSON format: \(context.debugDescription)")
-            case .keyNotFound(let key, let context):
-                showError("Missing field '\(key.stringValue)' in JSON: \(context.debugDescription)")
-            case .typeMismatch(let type, let context):
-                showError("Type mismatch for '\(type)' in JSON: \(context.debugDescription)")
-            case .valueNotFound(let type, let context):
-                showError("Missing value for type '\(type)' in JSON: \(context.debugDescription)")
-            @unknown default:
-                showError("Unknown JSON decoding error")
-            }
+        switch error {
+        case .dataCorrupted(let context):
+            showError("Invalid JSON format: \(context.debugDescription)")
+        case .keyNotFound(let key, let context):
+            showError("Missing field '\(key.stringValue)' in JSON: \(context.debugDescription)")
+        case .typeMismatch(let type, let context):
+            showError("Type mismatch for '\(type)' in JSON: \(context.debugDescription)")
+        case .valueNotFound(let type, let context):
+            showError("Missing value for type '\(type)' in JSON: \(context.debugDescription)")
+        @unknown default:
+            showError("Unknown JSON decoding error")
         }
-        
+    }
+    
     private func showError(_ message: String) {
         errorMessage = message
         showErrorAlert = true

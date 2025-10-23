@@ -13,12 +13,12 @@ struct ShareStorePostsView: View {
     @EnvironmentObject private var vm: PostsViewModel
     
     private let fileManager = FileStorageService.shared
-
+    
     var body: some View {
         VStack {
             textSection
-            .managingPostsTextFormater()
-
+                .managingPostsTextFormater()
+            
             if let fileURL = fileManager.getFileURL(fileName: fileManager.fileName) {
                 ShareLink(item: fileURL) {
                     VStack(spacing: 8) {
