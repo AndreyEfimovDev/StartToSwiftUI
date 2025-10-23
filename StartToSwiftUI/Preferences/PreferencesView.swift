@@ -13,18 +13,12 @@ struct PreferencesView: View {
     @EnvironmentObject private var vm: PostsViewModel
     
     let iconWidth: CGFloat = 18
-
-//    let action: () -> Void
-//    
-//    init(action: @escaping () -> Void) {
-//        self.action = action
-//    }
-    
+        
     var body: some View {
         NavigationStack {
             Form {
                 Section(header: Text("Settings")
-                        .foregroundStyle(Color.mycolor.myAccent)
+                    .foregroundStyle(Color.mycolor.myAccent)
                 ) {
                     HStack{
                         Image(systemName: "bell")
@@ -35,22 +29,22 @@ struct PreferencesView: View {
                     }
                 }
                 
-                Section(header: Text("Managing Posts (\(vm.allPosts.count))")
-                        .foregroundStyle(Color.mycolor.myAccent)
+                Section(header: Text("Managing posts (\(vm.allPosts.count))")
+                    .foregroundStyle(Color.mycolor.myAccent)
                 ) {
                     HStack {
                         Image(systemName: "icloud.and.arrow.down")
                             .frame(width: iconWidth)
                             .foregroundStyle(Color.mycolor.middle)
-                        NavigationLink("Load Persistent App Posts") {
-                            LoadPersistentPostsView()
+                        NavigationLink("Import pre-loaded posts from Cloud") {
+                            CloudImportView()
                         }
                     }
                     HStack {
                         Image(systemName: "square.and.arrow.up")
                             .frame(width: iconWidth)
                             .foregroundStyle(Color.mycolor.middle)
-                        NavigationLink("Share/Backup Posts") {
+                        NavigationLink("Share/Backup posts") {
                             ShareStorePostsView()
                         }
                     }
@@ -58,15 +52,16 @@ struct PreferencesView: View {
                         Image(systemName: "tray.and.arrow.up")
                             .frame(width: iconWidth)
                             .foregroundStyle(Color.mycolor.middle)
-                        NavigationLink("Restore Backup") {
-                            RestoreBackupView()
+                        NavigationLink("Restore packup") {
+//                            RestoreBackupView()
+                            DocumentPickerView()
                         }
                     }
                     HStack {
                         Image(systemName: "trash")
                             .frame(width: iconWidth)
                             .foregroundStyle(Color.mycolor.middle)
-                        NavigationLink("Erase All Posts") {
+                        NavigationLink("Erase all posts") {
                             EraseAllPostsView()
                         }
                     }
@@ -77,7 +72,7 @@ struct PreferencesView: View {
                         Image(systemName: "info.square")
                             .frame(width: iconWidth)
                             .foregroundStyle(Color.mycolor.middle)
-                        NavigationLink("About APP") {
+                        NavigationLink("About App") {
                             AboutAppView()
                         }
                     }
@@ -85,7 +80,7 @@ struct PreferencesView: View {
                         Image(systemName: "envelope") // envelope.open.fill envelope.fill
                             .frame(width: iconWidth)
                             .foregroundStyle(Color.mycolor.middle)
-
+                        
                         Button("Contact Developer") {
                             EmailService().sendEmail(
                                 to: "andrey.efimov.dev@gmail.com",
@@ -106,30 +101,16 @@ struct PreferencesView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
-//                        action()
                         dismiss()
                     }
                 }
             }
         } // NavigationStack
     }
-    
-    func sendEmail(to: String, subject: String, body: String) {
-            let subjectEncoded = subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-            let bodyEncoded = body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-            
-            let urlString = "mailto:\(to)?subject=\(subjectEncoded)&body=\(bodyEncoded)"
-            if let url = URL(string: urlString) {
-                UIApplication.shared.open(url)
-            }
-        }
-    
 }
-
-
 
 
 #Preview {
     PreferencesView ()
-    .environmentObject(PostsViewModel())
+        .environmentObject(PostsViewModel())
 }
