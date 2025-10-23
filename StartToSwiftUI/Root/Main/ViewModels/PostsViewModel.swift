@@ -201,18 +201,18 @@ class PostsViewModel: ObservableObject {
         completion()
     }
     
-    func loadPersistentPosts(_ completion: @escaping () -> ()) {
-        
-        let receivedPosts: [Post] = DevPreview.samplePosts // load MockData - to change to Networking later to load from cloud
-        
-        // skip posts with the same title - make posts unique by title
-        let newPosts = receivedPosts.filter { newPost in
-            !allPosts.contains(where: { $0.title == newPost.title })
-        }
-        allPosts.append(contentsOf: newPosts)
-        fileManager.savePosts(allPosts)
-        completion()
-    }
+//    func loadPersistentPosts(_ completion: @escaping () -> ()) {
+//        
+//        let receivedPosts: [Post] = DevPreview.samplePosts // load MockData - to change to Networking later to load from cloud
+//        
+//        // skip posts with the same title - make posts unique by title
+//        let newPosts = receivedPosts.filter { newPost in
+//            !allPosts.contains(where: { $0.title == newPost.title })
+//        }
+//        allPosts.append(contentsOf: newPosts)
+//        fileManager.savePosts(allPosts)
+//        completion()
+//    }
     
     func importPostsFromCloud(urlString: String, completion: @escaping () -> Void = {}) {
 
@@ -342,13 +342,16 @@ class PostsViewModel: ObservableObject {
     func favoriteToggle(post: Post) {
         
         if let index = allPosts.firstIndex(of: post) {
+            
             switch allPosts[index].favoriteChoice {
             case .no:
                 allPosts[index].favoriteChoice = .yes
             case .yes:
                 allPosts[index].favoriteChoice = .no
             }
+            fileManager.savePosts(allPosts)
         }
+                
     }
             
     /// Checks all filters for their values.
