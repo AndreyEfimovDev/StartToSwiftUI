@@ -37,7 +37,7 @@ struct PreferencesView: View {
                             .frame(width: iconWidth)
                             .foregroundStyle(Color.mycolor.middle)
                         NavigationLink("Import pre-loaded posts from Cloud") {
-                            CloudImportView()
+                            ImportPostsFromCloudView()
                         }
                     }
                     HStack {
@@ -52,7 +52,7 @@ struct PreferencesView: View {
                         Image(systemName: "tray.and.arrow.up")
                             .frame(width: iconWidth)
                             .foregroundStyle(Color.mycolor.middle)
-                        NavigationLink("Restore packup") {
+                        NavigationLink("Restore backup") {
 //                            RestoreBackupView()
                             DocumentPickerView()
                         }
