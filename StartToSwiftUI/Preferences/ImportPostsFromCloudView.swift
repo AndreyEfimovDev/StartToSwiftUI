@@ -12,8 +12,7 @@ struct ImportPostsFromCloudView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     
-//    private let hapticManager = HapticManager.shared
-    
+    private let hapticManager = HapticManager.shared
     private let selectedURL = Constants.cloudPostsURL
     
     @State private var isInProgress: Bool = false
@@ -21,6 +20,7 @@ struct ImportPostsFromCloudView: View {
     @State private var postCount: Int = 0
     
     var body: some View {
+        
         VStack {
             textSection
                 .managingPostsTextFormater()
@@ -50,6 +50,7 @@ struct ImportPostsFromCloudView: View {
         .padding(.horizontal, 30)
         .padding(.top, 30)
         .padding(30)
+//        .onAppear { print("✅ Started: 🚀 ImportPostsFromCloudView") }
         .alert("Import Error", isPresented: $vm.showCloudImportAlert) {
             Button("OK", role: .cancel) { }
         } message: {
@@ -71,6 +72,7 @@ struct ImportPostsFromCloudView: View {
         vm.importPostsFromCloud(urlString: selectedURL) {
             isInProgress = false
             isImported = true
+            hapticManager.notification(type: .success)
             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                 dismiss()
             }

@@ -26,13 +26,8 @@ struct RestoreBackupView: View {
     
     var body: some View {
         VStack {
-            Text("""
-              You are about to restore posts from backup on the device.
-              
-              The posts from backup will replace
-              all current posts in App.
-              """)
-            .managingPostsTextFormater()
+            textSection
+                .managingPostsTextFormater()
             
             CapsuleButtonView(
                 primaryTitle: "Restore Backup",
@@ -56,6 +51,7 @@ struct RestoreBackupView: View {
         .padding(.horizontal, 30)
         .padding(.top, 30)
         .padding(30)
+//        .onAppear { print("✅ Started: 🚀 RestoreBackupView") }
         .sheet(isPresented: $showDocumentPicker) {
             DocumentPicker(
                 onDocumentPicked: { url in
@@ -76,6 +72,15 @@ struct RestoreBackupView: View {
         } message: {
             Text(errorMessage)
         }
+    }
+    
+    private var textSection: some View {
+        Text("""
+              You are about to restore posts from backup on the device.
+              
+              The posts from backup will replace
+              all current posts in App.
+            """)
     }
     
     private func restorePosts(from url: URL) {
@@ -149,8 +154,6 @@ struct RestoreBackupView: View {
         errorMessage = message
         showErrorAlert = true
         hapticManager.notification(type: .error)
-//        let generator = UINotificationFeedbackGenerator()
-//        generator.notificationOccurred(.error)
     }
 }
 

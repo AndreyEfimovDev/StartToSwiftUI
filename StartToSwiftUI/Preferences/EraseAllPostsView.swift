@@ -44,6 +44,7 @@ struct EraseAllPostsView: View {
                     }
                 }
                 .padding(.top, 30)
+//                .onAppear { print("✅ Started: 🚀 EraseAllPostsView") }
                 .onChange(of: vm.allPosts.count, { oldValue, _ in
                     postCount = oldValue
                 })

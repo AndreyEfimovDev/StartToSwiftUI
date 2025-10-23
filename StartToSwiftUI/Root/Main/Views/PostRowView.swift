@@ -24,22 +24,15 @@ struct PostRowView: View {
         VStack(alignment: .leading, spacing: 5){
             Group {
                 title
-//                    .padding(.top, 4)
                 author
                 level
-//                    .padding(.bottom, 4)
             }
             .foregroundStyle(Color.mycolor.myAccent)
             .padding(.horizontal, 8)
-//            .padding(.vertical, 8)
         }
         .padding(.vertical, 8)
 //        .buttonStyle(.plain) // it makes the button "...more" accessable on touchable view
         .background(.ultraThickMaterial)
-//            ,
-//            in: RoundedRectangle(cornerRadius: 15)
-//        )
-//        .padding(.horizontal, 8)
     }
         
     // MARK: VIEW VARS

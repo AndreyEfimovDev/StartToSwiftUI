@@ -51,6 +51,8 @@ struct ShareStorePostsView: View {
         .padding(.horizontal, 30)
         .padding(.top, 30)
         .padding(30)
+//        .onAppear { print("✅ Started: 🚀 ShareStorePostsView") }
+
     }
     
     private var textSection: some View {
