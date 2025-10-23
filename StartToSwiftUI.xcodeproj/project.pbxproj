@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */; };
-		474007E12EA979EE00C4C9B8 /* DocumentPickerView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474007E02EA979ED00C4C9B8 /* DocumentPickerView2.swift */; };
 		4759974D2E5C690B008E20F0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 475997492E5C690B008E20F0 /* Assets.xcassets */; };
 		4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */; };
 		475997512E5C6C9D008E20F0 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997502E5C6C9D008E20F0 /* Post.swift */; };
@@ -60,7 +59,6 @@
 /* Begin PBXFileReference section */
 		470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleStrokeButtonView.swift; sourceTree = "<group>"; };
 		471BEF4F2EA793880093F962 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		474007E02EA979ED00C4C9B8 /* DocumentPickerView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPickerView2.swift; sourceTree = "<group>"; };
 		4759973B2E5C6901008E20F0 /* StartToSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StartToSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		475997492E5C690B008E20F0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartToSwiftUIApp.swift; sourceTree = "<group>"; };
@@ -256,7 +254,6 @@
 				4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */,
 				47AE6C7E2E7CB3BD006230DA /* AboutAppView.swift */,
 				47AA55892EA9741D000AF4E9 /* DocumentPickerView.swift */,
-				474007E02EA979ED00C4C9B8 /* DocumentPickerView2.swift */,
 				4791CDAE2E70187E00687126 /* PreferencesView.swift */,
 			);
 			path = Preferences;
@@ -395,7 +392,6 @@
 				4773545D2E65D03A001DEDEE /* FiltersSheetView.swift in Sources */,
 				47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */,
 				47BAF0F82E64A77A00287F10 /* Enums.swift in Sources */,
-				474007E12EA979EE00C4C9B8 /* DocumentPickerView2.swift in Sources */,
 				475997552E5C7F81008E20F0 /* PreviewData.swift in Sources */,
 				4791CE0A2E75DA0400687126 /* CardsListView.swift in Sources */,
 				4791CD8C2E6F4BDA00687126 /* ShareStorePostsView.swift in Sources */,
