@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct RestoreBackupView: View {
     
     @Environment(\.dismiss) private var dismiss
@@ -21,9 +19,8 @@ struct RestoreBackupView: View {
     @State private var postCount: Int = 0
     @State private var showErrorAlert = false
     @State private var errorMessage = ""
-    @State private var isLoading = false
+    @State private var isInProgress = false
     
-    // Для DocumentPicker
     @State private var showDocumentPicker = false
     @State private var importedURL: URL?
     
@@ -42,7 +39,6 @@ struct RestoreBackupView: View {
                 secondaryTitle: "\(postCount) Posts Restored!",
                 isToChangeTitile: isBackedUp
             ) {
-                isLoading.toggle()
                 showDocumentPicker = true
             }
             .disabled(isBackedUp)
@@ -50,7 +46,7 @@ struct RestoreBackupView: View {
             
             Spacer()
             
-            if isLoading {
+            if isInProgress {
                 ProgressView("Restoring posts...")
                     .padding()
                     .background(.regularMaterial)
@@ -63,10 +59,14 @@ struct RestoreBackupView: View {
         .sheet(isPresented: $showDocumentPicker) {
             DocumentPicker(
                 onDocumentPicked: { url in
-                    importPosts(from: url)
+                    isInProgress = true
+                    restorePosts(from: url)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        dismiss()
+                    }
                 },
                 onCancel: {
-                    isLoading = false
+                    isInProgress = false
                     print("Document picker cancelled")
                 }
             )
@@ -78,17 +78,16 @@ struct RestoreBackupView: View {
         }
     }
     
-    private func importPosts(from url: URL) {
-        isLoading = true
-
+    private func restorePosts(from url: URL) {
+        
         // Tracking url for debug
         print("Restore: Selected file URL: \(url)")
         print("Restore: File path: \(url.path)")
         
         // Checking file for existence
         guard FileManager.default.fileExists(atPath: url.path) else {
+            isInProgress = false
             showError("File does not exist")
-            isLoading = false
             return
         }
         
@@ -112,21 +111,21 @@ struct RestoreBackupView: View {
             let posts = try JSONDecoder().decode([Post].self, from: data)
             
             DispatchQueue.main.async {
+                isInProgress = false
+                isBackedUp = true
                 vm.allPosts = posts
                 fileManager.savePosts(posts)
                 postCount = posts.count
                 
-                isBackedUp = true
-                isLoading = false
-                
                 hapticManager.notification(type: .success)
-                
                 print("✅ Restored \(postCount) posts from \(url.lastPathComponent)")
             }
             
         } catch let decodingError as DecodingError {
+            isInProgress = false
             handleDecodingError(decodingError)
         } catch {
+            isInProgress = false
             showError("Failed to import: \(error.localizedDescription)")
         }
     }
@@ -149,9 +148,9 @@ struct RestoreBackupView: View {
     private func showError(_ message: String) {
         errorMessage = message
         showErrorAlert = true
-        
-        let generator = UINotificationFeedbackGenerator()
-        generator.notificationOccurred(.error)
+        hapticManager.notification(type: .error)
+//        let generator = UINotificationFeedbackGenerator()
+//        generator.notificationOccurred(.error)
     }
 }
 

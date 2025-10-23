@@ -75,9 +75,4 @@ struct Constants {
     // GitHub cloud url on JSON file with pre-loaded posts
     static let cloudPostsURL = "https://raw.githubusercontent.com/AndreyEfimovDev/StartToSwiftUI/refs/heads/main/posts.json"
     
-    // Или создайте несколько источников на выбор
-        static let cloudURLs = [
-            "Official Repository": "https://raw.githubusercontent.com/AndreyEfimovDev/StartToSwiftUI/refs/heads/main/posts.json",
-            "Backup Source": "https://raw.githubusercontent.com/yourusername/StartToSwift-backup/main/posts.json"
-        ]
 }

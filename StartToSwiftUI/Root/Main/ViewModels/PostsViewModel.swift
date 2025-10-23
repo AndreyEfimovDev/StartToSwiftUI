@@ -216,13 +216,13 @@ class PostsViewModel: ObservableObject {
     
     func importPostsFromCloud(urlString: String, completion: @escaping () -> Void = {}) {
 
-        isLoadingFromCloud = true
+//        isLoadingFromCloud = true
         cloudImportError = nil
         
         networkService.fetchPostsFromURL(urlString) { [weak self] result in
             DispatchQueue.main.async { [self] in
                 
-                self?.isLoadingFromCloud = false
+//                self?.isLoadingFromCloud = false
                 
                 switch result {
                 case .success(let receivedPosts):
