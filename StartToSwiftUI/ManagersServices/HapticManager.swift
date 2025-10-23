@@ -11,17 +11,51 @@ import SwiftUI
 class HapticManager {
     
     static let shared = HapticManager()
+
+    private var notificationGenerator: UINotificationFeedbackGenerator?
+    private var impactGenerators: [UIImpactFeedbackGenerator.FeedbackStyle: UIImpactFeedbackGenerator] = [:]
+    
+    private init() {
+        // Initialise the generators in advance
+        prepareGenerators()
+    }
+    
+    private func prepareGenerators() {
+        
+        notificationGenerator = UINotificationFeedbackGenerator()
+        notificationGenerator?.prepare()
+        
+        let styles: [UIImpactFeedbackGenerator.FeedbackStyle] = [.light, .medium, .heavy, .rigid, .soft]
+        for style in styles {
+            let generator = UIImpactFeedbackGenerator(style: style)
+            generator.prepare()
+            impactGenerators[style] = generator
+        }
+    }
     
     func notification(type: UINotificationFeedbackGenerator.FeedbackType) {
-        let generator = UINotificationFeedbackGenerator()
-        generator.notificationOccurred(type)
+        DispatchQueue.main.async {
+            self.notificationGenerator?.notificationOccurred(type)
+            // Preparing the generator for next use
+            self.notificationGenerator?.prepare()
+        }
     }
     
     func impact(style: UIImpactFeedbackGenerator.FeedbackStyle) {
-        let generator = UIImpactFeedbackGenerator(style: style)
-        generator.impactOccurred()
+        DispatchQueue.main.async {
+            // Use a pre-prepared generator for this style.
+            if let generator = self.impactGenerators[style] {
+                generator.impactOccurred()
+                // Re-preparing the generator for next use
+                generator.prepare()
+            } else {
+                // Fallback: create a new generator if the style has not been prepared
+                let generator = UIImpactFeedbackGenerator(style: style)
+                generator.prepare()
+                generator.impactOccurred()
+            }
+        }
     }
-    
 }
 
 

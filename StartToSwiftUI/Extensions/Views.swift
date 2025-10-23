@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 
 
-
 // MARK: CUSTOM BACKGROUND
 
 extension View {
@@ -65,6 +64,20 @@ extension View {
     }
 }
 
+// MARK: - View Modifier for styling Preferences List Rows
+
+extension View {
+    
+    func customPreferencesListRowStyle(iconName: String, iconWidth: CGFloat) -> some View {
+        HStack {
+            Image(systemName: iconName)
+                .frame(width: iconWidth)
+                .foregroundStyle(Color.mycolor.middle)
+            
+            self
+        }
+    }
+}
 
 
 

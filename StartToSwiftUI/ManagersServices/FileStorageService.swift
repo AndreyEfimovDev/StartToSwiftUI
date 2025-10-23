@@ -12,7 +12,7 @@ class FileStorageService: ObservableObject {
     
     static let shared = FileStorageService()
     
-    let fileName = "posts_app.json"
+    let fileName = Constants.localFileName // "posts_app.json"
 
     var fileURL: URL? {
         

@@ -189,10 +189,7 @@ struct HomeView: View {
                             }
                             .padding(.trailing, 35)
                     } // if showButtonOnTop
-                    
                 }
-                
-                
             } // ZStack
         } // ScrollViewReader
     }

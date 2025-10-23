@@ -70,9 +70,3 @@ class NetworkService: ObservableObject {
     }
 }
 
-
-struct Constants {
-    // GitHub cloud url on JSON file with pre-loaded posts
-    static let cloudPostsURL = "https://raw.githubusercontent.com/AndreyEfimovDev/StartToSwiftUI/refs/heads/main/posts.json"
-    
-}

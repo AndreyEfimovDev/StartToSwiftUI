@@ -7,96 +7,52 @@
 
 import SwiftUI
 
+
+enum PreferencesDestination: Hashable {
+    case cloudImport
+    case shareBackup
+    case restoreBackup
+    case erasePosts
+    case aboutApp
+}
+
 struct PreferencesView: View {
     
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     
+    @State private var navigationPath = NavigationPath()
+    @State private var selectedDestination: PreferencesDestination?
+    
     let iconWidth: CGFloat = 18
+    
+    private var postsCount: Int {
+            vm.allPosts.count
+        }
         
     var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text("Settings")
-                    .foregroundStyle(Color.mycolor.myAccent)
-                ) {
-                    HStack{
-                        Image(systemName: "bell")
-                            .frame(width: iconWidth)
-                            .foregroundStyle(Color.mycolor.middle)
-                        Toggle("Notification", isOn: $vm.isNotification)
-                            .tint(.blue)
-                    }
+                
+                Section(header: sectionHeader("Settings")) {
+                    notificationSetting
                 }
                 
-                Section(header: Text("Managing posts (\(vm.allPosts.count))")
-                    .foregroundStyle(Color.mycolor.myAccent)
-                ) {
-                    HStack {
-                        Image(systemName: "icloud.and.arrow.down")
-                            .frame(width: iconWidth)
-                            .foregroundStyle(Color.mycolor.middle)
-                        NavigationLink("Import pre-loaded posts from Cloud") {
-                            ImportPostsFromCloudView()
-                        }
-                    }
-                    HStack {
-                        Image(systemName: "square.and.arrow.up")
-                            .frame(width: iconWidth)
-                            .foregroundStyle(Color.mycolor.middle)
-                        NavigationLink("Share/Backup posts") {
-                            ShareStorePostsView()
-                        }
-                    }
-                    HStack {
-                        Image(systemName: "tray.and.arrow.up")
-                            .frame(width: iconWidth)
-                            .foregroundStyle(Color.mycolor.middle)
-                        NavigationLink("Restore backup") {
-                            RestoreBackupView()
-                        }
-                    }
-                    HStack {
-                        Image(systemName: "trash")
-                            .frame(width: iconWidth)
-                            .foregroundStyle(Color.mycolor.middle)
-                        NavigationLink("Erase all posts") {
-                            EraseAllPostsView()
-                        }
-                    }
+                Section(header: sectionHeader("Managing posts (\(postsCount))")) {
+                    cloudImportLink
+                    shareBackupLink
+                    restoreBackupLink
+                    erasePostsLink
                 }
                 
                 Section {
-                    HStack {
-                        Image(systemName: "info.square")
-                            .frame(width: iconWidth)
-                            .foregroundStyle(Color.mycolor.middle)
-                        NavigationLink("About App") {
-                            AboutAppView()
-                        }
-                    }
-                    HStack {
-                        Image(systemName: "envelope") // envelope.open.fill envelope.fill
-                            .frame(width: iconWidth)
-                            .foregroundStyle(Color.mycolor.middle)
-                        
-                        Button("Contact Developer") {
-                            EmailService().sendEmail(
-                                to: "andrey.efimov.dev@gmail.com",
-                                subject: "Start To SwftUI!",
-                                body: ""
-                            )
-                        }
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .imageScale(.small)
-                            .fontWeight(.bold)
-                            .foregroundStyle(.gray).opacity(0.5)
-                    }
-                } //Section "About APP"
+                    aboutAppLink
+                    contactDeveloperButton
+                }
             } // Form
             .foregroundStyle(Color.mycolor.myAccent)
             .navigationTitle("Preferences")
+//            .onAppear { print("✅ PreferencesView appeared on main thread: \(Thread.isMainThread)") }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
@@ -106,7 +62,92 @@ struct PreferencesView: View {
             }
         } // NavigationStack
     }
+    
+    // MARK: - Subviews
+    
+    private func sectionHeader(_ text: String) -> some View {
+        Text(text)
+            .foregroundStyle(Color.mycolor.myAccent)
+    }
+    
+    private var notificationSetting: some View {
+        HStack {
+            Image(systemName: "bell")
+                .frame(width: iconWidth)
+                .foregroundStyle(Color.mycolor.middle)
+            Toggle("Notification", isOn: $vm.isNotification)
+                .tint(.blue)
+        }
+    }
+    
+    private var cloudImportLink: some View {
+        NavigationLink("Import posts from Cloud") {
+            ImportPostsFromCloudView()
+//            LazyView { ImportPostsFromCloudView() }
+        }
+        .customPreferencesListRowStyle(iconName: "icloud.and.arrow.down", iconWidth: iconWidth)
+    }
+    
+    private var shareBackupLink: some View {
+        NavigationLink("Share/Backup posts") {
+//            ShareStorePostsView()
+            SharePostsView()
+//            LazyView { ShareStorePostsView() }
+        }
+        .customPreferencesListRowStyle(iconName: "square.and.arrow.up", iconWidth: iconWidth)
+    }
+    
+    private var restoreBackupLink: some View {
+        NavigationLink("Restore backup") {
+            RestoreBackupView()
+//            LazyView { RestoreBackupView() }
+        }
+        .customPreferencesListRowStyle(iconName: "tray.and.arrow.up", iconWidth: iconWidth)
+    }
+    
+    private var erasePostsLink: some View {
+        NavigationLink("Erase all posts") {
+            EraseAllPostsView()
+//            LazyView { EraseAllPostsView() }
+        }
+        .customPreferencesListRowStyle(iconName: "trash", iconWidth: iconWidth)
+    }
+    
+    private var aboutAppLink: some View {
+        NavigationLink("About App") {
+            AboutAppView()
+//            LazyView { AboutAppView() }
+        }
+        .customPreferencesListRowStyle(iconName: "info.square", iconWidth: iconWidth)
+    }
+    
+    private var contactDeveloperButton: some View {
+        Button("Contact Developer") {
+            EmailService().sendEmail(
+                to: "andrey.efimov.dev@gmail.com",
+                subject: "Start To SwiftUI!",
+                body: ""
+            )
+        }
+        .customPreferencesListRowStyle(iconName: "envelope", iconWidth: iconWidth)
+    }
 }
+
+// MARK: - Wrapping all child views for lazy loading
+
+struct LazyView<Content: View>: View {
+    
+    let build: () -> Content
+    
+    init(_ build: @escaping () -> Content) {
+        self.build = build
+    }
+    
+    var body: Content {
+        build()
+    }
+}
+
 
 
 #Preview {

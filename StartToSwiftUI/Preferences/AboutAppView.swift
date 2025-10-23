@@ -61,7 +61,7 @@ struct AboutAppView: View {
                         .padding(.bottom, 8)
                     
                 }
-                .padding()
+//                .padding()
                 
                 Text("""
             Dear fellow learner,
@@ -84,8 +84,8 @@ struct AboutAppView: View {
             Andrey
             
             """)
-                .managingPostsTextFormater()
                 .multilineTextAlignment(.leading)
+                .managingPostsTextFormater()
                 .padding(.horizontal)
                 Spacer()
             }
