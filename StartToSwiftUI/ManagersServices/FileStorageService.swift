@@ -12,7 +12,7 @@ class FileStorageService: ObservableObject {
     
     static let shared = FileStorageService()
     
-    let fileName = "posts.json"
+    let fileName = "posts_app.json"
 
     var fileURL: URL? {
         
@@ -74,30 +74,6 @@ class FileStorageService: ObservableObject {
             return []
         }
     }
-//
-//    func getFileURL() -> URL? {
-//        guard let url = fileURL(fileName: fileName) else { return nil }
-//            return url
-//    }
-    
-//    func shareJSONPostsFile() {
-//
-//        if let fileURL = getPath(fileName: fileName) {
-//            ShareLink(item: fileURL) {
-//                Label("Share JSON file", systemImage: "square.and.arrow.up")
-//            }
-//        } else {
-//            Text("File is not found")
-//        }
-//    }
-    
-//    // Onetime initialiation of posts with MockData
-//    func getJSONData() -> Data? {
-//
-//        let post = DevPreview.samplePosts
-//        let jsonData = try? JSONEncoder().encode(post)
-//        return jsonData
-//    }
 }
 
 

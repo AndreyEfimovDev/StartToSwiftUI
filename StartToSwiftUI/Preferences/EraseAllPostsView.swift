@@ -23,18 +23,18 @@ struct EraseAllPostsView: View {
     var body: some View {
         VStack {
             textSection
-            .managingPostsTextFormater()
+                .managingPostsTextFormater()
             
-            CapsuleButtonView(
-                primaryTitle: "Share/Backup Posts") {
-                    isShowingShareBackupSheet.toggle()
-                }
-                .padding(.top, 30)
-                .disabled(isDeleted)
-                .sheet(isPresented: $isShowingShareBackupSheet) {
-                    ShareStorePostsView()
-                }
-            
+            //            CapsuleButtonView(
+            //                primaryTitle: "Share/Backup Posts") {
+            //                    isShowingShareBackupSheet.toggle()
+            //                }
+            //                .padding(.top, 30)
+            //                .disabled(isDeleted)
+            //                .sheet(isPresented: $isShowingShareBackupSheet) {
+            //                    ShareStorePostsView()
+            //                }
+            //
             CapsuleButtonView(
                 primaryTitle: "Erase All Posts",
                 secondaryTitle: "\(postCount) Posts Erased!",
@@ -43,8 +43,12 @@ struct EraseAllPostsView: View {
                 isToChangeTitile: isDeleted) {
                     vm.eraseAllPosts{
                         isDeleted.toggle()
+//                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+//                            dismiss()
+//                        }
                     }
                 }
+                .padding(.top, 30)
                 .onChange(of: vm.allPosts.count, { oldValue, _ in
                     postCount = oldValue
                     hapticManager.notification(type: .success)
@@ -71,8 +75,8 @@ struct EraseAllPostsView: View {
             
             Text("""
             - create a single post,
-            - load persistent App posts, or
-            - restore backup from your device.
+            - import pre-loaded posts, or
+            - restore backup.
             """
             )
             .multilineTextAlignment(.leading)
