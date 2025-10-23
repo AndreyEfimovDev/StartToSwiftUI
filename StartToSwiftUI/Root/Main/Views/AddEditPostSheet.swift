@@ -113,7 +113,6 @@ struct AddEditPostSheet: View {
                         isShownCircle: false) { // square.and.arrow.down
                             checkPostAndSave()
                         }
-//                        .foregroundStyle(editedPost == draftPost ? Color.mycolor.secondaryText : Color.mycolor.blue)
                         .alert(isPresented: $showAlert) {
                             getAlert(
                                 alertTitle: alertTitle,
