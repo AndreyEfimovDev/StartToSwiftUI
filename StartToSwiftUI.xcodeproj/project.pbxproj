@@ -252,8 +252,8 @@
 				4791CD8B2E6F4BDA00687126 /* ShareStorePostsView.swift */,
 				4791CDB02E701D7E00687126 /* RestoreBackupView.swift */,
 				4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */,
-				47AE6C7E2E7CB3BD006230DA /* AboutAppView.swift */,
 				47AA55892EA9741D000AF4E9 /* DocumentPickerView.swift */,
+				47AE6C7E2E7CB3BD006230DA /* AboutAppView.swift */,
 				4791CDAE2E70187E00687126 /* PreferencesView.swift */,
 			);
 			path = Preferences;
