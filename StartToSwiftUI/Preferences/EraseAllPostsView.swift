@@ -31,9 +31,7 @@ struct EraseAllPostsView: View {
                 buttonColorPrimary: Color.mycolor.myRed,
                 buttonColorSecondary: Color.mycolor.myGreen,
                 isToChangeTitile: isDeleted) {
-                    
                     isInProgress = true
-                    
                     vm.eraseAllPosts{
                         isDeleted = true
                         isInProgress = false
@@ -44,7 +42,6 @@ struct EraseAllPostsView: View {
                     }
                 }
                 .padding(.top, 30)
-//                .onAppear { print("✅ Started: 🚀 EraseAllPostsView") }
                 .onChange(of: vm.allPosts.count, { oldValue, _ in
                     postCount = oldValue
                 })

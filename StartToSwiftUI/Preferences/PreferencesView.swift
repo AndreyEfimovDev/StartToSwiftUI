@@ -52,7 +52,6 @@ struct PreferencesView: View {
             } // Form
             .foregroundStyle(Color.mycolor.myAccent)
             .navigationTitle("Preferences")
-//            .onAppear { print("✅ PreferencesView appeared on main thread: \(Thread.isMainThread)") }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
