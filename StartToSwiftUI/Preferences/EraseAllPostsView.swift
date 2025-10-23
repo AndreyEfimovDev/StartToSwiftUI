@@ -14,9 +14,9 @@ struct EraseAllPostsView: View {
     
     private let hapticManager = HapticManager.shared
     
-    @State var isDeleted: Bool = false
-    @State var isShowingShareBackupSheet: Bool = false
-    
+    @State private var isDeleted: Bool = false
+    @State private var isShowingShareBackupSheet: Bool = false
+    @State private var isInProgress = false
     
     @State private var postCount: Int = 0
     
@@ -25,36 +25,38 @@ struct EraseAllPostsView: View {
             textSection
                 .managingPostsTextFormater()
             
-            //            CapsuleButtonView(
-            //                primaryTitle: "Share/Backup Posts") {
-            //                    isShowingShareBackupSheet.toggle()
-            //                }
-            //                .padding(.top, 30)
-            //                .disabled(isDeleted)
-            //                .sheet(isPresented: $isShowingShareBackupSheet) {
-            //                    ShareStorePostsView()
-            //                }
-            //
             CapsuleButtonView(
                 primaryTitle: "Erase All Posts",
                 secondaryTitle: "\(postCount) Posts Erased!",
                 buttonColorPrimary: Color.mycolor.myRed,
                 buttonColorSecondary: Color.mycolor.myGreen,
                 isToChangeTitile: isDeleted) {
+                    
+                    isInProgress = true
+                    
                     vm.eraseAllPosts{
-                        isDeleted.toggle()
-//                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-//                            dismiss()
-//                        }
+                        isDeleted = true
+                        isInProgress = false
+                        hapticManager.notification(type: .success)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                            dismiss()
+                        }
                     }
                 }
                 .padding(.top, 30)
                 .onChange(of: vm.allPosts.count, { oldValue, _ in
                     postCount = oldValue
-                    hapticManager.notification(type: .success)
                 })
                 .disabled(isDeleted)
+            
             Spacer()
+            
+            if isInProgress {
+                ProgressView("Erasing posts...")
+                    .padding()
+                    .background(.regularMaterial)
+                    .cornerRadius(10)
+            }
         }
         .padding(.horizontal, 30)
         .padding(.top, 30)

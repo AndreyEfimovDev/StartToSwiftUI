@@ -12,12 +12,12 @@ struct ImportPostsFromCloudView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     
-    private let hapticManager = HapticManager.shared
+//    private let hapticManager = HapticManager.shared
     
     private let selectedURL = Constants.cloudPostsURL
     
-    @State private var isLoading: Bool = false
-    @State private var isLoaded: Bool = false
+    @State private var isInProgress: Bool = false
+    @State private var isImported: Bool = false
     @State private var postCount: Int = 0
     
     var body: some View {
@@ -28,19 +28,19 @@ struct ImportPostsFromCloudView: View {
             CapsuleButtonView(
                 primaryTitle: "Import Posts",
                 secondaryTitle: "\(postCount) Posts Imported",
-                isToChangeTitile: isLoaded) {
-                    isLoaded.toggle()
+                isToChangeTitile: isImported) {
+                    isInProgress = true
                     importFromCloud()
                 }
                 .onChange(of: vm.allPosts.count) { oldValue, newValue in
                     postCount = newValue - oldValue
                 }
-                .disabled(isLoaded)
+                .disabled(isImported)
                 .padding(.top, 30)
             
             Spacer()
             
-            if isLoading {
+            if isInProgress {
                 ProgressView("Importing posts...")
                     .padding()
                     .background(.regularMaterial)
@@ -67,13 +67,13 @@ struct ImportPostsFromCloudView: View {
     }
     
     private func importFromCloud() {
-        
-        isLoading = true
+
         vm.importPostsFromCloud(urlString: selectedURL) {
-            isLoading = false
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-//                dismiss()
-//            }
+            isInProgress = false
+            isImported = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                dismiss()
+            }
         }
     }
     
