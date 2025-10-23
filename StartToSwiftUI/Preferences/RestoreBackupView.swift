@@ -1,9 +1,11 @@
-///
-//  BackupView.swift
+//
+//  DocumentPickerView.swift
 //  StartToSwiftUI
 //
-//  Created by Andrey Efimov on 09.09.2025.
+//  Created by Andrey Efimov on 22.10.2025.
 //
+
+import SwiftUI
 
 import SwiftUI
 
@@ -11,44 +13,44 @@ struct RestoreBackupView: View {
     
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
-    
+
     private let fileManager = FileStorageService.shared
     private let hapticManager = HapticManager.shared
     
-    @State private var isRestored: Bool = false // disabel a "Restore Backup" burtton when done
-    @State private var isToPerformFileImporter: Bool = false // to launch .fileImporter
-    @State private var postCount: Int = 0 // show how many posts restored
-    @State private var showErrorAlert = false // handle error messages
+    @State private var isBackedUp: Bool = false
+    @State private var postCount: Int = 0
+    @State private var showErrorAlert = false
     @State private var errorMessage = ""
-    @State private var isInProgress = false // showing a progress of restoring
+    @State private var isLoading = false
+    
+    // Для DocumentPicker
+    @State private var showDocumentPicker = false
+    @State private var importedURL: URL?
     
     var body: some View {
-        
         VStack {
-            textSection
-                .managingPostsTextFormater()
+            Text("""
+              You are about to restore posts from backup on the device.
+              
+              The posts from backup will replace
+              all current posts in App.
+              """)
+            .managingPostsTextFormater()
             
             CapsuleButtonView(
-                primaryTitle: "Restore from Backup",
-                secondaryTitle: "\(postCount) Posts Restored",
-                isToChangeTitile: isRestored
+                primaryTitle: "Restore Backup",
+                secondaryTitle: "\(postCount) Posts Restored!",
+                isToChangeTitile: isBackedUp
             ) {
-                isInProgress.toggle()
-                isToPerformFileImporter.toggle()
+                isLoading.toggle()
+                showDocumentPicker = true
             }
-            .disabled(isRestored)
+            .disabled(isBackedUp)
             .padding(.top, 30)
-            .fileImporter(
-                isPresented: $isToPerformFileImporter,
-                allowedContentTypes: [.json],
-                allowsMultipleSelection: false
-            ) { result in
-                handleFileImport(result)
-            }
             
             Spacer()
             
-            if isInProgress {
+            if isLoading {
                 ProgressView("Restoring posts...")
                     .padding()
                     .background(.regularMaterial)
@@ -58,6 +60,17 @@ struct RestoreBackupView: View {
         .padding(.horizontal, 30)
         .padding(.top, 30)
         .padding(30)
+        .sheet(isPresented: $showDocumentPicker) {
+            DocumentPicker(
+                onDocumentPicked: { url in
+                    importPosts(from: url)
+                },
+                onCancel: {
+                    isLoading = false
+                    print("Document picker cancelled")
+                }
+            )
+        }
         .alert("Error", isPresented: $showErrorAlert) {
             Button("OK", role: .cancel) { }
         } message: {
@@ -65,50 +78,18 @@ struct RestoreBackupView: View {
         }
     }
     
-    private var textSection: some View {
-        VStack(spacing: 12) {
-            Text("""
-            You are about to restore posts from backup on your local device.
-            
-            """)
-            .multilineTextAlignment(.center)
-            
-            Text("""
-            The posts from backup will replace
-            all current posts in App.
-            """)
-            .foregroundStyle(.red)
-            .bold()
-        }
-    }
-    
-    private func handleFileImport(_ result: Result<[URL], Error>) {
-        switch result {
-        case .success(let urls):
-            if let url = urls.first {
-                restorePosts(from: url)
-            }
-        case .failure(let error):
-            showError("Restore: File selection error: \(error.localizedDescription)")
-        }
-    }
-    
-    private func restorePosts(from url: URL) {
-        
+    private func importPosts(from url: URL) {
+        isLoading = true
+
         // Tracking url for debug
         print("Restore: Selected file URL: \(url)")
         print("Restore: File path: \(url.path)")
         
-        // Gaining access to security-scoped resource: users' folders
-        guard url.startAccessingSecurityScopedResource() else {
-            showError("❌ Restore: No access to selected file")
-            isInProgress = false
+        // Checking file for existence
+        guard FileManager.default.fileExists(atPath: url.path) else {
+            showError("File does not exist")
+            isLoading = false
             return
-        }
-        // Revoking access to security-scoped resource when finished
-        defer {
-            url.stopAccessingSecurityScopedResource()
-            print("✅ The access to security-scoped is revoked")
         }
         
         do {
@@ -116,37 +97,37 @@ struct RestoreBackupView: View {
             let data = try Data(contentsOf: url)
             
             guard !data.isEmpty else {
-                showError("❌ Restore: The selected file is empty")
+                showError("The selected file is empty")
                 return
             }
-            print("✅ The selected file is not empty")
             
             // Checking JSON structure
             let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
             guard jsonObject is [Any] else {
-                showError("❌ Restore: Invalid JSON format: expected array of posts")
+                showError("Invalid JSON format: expected array of posts")
                 return
             }
-            print("✅ JSON file structure checked")
             
             // Decoding posts
             let posts = try JSONDecoder().decode([Post].self, from: data)
-            print("✅ Decoded \(posts.count) posts from \(url.lastPathComponent)")
             
-            vm.allPosts = posts
-            fileManager.savePosts(vm.allPosts)
-            postCount = posts.count
-            isInProgress = false
-            isRestored = true
-            hapticManager.notification(type: .success)
-            
-            print("✅ Restored \(postCount) posts from \(url.lastPathComponent)")
-            
+            DispatchQueue.main.async {
+                vm.allPosts = posts
+                fileManager.savePosts(posts)
+                postCount = posts.count
+                
+                isBackedUp = true
+                isLoading = false
+                
+                hapticManager.notification(type: .success)
+                
+                print("✅ Restored \(postCount) posts from \(url.lastPathComponent)")
+            }
             
         } catch let decodingError as DecodingError {
             handleDecodingError(decodingError)
         } catch {
-            showError("❌ Failed to restore: \(error.localizedDescription)")
+            showError("Failed to import: \(error.localizedDescription)")
         }
     }
     
@@ -168,12 +149,15 @@ struct RestoreBackupView: View {
     private func showError(_ message: String) {
         errorMessage = message
         showErrorAlert = true
-        hapticManager.notification(type: .error)
-    }    
+        
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.error)
+    }
 }
-
 
 
 #Preview {
     RestoreBackupView()
+        .environmentObject(PostsViewModel())
+
 }

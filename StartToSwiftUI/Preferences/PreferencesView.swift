@@ -53,8 +53,7 @@ struct PreferencesView: View {
                             .frame(width: iconWidth)
                             .foregroundStyle(Color.mycolor.middle)
                         NavigationLink("Restore backup") {
-//                            RestoreBackupView()
-                            DocumentPickerView()
+                            RestoreBackupView()
                         }
                     }
                     HStack {
