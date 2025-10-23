@@ -28,7 +28,7 @@ struct PostRowView: View {
                 level
             }
             .foregroundStyle(Color.mycolor.myAccent)
-            .padding(.horizontal, 8)
+            .padding(.horizontal, 16)
         }
         .padding(.vertical, 8)
 //        .buttonStyle(.plain) // it makes the button "...more" accessable on touchable view
