@@ -66,8 +66,11 @@ struct SharePostsView: View {
                         hapticManager.notification(type: .success)
                         isShareCompleted = true // Change Share Button status and disable it
                         showActivityView = false // Close sheet after sharing completion
+                        print("✅ Successfully shared via: \(result.activityName)")
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                            dismiss()
+                        }
 
-                        print("✅ Shared via: \(result.activityName)")
                     } else {
                         // Sharing is cancelled
                         isInProgress = false // Stop ProgressView
