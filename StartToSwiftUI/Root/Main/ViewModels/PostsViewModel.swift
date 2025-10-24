@@ -67,21 +67,18 @@ class PostsViewModel: ObservableObject {
     init() {
         
         self.allPosts = fileManager.loadPosts()
-        // get list of years of posts
         
+        // get list of years of posts
         if !self.allPosts.isEmpty {
-            self.listOfYearsInPosts = getListOfPostedYearsOfPosts() // get list of years of posts
+            self.listOfYearsInPosts = getListOfPostedYearsOfPosts()
         }
         
-        
         self.filteredPosts = self.allPosts
-        
         
         // filters initilazation
         self.selectedLevel = self.storedLevel
         self.selectedFavorite = self.storedFavorite
         self.selectedLanguage = self.storedLanguage
-//        self.selectedPlatform = self.storedPlatform
         self.selectedYear = self.storedYear
         self.isFiltersEmpty = checkIfAllFiltersAreEmpty()
         
@@ -150,14 +147,12 @@ class PostsViewModel: ObservableObject {
         favorite: FavoriteChoice?,
         type: PostType?,
         language: LanguageOptions?,
-//        platform: Platform?,
         year: String?) -> [Post] {
             
             if level == nil &&
                 favorite == nil &&
                 language == nil &&
                 type == nil &&
-//                platform == nil &&
                 year == nil {
                 return allPosts
             }
@@ -165,7 +160,6 @@ class PostsViewModel: ObservableObject {
                 let matchesLevel = level == nil || post.studyLevel == level
                 let matchesFavorite = favorite == nil || post.favoriteChoice == favorite
                 let matchesLanguage = language == nil || post.postLanguage == language
-//                let matchesPlatform = platform == nil || post.postPlatform == platform
                 let matchesType = type == nil || post.postType == type
 
                 let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date()))
