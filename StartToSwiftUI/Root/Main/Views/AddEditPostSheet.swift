@@ -15,7 +15,7 @@ enum PostFields: Hashable {
     case author
     case urlString
     case additionalInfo
-    case date
+    case postDate
 }
 
 struct AddEditPostSheet: View {
@@ -91,10 +91,11 @@ struct AddEditPostSheet: View {
                     titleSection
                     introSection
                     authorSection
-                    languageSection
                     urlSection
-                    platformSection
+                    languageSection
                     postDateSection
+                    typeSection
+                    platformSection
                     studyLevelSection
                     favoviteChoiceSection
                     addInforSection
@@ -109,15 +110,15 @@ struct AddEditPostSheet: View {
                 ToolbarItem(placement: .topBarLeading) {
                     CircleStrokeButtonView(
                         iconName: "checkmark",
-                        iconFont: .title2,
-                        isShownCircle: false) { // square.and.arrow.down
-                            checkPostAndSave()
-                        }
-                        .alert(isPresented: $showAlert) {
-                            getAlert(
-                                alertTitle: alertTitle,
-                                alertMessage: alertMessage)
-                        }
+                        isShownCircle: false)
+                    {
+                        checkPostAndSave()
+                    }
+                    .alert(isPresented: $showAlert) {
+                        getAlert(
+                            alertTitle: alertTitle,
+                            alertMessage: alertMessage)
+                    }
                 }
                 ToolbarItem(placement: .topBarTrailing) { //
                     CircleStrokeButtonView(
@@ -162,7 +163,9 @@ struct AddEditPostSheet: View {
         }
     }
     
-    func checkPostAndSave() {
+    // MARK: Functions
+
+    private func checkPostAndSave() {
         if !textIsAppropriate(text: editedPost.title) {
             alertType = .error
             alertTitle = "The Title must contain at least 3 characters."
@@ -197,11 +200,11 @@ struct AddEditPostSheet: View {
         }
     }
     
-    func textIsAppropriate(text: String) -> Bool {
+    private func textIsAppropriate(text: String) -> Bool {
         return text.count >= 3
     }
     
-    func getAlert(alertTitle: String,
+    private func getAlert(alertTitle: String,
                   alertMessage: String) -> Alert {
         switch alertType {
         case .error:
@@ -225,12 +228,13 @@ struct AddEditPostSheet: View {
         }
     }
     
-    
+    // MARK: ViewBuilders
+
     @ViewBuilder
     private func textEditorRightButton(
         text: String,
-        iconName: String,
-        iconColor: Color,
+        iconName: String = "xmark",
+        iconColor: Color = Color.mycolor.myRed,
         action: @escaping () -> ()
     ) -> some View {
         
@@ -245,6 +249,8 @@ struct AddEditPostSheet: View {
             .background(.black.opacity(0.001))
         }
     }
+    
+    // MARK: Subviews
     
     private var titleSection: some View {
         
@@ -289,10 +295,7 @@ struct AddEditPostSheet: View {
                     .onSubmit {focusedField = .author }
                     .submitLabel(.return)
                 VStack {
-                    textEditorRightButton(
-                        text: editedPost.intro,
-                        iconName: "xmark",
-                        iconColor: Color.mycolor.myRed) {
+                    textEditorRightButton(text: editedPost.intro) {
                             editedPost.intro = ""
                         }
                         .background(.ultraThickMaterial,
@@ -326,12 +329,9 @@ struct AddEditPostSheet: View {
                     .frame(height: 50)
                     .autocorrectionDisabled()
                     .focused($focusedField, equals: .author)
-                    .onSubmit {focusedField = nil }
+                    .onSubmit {focusedField = .urlString }
                     .submitLabel(.next)
-                textEditorRightButton(
-                    text: editedPost.author,
-                    iconName: "xmark",
-                    iconColor: Color.mycolor.myRed) {
+                textEditorRightButton(text: editedPost.author) {
                         editedPost.author = ""
                     }
                     .background(.ultraThickMaterial,
@@ -339,6 +339,36 @@ struct AddEditPostSheet: View {
                     )
             }
             .sectionBackgroundInAddEditView()
+        }
+    }
+    
+    
+    private var urlSection: some View {
+        
+        VStack(alignment: .leading, spacing: 0) {
+            Text("URL")
+                .sectionSubheaderFormater(fontSubheader: fontSubheader,
+                                          colorSubheader: colorSubheader)
+            HStack(spacing: 0) {
+                TextField("", text: $editedPost.urlString)
+                    .font(fontTextInput)
+                    .padding(.leading, 5)
+                    .frame(height: 50)
+                    .textInputAutocapitalization(.none)
+                    .autocorrectionDisabled()
+                    .keyboardType(.URL)
+                    .focused($focusedField, equals: .urlString)
+                    .onSubmit {focusedField = nil }
+                    .submitLabel(.next)
+                textEditorRightButton(text: editedPost.urlString) {
+                        editedPost.urlString = ""
+                    }
+                    .background(.ultraThickMaterial,
+                                in: RoundedRectangle(cornerRadius: 8)
+                    )
+            }
+            .background(.ultraThickMaterial)
+            .cornerRadius(8)
         }
     }
     
@@ -366,59 +396,9 @@ struct AddEditPostSheet: View {
             }
             .sectionBackgroundInAddEditView()
         }
-        .onChange(of: editedPost.postLanguage) {
-            focusedField = .urlString
-        }
-    }
-    
-    private var urlSection: some View {
-        
-        VStack(alignment: .leading, spacing: 0) {
-            Text("URL")
-                .sectionSubheaderFormater(fontSubheader: fontSubheader,
-                                          colorSubheader: colorSubheader)
-            HStack(spacing: 0) {
-                TextField("", text: $editedPost.urlString)
-                    .font(fontTextInput)
-                    .padding(.leading, 5)
-                    .frame(height: 50)
-                    .textInputAutocapitalization(.none)
-                    .autocorrectionDisabled()
-                    .keyboardType(.URL)
-                    .focused($focusedField, equals: .urlString)
-                    .onSubmit {focusedField = nil }
-                    .submitLabel(.next)
-                textEditorRightButton(
-                    text: editedPost.urlString,
-                    iconName: "xmark",
-                    iconColor: Color.mycolor.myRed) {
-                        editedPost.urlString = ""
-                    }
-                    .background(.ultraThickMaterial,
-                                in: RoundedRectangle(cornerRadius: 8)
-                    )
-            }
-            .background(.ultraThickMaterial)
-            .cornerRadius(8)
-        }
-    }
-    
-    private var platformSection: some View {
-        
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Post Platform")
-                .sectionSubheaderFormater(fontSubheader: fontSubheader,
-                                          colorSubheader: colorSubheader)
-            UnderlineSermentedPickerNotOptional(
-                selection: $editedPost.postPlatform,
-                allItems: Platform.allCases,
-                titleForCase: { $0.displayName },
-                selectedTextColor: Color.blue,
-                unselectedTextColor: Color.mycolor.mySecondaryText
-            )
-            .frame(height: 50)
-            .sectionBackgroundInAddEditView()
-        }
+//        .onChange(of: editedPost.postLanguage) {
+//            focusedField = .postDate
+//        }
     }
     
     private var postDateSection: some View {
@@ -438,8 +418,47 @@ struct AddEditPostSheet: View {
             .frame(height: 50)
             .sectionBackgroundInAddEditView()
         }
-        .onChange(of: bindingPostDate.wrappedValue) { oldValue, newValue in
+        .onChange(of: bindingPostDate.wrappedValue) { _, newValue in
             editedPost.postDate = newValue
+        }
+    }
+    
+    private var typeSection: some View {
+        
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Post Type")
+                .sectionSubheaderFormater(fontSubheader: fontSubheader,
+                                          colorSubheader: colorSubheader)
+            UnderlineSermentedPickerNotOptional(
+                selection: $editedPost.postType,
+                allItems: PostType.allCases,
+                titleForCase: { $0.displayName },
+                selectedTextColor: Color.blue,
+                unselectedTextColor: Color.mycolor.mySecondaryText
+            )
+            .frame(height: 50)
+            .sectionBackgroundInAddEditView()
+        }
+//        .onChange(of: editedPost.postLanguage) {
+//            focusedField = .urlString
+//        }
+    }
+    
+    private var platformSection: some View {
+        
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Post Platform")
+                .sectionSubheaderFormater(fontSubheader: fontSubheader,
+                                          colorSubheader: colorSubheader)
+            UnderlineSermentedPickerNotOptional(
+                selection: $editedPost.postPlatform,
+                allItems: Platform.allCases,
+                titleForCase: { $0.displayName },
+                selectedTextColor: Color.blue,
+                unselectedTextColor: Color.mycolor.mySecondaryText
+            )
+            .frame(height: 50)
+            .sectionBackgroundInAddEditView()
         }
     }
     
@@ -499,10 +518,7 @@ struct AddEditPostSheet: View {
                     .onSubmit {focusedField = nil }
                     .submitLabel(.return)
                 VStack {
-                    textEditorRightButton(
-                        text: editedPost.additionalText,
-                        iconName: "xmark",
-                        iconColor: Color.mycolor.myRed) {
+                    textEditorRightButton(text: editedPost.additionalText) {
                             editedPost.additionalText = ""
                         }
                         .background(.ultraThickMaterial,

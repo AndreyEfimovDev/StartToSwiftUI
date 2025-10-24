@@ -67,21 +67,18 @@ class PostsViewModel: ObservableObject {
     init() {
         
         self.allPosts = fileManager.loadPosts()
-        // get list of years of posts
         
+        // get list of years of posts
         if !self.allPosts.isEmpty {
-            self.listOfYearsInPosts = getListOfPostedYearsOfPosts() // get list of years of posts
+            self.listOfYearsInPosts = getListOfPostedYearsOfPosts()
         }
         
-        
         self.filteredPosts = self.allPosts
-        
         
         // filters initilazation
         self.selectedLevel = self.storedLevel
         self.selectedFavorite = self.storedFavorite
         self.selectedLanguage = self.storedLanguage
-//        self.selectedPlatform = self.storedPlatform
         self.selectedYear = self.storedYear
         self.isFiltersEmpty = checkIfAllFiltersAreEmpty()
         
@@ -150,14 +147,12 @@ class PostsViewModel: ObservableObject {
         favorite: FavoriteChoice?,
         type: PostType?,
         language: LanguageOptions?,
-//        platform: Platform?,
         year: String?) -> [Post] {
             
             if level == nil &&
                 favorite == nil &&
                 language == nil &&
                 type == nil &&
-//                platform == nil &&
                 year == nil {
                 return allPosts
             }
@@ -165,7 +160,6 @@ class PostsViewModel: ObservableObject {
                 let matchesLevel = level == nil || post.studyLevel == level
                 let matchesFavorite = favorite == nil || post.favoriteChoice == favorite
                 let matchesLanguage = language == nil || post.postLanguage == language
-//                let matchesPlatform = platform == nil || post.postPlatform == platform
                 let matchesType = type == nil || post.postType == type
 
                 let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date()))
@@ -248,46 +242,6 @@ class PostsViewModel: ObservableObject {
         completion()
     }
     
-    //    func importPostsFromCloud(urlString: String, completion: @escaping () -> Void = {}) {
-    //
-    ////        isLoadingFromCloud = true
-    //        cloudImportError = nil
-    //
-    //        networkService.fetchPostsFromURL(urlString) { [weak self] result in
-    //            DispatchQueue.main.async { [self] in
-    //
-    ////                self?.isLoadingFromCloud = false
-    //
-    //                switch result {
-    //                case .success(let receivedPosts):
-    //
-    //                    let newPosts = receivedPosts.filter { newPost in
-    //                        !(self?.allPosts.contains(where: { $0.title == newPost.title }) ?? false)
-    //                    }
-    //                    self?.allPosts.append(contentsOf: newPosts)
-    //                    self?.fileManager.savePosts(self?.allPosts ?? [])
-    //                    self?.cloudImportError = nil
-    //                    self?.hapticManager.notification(type: .success)
-    //
-    ////                    let generator = UINotificationFeedbackGenerator()
-    ////                    generator.notificationOccurred(.success)
-    //
-    //                    print("✅ Successfully imported \(newPosts.count) posts from cloud")
-    //
-    //                case .failure(let error):
-    //                    self?.cloudImportError = error.localizedDescription
-    //                    self?.showCloudImportAlert = true
-    //                    self?.hapticManager.notification(type: .error)
-    ////                    let generator = UINotificationFeedbackGenerator()
-    ////                    generator.notificationOccurred(.error)
-    //
-    //                    print("❌ Cloud import error: \(error.localizedDescription)")
-    //                }
-    //                completion()
-    //            }
-    //        }
-    //    }
-    
     func importPostsFromCloud(urlString: String = Constants.cloudPostsURL, completion: @escaping () -> Void = {}) {
 
         cloudImportError = nil
@@ -299,19 +253,18 @@ class PostsViewModel: ObservableObject {
                 case .success(let cloudResponse):
                     
                     // Selecting Cloud posts with unique Titles only -  - do not import such posts from Cloud
-                    let newCloudPostsFirst = cloudResponse.cloudPosts.filter { newPost in
+                    let newCloudPosts1stCheck = cloudResponse.cloudPosts.filter { newPost in
                         !(self?.allPosts.contains(where: { $0.title == newPost.title }) ?? false)
                     }
                     
                     // Checking Cloud posts with the same ID to local App posts - do not import such posts from Cloud
-                    let newCloudPostsSecond = newCloudPostsFirst.filter { newPost in
+                    let newCloudPosts2ndCheck = newCloudPosts1stCheck.filter { newPost in
                         !(self?.allPosts.contains(where: { $0.title == newPost.title }) ?? false)
                     }
 
-                    
-                    if !newCloudPostsSecond.isEmpty {
+                    if !newCloudPosts2ndCheck.isEmpty {
                         // Updating App posts
-                        self?.allPosts.append(contentsOf: newCloudPostsSecond)
+                        self?.allPosts.append(contentsOf: newCloudPosts2ndCheck)
                         self?.fileManager.savePosts(self?.allPosts ?? [])
                         
                         self?.hapticManager.notification(type: .success)
@@ -320,10 +273,10 @@ class PostsViewModel: ObservableObject {
                         self?.localLastUpdated = cloudResponse.dateStamp
                         print(cloudResponse.dateStamp.formatted(date: .abbreviated, time: .shortened))
 
-                        print("✅ Successfully imported \(newCloudPostsSecond.count) posts from cloud")
+                        print("✅ Successfully imported \(newCloudPosts2ndCheck.count) posts from cloud")
                         
                     } else {
-                        print("✅ No new posts from cloud. \(newCloudPostsSecond.count) imported posts ")
+                        print("✅ No new posts from cloud. \(newCloudPosts2ndCheck.count) imported posts ")
                         self?.hapticManager.impact(style: .heavy)
                     }
                     
@@ -359,40 +312,7 @@ class PostsViewModel: ObservableObject {
             }
         }
     }
-    
-    //    func importPostsFromURL(_ url: URL, completion: @escaping () -> ()) {
-    //        do {
-    //
-    ////            // Gaining access to security-scoped resource
-    ////            guard url.startAccessingSecurityScopedResource() else {
-    ////                print("❌ VM: No access to JSON file")
-    ////                return
-    ////            }
-    ////
-    ////            defer {
-    ////                url.stopAccessingSecurityScopedResource()
-    ////            }
-    //
-    //
-    //
-    //
-    //
-    //            let data = try Data(contentsOf: url)
-    //            let posts = try JSONDecoder().decode([Post].self, from: data)
-    //
-    //            // skip posts with the same title - make posts unique by title
-    //            let newPosts = posts.filter { newPost in
-    //                !allPosts.contains(where: { $0.title == newPost.title })
-    //            }
-    //            allPosts.append(contentsOf: newPosts)
-    //            fileManager.savePosts(newPosts)
-    //            print("✅ VM: Imported \(newPosts.count) posts from \(url.lastPathComponent)")
-    //            completion()
-    //        } catch {
-    //            print("❌ VM: Error import: \(error.localizedDescription)")
-    //        }
-    //    }
-    
+        
     /// Checks if a title of a post is unique.
     ///
     /// The result is used to avoid doublied posts with the same titles.
@@ -437,6 +357,7 @@ class PostsViewModel: ObservableObject {
     ///
     /// - Warning: This app is made for self study learning purpose only.
     /// - Returns: Returns a boolean, true if all filters are not set (nil) and false if at least one is set.
+    ///
     func checkIfAllFiltersAreEmpty() -> Bool {
         // check if all filters are empty
         if selectedLevel == nil &&
