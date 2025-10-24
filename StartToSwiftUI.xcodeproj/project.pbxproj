@@ -30,11 +30,10 @@
 		4791CDAF2E70187E00687126 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDAE2E70187E00687126 /* PreferencesView.swift */; };
 		4791CDBB2E702E9700687126 /* EraseAllPostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */; };
 		4791CDC12E708E1300687126 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDC02E708E1000687126 /* DocumentPicker.swift */; };
-		4791CDC52E70B70000687126 /* ContentUnavailableViewBootcamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDC42E70B70000687126 /* ContentUnavailableViewBootcamp.swift */; };
 		4791CDC72E70B7D800687126 /* AlertBootcamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDC62E70B7D800687126 /* AlertBootcamp.swift */; };
 		4791CDEA2E72E8CC00687126 /* Arrays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDE92E72E8CC00687126 /* Arrays.swift */; };
 		4791CDEC2E73339100687126 /* SheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDEB2E73339100687126 /* SheetView.swift */; };
-		4791CDEF2E737B3600687126 /* 0427_SFSymbolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDEE2E737B3600687126 /* 0427_SFSymbolsView.swift */; };
+		4791CDEF2E737B3600687126 /* SFSymbolsAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDEE2E737B3600687126 /* SFSymbolsAnimationView.swift */; };
 		4791CDF12E7428EE00687126 /* CircleShadowButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDF02E7428EE00687126 /* CircleShadowButtonView.swift */; };
 		4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDF92E744AD400687126 /* CapsuleButtonView.swift */; };
 		4791CDFC2E746FF100687126 /* EmailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDFB2E746FF100687126 /* EmailService.swift */; };
@@ -84,11 +83,10 @@
 		4791CDAE2E70187E00687126 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EraseAllPostsView.swift; sourceTree = "<group>"; };
 		4791CDC02E708E1000687126 /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
-		4791CDC42E70B70000687126 /* ContentUnavailableViewBootcamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentUnavailableViewBootcamp.swift; sourceTree = "<group>"; };
 		4791CDC62E70B7D800687126 /* AlertBootcamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertBootcamp.swift; sourceTree = "<group>"; };
 		4791CDE92E72E8CC00687126 /* Arrays.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arrays.swift; sourceTree = "<group>"; };
 		4791CDEB2E73339100687126 /* SheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetView.swift; sourceTree = "<group>"; };
-		4791CDEE2E737B3600687126 /* 0427_SFSymbolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 0427_SFSymbolsView.swift; sourceTree = "<group>"; };
+		4791CDEE2E737B3600687126 /* SFSymbolsAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSymbolsAnimationView.swift; sourceTree = "<group>"; };
 		4791CDF02E7428EE00687126 /* CircleShadowButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleShadowButtonView.swift; sourceTree = "<group>"; };
 		4791CDF92E744AD400687126 /* CapsuleButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleButtonView.swift; sourceTree = "<group>"; };
 		4791CDFB2E746FF100687126 /* EmailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailService.swift; sourceTree = "<group>"; };
@@ -163,11 +161,10 @@
 				4791CDAD2E70186100687126 /* Preferences */,
 				4791CDE72E70D38100687126 /* Not Used */,
 				475997492E5C690B008E20F0 /* Assets.xcassets */,
-				4791CDC42E70B70000687126 /* ContentUnavailableViewBootcamp.swift */,
 				4791CDC62E70B7D800687126 /* AlertBootcamp.swift */,
 				4791CDEB2E73339100687126 /* SheetView.swift */,
 				4791CE092E75DA0400687126 /* CardsListView.swift */,
-				4791CDEE2E737B3600687126 /* 0427_SFSymbolsView.swift */,
+				4791CDEE2E737B3600687126 /* SFSymbolsAnimationView.swift */,
 			);
 			path = StartToSwiftUI;
 			sourceTree = "<group>";
@@ -409,13 +406,12 @@
 				47AE6C7F2E7CB3BD006230DA /* AboutAppView.swift in Sources */,
 				47BAF0CA2E635E2800287F10 /* Views.swift in Sources */,
 				47BAF0FA2E64CC8700287F10 /* UnderlineSermentedPicker.swift in Sources */,
-				4791CDEF2E737B3600687126 /* 0427_SFSymbolsView.swift in Sources */,
+				4791CDEF2E737B3600687126 /* SFSymbolsAnimationView.swift in Sources */,
 				4759975D2E5C8F4B008E20F0 /* PostRowView.swift in Sources */,
 				47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */,
 				4791CDF12E7428EE00687126 /* CircleShadowButtonView.swift in Sources */,
 				4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */,
 				4791CDFE2E747AC100687126 /* FileStorageService.swift in Sources */,
-				4791CDC52E70B70000687126 /* ContentUnavailableViewBootcamp.swift in Sources */,
 				475997512E5C6C9D008E20F0 /* Post.swift in Sources */,
 				4732FB2D2EAA2BFC0062269D /* ImportPostsFromCloudView.swift in Sources */,
 				4732FB312EAA59B00062269D /* SharePostsView.swift in Sources */,
