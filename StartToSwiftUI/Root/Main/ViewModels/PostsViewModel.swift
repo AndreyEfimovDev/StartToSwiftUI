@@ -308,7 +308,6 @@ class PostsViewModel: ObservableObject {
                         !(self?.allPosts.contains(where: { $0.title == newPost.title }) ?? false)
                     }
 
-                    
                     if !newCloudPosts2ndCheck.isEmpty {
                         // Updating App posts
                         self?.allPosts.append(contentsOf: newCloudPosts2ndCheck)
