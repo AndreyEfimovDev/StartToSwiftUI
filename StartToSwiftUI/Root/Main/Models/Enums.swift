@@ -86,9 +86,9 @@ enum Platform: String, CaseIterable, Codable {
 enum Theme: String, CaseIterable, Codable {
     case light, dark, system
     
-    var displayName: String { rawValue.capitalized }
+//    var displayName: String { rawValue.capitalized }
     
-    var displayName2: String {
+    var displayName: String {
         switch self {
         case .light: return "🌞 Light"
         case .dark: return "🌙 Dark"
