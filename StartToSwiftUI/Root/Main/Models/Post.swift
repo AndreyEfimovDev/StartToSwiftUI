@@ -20,7 +20,7 @@ struct Post: Identifiable, Hashable, Codable {
     var studyLevel: StudyLevel // knownledge of the post
     var favoriteChoice: FavoriteChoice
     var additionalText: String // free text field to enter everything you wishe
-    var date: Date // creation  date of the post
+    let date: Date // creation  date of the post
     
     init(
         id: UUID = UUID(),
