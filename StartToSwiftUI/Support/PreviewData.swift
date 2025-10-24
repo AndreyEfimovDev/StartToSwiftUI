@@ -13,19 +13,6 @@ struct DevPreview {
     
     //    static let shared = PreviewPosts()
     
-    static let samplePost0 = Post(
-        title: "Property Wrappers",
-        intro: "В этом видео я расскажу вам обо всех оболочках, которые нам предлагает SwiftUI для хранения временных данных. Так же вы поймете, в чем отличие между такими оболочки как @State, @StateObject, @ObservedObject, @EnvironmentObject. Эти оболочки очень похожи друг на друга и знание того, когда и какую лучше использовать, имеет решающее значение.",
-        author: "Evgenia Bruyko",
-        postLanguage: .russian,
-        urlString: "https://youtu.be/ExwwrvOT8mI?si=SU__YwU8UlR461Zb",
-        postPlatform: .youtube,
-        postDate: Date.from(year: 2021, month: 3, day: 26),
-        studyLevel: .beginner,
-        favoriteChoice: .yes,
-        additionalText: "",
-        date: .now
-    )
     static let samplePost1 = Post(
         title: "Property Wrappers",
         intro: "В этом видео я расскажу вам обо всех оболочках, которые нам предлагает SwiftUI для хранения временных данных. Так же вы поймете, в чем отличие между такими оболочки как @State, @StateObject, @ObservedObject, @EnvironmentObject. Эти оболочки очень похожи друг на друга и знание того, когда и какую лучше использовать, имеет решающее значение.",
@@ -98,7 +85,7 @@ struct DevPreview {
             postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 3, day: 26),
             studyLevel: .beginner,
-            favoriteChoice: .yes,
+            favoriteChoice: .no,
             additionalText: "",
             date: .now
         ),
