@@ -299,19 +299,19 @@ class PostsViewModel: ObservableObject {
                 case .success(let cloudResponse):
                     
                     // Selecting Cloud posts with unique Titles only -  - do not import such posts from Cloud
-                    let newCloudPostsFirst = cloudResponse.cloudPosts.filter { newPost in
+                    let newCloudPosts1stCheck = cloudResponse.cloudPosts.filter { newPost in
                         !(self?.allPosts.contains(where: { $0.title == newPost.title }) ?? false)
                     }
                     
                     // Checking Cloud posts with the same ID to local App posts - do not import such posts from Cloud
-                    let newCloudPostsSecond = newCloudPostsFirst.filter { newPost in
+                    let newCloudPosts2ndCheck = newCloudPosts1stCheck.filter { newPost in
                         !(self?.allPosts.contains(where: { $0.title == newPost.title }) ?? false)
                     }
 
                     
-                    if !newCloudPostsSecond.isEmpty {
+                    if !newCloudPosts2ndCheck.isEmpty {
                         // Updating App posts
-                        self?.allPosts.append(contentsOf: newCloudPostsSecond)
+                        self?.allPosts.append(contentsOf: newCloudPosts2ndCheck)
                         self?.fileManager.savePosts(self?.allPosts ?? [])
                         
                         self?.hapticManager.notification(type: .success)
@@ -320,10 +320,10 @@ class PostsViewModel: ObservableObject {
                         self?.localLastUpdated = cloudResponse.dateStamp
                         print(cloudResponse.dateStamp.formatted(date: .abbreviated, time: .shortened))
 
-                        print("✅ Successfully imported \(newCloudPostsSecond.count) posts from cloud")
+                        print("✅ Successfully imported \(newCloudPosts2ndCheck.count) posts from cloud")
                         
                     } else {
-                        print("✅ No new posts from cloud. \(newCloudPostsSecond.count) imported posts ")
+                        print("✅ No new posts from cloud. \(newCloudPosts2ndCheck.count) imported posts ")
                         self?.hapticManager.impact(style: .heavy)
                     }
                     
