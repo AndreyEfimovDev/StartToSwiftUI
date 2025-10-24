@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SFSymbolsAnimationView: View {
+struct _427_SFSymbolsView: View {
     
     @State var valueToUse: Int = 0
     @State var isDeleted: Bool = false
@@ -61,5 +61,5 @@ struct SFSymbolsAnimationView: View {
 }
 
 #Preview {
-    SFSymbolsAnimationView()
+    _427_SFSymbolsView()
 }
