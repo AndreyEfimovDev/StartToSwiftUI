@@ -14,22 +14,24 @@ struct Post: Identifiable, Hashable, Codable {
     var intro: String // description of the post
     var author: String // author of the post
     var postLanguage: LanguageOptions // Language of the post
+    var postType: PostType
     var urlString: String // url link of the post
-    var postPlatform: Platform // platform the post is located
+    var postPlatform: Platform // platform location
     var postDate: Date? // date of the post
-    var studyLevel: StudyLevel // knownledge of the post
+    var studyLevel: StudyLevel // study level of the post
     var favoriteChoice: FavoriteChoice
-    var additionalText: String // free text field to enter everything you wishe
+    var additionalText: String // free text field to enter everything you wish
     let date: Date // creation  date of the post
     
     init(
         id: UUID = UUID(),
-        title: String = "",
-        intro: String = "",
-        author: String = "",
-        postLanguage: LanguageOptions,
+        title: String,
+        intro: String,
+        author: String,
+        postLanguage: LanguageOptions = .english,
+        postType: PostType = .singlepost,
         urlString: String = "www.apple.com",
-        postPlatform: Platform,
+        postPlatform: Platform = .youtube,
         postDate: Date? = nil,
         studyLevel: StudyLevel = .beginner,
         favoriteChoice: FavoriteChoice = .no,
@@ -41,6 +43,7 @@ struct Post: Identifiable, Hashable, Codable {
         self.intro = intro
         self.author = author
         self.postLanguage = postLanguage
+        self.postType = postType
         self.urlString = urlString
         self.postPlatform = postPlatform
         self.postDate = postDate
