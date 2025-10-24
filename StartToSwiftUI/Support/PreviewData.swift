@@ -28,17 +28,15 @@ struct DevPreview {
     )
     
     static let samplePost2 = Post(
-        title: "FaceFacts app with SwiftUI and SwiftData",
-        intro: "It’s a small but complete app for iOS.",
-        author: "Paul Hudson",
-        postLanguage: .english,
-        urlString: "https://www.youtube.com/watch?v=n4SCMC25BxY",
-        postPlatform: .others,
-        postDate: nil, // Date.from(year: 2023, month: 12, day: 22),
-        studyLevel: .middle,
-        favoriteChoice: .no,
-        additionalText: "",
-        date: .now
+        title: "SwiftUI Advanced Learning",
+        intro: """
+            Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
+            """,
+        author: "Swiftful Thinking",
+        postType: .playlist,
+        urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
+        postDate: Date.from(year: 2021, month: 8, day: 30),
+        studyLevel: .advanced
     )
     
     static let samplePost3 = Post(
@@ -54,7 +52,7 @@ struct DevPreview {
         urlString: "https://www.youtube.com/watch?v=rbtIcKKxQ38", //
         postPlatform: .website,
         postDate: Date.from(year: 2022, month: 8, day: 11),
-        studyLevel: .advanced,
+        studyLevel: .middle,
         favoriteChoice: .no,
         additionalText: """
         In this video we are going to explore how we can stylize text for our Text views in SwiftUI.

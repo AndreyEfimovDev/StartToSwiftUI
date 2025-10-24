@@ -58,7 +58,7 @@ struct PostRowView: View {
             Text(post.postLanguage.displayName)
             +
             Text(", \(post.postDate?.formatted(date: .numeric, time: .omitted) ?? "post date missed")") +
-            Text(post.postPlatform == .others ? "" : ", on " + post.postPlatform.rawValue)
+            Text(post.postType == .others ? "" : ", " + post.postType.displayName)
         }
         .font(.footnote)
     }

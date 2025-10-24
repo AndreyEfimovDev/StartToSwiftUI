@@ -143,8 +143,9 @@ struct PostDetailsView: View {
         VStack(spacing: 0) {
             VStack {
                 let date = post.date.formatted(date: .numeric, time: .omitted)
-                let platform = post.postPlatform == .others ? "" : " on " + post.postPlatform.rawValue
-                Text("Posted " + date + platform)
+                let platform = post.postPlatform == .others ? "" : post.postPlatform.displayName
+                let postType = post.postPlatform == .others ? "" : post.postType.displayName
+                Text(postType + " on " + platform + " posted "  + date)
                     .font(.system(size: 10, weight: .light, design: .rounded))
                     .multilineTextAlignment(.trailing)
                     .frame(maxWidth: .infinity, alignment: .leading)
