@@ -87,7 +87,7 @@ class PostsViewModel: ObservableObject {
         
         if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
             utcCalendar.timeZone = utcTimeZone
-            print("✅  VM(init): TimeZone is set successfully")
+            print("✅ VM(init): TimeZone is set successfully")
         } else {
             print("❌ VM(init): TimeZone is not set")
         }
@@ -241,9 +241,12 @@ class PostsViewModel: ObservableObject {
         let newPosts = receivedPosts.filter { newPost in
             !allPosts.contains(where: { $0.title == newPost.title })
         }
-        allPosts.append(contentsOf: newPosts)
-        fileManager.savePosts(allPosts)
-        listOfYearsInPosts = getListOfPostedYearsOfPosts()
+        
+        if !newPosts.isEmpty {
+            allPosts.append(contentsOf: newPosts)
+            fileManager.savePosts(allPosts)
+            listOfYearsInPosts = getListOfPostedYearsOfPosts()
+        }
         completion()
     }
     
@@ -304,21 +307,26 @@ class PostsViewModel: ObservableObject {
                         !(self?.allPosts.contains(where: { $0.title == newPost.title }) ?? false)
                     }
                     
-                    // Updating App posts
-                    self?.allPosts.append(contentsOf: newCloudPosts)
-                    self?.fileManager.savePosts(self?.allPosts ?? [])
-                    
-                    // Saving the date stamp from the Cloud
-                    self?.localLastUpdated = cloudResponse.lastUpdated
-//                    UserDefaults.standard.set(cloudResponse.lastUpdated, forKey: "localLastUpdated")
-                    print(cloudResponse.lastUpdated.formatted(date: .abbreviated, time: .shortened))
-                    
-                    self?.cloudImportError = nil
-                    
-                    // Haptic feedback for success
-                    self?.hapticManager.notification(type: .success)
-                    
-                    print("✅ Successfully imported \(newCloudPosts.count) posts from cloud")
+                    if !newCloudPosts.isEmpty {
+                        // Updating App posts
+                        self?.allPosts.append(contentsOf: newCloudPosts)
+                        self?.fileManager.savePosts(self?.allPosts ?? [])
+                        // Saving the date stamp from the Cloud
+                        self?.localLastUpdated = cloudResponse.lastUpdated
+    //                    UserDefaults.standard.set(cloudResponse.lastUpdated, forKey: "localLastUpdated")
+                        print(cloudResponse.lastUpdated.formatted(date: .abbreviated, time: .shortened))
+                        
+                        self?.cloudImportError = nil
+                        
+                        // Haptic feedback for success
+                        self?.hapticManager.notification(type: .success)
+                        
+                        print("✅ Successfully imported \(newCloudPosts.count) posts from cloud")
+
+                    } else {
+                        print("✅ No new posts from cloud. \(newCloudPosts.count) imported posts ")
+                        self?.hapticManager.impact(style: .heavy)
+                    }
                     
                 case .failure(let error):
                     self?.cloudImportError = error.localizedDescription
@@ -480,7 +488,7 @@ class PostsViewModel: ObservableObject {
         })
         
         let result = Array(Set(list)).sorted(by: {$0 < $1})
-        print("VM: Final years list: \(result)")
+        print("✅ VM: Final years list: \(result)")
         return result
         
 //       return Array(Set(list)).sorted(by: {$0 < $1})
