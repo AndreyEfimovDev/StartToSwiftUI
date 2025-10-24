@@ -87,9 +87,6 @@ struct HomeView: View {
             // toolbar button "preferances"
                 .fullScreenCover(isPresented: $showPreferancesView) {
                     PreferencesView()
-//                    {
-//                        showPreferancesView.toggle()
-//                    }
                 }
             // toolbar button "+"
                 .fullScreenCover(isPresented: $showAddPostView, content: {

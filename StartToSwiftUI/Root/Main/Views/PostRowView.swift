@@ -44,10 +44,12 @@ struct PostRowView: View {
                 .fontWeight(.bold)
                 .minimumScaleFactor(0.75)
                 .lineLimit(1)
+                .padding(.top, 8)
             Spacer()
             Image(systemName: "star.fill")
                 .foregroundStyle(post.favoriteChoice == .yes ? Color.mycolor.myYellow : Color.mycolor.mySecondaryText)
         }
+        
     }
     
     private var author: some View {
@@ -66,6 +68,8 @@ struct PostRowView: View {
             .font(.body)
             .fontWeight(.medium)
             .foregroundStyle(post.studyLevel.color)
+//            .padding(.bottom, 8)
+
     }
 //    private var intro: some View {
 //        
