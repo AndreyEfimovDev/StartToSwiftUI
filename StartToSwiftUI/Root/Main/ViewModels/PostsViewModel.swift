@@ -22,7 +22,8 @@ class PostsViewModel: ObservableObject {
     @AppStorage("storedLevel") var storedLevel: StudyLevel?
     @AppStorage("storedFavorite") var storedFavorite: FavoriteChoice?
     @AppStorage("storedLanguage") var storedLanguage: LanguageOptions?
-    @AppStorage("storedPlatform") var storedPlatform: Platform?
+    @AppStorage("storedType") var storedType: PostType?
+//    @AppStorage("storedPlatform") var storedPlatform: Platform?
     @AppStorage("storedYear") var storedYear: String?
     
     // stored preferances
@@ -39,9 +40,12 @@ class PostsViewModel: ObservableObject {
     @Published var selectedLanguage: LanguageOptions? = nil {
         didSet { storedLanguage = selectedLanguage }
     }
-    @Published var selectedPlatform: Platform? = nil {
-        didSet { storedPlatform = selectedPlatform }
+    @Published var selectedType: PostType? = nil {
+        didSet { storedType = selectedType }
     }
+//    @Published var selectedPlatform: Platform? = nil {
+//        didSet { storedPlatform = selectedPlatform }
+//    }
     @Published var selectedYear: String? = nil {
         didSet { storedYear = selectedYear }
     }
@@ -77,7 +81,7 @@ class PostsViewModel: ObservableObject {
         self.selectedLevel = self.storedLevel
         self.selectedFavorite = self.storedFavorite
         self.selectedLanguage = self.storedLanguage
-        self.selectedPlatform = self.storedPlatform
+//        self.selectedPlatform = self.storedPlatform
         self.selectedYear = self.storedYear
         self.isFiltersEmpty = checkIfAllFiltersAreEmpty()
         
@@ -89,7 +93,6 @@ class PostsViewModel: ObservableObject {
             print("❌ VM(init): TimeZone is not set")
         }
         
-        
         // subscription
         addSubscribers()
     }
@@ -99,18 +102,18 @@ class PostsViewModel: ObservableObject {
     private func addSubscribers() {
         
         let filters = $selectedLevel
-            .combineLatest($selectedFavorite, $selectedLanguage, $selectedPlatform)
+            .combineLatest($selectedFavorite, $selectedLanguage, $selectedType)
         
         $selectedYear
             .combineLatest(filters)
             .map {year, filters -> [Post] in
-                let (level, favorite, language, platform) = filters
+                let (level, favorite, language, type) = filters
                 return self.filterPosts(
                     allPosts: self.allPosts,
                     level: level,
                     favorite: favorite,
+                    type: type,
                     language: language,
-                    platform: platform,
                     year: year
                 )
             }
@@ -125,8 +128,8 @@ class PostsViewModel: ObservableObject {
                     allPosts: posts,
                     level: self.selectedLevel,
                     favorite: self.selectedFavorite,
+                    type: self.selectedType,
                     language: self.selectedLanguage,
-                    platform: self.selectedPlatform,
                     year: self.selectedYear
                 )
             }
@@ -145,17 +148,16 @@ class PostsViewModel: ObservableObject {
         allPosts: [Post],
         level: StudyLevel?,
         favorite: FavoriteChoice?,
+        type: PostType?,
         language: LanguageOptions?,
-        platform: Platform?,
+//        platform: Platform?,
         year: String?) -> [Post] {
             
-            //            if checkIfAllFiltersAreEmpty() {
-            //                return allPosts
-            //            }
             if level == nil &&
                 favorite == nil &&
                 language == nil &&
-                platform == nil &&
+                type == nil &&
+//                platform == nil &&
                 year == nil {
                 return allPosts
             }
@@ -163,12 +165,13 @@ class PostsViewModel: ObservableObject {
                 let matchesLevel = level == nil || post.studyLevel == level
                 let matchesFavorite = favorite == nil || post.favoriteChoice == favorite
                 let matchesLanguage = language == nil || post.postLanguage == language
-                let matchesPlatform = platform == nil || post.postPlatform == platform
-                //                let postYear = String(Calendar.current.component(.year, from: post.postDate ?? Date()))
+//                let matchesPlatform = platform == nil || post.postPlatform == platform
+                let matchesType = type == nil || post.postType == type
+
                 let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date()))
                 let matchesYear = year == nil || postYear == year
                 
-                return matchesLevel && matchesFavorite && matchesLanguage && matchesPlatform && matchesYear
+                return matchesLevel && matchesFavorite && matchesLanguage && matchesType && matchesYear
             }
         }
     
@@ -295,14 +298,20 @@ class PostsViewModel: ObservableObject {
                 switch result {
                 case .success(let cloudResponse):
                     
-                    // Selecting Cloud posts with unique Titles only
-                    let newCloudPosts = cloudResponse.cloudPosts.filter { newPost in
+                    // Selecting Cloud posts with unique Titles only -  - do not import such posts from Cloud
+                    let newCloudPostsFirst = cloudResponse.cloudPosts.filter { newPost in
                         !(self?.allPosts.contains(where: { $0.title == newPost.title }) ?? false)
                     }
                     
-                    if !newCloudPosts.isEmpty {
+                    // Checking Cloud posts with the same ID to local App posts - do not import such posts from Cloud
+                    let newCloudPostsSecond = newCloudPostsFirst.filter { newPost in
+                        !(self?.allPosts.contains(where: { $0.title == newPost.title }) ?? false)
+                    }
+
+                    
+                    if !newCloudPostsSecond.isEmpty {
                         // Updating App posts
-                        self?.allPosts.append(contentsOf: newCloudPosts)
+                        self?.allPosts.append(contentsOf: newCloudPostsSecond)
                         self?.fileManager.savePosts(self?.allPosts ?? [])
                         
                         self?.hapticManager.notification(type: .success)
@@ -311,10 +320,10 @@ class PostsViewModel: ObservableObject {
                         self?.localLastUpdated = cloudResponse.dateStamp
                         print(cloudResponse.dateStamp.formatted(date: .abbreviated, time: .shortened))
 
-                        print("✅ Successfully imported \(newCloudPosts.count) posts from cloud")
+                        print("✅ Successfully imported \(newCloudPostsSecond.count) posts from cloud")
                         
                     } else {
-                        print("✅ No new posts from cloud. \(newCloudPosts.count) imported posts ")
+                        print("✅ No new posts from cloud. \(newCloudPostsSecond.count) imported posts ")
                         self?.hapticManager.impact(style: .heavy)
                     }
                     
@@ -433,7 +442,7 @@ class PostsViewModel: ObservableObject {
         if selectedLevel == nil &&
             selectedFavorite == nil &&
             selectedLanguage == nil &&
-            selectedPlatform == nil &&
+            selectedType == nil &&
             selectedYear == nil {
             return true
         } else {
