@@ -20,6 +20,21 @@ enum LanguageOptions: String, CaseIterable, Codable {
     }
 }
 
+enum PostType: String, CaseIterable, Codable {
+    case singlepost
+    case playlist
+    case others
+    
+    var displayName: String {
+        switch self {
+        case .singlepost: return "Single"
+        case .playlist: return "Playlist"
+        case .others: return "Others"
+        }
+    }
+}
+
+
 enum FavoriteChoice: String, CaseIterable, Codable {
     case yes
     case no
@@ -69,9 +84,9 @@ enum StudyLevel: String, CaseIterable, Codable {
 }
 
 enum Platform: String, CaseIterable, Codable {
-    case youtube = "YouTube"
-    case website = "WebSite"
-    case others = "Others"
+    case youtube
+    case website
+    case others
     
     var displayName: String {
         switch self {
