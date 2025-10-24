@@ -59,7 +59,7 @@ struct FiltersSheetView: View {
                 studyLevelFilter
                 favoriteFilter
                 languageFilter
-                platformFilter
+                typeFilter
                 yearFilter
                     .padding(.bottom, 50)
                 resetAllFiltersButton
@@ -171,16 +171,16 @@ struct FiltersSheetView: View {
         }
     }
     
-    private var platformFilter: some View {
-        VStack(spacing: 0){
-            Text("Platform:")
+    private var typeFilter: some View {
+        VStack {
+            Text("Post type:")
                 .font(.footnote)
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             SegmentedOneLinePicker(
-                selection: $vm.selectedPlatform,
-                allItems: Platform.allCases,
+                selection: $vm.selectedType,
+                allItems: PostType.allCases,
                 titleForCase: { $0.displayName },
                 selectedFont: selectedFont,
                 selectedTextColor: Color.mycolor.myBackground,
@@ -237,7 +237,7 @@ struct FiltersSheetView: View {
             vm.selectedLevel = nil
             vm.selectedFavorite = nil
             vm.selectedLanguage = nil
-            vm.selectedPlatform = nil
+            vm.selectedType = nil
             vm.selectedYear = nil
             updateFiltersSheetView.toggle()
         } label: {
@@ -262,7 +262,7 @@ struct FiltersSheetView: View {
             vm.selectedLevel = nil
             vm.selectedFavorite = nil
             vm.selectedLanguage = nil
-            vm.selectedPlatform = nil
+            vm.selectedType = nil
             vm.selectedYear = nil
             isFilterButtonPressed.toggle()
         } label: {

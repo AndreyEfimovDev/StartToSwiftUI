@@ -932,11 +932,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swift-error-handling-with-examples/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 3, day: 13),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 3, day: 13)),
         
 // Stewart Lynch
         Post(
@@ -950,11 +946,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://www.youtube.com/watch?v=IiLDbrtBsn0",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2025, month: 9, day: 14),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2025, month: 9, day: 14)),
         
         Post(
             title: "Mastering Liquid Glass in SwiftUI – Buttons, Containers & Transitions",
@@ -969,12 +961,89 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://www.youtube.com/watch?v=E2nQsw0El8M",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2025, month: 8, day: 31),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
-
+            postDate: Date.from(year: 2025, month: 8, day: 31)),
+// 2025-10-25
+        Post(
+            title: "Swift Basics",
+            intro: """
+                Get started with the Swift programming language. Write your first line of code and learn the fundamentals.
+                """,
+            author: "Swiftful Thinking",
+            postType: .playlist,
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiLvzZFJI6rVIBtdolrJBVB",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 6, day: 20)),
+        Post(
+            title: "SwiftUI Bootcamp",
+            intro: """
+                The fastest way to learn SwiftUI. Learn how to build beautiful screens and other UI components.
+                """,
+            author: "Swiftful Thinking",
+            postType: .playlist,
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 2, day: 3)),
+        Post(
+            title: "SwiftUI Todo List",
+            intro: """
+                Build your first app in SwiftUI! Learn how to build a real application with MVVM app architecture.
+                """,
+            author: "Swiftful Thinking",
+            postType: .playlist,
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpheGqemblOIA7v3oq0MS30i",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 3, day: 14)),
+        Post(
+            title: "Git & Source Control",
+            intro: """
+                A complete guide for learning how to use git. Practice using Source Control within Xcode, GitKraken, and Github. Get familiar with Git Flow.
+                """,
+            author: "Swiftful Thinking",
+            postType: .playlist,
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiALKk34l9mUS2f4mdJPvXq",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2024, month: 4, day: 29)),
+        Post(
+            title: "SwiftUI Map App",
+            intro: """
+                Build a map app to showcase real destinations around the world. Get familiar with data management and transitions.
+                """,
+            author: "Swiftful Thinking",
+            postType: .playlist,
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdpha5eVTjLM0eRlJ7-yDDwBk",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 12, day: 20)),
+        Post(
+            title: "SwiftUI Continued Learning",
+            intro: """
+                Building professional apps requires knowledge of data persistence and networking. This bootcamp builds on your existing knowledge of SwiftUI.
+                """,
+            author: "Swiftful Thinking",
+            postType: .playlist,
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar",
+            postDate: Date.from(year: 2021, month: 3, day: 29),
+            studyLevel: .middle),
+        Post(
+            title: "SwiftUI Crypto App",
+            intro: """
+                Build a cryptocurrency app that downloads live price data from an API and saves the current user's portfolio. Get comfortable with Combine, Core Data, and MVVM.
+                """,
+            author: "Swiftful Thinking",
+            postType: .playlist,
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
+            postDate: Date.from(year: 2021, month: 5, day: 24),
+            studyLevel: .middle),
+        Post(
+            title: "SwiftUI Advanced Learning",
+            intro: """
+                Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
+                """,
+            author: "Swiftful Thinking",
+            postType: .playlist,
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
+            postDate: Date.from(year: 2021, month: 8, day: 30),
+            studyLevel: .advanced),
+        
         
     ]
     
