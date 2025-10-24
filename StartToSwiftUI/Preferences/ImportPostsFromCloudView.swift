@@ -68,16 +68,7 @@ struct ImportPostsFromCloudView: View {
     
     private func importFromCloud() {
 
-        vm.loadPersistentPosts() {
-            isInProgress = false
-            isImported = true
-            hapticManager.notification(type: .success)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                dismiss()
-            }
-        }
-        
-//        vm.importPostsFromCloud(urlString: selectedURL) {
+//        vm.loadPersistentPosts() {
 //            isInProgress = false
 //            isImported = true
 //            hapticManager.notification(type: .success)
@@ -85,6 +76,15 @@ struct ImportPostsFromCloudView: View {
 //                dismiss()
 //            }
 //        }
+        
+        vm.importPostsFromCloud(urlString: selectedURL) {
+            isInProgress = false
+            isImported = true
+            hapticManager.notification(type: .success)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                dismiss()
+            }
+        }
     }
     
     private func checkForUpdates() {

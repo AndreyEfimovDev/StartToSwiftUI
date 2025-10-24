@@ -28,10 +28,9 @@ class PostsViewModel: ObservableObject {
     // stored preferances
     @AppStorage("isNotification") var isNotification: Bool = false
     
-    // stored preferances
+    // stored a date of dateStamp of the Cloud posts imported
     @AppStorage("localLastUpdated") var localLastUpdated: Date = (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date())
-    
-    
+        
     @Published var selectedLevel: StudyLevel? = nil {
         didSet { storedLevel = selectedLevel } }
     @Published var selectedFavorite: FavoriteChoice? = nil {
@@ -308,6 +307,7 @@ class PostsViewModel: ObservableObject {
                         
                         self?.hapticManager.notification(type: .success)
                         // Saving the date stamp of the Cloud posts
+                        print(self?.localLastUpdated.formatted(date: .abbreviated, time: .shortened) ?? Date())
                         self?.localLastUpdated = cloudResponse.dateStamp
                         print(cloudResponse.dateStamp.formatted(date: .abbreviated, time: .shortened))
 
