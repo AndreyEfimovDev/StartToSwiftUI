@@ -248,46 +248,6 @@ class PostsViewModel: ObservableObject {
         completion()
     }
     
-    //    func importPostsFromCloud(urlString: String, completion: @escaping () -> Void = {}) {
-    //
-    ////        isLoadingFromCloud = true
-    //        cloudImportError = nil
-    //
-    //        networkService.fetchPostsFromURL(urlString) { [weak self] result in
-    //            DispatchQueue.main.async { [self] in
-    //
-    ////                self?.isLoadingFromCloud = false
-    //
-    //                switch result {
-    //                case .success(let receivedPosts):
-    //
-    //                    let newPosts = receivedPosts.filter { newPost in
-    //                        !(self?.allPosts.contains(where: { $0.title == newPost.title }) ?? false)
-    //                    }
-    //                    self?.allPosts.append(contentsOf: newPosts)
-    //                    self?.fileManager.savePosts(self?.allPosts ?? [])
-    //                    self?.cloudImportError = nil
-    //                    self?.hapticManager.notification(type: .success)
-    //
-    ////                    let generator = UINotificationFeedbackGenerator()
-    ////                    generator.notificationOccurred(.success)
-    //
-    //                    print("✅ Successfully imported \(newPosts.count) posts from cloud")
-    //
-    //                case .failure(let error):
-    //                    self?.cloudImportError = error.localizedDescription
-    //                    self?.showCloudImportAlert = true
-    //                    self?.hapticManager.notification(type: .error)
-    ////                    let generator = UINotificationFeedbackGenerator()
-    ////                    generator.notificationOccurred(.error)
-    //
-    //                    print("❌ Cloud import error: \(error.localizedDescription)")
-    //                }
-    //                completion()
-    //            }
-    //        }
-    //    }
-    
     func importPostsFromCloud(urlString: String = Constants.cloudPostsURL, completion: @escaping () -> Void = {}) {
 
         cloudImportError = nil
@@ -358,40 +318,7 @@ class PostsViewModel: ObservableObject {
             }
         }
     }
-    
-    //    func importPostsFromURL(_ url: URL, completion: @escaping () -> ()) {
-    //        do {
-    //
-    ////            // Gaining access to security-scoped resource
-    ////            guard url.startAccessingSecurityScopedResource() else {
-    ////                print("❌ VM: No access to JSON file")
-    ////                return
-    ////            }
-    ////
-    ////            defer {
-    ////                url.stopAccessingSecurityScopedResource()
-    ////            }
-    //
-    //
-    //
-    //
-    //
-    //            let data = try Data(contentsOf: url)
-    //            let posts = try JSONDecoder().decode([Post].self, from: data)
-    //
-    //            // skip posts with the same title - make posts unique by title
-    //            let newPosts = posts.filter { newPost in
-    //                !allPosts.contains(where: { $0.title == newPost.title })
-    //            }
-    //            allPosts.append(contentsOf: newPosts)
-    //            fileManager.savePosts(newPosts)
-    //            print("✅ VM: Imported \(newPosts.count) posts from \(url.lastPathComponent)")
-    //            completion()
-    //        } catch {
-    //            print("❌ VM: Error import: \(error.localizedDescription)")
-    //        }
-    //    }
-    
+        
     /// Checks if a title of a post is unique.
     ///
     /// The result is used to avoid doublied posts with the same titles.
@@ -436,6 +363,7 @@ class PostsViewModel: ObservableObject {
     ///
     /// - Warning: This app is made for self study learning purpose only.
     /// - Returns: Returns a boolean, true if all filters are not set (nil) and false if at least one is set.
+    ///
     func checkIfAllFiltersAreEmpty() -> Bool {
         // check if all filters are empty
         if selectedLevel == nil &&
