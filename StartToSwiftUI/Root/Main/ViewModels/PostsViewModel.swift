@@ -18,7 +18,7 @@ class PostsViewModel: ObservableObject {
     @Published var searchText: String = ""
     @Published var isFiltersEmpty: Bool = true
 
-    // stored folters
+    // stored filters
     @AppStorage("storedLevel") var storedLevel: StudyLevel?
     @AppStorage("storedFavorite") var storedFavorite: FavoriteChoice?
     @AppStorage("storedLanguage") var storedLanguage: LanguageOptions?
@@ -27,6 +27,9 @@ class PostsViewModel: ObservableObject {
     
     // stored preferances
     @AppStorage("isNotification") var isNotification: Bool = false
+    
+    // stored preferances
+    @AppStorage("localLastUpdated") var localLastUpdated: Date = (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date())
 
     
     @Published var selectedLevel: StudyLevel? = nil {
@@ -46,6 +49,8 @@ class PostsViewModel: ObservableObject {
     
     var listOfYearsInPosts: [String]? = nil
     
+    var utcCalendar = Calendar.current
+
 
     private var cancellables = Set<AnyCancellable>()
     private let fileManager = FileStorageService.shared
@@ -61,11 +66,15 @@ class PostsViewModel: ObservableObject {
     init() {
         
         self.allPosts = fileManager.loadPosts()
+        // get list of years of posts
+        
+        if !self.allPosts.isEmpty {
+            self.listOfYearsInPosts = getListOfPostedYearsOfPosts() // get list of years of posts
+        }
+
                 
         self.filteredPosts = self.allPosts
         
-        // get list of years of posts
-        self.listOfYearsInPosts = getListOfPostedYearsOfPosts() // get list of years of posts
         
         // filters initilazation
         self.selectedLevel = self.storedLevel
@@ -75,6 +84,15 @@ class PostsViewModel: ObservableObject {
         self.selectedYear = self.storedYear
         self.isFiltersEmpty = checkIfAllFiltersAreEmpty()
         
+        
+        if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
+            utcCalendar.timeZone = utcTimeZone
+            print("✅  VM(init): TimeZone is set successfully")
+        } else {
+            print("❌ VM(init): TimeZone is not set")
+        }
+        
+
         // subscription
         addSubscribers()
     }
@@ -134,36 +152,50 @@ class PostsViewModel: ObservableObject {
         platform: Platform?,
         year: String?) -> [Post] {
             
-//            if checkIfAllFiltersAreEmpty() {
-//                return allPosts
-//            }
-                    if level == nil &&
-                        favorite == nil &&
-                        language == nil &&
-                        platform == nil &&
-                        year == nil {
-                        return allPosts
-                    }
+            //            if checkIfAllFiltersAreEmpty() {
+            //                return allPosts
+            //            }
+            if level == nil &&
+                favorite == nil &&
+                language == nil &&
+                platform == nil &&
+                year == nil {
+                return allPosts
+            }
             return allPosts.filter { post in
                 let matchesLevel = level == nil || post.studyLevel == level
                 let matchesFavorite = favorite == nil || post.favoriteChoice == favorite
                 let matchesLanguage = language == nil || post.postLanguage == language
                 let matchesPlatform = platform == nil || post.postPlatform == platform
-                
-                let postYear = String(Calendar.current.component(.year, from: post.postDate ?? Date()))
+                //                let postYear = String(Calendar.current.component(.year, from: post.postDate ?? Date()))
+                let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date()))
                 let matchesYear = year == nil || postYear == year
                 
                 return matchesLevel && matchesFavorite && matchesLanguage && matchesPlatform && matchesYear
             }
         }
 
+//    var utcCalendar = Calendar.current
+//    
+//    if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
+//        utcCalendar.timeZone = utcTimeZone
+//    }
+//    
+//    let list = allPosts.compactMap({ (post) -> String? in
+//        if let date = post.postDate {
+//            let year = String(utcCalendar.component(.year, from: date))
+//            return year
+//        }
+//        return nil
+//    })
+    
 
     // MARK: PUBLIC FUNCTIONS
     
     func addPost(_ newPost: Post) {
 //        
 //        if !checkNewPostForUniqueTitle(newPost.title) {
-            print("VM(addPost): Adding a new post")
+            print("✅ VM(addPost): Adding a new post")
             allPosts.append(newPost)
             fileManager.savePosts(allPosts)
 //        } else {
@@ -173,7 +205,7 @@ class PostsViewModel: ObservableObject {
     
     func updatePost(_ updatedPost: Post) {
         if let index = allPosts.firstIndex(where: { $0.id == updatedPost.id }) {
-            print("VM(updatePost): Updating a current post")
+            print("✅ VM(updatePost): Updating a current post")
         allPosts[index] = updatedPost
         listOfYearsInPosts = getListOfPostedYearsOfPosts()
         fileManager.savePosts(allPosts)
@@ -201,66 +233,114 @@ class PostsViewModel: ObservableObject {
         completion()
     }
     
-//    func loadPersistentPosts(_ completion: @escaping () -> ()) {
+    func loadPersistentPosts(_ completion: @escaping () -> ()) {
+        
+        let receivedPosts: [Post] = DevPreview.samplePosts // load MockData - to change to Networking later to load from cloud
+        
+        // skip posts with the same title - make posts unique by title
+        let newPosts = receivedPosts.filter { newPost in
+            !allPosts.contains(where: { $0.title == newPost.title })
+        }
+        allPosts.append(contentsOf: newPosts)
+        fileManager.savePosts(allPosts)
+        listOfYearsInPosts = getListOfPostedYearsOfPosts()
+        completion()
+    }
+    
+//    func importPostsFromCloud(urlString: String, completion: @escaping () -> Void = {}) {
+//
+////        isLoadingFromCloud = true
+//        cloudImportError = nil
 //        
-//        let receivedPosts: [Post] = DevPreview.samplePosts // load MockData - to change to Networking later to load from cloud
-//        
-//        // skip posts with the same title - make posts unique by title
-//        let newPosts = receivedPosts.filter { newPost in
-//            !allPosts.contains(where: { $0.title == newPost.title })
+//        networkService.fetchPostsFromURL(urlString) { [weak self] result in
+//            DispatchQueue.main.async { [self] in
+//                
+////                self?.isLoadingFromCloud = false
+//                
+//                switch result {
+//                case .success(let receivedPosts):
+//                    
+//                    let newPosts = receivedPosts.filter { newPost in
+//                        !(self?.allPosts.contains(where: { $0.title == newPost.title }) ?? false)
+//                    }
+//                    self?.allPosts.append(contentsOf: newPosts)
+//                    self?.fileManager.savePosts(self?.allPosts ?? [])
+//                    self?.cloudImportError = nil
+//                    self?.hapticManager.notification(type: .success)
+//
+////                    let generator = UINotificationFeedbackGenerator()
+////                    generator.notificationOccurred(.success)
+//                    
+//                    print("✅ Successfully imported \(newPosts.count) posts from cloud")
+//
+//                case .failure(let error):
+//                    self?.cloudImportError = error.localizedDescription
+//                    self?.showCloudImportAlert = true
+//                    self?.hapticManager.notification(type: .error)
+////                    let generator = UINotificationFeedbackGenerator()
+////                    generator.notificationOccurred(.error)
+//                    
+//                    print("❌ Cloud import error: \(error.localizedDescription)")
+//                }
+//                completion()
+//            }
 //        }
-//        allPosts.append(contentsOf: newPosts)
-//        fileManager.savePosts(allPosts)
-//        completion()
 //    }
     
-    func importPostsFromCloud(urlString: String, completion: @escaping () -> Void = {}) {
-
+    func importPostsFromCloud(urlString: String = Constants.cloudPostsURL, completion: @escaping () -> Void = {}) {
 //        isLoadingFromCloud = true
         cloudImportError = nil
         
-        networkService.fetchPostsFromURL(urlString) { [weak self] result in
-            DispatchQueue.main.async { [self] in
-                
+        networkService.fetchCloudPosts(from: urlString) { [weak self] result in
+            
+            DispatchQueue.main.async {
 //                self?.isLoadingFromCloud = false
                 
                 switch result {
-                case .success(let receivedPosts):
+                case .success(let cloudResponse):
                     
-                    let newPosts = receivedPosts.filter { newPost in
+                    // Selecting Cloud posts with unique Titles only
+                    let newCloudPosts = cloudResponse.cloudPosts.filter { newPost in
                         !(self?.allPosts.contains(where: { $0.title == newPost.title }) ?? false)
                     }
-                    self?.allPosts.append(contentsOf: newPosts)
-                    self?.fileManager.savePosts(self?.allPosts ?? [])
-                    self?.cloudImportError = nil
-                    self?.hapticManager.notification(type: .success)
-
-//                    let generator = UINotificationFeedbackGenerator()
-//                    generator.notificationOccurred(.success)
                     
-                    print("✅ Successfully imported \(newPosts.count) posts from cloud")
-
+                    // Updating App posts
+                    self?.allPosts.append(contentsOf: newCloudPosts)
+                    self?.fileManager.savePosts(self?.allPosts ?? [])
+                    
+                    // Saving the date stamp from the Cloud
+                    self?.localLastUpdated = cloudResponse.lastUpdated
+//                    UserDefaults.standard.set(cloudResponse.lastUpdated, forKey: "localLastUpdated")
+                    print(cloudResponse.lastUpdated.formatted(date: .abbreviated, time: .shortened))
+                    
+                    self?.cloudImportError = nil
+                    
+                    // Haptic feedback for success
+                    self?.hapticManager.notification(type: .success)
+                    
+                    print("✅ Successfully imported \(newCloudPosts.count) posts from cloud")
+                    
                 case .failure(let error):
                     self?.cloudImportError = error.localizedDescription
                     self?.showCloudImportAlert = true
+                    
+                    // Haptic feedback for error
                     self?.hapticManager.notification(type: .error)
-//                    let generator = UINotificationFeedbackGenerator()
-//                    generator.notificationOccurred(.error)
                     
                     print("❌ Cloud import error: \(error.localizedDescription)")
                 }
+                
                 completion()
             }
         }
     }
     
     func checkCloudForUpdates(completion: @escaping (Bool) -> Void) {
-        // Можно добавить логику проверки, есть ли новые посты в облаке
-        // Например, сравнивая даты или количество постов
-        networkService.fetchPostsFromURL(Constants.cloudPostsURL) { [weak self] result in
+        networkService.fetchCloudPosts(from: Constants.cloudPostsURL) { result in
             switch result {
-            case .success(let cloudPosts):
-                let hasUpdates = cloudPosts.count > (self?.allPosts.count ?? 0)
+            case .success(let cloudResponse):
+                let localLastUpdated = UserDefaults.standard.object(forKey: "localLastUpdated") as? Date ?? Date.distantPast
+                let hasUpdates = cloudResponse.lastUpdated > localLastUpdated
                 DispatchQueue.main.async {
                     completion(hasUpdates)
                 }
@@ -393,12 +473,17 @@ class PostsViewModel: ObservableObject {
         
         let list = allPosts.compactMap({ (post) -> String? in
             if let date = post.postDate {
-                let year = String(Calendar.current.component(.year, from: date))
+                let year = String(utcCalendar.component(.year, from: date))
                 return year
             }
             return nil
         })
-        return Array(Set(list)).sorted(by: {$0 < $1})
+        
+        let result = Array(Set(list)).sorted(by: {$0 < $1})
+        print("VM: Final years list: \(result)")
+        return result
+        
+//       return Array(Set(list)).sorted(by: {$0 < $1})
     }
     
 }
