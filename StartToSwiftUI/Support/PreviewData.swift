@@ -24,21 +24,18 @@ struct DevPreview {
         studyLevel: .beginner,
         favoriteChoice: .yes,
         additionalText: "",
-        date: .now
     )
     
     static let samplePost2 = Post(
-        title: "FaceFacts app with SwiftUI and SwiftData",
-        intro: "It’s a small but complete app for iOS.",
-        author: "Paul Hudson",
-        postLanguage: .english,
-        urlString: "https://www.youtube.com/watch?v=n4SCMC25BxY",
-        postPlatform: .others,
-        postDate: nil, // Date.from(year: 2023, month: 12, day: 22),
-        studyLevel: .middle,
-        favoriteChoice: .no,
-        additionalText: "",
-        date: .now
+        title: "SwiftUI Advanced Learning",
+        intro: """
+            Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
+            """,
+        author: "Swiftful Thinking",
+        postType: .course,
+        urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
+        postDate: Date.from(year: 2021, month: 8, day: 30),
+        studyLevel: .advanced
     )
     
     static let samplePost3 = Post(
@@ -54,7 +51,7 @@ struct DevPreview {
         urlString: "https://www.youtube.com/watch?v=rbtIcKKxQ38", //
         postPlatform: .website,
         postDate: Date.from(year: 2022, month: 8, day: 11),
-        studyLevel: .advanced,
+        studyLevel: .middle,
         favoriteChoice: .no,
         additionalText: """
         In this video we are going to explore how we can stylize text for our Text views in SwiftUI.
@@ -71,8 +68,7 @@ struct DevPreview {
         We will start by looking at how we can create a `Text` view with the Markdown-formatted base postLanguage version of the string as the localization key,
         We will also see how we can utilize string interpolation to combine and stylize our strings and present them in a text view.
         And finally, we will take a quick look at the power of Attributed strings in SwiftUI.
-        """,
-        date: .now
+        """
     )
     
     static let samplePosts = [
@@ -83,11 +79,7 @@ struct DevPreview {
             postLanguage: .russian,
             urlString: "https://youtu.be/ExwwrvOT8mI?si=SU__YwU8UlR461Zb",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 3, day: 26),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now
+            postDate: Date.from(year: 2021, month: 3, day: 26)
         ),
         Post(
             title: "Styling SwiftUI Text Views",
@@ -102,10 +94,7 @@ struct DevPreview {
             urlString: "https://www.youtube.com/watch?v=rbtIcKKxQ38",
             postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 5, day: 7),
-            studyLevel: .middle,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            studyLevel: .middle),
         Post(
             title: "Customizing the appearance of symbol images in SwiftUI",
             intro: "Symbol images are vector-based icons from Apple's SF Symbols library, designed for use across Apple platforms. These scalable images adapt to different sizes and weights, ensuring consistent, high-quality icons throughout our apps. Using symbol images in SwiftUI is straightforward with the Image view and the system name of the desired symbol.",
@@ -113,11 +102,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://nilcoalescing.com/blog/CustomizingTheAppearanceOfSymbolImagesInSwiftUI/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 9, day: 22),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2024, month: 9, day: 22)),
         Post(
             title: "ViewBuilder: Organize your views",
             intro: "ViewBuilders in SwiftUI are an excellent way to keep your code clean and organized. They make your code easier to read and maintain by allowing you to structure your views more clearly. This simplifies the process of building complex user interfaces, ensuring that your code remains elegant and efficient. Embracing ViewBuilders enhances both the readability and manageability of your SwiftUI projects.",
@@ -126,10 +111,7 @@ struct DevPreview {
             urlString: "https://softwareanders.com/swiftui-viewbuilder-organize-your-views/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 6, day: 27),
-            studyLevel: .advanced,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            studyLevel: .advanced),
         Post(
             title: "ClipShape: Shape Your Application",
             intro: """
@@ -141,11 +123,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-clipshape-shape-your-application/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 6, day: 13),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2024, month: 6, day: 13)),
         Post(
             title: "Long Press Gesture: Complete How-To Guide",
             intro: "The Long Press gesture in SwiftUI is a powerful interaction that triggers when a user presses and holds a view for a specific duration. This essential gesture recognizer is frequently implemented in modern iOS apps for context menus, drag and drop functionality, or revealing additional information to enhance user experience.",
@@ -153,11 +131,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-long-press-how-to-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 5, day: 7),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2024, month: 5, day: 7)),
         
         Post(
             title: "Toggle: Turn On And Off",
@@ -170,11 +144,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-toggle-turn-on-and-off/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 5, day: 2),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2024, month: 5, day: 2)),
         Post(
             title: "Animate SF Symbols",
             intro: """
@@ -186,14 +156,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-animate-sf-symbols/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 4, day: 24),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
-       
-        
-        
+            postDate: Date.from(year: 2024, month: 4, day: 24)),
         Post(
             title: "Shadow: Create depth and dimension",
             intro: """
@@ -205,11 +168,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-shadow-create-depth-and-dimension/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 4, day: 3),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2024, month: 4, day: 3)),
         
         Post(
             title: "ShareLink: Share with ease",
@@ -222,11 +181,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-sharelink-share-with-ease/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 3, day: 28),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2024, month: 3, day: 28)),
         Post(
             title: "Launch screen: First Impressions Matters",
             intro: "In this blog post, we cover how to create a launch screen in SwiftUI, exploring why they’re not just a good idea, but a crucial element in crafting an exceptional user experience.",
@@ -234,12 +189,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-launch-screen-first-impressions-matters/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 3, day: 21),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
-     
+            postDate: Date.from(year: 2024, month: 3, day: 21)),
         Post(
             title: "Swift check network connection",
             intro: """
@@ -253,11 +203,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swift-check-network-connection/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 3, day: 28),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2024, month: 3, day: 28)),
         Post(
             title: "Request review: Complete guide",
             intro: """
@@ -270,10 +216,7 @@ struct DevPreview {
             urlString: "https://softwareanders.com/swiftui-request-review-complete-guide/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 2, day: 22),
-            studyLevel: .middle,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            studyLevel: .middle),
         Post(
             title: "Segmented control: Easy to follow guide",
             intro: """
@@ -285,11 +228,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-segmented-control/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 2, day: 21),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2024, month: 2, day: 21)),
         Post(
             title: "Email: A Complete Guide",
             intro: """
@@ -301,11 +240,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-email-a-complete-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 3, day: 12),
-            studyLevel: .middle,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2024, month: 3, day: 12)),
         Post(
             title: "Material: How to use material",
             intro: """
@@ -317,11 +252,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-material-how-to-use-material/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 1, day: 14),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2024, month: 1, day: 14)),
 // 3 page
         Post(
             title: "Blur: A short guide",
@@ -334,11 +265,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-blur-a-short-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 1, day: 11),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2024, month: 1, day: 11)),
         Post(
             title: "Pull to refresh: Easy guide",
             intro: """
@@ -350,11 +277,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-pull-to-refresh-easy-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 12, day: 29),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 12, day: 29)),
         Post(
             title: "Link: How to guide",
             intro: "Link is a great and hassle-free way of opening a website from your application. In this article, we will cover how you use SwiftUI Link and how you can customize it to fit inside your application.",
@@ -362,11 +285,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-link-how-to-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 12, day: 28),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 12, day: 28)),
         Post(
             title: "Divider: A powerful line",
             intro: """
@@ -378,11 +297,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-divider-a-powerful-line/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 12, day: 20),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 12, day: 20)),
         Post(
             title: "Swift convert strings into different data types: Easy guide",
             intro: """
@@ -394,11 +309,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/converting-strings-into-different-data-types-easy-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 12, day: 8),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 12, day: 8)),
         Post(
             title: "ColorPicker: A complete guide to Color Selection",
             intro: """
@@ -410,11 +321,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-colorpicker-a-complete-guide-to-color-selection/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 11, day: 28),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 11, day: 28)),
         Post(
             title: "Swipe Actions: Complete guide with examples",
             intro: "One awesome and helpful feature in SwiftUI that enhances user interaction is swipe actions. In this blog post, we’ll explore the world of SwiftUI swipe actions, we will learn how to implement them and customize them to fit into your application, so you can provide even more value for your users.",
@@ -422,11 +329,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-swipe-actions-complete-guide-with-examples/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 11, day: 27),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 11, day: 27)),
         Post(
             title: "SF Symbols: A easy guide",
             intro: """
@@ -438,11 +341,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-sf-symbols-a-easy-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 11, day: 23),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 11, day: 23)),
         Post(
             title: "DatePicker: Integrating dates in your app",
             intro: """
@@ -454,11 +353,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-datepicker-integrating-dates-in-your-app/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 11, day: 21),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 11, day: 21)),
 // 4 page
 
         Post(
@@ -472,11 +367,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-texteditor-character-limit/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 11, day: 9),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 11, day: 9)),
         Post(
             title: "TextEditor: A user friendly guide",
             intro: """
@@ -488,11 +379,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 11, day: 7),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 11, day: 7)),
         Post(
             title: "Line chart: Complete guide with examples",
             intro: """
@@ -504,11 +391,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-line-chart-complete-guide-with-examples/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 10, day: 11),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 10, day: 11)),
         Post(
             title: "TabView: All you need to know",
             intro: """
@@ -520,11 +403,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-tabview-all-you-need-to-know/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 10, day: 10),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 10, day: 10)),
         Post(
             title: "Menu: A complete Guide",
             intro: """
@@ -536,11 +415,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-menu-a-complete-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 08, day: 31),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 08, day: 31)),
         Post(
             title: "Toolbar: A complete Guide with examples",
             intro: "Toolbar is a powerful tool for designing elegant and functional user interfaces. In this blog post, we’ll be working with the native SwiftUI Toolbar and exploring its capabilities, providing examples, and showing you how to customize things like its background color to match your app’s design.",
@@ -548,11 +423,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-toolbar-a-complete-guide-with-examples/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 08, day: 24),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 08, day: 24)),
         Post(
             title: "Search: Enhance User Experience with SwiftUI Searchable",
             intro: """
@@ -565,10 +436,7 @@ struct DevPreview {
             urlString: "https://softwareanders.com/swiftui-search-enhance-user-experience-with-swiftui-searchable/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 08, day: 22),
-            studyLevel: .middle,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            studyLevel: .middle),
         Post(
             title: "Swift UserDefaults: All you need to know",
             intro: "Swift UserDefaults is a lightweight and convenient data persistence store provided by Apple’s Foundation framework. It allows you to store small pieces of data, such as user preferences, settings, and simple configuration values. These values are automatically saved to the device’s file system, making them accessible even after the app is closed or the device is rebooted.",
@@ -576,11 +444,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swift-userdefaults-all-you-need-to-know/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 08, day: 15),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 08, day: 15)),
         Post(
             title: "PhotoPicker: A Hands-On Guide with Examples",
             intro: """
@@ -592,11 +456,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-photopicker-a-hands-on-guide-with-examples/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 08, day: 10),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 08, day: 10)),
 // 5 page
         
         Post(
@@ -610,11 +470,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-confirmationdialog-with-examples/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 8, day: 8),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 8, day: 8)),
         
         Post(
             title: "TextField clear button",
@@ -629,11 +485,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-textfield-clear-button/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 8, day: 4),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 8, day: 4)),
         
         Post(
             title: "TextField Placeholder: Best Practices and Tips",
@@ -642,11 +494,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-textfield-placeholder-best-practices-and-tips/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 8, day: 3),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 8, day: 3)),
         
         Post(
             title: "Swift EventKit: Calendar management",
@@ -660,10 +508,7 @@ struct DevPreview {
             urlString: "https://softwareanders.com/swift-eventkit-calendar-management/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 7, day: 28),
-            studyLevel: .middle,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            studyLevel: .middle),
         Post(
             title: "Password: Show and Hide",
             intro: "When creating an app security is very important but so is convenience therefore the ability to show and hide passwords has become a crucial feature for mobile applications. In this blog post, we will explore how to create a secure text field that hides the password but also learn how to create the ability to show/hide the password.",
@@ -671,11 +516,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-password-show-and-hide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 7, day: 26),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 7, day: 26)),
         Post(
             title: "TextField Background Color",
             intro: """
@@ -687,11 +528,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-textfield-background-color/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 7, day: 25),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 7, day: 25)),
         Post(
             title: "TextField: A User-Friendly Guide",
             intro: "SwiftUI’s TextField is a powerful user interface element that enables developers to effortlessly capture user input and create interactive experiences in their applications. Whether you’re a seasoned SwiftUI developer or just starting your journey, this blog post will walk you through the ins and outs of SwiftUI TextFields, providing valuable insights, use cases, and code examples along the way. Let’s dive in!",
@@ -699,11 +536,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-textfield-a-user-friendly-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 7, day: 24),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 7, day: 24)),
         Post(
             title: "AsyncImage: Asynchronous Image Loading",
             intro: """
@@ -715,11 +548,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-asyncimage/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 6, day: 28),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 6, day: 28)),
         Post(
             title: "Alert: Best Practices and Examples",
             intro: "When creating a mobile app it’s important to notify the users when something happens like an API request went OK or failed. With SwiftUI Alerts, you can quickly inform users, gather input, and prompt them to take specific actions. In this article, we’ll explore the power of SwiftUI Alerts and learn how to leverage them to enhance user interaction in your apps.",
@@ -727,11 +556,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-alert/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 6, day: 29),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 6, day: 29)),
         Post(
             title: "Navigation Bar: A Complete Guide",
             intro: """
@@ -743,11 +568,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-navigation-bar-a-complete-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 6, day: 15),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 6, day: 15)),
 // 6 page
                 
         Post(
@@ -761,11 +582,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-buttons/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 6, day: 13),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 6, day: 13)),
         Post(
             title: "ScrollView: Building Dynamic and Interactive Interfaces",
             intro: """
@@ -777,11 +594,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-scrollview-building-dynamic-and-interactive-interfaces/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 6, day: 6),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 6, day: 6)),
         Post(
             title: "Mastering Picker: A Powerful Tool for User Input",
             intro: "The Picker is a powerful and versatile user interface component in SwiftUI that allows users to select an option from a predefined list. In this blog post, we will explore the capabilities of the SwiftUI Picker and how you can leverage its features to enhance your app’s user experience.",
@@ -789,11 +602,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-picker/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 6, day: 2),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 6, day: 2)),
         Post(
             title: "Rotation Animation: Bringing Your App to Life",
             intro: "is a powerful framework for building user interfaces in iOS apps. One of the many features it offers is the ability to create animations easily, including rotation animations. In this post, we will explore how to use SwiftUI rotation animation, as well as some use cases and examples.",
@@ -801,11 +610,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-rotation-animation/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 5, day: 16),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 5, day: 16)),
         Post(
             title: "Mastering Redacted: Hide data and show loading",
             intro: "In this article, we’ll explore the power of SwiftUI’s redacted views, including their use cases and examples. You will be able to implement redated in no time",
@@ -813,11 +618,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-redacted/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 5, day: 8),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 5, day: 8)),
         Post(
             title: "ProgressView: An Overview",
             intro: "As developers, we strive to create applications that are easy to use and visually appealing. Part of achieving this goal is incorporating a user interface that provides clear feedback to the user about the state of the application. One way to achieve this is through the use of progress indicators. In SwiftUI, we have the ProgressView, a view that displays the progress of a task or process. In this post, we’ll explore what ProgressView is, how to use it, and why it’s a good idea.",
@@ -825,11 +626,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-progressview/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 4, day: 12),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 4, day: 12)),
         Post(
             title: "Sheet – with examples",
             intro: """
@@ -843,11 +640,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-sheet/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 4, day: 1),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 4, day: 1)),
         Post(
             title: "Swift guard statement — need to know with examples",
             intro: "In Swift the guard statement is a control flow statement that is used to check for certain conditions, and if those conditions are not met, it will exit the current scope early, returning from the current function, method, or closure.",
@@ -855,11 +648,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swift-guard-statement-need-to-know-with-examples/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 4, day: 1),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 4, day: 1)),
         Post(
             title: "Stepper: A Powerful Tool for User Input — with examples",
             intro: """
@@ -871,11 +660,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-stepper-a-powerful-tool-for-user-input-with-examples/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 3, day: 28),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 3, day: 28)),
         Post(
             title: "Forms",
             intro: "One of the most commonly used views in SwiftUI is the Form view, which is a container for grouping related controls and data entry fields in a structured way. In this post, we’ll explore the basics of SwiftUI Form, along with some examples and use cases.",
@@ -883,11 +668,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-form/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 3, day: 27),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 3, day: 27)),
 // 7 page
         Post(
             title: "List — the basics with examples",
@@ -900,11 +681,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 3, day: 18),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 3, day: 18)),
         Post(
             title: "MVVM in SwiftUI — a easy guide",
             intro: """
@@ -916,11 +693,7 @@ struct DevPreview {
             postLanguage: .english,
             urlString: "https://softwareanders.com/mvvm-in-swiftui-a-easy-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 3, day: 16),
-            studyLevel: .beginner,
-            favoriteChoice: .no,
-            additionalText: "",
-            date: .now),
+            postDate: Date.from(year: 2023, month: 3, day: 16)),
         Post(
             title: "Swift error handling — with examples",
             intro: """
@@ -962,14 +735,14 @@ struct DevPreview {
             urlString: "https://www.youtube.com/watch?v=E2nQsw0El8M",
             postPlatform: .youtube,
             postDate: Date.from(year: 2025, month: 8, day: 31)),
-// 2025-10-25
+// 2025-10-25 DONE
         Post(
             title: "Swift Basics",
             intro: """
                 Get started with the Swift programming language. Write your first line of code and learn the fundamentals.
                 """,
             author: "Swiftful Thinking",
-            postType: .playlist,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiLvzZFJI6rVIBtdolrJBVB",
             postPlatform: .youtube,
             postDate: Date.from(year: 2023, month: 6, day: 20)),
@@ -979,7 +752,7 @@ struct DevPreview {
                 The fastest way to learn SwiftUI. Learn how to build beautiful screens and other UI components.
                 """,
             author: "Swiftful Thinking",
-            postType: .playlist,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO",
             postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 2, day: 3)),
@@ -989,7 +762,7 @@ struct DevPreview {
                 Build your first app in SwiftUI! Learn how to build a real application with MVVM app architecture.
                 """,
             author: "Swiftful Thinking",
-            postType: .playlist,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpheGqemblOIA7v3oq0MS30i",
             postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 3, day: 14)),
@@ -999,7 +772,7 @@ struct DevPreview {
                 A complete guide for learning how to use git. Practice using Source Control within Xcode, GitKraken, and Github. Get familiar with Git Flow.
                 """,
             author: "Swiftful Thinking",
-            postType: .playlist,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiALKk34l9mUS2f4mdJPvXq",
             postPlatform: .youtube,
             postDate: Date.from(year: 2024, month: 4, day: 29)),
@@ -1009,7 +782,7 @@ struct DevPreview {
                 Build a map app to showcase real destinations around the world. Get familiar with data management and transitions.
                 """,
             author: "Swiftful Thinking",
-            postType: .playlist,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdpha5eVTjLM0eRlJ7-yDDwBk",
             postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 12, day: 20)),
@@ -1019,7 +792,7 @@ struct DevPreview {
                 Building professional apps requires knowledge of data persistence and networking. This bootcamp builds on your existing knowledge of SwiftUI.
                 """,
             author: "Swiftful Thinking",
-            postType: .playlist,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar",
             postDate: Date.from(year: 2021, month: 3, day: 29),
             studyLevel: .middle),
@@ -1029,7 +802,7 @@ struct DevPreview {
                 Build a cryptocurrency app that downloads live price data from an API and saves the current user's portfolio. Get comfortable with Combine, Core Data, and MVVM.
                 """,
             author: "Swiftful Thinking",
-            postType: .playlist,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
             postDate: Date.from(year: 2021, month: 5, day: 24),
             studyLevel: .middle),
@@ -1039,13 +812,25 @@ struct DevPreview {
                 Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
                 """,
             author: "Swiftful Thinking",
-            postType: .playlist,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
             postDate: Date.from(year: 2021, month: 8, day: 30),
             studyLevel: .advanced),
-        
+// 2025-10-26
+        Post(
+            title: "Tips to Git",
+            intro: """
+                The source contains tutorials on merging and rebasing, resetting, checking out, reverting, and other usefull guides, in Git.
+                """,
+            author: "www.atlassian.com",
+            postType: .post,
+            urlString: "https://www.atlassian.com/git/tutorials",
+            postDate: nil,
+            studyLevel: .beginner),
         
     ]
     
 }
+
+// 2025-10-25
 

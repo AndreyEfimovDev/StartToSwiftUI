@@ -26,6 +26,19 @@ class PostsViewModel: ObservableObject {
 //    @AppStorage("storedPlatform") var storedPlatform: Platform?
     @AppStorage("storedYear") var storedYear: String?
     
+    @AppStorage("isPostDraftSaved") var isPostDraftSaved: Bool = false
+    @AppStorage("titlePostDraft") var titlePostDraft: String?
+    @AppStorage("introPostDraft") var introPostDraft: String?
+    @AppStorage("authorPostDraft") var authorPostDraft: String?
+    @AppStorage("languagePostDraft") var languagePostDraft: LanguageOptions?
+    @AppStorage("typePostDraft") var typePostDraft: PostType?
+    @AppStorage("urlStringPostDraft") var urlStringPostDraft: String?
+    @AppStorage("platformPostDraft") var platformPostDraft: Platform?
+    @AppStorage("datePostDraft") var datePostDraft: Date?
+    @AppStorage("studyLevelPostDraft") var studyLevelPostDraft: StudyLevel?
+    @AppStorage("favoriteChoicePostDraft") var favoriteChoicePostDraft: FavoriteChoice?
+    @AppStorage("additionalTextPostDraft") var additionalTextPostDraft: String?
+    
     // stored preferances
     @AppStorage("isNotification") var isNotification: Bool = false
     
@@ -61,6 +74,7 @@ class PostsViewModel: ObservableObject {
     
     private var utcCalendar = Calendar.current
     var listOfYearsInPosts: [String]? = nil
+    var dispatchTime: DispatchTime { .now() + 2 }
     
     // MARK: INIT() SECTION
     

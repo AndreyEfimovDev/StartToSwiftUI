@@ -61,7 +61,8 @@ struct AboutAppView: View {
                         .padding(.bottom, 8)
                     
                 }
-//                .padding()
+                .padding(.horizontal)
+
                 
                 Text("""
             Dear fellow learner,

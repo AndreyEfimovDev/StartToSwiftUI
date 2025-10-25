@@ -21,15 +21,19 @@ enum LanguageOptions: String, CaseIterable, Codable {
 }
 
 enum PostType: String, CaseIterable, Codable {
-    case singlepost
-    case playlist
-    case others
+    case post
+    case course
+    case solution
+    case bug
+    case other
     
     var displayName: String {
         switch self {
-        case .singlepost: return "Single"
-        case .playlist: return "Playlist"
-        case .others: return "Others"
+        case .post: return "Post"
+        case .course: return "Course"
+        case .solution: return "Solution"
+        case .bug: return "Bug"
+        case .other: return "Other"
         }
     }
 }
@@ -100,9 +104,7 @@ enum Platform: String, CaseIterable, Codable {
 
 enum Theme: String, CaseIterable, Codable {
     case light, dark, system
-    
-//    var displayName: String { rawValue.capitalized }
-    
+
     var displayName: String {
         switch self {
         case .light: return "🌞 Light"
@@ -113,3 +115,12 @@ enum Theme: String, CaseIterable, Codable {
 }
 
 
+// edit and add cards
+enum PostFields: Hashable {
+    case postTitle
+    case intro
+    case author
+    case urlString
+    case additionalInfo
+//    case postDate
+}

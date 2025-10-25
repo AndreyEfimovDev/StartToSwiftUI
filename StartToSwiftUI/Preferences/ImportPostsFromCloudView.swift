@@ -72,7 +72,7 @@ struct ImportPostsFromCloudView: View {
 //            isInProgress = false
 //            isImported = true
 //            hapticManager.notification(type: .success)
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+//            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
 //                dismiss()
 //            }
 //        }
@@ -81,7 +81,7 @@ struct ImportPostsFromCloudView: View {
             isInProgress = false
             isImported = true
             hapticManager.notification(type: .success)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
                 dismiss()
             }
         }

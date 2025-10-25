@@ -19,6 +19,7 @@ struct MyColors {
     
     let myAccent = Color("AppAccentColor")
     let myBackground = Color("AppBackgroundColor")
+    let mySectionBackground = Color("AppSectionBackgroundColor")
     let myBlue = Color("AppBlueColor")
     let myGreen = Color("AppGreenColor")
     let myYellow = Color("AppYellowColor")
