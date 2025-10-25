@@ -34,21 +34,6 @@ struct FiltersSheetView: View {
                     .frame(width: 100, height: 3)
                     .frame(height: 30, alignment: .top)
                     .padding(.bottom, 15)
-                
-//                HStack(alignment: .top) {
-//                    Spacer()
-//                    
-//                    CircleStrokeButtonView(
-//                        iconName: "xmark",
-//                        isIconColorToChange: true,
-//                        imageColorSecondary: Color.mycolor.red,
-//                        isShownCircle: false) {
-//                            isFilterButtonPressed.toggle()
-//                        }
-//                        .border(.red)
-//                        .padding(8)
-//                        .padding(.trailing, 8)
-//                }
             }
             .padding(.top, 5)
             
@@ -68,6 +53,7 @@ struct FiltersSheetView: View {
             .foregroundStyle(Color.mycolor.myAccent)
             .padding(.top, -40)
             .padding()
+            
             Spacer()
         }
         .background(.ultraThinMaterial)
@@ -106,21 +92,6 @@ struct FiltersSheetView: View {
                 .font(.footnote)
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
-//            UnderlineSermentedPicker(
-//                selection: $vm.selectedFavorite,
-//                allItems: FavoriteChoice.allCases,
-//                titleForCase: { $0.displayName },
-//                selectedFont: selectedFont,
-//                selectedTextColor: Color.mycolor.blue,
-//                unselectedTextColor: Color.mycolor.accent,
-//                showNilOption: true,
-//                nilTitle: "All"
-//            )
-//            .padding(.horizontal, 3)
-//            .background(.ultraThickMaterial)
-//            .cornerRadius(3)
-//            .padding(.bottom, 8)
-
             SegmentedOneLinePicker(
                 selection: $vm.selectedFavorite,
                 allItems: FavoriteChoice.allCases,
@@ -142,20 +113,6 @@ struct FiltersSheetView: View {
                 .font(.footnote)
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
-//            UnderlineSermentedPicker(
-//                selection: $vm.selectedLanguage,
-//                allItems: LanguageOptions.allCases,
-//                titleForCase: { $0.displayName },
-//                selectedFont: selectedFont,
-//                selectedTextColor: Color.mycolor.blue,
-//                unselectedTextColor: Color.mycolor.accent,
-//                showNilOption: true,
-//                nilTitle: "All"
-//            )
-//            .padding(.horizontal, 3)
-//            .background(.clear)
-//            .cornerRadius(3)
-//            .padding(.bottom, 8)
             SegmentedOneLinePicker(
                 selection: $vm.selectedLanguage,
                 allItems: LanguageOptions.allCases,
@@ -190,21 +147,6 @@ struct FiltersSheetView: View {
                 showNilOption: true,
                 nilTitle: "All"
             )
-//            
-//            UnderlineSermentedPicker(
-//                selection: $vm.selectedPlatform,
-//                allItems: Platform.allCases,
-//                titleForCase: { $0.displayName },
-//                selectedFont: selectedFont,
-//                selectedTextColor: Color.mycolor.blue,
-//                unselectedTextColor: Color.mycolor.accent,
-//                showNilOption: true,
-//                nilTitle: "All"
-//            )
-//            .padding(.horizontal, 3)
-//            .background(.ultraThickMaterial)
-//            .cornerRadius(3)
-//            .padding(.bottom, 8)
         }
     }
     
@@ -233,52 +175,78 @@ struct FiltersSheetView: View {
     }
     
     private var resetAllFiltersButton: some View {
-        Button {
-            vm.selectedLevel = nil
-            vm.selectedFavorite = nil
-            vm.selectedLanguage = nil
-            vm.selectedType = nil
-            vm.selectedYear = nil
-            updateFiltersSheetView.toggle()
-        } label: {
-            Text("Reset All Filters")
-                .font(.headline)
-                .foregroundColor(Color.mycolor.myRed)
-                .padding(.vertical, 8)
-                .frame(height: 55)
-                .frame(maxWidth: .infinity)
-                .background(.clear)
-                .clipShape(Capsule())
-                .overlay(
-                    Capsule()
-                        .stroke(Color.mycolor.myBlue, lineWidth: 1)
-                )
-        }
+        
+        ClearCupsuleButton(
+            primaryTitle: "Reset All Filters",
+            primaryTitleColor: Color.mycolor.myRed) {
+                vm.selectedLevel = nil
+                vm.selectedFavorite = nil
+                vm.selectedLanguage = nil
+                vm.selectedType = nil
+                vm.selectedYear = nil
+                updateFiltersSheetView.toggle()
+            }
+
+//        
+//        Button {
+//            vm.selectedLevel = nil
+//            vm.selectedFavorite = nil
+//            vm.selectedLanguage = nil
+//            vm.selectedType = nil
+//            vm.selectedYear = nil
+//            updateFiltersSheetView.toggle()
+//        } label: {
+//            Text("Reset All Filters")
+//                .font(.headline)
+//                .foregroundColor(Color.mycolor.myRed)
+//                .padding(.vertical, 8)
+//                .frame(height: 55)
+//                .frame(maxWidth: .infinity)
+//                .background(.clear)
+//                .clipShape(Capsule())
+//                .overlay(
+//                    Capsule()
+//                        .stroke(Color.mycolor.myBlue, lineWidth: 1)
+//                )
+//        }
         .padding(.horizontal, 55)
     }
     
     private var resetAllFiltersAndExitButton: some View {
-        Button {
-            vm.selectedLevel = nil
-            vm.selectedFavorite = nil
-            vm.selectedLanguage = nil
-            vm.selectedType = nil
-            vm.selectedYear = nil
-            isFilterButtonPressed.toggle()
-        } label: {
-            Text("Reset All Filters and Exit")
-                .font(.headline)
-                .foregroundColor(Color.mycolor.myRed)
-                .padding(.vertical, 8)
-                .frame(height: 55)
-                .frame(maxWidth: .infinity)
-                .background(.clear)
-                .clipShape(Capsule())
-                .overlay(
-                    Capsule()
-                        .stroke(Color.mycolor.myBlue, lineWidth: 1)
-                )
-        }
+        
+        ClearCupsuleButton(
+            primaryTitle: "Reset All Filters and Exit",
+            primaryTitleColor: Color.mycolor.myRed) {
+                vm.selectedLevel = nil
+                vm.selectedFavorite = nil
+                vm.selectedLanguage = nil
+                vm.selectedType = nil
+                vm.selectedYear = nil
+                isFilterButtonPressed.toggle()
+            }
+
+//        
+//        Button {
+//            vm.selectedLevel = nil
+//            vm.selectedFavorite = nil
+//            vm.selectedLanguage = nil
+//            vm.selectedType = nil
+//            vm.selectedYear = nil
+//            isFilterButtonPressed.toggle()
+//        } label: {
+//            Text("Reset All Filters and Exit")
+//                .font(.headline)
+//                .foregroundColor(Color.mycolor.myRed)
+//                .padding(.vertical, 8)
+//                .frame(height: 55)
+//                .frame(maxWidth: .infinity)
+//                .background(.clear)
+//                .clipShape(Capsule())
+//                .overlay(
+//                    Capsule()
+//                        .stroke(Color.mycolor.myBlue, lineWidth: 1)
+//                )
+//        }
         .padding(.horizontal, 55)
     }
 }

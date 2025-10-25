@@ -32,7 +32,8 @@ struct PostRowView: View {
         }
         .padding(.vertical, 8)
 //        .buttonStyle(.plain) // it makes the button "...more" accessable on touchable view
-        .background(.ultraThickMaterial)
+//        .background(.ultraThickMaterial)
+        .background(Color.mycolor.myBackground)
     }
         
     // MARK: VIEW VARS
@@ -45,9 +46,12 @@ struct PostRowView: View {
                 .minimumScaleFactor(0.75)
                 .lineLimit(1)
                 .padding(.top, 8)
+//                .padding(.horizontal, 16)
             Spacer()
             Image(systemName: "star.fill")
                 .foregroundStyle(post.favoriteChoice == .yes ? Color.mycolor.myYellow : Color.mycolor.mySecondaryText)
+                .padding(.top, 8)
+//                .padding(.horizontal, 16)
         }
         
     }
