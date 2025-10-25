@@ -28,7 +28,7 @@ struct Post: Identifiable, Hashable, Codable {
         intro: String,
         author: String,
         postLanguage: LanguageOptions = .english,
-        postType: PostType = .singlepost,
+        postType: PostType = .post,
         urlString: String = "www.apple.com",
         postPlatform: Platform = .youtube,
         postDate: Date? = nil,

@@ -47,8 +47,8 @@ struct HomeView: View {
             viewBody
                 .navigationTitle(hiderText)
                 .navigationBarBackButtonHidden(true)
-                .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
-                .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+//                .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+//                .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             //                    .toolbarBackground(.visible, for: .navigationBar)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
@@ -107,7 +107,6 @@ struct HomeView: View {
                     .presentationCornerRadius(30)
                 }
         } // NavigationStack
-        .myBackground(colorScheme: colorScheme)
         .onAppear {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
         }
@@ -140,6 +139,7 @@ struct HomeView: View {
                                             }
                                     }
                                 )
+                                .padding(.bottom, 4)
                                 .listRowSeparator(.hidden)
                                 .listRowBackground(Color.clear)
                                 .listRowInsets(
@@ -153,12 +153,12 @@ struct HomeView: View {
                                     Button("Delete", action: {
                                         vm.deletePost(post: post)
                                     })
-                                    .tint(.red)
+                                    .tint(Color.mycolor.myRed)
                                     Button ("Edit", action: {
                                         print("Edit button tapped for post: \(post.title)")
                                         selectedPost = post
                                     })
-                                    .tint(.blue)
+                                    .tint(Color.mycolor.myBlue)
                                 } //swipeActions
                                 .swipeActions(edge: .leading, allowsFullSwipe: false) {
                                     Button (post.favoriteChoice == .yes ? "Unfavorite" : "Favorite") {
@@ -168,9 +168,11 @@ struct HomeView: View {
                                     .tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondaryText : Color.mycolor.myYellow)
                                 } //swipeActions
                         } // ForEach
+                        //                        .border(.green)
                     } // List
                     .listStyle(.plain)
-                    .scrollIndicators(.hidden)
+//                    .scrollIndicators(.hidden)
+                    .background(Color.mycolor.myBackground)
                     if showOnTopButton {
                         CircleStrokeButtonView(
                             iconName: "control", // control arrow.up
