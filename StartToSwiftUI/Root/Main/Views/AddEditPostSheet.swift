@@ -33,7 +33,6 @@ struct AddEditPostSheet: View {
     private let sectionBackground: Color = Color.mycolor.myBackground
     private let sectionCornerRadius: CGFloat = 8
 
-    
     private let fontSubheader: Font = .caption
     private let fontTextInput: Font = .callout
     private let colorSubheader: Color = Color.mycolor.myAccent.opacity(0.5)
@@ -477,6 +476,7 @@ struct AddEditPostSheet: View {
         }
     }
     
+    
     private var addInforSection: some View {
         
         VStack(alignment: .leading, spacing: 0) {
@@ -547,21 +547,20 @@ struct AddEditPostSheet: View {
                         .ignoresSafeArea()
                     
                     VStack(spacing: 20) {
-                        Text("DATA IS NOT SAVED")
+                        Text("DATA IS NOT SAVED!")
                             .font(.headline)
                             .bold()
                             .foregroundColor(Color.mycolor.myRed)
-
-                            .frame(maxWidth: .infinity)
-                            .multilineTextAlignment(.center)
+//                            .frame(maxWidth: .infinity)
+//                            .multilineTextAlignment(.center)
                         
-                        Text("Are you sure you want to exit without saving your data?")
+                        Text("Are you sure to exit without saving your data?")
                             .font(.subheadline)
                             .multilineTextAlignment(.center)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
                         
                         ClearCupsuleButton(
-                            primaryTitle: "YES",
+                            primaryTitle: "Yes",
                             primaryTitleColor: Color.mycolor.myRed) {
                                 vm.isPostDraftSaved = false // потом убрать
                                 dismiss()
@@ -569,9 +568,9 @@ struct AddEditPostSheet: View {
                             .disabled(isMenuConfirmationBlocked)
                         
                         ClearCupsuleButton(
-                            primaryTitle: "SAVE DRAFT",
-                            secondaryTitle: "DRAFT SAVED",
-                            primaryTitleColor: Color.mycolor.myBlue,
+                            primaryTitle: "Save draft",
+                            secondaryTitle: "Draft saved",
+//                            primaryTitleColor: Color.mycolor.myBlue,
                             secondaryTitleColor: Color.mycolor.myGreen,
                             isToChange: vm.isPostDraftSaved) {
                                 
@@ -597,7 +596,7 @@ struct AddEditPostSheet: View {
                             .disabled(isMenuConfirmationBlocked)
 
                         ClearCupsuleButton(
-                            primaryTitle: "NO",
+                            primaryTitle: "No",
                             primaryTitleColor: Color.mycolor.myGreen) {
                                 vm.isPostDraftSaved = false // потом убрать
                                 isShowingMenuConfirmation = false

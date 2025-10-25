@@ -224,29 +224,6 @@ struct FiltersSheetView: View {
                 vm.selectedYear = nil
                 isFilterButtonPressed.toggle()
             }
-
-//        
-//        Button {
-//            vm.selectedLevel = nil
-//            vm.selectedFavorite = nil
-//            vm.selectedLanguage = nil
-//            vm.selectedType = nil
-//            vm.selectedYear = nil
-//            isFilterButtonPressed.toggle()
-//        } label: {
-//            Text("Reset All Filters and Exit")
-//                .font(.headline)
-//                .foregroundColor(Color.mycolor.myRed)
-//                .padding(.vertical, 8)
-//                .frame(height: 55)
-//                .frame(maxWidth: .infinity)
-//                .background(.clear)
-//                .clipShape(Capsule())
-//                .overlay(
-//                    Capsule()
-//                        .stroke(Color.mycolor.myBlue, lineWidth: 1)
-//                )
-//        }
         .padding(.horizontal, 55)
     }
 }
