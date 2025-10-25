@@ -72,7 +72,7 @@ struct PostDetailsView: View {
             .padding(.horizontal)
 //            .background(.thinMaterial)
             .navigationBarBackButtonHidden(true)
-            .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+//            .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
             .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbar {
                 ToolbarItemGroup(placement: .topBarLeading) {
@@ -119,8 +119,6 @@ struct PostDetailsView: View {
                     SafariWebService(url: url)
                 }
             }
-            .myBackground(colorScheme: colorScheme)
-            
         } else {
             Text("Post not found")
         }

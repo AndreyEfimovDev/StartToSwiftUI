@@ -72,7 +72,7 @@ struct PreferencesView: View {
                 .frame(width: iconWidth)
                 .foregroundStyle(Color.mycolor.middle)
             Toggle("Notification", isOn: $vm.isNotification)
-                .tint(.blue)
+                .tint(Color.mycolor.myBlue)
         }
     }
     
@@ -80,35 +80,50 @@ struct PreferencesView: View {
         NavigationLink("Import posts from Cloud") {
             ImportPostsFromCloudView()
         }
-        .customPreferencesListRowStyle(iconName: "icloud.and.arrow.down", iconWidth: iconWidth)
+        .customPreferencesListRowStyle(
+            iconName: "icloud.and.arrow.down",
+            iconWidth: iconWidth
+        )
     }
     
     private var shareBackup: some View {
         NavigationLink("Share/Backup posts") {
             SharePostsView()
         }
-        .customPreferencesListRowStyle(iconName: "square.and.arrow.up", iconWidth: iconWidth)
+        .customPreferencesListRowStyle(
+            iconName: "square.and.arrow.up",
+            iconWidth: iconWidth
+        )
     }
     
     private var restoreBackup: some View {
         NavigationLink("Restore backup") {
             RestoreBackupView()
         }
-        .customPreferencesListRowStyle(iconName: "tray.and.arrow.up", iconWidth: iconWidth)
+        .customPreferencesListRowStyle(
+            iconName: "tray.and.arrow.up",
+            iconWidth: iconWidth
+        )
     }
     
     private var erasePosts: some View {
         NavigationLink("Erase all posts") {
             EraseAllPostsView()
         }
-        .customPreferencesListRowStyle(iconName: "trash", iconWidth: iconWidth)
+        .customPreferencesListRowStyle(
+            iconName: "trash",
+            iconWidth: iconWidth
+        )
     }
     
     private var aboutAppLink: some View {
         NavigationLink("About App") {
             AboutAppView()
         }
-        .customPreferencesListRowStyle(iconName: "info.square", iconWidth: iconWidth)
+        .customPreferencesListRowStyle(
+            iconName: "info.square",
+            iconWidth: iconWidth
+        )
     }
     
     private var contactDeveloperButton: some View {
@@ -119,7 +134,10 @@ struct PreferencesView: View {
                 body: ""
             )
         }
-        .customPreferencesListRowStyle(iconName: "envelope", iconWidth: iconWidth)
+        .customPreferencesListRowStyle(
+            iconName: "envelope",
+            iconWidth: iconWidth
+        )
     }
 }
 

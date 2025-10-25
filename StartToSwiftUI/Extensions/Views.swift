@@ -19,6 +19,16 @@ extension View {
     }
 }
 
+
+extension View {
+    func mySsectionBackground() -> some View {
+        self
+            .background(Color.mycolor.mySectionBackground)
+            .cornerRadius(8)
+    }
+}
+
+
 extension View {
     func managingPostsTextFormater() -> some View {
         self
@@ -37,20 +47,15 @@ extension View {
 }
 
 extension View {
-    func sectionBackgroundInAddEditView() -> some View {
-        self
-            .background(Color.mycolor.myBackground)
-            .cornerRadius(8)
-    }
-}
-
-extension View {
     func sectionSubheaderFormater(fontSubheader: Font, colorSubheader: Color) -> some View {
         self
             .font(fontSubheader)
             .bold()
             .foregroundStyle(colorSubheader)
-            .padding(.leading, 5)
+            .padding(5)
+//            .padding(.leading, 5)
+//            .padding(.bottom, 5)
+
     }
 }
 

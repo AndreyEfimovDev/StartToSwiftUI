@@ -28,13 +28,16 @@ struct PostRowView: View {
                 level
             }
             .foregroundStyle(Color.mycolor.myAccent)
-            .padding(.horizontal, 16)
         }
-        .padding(.vertical, 8)
+        .padding(8)
+        .padding(.horizontal, 8)
 //        .buttonStyle(.plain) // it makes the button "...more" accessable on touchable view
-//        .background(.ultraThickMaterial)
-        .padding(.horizontal, 16)
-        .background(Color.mycolor.myBackground)
+        .background(
+            Color.mycolor.mySectionBackground,
+            in: RoundedRectangle(cornerRadius: 8)
+        )
+
+
     }
         
     // MARK: VIEW VARS
@@ -47,12 +50,10 @@ struct PostRowView: View {
                 .minimumScaleFactor(0.75)
                 .lineLimit(1)
                 .padding(.top, 8)
-//                .padding(.horizontal, 16)
             Spacer()
             Image(systemName: "star.fill")
                 .foregroundStyle(post.favoriteChoice == .yes ? Color.mycolor.myYellow : Color.mycolor.mySecondaryText)
                 .padding(.top, 8)
-//                .padding(.horizontal, 16)
         }
         
     }
@@ -63,7 +64,7 @@ struct PostRowView: View {
             Text(post.postLanguage.displayName)
             +
             Text(", \(post.postDate?.formatted(date: .numeric, time: .omitted) ?? "post date missed")") +
-            Text(post.postType == .others ? "" : ", " + post.postType.displayName)
+            Text(post.postType == .other ? "" : ", " + post.postType.displayName)
         }
         .font(.footnote)
     }
@@ -103,12 +104,17 @@ fileprivate struct PostRowPreView: View {
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        VStack {
-            PostRowView(post: DevPreview.samplePost1)
-            PostRowView(post: DevPreview.samplePost2)
-            PostRowView(post: DevPreview.samplePost3)
+        ZStack {
+            Color.pink.opacity(0.1)
+                .ignoresSafeArea()
+
+            VStack {
+                PostRowView(post: DevPreview.samplePost1)
+                PostRowView(post: DevPreview.samplePost2)
+                PostRowView(post: DevPreview.samplePost3)
+            }
+            .padding()
         }
-        .myBackground(colorScheme: colorScheme)
     }
 }
 
