@@ -161,9 +161,13 @@ struct HomeView: View {
                                     .tint(Color.mycolor.myBlue)
                                 } //swipeActions
                                 .swipeActions(edge: .leading, allowsFullSwipe: false) {
-                                    Button (post.favoriteChoice == .yes ? "Unfavorite" : "Favorite") {
+                                    
+                                    Button {
                                         print("Favourite button tapped for post: \(post.title)")
                                         vm.favoriteToggle(post: post)
+                                    } label: {
+                                        Image(systemName: "star.fill")
+//                                        Text (post.favoriteChoice == .yes ? "Unfavorite" : "Favorite")
                                     }
                                     .tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondaryText : Color.mycolor.myYellow)
                                 } //swipeActions
