@@ -33,6 +33,7 @@ struct PostRowView: View {
         .padding(.vertical, 8)
 //        .buttonStyle(.plain) // it makes the button "...more" accessable on touchable view
 //        .background(.ultraThickMaterial)
+        .padding(.horizontal, 16)
         .background(Color.mycolor.myBackground)
     }
         

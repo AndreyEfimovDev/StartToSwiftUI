@@ -15,7 +15,7 @@ extension View {
     func myBackground(colorScheme: ColorScheme) -> some View {
         self
             .background(.thinMaterial)
-            .ignoresSafeArea()
+//            .ignoresSafeArea()
     }
 }
 

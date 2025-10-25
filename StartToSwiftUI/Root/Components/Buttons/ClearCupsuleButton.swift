@@ -42,7 +42,7 @@ struct ClearCupsuleButton: View {
                 .padding(.vertical, 8)
                 .frame(height: 55)
                 .frame(maxWidth: .infinity)
-                .background(.clear)
+                .background(.thinMaterial)
                 .clipShape(Capsule())
                 .overlay(
                     Capsule()
