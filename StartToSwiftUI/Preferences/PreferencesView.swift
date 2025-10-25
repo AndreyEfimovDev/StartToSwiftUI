@@ -33,18 +33,15 @@ struct PreferencesView: View {
     var body: some View {
         NavigationStack {
             Form {
-                
                 Section(header: sectionHeader("Settings")) {
                     notificationSetting
                 }
-                
                 Section(header: sectionHeader("Managing posts (\(postsCount))")) {
-                    cloudImportLink
-                    shareBackupLink
-                    restoreBackupLink
-                    erasePostsLink
+                    importFromCloud
+                    shareBackup
+                    restoreBackup
+                    erasePosts
                 }
-                
                 Section {
                     aboutAppLink
                     contactDeveloperButton
@@ -75,49 +72,58 @@ struct PreferencesView: View {
                 .frame(width: iconWidth)
                 .foregroundStyle(Color.mycolor.middle)
             Toggle("Notification", isOn: $vm.isNotification)
-                .tint(.blue)
+                .tint(Color.mycolor.myBlue)
         }
     }
     
-    private var cloudImportLink: some View {
+    private var importFromCloud: some View {
         NavigationLink("Import posts from Cloud") {
             ImportPostsFromCloudView()
-//            LazyView { ImportPostsFromCloudView() }
         }
-        .customPreferencesListRowStyle(iconName: "icloud.and.arrow.down", iconWidth: iconWidth)
+        .customPreferencesListRowStyle(
+            iconName: "icloud.and.arrow.down",
+            iconWidth: iconWidth
+        )
     }
     
-    private var shareBackupLink: some View {
+    private var shareBackup: some View {
         NavigationLink("Share/Backup posts") {
-//            ShareStorePostsView()
             SharePostsView()
-//            LazyView { ShareStorePostsView() }
         }
-        .customPreferencesListRowStyle(iconName: "square.and.arrow.up", iconWidth: iconWidth)
+        .customPreferencesListRowStyle(
+            iconName: "square.and.arrow.up",
+            iconWidth: iconWidth
+        )
     }
     
-    private var restoreBackupLink: some View {
+    private var restoreBackup: some View {
         NavigationLink("Restore backup") {
             RestoreBackupView()
-//            LazyView { RestoreBackupView() }
         }
-        .customPreferencesListRowStyle(iconName: "tray.and.arrow.up", iconWidth: iconWidth)
+        .customPreferencesListRowStyle(
+            iconName: "tray.and.arrow.up",
+            iconWidth: iconWidth
+        )
     }
     
-    private var erasePostsLink: some View {
+    private var erasePosts: some View {
         NavigationLink("Erase all posts") {
             EraseAllPostsView()
-//            LazyView { EraseAllPostsView() }
         }
-        .customPreferencesListRowStyle(iconName: "trash", iconWidth: iconWidth)
+        .customPreferencesListRowStyle(
+            iconName: "trash",
+            iconWidth: iconWidth
+        )
     }
     
     private var aboutAppLink: some View {
         NavigationLink("About App") {
             AboutAppView()
-//            LazyView { AboutAppView() }
         }
-        .customPreferencesListRowStyle(iconName: "info.square", iconWidth: iconWidth)
+        .customPreferencesListRowStyle(
+            iconName: "info.square",
+            iconWidth: iconWidth
+        )
     }
     
     private var contactDeveloperButton: some View {
@@ -128,7 +134,10 @@ struct PreferencesView: View {
                 body: ""
             )
         }
-        .customPreferencesListRowStyle(iconName: "envelope", iconWidth: iconWidth)
+        .customPreferencesListRowStyle(
+            iconName: "envelope",
+            iconWidth: iconWidth
+        )
     }
 }
 

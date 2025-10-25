@@ -21,15 +21,19 @@ enum LanguageOptions: String, CaseIterable, Codable {
 }
 
 enum PostType: String, CaseIterable, Codable {
-    case singlepost
-    case playlist
-    case others
+    case post
+    case course
+    case solution
+    case bug
+    case other
     
     var displayName: String {
         switch self {
-        case .singlepost: return "Single post"
-        case .playlist: return "Playlist"
-        case .others: return "Others"
+        case .post: return "Post"
+        case .course: return "Course"
+        case .solution: return "Solution"
+        case .bug: return "Bug"
+        case .other: return "Other"
         }
     }
 }
