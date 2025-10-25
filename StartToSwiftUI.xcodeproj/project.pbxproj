@@ -24,6 +24,7 @@
 		475997612E5CC0F8008E20F0 /* PostDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997602E5CC0F8008E20F0 /* PostDetailsView.swift */; };
 		4759976E2E5D933C008E20F0 /* SafariWebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4759976D2E5D933C008E20F0 /* SafariWebService.swift */; };
 		4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997792E5F1A32008E20F0 /* Colors.swift */; };
+		4764A1F82EAD1DAA00D76C3A /* ClearCupsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4764A1F72EAD1DAA00D76C3A /* ClearCupsuleButton.swift */; };
 		4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773545A2E65C470001DEDEE /* CapsulesSegmentedPicker.swift */; };
 		4773545D2E65D03A001DEDEE /* FiltersSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */; };
 		4791CD862E6ED58B00687126 /* ShrinkIconButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CD852E6ED58B00687126 /* ShrinkIconButtonStyle.swift */; };
@@ -77,6 +78,7 @@
 		475997602E5CC0F8008E20F0 /* PostDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailsView.swift; sourceTree = "<group>"; };
 		4759976D2E5D933C008E20F0 /* SafariWebService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebService.swift; sourceTree = "<group>"; };
 		475997792E5F1A32008E20F0 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		4764A1F72EAD1DAA00D76C3A /* ClearCupsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearCupsuleButton.swift; sourceTree = "<group>"; };
 		4773545A2E65C470001DEDEE /* CapsulesSegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsulesSegmentedPicker.swift; sourceTree = "<group>"; };
 		4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersSheetView.swift; sourceTree = "<group>"; };
 		4791CD852E6ED58B00687126 /* ShrinkIconButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShrinkIconButtonStyle.swift; sourceTree = "<group>"; };
@@ -281,10 +283,11 @@
 			children = (
 				47BAF0A12E60485D00287F10 /* FavoriteButton.swift */,
 				47BAF09F2E5F9E9800287F10 /* MoreLessTextButton.swift */,
+				4791CDF92E744AD400687126 /* CapsuleButtonView.swift */,
+				4764A1F72EAD1DAA00D76C3A /* ClearCupsuleButton.swift */,
 				47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */,
 				4791CDF02E7428EE00687126 /* CircleShadowButtonView.swift */,
 				470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */,
-				4791CDF92E744AD400687126 /* CapsuleButtonView.swift */,
 				4791CD852E6ED58B00687126 /* ShrinkIconButtonStyle.swift */,
 			);
 			path = Buttons;
@@ -408,6 +411,7 @@
 				47BAF0FA2E64CC8700287F10 /* UnderlineSermentedPicker.swift in Sources */,
 				4791CDEF2E737B3600687126 /* SFSymbolsAnimationView.swift in Sources */,
 				4759975D2E5C8F4B008E20F0 /* PostRowView.swift in Sources */,
+				4764A1F82EAD1DAA00D76C3A /* ClearCupsuleButton.swift in Sources */,
 				47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */,
 				4791CDF12E7428EE00687126 /* CircleShadowButtonView.swift in Sources */,
 				4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */,

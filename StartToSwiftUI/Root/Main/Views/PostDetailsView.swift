@@ -40,42 +40,56 @@ struct PostDetailsView: View {
         
         if let validPost = post {
             ScrollView(showsIndicators: false) {
-                header(for: validPost)
-                    .background(
-                        .ultraThickMaterial,
-                        in: RoundedRectangle(cornerRadius: 15)
-                    )
-                intro(for: validPost)
-                    .background(
-                        .ultraThickMaterial,
-                        in: RoundedRectangle(cornerRadius: 15)
-                    )
-                watchTheSourceButton(for: validPost)
-                addInfoField(for: validPost)
-                    .background(
-                        .ultraThickMaterial,
-                        in: RoundedRectangle(cornerRadius: 15)
-                    )
-                    .opacity(validPost.additionalText.isEmpty ? 0 : 1)
+                Group {
+                    header(for: validPost)
+                        .background(
+                            Color.mycolor.myBackground,
+                            in: RoundedRectangle(cornerRadius: 15)
+                        )
+                    intro(for: validPost)
+                        .background(
+                            Color.mycolor.myBackground,
+                            in: RoundedRectangle(cornerRadius: 15)
+                        )
+                    watchTheSourceButton(for: validPost)
+                        .padding(.horizontal, 55)
+                    
+                    addInfoField(for: validPost)
+                        .background(
+                            Color.mycolor.myBackground,
+                            in: RoundedRectangle(cornerRadius: 15)
+                        ).opacity(validPost.additionalText.isEmpty ? 0 : 1)
+                }
+                .foregroundStyle(Color.mycolor.myAccent)
             }
-            .foregroundStyle(Color.mycolor.myAccent)
             .padding(.top, 15)
             .padding(.horizontal)
+            .background(.thinMaterial)
             .navigationBarBackButtonHidden(true)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
+//                ToolbarItem(placement: .topBarLeading) {
+//                    CircleStrokeButtonView(
+//                        iconName: "chevron.left",
+//                        isShownCircle: false)
+//                    {
+//                        dismiss()
+//                    }
+//                }
+                ToolbarItemGroup(placement: .topBarLeading) {
                     CircleStrokeButtonView(
                         iconName: "chevron.left",
                         isShownCircle: false)
                     {
                         dismiss()
                     }
-                }
-                ToolbarItemGroup(placement: .bottomBar) {
+
                     ShareLink(item: validPost.urlString) {
                         Image(systemName: "square.and.arrow.up")
-                            .font(.title2)
-                            .foregroundStyle(Color.mycolor.myAccent)
+                            .font(.headline)
+                            .foregroundStyle(Color.mycolor.mySecondaryText)
+                            .offset(y: -2)
+                            .frame(width: 30, height: 30)
+                            .background(.black.opacity(0.001))
                     }
                 }
                 ToolbarItemGroup(placement: .topBarTrailing) {
@@ -88,8 +102,7 @@ struct PostDetailsView: View {
                     {
                         vm.favoriteToggle(post: validPost)
                     }
-//                }
-//                ToolbarItem(placement: .topBarTrailing) {
+
                     CircleStrokeButtonView(
                         iconName: "pencil",
                         isShownCircle: false)
@@ -237,4 +250,3 @@ fileprivate struct PostDetailsPreView: View {
 #Preview {
     PostDetailsPreView()
 }
-

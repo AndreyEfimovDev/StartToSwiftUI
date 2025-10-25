@@ -14,18 +14,8 @@ import SwiftUI
 extension View {
     func myBackground(colorScheme: ColorScheme) -> some View {
         self
-            .background(
-                Color.mycolor.myBackground
-                
-//                
-//                Image("Swift_Icon_RGB_Portret")
-//                    .scaledToFit()
-//                    .opacity(colorScheme == .dark ? 1 : 0.15)
-//                    .overlay(content: {
-//                        Color.black.opacity(colorScheme == .dark ? 0.7 : 0)
-//                    })
-                    .ignoresSafeArea()
-            )
+            .background(.thinMaterial)
+            .ignoresSafeArea()
     }
 }
 
@@ -49,7 +39,7 @@ extension View {
 extension View {
     func sectionBackgroundInAddEditView() -> some View {
         self
-            .background(.ultraThickMaterial)
+            .background(Color.mycolor.myBackground)
             .cornerRadius(8)
     }
 }
@@ -72,7 +62,7 @@ extension View {
         HStack {
             Image(systemName: iconName)
                 .frame(width: iconWidth)
-                .foregroundStyle(Color.mycolor.middle)
+                .foregroundStyle(Color.mycolor.myBlue)
             
             self
         }

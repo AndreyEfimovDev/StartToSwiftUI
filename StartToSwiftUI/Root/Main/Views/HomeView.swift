@@ -107,7 +107,8 @@ struct HomeView: View {
                     .presentationCornerRadius(30)
                 }
         } // NavigationStack
-        .myBackground(colorScheme: colorScheme)
+//        .background(.thinMaterial)
+//        .myBackground(colorScheme: colorScheme)
         .onAppear {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
         }
@@ -126,6 +127,15 @@ struct HomeView: View {
                     )
                 } else {
                     List {
+//                        Text("")
+//                            .frame(maxWidth: .infinity)
+//                            .frame(height: 0)
+//                            .padding(.top, 0)
+//                            .padding(.bottom, 0)
+//                            .listRowSeparator(.hidden, edges: .top)
+//                            .border(.red)
+//
+//                        
                         ForEach(searchedPosts) { post in
                             PostRowView(post: post)
                                 .id(post.id)
@@ -168,9 +178,11 @@ struct HomeView: View {
                                     .tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondaryText : Color.mycolor.myYellow)
                                 } //swipeActions
                         } // ForEach
+//                        .border(.green)
                     } // List
                     .listStyle(.plain)
                     .scrollIndicators(.hidden)
+                    .background(.ultraThinMaterial)
                     if showOnTopButton {
                         CircleStrokeButtonView(
                             iconName: "control", // control arrow.up
