@@ -36,46 +36,60 @@ struct PostDetailsView: View {
     private let fullFreeTextFieldLineSpacing: CGFloat = 0
     private let FreeTextFieldLinesCountLimit: Int = 2
     
+    private let sectionBackground: Color = Color.mycolor.myBackground
+    private let sectionCornerRadius: CGFloat = 15
+
+    
     var body: some View {
         
         if let validPost = post {
             ScrollView(showsIndicators: false) {
-                header(for: validPost)
-                    .background(
-                        .ultraThickMaterial,
-                        in: RoundedRectangle(cornerRadius: 15)
-                    )
-                intro(for: validPost)
-                    .background(
-                        .ultraThickMaterial,
-                        in: RoundedRectangle(cornerRadius: 15)
-                    )
-                watchTheSourceButton(for: validPost)
-                addInfoField(for: validPost)
-                    .background(
-                        .ultraThickMaterial,
-                        in: RoundedRectangle(cornerRadius: 15)
-                    )
-                    .opacity(validPost.additionalText.isEmpty ? 0 : 1)
+                VStack {
+                    header(for: validPost)
+                        .background(
+                            sectionBackground,
+                            in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                        )
+                        .padding(.top, 30)
+
+                    intro(for: validPost)
+                        .background(
+                            sectionBackground,
+                            in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                        )
+                    watchTheSourceButton(for: validPost)
+                        .padding(.horizontal, 55)
+                    
+                    addInfoField(for: validPost)
+                        .background(
+                            sectionBackground,
+                            in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                        ).opacity(validPost.additionalText.isEmpty ? 0 : 1)
+                }
+                .foregroundStyle(Color.mycolor.myAccent)
             }
-            .foregroundStyle(Color.mycolor.myAccent)
-            .padding(.top, 15)
+//            .padding(.top, 30)
             .padding(.horizontal)
+//            .background(.thinMaterial)
             .navigationBarBackButtonHidden(true)
+//            .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
+                ToolbarItemGroup(placement: .topBarLeading) {
                     CircleStrokeButtonView(
                         iconName: "chevron.left",
                         isShownCircle: false)
                     {
                         dismiss()
                     }
-                }
-                ToolbarItemGroup(placement: .bottomBar) {
+
                     ShareLink(item: validPost.urlString) {
                         Image(systemName: "square.and.arrow.up")
-                            .font(.title2)
-                            .foregroundStyle(Color.mycolor.myAccent)
+                            .font(.headline)
+                            .foregroundStyle(Color.mycolor.mySecondaryText)
+                            .offset(y: -2)
+                            .frame(width: 30, height: 30)
+                            .background(.black.opacity(0.001))
                     }
                 }
                 ToolbarItemGroup(placement: .topBarTrailing) {
@@ -88,8 +102,7 @@ struct PostDetailsView: View {
                     {
                         vm.favoriteToggle(post: validPost)
                     }
-//                }
-//                ToolbarItem(placement: .topBarTrailing) {
+
                     CircleStrokeButtonView(
                         iconName: "pencil",
                         isShownCircle: false)
@@ -106,8 +119,6 @@ struct PostDetailsView: View {
                     SafariWebService(url: url)
                 }
             }
-            .myBackground(colorScheme: colorScheme)
-            
         } else {
             Text("Post not found")
         }
@@ -142,9 +153,13 @@ struct PostDetailsView: View {
     private func intro(for post: Post) -> some View {
         VStack(spacing: 0) {
             VStack {
-                let date = post.date.formatted(date: .numeric, time: .omitted)
-                let platform = post.postPlatform == .others ? "" : " on " + post.postPlatform.rawValue
-                Text("Posted " + date + platform)
+                let dateChecked = post.postDate == nil ? "" : (post.postDate?.formatted(date: .numeric, time: .omitted) ?? "")
+                let prefecsToDate = post.postDate == nil ? "" : " posted "
+                let platform = post.postPlatform == .others ? "" : post.postPlatform.displayName
+                let postType = post.postPlatform == .others ? "" : post.postType.displayName
+                let titleForIntro = postType + " on " + platform + prefecsToDate + dateChecked
+                
+                Text(titleForIntro)
                     .font(.system(size: 10, weight: .light, design: .rounded))
                     .multilineTextAlignment(.trailing)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -233,4 +248,3 @@ fileprivate struct PostDetailsPreView: View {
 #Preview {
     PostDetailsPreView()
 }
-

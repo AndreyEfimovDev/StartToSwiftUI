@@ -21,7 +21,6 @@ struct RedCupsuleButton: View {
             .background(Color.mycolor.myRed)
             .foregroundColor(Color.mycolor.myBackground)
             .cornerRadius(30)
-            .padding(.horizontal, 55)
     }
 }
 

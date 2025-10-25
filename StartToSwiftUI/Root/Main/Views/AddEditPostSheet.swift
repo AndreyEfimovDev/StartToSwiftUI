@@ -7,22 +7,13 @@
 
 import SwiftUI
 
-// edit and add cards
-
-enum PostFields: Hashable {
-    case postTitle
-    case intro
-    case author
-    case urlString
-    case additionalInfo
-    case postDate
-}
-
 struct AddEditPostSheet: View {
     
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
+    
+    private let hapticManager = HapticManager.shared
     
     @FocusState private var focusedField: PostFields?
     
@@ -34,36 +25,21 @@ struct AddEditPostSheet: View {
     @State private var draftPost: Post?
     @State private var isNewPost: Bool
     
-    init(post: Post?) {
-        
-        if let post = post {
-            _editedPost = State(initialValue: post)
-            _draftPost = State(initialValue: post)
-            self.isNewPost = false
-        } else {
-            _editedPost = State(initialValue: Post(
-                title: "",
-                intro: "",
-                author: "",
-                postLanguage: .english,
-                urlString: "",
-                postPlatform: .youtube,
-                postDate: nil,
-                studyLevel: .beginner,
-                favoriteChoice: .no,
-                additionalText: "",
-                date: Date()
-            ))
-            self.isNewPost = true
-        }
-    }
+    @State var isShowingMenuConfirmation: Bool = false
+    @State var isMenuConfirmationBlocked: Bool = false
     
+    @State private var deleteItem = false
+    
+    private let sectionBackground: Color = Color.mycolor.mySectionBackground
+    private let sectionCornerRadius: CGFloat = 8
+
     private let fontSubheader: Font = .caption
     private let fontTextInput: Font = .callout
-    private let colorSubheader: Color = Color.mycolor.mySecondaryText
+    private let colorSubheader: Color = Color.mycolor.myAccent.opacity(0.5)
     
-    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date()
+    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date() // set the limit to the beginning year
     private let endingDate: Date = Date()
+    
     private var bindingPostDate: Binding<Date> {
         Binding<Date>(
             get: { editedPost.postDate ?? Date() },
@@ -79,6 +55,29 @@ struct AddEditPostSheet: View {
     enum PostAlerts {
         case success
         case error
+    }
+    
+    init(post: Post?) {
+        
+        if let post = post { // Edit post initialising
+            _editedPost = State(initialValue: post)
+            _draftPost = State(initialValue: post)
+            self.isNewPost = false
+        } else { // Add a new post initialising
+            _editedPost = State(initialValue: Post(
+                title: "",
+                intro: "",
+                author: "",
+                postLanguage: .english,
+                urlString: "",
+                postPlatform: .youtube,
+                postDate: nil,
+                studyLevel: .beginner,
+                favoriteChoice: .no,
+                additionalText: "",
+            ))
+            self.isNewPost = true
+        }
     }
     
     // MARK: BODY
@@ -104,6 +103,7 @@ struct AddEditPostSheet: View {
                 .padding(.horizontal, 8)
             } // VStack
             .navigationTitle(viewTitle)
+            .background(Color.mycolor.myBackground)
             .scrollIndicators(.hidden)
             .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbar {
@@ -127,44 +127,505 @@ struct AddEditPostSheet: View {
                         imageColorSecondary: Color.mycolor.myRed,
                         isShownCircle: false)
                     {
-                        dismiss()
+                        isShowingMenuConfirmation = true
                     }
+                    //                    .alert("DATA IS NOT SAVED", isPresented: $showMenuConfirmation) {
+                    //                        VStack {
+                    //                            Button("YES", role: .destructive) {
+                    //                                vm.isPostDraftSaved = false
+                    //                                dismiss()
+                    //                            }
+                    //                            Button(vm.isPostDraftSaved ? "DRAFT SAVED" : "SAVE DRAFT") {
+                    //                                vm.titlePostDraft = editedPost.title
+                    //                                vm.introPostDraft = editedPost.intro
+                    //                                vm.authorPostDraft = editedPost.author
+                    //                                vm.languagePostDraft = editedPost.postLanguage
+                    //                                vm.typePostDraft = editedPost.postType
+                    //                                vm.urlStringPostDraft = editedPost.urlString
+                    //                                vm.platformPostDraft = editedPost.postPlatform
+                    //                                vm.datePostDraft = editedPost.postDate
+                    //                                vm.studyLevelPostDraft = editedPost.studyLevel
+                    //                                vm.favoriteChoicePostDraft = editedPost.favoriteChoice
+                    //                                vm.additionalTextPostDraft = editedPost.additionalText
+                    //
+                    //                                hapticManager.notification(type: .success)
+                    //                                vm.isPostDraftSaved = true
+                    //                                dismiss()
+                    ////                                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+                    ////                                    dismiss()
+                    ////                                }
+                    //                            }
+                    //                            Button("NO", role: .cancel) {
+                    //                                vm.isPostDraftSaved = false
+                    //                            }
+                    //                        }
+                    //
+                    //                    } message: {
+                    //                        Text("Are you sure you want to exit without saving your data???")
+                    //                    }
                 }
             }
             .overlay(
-                Group {
-                    if focusedField != nil {
-                        VStack {
-                            Spacer()
-                            HStack {
-                                CircleStrokeButtonView(
-                                    iconName: "keyboard.chevron.compact.down",
-                                    iconFont: .title2,
-                                    imageColorPrimary: Color.mycolor.myBlue,
-                                    widthIn: 55,
-                                    heightIn: 55) {
-                                        withAnimation {
-                                            focusedField = nil
-                                        }
-                                    }
-//                                    .padding(.leading, 16)
-                                    .padding(.bottom, 16) // Indent from the bottom edge (above the keyboard)
-//                                Spacer()
-                            }
-                        }
-                        .transition(.opacity)
-                    }
-                }
-                .animation(.easeInOut(duration: 0.3), value: focusedField != nil)
+                hideKeybordButton
             )
         } //NavigationStack
         .onAppear {
             focusedField = .postTitle
         }
+        .overlay (
+            menuConfitmation
+        )
+            
+    }
+    
+    // MARK: ViewBuilders
+    
+    @ViewBuilder
+    private func textEditorRightButton(
+        text: String,
+        iconName: String = "xmark",
+        iconColor: Color = Color.mycolor.myRed,
+        action: @escaping () -> ()
+    ) -> some View {
+        
+        if !text.isEmpty {
+            Button {
+                action()
+            } label: {
+                Image(systemName: iconName)
+                    .foregroundStyle(iconColor)
+            }
+            .frame(width: 50, height: 50)
+            .background(.black.opacity(0.001))
+        }
+    }
+    
+    // MARK: Subviews
+    
+    private var titleSection: some View {
+        
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Title")
+                .textCase(.uppercase)
+                .sectionSubheaderFormater(
+                    fontSubheader: fontSubheader,
+                    colorSubheader: colorSubheader
+                )
+            HStack(spacing: 0) {
+                TextField("", text: $editedPost.title)
+                    .font(fontTextInput)
+                    .padding(.leading, 5)
+                    .frame(height: 50)
+                    .focused($focusedField, equals: .postTitle)
+                    .onSubmit {focusedField = .intro }
+                    .submitLabel(.next)
+                textEditorRightButton(
+                    text: editedPost.title,
+                    iconColor: Color.mycolor.myRed) {
+                        editedPost.title = ""
+                    }
+            }
+            .background(
+                sectionBackground,
+                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+            )
+        }
+    }
+    
+    private var introSection: some View {
+        
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Intro")
+                .textCase(.uppercase)
+                .sectionSubheaderFormater(
+                    fontSubheader: fontSubheader,
+                    colorSubheader: colorSubheader
+                )
+            HStack(spacing: 0) {
+                TextEditor(text: $editedPost.intro)
+                    .font(fontTextInput)
+                    .frame(height: 200)
+                    .autocorrectionDisabled(true) // fixing leaking memory
+                    .scrollContentBackground(.hidden)
+                    .focused($focusedField, equals: .intro)
+                    .onSubmit {focusedField = .author }
+                    .submitLabel(.return)
+                VStack {
+                    textEditorRightButton(text: editedPost.intro) {
+                        editedPost.intro = ""
+                    }
+                    textEditorRightButton(
+                        text: editedPost.intro,
+                        iconName: "arrow.turn.right.down",
+                        iconColor: Color.mycolor.myBlue) {
+                            focusedField = .author
+                        }
+                        .frame(maxHeight: .infinity, alignment: .bottom)
+                }
+            }
+            .background(
+                sectionBackground,
+                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+            )
+        }
+    }
+    
+    private var authorSection: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Author")
+                .textCase(.uppercase)
+                .sectionSubheaderFormater(
+                    fontSubheader: fontSubheader,
+                    colorSubheader: colorSubheader
+                )
+            HStack(spacing: 0) {
+                TextField("", text: $editedPost.author)
+                    .font(fontTextInput)
+                    .padding(.leading, 5)
+                    .frame(height: 50)
+                    .autocorrectionDisabled(true) // fixing leaking memory
+                    .focused($focusedField, equals: .author)
+                    .onSubmit {focusedField = .urlString }
+                    .submitLabel(.next)
+                textEditorRightButton(text: editedPost.author) {
+                    editedPost.author = ""
+                }
+            }
+            .background(
+                sectionBackground,
+                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+            )
+        }
+    }
+        
+    private var urlSection: some View {
+        
+        VStack(alignment: .leading, spacing: 0) {
+            Text("URL")
+                .sectionSubheaderFormater(
+                    fontSubheader: fontSubheader,
+                    colorSubheader: colorSubheader
+                )
+            HStack(spacing: 0) {
+                TextField("", text: $editedPost.urlString)
+                    .font(fontTextInput)
+                    .padding(.leading, 5)
+                    .frame(height: 50)
+                    .textInputAutocapitalization(.none)
+                    .autocorrectionDisabled(true) // fixing leaking memory
+                    .keyboardType(.URL)
+                    .focused($focusedField, equals: .urlString)
+                    .onSubmit {focusedField = nil }
+                    .submitLabel(.next)
+                textEditorRightButton(text: editedPost.urlString) {
+                    editedPost.urlString = ""
+                }
+            }
+            .background(
+                sectionBackground,
+                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+            )
+        }
+    }
+    
+    private var languageSection: some View {
+        
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Language")
+                .textCase(.uppercase)
+                .sectionSubheaderFormater(
+                    fontSubheader: fontSubheader,
+                    colorSubheader: colorSubheader
+                )
+            HStack {
+                Text("Select Language:")
+                    .font(fontTextInput)
+                    .padding(.leading, 5)
+                Spacer()
+                Picker("", selection: $editedPost.postLanguage) {
+                    ForEach(LanguageOptions.allCases, id: \.self) { language in
+                        Text(language.displayName)
+                            .tag(language)
+                            .foregroundColor(Color.mycolor.myBlue)
+                    }
+                }
+                .pickerStyle(.menu)
+                .tint(Color.mycolor.myBlue)
+                .frame(height: 50)
+            }
+            .background(
+                sectionBackground,
+                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+            )
+        }
+    }
+    
+    private var postDateSection: some View {
+        
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Post Date")
+                .textCase(.uppercase)
+                .sectionSubheaderFormater(
+                    fontSubheader: fontSubheader,
+                    colorSubheader: colorSubheader
+                )
+            DatePicker(
+                "Pick up date:",
+                selection: bindingPostDate,
+                in: startingDate...endingDate,
+                displayedComponents: .date
+            )
+            .font(fontTextInput)
+            .padding(.leading, 5)
+            .tint(Color.mycolor.myBlue)
+            .padding(.trailing, 4)
+            .frame(height: 50)
+            .background(
+                sectionBackground,
+                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+            )
+        }
+        .onChange(of: bindingPostDate.wrappedValue) { _, newValue in
+            editedPost.postDate = newValue
+        }
+    }
+    
+    private var typeSection: some View {
+        
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Post Type")
+                .textCase(.uppercase)
+                .sectionSubheaderFormater(
+                    fontSubheader: fontSubheader,
+                    colorSubheader: colorSubheader
+                )
+            UnderlineSermentedPickerNotOptional(
+                selection: $editedPost.postType,
+                allItems: PostType.allCases,
+                titleForCase: { $0.displayName },
+                selectedTextColor: Color.mycolor.myBlue,
+                unselectedTextColor: Color.mycolor.mySecondaryText
+            )
+            .padding(.horizontal, 8)
+            .frame(height: 50)
+            .background(
+                sectionBackground,
+                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+            )
+        }
+    }
+    
+    private var platformSection: some View {
+        
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Platform")
+                .textCase(.uppercase)
+                .sectionSubheaderFormater(fontSubheader: fontSubheader,
+                                          colorSubheader: colorSubheader)
+            UnderlineSermentedPickerNotOptional(
+                selection: $editedPost.postPlatform,
+                allItems: Platform.allCases,
+                titleForCase: { $0.displayName },
+                selectedTextColor: Color.mycolor.myBlue,
+                unselectedTextColor: Color.mycolor.mySecondaryText
+            )
+            .padding(.horizontal, 8)
+            .frame(height: 50)
+            .background(
+                sectionBackground,
+                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+            )
+        }
+    }
+    
+    private var studyLevelSection: some View {
+        
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Study Level")
+                .textCase(.uppercase)
+                .sectionSubheaderFormater(fontSubheader: fontSubheader,
+                                          colorSubheader: colorSubheader)
+            UnderlineSermentedPickerNotOptional(
+                selection: $editedPost.studyLevel,
+                allItems: StudyLevel.allCases,
+                titleForCase: { $0.displayName },
+                selectedTextColor: Color.mycolor.myBlue,
+                unselectedTextColor: Color.mycolor.mySecondaryText
+            )
+            .padding(.horizontal, 8)
+            .frame(height: 50)
+            .background(
+                sectionBackground,
+                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+            )
+        }
+    }
+    
+    private var favoviteChoiceSection: some View {
+        
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Favorite")
+                .textCase(.uppercase)
+                .sectionSubheaderFormater(fontSubheader: fontSubheader,
+                                          colorSubheader: colorSubheader)
+            UnderlineSermentedPickerNotOptional(
+                selection: $editedPost.favoriteChoice,
+                allItems: FavoriteChoice.allCases,
+                titleForCase: { $0.displayName },
+                selectedTextColor: Color.mycolor.myBlue,
+                unselectedTextColor: Color.mycolor.mySecondaryText
+            )
+            .padding(.horizontal, 8)
+            .frame(height: 50)
+            .background(
+                sectionBackground,
+                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+            )
+        }
+        .onChange(of: editedPost.favoriteChoice) {
+            focusedField = .additionalInfo
+        }
+    }
+    
+    
+    private var addInforSection: some View {
+        
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Additional Information")
+                .textCase(.uppercase)
+                .sectionSubheaderFormater(
+                    fontSubheader: fontSubheader,
+                    colorSubheader: colorSubheader
+                )
+            HStack(spacing: 0) {
+                TextEditor(text: $editedPost.additionalText)
+                    .font(fontTextInput)
+                    .frame(minHeight: 200)
+                    .scrollContentBackground(.hidden)
+                    .focused($focusedField, equals: .additionalInfo)
+                    .onSubmit {focusedField = nil }
+                    .submitLabel(.return)
+                VStack {
+                    textEditorRightButton(text: editedPost.additionalText) {
+                        editedPost.additionalText = ""
+                    }
+                    textEditorRightButton(
+                        text: editedPost.additionalText,
+                        iconName: "arrow.turn.right.down",
+                        iconColor: Color.mycolor.myBlue) {
+                            focusedField = nil
+                        }
+                        .frame(maxHeight: .infinity, alignment: .bottom)
+                }
+            }
+            .background(
+                sectionBackground,
+                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+            )
+        }
+    }
+    
+    private var hideKeybordButton: some View {
+        
+        Group {
+            if focusedField != nil {
+                VStack {
+                    Spacer()
+                    HStack {
+                        CircleStrokeButtonView(
+                            iconName: "keyboard.chevron.compact.down",
+                            iconFont: .title2,
+                            imageColorPrimary: Color.mycolor.myBlue,
+                            widthIn: 55,
+                            heightIn: 55) {
+                                withAnimation {
+                                    focusedField = nil
+                                }
+                            }
+                            .padding(.bottom, 16)
+                    }
+                }
+                .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.3), value: focusedField != nil)
+    }
+    
+    private var menuConfitmation: some View {
+        Group {
+            if isShowingMenuConfirmation {
+                ZStack {
+                    Color.black.opacity(0.4)
+                        .ignoresSafeArea()
+                    
+                    VStack(spacing: 20) {
+                        Text("DATA IS NOT SAVED!")
+                            .font(.headline)
+                            .bold()
+                            .foregroundColor(Color.mycolor.myRed)
+//                            .frame(maxWidth: .infinity)
+//                            .multilineTextAlignment(.center)
+                        
+                        Text("Are you sure to exit without saving your data?")
+                            .font(.subheadline)
+                            .multilineTextAlignment(.center)
+                            .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
+                        
+                        ClearCupsuleButton(
+                            primaryTitle: "Yes",
+                            primaryTitleColor: Color.mycolor.myRed) {
+                                vm.isPostDraftSaved = false // потом убрать
+                                dismiss()
+                            }
+                            .disabled(isMenuConfirmationBlocked)
+                        
+                        ClearCupsuleButton(
+                            primaryTitle: "Save draft",
+                            secondaryTitle: "Draft saved",
+//                            primaryTitleColor: Color.mycolor.myBlue,
+                            secondaryTitleColor: Color.mycolor.myGreen,
+                            isToChange: vm.isPostDraftSaved) {
+                                
+                                vm.titlePostDraft = editedPost.title
+                                vm.introPostDraft = editedPost.intro
+                                vm.authorPostDraft = editedPost.author
+                                vm.languagePostDraft = editedPost.postLanguage
+                                vm.typePostDraft = editedPost.postType
+                                vm.urlStringPostDraft = editedPost.urlString
+                                vm.platformPostDraft = editedPost.postPlatform
+                                vm.datePostDraft = editedPost.postDate
+                                vm.studyLevelPostDraft = editedPost.studyLevel
+                                vm.favoriteChoicePostDraft = editedPost.favoriteChoice
+                                vm.additionalTextPostDraft = editedPost.additionalText
+                                
+                                isMenuConfirmationBlocked = true
+                                vm.isPostDraftSaved = true
+                                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+                                    isMenuConfirmationBlocked = false
+                                    dismiss()
+                                }
+                            }
+                            .disabled(isMenuConfirmationBlocked)
+
+                        ClearCupsuleButton(
+                            primaryTitle: "No",
+                            primaryTitleColor: Color.mycolor.myGreen) {
+                                vm.isPostDraftSaved = false // потом убрать
+                                isShowingMenuConfirmation = false
+                            }
+                            .disabled(isMenuConfirmationBlocked)
+                    }
+                    .padding()
+                    .background(.regularMaterial)
+                    .cornerRadius(30)
+                    .padding(.horizontal, 40)
+                }
+            }
+        }
     }
     
     // MARK: Functions
-
+    
     private func checkPostAndSave() {
         if !textIsAppropriate(text: editedPost.title) {
             alertType = .error
@@ -205,7 +666,7 @@ struct AddEditPostSheet: View {
     }
     
     private func getAlert(alertTitle: String,
-                  alertMessage: String) -> Alert {
+                          alertMessage: String) -> Alert {
         switch alertType {
         case .error:
             return Alert(
@@ -228,317 +689,7 @@ struct AddEditPostSheet: View {
         }
     }
     
-    // MARK: ViewBuilders
 
-    @ViewBuilder
-    private func textEditorRightButton(
-        text: String,
-        iconName: String = "xmark",
-        iconColor: Color = Color.mycolor.myRed,
-        action: @escaping () -> ()
-    ) -> some View {
-        
-        if !text.isEmpty {
-            Button {
-                action()
-            } label: {
-                Image(systemName: iconName)
-                    .foregroundStyle(iconColor)
-            }
-            .frame(width: 50, height: 50)
-            .background(.black.opacity(0.001))
-        }
-    }
-    
-    // MARK: Subviews
-    
-    private var titleSection: some View {
-        
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Title")
-                .sectionSubheaderFormater(fontSubheader: fontSubheader,
-                                          colorSubheader: colorSubheader)
-            HStack(spacing: 0) {
-                TextField("", text: $editedPost.title)
-                    .font(fontTextInput)
-                    .padding(.leading, 5)
-                    .frame(height: 50)
-                    .focused($focusedField, equals: .postTitle)
-                    .onSubmit {focusedField = .intro }
-                    .submitLabel(.next)
-                textEditorRightButton(
-                    text: editedPost.title,
-                    iconName: "xmark",
-                    iconColor: Color.mycolor.myRed) {
-                        editedPost.title = ""
-                    }
-                    .background(.ultraThickMaterial,
-                                in: RoundedRectangle(cornerRadius: 8)
-                    )
-            }
-            .sectionBackgroundInAddEditView()
-        }
-    }
-    
-    private var introSection: some View {
-        
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Intro")
-                .sectionSubheaderFormater(fontSubheader: fontSubheader,
-                                          colorSubheader: colorSubheader)
-            HStack(spacing: 0) {
-                TextEditor(text: $editedPost.intro)
-                    .font(fontTextInput)
-                    .frame(height: 200)
-                    .scrollContentBackground(.hidden)
-                    .focused($focusedField, equals: .intro)
-                    .onSubmit {focusedField = .author }
-                    .submitLabel(.return)
-                VStack {
-                    textEditorRightButton(text: editedPost.intro) {
-                            editedPost.intro = ""
-                        }
-                        .background(.ultraThickMaterial,
-                                    in: RoundedRectangle(cornerRadius: 8)
-                        )
-                    textEditorRightButton(
-                        text: editedPost.intro,
-                        iconName: "arrow.turn.right.down",
-                        iconColor: Color.mycolor.myBlue) {
-                            focusedField = .author
-                        }
-                        .frame(maxHeight: .infinity, alignment: .bottom)
-                        .background(.ultraThickMaterial,
-                                    in: RoundedRectangle(cornerRadius: 8)
-                        )
-                }
-            }
-            .sectionBackgroundInAddEditView()
-        }
-    }
-    
-    private var authorSection: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Author")
-                .sectionSubheaderFormater(fontSubheader: fontSubheader,
-                                          colorSubheader: colorSubheader)
-            HStack(spacing: 0) {
-                TextField("", text: $editedPost.author)
-                    .font(fontTextInput)
-                    .padding(.leading, 5)
-                    .frame(height: 50)
-                    .autocorrectionDisabled()
-                    .focused($focusedField, equals: .author)
-                    .onSubmit {focusedField = .urlString }
-                    .submitLabel(.next)
-                textEditorRightButton(text: editedPost.author) {
-                        editedPost.author = ""
-                    }
-                    .background(.ultraThickMaterial,
-                                in: RoundedRectangle(cornerRadius: 8)
-                    )
-            }
-            .sectionBackgroundInAddEditView()
-        }
-    }
-    
-    
-    private var urlSection: some View {
-        
-        VStack(alignment: .leading, spacing: 0) {
-            Text("URL")
-                .sectionSubheaderFormater(fontSubheader: fontSubheader,
-                                          colorSubheader: colorSubheader)
-            HStack(spacing: 0) {
-                TextField("", text: $editedPost.urlString)
-                    .font(fontTextInput)
-                    .padding(.leading, 5)
-                    .frame(height: 50)
-                    .textInputAutocapitalization(.none)
-                    .autocorrectionDisabled()
-                    .keyboardType(.URL)
-                    .focused($focusedField, equals: .urlString)
-                    .onSubmit {focusedField = nil }
-                    .submitLabel(.next)
-                textEditorRightButton(text: editedPost.urlString) {
-                        editedPost.urlString = ""
-                    }
-                    .background(.ultraThickMaterial,
-                                in: RoundedRectangle(cornerRadius: 8)
-                    )
-            }
-            .background(.ultraThickMaterial)
-            .cornerRadius(8)
-        }
-    }
-    
-    private var languageSection: some View {
-        
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Post Language")
-                .sectionSubheaderFormater(fontSubheader: fontSubheader,
-                                          colorSubheader: colorSubheader)
-            HStack {
-                Text("Select Language:")
-                    .font(fontTextInput)
-                    .padding(.leading, 5)
-                Spacer()
-                Picker("", selection: $editedPost.postLanguage) {
-                    ForEach(LanguageOptions.allCases, id: \.self) { language in
-                        Text(language.displayName)
-                            .tag(language)
-                            .foregroundColor(.blue)
-                    }
-                }
-                .pickerStyle(.menu)
-                .tint(.blue)
-                .frame(height: 50)
-            }
-            .sectionBackgroundInAddEditView()
-        }
-//        .onChange(of: editedPost.postLanguage) {
-//            focusedField = .postDate
-//        }
-    }
-    
-    private var postDateSection: some View {
-        
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Post Date")
-                .sectionSubheaderFormater(fontSubheader: fontSubheader,
-                                          colorSubheader: colorSubheader)
-            DatePicker(
-                "Select post date:",
-                selection: bindingPostDate,
-                in: startingDate...endingDate,
-                displayedComponents: .date
-            )
-            .tint(Color.mycolor.myBlue)
-            .padding(.trailing, 4)
-            .frame(height: 50)
-            .sectionBackgroundInAddEditView()
-        }
-        .onChange(of: bindingPostDate.wrappedValue) { _, newValue in
-            editedPost.postDate = newValue
-        }
-    }
-    
-    private var typeSection: some View {
-        
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Post Type")
-                .sectionSubheaderFormater(fontSubheader: fontSubheader,
-                                          colorSubheader: colorSubheader)
-            UnderlineSermentedPickerNotOptional(
-                selection: $editedPost.postType,
-                allItems: PostType.allCases,
-                titleForCase: { $0.displayName },
-                selectedTextColor: Color.blue,
-                unselectedTextColor: Color.mycolor.mySecondaryText
-            )
-            .frame(height: 50)
-            .sectionBackgroundInAddEditView()
-        }
-//        .onChange(of: editedPost.postLanguage) {
-//            focusedField = .urlString
-//        }
-    }
-    
-    private var platformSection: some View {
-        
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Post Platform")
-                .sectionSubheaderFormater(fontSubheader: fontSubheader,
-                                          colorSubheader: colorSubheader)
-            UnderlineSermentedPickerNotOptional(
-                selection: $editedPost.postPlatform,
-                allItems: Platform.allCases,
-                titleForCase: { $0.displayName },
-                selectedTextColor: Color.blue,
-                unselectedTextColor: Color.mycolor.mySecondaryText
-            )
-            .frame(height: 50)
-            .sectionBackgroundInAddEditView()
-        }
-    }
-    
-    private var studyLevelSection: some View {
-        
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Study Level")
-                .sectionSubheaderFormater(fontSubheader: fontSubheader,
-                                          colorSubheader: colorSubheader)
-            UnderlineSermentedPickerNotOptional(
-                selection: $editedPost.studyLevel,
-                allItems: StudyLevel.allCases,
-                titleForCase: { $0.displayName },
-                selectedTextColor: Color.mycolor.myBlue,
-                unselectedTextColor: Color.mycolor.mySecondaryText
-            )
-            .frame(height: 50)
-            .sectionBackgroundInAddEditView()
-        }
-    }
-    
-    private var favoviteChoiceSection: some View {
-        
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Favorite")
-                .sectionSubheaderFormater(fontSubheader: fontSubheader,
-                                          colorSubheader: colorSubheader)
-            UnderlineSermentedPickerNotOptional(
-                selection: $editedPost.favoriteChoice,
-                allItems: FavoriteChoice.allCases,
-                titleForCase: { $0.displayName },
-                selectedTextColor: Color.mycolor.myBlue,
-                unselectedTextColor: Color.mycolor.mySecondaryText
-            )
-            .frame(height: 50)
-            .sectionBackgroundInAddEditView()
-        }
-        .onChange(of: editedPost.favoriteChoice) {
-            focusedField = .additionalInfo
-        }
-    }
-    
-    private var addInforSection: some View {
-        
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Additional Information")
-                .sectionSubheaderFormater(
-                    fontSubheader: fontSubheader,
-                    colorSubheader: colorSubheader
-                )
-            HStack(spacing: 0) {
-                TextEditor(text: $editedPost.additionalText)
-                    .font(fontTextInput)
-                    .frame(minHeight: 200)
-                    .scrollContentBackground(.hidden)
-                    .focused($focusedField, equals: .additionalInfo)
-                    .onSubmit {focusedField = nil }
-                    .submitLabel(.return)
-                VStack {
-                    textEditorRightButton(text: editedPost.additionalText) {
-                            editedPost.additionalText = ""
-                        }
-                        .background(.ultraThickMaterial,
-                                    in: RoundedRectangle(cornerRadius: 8)
-                        )
-                    textEditorRightButton(
-                        text: editedPost.additionalText,
-                        iconName: "arrow.turn.right.down",
-                        iconColor: Color.mycolor.myBlue) {
-                            focusedField = nil
-                        }
-                        .frame(maxHeight: .infinity, alignment: .bottom)
-                        .background(.ultraThickMaterial,
-                                    in: RoundedRectangle(cornerRadius: 8)
-                        )
-                }
-            }
-            .sectionBackgroundInAddEditView()
-        }
-    }
 }
 
 #Preview {

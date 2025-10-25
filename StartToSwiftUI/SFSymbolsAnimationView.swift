@@ -3,11 +3,11 @@
 //  EasySelfStudyOfEnglish
 //
 //  Created by Andrey Efimov on 27.04.2025.
-//
+// 0427_SFSymbolsView
 
 import SwiftUI
 
-struct _427_SFSymbolsView: View {
+struct SFSymbolsAnimationView: View {
     
     @State var valueToUse: Int = 0
     @State var isDeleted: Bool = false
@@ -61,5 +61,5 @@ struct _427_SFSymbolsView: View {
 }
 
 #Preview {
-    _427_SFSymbolsView()
+    SFSymbolsAnimationView()
 }
