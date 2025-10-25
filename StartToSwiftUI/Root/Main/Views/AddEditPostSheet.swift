@@ -7,22 +7,13 @@
 
 import SwiftUI
 
-// edit and add cards
-
-enum PostFields: Hashable {
-    case postTitle
-    case intro
-    case author
-    case urlString
-    case additionalInfo
-    case postDate
-}
-
 struct AddEditPostSheet: View {
     
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
+    
+    private let hapticManager = HapticManager.shared
     
     @FocusState private var focusedField: PostFields?
     
@@ -34,36 +25,18 @@ struct AddEditPostSheet: View {
     @State private var draftPost: Post?
     @State private var isNewPost: Bool
     
-    init(post: Post?) {
-        
-        if let post = post {
-            _editedPost = State(initialValue: post)
-            _draftPost = State(initialValue: post)
-            self.isNewPost = false
-        } else {
-            _editedPost = State(initialValue: Post(
-                title: "",
-                intro: "",
-                author: "",
-                postLanguage: .english,
-                urlString: "",
-                postPlatform: .youtube,
-                postDate: nil,
-                studyLevel: .beginner,
-                favoriteChoice: .no,
-                additionalText: "",
-                date: Date()
-            ))
-            self.isNewPost = true
-        }
-    }
+    @State var showMenuConfirmation: Bool = false
+    @State var isShowMenuConfirmationBlocked: Bool = false
+    
+    @State private var deleteItem = false
     
     private let fontSubheader: Font = .caption
     private let fontTextInput: Font = .callout
     private let colorSubheader: Color = Color.mycolor.mySecondaryText
     
-    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date()
+    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date() // set the limit to the beginning year
     private let endingDate: Date = Date()
+    
     private var bindingPostDate: Binding<Date> {
         Binding<Date>(
             get: { editedPost.postDate ?? Date() },
@@ -79,6 +52,29 @@ struct AddEditPostSheet: View {
     enum PostAlerts {
         case success
         case error
+    }
+    
+    init(post: Post?) {
+        
+        if let post = post { // Edit post initialising
+            _editedPost = State(initialValue: post)
+            _draftPost = State(initialValue: post)
+            self.isNewPost = false
+        } else { // Add a new post initialising
+            _editedPost = State(initialValue: Post(
+                title: "",
+                intro: "",
+                author: "",
+                postLanguage: .english,
+                urlString: "",
+                postPlatform: .youtube,
+                postDate: nil,
+                studyLevel: .beginner,
+                favoriteChoice: .no,
+                additionalText: "",
+            ))
+            self.isNewPost = true
+        }
     }
     
     // MARK: BODY
@@ -127,44 +123,59 @@ struct AddEditPostSheet: View {
                         imageColorSecondary: Color.mycolor.myRed,
                         isShownCircle: false)
                     {
-                        dismiss()
+                        showMenuConfirmation = true
                     }
+                    //                    .alert("DATA IS NOT SAVED", isPresented: $showMenuConfirmation) {
+                    //                        VStack {
+                    //                            Button("YES", role: .destructive) {
+                    //                                vm.isPostDraftSaved = false
+                    //                                dismiss()
+                    //                            }
+                    //                            Button(vm.isPostDraftSaved ? "DRAFT SAVED" : "SAVE DRAFT") {
+                    //                                vm.titlePostDraft = editedPost.title
+                    //                                vm.introPostDraft = editedPost.intro
+                    //                                vm.authorPostDraft = editedPost.author
+                    //                                vm.languagePostDraft = editedPost.postLanguage
+                    //                                vm.typePostDraft = editedPost.postType
+                    //                                vm.urlStringPostDraft = editedPost.urlString
+                    //                                vm.platformPostDraft = editedPost.postPlatform
+                    //                                vm.datePostDraft = editedPost.postDate
+                    //                                vm.studyLevelPostDraft = editedPost.studyLevel
+                    //                                vm.favoriteChoicePostDraft = editedPost.favoriteChoice
+                    //                                vm.additionalTextPostDraft = editedPost.additionalText
+                    //
+                    //                                hapticManager.notification(type: .success)
+                    //                                vm.isPostDraftSaved = true
+                    //                                dismiss()
+                    ////                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    ////                                    dismiss()
+                    ////                                }
+                    //                            }
+                    //                            Button("NO", role: .cancel) {
+                    //                                vm.isPostDraftSaved = false
+                    //                            }
+                    //                        }
+                    //
+                    //                    } message: {
+                    //                        Text("Are you sure you want to exit without saving your data???")
+                    //                    }
                 }
             }
             .overlay(
-                Group {
-                    if focusedField != nil {
-                        VStack {
-                            Spacer()
-                            HStack {
-                                CircleStrokeButtonView(
-                                    iconName: "keyboard.chevron.compact.down",
-                                    iconFont: .title2,
-                                    imageColorPrimary: Color.mycolor.myBlue,
-                                    widthIn: 55,
-                                    heightIn: 55) {
-                                        withAnimation {
-                                            focusedField = nil
-                                        }
-                                    }
-//                                    .padding(.leading, 16)
-                                    .padding(.bottom, 16) // Indent from the bottom edge (above the keyboard)
-//                                Spacer()
-                            }
-                        }
-                        .transition(.opacity)
-                    }
-                }
-                .animation(.easeInOut(duration: 0.3), value: focusedField != nil)
+                hideKeybordButton
             )
         } //NavigationStack
         .onAppear {
             focusedField = .postTitle
         }
+        .overlay (
+            menuConfitmation
+        )
+            
     }
     
     // MARK: Functions
-
+    
     private func checkPostAndSave() {
         if !textIsAppropriate(text: editedPost.title) {
             alertType = .error
@@ -205,7 +216,7 @@ struct AddEditPostSheet: View {
     }
     
     private func getAlert(alertTitle: String,
-                  alertMessage: String) -> Alert {
+                          alertMessage: String) -> Alert {
         switch alertType {
         case .error:
             return Alert(
@@ -229,7 +240,7 @@ struct AddEditPostSheet: View {
     }
     
     // MARK: ViewBuilders
-
+    
     @ViewBuilder
     private func textEditorRightButton(
         text: String,
@@ -296,11 +307,11 @@ struct AddEditPostSheet: View {
                     .submitLabel(.return)
                 VStack {
                     textEditorRightButton(text: editedPost.intro) {
-                            editedPost.intro = ""
-                        }
-                        .background(.ultraThickMaterial,
-                                    in: RoundedRectangle(cornerRadius: 8)
-                        )
+                        editedPost.intro = ""
+                    }
+                    .background(.ultraThickMaterial,
+                                in: RoundedRectangle(cornerRadius: 8)
+                    )
                     textEditorRightButton(
                         text: editedPost.intro,
                         iconName: "arrow.turn.right.down",
@@ -332,11 +343,11 @@ struct AddEditPostSheet: View {
                     .onSubmit {focusedField = .urlString }
                     .submitLabel(.next)
                 textEditorRightButton(text: editedPost.author) {
-                        editedPost.author = ""
-                    }
-                    .background(.ultraThickMaterial,
-                                in: RoundedRectangle(cornerRadius: 8)
-                    )
+                    editedPost.author = ""
+                }
+                .background(.ultraThickMaterial,
+                            in: RoundedRectangle(cornerRadius: 8)
+                )
             }
             .sectionBackgroundInAddEditView()
         }
@@ -361,11 +372,11 @@ struct AddEditPostSheet: View {
                     .onSubmit {focusedField = nil }
                     .submitLabel(.next)
                 textEditorRightButton(text: editedPost.urlString) {
-                        editedPost.urlString = ""
-                    }
-                    .background(.ultraThickMaterial,
-                                in: RoundedRectangle(cornerRadius: 8)
-                    )
+                    editedPost.urlString = ""
+                }
+                .background(.ultraThickMaterial,
+                            in: RoundedRectangle(cornerRadius: 8)
+                )
             }
             .background(.ultraThickMaterial)
             .cornerRadius(8)
@@ -396,9 +407,9 @@ struct AddEditPostSheet: View {
             }
             .sectionBackgroundInAddEditView()
         }
-//        .onChange(of: editedPost.postLanguage) {
-//            focusedField = .postDate
-//        }
+        //        .onChange(of: editedPost.postLanguage) {
+        //            focusedField = .postDate
+        //        }
     }
     
     private var postDateSection: some View {
@@ -439,9 +450,9 @@ struct AddEditPostSheet: View {
             .frame(height: 50)
             .sectionBackgroundInAddEditView()
         }
-//        .onChange(of: editedPost.postLanguage) {
-//            focusedField = .urlString
-//        }
+        //        .onChange(of: editedPost.postLanguage) {
+        //            focusedField = .urlString
+        //        }
     }
     
     private var platformSection: some View {
@@ -519,11 +530,11 @@ struct AddEditPostSheet: View {
                     .submitLabel(.return)
                 VStack {
                     textEditorRightButton(text: editedPost.additionalText) {
-                            editedPost.additionalText = ""
-                        }
-                        .background(.ultraThickMaterial,
-                                    in: RoundedRectangle(cornerRadius: 8)
-                        )
+                        editedPost.additionalText = ""
+                    }
+                    .background(.ultraThickMaterial,
+                                in: RoundedRectangle(cornerRadius: 8)
+                    )
                     textEditorRightButton(
                         text: editedPost.additionalText,
                         iconName: "arrow.turn.right.down",
@@ -539,6 +550,105 @@ struct AddEditPostSheet: View {
             .sectionBackgroundInAddEditView()
         }
     }
+    
+    private var hideKeybordButton: some View {
+        
+        Group {
+            if focusedField != nil {
+                VStack {
+                    Spacer()
+                    HStack {
+                        CircleStrokeButtonView(
+                            iconName: "keyboard.chevron.compact.down",
+                            iconFont: .title2,
+                            imageColorPrimary: Color.mycolor.myBlue,
+                            widthIn: 55,
+                            heightIn: 55) {
+                                withAnimation {
+                                    focusedField = nil
+                                }
+                            }
+                            .padding(.bottom, 16)
+                    }
+                }
+                .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.3), value: focusedField != nil)
+    }
+    
+    private var menuConfitmation: some View {
+        Group {
+            if showMenuConfirmation {
+                ZStack {
+                    Color.black.opacity(0.4)
+                        .ignoresSafeArea()
+                    
+                    VStack(spacing: 20) {
+                        Text("DATA IS NOT SAVED")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .multilineTextAlignment(.center)
+                        
+                        Text("Are you sure you want to exit without saving your data?")
+                            .font(.subheadline)
+                            .multilineTextAlignment(.center)
+                            .foregroundColor(.secondary)
+                        
+                        CapsuleButtonView(
+                            primaryTitle: "YES",
+                            buttonColorPrimary: Color.mycolor.myRed) {
+                                vm.isPostDraftSaved = false
+                                dismiss()
+                            }
+                            .disabled(isShowMenuConfirmationBlocked)
+                        
+                        CapsuleButtonView(
+                            primaryTitle: "SAVE DRAFT",
+                            secondaryTitle: "DRAFT SAVED",
+                            buttonColorPrimary: Color.mycolor.myBlue,
+                            buttonColorSecondary: Color.mycolor.myGreen,
+                            isToChangeTitile: vm.isPostDraftSaved) {
+                                
+                                vm.titlePostDraft = editedPost.title
+                                vm.introPostDraft = editedPost.intro
+                                vm.authorPostDraft = editedPost.author
+                                vm.languagePostDraft = editedPost.postLanguage
+                                vm.typePostDraft = editedPost.postType
+                                vm.urlStringPostDraft = editedPost.urlString
+                                vm.platformPostDraft = editedPost.postPlatform
+                                vm.datePostDraft = editedPost.postDate
+                                vm.studyLevelPostDraft = editedPost.studyLevel
+                                vm.favoriteChoicePostDraft = editedPost.favoriteChoice
+                                vm.additionalTextPostDraft = editedPost.additionalText
+                                isShowMenuConfirmationBlocked = true
+                                vm.isPostDraftSaved = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                    isShowMenuConfirmationBlocked = false
+                                    showMenuConfirmation = false
+                                    dismiss()
+                                }
+                            }
+                            .disabled(vm.isPostDraftSaved) // isShowMenuConfirmationBlocked
+                        
+                        CapsuleButtonView(
+                            primaryTitle: "NO",
+                            buttonColorPrimary: Color.mycolor.myYellow) {
+                                vm.isPostDraftSaved = false // потом убрать
+                                showMenuConfirmation = false
+                            }
+                            .disabled(isShowMenuConfirmationBlocked)
+                        
+                    }
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(12)
+                    .padding(.horizontal, 40)
+                }
+            }
+        }
+    }
+    
 }
 
 #Preview {
