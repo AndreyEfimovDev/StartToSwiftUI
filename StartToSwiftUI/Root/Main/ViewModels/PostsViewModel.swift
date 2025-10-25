@@ -74,6 +74,7 @@ class PostsViewModel: ObservableObject {
     
     private var utcCalendar = Calendar.current
     var listOfYearsInPosts: [String]? = nil
+    var dispatchTime: DispatchTime { .now() + 2 }
     
     // MARK: INIT() SECTION
     

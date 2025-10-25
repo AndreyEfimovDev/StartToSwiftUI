@@ -177,7 +177,7 @@ struct FiltersSheetView: View {
     private var resetAllFiltersButton: some View {
         
         ClearCupsuleButton(
-            primaryTitle: "Reset All Filters",
+            primaryTitle: "Reset All",
             primaryTitleColor: Color.mycolor.myRed) {
                 vm.selectedLevel = nil
                 vm.selectedFavorite = nil
@@ -186,36 +186,13 @@ struct FiltersSheetView: View {
                 vm.selectedYear = nil
                 updateFiltersSheetView.toggle()
             }
-
-//        
-//        Button {
-//            vm.selectedLevel = nil
-//            vm.selectedFavorite = nil
-//            vm.selectedLanguage = nil
-//            vm.selectedType = nil
-//            vm.selectedYear = nil
-//            updateFiltersSheetView.toggle()
-//        } label: {
-//            Text("Reset All Filters")
-//                .font(.headline)
-//                .foregroundColor(Color.mycolor.myRed)
-//                .padding(.vertical, 8)
-//                .frame(height: 55)
-//                .frame(maxWidth: .infinity)
-//                .background(.clear)
-//                .clipShape(Capsule())
-//                .overlay(
-//                    Capsule()
-//                        .stroke(Color.mycolor.myBlue, lineWidth: 1)
-//                )
-//        }
         .padding(.horizontal, 55)
     }
     
     private var resetAllFiltersAndExitButton: some View {
         
         ClearCupsuleButton(
-            primaryTitle: "Reset All Filters and Exit",
+            primaryTitle: "Reset All & Exit",
             primaryTitleColor: Color.mycolor.myRed) {
                 vm.selectedLevel = nil
                 vm.selectedFavorite = nil

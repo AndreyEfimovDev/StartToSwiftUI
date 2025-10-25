@@ -36,7 +36,7 @@ struct EraseAllPostsView: View {
                         isDeleted = true
                         isInProgress = false
                         hapticManager.notification(type: .success)
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
                             dismiss()
                         }
                     }

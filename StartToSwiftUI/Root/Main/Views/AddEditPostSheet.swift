@@ -30,7 +30,7 @@ struct AddEditPostSheet: View {
     
     @State private var deleteItem = false
     
-    private let sectionBackground: Color = Color.mycolor.myBackground
+    private let sectionBackground: Color = Color.mycolor.mySectionBackground
     private let sectionCornerRadius: CGFloat = 8
 
     private let fontSubheader: Font = .caption
@@ -103,7 +103,7 @@ struct AddEditPostSheet: View {
                 .padding(.horizontal, 8)
             } // VStack
             .navigationTitle(viewTitle)
-            .background(.thinMaterial)
+            .background(Color.mycolor.myBackground)
             .scrollIndicators(.hidden)
             .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbar {
@@ -151,7 +151,7 @@ struct AddEditPostSheet: View {
                     //                                hapticManager.notification(type: .success)
                     //                                vm.isPostDraftSaved = true
                     //                                dismiss()
-                    ////                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    ////                                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
                     ////                                    dismiss()
                     ////                                }
                     //                            }
@@ -206,6 +206,7 @@ struct AddEditPostSheet: View {
         
         VStack(alignment: .leading, spacing: 0) {
             Text("Title")
+                .textCase(.uppercase)
                 .sectionSubheaderFormater(
                     fontSubheader: fontSubheader,
                     colorSubheader: colorSubheader
@@ -235,6 +236,7 @@ struct AddEditPostSheet: View {
         
         VStack(alignment: .leading, spacing: 0) {
             Text("Intro")
+                .textCase(.uppercase)
                 .sectionSubheaderFormater(
                     fontSubheader: fontSubheader,
                     colorSubheader: colorSubheader
@@ -243,6 +245,7 @@ struct AddEditPostSheet: View {
                 TextEditor(text: $editedPost.intro)
                     .font(fontTextInput)
                     .frame(height: 200)
+                    .autocorrectionDisabled(true) // fixing leaking memory
                     .scrollContentBackground(.hidden)
                     .focused($focusedField, equals: .intro)
                     .onSubmit {focusedField = .author }
@@ -270,6 +273,7 @@ struct AddEditPostSheet: View {
     private var authorSection: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Author")
+                .textCase(.uppercase)
                 .sectionSubheaderFormater(
                     fontSubheader: fontSubheader,
                     colorSubheader: colorSubheader
@@ -279,7 +283,7 @@ struct AddEditPostSheet: View {
                     .font(fontTextInput)
                     .padding(.leading, 5)
                     .frame(height: 50)
-                    .autocorrectionDisabled()
+                    .autocorrectionDisabled(true) // fixing leaking memory
                     .focused($focusedField, equals: .author)
                     .onSubmit {focusedField = .urlString }
                     .submitLabel(.next)
@@ -308,7 +312,7 @@ struct AddEditPostSheet: View {
                     .padding(.leading, 5)
                     .frame(height: 50)
                     .textInputAutocapitalization(.none)
-                    .autocorrectionDisabled()
+                    .autocorrectionDisabled(true) // fixing leaking memory
                     .keyboardType(.URL)
                     .focused($focusedField, equals: .urlString)
                     .onSubmit {focusedField = nil }
@@ -327,7 +331,8 @@ struct AddEditPostSheet: View {
     private var languageSection: some View {
         
         VStack(alignment: .leading, spacing: 0) {
-            Text("Post Language")
+            Text("Language")
+                .textCase(.uppercase)
                 .sectionSubheaderFormater(
                     fontSubheader: fontSubheader,
                     colorSubheader: colorSubheader
@@ -341,11 +346,11 @@ struct AddEditPostSheet: View {
                     ForEach(LanguageOptions.allCases, id: \.self) { language in
                         Text(language.displayName)
                             .tag(language)
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color.mycolor.myBlue)
                     }
                 }
                 .pickerStyle(.menu)
-                .tint(.blue)
+                .tint(Color.mycolor.myBlue)
                 .frame(height: 50)
             }
             .background(
@@ -359,6 +364,7 @@ struct AddEditPostSheet: View {
         
         VStack(alignment: .leading, spacing: 0) {
             Text("Post Date")
+                .textCase(.uppercase)
                 .sectionSubheaderFormater(
                     fontSubheader: fontSubheader,
                     colorSubheader: colorSubheader
@@ -388,6 +394,7 @@ struct AddEditPostSheet: View {
         
         VStack(alignment: .leading, spacing: 0) {
             Text("Post Type")
+                .textCase(.uppercase)
                 .sectionSubheaderFormater(
                     fontSubheader: fontSubheader,
                     colorSubheader: colorSubheader
@@ -411,7 +418,8 @@ struct AddEditPostSheet: View {
     private var platformSection: some View {
         
         VStack(alignment: .leading, spacing: 0) {
-            Text("Post Platform")
+            Text("Platform")
+                .textCase(.uppercase)
                 .sectionSubheaderFormater(fontSubheader: fontSubheader,
                                           colorSubheader: colorSubheader)
             UnderlineSermentedPickerNotOptional(
@@ -434,6 +442,7 @@ struct AddEditPostSheet: View {
         
         VStack(alignment: .leading, spacing: 0) {
             Text("Study Level")
+                .textCase(.uppercase)
                 .sectionSubheaderFormater(fontSubheader: fontSubheader,
                                           colorSubheader: colorSubheader)
             UnderlineSermentedPickerNotOptional(
@@ -456,6 +465,7 @@ struct AddEditPostSheet: View {
         
         VStack(alignment: .leading, spacing: 0) {
             Text("Favorite")
+                .textCase(.uppercase)
                 .sectionSubheaderFormater(fontSubheader: fontSubheader,
                                           colorSubheader: colorSubheader)
             UnderlineSermentedPickerNotOptional(
@@ -465,6 +475,7 @@ struct AddEditPostSheet: View {
                 selectedTextColor: Color.mycolor.myBlue,
                 unselectedTextColor: Color.mycolor.mySecondaryText
             )
+            .padding(.horizontal, 8)
             .frame(height: 50)
             .background(
                 sectionBackground,
@@ -481,6 +492,7 @@ struct AddEditPostSheet: View {
         
         VStack(alignment: .leading, spacing: 0) {
             Text("Additional Information")
+                .textCase(.uppercase)
                 .sectionSubheaderFormater(
                     fontSubheader: fontSubheader,
                     colorSubheader: colorSubheader
@@ -588,7 +600,7 @@ struct AddEditPostSheet: View {
                                 
                                 isMenuConfirmationBlocked = true
                                 vm.isPostDraftSaved = true
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
                                     isMenuConfirmationBlocked = false
                                     dismiss()
                                 }
