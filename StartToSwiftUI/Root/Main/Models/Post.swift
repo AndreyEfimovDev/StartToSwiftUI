@@ -21,7 +21,6 @@ struct Post: Identifiable, Hashable, Codable {
     var studyLevel: StudyLevel // study level of the post
     var favoriteChoice: FavoriteChoice
     var additionalText: String // free text field to enter everything you wish
-    let date: Date // creation  date of the post
     
     init(
         id: UUID = UUID(),
@@ -36,7 +35,6 @@ struct Post: Identifiable, Hashable, Codable {
         studyLevel: StudyLevel = .beginner,
         favoriteChoice: FavoriteChoice = .no,
         additionalText: String = "",
-        date: Date = .now
     ) {
         self.id = id
         self.title = title
@@ -50,7 +48,6 @@ struct Post: Identifiable, Hashable, Codable {
         self.studyLevel = studyLevel
         self.favoriteChoice = favoriteChoice
         self.additionalText = additionalText
-        self.date = date
     }
 }
 
