@@ -32,7 +32,7 @@ struct DevPreview {
             Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
             """,
         author: "Swiftful Thinking",
-        postType: .playlist,
+        postType: .course,
         urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
         postDate: Date.from(year: 2021, month: 8, day: 30),
         studyLevel: .advanced
@@ -742,7 +742,7 @@ struct DevPreview {
                 Get started with the Swift programming language. Write your first line of code and learn the fundamentals.
                 """,
             author: "Swiftful Thinking",
-            postType: .playlist,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiLvzZFJI6rVIBtdolrJBVB",
             postPlatform: .youtube,
             postDate: Date.from(year: 2023, month: 6, day: 20)),
@@ -752,7 +752,7 @@ struct DevPreview {
                 The fastest way to learn SwiftUI. Learn how to build beautiful screens and other UI components.
                 """,
             author: "Swiftful Thinking",
-            postType: .playlist,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO",
             postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 2, day: 3)),
@@ -762,7 +762,7 @@ struct DevPreview {
                 Build your first app in SwiftUI! Learn how to build a real application with MVVM app architecture.
                 """,
             author: "Swiftful Thinking",
-            postType: .playlist,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpheGqemblOIA7v3oq0MS30i",
             postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 3, day: 14)),
@@ -772,7 +772,7 @@ struct DevPreview {
                 A complete guide for learning how to use git. Practice using Source Control within Xcode, GitKraken, and Github. Get familiar with Git Flow.
                 """,
             author: "Swiftful Thinking",
-            postType: .playlist,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiALKk34l9mUS2f4mdJPvXq",
             postPlatform: .youtube,
             postDate: Date.from(year: 2024, month: 4, day: 29)),
@@ -782,7 +782,7 @@ struct DevPreview {
                 Build a map app to showcase real destinations around the world. Get familiar with data management and transitions.
                 """,
             author: "Swiftful Thinking",
-            postType: .playlist,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdpha5eVTjLM0eRlJ7-yDDwBk",
             postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 12, day: 20)),
@@ -792,7 +792,7 @@ struct DevPreview {
                 Building professional apps requires knowledge of data persistence and networking. This bootcamp builds on your existing knowledge of SwiftUI.
                 """,
             author: "Swiftful Thinking",
-            postType: .playlist,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar",
             postDate: Date.from(year: 2021, month: 3, day: 29),
             studyLevel: .middle),
@@ -802,7 +802,7 @@ struct DevPreview {
                 Build a cryptocurrency app that downloads live price data from an API and saves the current user's portfolio. Get comfortable with Combine, Core Data, and MVVM.
                 """,
             author: "Swiftful Thinking",
-            postType: .playlist,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
             postDate: Date.from(year: 2021, month: 5, day: 24),
             studyLevel: .middle),
@@ -812,7 +812,7 @@ struct DevPreview {
                 Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
                 """,
             author: "Swiftful Thinking",
-            postType: .playlist,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
             postDate: Date.from(year: 2021, month: 8, day: 30),
             studyLevel: .advanced),
@@ -823,7 +823,7 @@ struct DevPreview {
                 The source contains tutorials on merging and rebasing, resetting, checking out, reverting, and other usefull guides, in Git.
                 """,
             author: "www.atlassian.com",
-            postType: .singlepost,
+            postType: .post,
             urlString: "https://www.atlassian.com/git/tutorials",
             postDate: nil,
             studyLevel: .beginner),

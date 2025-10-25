@@ -59,7 +59,7 @@ struct SharePostsView: View {
                         isShareCompleted = true // Change Share Button status and disable it
                         showActivityView = false // Close sheet after sharing completion
                         print("✅ Successfully shared via: \(result.activityName)")
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
                             dismiss()
                         }
                     } else {
