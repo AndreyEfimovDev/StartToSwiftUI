@@ -641,8 +641,8 @@ struct AddEditPostSheet: View {
                         
                     }
                     .padding()
-                    .background(Color.white)
-                    .cornerRadius(12)
+                    .background()
+                    .cornerRadius(30)
                     .padding(.horizontal, 40)
                 }
             }
