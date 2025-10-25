@@ -960,7 +960,7 @@ struct DevPreview {
             urlString: "https://www.youtube.com/watch?v=E2nQsw0El8M",
             postPlatform: .youtube,
             postDate: Date.from(year: 2025, month: 8, day: 31)),
-// 2025-10-25
+// 2025-10-25 DONE
         Post(
             title: "Swift Basics",
             intro: """
@@ -1041,9 +1041,21 @@ struct DevPreview {
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
             postDate: Date.from(year: 2021, month: 8, day: 30),
             studyLevel: .advanced),
-        
+// 2025-10-26
+        Post(
+            title: "Merging vs rebasing, advanced tips to Git",
+            intro: """
+                The source contains tutorials on merging and rebasing in Git..
+                """,
+            author: "www.atlassian.com",
+            postType: .singlepost,
+            urlString: "https://www.atlassian.com/git/tutorials",
+            postDate: nil,
+            studyLevel: .beginner),
         
     ]
     
 }
+
+// 2025-10-25
 
