@@ -31,13 +31,11 @@ struct PostRowView: View {
         }
         .padding(8)
         .padding(.horizontal, 8)
-//        .buttonStyle(.plain) // it makes the button "...more" accessable on touchable view
-        .background(
-            Color.mycolor.mySectionBackground,
-            in: RoundedRectangle(cornerRadius: 8)
-        )
-
-
+        .background(Color.mycolor.mySectionBackground)
+//        .background(
+//            Color.mycolor.mySectionBackground,
+//            in: RoundedRectangle(cornerRadius: 8)
+//        )
     }
         
     // MARK: VIEW VARS
@@ -74,29 +72,8 @@ struct PostRowView: View {
             .font(.body)
             .fontWeight(.medium)
             .foregroundStyle(post.studyLevel.color)
-//            .padding(.bottom, 8)
 
     }
-//    private var intro: some View {
-//        
-//        VStack {
-//            Text(post.intro)
-//                .lineLimit(showFullIntro ? nil : introLinesCountLimit)
-//                .font(introFont)
-//                .lineSpacing(introLineSpacing)
-//                .frame(maxWidth: .infinity, alignment: .leading)
-//                .onLineCountChanged(font: introFont, lineSpacing: introLineSpacing) { count in
-//                    introLineCount = count
-//                }
-//            HStack {
-//                Spacer()
-//                if introLineCount > introLinesCountLimit { MoreLessTextButton(showText: $showFullIntro)
-//                }
-//            }
-//            .offset(y: -15)
-//        }
-//        .frame(minHeight: 40, alignment: .topLeading)
-//    } // private var intro
 }
 
 fileprivate struct PostRowPreView: View {
