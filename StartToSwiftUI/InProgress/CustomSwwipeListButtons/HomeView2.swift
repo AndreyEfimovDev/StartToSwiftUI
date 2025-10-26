@@ -1,13 +1,13 @@
 //
-//  HomwViewCopy.swift
+//  HomeView2.swift
 //  StartToSwiftUI
 //
-//  Created by Andrey Efimov on 25.08.2025.
-//  *** Combine
+//  Created by Andrey Efimov on 26.10.2025.
+//
 
 import SwiftUI
 
-struct HomeView: View {
+struct HomeView2: View {
     
     // MARK: PROPERTIES
     
@@ -47,8 +47,8 @@ struct HomeView: View {
             viewBody
                 .navigationTitle(hiderText)
                 .navigationBarBackButtonHidden(true)
-//                .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
-//                .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+            //                .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+            //                .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             //                    .toolbarBackground(.visible, for: .navigationBar)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
@@ -124,54 +124,35 @@ struct HomeView: View {
                         description: Text("You should go to Preferences to upload posts")
                     )
                 } else {
-                    List {
-                        ForEach(searchedPosts) { post in
-                            PostRowView(post: post)
-                                .id(post.id)
-                                .background(
-                                    GeometryReader { geo in
-                                        Color.clear
-                                            .onChange(of: geo.frame(in: .global).minY) { oldY, newY in
-                                                // Track first element position
-                                                if post.id == vm.filteredPosts.first?.id {
-                                                    showOnTopButton = newY < 0
+                    ScrollView {
+                        
+                        LazyVStack {
+                            ForEach(searchedPosts) { post in
+                                
+                                PostRowView2(post: post)
+                                    .id(post.id)
+                                    .background(
+                                        GeometryReader { geo in
+                                            Color.clear
+                                                .onChange(of: geo.frame(in: .global).minY) { oldY, newY in
+                                                    // Track first element position
+                                                    if post.id == vm.filteredPosts.first?.id {
+                                                        showOnTopButton = newY < 0
+                                                    }
                                                 }
-                                            }
-                                    }
-                                )
-                                .padding(.bottom, 4)
-                                .listRowSeparator(.hidden)
-                                .listRowBackground(Color.clear)
-                                .listRowInsets(
-                                    EdgeInsets(top: 0, leading: 1, bottom: 1, trailing: 1)
-                                )
-                                .onTapGesture {
-                                    selectedPostId = post.id
-                                    showDetailView.toggle()
-                                }
-                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                    Button("Delete", systemImage: "trash") {
-                                        vm.deletePost(post: post)
-                                    }
-                                    .tint(Color.mycolor.myRed)
-
-                                    Button("Edit", systemImage: "pencil") {
-                                        selectedPost = post
-                                    }
-                                    .tint(Color.mycolor.myBlue)
-                                    
-                                } //swipeActions
-                                .swipeActions(edge: .leading, allowsFullSwipe: false) {
-                                    Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: "star.fill") {
-                                        vm.favoriteToggle(post: post)
-                                    }
-                                    .tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondaryText : Color.mycolor.myYellow)
-                                } //swipeActions
-                        } // ForEach
-//                        .buttonStyle(.plain) // it makes the buttons accessable
-                    } // List
-                    .listStyle(.plain)
-//                    .scrollIndicators(.hidden)
+                                        }
+                                    )
+                                    .padding(.bottom, 4)
+                            } // ForEach
+                            //                            .buttonStyle(.plain)  it makes the buttons accessable
+                        } // List
+                    }
+//                    .simultaneousGesture(
+//                        DragGesture()
+//                            .onChanged { _ in
+//                            }
+//                    )
+                    //                    .scrollIndicators(.hidden)
                     .background(Color.mycolor.myBackground)
                     if showOnTopButton {
                         CircleStrokeButtonView(
@@ -189,6 +170,8 @@ struct HomeView: View {
                             .padding(.trailing, 35)
                     } // if showButtonOnTop
                 }
+                
+                
             } // ZStack
         } // ScrollViewReader
     }
@@ -196,6 +179,6 @@ struct HomeView: View {
 
 
 #Preview {
-    HomeView()
+    HomeView2()
         .environmentObject(PostsViewModel())
 }
