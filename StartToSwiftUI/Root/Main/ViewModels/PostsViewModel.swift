@@ -208,13 +208,18 @@ class PostsViewModel: ObservableObject {
     }
     
     
-    func deletePost(post: Post) {
+    func deletePost(post: Post?) {
         
-        if let index = allPosts.firstIndex(of: post) {
-            allPosts.remove(at: index)
-            listOfYearsInPosts = getListOfPostedYearsOfPosts()
-            fileManager.savePosts(allPosts)
+        if let validPost = post {
+            if let index = allPosts.firstIndex(of: validPost) {
+                allPosts.remove(at: index)
+                listOfYearsInPosts = getListOfPostedYearsOfPosts()
+                fileManager.savePosts(allPosts)
+            }
+        } else {
+            print("VM.deletePost: passed post is nil")
         }
+        
     }
     
     func eraseAllPosts(_ completion: @escaping () -> ()) {
@@ -266,12 +271,12 @@ class PostsViewModel: ObservableObject {
                 switch result {
                 case .success(let cloudResponse):
                     
-                    // Selecting Cloud posts with unique Titles only -  - do not import such posts from Cloud
+                    // Selecting Cloud posts with unique Titles only -  - do not append such posts from Cloud
                     let newCloudPosts1stCheck = cloudResponse.cloudPosts.filter { newPost in
                         !(self?.allPosts.contains(where: { $0.title == newPost.title }) ?? false)
                     }
                     
-                    // Checking Cloud posts with the same ID to local App posts - do not import such posts from Cloud
+                    // Checking Cloud posts with the same ID to local App posts - do not append such posts from Cloud
                     let newCloudPosts2ndCheck = newCloudPosts1stCheck.filter { newPost in
                         !(self?.allPosts.contains(where: { $0.title == newPost.title }) ?? false)
                     }
