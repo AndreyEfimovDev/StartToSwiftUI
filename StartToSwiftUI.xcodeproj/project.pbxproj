@@ -58,6 +58,7 @@
 		47BAF0F62E6485B000287F10 /* SegmentedOneLinePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF0F52E6485B000287F10 /* SegmentedOneLinePicker.swift */; };
 		47BAF0F82E64A77A00287F10 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF0F72E64A77A00287F10 /* Enums.swift */; };
 		47BAF0FA2E64CC8700287F10 /* UnderlineSermentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF0F92E64CC8700287F10 /* UnderlineSermentedPicker.swift */; };
+		47C57E7F2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */; };
 		47E439B72EA9290E007001AD /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E439B62EA9290E007001AD /* NetworkService.swift */; };
 /* End PBXBuildFile section */
 
@@ -115,6 +116,7 @@
 		47BAF0F52E6485B000287F10 /* SegmentedOneLinePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedOneLinePicker.swift; sourceTree = "<group>"; };
 		47BAF0F72E64A77A00287F10 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		47BAF0F92E64CC8700287F10 /* UnderlineSermentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineSermentedPicker.swift; sourceTree = "<group>"; };
+		47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForPostsUpdateView.swift; sourceTree = "<group>"; };
 		47E439B62EA9290E007001AD /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -279,6 +281,7 @@
 		4791CDAD2E70186100687126 /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
+				47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */,
 				4732FB2C2EAA2BFC0062269D /* ImportPostsFromCloudView.swift */,
 				4732FB302EAA59B00062269D /* SharePostsView.swift */,
 				47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */,
@@ -413,6 +416,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				47C57E7F2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift in Sources */,
 				47453E022EAB51B5000D2C16 /* CloudPosts.swift in Sources */,
 				4765A76D2EAE5F7B00EACDF4 /* PostRowView.swift in Sources */,
 				4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */,

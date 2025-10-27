@@ -37,6 +37,7 @@ struct PreferencesView: View {
                     notificationSetting
                 }
                 Section(header: sectionHeader("Managing posts (\(postsCount))")) {
+                    checkForPostsUpdate
                     importFromCloud
                     shareBackup
                     restoreBackup
@@ -74,6 +75,16 @@ struct PreferencesView: View {
             Toggle("Notification", isOn: $vm.isNotification)
                 .tint(Color.mycolor.myBlue)
         }
+    }
+    
+    private var checkForPostsUpdate: some View {
+        NavigationLink("Check posts updates") {
+            CheckForPostsUpdateView()
+        }
+        .customPreferencesListRowStyle(
+            iconName: "arrow.trianglehead.counterclockwise", // arrow.counterclockwise.circle
+            iconWidth: iconWidth
+        )
     }
     
     private var importFromCloud: some View {
@@ -121,7 +132,7 @@ struct PreferencesView: View {
             AboutAppView()
         }
         .customPreferencesListRowStyle(
-            iconName: "info.square",
+            iconName: "info.circle",
             iconWidth: iconWidth
         )
     }
@@ -139,9 +150,12 @@ struct PreferencesView: View {
             iconWidth: iconWidth
         )
     }
+    
+
 }
 
-// MARK: - Wrapping all child views for lazy loading
+
+// MARK: - Wrapping all child views for lazy loading (for testing)
 
 struct LazyView<Content: View>: View {
     
