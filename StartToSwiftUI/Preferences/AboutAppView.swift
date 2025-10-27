@@ -69,7 +69,7 @@ struct AboutAppView: View {
                         
             The StartToSwiftUI app is my first application, designed to help beginners learn SwiftUI from the ground up.
                         
-            My own journey with SwiftUI began with feeling overwhelmed by the wealth of self-study materials. I started gathering tutorials and articles from open sources that explained the concepts in a way that resonated with me. I soon realised that to truly grasp certain topics, I needed to return to these resources time and again. To facilitate easier, I began storing and organising them for quick access. This need ultimately led me to create this app, which in turn provided me with the perfect opportunity to put my theoretical knowledge into practice and truly cement my understanding.
+            My own journey with SwiftUI began with feeling overwhelmed by the wealth of self-study materials. I started gathering tutorials and articles from open sources that explained the concepts in a way that resonated with me. I soon realised that to truly grasp certain topics, I needed to return to these resources time and again. To facilitate easier, I began storing and organising them for quick access. This need ultimately led me to create my first app, which in turn provided me with the perfect opportunity to put my theoretical knowledge into practice and truly cement my understanding.
             
             The app offers the following features:
             - Load pre-loaded posts (collected from available open sources) and work with them as you wish.
