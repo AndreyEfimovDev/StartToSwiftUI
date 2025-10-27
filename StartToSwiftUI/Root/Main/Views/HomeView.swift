@@ -51,9 +51,8 @@ struct HomeView: View {
                 viewBody
                     .navigationTitle("SwiftUI posts")
                     .navigationBarBackButtonHidden(true)
-                //                .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
-                //                .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-                //                    .toolbarBackground(.visible, for: .navigationBar)
+                    .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+                    .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading) {
                             CircleStrokeButtonView(

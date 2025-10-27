@@ -43,7 +43,7 @@ struct FiltersSheetView: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                 studyLevelFilter
                 favoriteFilter
-                languageFilter
+//                languageFilter
                 typeFilter
                 yearFilter
                     .padding(.bottom, 50)
@@ -107,26 +107,26 @@ struct FiltersSheetView: View {
         }
     }
     
-    private var languageFilter: some View {
-        VStack {
-            Text("Language:")
-                .font(.footnote)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            SegmentedOneLinePicker(
-                selection: $vm.selectedLanguage,
-                allItems: LanguageOptions.allCases,
-                titleForCase: { $0.displayName },
-                selectedFont: selectedFont,
-                selectedTextColor: Color.mycolor.myBackground,
-                unselectedTextColor: Color.mycolor.myAccent,
-                selectedBackground: Color.mycolor.myBlue,
-                unselectedBackground: .clear,
-                showNilOption: true,
-                nilTitle: "All"
-            )
-        }
-    }
+//    private var languageFilter: some View {
+//        VStack {
+//            Text("Language:")
+//                .font(.footnote)
+//                .fontWeight(.semibold)
+//                .frame(maxWidth: .infinity, alignment: .leading)
+//            SegmentedOneLinePicker(
+//                selection: $vm.selectedLanguage,
+//                allItems: LanguageOptions.allCases,
+//                titleForCase: { $0.displayName },
+//                selectedFont: selectedFont,
+//                selectedTextColor: Color.mycolor.myBackground,
+//                unselectedTextColor: Color.mycolor.myAccent,
+//                selectedBackground: Color.mycolor.myBlue,
+//                unselectedBackground: .clear,
+//                showNilOption: true,
+//                nilTitle: "All"
+//            )
+//        }
+//    }
     
     private var typeFilter: some View {
         VStack {
@@ -181,7 +181,7 @@ struct FiltersSheetView: View {
             primaryTitleColor: Color.mycolor.myRed) {
                 vm.selectedLevel = nil
                 vm.selectedFavorite = nil
-                vm.selectedLanguage = nil
+//                vm.selectedLanguage = nil
                 vm.selectedType = nil
                 vm.selectedYear = nil
                 updateFiltersSheetView.toggle()
@@ -196,7 +196,7 @@ struct FiltersSheetView: View {
             primaryTitleColor: Color.mycolor.myRed) {
                 vm.selectedLevel = nil
                 vm.selectedFavorite = nil
-                vm.selectedLanguage = nil
+//                vm.selectedLanguage = nil
                 vm.selectedType = nil
                 vm.selectedYear = nil
                 isFilterButtonPressed.toggle()
