@@ -111,19 +111,18 @@ class PostsViewModel: ObservableObject {
     
     private func addSubscribers() {
         
-        let filters = $selectedLevel
-            .combineLatest($selectedFavorite, $selectedType)
+//        let filters = $selectedLevel
+//            .combineLatest($selectedFavorite, $selectedType)
         
         $selectedYear
-            .combineLatest(filters)
-            .map {year, filters -> [Post] in
-                let (level, favorite, type) = filters
+            .combineLatest($selectedLevel, $selectedFavorite, $selectedType)
+            .map {year, level, favorite, type -> [Post] in
+//                let (level, favorite, type) = filters
                 return self.filterPosts(
                     allPosts: self.allPosts,
                     level: level,
                     favorite: favorite,
                     type: type,
-//                    language: language,
                     year: year
                 )
             }
@@ -139,7 +138,6 @@ class PostsViewModel: ObservableObject {
                     level: self.selectedLevel,
                     favorite: self.selectedFavorite,
                     type: self.selectedType,
-//                    language: self.selectedLanguage,
                     year: self.selectedYear
                 )
             }
@@ -159,12 +157,10 @@ class PostsViewModel: ObservableObject {
         level: StudyLevel?,
         favorite: FavoriteChoice?,
         type: PostType?,
-//        language: LanguageOptions?,
         year: String?) -> [Post] {
             
             if level == nil &&
                 favorite == nil &&
-//                language == nil &&
                 type == nil &&
                 year == nil {
                 return allPosts
@@ -172,7 +168,6 @@ class PostsViewModel: ObservableObject {
             return allPosts.filter { post in
                 let matchesLevel = level == nil || post.studyLevel == level
                 let matchesFavorite = favorite == nil || post.favoriteChoice == favorite
-//                let matchesLanguage = language == nil || post.postLanguage == language
                 let matchesType = type == nil || post.postType == type
 
                 let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date()))
@@ -185,14 +180,9 @@ class PostsViewModel: ObservableObject {
     // MARK: PUBLIC FUNCTIONS
     
     func addPost(_ newPost: Post) {
-        //
-        //        if !checkNewPostForUniqueTitle(newPost.title) {
         print("✅ VM(addPost): Adding a new post")
         allPosts.append(newPost)
         fileManager.savePosts(allPosts)
-        //        } else {
-        //            print("❌ A post with this title already exists")
-        //        }
     }
     
     func updatePost(_ updatedPost: Post) {
