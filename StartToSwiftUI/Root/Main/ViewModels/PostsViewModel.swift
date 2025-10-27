@@ -208,13 +208,18 @@ class PostsViewModel: ObservableObject {
     }
     
     
-    func deletePost(post: Post) {
+    func deletePost(post: Post?) {
         
-        if let index = allPosts.firstIndex(of: post) {
-            allPosts.remove(at: index)
-            listOfYearsInPosts = getListOfPostedYearsOfPosts()
-            fileManager.savePosts(allPosts)
+        if let validPost = post {
+            if let index = allPosts.firstIndex(of: validPost) {
+                allPosts.remove(at: index)
+                listOfYearsInPosts = getListOfPostedYearsOfPosts()
+                fileManager.savePosts(allPosts)
+            }
+        } else {
+            print("VM.deletePost: passed post is nil")
         }
+        
     }
     
     func eraseAllPosts(_ completion: @escaping () -> ()) {
