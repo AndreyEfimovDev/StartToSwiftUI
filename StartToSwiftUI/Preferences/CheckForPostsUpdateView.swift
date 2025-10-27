@@ -18,7 +18,7 @@ struct CheckForPostsUpdateView: View {
     @State private var buttonFirstText: String = "Check for updates"
     @State private var followingTextColor: Color = Color.mycolor.myAccent
     @State private var isInProgress: Bool = true
-    @State private var isPostsUpdateAvailavle: Bool = false
+    @State private var isPostsUpdateAvailable: Bool = false
     @State private var isPostsUpdated: Bool = false
     @State private var isImported: Bool = false
     @State private var postCount: Int = 0
@@ -31,14 +31,10 @@ struct CheckForPostsUpdateView: View {
                         HStack {
                             Text(followingText)
                                 .foregroundStyle(followingTextColor)
-                                .border(.red)
-                            
                             Spacer()
                             if isInProgress {
                                 ProgressView()
-                                //                                .padding()
                                     .background(.regularMaterial)
-                                //                                .cornerRadius(10)
                             }
                         }
                         HStack {
@@ -48,45 +44,39 @@ struct CheckForPostsUpdateView: View {
                         }
                     }
                     .foregroundStyle(Color.mycolor.myAccent)
-                    
-                    textSection
-                        .managingPostsTextFormater()
-                        .padding(.horizontal, 30)
-                        .padding(30)
-                        .listRowBackground(Color.clear)
-                } // Form
-                .background(Color.blue)
-//                .border(.yellow)
-                
-                if isImported {
-                    CapsuleButtonView(
-                        primaryTitle: buttonFirstText,
-                        secondaryTitle: "Imported \(postCount) posts",
-                        isToChangeTitile: isImported) {
-                            
-                            isInProgress = true
-                            
-                            vm.importPostsFromCloud(urlString: selectedURL) {
-                                
-                                isInProgress = false
-                                isImported = true
-                                hapticManager.notification(type: .success)
-                                
-                                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                                    dismiss()
+
+                    Group {
+                        textSection
+                            .managingPostsTextFormater()
+                            .padding(.horizontal, 30)
+                        
+                        if !isPostsUpdated {
+                            CapsuleButtonView(
+                                primaryTitle: buttonFirstText,
+                                secondaryTitle: "Imported \(postCount) posts",
+                                isToChangeTitile: isImported) {
+                                    
+                                    isInProgress = true
+                                    vm.importPostsFromCloud(urlString: selectedURL) {
+                                        isInProgress = false
+                                        isImported = true
+                                        hapticManager.notification(type: .success)
+                                        DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+                                            dismiss()
+                                        }
+                                    }
                                 }
-                            }
+                                .onChange(of: vm.allPosts.count) { oldValue, newValue in
+                                    postCount = newValue - oldValue
+                                }
+                                .padding(.horizontal, 30)
+                                .padding(30)
+                                .disabled(isImported)
+                            
                         }
-                        .onChange(of: vm.allPosts.count) { oldValue, newValue in
-                            postCount = newValue - oldValue
-                        }
-                        .padding(.horizontal, 30)
-                        .padding(30)
-                        .disabled(isImported)
-
-                }
-                Spacer()
-
+                    }
+                    .listRowBackground(Color.clear)
+                } // Form
             } // VStack
             .onAppear {
                 checkForUpdates()
@@ -122,14 +112,14 @@ struct CheckForPostsUpdateView: View {
                 followingText = "Updates available"
                 followingTextColor = Color.mycolor.myRed
                 buttonFirstText = "Update"
-                isPostsUpdateAvailavle = true
+                isPostsUpdateAvailable = true
                 isInProgress = false
                 print("Updates available")
                 
             } else {
                 followingText = "You are up to date"
                 followingTextColor = Color.mycolor.myGreen
-                isPostsUpdateAvailavle = false
+                isPostsUpdateAvailable = false
                 isPostsUpdated = true
                 isInProgress = false
                 print("No updates available")
