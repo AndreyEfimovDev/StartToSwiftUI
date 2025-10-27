@@ -299,13 +299,6 @@
 			path = "Not Used";
 			sourceTree = "<group>";
 		};
-		4791CDF22E742AA600687126 /* Launch */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Launch;
-			sourceTree = "<group>";
-		};
 		47BAF09E2E5F9C4500287F10 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
@@ -327,7 +320,6 @@
 				475997562E5C8671008E20F0 /* Models */,
 				475997572E5C8688008E20F0 /* ViewModels */,
 				47BAF0EE2E645B0A00287F10 /* Views */,
-				4791CDF22E742AA600687126 /* Launch */,
 			);
 			path = Main;
 			sourceTree = "<group>";
