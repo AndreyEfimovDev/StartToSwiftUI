@@ -28,7 +28,8 @@ struct HomeView: View {
     @State private var isFilterButtonPressed: Bool = false
     
     @State private var isShowingDeleteConfirmation: Bool = false
-        
+    @State private var isPostsUpdateAvailable: Bool = false
+    
     private var searchedPosts: [Post] {
         if vm.searchText.isEmpty {
             return vm.filteredPosts
@@ -110,6 +111,40 @@ struct HomeView: View {
                         .presentationCornerRadius(30)
                     }
                 
+                // Updates available dialog
+                if isPostsUpdateAvailable && vm.isNotification {
+                    VStack {
+                        ZStack {
+                        Color.mycolor.myAccent.opacity(0.4)
+                            .ignoresSafeArea()
+                        
+                            VStack(spacing: 20) {
+                                Text("Posts update is available")
+                                    .textCase(.uppercase)
+                                    .font(.headline)
+                                    .bold()
+                                    .foregroundColor(Color.mycolor.myRed)
+                                
+                                Text("You can go to Preferenses for updates.")
+                                    .font(.subheadline)
+                                    .multilineTextAlignment(.center)
+                                    .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
+                                ClearCupsuleButton(
+                                    primaryTitle: "OK",
+                                    primaryTitleColor: Color.mycolor.myGreen) {
+                                        vm.isPostsUpdateAvailable = false
+                                        isPostsUpdateAvailable = false
+                                    }
+                            }
+                            .padding()
+                            .background(.regularMaterial)
+                            .cornerRadius(30)
+                            .padding(.horizontal, 40)
+                        }
+                    } // VStack: Deletion confirmation dialog
+                } // IF: Deletion confirmation dialog
+                
+                
                 // Deletion confirmation dialog
                 if isShowingDeleteConfirmation {
                     VStack {
@@ -148,10 +183,12 @@ struct HomeView: View {
                         }
                     } // VStack: Deletion confirmation dialog
                 } // IF: Deletion confirmation dialog
+                
             } // ZStack
         } // NavigationStack
         .onAppear {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
+            isPostsUpdateAvailable = vm.isPostsUpdateAvailable
         }
     }
     
