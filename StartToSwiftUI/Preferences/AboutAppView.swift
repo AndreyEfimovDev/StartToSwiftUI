@@ -89,7 +89,6 @@ struct AboutAppView: View {
                 .multilineTextAlignment(.leading)
                 .managingPostsTextFormater()
                 .padding(.horizontal)
-                Spacer()
             }
             .foregroundStyle(Color.mycolor.myAccent)
             .navigationTitle("About App")
