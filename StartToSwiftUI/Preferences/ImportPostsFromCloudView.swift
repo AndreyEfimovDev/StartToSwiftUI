@@ -85,7 +85,8 @@ struct ImportPostsFromCloudView: View {
                 dismiss()
             }
         }
-    }
+        
+    } // func importFromCloud()
     
     private func checkForUpdates() {
         vm.checkCloudForUpdates { hasUpdates in
