@@ -14,8 +14,11 @@ struct HomeView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject private var vm: PostsViewModel
     
+    private let hapticManager = HapticManager.shared
+    
     @State private var selectedPostId: UUID?
     @State private var selectedPost: Post?
+    @State private var selectedPostToDelete: Post?
     
     @State private var showDetailView: Bool = false
     @State private var showPreferancesView: Bool = false
@@ -24,8 +27,8 @@ struct HomeView: View {
     @State private var showOnTopButton: Bool = false
     @State private var isFilterButtonPressed: Bool = false
     
-    let hiderText: String = "SwiftUI posts"
-    
+    @State private var isShowingDeleteConfirmation: Bool = false
+        
     private var searchedPosts: [Post] {
         if vm.searchText.isEmpty {
             return vm.filteredPosts
@@ -44,68 +47,109 @@ struct HomeView: View {
     
     var body: some View {
         NavigationStack {
-            viewBody
-                .navigationTitle(hiderText)
-                .navigationBarBackButtonHidden(true)
-//                .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
-//                .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-            //                    .toolbarBackground(.visible, for: .navigationBar)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        CircleStrokeButtonView(
-                            iconName: "gearshape",
-                            isShownCircle: false)
-                        {
-                            showPreferancesView.toggle()
+            ZStack {
+                viewBody
+                    .navigationTitle("SwiftUI posts")
+                    .navigationBarBackButtonHidden(true)
+                //                .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+                //                .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+                //                    .toolbarBackground(.visible, for: .navigationBar)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            CircleStrokeButtonView(
+                                iconName: "gearshape",
+                                isShownCircle: false)
+                            {
+                                showPreferancesView.toggle()
+                            }
+                        }
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            CircleStrokeButtonView(
+                                iconName: "plus",
+                                isShownCircle: false)
+                            {
+                                showAddPostView.toggle()
+                            }
+                        }
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            CircleStrokeButtonView(
+                                iconName: "line.3.horizontal.decrease",
+                                isIconColorToChange: !vm.isFiltersEmpty,
+                                isShownCircle: false)
+                            {
+                                isFilterButtonPressed.toggle()}
                         }
                     }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        CircleStrokeButtonView(
-                            iconName: "plus",
-                            isShownCircle: false)
-                        {
-                            showAddPostView.toggle()
+                    .safeAreaInset(edge: .top) {
+                        SearchBarView(searchText: $vm.searchText)
+                    }
+                    .navigationDestination(isPresented: $showDetailView) {
+                        if let id = selectedPostId {
+                            PostDetailsView(postId: id)
                         }
                     }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        CircleStrokeButtonView(
-                            iconName: "line.3.horizontal.decrease",
-                            isIconColorToChange: !vm.isFiltersEmpty,
-                            isShownCircle: false)
-                        {
-                            isFilterButtonPressed.toggle()}
+                // toolbar button "preferances"
+                    .fullScreenCover(isPresented: $showPreferancesView) {
+                        PreferencesView()
                     }
-                }
-                .safeAreaInset(edge: .top) {
-                    SearchBarView(searchText: $vm.searchText)
-                }
-                .navigationDestination(isPresented: $showDetailView) {
-                    if let id = selectedPostId {
-                        PostDetailsView(postId: id)
+                // toolbar button "+"
+                    .fullScreenCover(isPresented: $showAddPostView, content: {
+                        AddEditPostSheet(post: nil)
+                    })
+                // swipe action Edit post
+                    .fullScreenCover(item: $selectedPost, content: { post in
+                        AddEditPostSheet(post: post)
+                    })
+                // toolbar button "filters"
+                    .sheet(isPresented: $isFilterButtonPressed) {
+                        FiltersSheetView(
+                            isFilterButtonPressed: $isFilterButtonPressed
+                        )
+                        .presentationBackground(.clear)
+                        .presentationDetents([.height(600)])
+                        .presentationDragIndicator(.automatic)
+                        .presentationCornerRadius(30)
                     }
-                }
-            // toolbar button "preferances"
-                .fullScreenCover(isPresented: $showPreferancesView) {
-                    PreferencesView()
-                }
-            // toolbar button "+"
-                .fullScreenCover(isPresented: $showAddPostView, content: {
-                    AddEditPostSheet(post: nil)
-                })
-            // swipe action Edit post
-                .fullScreenCover(item: $selectedPost, content: { post in
-                    AddEditPostSheet(post: post)
-                })
-            // toolbar button "filters"
-                .sheet(isPresented: $isFilterButtonPressed) {
-                    FiltersSheetView(
-                        isFilterButtonPressed: $isFilterButtonPressed
-                    )
-                    .presentationBackground(.clear)
-                    .presentationDetents([.height(600)])
-                    .presentationDragIndicator(.automatic)
-                    .presentationCornerRadius(30)
-                }
+                
+                // Deletion confirmation dialog
+                if isShowingDeleteConfirmation {
+                    VStack {
+                        ZStack {
+                        Color.mycolor.myAccent.opacity(0.4)
+                            .ignoresSafeArea()
+                        
+                            VStack(spacing: 20) {
+                                Text("DELETE THE POST?")
+                                    .font(.headline)
+                                    .bold()
+                                    .foregroundColor(Color.mycolor.myRed)
+                                
+                                Text("Please confirm the deletion of the post?")
+                                    .font(.subheadline)
+                                    .multilineTextAlignment(.center)
+                                    .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
+                                ClearCupsuleButton(
+                                    primaryTitle: "Yes",
+                                    primaryTitleColor: Color.mycolor.myRed) {
+                                        vm.deletePost(post: selectedPostToDelete ?? nil)
+                                        hapticManager.notification(type: .success)
+                                        isShowingDeleteConfirmation = false
+                                    }
+
+                                ClearCupsuleButton(
+                                    primaryTitle: "No",
+                                    primaryTitleColor: Color.mycolor.myGreen) {
+                                        isShowingDeleteConfirmation = false
+                                    }
+                            }
+                            .padding()
+                            .background(.regularMaterial)
+                            .cornerRadius(30)
+                            .padding(.horizontal, 40)
+                        }
+                    } // VStack: Deletion confirmation dialog
+                } // IF: Deletion confirmation dialog
+            } // ZStack
         } // NavigationStack
         .onAppear {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
@@ -113,6 +157,52 @@ struct HomeView: View {
     }
     
     // MARK: VAR VIEWS
+    
+//    @ViewBuilder
+//    private func deletePostConfirm (
+//        post: Post,
+//        action: @escaping () -> ()
+//    ) -> some View {
+//        
+//        if isShowingDeleteConfirmation {
+//            VStack {
+//                ZStack {
+//                Color.mycolor.myAccent.opacity(0.4)
+//                    .ignoresSafeArea()
+//                
+//                    VStack(spacing: 20) {
+//                        Text("DELETE THE POST?")
+//                            .font(.headline)
+//                            .bold()
+//                            .foregroundColor(Color.mycolor.myRed)
+//                        
+//                        Text("Please confirm the deletion of the post?")
+//                            .font(.subheadline)
+//                            .multilineTextAlignment(.center)
+//                            .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
+//                        ClearCupsuleButton(
+//                            primaryTitle: "Yes",
+//                            primaryTitleColor: Color.mycolor.myRed) {
+//                                vm.deletePost(post: post)
+//                                action()
+////                                isShowingDeleteConfirmation = false
+//                            }
+//
+//                        ClearCupsuleButton(
+//                            primaryTitle: "No",
+//                            primaryTitleColor: Color.mycolor.myGreen) {
+//                                action()
+//                            }
+//                    }
+//                    .padding()
+//                    .background(.regularMaterial)
+//                    .cornerRadius(30)
+//                    .padding(.horizontal, 40)
+//                }
+//            } // VStack: Deletion confirmation dialog
+//        } // IF: Deletion confirmation dialog
+//
+//    }
     
     private var viewBody: some View {
         ScrollViewReader { proxy in
@@ -151,7 +241,9 @@ struct HomeView: View {
                                 }
                                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                     Button("Delete", systemImage: "trash") {
-                                        vm.deletePost(post: post)
+                                        selectedPostToDelete = post
+                                        hapticManager.notification(type: .warning)
+                                        isShowingDeleteConfirmation = true
                                     }
                                     .tint(Color.mycolor.myRed)
 

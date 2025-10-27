@@ -16,6 +16,7 @@ struct AddEditPostSheet: View {
     private let hapticManager = HapticManager.shared
     
     @FocusState private var focusedField: PostFields?
+    @State private var focusedFieldSaved: PostFields?
     
     private var viewTitle: String {
         isNewPost ? "Add Post" : "Edit Post"
@@ -37,7 +38,7 @@ struct AddEditPostSheet: View {
     private let fontTextInput: Font = .callout
     private let colorSubheader: Color = Color.mycolor.myAccent.opacity(0.5)
     
-    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date() // set the limit to the beginning year
+    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date() // set the limit to the beginning year for choice
     private let endingDate: Date = Date()
     
     private var bindingPostDate: Binding<Date> {
@@ -59,7 +60,7 @@ struct AddEditPostSheet: View {
     
     init(post: Post?) {
         
-        if let post = post { // Edit post initialising
+        if let post = post { // Post for editing initialising
             _editedPost = State(initialValue: post)
             _draftPost = State(initialValue: post)
             self.isNewPost = false
@@ -127,42 +128,11 @@ struct AddEditPostSheet: View {
                         imageColorSecondary: Color.mycolor.myRed,
                         isShownCircle: false)
                     {
+                        hapticManager.notification(type: .warning)
+                        focusedFieldSaved = focusedField ?? nil
+                        focusedField = nil
                         isShowingMenuConfirmation = true
                     }
-                    //                    .alert("DATA IS NOT SAVED", isPresented: $showMenuConfirmation) {
-                    //                        VStack {
-                    //                            Button("YES", role: .destructive) {
-                    //                                vm.isPostDraftSaved = false
-                    //                                dismiss()
-                    //                            }
-                    //                            Button(vm.isPostDraftSaved ? "DRAFT SAVED" : "SAVE DRAFT") {
-                    //                                vm.titlePostDraft = editedPost.title
-                    //                                vm.introPostDraft = editedPost.intro
-                    //                                vm.authorPostDraft = editedPost.author
-                    //                                vm.languagePostDraft = editedPost.postLanguage
-                    //                                vm.typePostDraft = editedPost.postType
-                    //                                vm.urlStringPostDraft = editedPost.urlString
-                    //                                vm.platformPostDraft = editedPost.postPlatform
-                    //                                vm.datePostDraft = editedPost.postDate
-                    //                                vm.studyLevelPostDraft = editedPost.studyLevel
-                    //                                vm.favoriteChoicePostDraft = editedPost.favoriteChoice
-                    //                                vm.additionalTextPostDraft = editedPost.additionalText
-                    //
-                    //                                hapticManager.notification(type: .success)
-                    //                                vm.isPostDraftSaved = true
-                    //                                dismiss()
-                    ////                                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                    ////                                    dismiss()
-                    ////                                }
-                    //                            }
-                    //                            Button("NO", role: .cancel) {
-                    //                                vm.isPostDraftSaved = false
-                    //                            }
-                    //                        }
-                    //
-                    //                    } message: {
-                    //                        Text("Are you sure you want to exit without saving your data???")
-                    //                    }
                 }
             }
             .overlay(
@@ -528,7 +498,7 @@ struct AddEditPostSheet: View {
     private var hideKeybordButton: some View {
         
         Group {
-            if focusedField != nil {
+            if focusedField != nil /*&& !isShowingMenuConfirmation*/ {
                 VStack {
                     Spacer()
                     HStack {
@@ -555,7 +525,7 @@ struct AddEditPostSheet: View {
         Group {
             if isShowingMenuConfirmation {
                 ZStack {
-                    Color.black.opacity(0.4)
+                    Color.mycolor.myAccent.opacity(0.4)
                         .ignoresSafeArea()
                     
                     VStack(spacing: 20) {
@@ -563,8 +533,6 @@ struct AddEditPostSheet: View {
                             .font(.headline)
                             .bold()
                             .foregroundColor(Color.mycolor.myRed)
-//                            .frame(maxWidth: .infinity)
-//                            .multilineTextAlignment(.center)
                         
                         Text("Are you sure to exit without saving your data?")
                             .font(.subheadline)
@@ -582,7 +550,6 @@ struct AddEditPostSheet: View {
                         ClearCupsuleButton(
                             primaryTitle: "Save draft",
                             secondaryTitle: "Draft saved",
-//                            primaryTitleColor: Color.mycolor.myBlue,
                             secondaryTitleColor: Color.mycolor.myGreen,
                             isToChange: vm.isPostDraftSaved) {
                                 
@@ -599,6 +566,7 @@ struct AddEditPostSheet: View {
                                 vm.additionalTextPostDraft = editedPost.additionalText
                                 
                                 isMenuConfirmationBlocked = true
+                                hapticManager.notification(type: .success)
                                 vm.isPostDraftSaved = true
                                 DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
                                     isMenuConfirmationBlocked = false
@@ -611,6 +579,7 @@ struct AddEditPostSheet: View {
                             primaryTitle: "No",
                             primaryTitleColor: Color.mycolor.myGreen) {
                                 vm.isPostDraftSaved = false // потом убрать
+                                focusedField = focusedFieldSaved
                                 isShowingMenuConfirmation = false
                             }
                             .disabled(isMenuConfirmationBlocked)
