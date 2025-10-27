@@ -195,8 +195,8 @@ struct PostRowView2: View {
     private var author: some View {
         HStack {
             Text("@" + post.author + ", ") +
-            Text(post.postLanguage.displayName)
-            +
+//            Text(post.postLanguage.displayName)
+//            +
             Text(", \(post.postDate?.formatted(date: .numeric, time: .omitted) ?? "post date missed")") +
             Text(post.postType == .other ? "" : ", " + post.postType.displayName)
         }

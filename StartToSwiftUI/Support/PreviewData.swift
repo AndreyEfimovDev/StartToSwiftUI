@@ -17,7 +17,6 @@ struct DevPreview {
         title: "Property Wrappers",
         intro: "В этом видео я расскажу вам обо всех оболочках, которые нам предлагает SwiftUI для хранения временных данных. Так же вы поймете, в чем отличие между такими оболочки как @State, @StateObject, @ObservedObject, @EnvironmentObject. Эти оболочки очень похожи друг на друга и знание того, когда и какую лучше использовать, имеет решающее значение.",
         author: "Evgenia Bruyko",
-        postLanguage: .russian,
         urlString: "https://youtu.be/ExwwrvOT8mI?si=SU__YwU8UlR461Zb",
         postPlatform: .youtube,
         postDate: Date.from(year: 2021, month: 3, day: 26),
@@ -47,7 +46,6 @@ struct DevPreview {
         And finally, we will take a quick look at the power of Attributed strings in SwiftUI.
         """,
         author: "Stewart Lynch",
-        postLanguage: .english,
         urlString: "https://www.youtube.com/watch?v=rbtIcKKxQ38", //
         postPlatform: .website,
         postDate: Date.from(year: 2022, month: 8, day: 11),
@@ -76,7 +74,6 @@ struct DevPreview {
             title: "Property Wrappers",
             intro: "В этом видео я расскажу вам обо всех оболочках, которые нам предлагает SwiftUI для хранения временных данных. Так же вы поймете, в чем отличие между такими оболочки как @State, @StateObject, @ObservedObject, @EnvironmentObject. Эти оболочки очень похожи друг на друга и знание того, когда и какую лучше использовать, имеет решающее значение.",
             author: "Evgenia Bruyko",
-            postLanguage: .russian,
             urlString: "https://youtu.be/ExwwrvOT8mI?si=SU__YwU8UlR461Zb",
             postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 3, day: 26)
@@ -90,7 +87,6 @@ struct DevPreview {
             And finally, we will take a quick look at the power of Attributed strings in SwiftUI.
             """,
             author: "Stewart Lynch",
-            postLanguage: .english,
             urlString: "https://www.youtube.com/watch?v=rbtIcKKxQ38",
             postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 5, day: 7),
@@ -99,7 +95,6 @@ struct DevPreview {
             title: "Customizing the appearance of symbol images in SwiftUI",
             intro: "Symbol images are vector-based icons from Apple's SF Symbols library, designed for use across Apple platforms. These scalable images adapt to different sizes and weights, ensuring consistent, high-quality icons throughout our apps. Using symbol images in SwiftUI is straightforward with the Image view and the system name of the desired symbol.",
             author: "Natalia Panferova",
-            postLanguage: .english,
             urlString: "https://nilcoalescing.com/blog/CustomizingTheAppearanceOfSymbolImagesInSwiftUI/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 9, day: 22)),
@@ -107,7 +102,6 @@ struct DevPreview {
             title: "ViewBuilder: Organize your views",
             intro: "ViewBuilders in SwiftUI are an excellent way to keep your code clean and organized. They make your code easier to read and maintain by allowing you to structure your views more clearly. This simplifies the process of building complex user interfaces, ensuring that your code remains elegant and efficient. Embracing ViewBuilders enhances both the readability and manageability of your SwiftUI projects.",
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-viewbuilder-organize-your-views/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 6, day: 27),
@@ -120,7 +114,6 @@ struct DevPreview {
             In this post you will learn about ClipShape in SwiftUI. You will learn how to implement them and we will also cover the different shapes available.
             """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-clipshape-shape-your-application/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 6, day: 13)),
@@ -128,7 +121,6 @@ struct DevPreview {
             title: "Long Press Gesture: Complete How-To Guide",
             intro: "The Long Press gesture in SwiftUI is a powerful interaction that triggers when a user presses and holds a view for a specific duration. This essential gesture recognizer is frequently implemented in modern iOS apps for context menus, drag and drop functionality, or revealing additional information to enhance user experience.",
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-long-press-how-to-guide/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 5, day: 7)),
@@ -141,7 +133,6 @@ struct DevPreview {
             With very little code you can implement a simple and effective way of getting user input. In this blog post we will cover how to implement a Toggle switch, change the color, hide the label and execute a function when turned on.
             """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-toggle-turn-on-and-off/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 5, day: 2)),
@@ -153,7 +144,6 @@ struct DevPreview {
                 In the following examples, we will discover different variations of animations, so you are ready to animate your SF Symbols.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-animate-sf-symbols/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 4, day: 24)),
@@ -165,7 +155,6 @@ struct DevPreview {
                 In this blog post, we will discover how to use the shadow() modifier in effect on any view in SwiftUI and we will also cover how you can customize the shadow effect.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-shadow-create-depth-and-dimension/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 4, day: 3)),
@@ -178,7 +167,6 @@ struct DevPreview {
                 In this blog post, we’re going to dive into SwiftUI’s ShareLink and how you can share a URL or Image with ease.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-sharelink-share-with-ease/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 3, day: 28)),
@@ -186,7 +174,6 @@ struct DevPreview {
             title: "Launch screen: First Impressions Matters",
             intro: "In this blog post, we cover how to create a launch screen in SwiftUI, exploring why they’re not just a good idea, but a crucial element in crafting an exceptional user experience.",
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-launch-screen-first-impressions-matters/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 3, day: 21)),
@@ -200,7 +187,6 @@ struct DevPreview {
                 NB: Before diving into this guide, it’s a good idea to test on an iPhone and not the simulator.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swift-check-network-connection/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 3, day: 28)),
@@ -212,7 +198,6 @@ struct DevPreview {
                 In this blog post we will cover how to request a review in SwitUI, we will also cover best practices on when to ask for a review and Apple’s guidelines.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-request-review-complete-guide/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 2, day: 22),
@@ -225,7 +210,6 @@ struct DevPreview {
                 In this blog post, we’ll learn how to create a Segmented Control in SwiftUI and explore how to change the selected color and background color.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-segmented-control/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 2, day: 21)),
@@ -237,7 +221,6 @@ struct DevPreview {
                 In this blog post, we’ll explore how to send emails using SwiftUI, both with and without an attachment.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-email-a-complete-guide/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 3, day: 12)),
@@ -249,7 +232,6 @@ struct DevPreview {
                 In this blog post, you will learn what Material is and how you use it and we will create an example with a view where we use material.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-material-how-to-use-material/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 1, day: 14)),
@@ -262,7 +244,6 @@ struct DevPreview {
                 In SwiftUI, the blur effect is achieved using the blur modifier. This modifier allows developers to apply a blur to any SwiftUI view.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-blur-a-short-guide/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 1, day: 11)),
@@ -274,7 +255,6 @@ struct DevPreview {
                 In this blog post, we will explore the implementation of SwiftUI Pull to Refresh, its benefits, and the steps to integrate this feature into your application.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-pull-to-refresh-easy-guide/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 12, day: 29)),
@@ -282,7 +262,6 @@ struct DevPreview {
             title: "Link: How to guide",
             intro: "Link is a great and hassle-free way of opening a website from your application. In this article, we will cover how you use SwiftUI Link and how you can customize it to fit inside your application.",
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-link-how-to-guide/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 12, day: 28)),
@@ -294,7 +273,6 @@ struct DevPreview {
                 In this blog post, we’ll explore the SwiftUI Divider and how it can elevate your app’s design and how to customize it to fit in your application.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-divider-a-powerful-line/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 12, day: 20)),
@@ -306,7 +284,6 @@ struct DevPreview {
                 In this blog post, we’ll explore the art of converting strings into different data types like int, date, double and you will also learn how to convert your strings and prevent your app from crashing if it’s a wrong data type.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/converting-strings-into-different-data-types-easy-guide/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 12, day: 8)),
@@ -318,7 +295,6 @@ struct DevPreview {
                 In this blog post dive into the SwiftUI ColorPicker, exploring its functionality and how it simplifies the process of color selection within your SwiftUI applications.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-colorpicker-a-complete-guide-to-color-selection/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 11, day: 28)),
@@ -326,7 +302,6 @@ struct DevPreview {
             title: "Swipe Actions: Complete guide with examples",
             intro: "One awesome and helpful feature in SwiftUI that enhances user interaction is swipe actions. In this blog post, we’ll explore the world of SwiftUI swipe actions, we will learn how to implement them and customize them to fit into your application, so you can provide even more value for your users.",
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-swipe-actions-complete-guide-with-examples/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 11, day: 27)),
@@ -338,7 +313,6 @@ struct DevPreview {
                 In this blog post, we’ll explore how to implement SwiftUI SF Symbols and dive into how they can be customized to fit your needs.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-sf-symbols-a-easy-guide/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 11, day: 23)),
@@ -350,7 +324,6 @@ struct DevPreview {
                 In this blog post, you will learn how to use the DatePicker in SwiftUI and how to customize it so it fits right into the style of your application.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-datepicker-integrating-dates-in-your-app/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 11, day: 21)),
@@ -364,7 +337,6 @@ struct DevPreview {
                 In this blog post, you will learn how to create a TextEditor with a limit of 280 characters. We’ll create the TextEditor in its own view so you can easily use it in different places inside your application. We will also create the character limit as a custom modifier — that way you can have different text editors with different limits.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-texteditor-character-limit/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 11, day: 9)),
@@ -376,7 +348,6 @@ struct DevPreview {
                 In this blog post, we’re going to take a deep dive into SwiftUI TextEditor, exploring its features, capabilities, and how you can use it in your application. I hope that whether you’re new to SwiftUI or a seasoned developer, this guide will provide you with insights and practical examples to unlock the full potential of TextEditor in your projects.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 11, day: 7)),
@@ -388,7 +359,6 @@ struct DevPreview {
                 In SwiftUI it’s easy to make a line chart and in this blog post you will learn everything you need to know about line charts in SwiftUI.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-line-chart-complete-guide-with-examples/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 10, day: 11)),
@@ -400,7 +370,6 @@ struct DevPreview {
                 In this blog post I will provide you with practical examples to help you master the native tabview.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-tabview-all-you-need-to-know/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 10, day: 10)),
@@ -412,7 +381,6 @@ struct DevPreview {
                 In this post, we will explore various aspects of SwiftUI Menu. We will cover a basic example, add a image to the menu, add a checkmark and more.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-menu-a-complete-guide/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 08, day: 31)),
@@ -420,7 +388,6 @@ struct DevPreview {
             title: "Toolbar: A complete Guide with examples",
             intro: "Toolbar is a powerful tool for designing elegant and functional user interfaces. In this blog post, we’ll be working with the native SwiftUI Toolbar and exploring its capabilities, providing examples, and showing you how to customize things like its background color to match your app’s design.",
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-toolbar-a-complete-guide-with-examples/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 08, day: 24)),
@@ -432,7 +399,6 @@ struct DevPreview {
                 In this blog post, we’ll dive into SwiftUI Searchable modifier, explore its capabilities, and learn how to search simple strings and complex objects. We will also use search suggestions and search scopes.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-search-enhance-user-experience-with-swiftui-searchable/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 08, day: 22),
@@ -441,7 +407,6 @@ struct DevPreview {
             title: "Swift UserDefaults: All you need to know",
             intro: "Swift UserDefaults is a lightweight and convenient data persistence store provided by Apple’s Foundation framework. It allows you to store small pieces of data, such as user preferences, settings, and simple configuration values. These values are automatically saved to the device’s file system, making them accessible even after the app is closed or the device is rebooted.",
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swift-userdefaults-all-you-need-to-know/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 08, day: 15)),
@@ -453,7 +418,6 @@ struct DevPreview {
                 In this blog post, we’ll dive into how you can implement PhotoPicker and how you let the user pick a single image or select multiple images and of course how you can filter what kind of images they can select.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-photopicker-a-hands-on-guide-with-examples/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 08, day: 10)),
@@ -467,7 +431,6 @@ struct DevPreview {
                 In this blog post we will explore what SwiftUI confirmationDialiog is, how it works and give examples on how to use it in your own app.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-confirmationdialog-with-examples/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 8, day: 8)),
@@ -482,7 +445,6 @@ struct DevPreview {
                 In this blog post, I will walk you through the steps of implementing a clear button for a TextField in SwiftUI. You will learn how to quickly add a clear button to one TextField and you will also learn how to create a ViewModifier so you can reuse the solution throughout your app.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-textfield-clear-button/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 8, day: 4)),
@@ -491,7 +453,6 @@ struct DevPreview {
             title: "TextField Placeholder: Best Practices and Tips",
             intro: "A well-crafted placeholder can greatly impact the overall user experience. In this blog post, we will explore the importance of TextField placeholders, learn how to change the color of the placeholder, use a image in placeholder and change the font. We will end the blog post with some great tips make better placeholders.",
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-textfield-placeholder-best-practices-and-tips/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 8, day: 3)),
@@ -504,7 +465,6 @@ struct DevPreview {
                 In this blog post, we will explore a full example of eventkit to create, edit, and delete calendar events, helping users stay organized and on top of their schedules. 
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swift-eventkit-calendar-management/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 7, day: 28),
@@ -513,7 +473,6 @@ struct DevPreview {
             title: "Password: Show and Hide",
             intro: "When creating an app security is very important but so is convenience therefore the ability to show and hide passwords has become a crucial feature for mobile applications. In this blog post, we will explore how to create a secure text field that hides the password but also learn how to create the ability to show/hide the password.",
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-password-show-and-hide/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 7, day: 26)),
@@ -525,7 +484,6 @@ struct DevPreview {
                 In this guide about background color for textfield in SwiftUI we will cover the basics but also learn how to set a gradient background and how to change the background based on user input.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-textfield-background-color/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 7, day: 25)),
@@ -533,7 +491,6 @@ struct DevPreview {
             title: "TextField: A User-Friendly Guide",
             intro: "SwiftUI’s TextField is a powerful user interface element that enables developers to effortlessly capture user input and create interactive experiences in their applications. Whether you’re a seasoned SwiftUI developer or just starting your journey, this blog post will walk you through the ins and outs of SwiftUI TextFields, providing valuable insights, use cases, and code examples along the way. Let’s dive in!",
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-textfield-a-user-friendly-guide/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 7, day: 24)),
@@ -545,7 +502,6 @@ struct DevPreview {
                 In this blog post, we’ll explore how AsyncImage simplifies the process of loading remote images in SwiftUI, making it easier and more efficient for developers — the easier it is, the happier the developer.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-asyncimage/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 6, day: 28)),
@@ -553,7 +509,6 @@ struct DevPreview {
             title: "Alert: Best Practices and Examples",
             intro: "When creating a mobile app it’s important to notify the users when something happens like an API request went OK or failed. With SwiftUI Alerts, you can quickly inform users, gather input, and prompt them to take specific actions. In this article, we’ll explore the power of SwiftUI Alerts and learn how to leverage them to enhance user interaction in your apps.",
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-alert/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 6, day: 29)),
@@ -565,7 +520,6 @@ struct DevPreview {
                 SwiftUI navigation bar is a UI element that allows users to navigate between different views in an app. It is typically used to provide a hierarchical navigation experience, where users can move from a parent view to a child view, and then back to the parent view.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-navigation-bar-a-complete-guide/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 6, day: 15)),
@@ -579,7 +533,6 @@ struct DevPreview {
                 By the end, you’ll be equipped with the knowledge to create beautiful and interactive buttons that elevate your app’s user interface.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-buttons/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 6, day: 13)),
@@ -591,7 +544,6 @@ struct DevPreview {
                 The ScrollView automatically adjusts its content size based on the views it contains, enabling the user to scroll vertically or horizontally through the content. It handles various complexities, such as dynamic content heights, nested scroll views, and lazy loading, making it a versatile tool for building dynamic and interactive user interfaces.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-scrollview-building-dynamic-and-interactive-interfaces/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 6, day: 6)),
@@ -599,7 +551,6 @@ struct DevPreview {
             title: "Mastering Picker: A Powerful Tool for User Input",
             intro: "The Picker is a powerful and versatile user interface component in SwiftUI that allows users to select an option from a predefined list. In this blog post, we will explore the capabilities of the SwiftUI Picker and how you can leverage its features to enhance your app’s user experience.",
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-picker/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 6, day: 2)),
@@ -607,7 +558,6 @@ struct DevPreview {
             title: "Rotation Animation: Bringing Your App to Life",
             intro: "is a powerful framework for building user interfaces in iOS apps. One of the many features it offers is the ability to create animations easily, including rotation animations. In this post, we will explore how to use SwiftUI rotation animation, as well as some use cases and examples.",
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-rotation-animation/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 5, day: 16)),
@@ -615,7 +565,6 @@ struct DevPreview {
             title: "Mastering Redacted: Hide data and show loading",
             intro: "In this article, we’ll explore the power of SwiftUI’s redacted views, including their use cases and examples. You will be able to implement redated in no time",
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-redacted/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 5, day: 8)),
@@ -623,7 +572,6 @@ struct DevPreview {
             title: "ProgressView: An Overview",
             intro: "As developers, we strive to create applications that are easy to use and visually appealing. Part of achieving this goal is incorporating a user interface that provides clear feedback to the user about the state of the application. One way to achieve this is through the use of progress indicators. In SwiftUI, we have the ProgressView, a view that displays the progress of a task or process. In this post, we’ll explore what ProgressView is, how to use it, and why it’s a good idea.",
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-progressview/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 4, day: 12)),
@@ -637,7 +585,6 @@ struct DevPreview {
                 You can dismiss the sheet by tapping on the background, dragging it down, or using a specific action. To create a sheet in SwiftUI, use the sheet modifier on a view.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-sheet/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 4, day: 1)),
@@ -645,7 +592,6 @@ struct DevPreview {
             title: "Swift guard statement — need to know with examples",
             intro: "In Swift the guard statement is a control flow statement that is used to check for certain conditions, and if those conditions are not met, it will exit the current scope early, returning from the current function, method, or closure.",
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swift-guard-statement-need-to-know-with-examples/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 4, day: 1)),
@@ -657,7 +603,6 @@ struct DevPreview {
                 In this blog post, we will explore the SwiftUI Stepper, how to use it, and why it’s a good idea to use it in your apps. We’ll also look at some use cases where the Stepper can be useful.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-stepper-a-powerful-tool-for-user-input-with-examples/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 3, day: 28)),
@@ -665,7 +610,6 @@ struct DevPreview {
             title: "Forms",
             intro: "One of the most commonly used views in SwiftUI is the Form view, which is a container for grouping related controls and data entry fields in a structured way. In this post, we’ll explore the basics of SwiftUI Form, along with some examples and use cases.",
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swiftui-form/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 3, day: 27)),
@@ -678,7 +622,6 @@ struct DevPreview {
                 A List in SwiftUI is a container view that presents rows of data arranged in a single column. It can be used to display a vertically scrolling list of items, where each item is a separate row. A List is a fundamental building block of a SwiftUI app, and it provides several features out-of-the-box, such as automatic scrolling, dynamic row heights, and support for sectioned lists.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 3, day: 18)),
@@ -690,7 +633,6 @@ struct DevPreview {
                 In this tutorial, you will learn what MVVM is and you will get an example of how to implement it in your SwiftUI app easily.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/mvvm-in-swiftui-a-easy-guide/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 3, day: 16)),
@@ -702,7 +644,6 @@ struct DevPreview {
                 In Swift, errors are represented by values of types that conform to the Error protocol. When a function encounters an error, it can throw an error using the throw statement. The error can then be caught and handled by a surrounding do-catch statement.
                 """,
             author: "softwareanders.com",
-            postLanguage: .english,
             urlString: "https://softwareanders.com/swift-error-handling-with-examples/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 3, day: 13)),
@@ -716,7 +657,6 @@ struct DevPreview {
                 By the end of the video, you’ll be equipped to take full advantage of toolbars and sheet presentation enhancements in iOS 26.
                 """,
             author: "Stewart Lynch",
-            postLanguage: .english,
             urlString: "https://www.youtube.com/watch?v=IiLDbrtBsn0",
             postPlatform: .youtube,
             postDate: Date.from(year: 2025, month: 9, day: 14)),
@@ -731,7 +671,6 @@ struct DevPreview {
                 Whether you’re building for iOS, macOS, or visionOS, Liquid Glass is a game-changer—and I’ll help you get the most out of it.
                 """,
             author: "Stewart Lynch",
-            postLanguage: .english,
             urlString: "https://www.youtube.com/watch?v=E2nQsw0El8M",
             postPlatform: .youtube,
             postDate: Date.from(year: 2025, month: 8, day: 31)),
@@ -827,6 +766,61 @@ struct DevPreview {
             urlString: "https://www.atlassian.com/git/tutorials",
             postDate: nil,
             studyLevel: .beginner),
+// 2025-10-27
+        Post(
+            title: "Combine – швейцарский нож iOS-разработчика. Или нет?",
+            intro: """
+                Привет! Меня зовут Антон, я iOS-разработчик в Банки.ру. Когда я только начинал изучать Combine, он казался для меня магией. Пара команд и вот у тебя уже есть какие-то данные. Чтобы Combine перестал оставаться черным ящиком давайте заглянем внутрь. Эта статья – мое виденье этого фреймворка.
+                """,
+            author: "Anton @Toshhhh",
+            postType: .post,
+            urlString: "https://habr.com/ru/companies/banki/articles/958650/",
+            postPlatform: .website,
+            postDate: Date.from(year: 2025, month: 10, day: 22),
+            studyLevel: .middle),
+        Post(
+            title: "Xcode: ключевые инструменты для ручного тестирования мобильных приложений",
+            intro: """
+                Привет! Я – Андрей, QA-лид из компании «Совкомбанк Технологии».
+                        
+                Хочу поделиться опытом тестировании мобильных приложений в Xcode — среде, которую многие используют только для разработки. По внутренним данным нашей компании, примерно 65% критических багов в iOS-приложениях можно выловить ещё на этапе разработки, если грамотно использовать встроенные инструменты Xcode.
+                """,
+            author: "Andrey @SovcomTech",
+            postType: .post,
+            urlString: "https://habr.com/ru/companies/sovcombank_technologies/articles/956112/",
+            postPlatform: .website,
+            postDate: Date.from(year: 2025, month: 10, day: 14),
+            studyLevel: .middle),
+        
+        Post(
+            title: "List or LazyVStack: Choosing the Right Lazy Container in SwiftUI",
+            intro: """
+                In the world of SwiftUI, List and LazyVStack, as two core lazy containers, offer robust support for developers to display large amounts of data. However, their similar performance in certain scenarios often causes confusion among developers when making a choice. This article aims to analyze the characteristics and advantages of these two components to help you make a better decision.
+                """,
+            author: "Fatbobman",
+            postType: .post,
+            urlString: "https://fatbobman.com/en/posts/list-or-lazyvstack/",
+            postPlatform: .website,
+            postDate: Date.from(year: 2024, month: 7, day: 10),
+            studyLevel: .beginner),
+        Post(
+            title: "Encapsulating SwiftUI view styles",
+            intro: """
+                Regardless of what framework or tool that’s used to build a given UI, finding a good way to separate the structure and internal logic of our various views from the styles that are being applied to them is often key in order to make UI code easier to maintain and manage.
+                
+                While certain technologies offer a quite natural way of separating those two aspects of UI development, such as how websites declare their structure through HTML and their styles using CSS — when it comes to SwiftUI, it might not initially seem like that kind of separation is practical, or even encouraged.
+                
+                However, if we start exploring SwiftUI’s various APIs and conventions a bit further, it turns out that there are a number of tools and techniques that we can use to create a clean separation between our view hierarchy, its styles, and the components that we’re looking to reuse across a given project.
+                
+                That’s exactly what we’ll take a look at in this week’s article.
+                """,
+            author: "John Sundell",
+            postType: .post,
+            urlString: "https://www.swiftbysundell.com/articles/encapsulating-swiftui-view-styles/",
+            postPlatform: .website,
+            postDate: Date.from(year: 2020, month: 9, day: 27),
+            studyLevel: .beginner),
+        
         
     ]
     

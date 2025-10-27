@@ -69,7 +69,6 @@ struct AddEditPostSheet: View {
                 title: "",
                 intro: "",
                 author: "",
-                postLanguage: .english,
                 urlString: "",
                 postPlatform: .youtube,
                 postDate: nil,
@@ -92,7 +91,7 @@ struct AddEditPostSheet: View {
                     introSection
                     authorSection
                     urlSection
-                    languageSection
+//                    languageSection
                     postDateSection
                     typeSection
                     platformSection
@@ -298,37 +297,37 @@ struct AddEditPostSheet: View {
         }
     }
     
-    private var languageSection: some View {
-        
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Language")
-                .textCase(.uppercase)
-                .sectionSubheaderFormater(
-                    fontSubheader: fontSubheader,
-                    colorSubheader: colorSubheader
-                )
-            HStack {
-                Text("Select Language:")
-                    .font(fontTextInput)
-                    .padding(.leading, 5)
-                Spacer()
-                Picker("", selection: $editedPost.postLanguage) {
-                    ForEach(LanguageOptions.allCases, id: \.self) { language in
-                        Text(language.displayName)
-                            .tag(language)
-                            .foregroundColor(Color.mycolor.myBlue)
-                    }
-                }
-                .pickerStyle(.menu)
-                .tint(Color.mycolor.myBlue)
-                .frame(height: 50)
-            }
-            .background(
-                sectionBackground,
-                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
-            )
-        }
-    }
+//    private var languageSection: some View {
+//        
+//        VStack(alignment: .leading, spacing: 0) {
+//            Text("Language")
+//                .textCase(.uppercase)
+//                .sectionSubheaderFormater(
+//                    fontSubheader: fontSubheader,
+//                    colorSubheader: colorSubheader
+//                )
+//            HStack {
+//                Text("Select Language:")
+//                    .font(fontTextInput)
+//                    .padding(.leading, 5)
+//                Spacer()
+//                Picker("", selection: $editedPost.postLanguage) {
+//                    ForEach(LanguageOptions.allCases, id: \.self) { language in
+//                        Text(language.displayName)
+//                            .tag(language)
+//                            .foregroundColor(Color.mycolor.myBlue)
+//                    }
+//                }
+//                .pickerStyle(.menu)
+//                .tint(Color.mycolor.myBlue)
+//                .frame(height: 50)
+//            }
+//            .background(
+//                sectionBackground,
+//                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+//            )
+//        }
+//    }
     
     private var postDateSection: some View {
         
@@ -556,7 +555,7 @@ struct AddEditPostSheet: View {
                                 vm.titlePostDraft = editedPost.title
                                 vm.introPostDraft = editedPost.intro
                                 vm.authorPostDraft = editedPost.author
-                                vm.languagePostDraft = editedPost.postLanguage
+//                                vm.languagePostDraft = editedPost.postLanguage
                                 vm.typePostDraft = editedPost.postType
                                 vm.urlStringPostDraft = editedPost.urlString
                                 vm.platformPostDraft = editedPost.postPlatform
