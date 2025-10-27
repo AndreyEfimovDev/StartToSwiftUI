@@ -555,7 +555,6 @@ struct AddEditPostSheet: View {
                                 vm.titlePostSaved = editedPost.title
                                 vm.introPostSaved = editedPost.intro
                                 vm.authorPostSaved = editedPost.author
-//                                vm.languagePostDraft = editedPost.postLanguage
                                 vm.typePostSaved = editedPost.postType
                                 vm.urlStringPostSaved = editedPost.urlString
                                 vm.platformPostSaved = editedPost.postPlatform

@@ -117,7 +117,7 @@ struct CheckForPostsUpdateView: View {
                 print("Updates available")
                 
             } else {
-                followingText = "You are up to date"
+                followingText = "Posts are up to date"
                 followingTextColor = Color.mycolor.myGreen
                 isPostsUpdateAvailable = false
                 isPostsUpdated = true
