@@ -76,6 +76,8 @@ class PostsViewModel: ObservableObject {
     var listOfYearsInPosts: [String]? = nil
     var dispatchTime: DispatchTime { .now() + 2 }
     
+    var isPostsUpdateAvailable: Bool = false
+    
     // MARK: INIT() SECTION
     
     init() {
@@ -85,6 +87,14 @@ class PostsViewModel: ObservableObject {
         // get list of years of posts
         if !self.allPosts.isEmpty {
             self.listOfYearsInPosts = getListOfPostedYearsOfPosts()
+            
+            // Check if posts update is available
+            checkCloudForUpdates { hasUpdates in
+                if hasUpdates {
+                    self.isPostsUpdateAvailable = true
+                    print("VM(init): Posts update is available")
+                }
+            }
         }
         
         self.filteredPosts = self.allPosts
