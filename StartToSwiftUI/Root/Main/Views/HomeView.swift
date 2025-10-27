@@ -158,52 +158,6 @@ struct HomeView: View {
     
     // MARK: VAR VIEWS
     
-//    @ViewBuilder
-//    private func deletePostConfirm (
-//        post: Post,
-//        action: @escaping () -> ()
-//    ) -> some View {
-//        
-//        if isShowingDeleteConfirmation {
-//            VStack {
-//                ZStack {
-//                Color.mycolor.myAccent.opacity(0.4)
-//                    .ignoresSafeArea()
-//                
-//                    VStack(spacing: 20) {
-//                        Text("DELETE THE POST?")
-//                            .font(.headline)
-//                            .bold()
-//                            .foregroundColor(Color.mycolor.myRed)
-//                        
-//                        Text("Please confirm the deletion of the post?")
-//                            .font(.subheadline)
-//                            .multilineTextAlignment(.center)
-//                            .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
-//                        ClearCupsuleButton(
-//                            primaryTitle: "Yes",
-//                            primaryTitleColor: Color.mycolor.myRed) {
-//                                vm.deletePost(post: post)
-//                                action()
-////                                isShowingDeleteConfirmation = false
-//                            }
-//
-//                        ClearCupsuleButton(
-//                            primaryTitle: "No",
-//                            primaryTitleColor: Color.mycolor.myGreen) {
-//                                action()
-//                            }
-//                    }
-//                    .padding()
-//                    .background(.regularMaterial)
-//                    .cornerRadius(30)
-//                    .padding(.horizontal, 40)
-//                }
-//            } // VStack: Deletion confirmation dialog
-//        } // IF: Deletion confirmation dialog
-//
-//    }
-    
     private var viewBody: some View {
         ScrollViewReader { proxy in
             ZStack (alignment: .bottomTrailing) {

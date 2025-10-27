@@ -498,7 +498,7 @@ struct AddEditPostSheet: View {
     private var hideKeybordButton: some View {
         
         Group {
-            if focusedField != nil /*&& !isShowingMenuConfirmation*/ {
+            if focusedField != nil {
                 VStack {
                     Spacer()
                     HStack {
