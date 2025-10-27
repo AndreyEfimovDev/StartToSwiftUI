@@ -324,7 +324,11 @@ class PostsViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     completion(hasUpdates)
                 }
-            case .failure:
+            case .failure (let error):
+                self.cloudImportError = error.localizedDescription
+                self.showCloudImportAlert = true
+                self.hapticManager.notification(type: .error)
+
                 DispatchQueue.main.async {
                     completion(false)
                 }
