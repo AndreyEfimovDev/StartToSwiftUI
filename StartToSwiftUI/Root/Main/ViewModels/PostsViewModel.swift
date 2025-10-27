@@ -21,47 +21,37 @@ class PostsViewModel: ObservableObject {
     // stored filters
     @AppStorage("storedLevel") var storedLevel: StudyLevel?
     @AppStorage("storedFavorite") var storedFavorite: FavoriteChoice?
-//    @AppStorage("storedLanguage") var storedLanguage: LanguageOptions?
     @AppStorage("storedType") var storedType: PostType?
-//    @AppStorage("storedPlatform") var storedPlatform: Platform?
+    @AppStorage("storedPlatform") var storedPlatform: Platform?
     @AppStorage("storedYear") var storedYear: String?
     
     @AppStorage("isPostDraftSaved") var isPostDraftSaved: Bool = false
-    @AppStorage("titlePostDraft") var titlePostDraft: String?
-    @AppStorage("introPostDraft") var introPostDraft: String?
-    @AppStorage("authorPostDraft") var authorPostDraft: String?
-//    @AppStorage("languagePostDraft") var languagePostDraft: LanguageOptions?
-    @AppStorage("typePostDraft") var typePostDraft: PostType?
-    @AppStorage("urlStringPostDraft") var urlStringPostDraft: String?
-    @AppStorage("platformPostDraft") var platformPostDraft: Platform?
-    @AppStorage("datePostDraft") var datePostDraft: Date?
-    @AppStorage("studyLevelPostDraft") var studyLevelPostDraft: StudyLevel?
-    @AppStorage("favoriteChoicePostDraft") var favoriteChoicePostDraft: FavoriteChoice?
-    @AppStorage("additionalTextPostDraft") var additionalTextPostDraft: String?
+    @AppStorage("titlePostSaved") var titlePostSaved: String?
+    @AppStorage("introPostSaved") var introPostSaved: String?
+    @AppStorage("authorPostSaved") var authorPostSaved: String?
+    @AppStorage("typePostSaved") var typePostSaved: PostType?
+    @AppStorage("urlStringPostSaved") var urlStringPostSaved: String?
+//    @AppStorage("platformPostSaved") var platformPostSaved: Platform?
+    @AppStorage("datePostSaved") var datePostSaved: Date?
+    @AppStorage("studyLevelPostSaved") var studyLevelPostSaved: StudyLevel?
+    @AppStorage("favoriteChoicePostSaved") var favoriteChoicePostSaved: FavoriteChoice?
+    @AppStorage("additionalTextPostSaved") var additionalTextPostSaved: String?
     
     // stored preferances
     @AppStorage("isNotification") var isNotification: Bool = false
     
     // stored a date of dateStamp of the Cloud posts imported
     @AppStorage("localLastUpdated") var localLastUpdated: Date = (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date())
-        
+    
+    // set filters
     @Published var selectedLevel: StudyLevel? = nil {
-        didSet { storedLevel = selectedLevel } }
+        didSet { storedLevel = selectedLevel }}
     @Published var selectedFavorite: FavoriteChoice? = nil {
-        didSet { storedFavorite = selectedFavorite }
-    }
-//    @Published var selectedLanguage: LanguageOptions? = nil {
-//        didSet { storedLanguage = selectedLanguage }
-//    }
+        didSet { storedFavorite = selectedFavorite }}
     @Published var selectedType: PostType? = nil {
-        didSet { storedType = selectedType }
-    }
-//    @Published var selectedPlatform: Platform? = nil {
-//        didSet { storedPlatform = selectedPlatform }
-//    }
+        didSet { storedType = selectedType }}
     @Published var selectedYear: String? = nil {
-        didSet { storedYear = selectedYear }
-    }
+        didSet { storedYear = selectedYear }}
     
     private var cancellables = Set<AnyCancellable>()
     private let fileManager = FileStorageService.shared
@@ -102,7 +92,6 @@ class PostsViewModel: ObservableObject {
         // filters initilazation
         self.selectedLevel = self.storedLevel
         self.selectedFavorite = self.storedFavorite
-//        self.selectedLanguage = self.storedLanguage
         self.selectedYear = self.storedYear
         self.isFiltersEmpty = checkIfAllFiltersAreEmpty()
         

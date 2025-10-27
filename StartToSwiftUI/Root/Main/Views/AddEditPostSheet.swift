@@ -552,17 +552,17 @@ struct AddEditPostSheet: View {
                             secondaryTitleColor: Color.mycolor.myGreen,
                             isToChange: vm.isPostDraftSaved) {
                                 
-                                vm.titlePostDraft = editedPost.title
-                                vm.introPostDraft = editedPost.intro
-                                vm.authorPostDraft = editedPost.author
+                                vm.titlePostSaved = editedPost.title
+                                vm.introPostSaved = editedPost.intro
+                                vm.authorPostSaved = editedPost.author
 //                                vm.languagePostDraft = editedPost.postLanguage
-                                vm.typePostDraft = editedPost.postType
-                                vm.urlStringPostDraft = editedPost.urlString
-                                vm.platformPostDraft = editedPost.postPlatform
-                                vm.datePostDraft = editedPost.postDate
-                                vm.studyLevelPostDraft = editedPost.studyLevel
-                                vm.favoriteChoicePostDraft = editedPost.favoriteChoice
-                                vm.additionalTextPostDraft = editedPost.additionalText
+                                vm.typePostSaved = editedPost.postType
+                                vm.urlStringPostSaved = editedPost.urlString
+                                vm.platformPostSaved = editedPost.postPlatform
+                                vm.datePostSaved = editedPost.postDate
+                                vm.studyLevelPostSaved = editedPost.studyLevel
+                                vm.favoriteChoicePostSaved = editedPost.favoriteChoice
+                                vm.additionalTextPostSaved = editedPost.additionalText
                                 
                                 isMenuConfirmationBlocked = true
                                 hapticManager.notification(type: .success)
