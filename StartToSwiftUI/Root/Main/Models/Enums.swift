@@ -8,17 +8,17 @@
 import Foundation
 import SwiftUI
 
-enum LanguageOptions: String, CaseIterable, Codable {
-    case english
-    case russian
-    
-    var displayName: String {
-        switch self {
-        case .english: return "EN"
-        case .russian: return "RU"
-        }
-    }
-}
+//enum LanguageOptions: String, CaseIterable, Codable {
+//    case english
+//    case russian
+//    
+//    var displayName: String {
+//        switch self {
+//        case .english: return "EN"
+//        case .russian: return "RU"
+//        }
+//    }
+//}
 
 enum PostType: String, CaseIterable, Codable {
     case post

@@ -21,7 +21,7 @@ class PostsViewModel: ObservableObject {
     // stored filters
     @AppStorage("storedLevel") var storedLevel: StudyLevel?
     @AppStorage("storedFavorite") var storedFavorite: FavoriteChoice?
-    @AppStorage("storedLanguage") var storedLanguage: LanguageOptions?
+//    @AppStorage("storedLanguage") var storedLanguage: LanguageOptions?
     @AppStorage("storedType") var storedType: PostType?
 //    @AppStorage("storedPlatform") var storedPlatform: Platform?
     @AppStorage("storedYear") var storedYear: String?
@@ -30,7 +30,7 @@ class PostsViewModel: ObservableObject {
     @AppStorage("titlePostDraft") var titlePostDraft: String?
     @AppStorage("introPostDraft") var introPostDraft: String?
     @AppStorage("authorPostDraft") var authorPostDraft: String?
-    @AppStorage("languagePostDraft") var languagePostDraft: LanguageOptions?
+//    @AppStorage("languagePostDraft") var languagePostDraft: LanguageOptions?
     @AppStorage("typePostDraft") var typePostDraft: PostType?
     @AppStorage("urlStringPostDraft") var urlStringPostDraft: String?
     @AppStorage("platformPostDraft") var platformPostDraft: Platform?
@@ -50,9 +50,9 @@ class PostsViewModel: ObservableObject {
     @Published var selectedFavorite: FavoriteChoice? = nil {
         didSet { storedFavorite = selectedFavorite }
     }
-    @Published var selectedLanguage: LanguageOptions? = nil {
-        didSet { storedLanguage = selectedLanguage }
-    }
+//    @Published var selectedLanguage: LanguageOptions? = nil {
+//        didSet { storedLanguage = selectedLanguage }
+//    }
     @Published var selectedType: PostType? = nil {
         didSet { storedType = selectedType }
     }
@@ -92,7 +92,7 @@ class PostsViewModel: ObservableObject {
         // filters initilazation
         self.selectedLevel = self.storedLevel
         self.selectedFavorite = self.storedFavorite
-        self.selectedLanguage = self.storedLanguage
+//        self.selectedLanguage = self.storedLanguage
         self.selectedYear = self.storedYear
         self.isFiltersEmpty = checkIfAllFiltersAreEmpty()
         
@@ -113,18 +113,18 @@ class PostsViewModel: ObservableObject {
     private func addSubscribers() {
         
         let filters = $selectedLevel
-            .combineLatest($selectedFavorite, $selectedLanguage, $selectedType)
+            .combineLatest($selectedFavorite, $selectedType)
         
         $selectedYear
             .combineLatest(filters)
             .map {year, filters -> [Post] in
-                let (level, favorite, language, type) = filters
+                let (level, favorite, type) = filters
                 return self.filterPosts(
                     allPosts: self.allPosts,
                     level: level,
                     favorite: favorite,
                     type: type,
-                    language: language,
+//                    language: language,
                     year: year
                 )
             }
@@ -140,7 +140,7 @@ class PostsViewModel: ObservableObject {
                     level: self.selectedLevel,
                     favorite: self.selectedFavorite,
                     type: self.selectedType,
-                    language: self.selectedLanguage,
+//                    language: self.selectedLanguage,
                     year: self.selectedYear
                 )
             }
@@ -160,12 +160,12 @@ class PostsViewModel: ObservableObject {
         level: StudyLevel?,
         favorite: FavoriteChoice?,
         type: PostType?,
-        language: LanguageOptions?,
+//        language: LanguageOptions?,
         year: String?) -> [Post] {
             
             if level == nil &&
                 favorite == nil &&
-                language == nil &&
+//                language == nil &&
                 type == nil &&
                 year == nil {
                 return allPosts
@@ -173,13 +173,13 @@ class PostsViewModel: ObservableObject {
             return allPosts.filter { post in
                 let matchesLevel = level == nil || post.studyLevel == level
                 let matchesFavorite = favorite == nil || post.favoriteChoice == favorite
-                let matchesLanguage = language == nil || post.postLanguage == language
+//                let matchesLanguage = language == nil || post.postLanguage == language
                 let matchesType = type == nil || post.postType == type
 
                 let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date()))
                 let matchesYear = year == nil || postYear == year
                 
-                return matchesLevel && matchesFavorite && matchesLanguage && matchesType && matchesYear
+                return matchesLevel && matchesFavorite && matchesType && matchesYear
             }
         }
     
@@ -381,7 +381,7 @@ class PostsViewModel: ObservableObject {
         // check if all filters are empty
         if selectedLevel == nil &&
             selectedFavorite == nil &&
-            selectedLanguage == nil &&
+//            selectedLanguage == nil &&
             selectedType == nil &&
             selectedYear == nil {
             return true
