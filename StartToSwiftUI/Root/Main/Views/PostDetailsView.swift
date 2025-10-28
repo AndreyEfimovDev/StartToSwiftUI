@@ -68,48 +68,11 @@ struct PostDetailsView: View {
                 }
                 .foregroundStyle(Color.mycolor.myAccent)
             }
-//            .padding(.top, 30)
             .padding(.horizontal)
-//            .background(.thinMaterial)
             .navigationBarBackButtonHidden(true)
-//            .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
             .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbar {
-                ToolbarItemGroup(placement: .topBarLeading) {
-                    CircleStrokeButtonView(
-                        iconName: "chevron.left",
-                        isShownCircle: false)
-                    {
-                        dismiss()
-                    }
-
-                    ShareLink(item: validPost.urlString) {
-                        Image(systemName: "square.and.arrow.up")
-                            .font(.headline)
-                            .foregroundStyle(Color.mycolor.mySecondaryText)
-                            .offset(y: -2)
-                            .frame(width: 30, height: 30)
-                            .background(.black.opacity(0.001))
-                    }
-                }
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    CircleStrokeButtonView(
-                        iconName: validPost.favoriteChoice == .yes ? "star.fill" : "star",
-                        iconFont: .headline,
-                        isIconColorToChange: validPost.favoriteChoice == .yes ? true : false,
-                        imageColorSecondary: Color.mycolor.myYellow,
-                        isShownCircle: false)
-                    {
-                        vm.favoriteToggle(post: validPost)
-                    }
-
-                    CircleStrokeButtonView(
-                        iconName: "pencil",
-                        isShownCircle: false)
-                    {
-                        showEditPostView.toggle()
-                    }
-                }
+                    toolbarForPostDetails(validPost: validPost)
             }
             .fullScreenCover(isPresented: $showEditPostView, content: {
                 AddEditPostSheet(post: post)
@@ -123,6 +86,8 @@ struct PostDetailsView: View {
             Text("Post not found")
         }
     }
+    
+    // MARK: Subviews
     
     private func header(for post: Post) -> some View {
         
@@ -227,6 +192,45 @@ struct PostDetailsView: View {
             } // if isShowingFullFreeTextField
         } // VStack
     } // private var additionalText
+    
+    @ToolbarContentBuilder
+    private func toolbarForPostDetails(validPost: Post) -> some ToolbarContent {
+        ToolbarItemGroup(placement: .topBarLeading) {
+            CircleStrokeButtonView(
+                iconName: "chevron.left",
+                isShownCircle: false)
+            {
+                dismiss()
+            }
+
+            ShareLink(item: validPost.urlString) {
+                Image(systemName: "square.and.arrow.up")
+                    .font(.headline)
+                    .foregroundStyle(Color.mycolor.mySecondaryText)
+                    .offset(y: -2)
+                    .frame(width: 30, height: 30)
+                    .background(.black.opacity(0.001))
+            }
+        }
+        ToolbarItemGroup(placement: .topBarTrailing) {
+            CircleStrokeButtonView(
+                iconName: validPost.favoriteChoice == .yes ? "star.fill" : "star",
+                iconFont: .headline,
+                isIconColorToChange: validPost.favoriteChoice == .yes ? true : false,
+                imageColorSecondary: Color.mycolor.myYellow,
+                isShownCircle: false)
+            {
+                vm.favoriteToggle(post: validPost)
+            }
+
+            CircleStrokeButtonView(
+                iconName: "pencil",
+                isShownCircle: false)
+            {
+                showEditPostView.toggle()
+            }
+        }
+    }
 }
 
 

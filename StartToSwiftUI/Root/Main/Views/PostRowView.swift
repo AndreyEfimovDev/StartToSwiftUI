@@ -32,13 +32,9 @@ struct PostRowView: View {
         .padding(8)
         .padding(.horizontal, 8)
         .background(Color.mycolor.mySectionBackground)
-//        .background(
-//            Color.mycolor.mySectionBackground,
-//            in: RoundedRectangle(cornerRadius: 8)
-//        )
     }
         
-    // MARK: VIEW VARS
+    // MARK: Subviews
     
     private var title: some View {
         HStack {
@@ -53,7 +49,6 @@ struct PostRowView: View {
                 .foregroundStyle(post.favoriteChoice == .yes ? Color.mycolor.myYellow : Color.mycolor.mySecondaryText)
                 .padding(.top, 8)
         }
-        
     }
     
     private var author: some View {
@@ -70,8 +65,8 @@ struct PostRowView: View {
             .font(.body)
             .fontWeight(.medium)
             .foregroundStyle(post.studyLevel.color)
-
     }
+    
 }
 
 fileprivate struct PostRowPreView: View {
