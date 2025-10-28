@@ -214,8 +214,8 @@
 		475997582E5C86B7008E20F0 /* Root */ = {
 			isa = PBXGroup;
 			children = (
-				47069EFC2EAFF2E30082AE12 /* Launch */,
 				475997592E5C86C5008E20F0 /* Components */,
+				47069EFC2EAFF2E30082AE12 /* Launch */,
 				47BAF0ED2E645AFE00287F10 /* Main */,
 			);
 			path = Root;
