@@ -57,6 +57,8 @@ struct ImportPostsFromCloudView: View {
         }
     }
     
+    // MARK: Subviews
+
     private var textSection: some View {
         Text("""
             You are about to import pre-loaded posts from the cloud.
@@ -88,16 +90,6 @@ struct ImportPostsFromCloudView: View {
         
     } // func importFromCloud()
     
-    private func checkForUpdates() {
-        vm.checkCloudForUpdates { hasUpdates in
-            if hasUpdates {
-                // Можно показать alert с предложением обновиться
-                print("Updates available!")
-            } else {
-                print("No updates available")
-            }
-        }
-    }
 }
 
 #Preview {

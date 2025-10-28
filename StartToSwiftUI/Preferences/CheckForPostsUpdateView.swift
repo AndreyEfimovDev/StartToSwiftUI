@@ -27,55 +27,8 @@ struct CheckForPostsUpdateView: View {
         NavigationStack {
             VStack {
                 Form {
-                    Section {
-                        HStack {
-                            Text(followingText)
-                                .foregroundStyle(followingTextColor)
-                            Spacer()
-                            if isInProgress {
-                                ProgressView()
-                                    .background(.regularMaterial)
-                            }
-                        }
-                        HStack {
-                            Text("Last update from:")
-                            Spacer()
-                            Text(vm.localLastUpdated.formatted(date: .numeric, time: .omitted))
-                        }
-                    }
-                    .foregroundStyle(Color.mycolor.myAccent)
-
-                    Group {
-                        textSection
-                            .managingPostsTextFormater()
-                            .padding(.horizontal, 30)
-                        
-                        if !isPostsUpdated {
-                            CapsuleButtonView(
-                                primaryTitle: buttonFirstText,
-                                secondaryTitle: "Imported \(postCount) posts",
-                                isToChangeTitile: isImported) {
-                                    
-                                    isInProgress = true
-                                    vm.importPostsFromCloud(urlString: selectedURL) {
-                                        isInProgress = false
-                                        isImported = true
-                                        hapticManager.notification(type: .success)
-                                        DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                                            dismiss()
-                                        }
-                                    }
-                                }
-                                .onChange(of: vm.allPosts.count) { oldValue, newValue in
-                                    postCount = newValue - oldValue
-                                }
-                                .padding(.horizontal, 30)
-                                .padding(30)
-                                .disabled(isImported)
-                            
-                        }
-                    }
-                    .listRowBackground(Color.clear)
+                    section_1
+                    section_2
                 } // Form
             } // VStack
             .onAppear {
@@ -88,12 +41,64 @@ struct CheckForPostsUpdateView: View {
             }
         }
     }
-        
-    private func sectionHeader(_ text: String) -> some View {
-        Text(text)
-            .foregroundStyle(Color.mycolor.myAccent)
-            .textCase(.uppercase)
+    
+    // MARK: Subviews
+    
+    private var section_1: some View {
+        Section {
+            HStack {
+                Text(followingText)
+                    .foregroundStyle(followingTextColor)
+                Spacer()
+                if isInProgress {
+                    ProgressView()
+                        .background(.regularMaterial)
+                }
+            }
+            HStack {
+                Text("Last update from:")
+                Spacer()
+                Text(vm.localLastUpdated.formatted(date: .numeric, time: .omitted))
+            }
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+
     }
+    
+    private var section_2: some View {
+        Group {
+            textSection
+                .managingPostsTextFormater()
+                .padding(.horizontal, 30)
+            
+            if !isPostsUpdated {
+                CapsuleButtonView(
+                    primaryTitle: buttonFirstText,
+                    secondaryTitle: "Imported \(postCount) posts",
+                    isToChangeTitile: isImported) {
+                        
+                        isInProgress = true
+                        vm.importPostsFromCloud(urlString: selectedURL) {
+                            isInProgress = false
+                            isImported = true
+                            hapticManager.notification(type: .success)
+                            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+                                dismiss()
+                            }
+                        }
+                    }
+                    .onChange(of: vm.allPosts.count) { oldValue, newValue in
+                        postCount = newValue - oldValue
+                    }
+                    .padding(.horizontal, 30)
+                    .padding(30)
+                    .disabled(isImported)
+                
+            }
+        }
+        .listRowBackground(Color.clear)
+    }
+
 
     private var textSection: some View {
         Text("""
@@ -106,6 +111,12 @@ struct CheckForPostsUpdateView: View {
     
     // MARK: Functions
 
+    private func sectionHeader(_ text: String) -> some View {
+        Text(text)
+            .foregroundStyle(Color.mycolor.myAccent)
+            .textCase(.uppercase)
+    }
+    
     private func checkForUpdates() {
         vm.checkCloudForUpdates { hasUpdates in
             if hasUpdates {

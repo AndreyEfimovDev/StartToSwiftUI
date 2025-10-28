@@ -14,7 +14,7 @@ struct PostDetailsView: View {
     @EnvironmentObject private var vm: PostsViewModel
     
     private let fileManager = FileStorageService.shared
-
+    
     @State private var showSafariView = false
     @State private var showFullIntro: Bool = false
     @State private var showFullFreeTextField: Bool = false
@@ -38,7 +38,7 @@ struct PostDetailsView: View {
     
     private let sectionBackground: Color = Color.mycolor.myBackground
     private let sectionCornerRadius: CGFloat = 15
-
+    
     
     var body: some View {
         
@@ -51,7 +51,7 @@ struct PostDetailsView: View {
                             in: RoundedRectangle(cornerRadius: sectionCornerRadius)
                         )
                         .padding(.top, 30)
-
+                    
                     intro(for: validPost)
                         .background(
                             sectionBackground,
@@ -72,7 +72,7 @@ struct PostDetailsView: View {
             .navigationBarBackButtonHidden(true)
             .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbar {
-                    toolbarForPostDetails(validPost: validPost)
+                toolbarForPostDetails(validPost: validPost)
             }
             .fullScreenCover(isPresented: $showEditPostView, content: {
                 AddEditPostSheet(post: post)
@@ -98,18 +98,17 @@ struct PostDetailsView: View {
                     .fontWeight(.semibold)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)
-                let author = "@" + post.author
-                Text(author)
+                
+                Text("@" + post.author)
                     .font(.body)
                     .font(.caption)
                     .frame(maxWidth: .infinity)
-
+                
                 Text(post.studyLevel.rawValue.capitalized + " level")
                     .font(.body)
                     .fontWeight(.medium)
                     .foregroundStyle(post.studyLevel.color)
                     .frame(maxWidth: .infinity)
-
             }
             .padding(.vertical, 8)
         }
@@ -202,7 +201,7 @@ struct PostDetailsView: View {
             {
                 dismiss()
             }
-
+            
             ShareLink(item: validPost.urlString) {
                 Image(systemName: "square.and.arrow.up")
                     .font(.headline)
@@ -222,7 +221,7 @@ struct PostDetailsView: View {
             {
                 vm.favoriteToggle(post: validPost)
             }
-
+            
             CircleStrokeButtonView(
                 iconName: "pencil",
                 isShownCircle: false)
@@ -240,13 +239,13 @@ fileprivate struct PostDetailsPreView: View {
             PostDetailsView(postId: DevPreview.samplePosts.first!.id)
                 .environmentObject(createPreviewViewModel())
         }
-            }
+    }
     private func createPreviewViewModel() -> PostsViewModel {
         let viewModel = PostsViewModel()
         viewModel.allPosts = DevPreview.samplePosts
         return viewModel
     }
-
+    
 }
 
 #Preview {

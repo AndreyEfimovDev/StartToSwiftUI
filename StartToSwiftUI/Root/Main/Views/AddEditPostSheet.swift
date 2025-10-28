@@ -91,7 +91,6 @@ struct AddEditPostSheet: View {
                     introSection
                     authorSection
                     urlSection
-//                    languageSection
                     postDateSection
                     typeSection
                     platformSection
@@ -101,39 +100,12 @@ struct AddEditPostSheet: View {
                 } // ScrollView
                 .foregroundStyle(Color.mycolor.myAccent)
                 .padding(.horizontal, 8)
-            } // VStack
+            }
             .navigationTitle(viewTitle)
             .background(Color.mycolor.myBackground)
             .scrollIndicators(.hidden)
             .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    CircleStrokeButtonView(
-                        iconName: "checkmark",
-                        isShownCircle: false)
-                    {
-                        checkPostAndSave()
-                    }
-                    .alert(isPresented: $showAlert) {
-                        getAlert(
-                            alertTitle: alertTitle,
-                            alertMessage: alertMessage)
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) { //
-                    CircleStrokeButtonView(
-                        iconName: "xmark",
-                        isIconColorToChange: true,
-                        imageColorSecondary: Color.mycolor.myRed,
-                        isShownCircle: false)
-                    {
-                        hapticManager.notification(type: .warning)
-                        focusedFieldSaved = focusedField ?? nil
-                        focusedField = nil
-                        isShowingMenuConfirmation = true
-                    }
-                }
-            }
+            .toolbar { toolbarForAddEditView() }
             .overlay(
                 hideKeybordButton
             )
@@ -142,12 +114,42 @@ struct AddEditPostSheet: View {
             focusedField = .postTitle
         }
         .overlay (
-            menuConfitmation
+            exitMenuConfirmation
         )
             
     }
     
-    // MARK: ViewBuilders
+    // MARK: Subviews
+    
+    @ToolbarContentBuilder
+    private func toolbarForAddEditView() -> some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            CircleStrokeButtonView(
+                iconName: "checkmark",
+                isShownCircle: false)
+            {
+                checkPostAndSave()
+            }
+            .alert(isPresented: $showAlert) {
+                getAlert(
+                    alertTitle: alertTitle,
+                    alertMessage: alertMessage)
+            }
+        }
+        ToolbarItem(placement: .topBarTrailing) { //
+            CircleStrokeButtonView(
+                iconName: "xmark",
+                isIconColorToChange: true,
+                imageColorSecondary: Color.mycolor.myRed,
+                isShownCircle: false)
+            {
+                hapticManager.notification(type: .warning)
+                focusedFieldSaved = focusedField ?? nil
+                focusedField = nil
+                isShowingMenuConfirmation = true
+            }
+        }
+    }
     
     @ViewBuilder
     private func textEditorRightButton(
@@ -169,10 +171,7 @@ struct AddEditPostSheet: View {
         }
     }
     
-    // MARK: Subviews
-    
     private var titleSection: some View {
-        
         VStack(alignment: .leading, spacing: 0) {
             Text("Title")
                 .textCase(.uppercase)
@@ -202,7 +201,6 @@ struct AddEditPostSheet: View {
     }
     
     private var introSection: some View {
-        
         VStack(alignment: .leading, spacing: 0) {
             Text("Intro")
                 .textCase(.uppercase)
@@ -268,7 +266,6 @@ struct AddEditPostSheet: View {
     }
         
     private var urlSection: some View {
-        
         VStack(alignment: .leading, spacing: 0) {
             Text("URL")
                 .sectionSubheaderFormater(
@@ -297,40 +294,7 @@ struct AddEditPostSheet: View {
         }
     }
     
-//    private var languageSection: some View {
-//        
-//        VStack(alignment: .leading, spacing: 0) {
-//            Text("Language")
-//                .textCase(.uppercase)
-//                .sectionSubheaderFormater(
-//                    fontSubheader: fontSubheader,
-//                    colorSubheader: colorSubheader
-//                )
-//            HStack {
-//                Text("Select Language:")
-//                    .font(fontTextInput)
-//                    .padding(.leading, 5)
-//                Spacer()
-//                Picker("", selection: $editedPost.postLanguage) {
-//                    ForEach(LanguageOptions.allCases, id: \.self) { language in
-//                        Text(language.displayName)
-//                            .tag(language)
-//                            .foregroundColor(Color.mycolor.myBlue)
-//                    }
-//                }
-//                .pickerStyle(.menu)
-//                .tint(Color.mycolor.myBlue)
-//                .frame(height: 50)
-//            }
-//            .background(
-//                sectionBackground,
-//                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
-//            )
-//        }
-//    }
-    
     private var postDateSection: some View {
-        
         VStack(alignment: .leading, spacing: 0) {
             Text("Post Date")
                 .textCase(.uppercase)
@@ -360,7 +324,6 @@ struct AddEditPostSheet: View {
     }
     
     private var typeSection: some View {
-        
         VStack(alignment: .leading, spacing: 0) {
             Text("Post Type")
                 .textCase(.uppercase)
@@ -385,7 +348,6 @@ struct AddEditPostSheet: View {
     }
     
     private var platformSection: some View {
-        
         VStack(alignment: .leading, spacing: 0) {
             Text("Platform")
                 .textCase(.uppercase)
@@ -408,7 +370,6 @@ struct AddEditPostSheet: View {
     }
     
     private var studyLevelSection: some View {
-        
         VStack(alignment: .leading, spacing: 0) {
             Text("Study Level")
                 .textCase(.uppercase)
@@ -431,7 +392,6 @@ struct AddEditPostSheet: View {
     }
     
     private var favoviteChoiceSection: some View {
-        
         VStack(alignment: .leading, spacing: 0) {
             Text("Favorite")
                 .textCase(.uppercase)
@@ -456,9 +416,7 @@ struct AddEditPostSheet: View {
         }
     }
     
-    
     private var addInforSection: some View {
-        
         VStack(alignment: .leading, spacing: 0) {
             Text("Additional Information")
                 .textCase(.uppercase)
@@ -495,7 +453,6 @@ struct AddEditPostSheet: View {
     }
     
     private var hideKeybordButton: some View {
-        
         Group {
             if focusedField != nil {
                 VStack {
@@ -520,7 +477,7 @@ struct AddEditPostSheet: View {
         .animation(.easeInOut(duration: 0.3), value: focusedField != nil)
     }
     
-    private var menuConfitmation: some View {
+    private var exitMenuConfirmation: some View {
         Group {
             if isShowingMenuConfirmation {
                 ZStack {

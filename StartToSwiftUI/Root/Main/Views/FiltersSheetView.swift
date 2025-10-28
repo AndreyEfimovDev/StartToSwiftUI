@@ -24,18 +24,8 @@ struct FiltersSheetView: View {
     var body: some View {
         
         VStack {
-            ZStack {
-                Capsule()
-                    .fill(Color.mycolor.myBackground)
-                    .overlay(
-                        Capsule()
-                            .stroke(Color.mycolor.myAccent.opacity(0.5), lineWidth: 1)
-                    )
-                    .frame(width: 100, height: 3)
-                    .frame(height: 30, alignment: .top)
-                    .padding(.bottom, 15)
-            }
-            .padding(.top, 5)
+            
+            drugHundler
             
             VStack (alignment: .leading) {
                 Text("Filters")
@@ -45,7 +35,9 @@ struct FiltersSheetView: View {
                 favoriteFilter
                 typeFilter
                 yearFilter
-                    .padding(.bottom, 50)
+                
+                Spacer()
+                
                 resetAllFiltersButton
                 resetAllFiltersAndExitButton
             }
@@ -62,7 +54,20 @@ struct FiltersSheetView: View {
         }
     }
     
-    // MARK: VAR VIEWS
+    // MARK: Subviews
+    
+    private var drugHundler: some View {
+        Capsule()
+            .fill(Color.mycolor.myBackground)
+            .overlay(
+                Capsule()
+                    .stroke(Color.mycolor.myAccent.opacity(0.5), lineWidth: 1)
+            )
+            .frame(width: 100, height: 3)
+            .frame(height: 30, alignment: .top)
+            .padding(.top, 10)
+            .padding(.bottom, 15)
+    }
     
     private var studyLevelFilter: some View {
         VStack {
