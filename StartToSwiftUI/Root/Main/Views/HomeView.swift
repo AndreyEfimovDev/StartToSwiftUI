@@ -97,17 +97,13 @@ struct HomeView: View {
     }
     
     
-    // MARK: VAR VIEWS
+    // MARK: Subviews
     
     private var viewBody: some View {
         ScrollViewReader { proxy in
             ZStack (alignment: .bottomTrailing) {
                 if searchedPosts.isEmpty {
-                    ContentUnavailableView(
-                        "No Posts Stored",
-                        systemImage: "tray.and.arrow.down",
-                        description: Text("You should go to Preferences to upload posts")
-                    )
+                    postsIsEmpty
                 } else {
                     List {
                         ForEach(searchedPosts) { post in
@@ -129,14 +125,12 @@ struct HomeView: View {
                                         selectedPostToDelete = post
                                         hapticManager.notification(type: .warning)
                                         isShowingDeleteConfirmation = true
-                                    }
-                                    .tint(Color.mycolor.myRed)
-                                    
+                                    }.tint(Color.mycolor.myRed)
+
                                     Button("Edit", systemImage: "pencil") {
                                         selectedPost = post
                                     }
                                     .tint(Color.mycolor.myBlue)
-                                    
                                 } //swipeActions
                                 .swipeActions(edge: .leading, allowsFullSwipe: false) {
                                     Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: "star.fill") {
@@ -145,10 +139,9 @@ struct HomeView: View {
                                     .tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondaryText : Color.mycolor.myYellow)
                                 } //swipeActions
                         } // ForEach
-                        //                        .buttonStyle(.plain) // it makes the buttons accessable
+                        // .buttonStyle(.plain) // it makes the buttons accessable
                     } // List
                     .listStyle(.plain)
-                    //                    .scrollIndicators(.hidden)
                     .background(Color.mycolor.myBackground)
                     
                     if showOnTopButton {
@@ -171,6 +164,14 @@ struct HomeView: View {
         } // ScrollViewReader
     }
     
+    private var postsIsEmpty: some View {
+        ContentUnavailableView(
+            "No Posts Stored",
+            systemImage: "tray.and.arrow.down",
+            description: Text("You should go to Preferences to upload posts")
+        )
+    }
+    
     @ViewBuilder
     private func trackingFistPostInList(post: Post) -> some View {
         GeometryReader { geo in
@@ -184,33 +185,31 @@ struct HomeView: View {
         }
     }
     
-//    @ToolbarContentBuilder
+    @ToolbarContentBuilder
     private func toolbarForMainViewBody() -> some ToolbarContent {
-        Group {
-            ToolbarItem(placement: .navigationBarLeading) {
-                CircleStrokeButtonView(
-                    iconName: "gearshape",
-                    isShownCircle: false)
-                {
-                    showPreferancesView.toggle()
-                }
+        ToolbarItem(placement: .navigationBarLeading) {
+            CircleStrokeButtonView(
+                iconName: "gearshape",
+                isShownCircle: false)
+            {
+                showPreferancesView.toggle()
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                CircleStrokeButtonView(
-                    iconName: "plus",
-                    isShownCircle: false)
-                {
-                    showAddPostView.toggle()
-                }
+        }
+        ToolbarItem(placement: .navigationBarTrailing) {
+            CircleStrokeButtonView(
+                iconName: "plus",
+                isShownCircle: false)
+            {
+                showAddPostView.toggle()
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                CircleStrokeButtonView(
-                    iconName: "line.3.horizontal.decrease",
-                    isIconColorToChange: !vm.isFiltersEmpty,
-                    isShownCircle: false)
-                {
-                    isFilterButtonPressed.toggle()}
-            }
+        }
+        ToolbarItem(placement: .navigationBarTrailing) {
+            CircleStrokeButtonView(
+                iconName: "line.3.horizontal.decrease",
+                isIconColorToChange: !vm.isFiltersEmpty,
+                isShownCircle: false)
+            {
+                isFilterButtonPressed.toggle()}
         }
     }
     
