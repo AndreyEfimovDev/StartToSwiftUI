@@ -37,7 +37,9 @@ struct PreferencesView: View {
                     notificationSetting
                 }
                 Section(header: sectionHeader("Managing posts (\(postsCount))")) {
-                    checkForPostsUpdate
+                    if !vm.allPosts.isEmpty {
+                        checkForPostsUpdate
+                    }
                     importFromCloud
                     shareBackup
                     restoreBackup

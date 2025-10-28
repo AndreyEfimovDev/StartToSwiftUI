@@ -18,6 +18,8 @@ class PostsViewModel: ObservableObject {
     @Published var searchText: String = ""
     @Published var isFiltersEmpty: Bool = true
     
+    @State var showLaunchView: Bool = true
+    
     // stored filters
     @AppStorage("storedLevel") var storedLevel: StudyLevel?
     @AppStorage("storedFavorite") var storedFavorite: FavoriteChoice?
