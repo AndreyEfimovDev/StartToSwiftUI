@@ -96,7 +96,6 @@ struct HomeView: View {
         }
     }
     
-    
     // MARK: Subviews
     
     private var viewBody: some View {
@@ -131,13 +130,13 @@ struct HomeView: View {
                                         selectedPost = post
                                     }
                                     .tint(Color.mycolor.myBlue)
-                                } //swipeActions
+                                } // right side swipe action buttonss
                                 .swipeActions(edge: .leading, allowsFullSwipe: false) {
                                     Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: "star.fill") {
                                         vm.favoriteToggle(post: post)
                                     }
                                     .tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondaryText : Color.mycolor.myYellow)
-                                } //swipeActions
+                                } // lefut side swipe action buttonss
                         } // ForEach
                         // .buttonStyle(.plain) // it makes the buttons accessable
                     } // List
@@ -283,7 +282,6 @@ struct HomeView: View {
         } // VStack: Deletion confirmation dialog
     }
 }
-
 
 #Preview {
     HomeView()
