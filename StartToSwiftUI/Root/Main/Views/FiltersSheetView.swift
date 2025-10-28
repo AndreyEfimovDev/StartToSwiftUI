@@ -43,7 +43,6 @@ struct FiltersSheetView: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                 studyLevelFilter
                 favoriteFilter
-//                languageFilter
                 typeFilter
                 yearFilter
                     .padding(.bottom, 50)
@@ -88,7 +87,7 @@ struct FiltersSheetView: View {
     
     private var favoriteFilter: some View {
         VStack {
-            Text("Favorite")
+            Text("Favorite:")
                 .font(.footnote)
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -106,27 +105,6 @@ struct FiltersSheetView: View {
             )
         }
     }
-    
-//    private var languageFilter: some View {
-//        VStack {
-//            Text("Language:")
-//                .font(.footnote)
-//                .fontWeight(.semibold)
-//                .frame(maxWidth: .infinity, alignment: .leading)
-//            SegmentedOneLinePicker(
-//                selection: $vm.selectedLanguage,
-//                allItems: LanguageOptions.allCases,
-//                titleForCase: { $0.displayName },
-//                selectedFont: selectedFont,
-//                selectedTextColor: Color.mycolor.myBackground,
-//                unselectedTextColor: Color.mycolor.myAccent,
-//                selectedBackground: Color.mycolor.myBlue,
-//                unselectedBackground: .clear,
-//                showNilOption: true,
-//                nilTitle: "All"
-//            )
-//        }
-//    }
     
     private var typeFilter: some View {
         VStack {
