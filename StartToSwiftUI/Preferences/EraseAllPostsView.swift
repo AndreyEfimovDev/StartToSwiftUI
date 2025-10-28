@@ -64,6 +64,8 @@ struct EraseAllPostsView: View {
         }
     }
     
+    // MARK: Subviews
+
     private var textSection: some View {
         VStack(spacing: 12) {
             Text("""

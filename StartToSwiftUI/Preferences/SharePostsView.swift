@@ -51,24 +51,31 @@ struct SharePostsView: View {
         .padding(30)
         .sheet(isPresented: $showActivityView) {
             if let fileURL = fileManager.getFileURL(fileName: fileName) {
-                ActivityView(activityItems: [fileURL], applicationActivities: nil) { result in
-                    if result.completed {
-                        // Successful sharing
-                        isInProgress = false // Stop ProgressView
-                        hapticManager.notification(type: .success)
-                        isShareCompleted = true // Change Share Button status and disable it
-                        showActivityView = false // Close sheet after sharing completion
-                        print("✅ Successfully shared via: \(result.activityName)")
-                        DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                            dismiss()
-                        }
-                    } else {
-                        // Sharing is cancelled
-                        isInProgress = false // Stop ProgressView
-                        hapticManager.impact(style: .light)
-                        print("✅ Shared is cancelled.")
-                    }
+                handleDocumentSharing(fileURL: fileURL)
+            }
+        }
+    }
+    
+    // MARK: Subviews
+
+    @ViewBuilder
+    private func handleDocumentSharing(fileURL: URL) -> some View {
+        ActivityView(activityItems: [fileURL], applicationActivities: nil) { result in
+            if result.completed {
+                // Successful sharing
+                isInProgress = false 
+                hapticManager.notification(type: .success)
+                isShareCompleted = true // Change Share Button status and disable it
+                showActivityView = false // Close sheet after sharing completion
+                print("✅ Successfully shared via: \(result.activityName)")
+                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+                    dismiss()
                 }
+            } else {
+                // Sharing is cancelled
+                isInProgress = false
+                hapticManager.impact(style: .light)
+                print("✅ Shared is cancelled.")
             }
         }
     }

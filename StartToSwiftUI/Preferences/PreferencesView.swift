@@ -152,8 +152,6 @@ struct PreferencesView: View {
             iconWidth: iconWidth
         )
     }
-    
-
 }
 
 

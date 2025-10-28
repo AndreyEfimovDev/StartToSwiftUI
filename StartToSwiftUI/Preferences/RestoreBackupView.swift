@@ -73,6 +73,8 @@ struct RestoreBackupView: View {
         }
     }
     
+    // MARK: Subviews
+
     private var textSection: some View {
         Text("""
               You are about to restore posts from backup on the device.
