@@ -188,7 +188,7 @@ struct HomeView: View {
         } // NavigationStack
         .onAppear {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-            isPostsUpdateAvailable = vm.isPostsUpdateAvailable
+            vm.showLaunchView = false
         }
     }
     

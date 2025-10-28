@@ -12,6 +12,7 @@ import SwiftUI
 struct StartToSwiftUIApp: App {
     
     @StateObject private var vm = PostsViewModel()
+    @State private var showLaunchView: Bool = true
     
     init() { // to set a custom colour for the magnifying class in the search bar
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor : UIColor(Color.mycolor.myAccent)]
@@ -22,9 +23,22 @@ struct StartToSwiftUIApp: App {
     
     var body: some Scene {
         WindowGroup {
-            HomeView()
-                .environmentObject(vm)
-//            CustomSwipActionButtons()
+            ZStack{
+                ZStack {
+                    if showLaunchView {
+                        LaunchView() {
+//                            vm.showLaunchView = false
+                            showLaunchView = false
+                        }
+                        .transition(.move(edge: .leading))
+                    }
+                }
+                .zIndex(2.0)
+
+                HomeView()
+                
+            }
+            .environmentObject(vm)
         }
     }
 }
