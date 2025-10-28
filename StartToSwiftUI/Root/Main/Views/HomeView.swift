@@ -54,32 +54,7 @@ struct HomeView: View {
                     .navigationBarBackButtonHidden(true)
                     .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
                     .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            CircleStrokeButtonView(
-                                iconName: "gearshape",
-                                isShownCircle: false)
-                            {
-                                showPreferancesView.toggle()
-                            }
-                        }
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            CircleStrokeButtonView(
-                                iconName: "plus",
-                                isShownCircle: false)
-                            {
-                                showAddPostView.toggle()
-                            }
-                        }
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            CircleStrokeButtonView(
-                                iconName: "line.3.horizontal.decrease",
-                                isIconColorToChange: !vm.isFiltersEmpty,
-                                isShownCircle: false)
-                            {
-                                isFilterButtonPressed.toggle()}
-                        }
-                    }
+                    .toolbar { toolbarForMainViewBody() }
                     .safeAreaInset(edge: .top) {
                         SearchBarView(searchText: $vm.searchText)
                     }
@@ -88,19 +63,15 @@ struct HomeView: View {
                             PostDetailsView(postId: id)
                         }
                     }
-                // toolbar button "preferances"
                     .fullScreenCover(isPresented: $showPreferancesView) {
                         PreferencesView()
                     }
-                // toolbar button "+"
                     .fullScreenCover(isPresented: $showAddPostView, content: {
                         AddEditPostSheet(post: nil)
                     })
-                // swipe action Edit post
                     .fullScreenCover(item: $selectedPost, content: { post in
                         AddEditPostSheet(post: post)
                     })
-                // toolbar button "filters"
                     .sheet(isPresented: $isFilterButtonPressed) {
                         FiltersSheetView(
                             isFilterButtonPressed: $isFilterButtonPressed
@@ -110,87 +81,21 @@ struct HomeView: View {
                         .presentationDragIndicator(.automatic)
                         .presentationCornerRadius(30)
                     }
-                
                 // Updates available dialog
                 if isPostsUpdateAvailable && vm.isNotification {
-                    VStack {
-                        ZStack {
-                        Color.mycolor.myAccent.opacity(0.4)
-                            .ignoresSafeArea()
-                        
-                            VStack(spacing: 20) {
-                                Text("Posts update is available")
-                                    .textCase(.uppercase)
-                                    .font(.headline)
-                                    .bold()
-                                    .foregroundColor(Color.mycolor.myRed)
-                                
-                                Text("You can go to Preferenses for updates.")
-                                    .font(.subheadline)
-                                    .multilineTextAlignment(.center)
-                                    .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
-                                ClearCupsuleButton(
-                                    primaryTitle: "OK",
-                                    primaryTitleColor: Color.mycolor.myGreen) {
-                                        vm.isPostsUpdateAvailable = false
-                                        isPostsUpdateAvailable = false
-                                    }
-                            }
-                            .padding()
-                            .background(.regularMaterial)
-                            .cornerRadius(30)
-                            .padding(.horizontal, 40)
-                        }
-                    } // VStack: Deletion confirmation dialog
-                } // IF: Deletion confirmation dialog
-                
-                
+                    updateAvailableDialog
+                }
                 // Deletion confirmation dialog
                 if isShowingDeleteConfirmation {
-                    VStack {
-                        ZStack {
-                        Color.mycolor.myAccent.opacity(0.4)
-                            .ignoresSafeArea()
-                        
-                            VStack(spacing: 20) {
-                                Text("DELETE THE POST?")
-                                    .font(.headline)
-                                    .bold()
-                                    .foregroundColor(Color.mycolor.myRed)
-                                
-                                Text("Please confirm the deletion of the post?")
-                                    .font(.subheadline)
-                                    .multilineTextAlignment(.center)
-                                    .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
-                                ClearCupsuleButton(
-                                    primaryTitle: "Yes",
-                                    primaryTitleColor: Color.mycolor.myRed) {
-                                        vm.deletePost(post: selectedPostToDelete ?? nil)
-                                        hapticManager.notification(type: .success)
-                                        isShowingDeleteConfirmation = false
-                                    }
-
-                                ClearCupsuleButton(
-                                    primaryTitle: "No",
-                                    primaryTitleColor: Color.mycolor.myGreen) {
-                                        isShowingDeleteConfirmation = false
-                                    }
-                            }
-                            .padding()
-                            .background(.regularMaterial)
-                            .cornerRadius(30)
-                            .padding(.horizontal, 40)
-                        }
-                    } // VStack: Deletion confirmation dialog
-                } // IF: Deletion confirmation dialog
-                
+                    deletionConfirmationDialog
+                }
             } // ZStack
         } // NavigationStack
         .onAppear {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-            vm.showLaunchView = false
         }
     }
+    
     
     // MARK: VAR VIEWS
     
@@ -208,17 +113,7 @@ struct HomeView: View {
                         ForEach(searchedPosts) { post in
                             PostRowView(post: post)
                                 .id(post.id)
-                                .background(
-                                    GeometryReader { geo in
-                                        Color.clear
-                                            .onChange(of: geo.frame(in: .global).minY) { oldY, newY in
-                                                // Track first element position
-                                                if post.id == vm.filteredPosts.first?.id {
-                                                    showOnTopButton = newY < 0
-                                                }
-                                            }
-                                    }
-                                )
+                                .background(trackingFistPostInList(post: post))
                                 .padding(.bottom, 4)
                                 .listRowSeparator(.hidden)
                                 .listRowBackground(Color.clear)
@@ -236,7 +131,7 @@ struct HomeView: View {
                                         isShowingDeleteConfirmation = true
                                     }
                                     .tint(Color.mycolor.myRed)
-
+                                    
                                     Button("Edit", systemImage: "pencil") {
                                         selectedPost = post
                                     }
@@ -250,11 +145,12 @@ struct HomeView: View {
                                     .tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondaryText : Color.mycolor.myYellow)
                                 } //swipeActions
                         } // ForEach
-//                        .buttonStyle(.plain) // it makes the buttons accessable
+                        //                        .buttonStyle(.plain) // it makes the buttons accessable
                     } // List
                     .listStyle(.plain)
-//                    .scrollIndicators(.hidden)
+                    //                    .scrollIndicators(.hidden)
                     .background(Color.mycolor.myBackground)
+                    
                     if showOnTopButton {
                         CircleStrokeButtonView(
                             iconName: "control", // control arrow.up
@@ -273,6 +169,119 @@ struct HomeView: View {
                 }
             } // ZStack
         } // ScrollViewReader
+    }
+    
+    @ViewBuilder
+    private func trackingFistPostInList(post: Post) -> some View {
+        GeometryReader { geo in
+            Color.clear
+                .onChange(of: geo.frame(in: .global).minY) { oldY, newY in
+                    // Track first element position
+                    if post.id == vm.filteredPosts.first?.id {
+                        showOnTopButton = newY < 0
+                    }
+                }
+        }
+    }
+    
+//    @ToolbarContentBuilder
+    private func toolbarForMainViewBody() -> some ToolbarContent {
+        Group {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(
+                    iconName: "gearshape",
+                    isShownCircle: false)
+                {
+                    showPreferancesView.toggle()
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                CircleStrokeButtonView(
+                    iconName: "plus",
+                    isShownCircle: false)
+                {
+                    showAddPostView.toggle()
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                CircleStrokeButtonView(
+                    iconName: "line.3.horizontal.decrease",
+                    isIconColorToChange: !vm.isFiltersEmpty,
+                    isShownCircle: false)
+                {
+                    isFilterButtonPressed.toggle()}
+            }
+        }
+    }
+    
+    private var updateAvailableDialog: some View {
+        VStack {
+            ZStack {
+                Color.mycolor.myAccent.opacity(0.4)
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 20) {
+                    Text("Posts update is available")
+                        .textCase(.uppercase)
+                        .font(.headline)
+                        .bold()
+                        .foregroundColor(Color.mycolor.myRed)
+                    
+                    Text("You can go to Preferenses for updates.")
+                        .font(.subheadline)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
+                    ClearCupsuleButton(
+                        primaryTitle: "OK",
+                        primaryTitleColor: Color.mycolor.myGreen) {
+                            vm.isPostsUpdateAvailable = false
+                            isPostsUpdateAvailable = false
+                        }
+                }
+                .padding()
+                .background(.regularMaterial)
+                .cornerRadius(30)
+                .padding(.horizontal, 40)
+            }
+        } // VStack: Deletion confirmation dialog
+    }
+    
+    private var deletionConfirmationDialog: some View {
+        VStack {
+            ZStack {
+                Color.mycolor.myAccent.opacity(0.4)
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 20) {
+                    Text("DELETE THE POST?")
+                        .font(.headline)
+                        .bold()
+                        .foregroundColor(Color.mycolor.myRed)
+                    
+                    Text("Please confirm the deletion of the post?")
+                        .font(.subheadline)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
+                    ClearCupsuleButton(
+                        primaryTitle: "Yes",
+                        primaryTitleColor: Color.mycolor.myRed) {
+                            vm.deletePost(post: selectedPostToDelete ?? nil)
+                            hapticManager.notification(type: .success)
+                            isShowingDeleteConfirmation = false
+                        }
+                    
+                    ClearCupsuleButton(
+                        primaryTitle: "No",
+                        primaryTitleColor: Color.mycolor.myGreen) {
+                            isShowingDeleteConfirmation = false
+                        }
+                }
+                .padding()
+                .background(.regularMaterial)
+                .cornerRadius(30)
+                .padding(.horizontal, 40)
+            }
+        } // VStack: Deletion confirmation dialog
     }
 }
 
