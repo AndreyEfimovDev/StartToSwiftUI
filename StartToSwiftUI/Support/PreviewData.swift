@@ -755,7 +755,7 @@ struct DevPreview {
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
             postDate: Date.from(year: 2021, month: 8, day: 30),
             studyLevel: .advanced),
-// 2025-10-26
+// 2025-10-26 DONE
         Post(
             title: "Tips to Git",
             intro: """
@@ -766,7 +766,7 @@ struct DevPreview {
             urlString: "https://www.atlassian.com/git/tutorials",
             postDate: nil,
             studyLevel: .beginner),
-// 2025-10-27
+// 2025-10-27 DONE
         Post(
             title: "Combine – швейцарский нож iOS-разработчика. Или нет?",
             intro: """
@@ -820,7 +820,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2020, month: 9, day: 27),
             studyLevel: .beginner),
-// 2025-10-27
+// 2025-10-28
         Post(
             title: "How to use AnyLayout in SwiftUI | Bootcamp #70",
             intro: """
@@ -888,6 +888,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2021, month: 12, day: 7),
             studyLevel: .beginner),
+// 2025-10-29
         
     ]
     

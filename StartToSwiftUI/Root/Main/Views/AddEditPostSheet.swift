@@ -116,7 +116,6 @@ struct AddEditPostSheet: View {
         .overlay (
             exitMenuConfirmation
         )
-            
     }
     
     // MARK: Subviews
