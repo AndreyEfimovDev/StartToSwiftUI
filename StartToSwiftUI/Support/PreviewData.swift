@@ -820,7 +820,74 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2020, month: 9, day: 27),
             studyLevel: .beginner),
-        
+// 2025-10-27
+        Post(
+            title: "How to use AnyLayout in SwiftUI | Bootcamp #70",
+            intro: """
+                This video introduces AnyLayout, which allows us to customize the layout of our Views. This is similar to using an HStack or VStack, except gives us additional capabilities to customize the View for different environments or settings.
+                """,
+            author: "Swiftful Thinking",
+            postType: .post,
+            urlString: "https://www.youtube.com/watch?v=7BAW70amSCA&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=73",
+            postPlatform: .website,
+            postDate: Date.from(year: 2023, month: 11, day: 9),
+            studyLevel: .beginner),
+        Post(
+            title: "How to use ViewThatFits in SwiftUI | Bootcamp #71",
+            intro: """
+                In this video, we'll learn how to use ViewThatFits to add custom View rendering into our application! This allows us to dynamically change the "View" to the best "fit" for the current frame. This is especially helpful when displaying on devices with different screen sizes.
+                """,
+            author: "Swiftful Thinking",
+            postType: .post,
+            urlString: "https://www.youtube.com/watch?v=oN3Rqo6V6Uc&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=74",
+            postPlatform: .website,
+            postDate: Date.from(year: 2021, month: 11, day: 14),
+            studyLevel: .beginner),
+        Post(
+            title: "How to use ControlGroup in SwiftUI | Bootcamp #75",
+            intro: """
+                Explore ControlGroup in SwiftUI to efficiently organize UI controls in your iOS and macOS apps. This video covers how to use ControlGroup for grouping related user interface elements, improving both the design and functionality of your applications. Essential for developers looking to enhance their SwiftUI projects.
+                """,
+            author: "Swiftful Thinking",
+            postType: .post,
+            urlString: "https://www.youtube.com/watch?v=oN3Rqo6V6Uc&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=74",
+            postPlatform: .website,
+            postDate: Date.from(year: 2024, month: 02, day: 26),
+            studyLevel: .beginner),
+
+        Post(
+            title: "How to make a reusable ActionSheet in SwiftUI | Bootcamp #33",
+            intro: """
+                The Action Sheet is a super convenient component in SwiftUI that presents a message and buttons to our users. Implementing an .actionSheet() is very similar to the .alert() which we learned the last video of the SwiftUI Bootcamp, however, the action sheet pops up from the bottom and can support more than 2 buttons! In this video we will learn how to implement and customize the .actionSheet to make it adaptable and dynamic.
+                """,
+            author: "Swiftful Thinking",
+            postType: .post,
+            urlString: "https://www.youtube.com/watch?v=tNwnihqJf2I&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=36",
+            postPlatform: .website,
+            postDate: Date.from(year: 2021, month: 2, day: 21),
+            studyLevel: .beginner),
+        Post(
+            title: "How to safely unwrap optionals in Swift with if-let and guard statements | Bootcamp #47",
+            intro: """
+                In almost every application there are cases where you will declare variables as optional. In Swift we declare a value as optional be using the ?. When we do this, we are telling Xcode that this variable has the potential to be nil (or without a value). Therefore, when we go to use that variable in our code, we need to safely check whether or not it really has a value at that time. Two of the smartest and safest ways to safely "unwrap" these optionals is be using 'if let' and 'guard' statements. In this video we will learn both! It should be noted that both of these methods are MUCH safer than explicitly unwrapping optionals by using the ! symbol (avoid this!).
+                """,
+            author: "Swiftful Thinking",
+            postType: .post,
+            urlString: "https://www.youtube.com/watch?v=wmQIl0O9HBY&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=50",
+            postPlatform: .website,
+            postDate: Date.from(year: 2021, month: 3, day: 7),
+            studyLevel: .beginner),
+        Post(
+            title: "How to select text with TextSelection in SwiftUI | Bootcamp #56",
+            intro: """
+                One of the most underrated features released in iOS 15 is the ability to let users select and copy text in SwiftUI. In this quick video, we will learn how to use the .textSelection modifier! This feature probably did not need it's own video, but I think it's a pretty important feature to know about. This is great for chat apps or any content-based app where users might want to share some text with a friend. Sharing is not only a great feature for your users, but will help drive organic growth as users share with others.
+                """,
+            author: "Swiftful Thinking",
+            postType: .post,
+            urlString: "https://www.youtube.com/watch?v=AiSLtya25ac&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=59",
+            postPlatform: .website,
+            postDate: Date.from(year: 2021, month: 12, day: 7),
+            studyLevel: .beginner),
         
     ]
     
