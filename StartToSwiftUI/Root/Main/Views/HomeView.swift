@@ -28,7 +28,7 @@ struct HomeView: View {
     @State private var isFilterButtonPressed: Bool = false
     
     @State private var isShowingDeleteConfirmation: Bool = false
-    @State private var isPostsUpdateAvailable: Bool = false
+//    @State private var isPostsUpdateAvailable: Bool = false
     
     private var searchedPosts: [Post] {
         if vm.searchText.isEmpty {
@@ -49,6 +49,13 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ZStack {
+                
+                // Updates available dialog
+                if vm.isPostsUpdateAvailable && vm.isNotification {
+                    updateAvailableDialog
+                        .zIndex(1)
+                }
+
                 viewBody
                     .navigationTitle("SwiftUI posts")
                     .navigationBarBackButtonHidden(true)
@@ -81,10 +88,7 @@ struct HomeView: View {
                         .presentationDragIndicator(.automatic)
                         .presentationCornerRadius(30)
                     }
-                // Updates available dialog
-                if isPostsUpdateAvailable && vm.isNotification {
-                    updateAvailableDialog
-                }
+
                 // Deletion confirmation dialog
                 if isShowingDeleteConfirmation {
                     deletionConfirmationDialog
@@ -213,9 +217,8 @@ struct HomeView: View {
     }
     
     private var updateAvailableDialog: some View {
-        VStack {
             ZStack {
-                Color.mycolor.myAccent.opacity(0.4)
+                Color.clear
                     .ignoresSafeArea()
                 
                 VStack(spacing: 20) {
@@ -233,7 +236,6 @@ struct HomeView: View {
                         primaryTitle: "OK",
                         primaryTitleColor: Color.mycolor.myGreen) {
                             vm.isPostsUpdateAvailable = false
-                            isPostsUpdateAvailable = false
                         }
                 }
                 .padding()
@@ -241,11 +243,9 @@ struct HomeView: View {
                 .cornerRadius(30)
                 .padding(.horizontal, 40)
             }
-        } // VStack: Deletion confirmation dialog
     }
     
     private var deletionConfirmationDialog: some View {
-        VStack {
             ZStack {
                 Color.mycolor.myAccent.opacity(0.4)
                     .ignoresSafeArea()
@@ -279,7 +279,6 @@ struct HomeView: View {
                 .cornerRadius(30)
                 .padding(.horizontal, 40)
             }
-        } // VStack: Deletion confirmation dialog
     }
 }
 

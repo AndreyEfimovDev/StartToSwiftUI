@@ -40,10 +40,10 @@ class PostsViewModel: ObservableObject {
     
     // stored preferances
     @AppStorage("isNotification") var isNotification: Bool = false
-    
     // stored a date of dateStamp of the Cloud posts imported
     @AppStorage("localLastUpdated") var localLastUpdated: Date = (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date())
-    
+    @Published var isPostsUpdateAvailable: Bool = false
+
     // set filters
     @Published var selectedLevel: StudyLevel? = nil {
         didSet { storedLevel = selectedLevel }}
@@ -57,8 +57,8 @@ class PostsViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private let fileManager = FileStorageService.shared
     private let hapticManager = HapticManager.shared
-    
     private let networkService = NetworkService()
+    
     @Published var isLoadingFromCloud = false
     @Published var cloudImportError: String?
     @Published var showCloudImportAlert = false
@@ -66,8 +66,6 @@ class PostsViewModel: ObservableObject {
     private var utcCalendar = Calendar.current
     var listOfYearsInPosts: [String]? = nil
     var dispatchTime: DispatchTime { .now() + 2 }
-    
-    var isPostsUpdateAvailable: Bool = false
     
     // MARK: INIT() SECTION
     
@@ -79,11 +77,11 @@ class PostsViewModel: ObservableObject {
         if !self.allPosts.isEmpty {
             self.listOfYearsInPosts = getListOfPostedYearsOfPosts()
             
-            // Check if posts update is available
             checkCloudForUpdates { hasUpdates in
                 if hasUpdates {
                     self.isPostsUpdateAvailable = true
-                    print("VM(init): Posts update is available")
+                    print("VM(appear): Posts update is available")
+                    print(self.isPostsUpdateAvailable.description)
                 }
             }
         }
