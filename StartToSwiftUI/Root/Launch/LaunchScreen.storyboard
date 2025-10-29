@@ -25,7 +25,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J3r-5b-2fa">
                                 <rect key="frame" x="0.0" y="118" width="393" height="666"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="StartToSwiftUI_icon_any_1024" translatesAutoresizingMaskIntoConstraints="NO" id="Y54-28-a8V">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="StartToSwiftUI_icon_any_1024blue" translatesAutoresizingMaskIntoConstraints="NO" id="Y54-28-a8V">
                                         <rect key="frame" x="96.666666666666686" y="233" width="200" height="200"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="200" id="Hxj-wf-JCY"/>
@@ -59,7 +59,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="StartToSwiftUI_icon_any_1024" width="1024" height="1024"/>
+        <image name="StartToSwiftUI_icon_any_1024blue" width="1024" height="1024"/>
         <namedColor name="LaunchBackgroundColor">
             <color red="0.95899999141693115" green="0.95899999141693115" blue="0.95999997854232788" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
