@@ -14,10 +14,10 @@ struct CheckForPostsUpdateView: View {
     private let hapticManager = HapticManager.shared
     private let selectedURL = Constants.cloudPostsURL
     
-    @State private var followingText: String = "Checking for posts updates"
-    @State private var buttonFirstText: String = "Check for updates"
+    @State private var followingText: String = "Checking for updates..."
     @State private var followingTextColor: Color = Color.mycolor.myAccent
-    @State private var isInProgress: Bool = true
+    
+    @State private var isInProgress: Bool = false
     @State private var isPostsUpdateAvailable: Bool = false
     @State private var isPostsUpdated: Bool = false
     @State private var isImported: Bool = false
@@ -29,8 +29,8 @@ struct CheckForPostsUpdateView: View {
                 Form {
                     section_1
                     section_2
-                } // Form
-            } // VStack
+                }
+            }
             .onAppear {
                 checkForUpdates()
             }
@@ -73,7 +73,7 @@ struct CheckForPostsUpdateView: View {
             
             if !isPostsUpdated {
                 CapsuleButtonView(
-                    primaryTitle: buttonFirstText,
+                    primaryTitle: "Update now",
                     secondaryTitle: "Imported \(postCount) posts",
                     isToChangeTitile: isImported) {
                         
@@ -110,25 +110,18 @@ struct CheckForPostsUpdateView: View {
     
     
     // MARK: Functions
-
-    private func sectionHeader(_ text: String) -> some View {
-        Text(text)
-            .foregroundStyle(Color.mycolor.myAccent)
-            .textCase(.uppercase)
-    }
     
     private func checkForUpdates() {
         vm.checkCloudForUpdates { hasUpdates in
             if hasUpdates {
-                followingText = "Updates available"
+                followingText = "Updates available!"
                 followingTextColor = Color.mycolor.myRed
-                buttonFirstText = "Update"
                 isPostsUpdateAvailable = true
                 isInProgress = false
                 print("Updates available")
                 
             } else {
-                followingText = "Posts are up to date"
+                followingText = "No update available"
                 followingTextColor = Color.mycolor.myGreen
                 isPostsUpdateAvailable = false
                 isPostsUpdated = true
