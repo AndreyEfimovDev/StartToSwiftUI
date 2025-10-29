@@ -38,13 +38,14 @@ class PostsViewModel: ObservableObject {
     @AppStorage("favoriteChoicePostSaved") var favoriteChoicePostSaved: FavoriteChoice?
     @AppStorage("additionalTextPostSaved") var additionalTextPostSaved: String?
     
-    // stored preferances
+    // MARK: Stored preferances
+    
     @AppStorage("isNotification") var isNotification: Bool = false
-    // stored a date of dateStamp of the Cloud posts imported
+    // stored the date of the Cloud posts last imported
     @AppStorage("localLastUpdated") var localLastUpdated: Date = (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date())
     @Published var isPostsUpdateAvailable: Bool = false
 
-    // set filters
+    // setting filters
     @Published var selectedLevel: StudyLevel? = nil {
         didSet { storedLevel = selectedLevel }}
     @Published var selectedFavorite: FavoriteChoice? = nil {
@@ -71,13 +72,14 @@ class PostsViewModel: ObservableObject {
     
     init() {
         
-        print("VM(init): Last update date: \(localLastUpdated)")
+        print("VM(init): Last update date: \(localLastUpdated.formatted(date: .abbreviated, time: .shortened))")
+                
         self.allPosts = fileManager.loadPosts()
         
-        // get list of years of posts
+        // getting a list of years presented in current posts and checking for updates
         if !self.allPosts.isEmpty {
-            self.listOfYearsInPosts = getListOfPostedYearsOfPosts()
             
+            self.listOfYearsInPosts = getListOfPostedYearsOfPosts()
             checkCloudForUpdates { hasUpdates in
                 if hasUpdates {
                     self.isPostsUpdateAvailable = true
@@ -92,9 +94,9 @@ class PostsViewModel: ObservableObject {
         // filters initilazation
         self.selectedLevel = self.storedLevel
         self.selectedFavorite = self.storedFavorite
+        self.selectedType = self.storedType
         self.selectedYear = self.storedYear
         self.isFiltersEmpty = checkIfAllFiltersAreEmpty()
-        
         
         if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
             utcCalendar.timeZone = utcTimeZone
@@ -103,7 +105,7 @@ class PostsViewModel: ObservableObject {
             print("❌ VM(init): TimeZone is not set")
         }
         
-        // subscription
+        // initiating subscriptions
         addSubscribers()
     }
     
@@ -113,7 +115,6 @@ class PostsViewModel: ObservableObject {
         
 //        let filters = $selectedLevel
 //            .combineLatest($selectedFavorite, $selectedType)
-        
         $selectedYear
             .combineLatest($selectedLevel, $selectedFavorite, $selectedType)
             .map {year, level, favorite, type -> [Post] in
@@ -187,7 +188,7 @@ class PostsViewModel: ObservableObject {
     
     func updatePost(_ updatedPost: Post) {
         if let index = allPosts.firstIndex(where: { $0.id == updatedPost.id }) {
-            print("✅ VM(updatePost): Updating a current post")
+            print("✅ VM(updatePost): Updating a current edited post")
             allPosts[index] = updatedPost
             listOfYearsInPosts = getListOfPostedYearsOfPosts()
             fileManager.savePosts(allPosts)
@@ -195,7 +196,6 @@ class PostsViewModel: ObservableObject {
             print("❌ VM(updatePost): Can't find the index")
         }
     }
-    
     
     func deletePost(post: Post?) {
         
@@ -233,11 +233,22 @@ class PostsViewModel: ObservableObject {
         }
     }
     
+    /// Import manually pre-saved posts mainly for the development purpose.
+    ///
+    /// Manually pre-saved posts are also used for creating remote posts in the Cloud .
+    ///
+    /// ```
+    /// loadPersistentPosts() -> Void
+    /// ```
+    ///
+    /// - Warning: This app is made for self study purpose only.
+    /// - Returns: Returns a boolean result or error within completion handler.
+
     func loadPersistentPosts(_ completion: @escaping () -> ()) {
         
-        let receivedPosts: [Post] = DevPreview.samplePosts // load MockData - to change to Networking later to load from cloud
+        let receivedPosts: [Post] = DevPreview.samplePosts
         
-        // skip posts with the same title - make posts unique by title
+        // Skipping posts with the same title - make posts unique by title
         let newPosts = receivedPosts.filter { newPost in
             !allPosts.contains(where: { $0.title == newPost.title })
         }
@@ -249,6 +260,22 @@ class PostsViewModel: ObservableObject {
         }
         completion()
     }
+    
+    /// Import posts from the Cloud using the specified URL string.
+    ///
+    /// Imported posts from the Cloud are processed as follows:
+    ///  - Only posts with unique titles are selected.
+    ///  - Only posts with unique ID are selected (just in case).
+    ///  - The selected posts are added to the current posts.
+    ///  - The date of new posts is saved for subsequent checking.
+    ///
+    ///
+    /// ```
+    /// checkCloudForUpdates() -> Void
+    /// ```
+    ///
+    /// - Warning: This app is made for self study purpose only.
+    /// - Returns: Returns a boolean result or error within completion handler.
     
     func importPostsFromCloud(urlString: String = Constants.cloudPostsURL, completion: @escaping () -> Void = {}) {
 
@@ -267,7 +294,7 @@ class PostsViewModel: ObservableObject {
                     
                     // Checking Cloud posts with the same ID to local App posts - do not append such posts from Cloud
                     let newCloudPosts2ndCheck = newCloudPosts1stCheck.filter { newPost in
-                        !(self?.allPosts.contains(where: { $0.title == newPost.title }) ?? false)
+                        !(self?.allPosts.contains(where: { $0.id == newPost.id }) ?? false)
                     }
 
                     if !newCloudPosts2ndCheck.isEmpty {
@@ -304,11 +331,21 @@ class PostsViewModel: ObservableObject {
         }
     }
     
+    /// Checking for available posts update in the Cloud.
+    ///
+    /// The result is used to check and then warn an user about an available posts update in the Cloud.
+    ///
+    /// ```
+    /// checkCloudForUpdates() -> Void
+    /// ```
+    ///
+    /// - Warning: This app is made for self study purpose only.
+    /// - Returns: Returns a boolean result or error within completion handler.
+    
     func checkCloudForUpdates(completion: @escaping (Bool) -> Void) {
         networkService.fetchCloudPosts(from: Constants.cloudPostsURL) { result in
             switch result {
             case .success(let cloudResponse):
-//                let localLastUpdated = UserDefaults.standard.object(forKey: "localLastUpdated") as? Date ?? Date.distantPast
                 let hasUpdates = cloudResponse.dateStamp > self.localLastUpdated
                 DispatchQueue.main.async {
                     completion(hasUpdates)
@@ -325,29 +362,20 @@ class PostsViewModel: ObservableObject {
         }
     }
         
-    /// Checks if a title of a post is unique.
+    /// Checking if a title of a new/editing post is not in the array of existing posts.
     ///
     /// The result is used to avoid doublied posts with the same titles.
     ///
     /// ```
-    /// checkIfAllFilterAreEmpty() -> Bool
+    /// checkNewPostForUniqueTitle() -> Bool
     /// ```
     ///
-    /// - Warning: This app is made for self study learning purpose only.
+    /// - Warning: This app is made for self study purpose only.
     /// - Returns: Returns a boolean, true if a title of a post is unique and false if not unique.
     
-    //    func checkNewPostForUniqueTitle(_ newPostTitle: String) -> Bool {
-    //
-    //        if allPosts.contains(where: { $0.title == newPostTitle }) {
-    //            return true // yes, post with the same newTitle already exists in allPosts
-    //        } else {
-    //            return false // no, newTitle is an unique title
-    //        }
-    //    }
-    
-    func checkNewPostForUniqueTitle(_ postTitle: String, excludingPostId: UUID?) -> Bool {
+    func checkNewPostForUniqueTitle(_ postTitle: String, editingPostId: UUID?) -> Bool {
         //        If there is a post with the same title and its id is not equal to excludingPostId, then the title is not unique
-        return allPosts.contains(where: { $0.title == postTitle && $0.id != excludingPostId })
+        return allPosts.contains(where: { $0.title == postTitle && $0.id != editingPostId })
         
         //        if allPosts.contains(where: { $0.title == postTitle && $0.id != excludingPostId }) {
         //            return true
@@ -367,7 +395,7 @@ class PostsViewModel: ObservableObject {
     /// checkIfAllFilterAreEmpty() -> Bool
     /// ```
     ///
-    /// - Warning: This app is made for self study learning purpose only.
+    /// - Warning: This app is made for self study purpose only.
     /// - Returns: Returns a boolean, true if all filters are not set (nil) and false if at least one is set.
     ///
     func checkIfAllFiltersAreEmpty() -> Bool {
@@ -383,7 +411,7 @@ class PostsViewModel: ObservableObject {
         }
     }
     
-    /// Gets a list of unique years presented in posts .
+    /// Gets a list of years presented in current posts.
     ///
     /// The result is used in the FilterSheetView for selecting a year for the filter.
     ///
@@ -391,8 +419,8 @@ class PostsViewModel: ObservableObject {
     /// getListOfPostedYearsOfPosts() -> [String]?
     /// ```
     ///
-    /// - Warning: This app is made for self study learning purpose only.
-    /// - Returns: Returns an array of strings with the unique values of years.
+    /// - Warning: This app is made for self study purpose only.
+    /// - Returns: Returns an array of strings with the values of years available in the current posts.
     ///
     
     private func getListOfPostedYearsOfPosts() -> [String]? {

@@ -28,7 +28,6 @@ struct HomeView: View {
     @State private var isFilterButtonPressed: Bool = false
     
     @State private var isShowingDeleteConfirmation: Bool = false
-//    @State private var isPostsUpdateAvailable: Bool = false
     
     private var searchedPosts: [Post] {
         if vm.searchText.isEmpty {
@@ -56,7 +55,7 @@ struct HomeView: View {
                         .zIndex(1)
                 }
 
-                viewBody
+                mainViewBody
                     .navigationTitle("SwiftUI posts")
                     .navigationBarBackButtonHidden(true)
                     .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
@@ -102,7 +101,7 @@ struct HomeView: View {
     
     // MARK: Subviews
     
-    private var viewBody: some View {
+    private var mainViewBody: some View {
         ScrollViewReader { proxy in
             ZStack (alignment: .bottomTrailing) {
                 if searchedPosts.isEmpty {
@@ -180,7 +179,7 @@ struct HomeView: View {
         GeometryReader { geo in
             Color.clear
                 .onChange(of: geo.frame(in: .global).minY) { oldY, newY in
-                    // Track first element position
+                    // Track first element position in the List
                     if post.id == vm.filteredPosts.first?.id {
                         showOnTopButton = newY < 0
                     }
