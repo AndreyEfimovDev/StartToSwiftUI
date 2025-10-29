@@ -28,6 +28,8 @@ struct HomeView: View {
     @State private var isFilterButtonPressed: Bool = false
     
     @State private var isShowingDeleteConfirmation: Bool = false
+    @State private var isAnyChanges: Bool = false
+
     
     private var searchedPosts: [Post] {
         if vm.searchText.isEmpty {
