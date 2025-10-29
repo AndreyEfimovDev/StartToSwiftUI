@@ -34,6 +34,7 @@
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="MeM-Vz-803" firstAttribute="centerX" secondItem="J3r-5b-2fa" secondAttribute="centerX" id="m4e-Li-9ni"/>
                                     <constraint firstItem="MeM-Vz-803" firstAttribute="centerY" secondItem="J3r-5b-2fa" secondAttribute="centerY" id="xk1-Fj-CZ9"/>
