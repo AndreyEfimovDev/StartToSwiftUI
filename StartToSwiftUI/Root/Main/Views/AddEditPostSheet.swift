@@ -562,7 +562,7 @@ struct AddEditPostSheet: View {
             alertMessage = "Please correct the Author."
             focusedField = .author
             showAlert.toggle()
-        } else if vm.checkNewPostForUniqueTitle(editedPost.title, excludingPostId: isNewPost ? nil : editedPost.id) {
+        } else if vm.checkNewPostForUniqueTitle(editedPost.title, editingPostId: isNewPost ? nil : editedPost.id) {
             alertType = .error
             alertTitle = "The Title must be unique."
             alertMessage = "Please correct the Title."
