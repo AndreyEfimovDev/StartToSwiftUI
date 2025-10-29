@@ -25,18 +25,18 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J3r-5b-2fa">
                                 <rect key="frame" x="0.0" y="118" width="393" height="666"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="StartToSwiftUI_icon_any_1024blue" translatesAutoresizingMaskIntoConstraints="NO" id="Y54-28-a8V">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="StartToSwiftUI_icon_any_1024blue" translatesAutoresizingMaskIntoConstraints="NO" id="MeM-Vz-803">
                                         <rect key="frame" x="96.666666666666686" y="233" width="200" height="200"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="200" id="Hxj-wf-JCY"/>
-                                            <constraint firstAttribute="width" constant="200" id="OBA-nS-B82"/>
+                                            <constraint firstAttribute="height" constant="200" id="NON-SW-zwk"/>
+                                            <constraint firstAttribute="width" constant="200" id="Zdr-2N-kb0"/>
                                         </constraints>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="Y54-28-a8V" firstAttribute="centerX" secondItem="J3r-5b-2fa" secondAttribute="centerX" id="V7Q-9O-2fU"/>
-                                    <constraint firstItem="Y54-28-a8V" firstAttribute="centerY" secondItem="J3r-5b-2fa" secondAttribute="centerY" id="qyB-iF-U1h"/>
+                                    <constraint firstItem="MeM-Vz-803" firstAttribute="centerX" secondItem="J3r-5b-2fa" secondAttribute="centerX" id="m4e-Li-9ni"/>
+                                    <constraint firstItem="MeM-Vz-803" firstAttribute="centerY" secondItem="J3r-5b-2fa" secondAttribute="centerY" id="xk1-Fj-CZ9"/>
                                 </constraints>
                             </view>
                         </subviews>
