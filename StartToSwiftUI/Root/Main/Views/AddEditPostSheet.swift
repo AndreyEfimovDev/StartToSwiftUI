@@ -53,6 +53,12 @@ struct AddEditPostSheet: View {
     @State var alertTitle: String = ""
     @State var alertMessage: String = ""
     
+    let templateForNewPost: Post = Post(
+        title: "", intro: "", author: "", urlString: "",
+        postPlatform: .youtube, postDate: nil, studyLevel: .beginner,
+        favoriteChoice: .no, additionalText: ""
+    )
+    
     enum PostAlerts {
         case success
         case error
@@ -60,22 +66,13 @@ struct AddEditPostSheet: View {
     
     init(post: Post?) {
         
-        if let post = post { // Post for editing initialising
+        if let post = post { // if post is passed - post for editing initialising
             _editedPost = State(initialValue: post)
             _draftPost = State(initialValue: post)
             self.isNewPost = false
-        } else { // Add a new post initialising
-            _editedPost = State(initialValue: Post(
-                title: "",
-                intro: "",
-                author: "",
-                urlString: "",
-                postPlatform: .youtube,
-                postDate: nil,
-                studyLevel: .beginner,
-                favoriteChoice: .no,
-                additionalText: "",
-            ))
+        } else { // if post is not passed (nil) - add a new post initialising
+            _editedPost = State(initialValue: templateForNewPost)
+            _draftPost = State(initialValue: templateForNewPost)
             self.isNewPost = true
         }
     }
@@ -113,9 +110,11 @@ struct AddEditPostSheet: View {
         .onAppear {
             focusedField = .postTitle
         }
-        .overlay (
-            exitMenuConfirmation
-        )
+        .overlay {
+            if isShowingMenuConfirmation {
+                exitMenuConfirmation
+            }
+        }
     }
     
     // MARK: Subviews
@@ -127,7 +126,11 @@ struct AddEditPostSheet: View {
                 iconName: "checkmark",
                 isShownCircle: false)
             {
-                checkPostAndSave()
+                if editedPost == draftPost {  // if no changes
+                    dismiss()
+                } else {
+                    checkPostAndSave()
+                }
             }
             .alert(isPresented: $showAlert) {
                 getAlert(
@@ -138,14 +141,17 @@ struct AddEditPostSheet: View {
         ToolbarItem(placement: .topBarTrailing) { //
             CircleStrokeButtonView(
                 iconName: "xmark",
-                isIconColorToChange: true,
-                imageColorSecondary: Color.mycolor.myRed,
+                imageColorPrimary: Color.mycolor.myRed,
                 isShownCircle: false)
             {
-                hapticManager.notification(type: .warning)
-                focusedFieldSaved = focusedField ?? nil
-                focusedField = nil
-                isShowingMenuConfirmation = true
+                if editedPost == draftPost {  // if no changes
+                    dismiss()
+                } else {
+                    hapticManager.notification(type: .warning)
+                    focusedFieldSaved = focusedField ?? nil
+                    focusedField = nil
+                    isShowingMenuConfirmation = true
+                }
             }
         }
     }
@@ -477,8 +483,6 @@ struct AddEditPostSheet: View {
     }
     
     private var exitMenuConfirmation: some View {
-        Group {
-            if isShowingMenuConfirmation {
                 ZStack {
                     Color.mycolor.myAccent.opacity(0.4)
                         .ignoresSafeArea()
@@ -501,33 +505,33 @@ struct AddEditPostSheet: View {
                                 dismiss()
                             }
                             .disabled(isMenuConfirmationBlocked)
-                        
-                        ClearCupsuleButton(
-                            primaryTitle: "Save draft",
-                            secondaryTitle: "Draft saved",
-                            secondaryTitleColor: Color.mycolor.myGreen,
-                            isToChange: vm.isPostDraftSaved) {
-                                
-                                vm.titlePostSaved = editedPost.title
-                                vm.introPostSaved = editedPost.intro
-                                vm.authorPostSaved = editedPost.author
-                                vm.typePostSaved = editedPost.postType
-                                vm.urlStringPostSaved = editedPost.urlString
-                                vm.platformPostSaved = editedPost.postPlatform
-                                vm.datePostSaved = editedPost.postDate
-                                vm.studyLevelPostSaved = editedPost.studyLevel
-                                vm.favoriteChoicePostSaved = editedPost.favoriteChoice
-                                vm.additionalTextPostSaved = editedPost.additionalText
-                                
-                                isMenuConfirmationBlocked = true
-                                hapticManager.notification(type: .success)
-                                vm.isPostDraftSaved = true
-                                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                                    isMenuConfirmationBlocked = false
-                                    dismiss()
-                                }
-                            }
-                            .disabled(isMenuConfirmationBlocked)
+//                        
+//                        ClearCupsuleButton(
+//                            primaryTitle: "Save draft",
+//                            secondaryTitle: "Draft saved",
+//                            secondaryTitleColor: Color.mycolor.myGreen,
+//                            isToChange: vm.isPostDraftSaved) {
+//                                
+//                                vm.titlePostSaved = editedPost.title
+//                                vm.introPostSaved = editedPost.intro
+//                                vm.authorPostSaved = editedPost.author
+//                                vm.typePostSaved = editedPost.postType
+//                                vm.urlStringPostSaved = editedPost.urlString
+//                                vm.platformPostSaved = editedPost.postPlatform
+//                                vm.datePostSaved = editedPost.postDate
+//                                vm.studyLevelPostSaved = editedPost.studyLevel
+//                                vm.favoriteChoicePostSaved = editedPost.favoriteChoice
+//                                vm.additionalTextPostSaved = editedPost.additionalText
+//                                
+//                                isMenuConfirmationBlocked = true
+//                                hapticManager.notification(type: .success)
+//                                vm.isPostDraftSaved = true
+//                                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+//                                    isMenuConfirmationBlocked = false
+//                                    dismiss()
+//                                }
+//                            }
+//                            .disabled(isMenuConfirmationBlocked)
 
                         ClearCupsuleButton(
                             primaryTitle: "No",
@@ -543,46 +547,46 @@ struct AddEditPostSheet: View {
                     .cornerRadius(30)
                     .padding(.horizontal, 40)
                 }
-            }
-        }
     }
     
     // MARK: Functions
     
     private func checkPostAndSave() {
-        if !textIsAppropriate(text: editedPost.title) {
-            alertType = .error
-            alertTitle = "The Title must contain at least 3 characters."
-            alertMessage = "Please correct the Title."
-            focusedField = .postTitle
-            showAlert.toggle()
-        } else if !textIsAppropriate(text: editedPost.author) {
-            alertType = .error
-            alertTitle = "The Author must contain at least 3 characters."
-            alertMessage = "Please correct the Author."
-            focusedField = .author
-            showAlert.toggle()
-        } else if vm.checkNewPostForUniqueTitle(editedPost.title, editingPostId: isNewPost ? nil : editedPost.id) {
-            alertType = .error
-            alertTitle = "The Title must be unique."
-            alertMessage = "Please correct the Title."
-            focusedField = .postTitle
-            showAlert.toggle()
-        } else {
-            switch isNewPost {
-            case true:
-                print("Added a new post: \(editedPost.title)")
-                print("\(isNewPost.description)")
-                vm.addPost(editedPost)
-            case false:
-                print("Updated a current post : \(editedPost.title)")
-                print("\(isNewPost.description)")
-                vm.updatePost(editedPost)
+        
+            if !textIsAppropriate(text: editedPost.title) {
+                alertType = .error
+                alertTitle = "The Title must contain at least 3 characters."
+                alertMessage = "Please correct the Title."
+                focusedField = .postTitle
+                showAlert.toggle()
+            } else if !textIsAppropriate(text: editedPost.author) {
+                alertType = .error
+                alertTitle = "The Author must contain at least 3 characters."
+                alertMessage = "Please correct the Author."
+                focusedField = .author
+                showAlert.toggle()
+            } else if vm.checkNewPostForUniqueTitle(editedPost.title, editingPostId: isNewPost ? nil : editedPost.id) {
+                alertType = .error
+                alertTitle = "The Title must be unique."
+                alertMessage = "Please correct the Title."
+                focusedField = .postTitle
+                showAlert.toggle()
+            } else {
+                switch isNewPost {
+                case true:
+    //                print("Added a new post: \(editedPost.title)")
+    //                print("\(isNewPost.description)")
+                    vm.addPost(editedPost)
+                case false:
+    //                print("Updated edited post : \(editedPost.title)")
+    //                print("\(isNewPost.description)")
+                    vm.updatePost(editedPost)
+                }
+                alertType = .success
+                showAlert.toggle()
             }
-            alertType = .success
-            showAlert.toggle()
         }
-    }
+    
     
     private func textIsAppropriate(text: String) -> Bool {
         return text.count >= 3
