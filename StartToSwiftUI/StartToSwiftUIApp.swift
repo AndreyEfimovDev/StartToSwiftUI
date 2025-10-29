@@ -35,7 +35,7 @@ struct StartToSwiftUIApp: App {
                         .transition(.move(edge: .leading))
                     }
                 }
-                .zIndex(2.0)
+                .zIndex(1)
 
                 HomeView()
                 
