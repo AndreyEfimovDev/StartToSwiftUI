@@ -23,7 +23,7 @@ struct LaunchView: View {
             Color.launch.background
                 .ignoresSafeArea()
             
-            Image("StartToSwiftUI_icon_any_1024")
+            Image("StartToSwiftUI_icon_any_1024blue")
                 .resizable()
                 .font(.headline)
                 .fontWeight(.heavy)
