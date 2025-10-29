@@ -218,7 +218,7 @@ struct HomeView: View {
     
     private var updateAvailableDialog: some View {
             ZStack {
-                Color.clear
+                Color.mycolor.myAccent.opacity(0.4)
                     .ignoresSafeArea()
                 
                 VStack(spacing: 20) {
@@ -226,15 +226,15 @@ struct HomeView: View {
                         .textCase(.uppercase)
                         .font(.headline)
                         .bold()
-                        .foregroundColor(Color.mycolor.myRed)
+                        .foregroundColor(Color.mycolor.myAccent)
                     
                     Text("You can go to Preferenses for updates.")
                         .font(.subheadline)
                         .multilineTextAlignment(.center)
-                        .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
+                        .foregroundColor(Color.mycolor.mySecondaryText)
                     ClearCupsuleButton(
                         primaryTitle: "OK",
-                        primaryTitleColor: Color.mycolor.myGreen) {
+                        primaryTitleColor: Color.mycolor.myBlue) {
                             vm.isPostsUpdateAvailable = false
                         }
                 }

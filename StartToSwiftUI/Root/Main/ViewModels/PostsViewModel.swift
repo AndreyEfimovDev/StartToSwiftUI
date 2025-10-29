@@ -71,6 +71,7 @@ class PostsViewModel: ObservableObject {
     
     init() {
         
+        print("VM(init): Last update date: \(localLastUpdated)")
         self.allPosts = fileManager.loadPosts()
         
         // get list of years of posts
@@ -80,7 +81,7 @@ class PostsViewModel: ObservableObject {
             checkCloudForUpdates { hasUpdates in
                 if hasUpdates {
                     self.isPostsUpdateAvailable = true
-                    print("VM(appear): Posts update is available")
+                    print("VM(init): Posts update is available")
                     print(self.isPostsUpdateAvailable.description)
                 }
             }
