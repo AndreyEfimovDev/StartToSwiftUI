@@ -48,13 +48,6 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                
-                // Updates available dialog
-                if vm.isPostsUpdateAvailable && vm.isNotification {
-                    updateAvailableDialog
-                        .zIndex(1)
-                }
-
                 mainViewBody
                     .navigationTitle("SwiftUI posts")
                     .navigationBarBackButtonHidden(true)
@@ -72,12 +65,12 @@ struct HomeView: View {
                     .fullScreenCover(isPresented: $showPreferancesView) {
                         PreferencesView()
                     }
-                    .fullScreenCover(isPresented: $showAddPostView, content: {
+                    .fullScreenCover(isPresented: $showAddPostView) {
                         AddEditPostSheet(post: nil)
-                    })
-                    .fullScreenCover(item: $selectedPost, content: { post in
+                    }
+                    .fullScreenCover(item: $selectedPost) { post in
                         AddEditPostSheet(post: post)
-                    })
+                    }
                     .sheet(isPresented: $isFilterButtonPressed) {
                         FiltersSheetView(
                             isFilterButtonPressed: $isFilterButtonPressed
@@ -87,16 +80,22 @@ struct HomeView: View {
                         .presentationDragIndicator(.automatic)
                         .presentationCornerRadius(30)
                     }
-
-                // Deletion confirmation dialog
-                if isShowingDeleteConfirmation {
-                    deletionConfirmationDialog
-                }
             } // ZStack
         } // NavigationStack
         .onAppear {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
         }
+        .overlay {
+            // Updates available notification
+            if vm.isPostsUpdateAvailable && vm.isNotification {
+                updateAvailableDialog
+            }
+            // Deletion confirmation dialog
+            if isShowingDeleteConfirmation {
+                deletionConfirmationDialog
+            }
+        }
+        
     }
     
     // MARK: Subviews
