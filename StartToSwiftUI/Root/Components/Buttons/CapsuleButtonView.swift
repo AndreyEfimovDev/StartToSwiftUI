@@ -38,9 +38,9 @@ struct CapsuleButtonView: View {
             action()
         } label: {
             Text(isToChangeTitle ? secondaryTitle : primaryTitle)
-                .font(.body)
-                .fontWeight(.semibold)
-                .foregroundColor(isToChangeTitle ? Color.mycolor.myAccent : Color.mycolor.myBackground)
+                .font(.headline)
+//                .fontWeight(.bold)
+                .foregroundColor(Color.mycolor.myButtonTextPrimary)
                 .frame(height: 55)
                 .frame(maxWidth: .infinity)
                 .background(isToChangeTitle ? buttonColorSecondary : buttonColorPrimary, in: .capsule)
