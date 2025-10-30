@@ -13,7 +13,7 @@ struct AddEditPostSheet: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     
-    private let hapticManager = HapticManager.shared
+    private let hapticManager = HapticService.shared
     
     @FocusState private var focusedField: PostFields?
     @State private var focusedFieldSaved: PostFields?

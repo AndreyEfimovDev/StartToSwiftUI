@@ -13,7 +13,7 @@ struct RestoreBackupView: View {
     @EnvironmentObject private var vm: PostsViewModel
 
     private let fileManager = FileStorageService.shared
-    private let hapticManager = HapticManager.shared
+    private let hapticManager = HapticService.shared
     
     @State private var isBackedUp: Bool = false
     @State private var postCount: Int = 0

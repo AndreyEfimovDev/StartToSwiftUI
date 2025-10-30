@@ -12,7 +12,7 @@ struct ImportPostsFromCloudView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     
-    private let hapticManager = HapticManager.shared
+    private let hapticManager = HapticService.shared
     private let selectedURL = Constants.cloudPostsURL
     
     @State private var isInProgress: Bool = false

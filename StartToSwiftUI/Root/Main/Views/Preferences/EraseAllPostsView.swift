@@ -12,7 +12,7 @@ struct EraseAllPostsView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     
-    private let hapticManager = HapticManager.shared
+    private let hapticManager = HapticService.shared
     
     @State private var isDeleted: Bool = false
     @State private var isShowingShareBackupSheet: Bool = false

@@ -869,9 +869,8 @@ struct DevPreview {
 
     ]
     
-    
     static let myLocalPosts = [
-        
+// 2025-10-30
         Post(
             title: "Property Wrappers",
             intro: "В этом видео я расскажу вам обо всех оболочках, которые нам предлагает SwiftUI для хранения временных данных. Так же вы поймете, в чем отличие между такими оболочки как @State, @StateObject, @ObservedObject, @EnvironmentObject. Эти оболочки очень похожи друг на друга и знание того, когда и какую лучше использовать, имеет решающее значение.",
@@ -902,7 +901,23 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 14),
             studyLevel: .middle),
+ // Create With Swift: www.createwithswift.com
+        Post(
+            title: "Exploring Concentricity in SwiftUI",
+            intro: """
+                Learn about the concept of concentricity applied to UI elements in a SwiftUI app.
+                
+                Concentricity is one of the key design principles Apple highlighted at the last WWDC. It’s a concept already present in many parts of their operating systems. A clear example is the Dynamic Island, where its corner radius perfectly mirrors the rounded corners of the device’s bezel.
+                """,
+            author: "Matteo Altobello",
+            postType: .post,
+            urlString: "https://www.createwithswift.com/exploring-concentricity-in-swiftui/",
+            postPlatform: .website,
+            postDate: Date.from(year: 2025, month: 9, day: 5),
+            studyLevel: .middle),
     ]
+    
+    
 
 }
 

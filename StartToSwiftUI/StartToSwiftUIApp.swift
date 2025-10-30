@@ -14,7 +14,7 @@ struct StartToSwiftUIApp: App {
     @StateObject private var vm = PostsViewModel()
     @State private var showLaunchView: Bool = true
     
-    private let hapticManager = HapticManager.shared
+    private let hapticManager = HapticService.shared
 
     init() { // to set a custom colour for the magnifying class in the search bar
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor : UIColor(Color.mycolor.myAccent)]
