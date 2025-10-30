@@ -113,6 +113,7 @@ class PostsViewModel: ObservableObject {
     
     private func addSubscribers() {
         
+        // Subscribe on change of filters
 //        let filters = $selectedLevel
 //            .combineLatest($selectedFavorite, $selectedType)
         $selectedYear
@@ -132,6 +133,26 @@ class PostsViewModel: ObservableObject {
             }
             .store(in: &cancellables)
         
+        $searchText
+            .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
+            .map { text -> [Post] in
+                guard !text.isEmpty else {
+                    return self.filteredPosts
+                }
+                let searchedPosts = self.filteredPosts.filter( {
+                    $0.title.lowercased().contains(text.lowercased()) ||
+                    $0.intro.lowercased().contains(text.lowercased())  ||
+                    $0.author.lowercased().contains(text.lowercased()) ||
+                    $0.additionalText.lowercased().contains(text.lowercased())
+                } )
+                return searchedPosts
+            }
+            .sink { [weak self] searchedPosts in
+                self?.filteredPosts = searchedPosts
+            }
+            .store(in: &cancellables)
+        
+        // Subscribe on change of posts
         $allPosts
             .map { posts -> [Post] in
                 return self.filterPosts(
@@ -177,6 +198,20 @@ class PostsViewModel: ObservableObject {
                 return matchesLevel && matchesFavorite && matchesType && matchesYear
             }
         }
+    
+    private func searchPosts() -> [Post] {
+        guard !searchText.isEmpty else {
+            return filteredPosts
+        }
+        let searchedPosts = filteredPosts.filter( {
+            $0.title.lowercased().contains(searchText.lowercased()) ||
+            $0.intro.lowercased().contains(searchText.lowercased())  ||
+            $0.author.lowercased().contains(searchText.lowercased()) ||
+            $0.additionalText.lowercased().contains(searchText.lowercased())
+        } )
+        return searchedPosts
+    }
+
     
     // MARK: PUBLIC FUNCTIONS
     

@@ -39,7 +39,7 @@ struct AddEditPostSheet: View {
     private let colorSubheader: Color = Color.mycolor.myAccent.opacity(0.5)
     
     private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date() // set the limit to the beginning year for choice
-    private let endingDate: Date = Date()
+    private let endingDate: Date = .now
     
     private var bindingPostDate: Binding<Date> {
         Binding<Date>(
@@ -592,8 +592,10 @@ struct AddEditPostSheet: View {
         return text.count >= 3
     }
     
-    private func getAlert(alertTitle: String,
-                          alertMessage: String) -> Alert {
+    private func getAlert(
+        alertTitle: String,
+        alertMessage: String
+    ) -> Alert {
         switch alertType {
         case .error:
             return Alert(
@@ -602,15 +604,18 @@ struct AddEditPostSheet: View {
                 dismissButton: .default(Text("OK")))
         case .success:
             if isNewPost {
-                return Alert(title: Text("New Post added successfully"), message: Text("Tap OK to continue"), dismissButton: .default(Text("OK"), action: {
-                    dismiss()
-                }))
+                return Alert(
+                    title: Text("New Post added successfully"),
+                    message: Text("Tap OK to continue"),
+                    dismissButton: .default(Text("OK")) { dismiss() }
+                )
             } else {
-                return Alert(title: Text("Edited Post saved successfully"), message: Text("Tap OK to continue"), dismissButton: .default(Text("OK"), action: {
-                    dismiss()
-                }))
+                return Alert(
+                    title: Text("Edited Post saved successfully"),
+                    message: Text("Tap OK to continue"),
+                    dismissButton: .default(Text("OK")) { dismiss() }
+                )
             }
-            
         default:
             return Alert(title: Text("ERROR"))
         }
