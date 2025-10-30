@@ -45,8 +45,6 @@ struct SearchBarView: View {
         .padding(8)
         .background(
             ZStack {
-//                Capsule()
-//                    .fill(.ultraThickMaterial)
                 Capsule()
                     .stroke(
                         searchText.isEmpty ? Color.mycolor.myAccent.opacity(0.3) : Color.mycolor.myAccent,

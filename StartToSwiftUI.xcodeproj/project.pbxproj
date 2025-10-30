@@ -62,6 +62,7 @@
 		47BAF0FA2E64CC8700287F10 /* UnderlineSermentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF0F92E64CC8700287F10 /* UnderlineSermentedPicker.swift */; };
 		47C57E7F2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */; };
 		47E439B72EA9290E007001AD /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E439B62EA9290E007001AD /* NetworkService.swift */; };
+		47FB1DA02EB333D5007567EB /* CapsuleButtonView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FB1D9F2EB333D5007567EB /* CapsuleButtonView2.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -122,6 +123,7 @@
 		47BAF0F92E64CC8700287F10 /* UnderlineSermentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineSermentedPicker.swift; sourceTree = "<group>"; };
 		47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForPostsUpdateView.swift; sourceTree = "<group>"; };
 		47E439B62EA9290E007001AD /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		47FB1D9F2EB333D5007567EB /* CapsuleButtonView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleButtonView2.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -311,6 +313,7 @@
 				47BAF0A12E60485D00287F10 /* FavoriteButton.swift */,
 				47BAF09F2E5F9E9800287F10 /* MoreLessTextButton.swift */,
 				4791CDF92E744AD400687126 /* CapsuleButtonView.swift */,
+				47FB1D9F2EB333D5007567EB /* CapsuleButtonView2.swift */,
 				4764A1F72EAD1DAA00D76C3A /* ClearCupsuleButton.swift */,
 				47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */,
 				4791CDF02E7428EE00687126 /* CircleShadowButtonView.swift */,
@@ -430,6 +433,7 @@
 				4765A7672EAE277A00EACDF4 /* SwipeListButton.swift in Sources */,
 				47BAF0F82E64A77A00287F10 /* Enums.swift in Sources */,
 				475997552E5C7F81008E20F0 /* PreviewData.swift in Sources */,
+				47FB1DA02EB333D5007567EB /* CapsuleButtonView2.swift in Sources */,
 				4791CE0A2E75DA0400687126 /* CardsListView.swift in Sources */,
 				4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */,
 				4759976E2E5D933C008E20F0 /* SafariWebService.swift in Sources */,

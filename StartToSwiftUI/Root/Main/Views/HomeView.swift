@@ -30,20 +30,20 @@ struct HomeView: View {
     @State private var isShowingDeleteConfirmation: Bool = false
     @State private var isAnyChanges: Bool = false
 
-    
-    private var searchedPosts: [Post] {
-        if vm.searchText.isEmpty {
-            return vm.filteredPosts
-        } else {
-            let searchedPosts = vm.filteredPosts.filter( {
-                $0.title.lowercased().contains(vm.searchText.lowercased()) ||
-                $0.intro.lowercased().contains(vm.searchText.lowercased())  ||
-                $0.author.lowercased().contains(vm.searchText.lowercased()) ||
-                $0.additionalText.lowercased().contains(vm.searchText.lowercased())
-            } )
-            return searchedPosts
-        }
-    }
+//    
+//    private var searchedPosts: [Post] {
+//        if vm.searchText.isEmpty {
+//            return vm.filteredPosts
+//        } else {
+//            let searchedPosts = vm.filteredPosts.filter( {
+//                $0.title.lowercased().contains(vm.searchText.lowercased()) ||
+//                $0.intro.lowercased().contains(vm.searchText.lowercased())  ||
+//                $0.author.lowercased().contains(vm.searchText.lowercased()) ||
+//                $0.additionalText.lowercased().contains(vm.searchText.lowercased())
+//            } )
+//            return searchedPosts
+//        }
+//    }
     
     // MARK: VIEW BODY
     
@@ -105,11 +105,11 @@ struct HomeView: View {
     private var mainViewBody: some View {
         ScrollViewReader { proxy in
             ZStack (alignment: .bottomTrailing) {
-                if searchedPosts.isEmpty {
+                if vm.filteredPosts.isEmpty {
                     postsIsEmpty
                 } else {
                     List {
-                        ForEach(searchedPosts) { post in
+                        ForEach(vm.filteredPosts) { post in
                             PostRowView(post: post)
                                 .id(post.id)
                                 .background(trackingFistPostInList(post: post))
@@ -261,7 +261,7 @@ struct HomeView: View {
                         .multilineTextAlignment(.center)
                         .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
                     ClearCupsuleButton(
-                        primaryTitle: "Yes",
+                        primaryTitle: "YES",
                         primaryTitleColor: Color.mycolor.myRed) {
                             vm.deletePost(post: selectedPostToDelete ?? nil)
                             hapticManager.notification(type: .success)
@@ -269,8 +269,8 @@ struct HomeView: View {
                         }
                     
                     ClearCupsuleButton(
-                        primaryTitle: "No",
-                        primaryTitleColor: Color.mycolor.myGreen) {
+                        primaryTitle: "Cancel",
+                        primaryTitleColor: Color.mycolor.myAccent) {
                             isShowingDeleteConfirmation = false
                         }
                 }
