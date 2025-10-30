@@ -189,7 +189,7 @@ struct FiltersSheetView: View {
         
         
         CapsuleButtonView(
-            primaryTitle: "Reset All",
+            primaryTitle: "Reset All & Exit",
             textColorPrimary: Color.mycolor.myButtonTextRed,
             buttonColorPrimary: Color.mycolor.myButtonBGRed) {
                 vm.selectedLevel = nil
