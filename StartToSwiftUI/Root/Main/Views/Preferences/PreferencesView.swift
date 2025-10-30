@@ -73,7 +73,7 @@ struct PreferencesView: View {
         HStack {
             Image(systemName: "bell")
                 .frame(width: iconWidth)
-                .foregroundStyle(Color.mycolor.middle)
+                .foregroundStyle(Color.mycolor.myBlue)
             Toggle("Notification", isOn: $vm.isNotification)
                 .tint(Color.mycolor.myBlue)
         }

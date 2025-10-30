@@ -132,7 +132,7 @@ struct HomeView: View {
                                     Button("Edit", systemImage: "pencil") {
                                         selectedPost = post
                                     }
-                                    .tint(Color.mycolor.myBlue)
+                                    .tint(Color.mycolor.myButtonBGBlue)
                                 } // right side swipe action buttonss
                                 .swipeActions(edge: .leading, allowsFullSwipe: false) {
                                     Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: "star.fill") {
