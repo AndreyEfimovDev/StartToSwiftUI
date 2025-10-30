@@ -69,15 +69,7 @@ struct DevPreview {
         """
     )
     
-    static let samplePosts = [
-//        Post(
-//            title: "Property Wrappers",
-//            intro: "В этом видео я расскажу вам обо всех оболочках, которые нам предлагает SwiftUI для хранения временных данных. Так же вы поймете, в чем отличие между такими оболочки как @State, @StateObject, @ObservedObject, @EnvironmentObject. Эти оболочки очень похожи друг на друга и знание того, когда и какую лучше использовать, имеет решающее значение.",
-//            author: "Evgenia Bruyko",
-//            urlString: "https://youtu.be/ExwwrvOT8mI?si=SU__YwU8UlR461Zb",
-//            postPlatform: .youtube,
-//            postDate: Date.from(year: 2021, month: 3, day: 26)
-//        ),
+    static let postsForCloud = [
         Post(
             title: "Styling SwiftUI Text Views",
             intro: """
@@ -767,32 +759,6 @@ struct DevPreview {
             postDate: nil,
             studyLevel: .beginner),
 // 2025-10-27 DONE
-        
-//        Post(
-//            title: "Combine – швейцарский нож iOS-разработчика. Или нет?",
-//            intro: """
-//                Привет! Меня зовут Антон, я iOS-разработчик в Банки.ру. Когда я только начинал изучать Combine, он казался для меня магией. Пара команд и вот у тебя уже есть какие-то данные. Чтобы Combine перестал оставаться черным ящиком давайте заглянем внутрь. Эта статья – мое виденье этого фреймворка.
-//                """,
-//            author: "Anton @Toshhhh",
-//            postType: .post,
-//            urlString: "https://habr.com/ru/companies/banki/articles/958650/",
-//            postPlatform: .website,
-//            postDate: Date.from(year: 2025, month: 10, day: 22),
-//            studyLevel: .middle),
-//        Post(
-//            title: "Xcode: ключевые инструменты для ручного тестирования мобильных приложений",
-//            intro: """
-//                Привет! Я – Андрей, QA-лид из компании «Совкомбанк Технологии».
-//                        
-//                Хочу поделиться опытом тестировании мобильных приложений в Xcode — среде, которую многие используют только для разработки. По внутренним данным нашей компании, примерно 65% критических багов в iOS-приложениях можно выловить ещё на этапе разработки, если грамотно использовать встроенные инструменты Xcode.
-//                """,
-//            author: "Andrey @SovcomTech",
-//            postType: .post,
-//            urlString: "https://habr.com/ru/companies/sovcombank_technologies/articles/956112/",
-//            postPlatform: .website,
-//            postDate: Date.from(year: 2025, month: 10, day: 14),
-//            studyLevel: .middle),
-//        
         Post(
             title: "List or LazyVStack: Choosing the Right Lazy Container in SwiftUI",
             intro: """
@@ -903,6 +869,41 @@ struct DevPreview {
 
     ]
     
+    
+    static let myLocalPosts = [
+        
+        Post(
+            title: "Property Wrappers",
+            intro: "В этом видео я расскажу вам обо всех оболочках, которые нам предлагает SwiftUI для хранения временных данных. Так же вы поймете, в чем отличие между такими оболочки как @State, @StateObject, @ObservedObject, @EnvironmentObject. Эти оболочки очень похожи друг на друга и знание того, когда и какую лучше использовать, имеет решающее значение.",
+            author: "Evgenia Bruyko",
+            urlString: "https://youtu.be/ExwwrvOT8mI?si=SU__YwU8UlR461Zb",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 3, day: 26)
+        ),
+        Post(
+            title: "Combine – швейцарский нож iOS-разработчика. Или нет?",
+            intro: """
+                Привет! Меня зовут Антон, я iOS-разработчик в Банки.ру. Когда я только начинал изучать Combine, он казался для меня магией. Пара команд и вот у тебя уже есть какие-то данные. Чтобы Combine перестал оставаться черным ящиком давайте заглянем внутрь. Эта статья – мое виденье этого фреймворка.
+                """,
+            author: "Anton @Toshhhh",
+            postType: .post,
+            urlString: "https://habr.com/ru/companies/banki/articles/958650/",
+            postPlatform: .website,
+            postDate: Date.from(year: 2025, month: 10, day: 22),
+            studyLevel: .middle),
+        Post(
+            title: "Xcode: ключевые инструменты для ручного тестирования мобильных приложений",
+            intro: """
+                Привет! Я – Андрей, QA-лид из компании «Совкомбанк Технологии». Хочу поделиться опытом тестировании мобильных приложений в Xcode — среде, которую многие используют только для разработки. По внутренним данным нашей компании, примерно 65% критических багов в iOS-приложениях можно выловить ещё на этапе разработки, если грамотно использовать встроенные инструменты Xcode.
+                """,
+            author: "Andrey @SovcomTech",
+            postType: .post,
+            urlString: "https://habr.com/ru/companies/sovcombank_technologies/articles/956112/",
+            postPlatform: .website,
+            postDate: Date.from(year: 2025, month: 10, day: 14),
+            studyLevel: .middle),
+    ]
+
 }
 
 // 2025-10-25

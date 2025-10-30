@@ -281,7 +281,7 @@ class PostsViewModel: ObservableObject {
 
     func loadPersistentPosts(_ completion: @escaping () -> ()) {
         
-        let receivedPosts: [Post] = DevPreview.samplePosts
+        let receivedPosts: [Post] = DevPreview.postsForCloud
         
         // Skipping posts with the same title - make posts unique by title
         let newPosts = receivedPosts.filter { newPost in

@@ -78,8 +78,8 @@ struct HomeView: View {
                             isFilterButtonPressed: $isFilterButtonPressed
                         )
                         .presentationBackground(.clear)
-                        .presentationDetents([.height(600)])
-                        .presentationDragIndicator(.automatic)
+                        .presentationDetents([.height(500)])
+                        .presentationDragIndicator(.visible)
                         .presentationCornerRadius(30)
                     }
             } // ZStack

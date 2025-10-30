@@ -24,13 +24,13 @@ struct FiltersSheetView: View {
     var body: some View {
         
         VStack {
-            
-            drugHundler
-            
+//            drugHundler
             VStack (alignment: .leading) {
                 Text("Filters")
                     .font(.largeTitle)
                     .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.top, 55)
+
                 studyLevelFilter
                 favoriteFilter
                 typeFilter
@@ -38,12 +38,13 @@ struct FiltersSheetView: View {
                 
                 Spacer()
                 
+                exitFiltersButton
                 resetAllFiltersButton
                 resetAllFiltersAndExitButton
             }
             .foregroundStyle(Color.mycolor.myAccent)
             .padding(.top, -40)
-            .padding()
+            .padding(.horizontal)
             
             Spacer()
         }
@@ -157,6 +158,17 @@ struct FiltersSheetView: View {
         }
     }
     
+    private var exitFiltersButton: some View {
+        
+        ClearCupsuleButton(
+            primaryTitle: "Apply",
+            primaryTitleColor: Color.mycolor.myBlue) {
+                isFilterButtonPressed.toggle()
+            }
+        .padding(.horizontal, 55)
+    }
+
+    
     private var resetAllFiltersButton: some View {
         
         ClearCupsuleButton(
@@ -164,7 +176,6 @@ struct FiltersSheetView: View {
             primaryTitleColor: Color.mycolor.myRed) {
                 vm.selectedLevel = nil
                 vm.selectedFavorite = nil
-//                vm.selectedLanguage = nil
                 vm.selectedType = nil
                 vm.selectedYear = nil
                 updateFiltersSheetView.toggle()
@@ -179,7 +190,6 @@ struct FiltersSheetView: View {
             primaryTitleColor: Color.mycolor.myRed) {
                 vm.selectedLevel = nil
                 vm.selectedFavorite = nil
-//                vm.selectedLanguage = nil
                 vm.selectedType = nil
                 vm.selectedYear = nil
                 isFilterButtonPressed.toggle()
