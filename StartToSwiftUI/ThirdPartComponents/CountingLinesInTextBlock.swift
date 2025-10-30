@@ -13,7 +13,7 @@ struct CountingLinesInTextBlock: View {
         
         var body: some View {
             Text("""
-            SwiftUI lets you measure
+            SwiftUI lets measure
             how many lines a Text
             will actually use.
             """)

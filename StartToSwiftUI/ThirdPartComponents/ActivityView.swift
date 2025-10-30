@@ -6,9 +6,6 @@
 //
 
 import SwiftUI
-
-
-import SwiftUI
 import UIKit
 
 struct ActivityView: UIViewControllerRepresentable {

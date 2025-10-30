@@ -35,18 +35,14 @@
 		4791CDAF2E70187E00687126 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDAE2E70187E00687126 /* PreferencesView.swift */; };
 		4791CDBB2E702E9700687126 /* EraseAllPostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */; };
 		4791CDC12E708E1300687126 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDC02E708E1000687126 /* DocumentPicker.swift */; };
-		4791CDC72E70B7D800687126 /* AlertBootcamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDC62E70B7D800687126 /* AlertBootcamp.swift */; };
 		4791CDEA2E72E8CC00687126 /* Arrays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDE92E72E8CC00687126 /* Arrays.swift */; };
-		4791CDEC2E73339100687126 /* SheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDEB2E73339100687126 /* SheetView.swift */; };
-		4791CDEF2E737B3600687126 /* SFSymbolsAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDEE2E737B3600687126 /* SFSymbolsAnimationView.swift */; };
 		4791CDF12E7428EE00687126 /* CircleShadowButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDF02E7428EE00687126 /* CircleShadowButtonView.swift */; };
 		4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDF92E744AD400687126 /* CapsuleButtonView.swift */; };
 		4791CDFC2E746FF100687126 /* EmailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDFB2E746FF100687126 /* EmailService.swift */; };
 		4791CDFE2E747AC100687126 /* FileStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDFD2E747AC100687126 /* FileStorageService.swift */; };
-		4791CE002E747B2E00687126 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDFF2E747B2E00687126 /* HapticManager.swift */; };
+		4791CE002E747B2E00687126 /* HapticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDFF2E747B2E00687126 /* HapticService.swift */; };
 		4791CE042E748DA200687126 /* AddEditPostSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE032E748DA200687126 /* AddEditPostSheet.swift */; };
 		4791CE082E75AAB000687126 /* UnderlineSermentedPickerNotOptional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE072E75AAAF00687126 /* UnderlineSermentedPickerNotOptional.swift */; };
-		4791CE0A2E75DA0400687126 /* CardsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE092E75DA0400687126 /* CardsListView.swift */; };
 		47920AA22EB11782006E53EF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47920AA12EB11782006E53EF /* LaunchScreen.storyboard */; };
 		47AA558A2EA9741D000AF4E9 /* RestoreBackupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */; };
 		47AE6C7F2E7CB3BD006230DA /* AboutAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AE6C7E2E7CB3BD006230DA /* AboutAppView.swift */; };
@@ -68,7 +64,7 @@
 /* Begin PBXFileReference section */
 		47069EFF2EAFF6210082AE12 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleStrokeButtonView.swift; sourceTree = "<group>"; };
-		471BEF4F2EA793880093F962 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		471BEF4F2EA793880093F962 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4732FB2C2EAA2BFC0062269D /* ImportPostsFromCloudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportPostsFromCloudView.swift; sourceTree = "<group>"; };
 		4732FB302EAA59B00062269D /* SharePostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePostsView.swift; sourceTree = "<group>"; };
 		4732FB322EAA5A9E0062269D /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
@@ -96,18 +92,14 @@
 		4791CDAE2E70187E00687126 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EraseAllPostsView.swift; sourceTree = "<group>"; };
 		4791CDC02E708E1000687126 /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
-		4791CDC62E70B7D800687126 /* AlertBootcamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertBootcamp.swift; sourceTree = "<group>"; };
 		4791CDE92E72E8CC00687126 /* Arrays.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arrays.swift; sourceTree = "<group>"; };
-		4791CDEB2E73339100687126 /* SheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetView.swift; sourceTree = "<group>"; };
-		4791CDEE2E737B3600687126 /* SFSymbolsAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSymbolsAnimationView.swift; sourceTree = "<group>"; };
 		4791CDF02E7428EE00687126 /* CircleShadowButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleShadowButtonView.swift; sourceTree = "<group>"; };
 		4791CDF92E744AD400687126 /* CapsuleButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleButtonView.swift; sourceTree = "<group>"; };
 		4791CDFB2E746FF100687126 /* EmailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailService.swift; sourceTree = "<group>"; };
 		4791CDFD2E747AC100687126 /* FileStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorageService.swift; sourceTree = "<group>"; };
-		4791CDFF2E747B2E00687126 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
+		4791CDFF2E747B2E00687126 /* HapticService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticService.swift; sourceTree = "<group>"; };
 		4791CE032E748DA200687126 /* AddEditPostSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditPostSheet.swift; sourceTree = "<group>"; };
 		4791CE072E75AAAF00687126 /* UnderlineSermentedPickerNotOptional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineSermentedPickerNotOptional.swift; sourceTree = "<group>"; };
-		4791CE092E75DA0400687126 /* CardsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsListView.swift; sourceTree = "<group>"; };
 		47920AA12EB11782006E53EF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreBackupView.swift; sourceTree = "<group>"; };
 		47AE6C7E2E7CB3BD006230DA /* AboutAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAppView.swift; sourceTree = "<group>"; };
@@ -177,19 +169,15 @@
 			isa = PBXGroup;
 			children = (
 				4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */,
-				471BEF4F2EA793880093F962 /* Info.plist */,
 				475997622E5CF0C3008E20F0 /* ThirdPartComponents */,
 				475997712E5D9B1A008E20F0 /* Support */,
 				4765A76E2EAE669200EACDF4 /* InProgress */,
 				475997722E5DA436008E20F0 /* Extensions */,
-				4759976C2E5D931F008E20F0 /* ManagersServices */,
+				4759976C2E5D931F008E20F0 /* Services */,
+				47069EFC2EAFF2E30082AE12 /* Launch */,
 				475997582E5C86B7008E20F0 /* Root */,
-				4791CDAD2E70186100687126 /* Preferences */,
 				475997492E5C690B008E20F0 /* Assets.xcassets */,
-				4791CDC62E70B7D800687126 /* AlertBootcamp.swift */,
-				4791CDEB2E73339100687126 /* SheetView.swift */,
-				4791CE092E75DA0400687126 /* CardsListView.swift */,
-				4791CDEE2E737B3600687126 /* SFSymbolsAnimationView.swift */,
+				471BEF4F2EA793880093F962 /* Info.plist */,
 			);
 			path = StartToSwiftUI;
 			sourceTree = "<group>";
@@ -217,7 +205,6 @@
 			isa = PBXGroup;
 			children = (
 				475997592E5C86C5008E20F0 /* Components */,
-				47069EFC2EAFF2E30082AE12 /* Launch */,
 				47BAF0ED2E645AFE00287F10 /* Main */,
 			);
 			path = Root;
@@ -236,6 +223,7 @@
 		475997622E5CF0C3008E20F0 /* ThirdPartComponents */ = {
 			isa = PBXGroup;
 			children = (
+				4759976D2E5D933C008E20F0 /* SafariWebService.swift */,
 				4791CDC02E708E1000687126 /* DocumentPicker.swift */,
 				4732FB322EAA5A9E0062269D /* ActivityView.swift */,
 				4759975E2E5CA789008E20F0 /* CountingLinesInTextBlock.swift */,
@@ -244,15 +232,14 @@
 			path = ThirdPartComponents;
 			sourceTree = "<group>";
 		};
-		4759976C2E5D931F008E20F0 /* ManagersServices */ = {
+		4759976C2E5D931F008E20F0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				4759976D2E5D933C008E20F0 /* SafariWebService.swift */,
 				4791CDFD2E747AC100687126 /* FileStorageService.swift */,
-				4791CDFF2E747B2E00687126 /* HapticManager.swift */,
+				4791CDFF2E747B2E00687126 /* HapticService.swift */,
 				47E439B62EA9290E007001AD /* NetworkService.swift */,
 			);
-			path = ManagersServices;
+			path = Services;
 			sourceTree = "<group>";
 		};
 		475997712E5D9B1A008E20F0 /* Support */ = {
@@ -341,6 +328,7 @@
 				475997602E5CC0F8008E20F0 /* PostDetailsView.swift */,
 				4791CE032E748DA200687126 /* AddEditPostSheet.swift */,
 				4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */,
+				4791CDAD2E70186100687126 /* Preferences */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -426,7 +414,6 @@
 				47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */,
 				47BAF0A42E60613200287F10 /* SearchBarView.swift in Sources */,
 				4791CD862E6ED58B00687126 /* ShrinkIconButtonStyle.swift in Sources */,
-				4791CDC72E70B7D800687126 /* AlertBootcamp.swift in Sources */,
 				4732FB332EAA5A9E0062269D /* ActivityView.swift in Sources */,
 				4773545D2E65D03A001DEDEE /* FiltersSheetView.swift in Sources */,
 				47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */,
@@ -434,10 +421,9 @@
 				47BAF0F82E64A77A00287F10 /* Enums.swift in Sources */,
 				475997552E5C7F81008E20F0 /* PreviewData.swift in Sources */,
 				47FB1DA02EB333D5007567EB /* CapsuleButtonView2.swift in Sources */,
-				4791CE0A2E75DA0400687126 /* CardsListView.swift in Sources */,
 				4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */,
 				4759976E2E5D933C008E20F0 /* SafariWebService.swift in Sources */,
-				4791CE002E747B2E00687126 /* HapticManager.swift in Sources */,
+				4791CE002E747B2E00687126 /* HapticService.swift in Sources */,
 				475997532E5C7680008E20F0 /* PostsViewModel.swift in Sources */,
 				4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */,
 				4765A7692EAE471F00EACDF4 /* HomeView2.swift in Sources */,
@@ -445,7 +431,6 @@
 				47BAF0CA2E635E2800287F10 /* Views.swift in Sources */,
 				47BAF0FA2E64CC8700287F10 /* UnderlineSermentedPicker.swift in Sources */,
 				4765A76B2EAE483C00EACDF4 /* PostRowView2.swift in Sources */,
-				4791CDEF2E737B3600687126 /* SFSymbolsAnimationView.swift in Sources */,
 				4764A1F82EAD1DAA00D76C3A /* ClearCupsuleButton.swift in Sources */,
 				47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */,
 				4791CDF12E7428EE00687126 /* CircleShadowButtonView.swift in Sources */,
@@ -463,7 +448,6 @@
 				47069F002EAFF6210082AE12 /* LaunchView.swift in Sources */,
 				4759975F2E5CA789008E20F0 /* CountingLinesInTextBlock.swift in Sources */,
 				4791CE042E748DA200687126 /* AddEditPostSheet.swift in Sources */,
-				4791CDEC2E73339100687126 /* SheetView.swift in Sources */,
 				47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */,
 				4791CDC12E708E1300687126 /* DocumentPicker.swift in Sources */,
 				47E439B72EA9290E007001AD /* NetworkService.swift in Sources */,

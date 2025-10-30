@@ -14,7 +14,7 @@ struct HomeView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject private var vm: PostsViewModel
     
-    private let hapticManager = HapticManager.shared
+    private let hapticManager = HapticService.shared
     
     @State private var selectedPostId: UUID?
     @State private var selectedPost: Post?

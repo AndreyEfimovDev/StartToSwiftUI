@@ -13,7 +13,7 @@ struct SharePostsView: View {
     @EnvironmentObject private var vm: PostsViewModel
 
     private let fileManager = FileStorageService.shared
-    private let hapticManager = HapticManager.shared
+    private let hapticManager = HapticService.shared
     
     let fileName = Constants.localFileName
 

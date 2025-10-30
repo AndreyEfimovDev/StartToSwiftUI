@@ -57,7 +57,7 @@ class PostsViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     private let fileManager = FileStorageService.shared
-    private let hapticManager = HapticManager.shared
+    private let hapticManager = HapticService.shared
     private let networkService = NetworkService()
     
     @Published var isLoadingFromCloud = false
