@@ -78,7 +78,7 @@ struct HomeView: View {
                             isFilterButtonPressed: $isFilterButtonPressed
                         )
                         .presentationBackground(.clear)
-                        .presentationDetents([.height(500)])
+                        .presentationDetents([.height(550)])
                         .presentationDragIndicator(.visible)
                         .presentationCornerRadius(30)
                     }

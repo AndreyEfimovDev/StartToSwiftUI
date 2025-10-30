@@ -47,8 +47,8 @@ struct SearchBarView: View {
             ZStack {
                 Capsule()
                     .stroke(
-                        searchText.isEmpty ? Color.mycolor.myAccent.opacity(0.3) : Color.mycolor.myAccent,
-                        lineWidth: 1
+                        !isFocusedOnSearchBar ? Color.mycolor.myAccent.opacity(0.3) : Color.mycolor.myBlue,
+                        lineWidth: !isFocusedOnSearchBar ? 1 : 3
                     )
             }
         )
