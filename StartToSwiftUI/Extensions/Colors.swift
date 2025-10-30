@@ -25,7 +25,7 @@ struct MyColors {
     let myBlue = Color("AppBlueColor")
     let myGreen = Color("AppGreenColor")
     let myYellow = Color("AppYellowColor")
-    let middle = Color("AppMiddle")
+//    let middle = Color("AppMiddle")
     let myOrange = Color("AppOrangeColor")
     let myRed = Color("AppRedColor")
     let mySecondaryText = Color("AppSecondaryTextColor")

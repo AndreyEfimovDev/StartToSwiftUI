@@ -92,7 +92,6 @@ fileprivate struct CupsuleButtonPreview: View {
             primaryTitle: "Primary title",
             secondaryTitle: "Secondary title",
             textColorPrimary: Color.mycolor.myButtonTextRed,
-            buttonColorPrimary: Color.mycolor.myButtonBGRed,
             isToChange: true) {
                 count += 1
             }

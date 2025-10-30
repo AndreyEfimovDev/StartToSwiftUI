@@ -13,6 +13,7 @@ struct FiltersSheetView: View {
     
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var vm: PostsViewModel
+    
     @Binding var isFilterButtonPressed: Bool
     @State private var updateFiltersSheetView: Bool = false
     
@@ -57,18 +58,18 @@ struct FiltersSheetView: View {
     
     // MARK: Subviews
     
-    private var drugHundler: some View {
-        Capsule()
-            .fill(Color.mycolor.myBackground)
-            .overlay(
-                Capsule()
-                    .stroke(Color.mycolor.myAccent.opacity(0.5), lineWidth: 1)
-            )
-            .frame(width: 100, height: 3)
-            .frame(height: 30, alignment: .top)
-            .padding(.top, 10)
-            .padding(.bottom, 15)
-    }
+//    private var drugHundler: some View {
+//        Capsule()
+//            .fill(Color.mycolor.myBackground)
+//            .overlay(
+//                Capsule()
+//                    .stroke(Color.mycolor.myAccent.opacity(0.5), lineWidth: 1)
+//            )
+//            .frame(width: 100, height: 3)
+//            .frame(height: 30, alignment: .top)
+//            .padding(.top, 10)
+//            .padding(.bottom, 15)
+//    }
     
     private var studyLevelFilter: some View {
         VStack {
@@ -83,7 +84,7 @@ struct FiltersSheetView: View {
                 selectedFont: selectedFont,
                 selectedTextColor: Color.mycolor.myBackground,
                 unselectedTextColor: Color.mycolor.myAccent,
-                selectedBackground: Color.mycolor.myBlue,
+                selectedBackground: Color.mycolor.myButtonBGBlue,
                 unselectedBackground: .clear,
                 showNilOption: true,
                 nilTitle: "All"
@@ -104,7 +105,7 @@ struct FiltersSheetView: View {
                 selectedFont: selectedFont,
                 selectedTextColor: Color.mycolor.myBackground,
                 unselectedTextColor: Color.mycolor.myAccent,
-                selectedBackground: Color.mycolor.myBlue,
+                selectedBackground: Color.mycolor.myButtonBGBlue,
                 unselectedBackground: .clear,
                 showNilOption: true,
                 nilTitle: "All"
@@ -126,7 +127,7 @@ struct FiltersSheetView: View {
                 selectedFont: selectedFont,
                 selectedTextColor: Color.mycolor.myBackground,
                 unselectedTextColor: Color.mycolor.myAccent,
-                selectedBackground: Color.mycolor.myBlue,
+                selectedBackground: Color.mycolor.myButtonBGBlue,
                 unselectedBackground: .clear,
                 showNilOption: true,
                 nilTitle: "All"
@@ -149,7 +150,7 @@ struct FiltersSheetView: View {
                     selectedFont: selectedFont,
                     selectedTextColor: Color.mycolor.myBackground,
                     unselectedTextColor: Color.mycolor.myAccent,
-                    selectedBackground: Color.mycolor.myBlue,
+                    selectedBackground: Color.mycolor.myButtonBGBlue,
                     unselectedBackground: .clear,
                     showNilOption: true,
                     nilTitle: "All"
@@ -160,41 +161,44 @@ struct FiltersSheetView: View {
     
     private var exitFiltersButton: some View {
         
-        ClearCupsuleButton(
-            primaryTitle: "Apply",
-            primaryTitleColor: Color.mycolor.myBlue) {
+        CapsuleButtonView(
+            primaryTitle: "Apply") {
                 isFilterButtonPressed.toggle()
             }
-        .padding(.horizontal, 55)
+            .padding(.horizontal, 55)
+
     }
 
-    
     private var resetAllFiltersButton: some View {
         
-        ClearCupsuleButton(
+        
+        CapsuleButtonView(
             primaryTitle: "Reset All",
-            primaryTitleColor: Color.mycolor.myRed) {
+            textColorPrimary: Color.mycolor.myButtonTextRed,
+            buttonColorPrimary: Color.mycolor.myButtonBGRed) {
                 vm.selectedLevel = nil
                 vm.selectedFavorite = nil
                 vm.selectedType = nil
                 vm.selectedYear = nil
                 updateFiltersSheetView.toggle()
             }
-        .padding(.horizontal, 55)
+            .padding(.horizontal, 55)
     }
     
     private var resetAllFiltersAndExitButton: some View {
         
-        ClearCupsuleButton(
-            primaryTitle: "Reset All & Exit",
-            primaryTitleColor: Color.mycolor.myRed) {
+        
+        CapsuleButtonView(
+            primaryTitle: "Reset All",
+            textColorPrimary: Color.mycolor.myButtonTextRed,
+            buttonColorPrimary: Color.mycolor.myButtonBGRed) {
                 vm.selectedLevel = nil
                 vm.selectedFavorite = nil
                 vm.selectedType = nil
                 vm.selectedYear = nil
                 isFilterButtonPressed.toggle()
             }
-        .padding(.horizontal, 55)
+            .padding(.horizontal, 55)
     }
 }
 
