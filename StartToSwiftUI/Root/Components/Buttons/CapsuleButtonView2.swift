@@ -9,10 +9,11 @@ import SwiftUI
 
 struct CapsuleButtonView2: View {
     
+    let backgroundOpacity: Double = 1
+    
     let primaryTitle: String
     let secondaryTitle: String
-    let textColorPrimary: Color
-    let textColorSecondary: Color
+    let textColor: Color
     let buttonColorPrimary: Color
     let buttonColorSecondary: Color
     let isToChange: Bool
@@ -21,7 +22,7 @@ struct CapsuleButtonView2: View {
     init(
         primaryTitle: String,
         secondaryTitle: String = "",
-        textColorPrimary: Color = Color.mycolor.myAccent,
+        textColor: Color = Color.mycolor.myButtonTextPrimary,
         textColorSecondary: Color = Color.mycolor.mySecondaryText,
         buttonColorPrimary: Color = Color.mycolor.myBlue,
         buttonColorSecondary: Color = Color.mycolor.myGreen,
@@ -30,8 +31,7 @@ struct CapsuleButtonView2: View {
     ) {
         self.primaryTitle = primaryTitle
         self.secondaryTitle = secondaryTitle
-        self.textColorPrimary = textColorPrimary
-        self.textColorSecondary = textColorSecondary
+        self.textColor = textColor
         self.buttonColorPrimary = buttonColorPrimary
         self.buttonColorSecondary = buttonColorSecondary
         self.isToChange = isToChange
@@ -46,10 +46,13 @@ struct CapsuleButtonView2: View {
             Text(isToChange ? secondaryTitle : primaryTitle)
                 .font(.body)
                 .fontWeight(.semibold)
-                .foregroundColor(isToChange ? Color.mycolor.myAccent : Color.mycolor.myBackground)
+                .foregroundColor(textColor)
                 .frame(height: 55)
                 .frame(maxWidth: .infinity)
-                .background(isToChange ? buttonColorSecondary : buttonColorPrimary, in: .capsule)
+                .background(
+                    isToChange ? buttonColorSecondary.opacity(backgroundOpacity) : buttonColorPrimary.opacity(backgroundOpacity),
+                    in: .capsule
+                )
         }
     }
 }
@@ -63,6 +66,7 @@ fileprivate struct CupsuleButtonPreview2: View {
         CapsuleButtonView2(
             primaryTitle: "Primary title",
             secondaryTitle: "Secondary title",
+            textColor: Color.mycolor.myButtonTextPrimary,
             buttonColorPrimary: Color.mycolor.myBlue.opacity(0.7),
             buttonColorSecondary: Color.mycolor.myGreen.opacity(0.7),
             isToChange: false) {
@@ -72,8 +76,9 @@ fileprivate struct CupsuleButtonPreview2: View {
         CapsuleButtonView2(
             primaryTitle: "Primary title",
             secondaryTitle: "Secondary title",
+            textColor: Color.mycolor.myButtonTextRed,
             buttonColorPrimary: Color.mycolor.myBlue.opacity(0.7),
-            buttonColorSecondary: Color.mycolor.myGreen.opacity(0.7),
+            buttonColorSecondary: Color.mycolor.myRed.opacity(0.2),
             isToChange: true) {
                 count += 1
             }
