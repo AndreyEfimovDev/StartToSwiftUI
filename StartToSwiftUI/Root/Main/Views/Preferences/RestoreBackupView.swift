@@ -32,7 +32,7 @@ struct RestoreBackupView: View {
             CapsuleButtonView(
                 primaryTitle: "Restore Backup",
                 secondaryTitle: "\(postCount) Posts Restored!",
-                isToChangeTitile: isBackedUp
+                isToChange: isBackedUp
             ) {
                 showDocumentPicker = true
             }

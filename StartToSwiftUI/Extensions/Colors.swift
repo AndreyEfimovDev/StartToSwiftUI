@@ -29,6 +29,11 @@ struct MyColors {
     let myOrange = Color("AppOrangeColor")
     let myRed = Color("AppRedColor")
     let mySecondaryText = Color("AppSecondaryTextColor")
+    let myButtonBGBlue = Color("AppButtonBGBlue")
+    let myButtonBGGray = Color("AppButtonBGGray")
+    let myButtonBGGreen = Color("AppButtonBGGreen")
+    let myButtonBGRed = Color("AppButtonBGRed")
+    
     let myButtonTextPrimary = Color("AppButtonTextPrimary")
     let myButtonTextRed = Color("AppButtonTextRed")
     let myButtonTextSecondary = Color("AppButtonTextSecondary")
