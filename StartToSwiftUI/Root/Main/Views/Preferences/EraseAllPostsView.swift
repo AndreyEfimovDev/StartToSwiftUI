@@ -30,7 +30,7 @@ struct EraseAllPostsView: View {
                 secondaryTitle: "\(postCount) Posts Erased!",
                 buttonColorPrimary: Color.mycolor.myRed,
                 buttonColorSecondary: Color.mycolor.myGreen,
-                isToChangeTitile: isDeleted) {
+                isToChange: isDeleted) {
                     isInProgress = true
                     vm.eraseAllPosts{
                         isDeleted = true

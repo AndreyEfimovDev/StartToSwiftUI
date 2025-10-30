@@ -75,7 +75,7 @@ struct CheckForPostsUpdateView: View {
                 CapsuleButtonView(
                     primaryTitle: "Update now",
                     secondaryTitle: "Imported \(postCount) posts",
-                    isToChangeTitile: isImported) {
+                    isToChange: isImported) {
                         
                         isInProgress = true
                         vm.importPostsFromCloud(urlString: selectedURL) {

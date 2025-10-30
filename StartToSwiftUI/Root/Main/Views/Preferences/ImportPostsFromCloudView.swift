@@ -28,7 +28,7 @@ struct ImportPostsFromCloudView: View {
             CapsuleButtonView(
                 primaryTitle: "Import Posts",
                 secondaryTitle: "\(postCount) Posts Imported",
-                isToChangeTitile: isImported) {
+                isToChange: isImported) {
                     isInProgress = true
                     importFromCloud()
                 }

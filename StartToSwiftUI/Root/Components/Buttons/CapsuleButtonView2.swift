@@ -9,8 +9,6 @@ import SwiftUI
 
 struct CapsuleButtonView2: View {
     
-    let backgroundOpacity: Double = 1
-    
     let primaryTitle: String
     let secondaryTitle: String
     let textColor: Color
@@ -23,9 +21,8 @@ struct CapsuleButtonView2: View {
         primaryTitle: String,
         secondaryTitle: String = "",
         textColor: Color = Color.mycolor.myButtonTextPrimary,
-        textColorSecondary: Color = Color.mycolor.mySecondaryText,
-        buttonColorPrimary: Color = Color.mycolor.myBlue,
-        buttonColorSecondary: Color = Color.mycolor.myGreen,
+        buttonColorPrimary: Color = Color.mycolor.myButtonBGBlue,
+        buttonColorSecondary: Color = Color.mycolor.myButtonBGGreen,
         isToChange: Bool = false,
         action: @escaping () -> Void
     ) {
@@ -50,7 +47,7 @@ struct CapsuleButtonView2: View {
                 .frame(height: 55)
                 .frame(maxWidth: .infinity)
                 .background(
-                    isToChange ? buttonColorSecondary.opacity(backgroundOpacity) : buttonColorPrimary.opacity(backgroundOpacity),
+                    isToChange ? buttonColorSecondary : buttonColorPrimary,
                     in: .capsule
                 )
         }
@@ -66,10 +63,16 @@ fileprivate struct CupsuleButtonPreview2: View {
         CapsuleButtonView2(
             primaryTitle: "Primary title",
             secondaryTitle: "Secondary title",
-            textColor: Color.mycolor.myButtonTextPrimary,
-            buttonColorPrimary: Color.mycolor.myBlue.opacity(0.7),
-            buttonColorSecondary: Color.mycolor.myGreen.opacity(0.7),
             isToChange: false) {
+                count += 1
+            }
+        
+        
+        CapsuleButtonView2(
+            primaryTitle: "Primary title",
+            secondaryTitle: "Secondary title",
+            textColor: Color.mycolor.myButtonTextPrimary,
+            isToChange: true) {
                 count += 1
             }
         
@@ -77,9 +80,15 @@ fileprivate struct CupsuleButtonPreview2: View {
             primaryTitle: "Primary title",
             secondaryTitle: "Secondary title",
             textColor: Color.mycolor.myButtonTextRed,
-            buttonColorPrimary: Color.mycolor.myBlue.opacity(0.7),
-            buttonColorSecondary: Color.mycolor.myRed.opacity(0.2),
-            isToChange: true) {
+            buttonColorPrimary: Color.mycolor.myButtonBGRed) {
+                count += 1
+            }
+        
+        CapsuleButtonView2(
+            primaryTitle: "Primary title",
+            secondaryTitle: "Secondary title",
+            textColor: Color.mycolor.myButtonTextSecondary,
+            buttonColorPrimary: Color.mycolor.myButtonBGGray) {
                 count += 1
             }
 

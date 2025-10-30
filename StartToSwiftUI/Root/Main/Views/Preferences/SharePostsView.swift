@@ -29,7 +29,7 @@ struct SharePostsView: View {
             CapsuleButtonView(
                 primaryTitle: "Share/Store posts",
                 secondaryTitle: "Posts Shared/Stored",
-                isToChangeTitile: isShareCompleted
+                isToChange: isShareCompleted
             ) {
                 isInProgress = true
                 showActivityView = true
