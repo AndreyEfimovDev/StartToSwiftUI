@@ -97,7 +97,6 @@ struct HomeView: View {
                 deletionConfirmationDialog
             }
         }
-        
     }
     
     // MARK: Subviews
@@ -105,7 +104,7 @@ struct HomeView: View {
     private var mainViewBody: some View {
         ScrollViewReader { proxy in
             ZStack (alignment: .bottomTrailing) {
-                if vm.filteredPosts.isEmpty {
+                if vm.allPosts.isEmpty {
                     postsIsEmpty
                 } else {
                     List {
