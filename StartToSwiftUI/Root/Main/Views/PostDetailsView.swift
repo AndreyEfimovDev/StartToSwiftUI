@@ -236,13 +236,13 @@ struct PostDetailsView: View {
 fileprivate struct PostDetailsPreView: View {
     var body: some View {
         NavigationStack {
-            PostDetailsView(postId: DevPreview.samplePosts.first!.id)
+            PostDetailsView(postId: DevPreview.postsForCloud.first!.id)
                 .environmentObject(createPreviewViewModel())
         }
     }
     private func createPreviewViewModel() -> PostsViewModel {
         let viewModel = PostsViewModel()
-        viewModel.allPosts = DevPreview.samplePosts
+        viewModel.allPosts = DevPreview.postsForCloud
         return viewModel
     }
     
