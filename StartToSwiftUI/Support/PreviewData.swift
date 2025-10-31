@@ -2444,8 +2444,18 @@ struct DevPreview {
             typingAttributes
             transformAttributes
             """),
-
-        
+// 2025-10-31
+        Post(
+            title: "Swift Codable",
+            intro: """
+                Swift Codable - протокол, позволяющий преобразовывать структуры в бинарные данные и обратно. В этой cтатье раскрыт механизм его работы "под капотом".
+            """,
+            author: "Grandschtien",
+            postType: .post,
+            urlString: "https://habr.com/ru/articles/953560/",
+            postPlatform: .website,
+            postDate: Date.from(year: 2025, month: 10, day: 5),
+            studyLevel: .beginner),
         
         
         
