@@ -51,7 +51,7 @@ struct HomeView: View {
         NavigationStack {
             ZStack {
                 mainViewBody
-                    .navigationTitle("SwiftUI posts")
+                    .navigationTitle("Study materials")
                     .navigationBarBackButtonHidden(true)
                     .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
                     .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
