@@ -2437,7 +2437,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 17),
             studyLevel: .beginner,
-        additionalText: """
+            additionalText: """
             AttributedString
             AttributeContainer
             AttributedTextSelection
@@ -2456,6 +2456,21 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 5),
             studyLevel: .beginner),
+        Post(
+            title: "Swift: Dead Simple Formatting (Dates, Numbers, Currency, Measurement, Time)",
+            intro: """
+                In this video I show you the power of the FormatStyle API as well as a resource that shows examples of all the ways you can format numbers, currency, dates, measurements, time, and more. You can now easily create any format you like with this powerful API.
+            """,
+            author: "Sean Allen",
+            postType: .post,
+            urlString: "https://habr.com/ru/articles/953560/",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2025, month: 1, day: 2),
+            studyLevel: .beginner,
+            additionalText: """
+                https://fuckingformatstyle.com/
+                https://github.com/brettohland/fuckingformatstyle
+                """),
         
         
         
