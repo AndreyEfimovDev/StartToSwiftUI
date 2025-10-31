@@ -1,7 +1,31 @@
 {
   "images" : [
     {
-      "filename" : "StartToSwiftUI_logo_any_1024_blue2.png",
+      "filename" : "_StartToSwiftUI_logo_any_1024_blue.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "_StartToSwiftUI_logo_any_1024_blue 1.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "_StartToSwiftUI_logo_tint_1024.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
