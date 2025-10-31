@@ -51,7 +51,7 @@ struct HomeView: View {
         NavigationStack {
             ZStack {
                 mainViewBody
-                    .navigationTitle("Study materials")
+                    .navigationTitle(vm.homeTitleName)
                     .navigationBarBackButtonHidden(true)
                     .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
                     .toolbarBackground(.ultraThinMaterial, for: .navigationBar)

@@ -11,13 +11,13 @@ import Foundation
 struct Constants {
     
     // GitHub cloud url on JSON file with pre-loaded posts
-    static let cloudPostsURL = "https://raw.githubusercontent.com/AndreyEfimovDev/StartToSwiftUI/refs/heads/main/cloudPosts.json"
+//    static let cloudPostsURL = "https://raw.githubusercontent.com/AndreyEfimovDev/StartToSwiftUI/refs/heads/main/cloudPosts.json"
     
     // File name for FileManager to kepp all posts saved
     static let localFileName = "posts_app.json"
     
-    // File name for FileManager to kepp all posts saved
-    static let backupFileName = "posts_backup.json"
+//    // File name for FileManager to kepp all posts saved
+//    static let backupFileName = "posts_backup.json"
 
 
     
