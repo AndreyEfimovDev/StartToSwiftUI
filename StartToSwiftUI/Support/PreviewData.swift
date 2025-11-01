@@ -2471,6 +2471,20 @@ struct DevPreview {
                 https://fuckingformatstyle.com/
                 https://github.com/brettohland/fuckingformatstyle
                 """),
+        Post(
+            title: "Format Styles In Excruciating Detail",
+            intro: """
+                Swift’s FormatStyle and ParseableFormatStyle are the easiest way to convert Foundation data types to and from localized strings. Unfortunately Apple hasn’t done a great job in documenting just what it can do, or how to use them.
+
+                This site is going to help you do just that.
+            """,
+            author: "Ampersandsoftworks",
+            postType: .post,
+            urlString: "https://fuckingformatstyle.com/#the-basics",
+            postPlatform: .website,
+            postDate: nil,
+            studyLevel: .beginner),
+        
         
         
         
