@@ -20,11 +20,6 @@ class PostsViewModel: ObservableObject {
     
     @AppStorage("homeTitleName") var homeTitleName: String = "SwiftUI materials"
     
-//    // GitHub cloud url on JSON file with pre-loaded posts
-//    let cloudPostsURLoriginal: String = "https://raw.githubusercontent.com/AndreyEfimovDev/StartToSwiftUI/refs/heads/main/cloudPosts.json"
-//    
-//    @AppStorage("cloudPostsURL") var cloudPostsURL: String = "https://raw.githubusercontent.com/AndreyEfimovDev/StartToSwiftUI/refs/heads/main/cloudPosts.json"
-//        
     // stored filters
     @AppStorage("storedLevel") var storedLevel: StudyLevel?
     @AppStorage("storedFavorite") var storedFavorite: FavoriteChoice?
