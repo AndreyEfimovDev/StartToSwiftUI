@@ -675,8 +675,7 @@ struct DevPreview {
             author: "Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiLvzZFJI6rVIBtdolrJBVB",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2023, month: 6, day: 20)),
+            postPlatform: .youtube),
         Post(
             title: "SwiftUI Bootcamp",
             intro: """
@@ -685,8 +684,7 @@ struct DevPreview {
             author: "Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 2, day: 3)),
+            postPlatform: .youtube),
         Post(
             title: "SwiftUI Todo List",
             intro: """
@@ -705,8 +703,7 @@ struct DevPreview {
             author: "Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiALKk34l9mUS2f4mdJPvXq",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2024, month: 4, day: 29)),
+            postPlatform: .youtube),
         Post(
             title: "SwiftUI Map App",
             intro: """
@@ -725,7 +722,6 @@ struct DevPreview {
             author: "Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar",
-            postDate: Date.from(year: 2021, month: 3, day: 29),
             studyLevel: .middle),
         Post(
             title: "SwiftUI Crypto App",
@@ -733,7 +729,7 @@ struct DevPreview {
                 Build a cryptocurrency app that downloads live price data from an API and saves the current user's portfolio. Get comfortable with Combine, Core Data, and MVVM.
                 """,
             author: "Swiftful Thinking",
-            postType: .course,
+            postType: .solution,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
             postDate: Date.from(year: 2021, month: 5, day: 24),
             studyLevel: .middle),
@@ -745,7 +741,6 @@ struct DevPreview {
             author: "Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
-            postDate: Date.from(year: 2021, month: 8, day: 30),
             studyLevel: .advanced),
 // 2025-10-26 DONE
         Post(
@@ -908,13 +903,12 @@ struct DevPreview {
         Post(
             title: "SwiftUI",
             intro: """
-                A collection of 138 posts.
+                A collection of SwiftUI posts.
             """,
             author: "Create With Swift",
             postType: .course,
             urlString: "https://www.createwithswift.com/tag/swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2021, month: 6, day: 21),
             studyLevel: .beginner),
         Post(
             title: "Swift 6.2: Расширяем границы производительности и безопасности",
@@ -938,7 +932,6 @@ struct DevPreview {
             postType: .course,
             urlString: "https://www.createwithswift.com/tag/combine/",
             postPlatform: .website,
-            postDate: Date.from(year: 2021, month: 7, day: 21),
             studyLevel: .middle),
         Post(
             title: "@propertyWrapper: Encoding Strings to Valid URL Characters",

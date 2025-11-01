@@ -53,13 +53,7 @@ enum FavoriteChoice: String, CaseIterable, Codable {
     var icon: Image {
         switch self {
         case .yes: return Image(systemName: "star")
-//                .font(.body)
-//                .foregroundStyle(Color.mycolor.yellow)
-//                .frame(width: 30, height: 30)
         case .no: return Image(systemName: "star.fill")
-//                .font(.body)
-//                .foregroundStyle(Color.mycolor.secondaryText)
-//                .frame(width: 30, height: 30)
         }
     }
 
@@ -95,7 +89,7 @@ enum Platform: String, CaseIterable, Codable {
     var displayName: String {
         switch self {
         case .youtube: return "YouTube"
-        case .website: return "WebSite"
+        case .website: return "Website"
         case .others: return "Others"
         }
     }
@@ -115,7 +109,7 @@ enum Theme: String, CaseIterable, Codable {
 }
 
 
-// edit and add cards
+// for AddEditPostView
 enum PostFields: Hashable {
     case postTitle
     case intro
