@@ -38,9 +38,8 @@ struct AddEditPostSheet: View {
     private let fontTextInput: Font = .callout
     private let colorSubheader: Color = Color.mycolor.myAccent.opacity(0.5)
     
-    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date() // set the limit to the beginning year for choice
+    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date() // set beginning year for choice
     private let endingDate: Date = .now
-    
     private var bindingPostDate: Binding<Date> {
         Binding<Date>(
             get: { editedPost.postDate ?? Date() },
@@ -55,7 +54,7 @@ struct AddEditPostSheet: View {
     
     let templateForNewPost: Post = Post(
         title: "", intro: "", author: "", urlString: "",
-        postPlatform: .youtube, postDate: .now, studyLevel: .beginner,
+        postPlatform: .youtube, postDate: nil, studyLevel: .beginner,
         favoriteChoice: .no, additionalText: ""
     )
     
@@ -307,25 +306,46 @@ struct AddEditPostSheet: View {
                     fontSubheader: fontSubheader,
                     colorSubheader: colorSubheader
                 )
-            DatePicker(
-                "Pick up date:",
-                selection: bindingPostDate,
-                in: startingDate...endingDate,
-                displayedComponents: .date
-            )
-            .font(fontTextInput)
-            .padding(.leading, 5)
-            .tint(Color.mycolor.myBlue)
-            .padding(.trailing, 4)
-            .frame(height: 50)
+            ZStack {
+                HStack {
+                    Button(editedPost.postDate == nil ? "Set date" : "Reset date") {
+                        if editedPost.postDate == nil {
+                            editedPost.postDate = Date()
+                        } else {
+                            editedPost.postDate = nil
+                        }
+                    }
+                    .foregroundColor(editedPost.postDate == nil ? .blue : .red)
+                    .padding(8)
+                    .background(
+                        .ultraThinMaterial,
+                        in: .capsule
+                    )
+                    Spacer()
+                }
+                .padding(8)
+                .zIndex(1)
+                
+                DatePicker("",
+                    selection: bindingPostDate,
+                    in: startingDate...endingDate,
+                    displayedComponents: .date
+                )
+                .tint(Color.mycolor.myBlue)
+                .padding(.trailing, 8)
+                .datePickerStyle(.compact)
+                .disabled(editedPost.postDate == nil)
+                .opacity(editedPost.postDate == nil ? 0 : 1)
+            }
             .background(
                 sectionBackground,
-                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                in: RoundedRectangle(cornerRadius: sectionCornerRadius)
             )
         }
-        .onChange(of: bindingPostDate.wrappedValue) { _, newValue in
-            editedPost.postDate = newValue
-        }
+//        .onChange(of: bindingPostDate.wrappedValue) { _, newValue in
+//            editedPost.postDate = newValue
+//        }
+        
     }
     
     private var typeSection: some View {
