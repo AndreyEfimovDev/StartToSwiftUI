@@ -12,7 +12,7 @@ struct CheckForPostsUpdateView: View {
     @EnvironmentObject private var vm: PostsViewModel
     
     private let hapticManager = HapticService.shared
-//    private let selectedURL = Constants.cloudPostsURL
+    private let selectedURL = Constants.cloudPostsURL
     
     @State private var followingText: String = "Checking for updates..."
     @State private var followingTextColor: Color = Color.mycolor.myAccent
@@ -78,7 +78,7 @@ struct CheckForPostsUpdateView: View {
                     isToChange: isImported) {
                         
                         isInProgress = true
-                        vm.importPostsFromCloud(urlString: vm.cloudPostsURL) {
+                        vm.importPostsFromCloud(urlString: selectedURL) {
                             isInProgress = false
                             isImported = true
                             hapticManager.notification(type: .success)
