@@ -118,13 +118,13 @@ struct PostDetailsView: View {
         VStack(spacing: 0) {
             VStack {
                 let dateChecked = post.postDate == nil ? "" : (post.postDate?.formatted(date: .numeric, time: .omitted) ?? "")
-                let prefecsToDate = post.postDate == nil ? "" : " posted "
+                let prefixToDate = post.postDate == nil ? "" : " posted "
                 let platform = post.postPlatform == .others ? "" : post.postPlatform.displayName
                 let postType = post.postPlatform == .others ? "" : post.postType.displayName
-                let titleForIntro = postType + " on " + platform + prefecsToDate + dateChecked
+                let titleForIntro = postType + " on " + platform + prefixToDate + dateChecked
                 
                 Text(titleForIntro)
-                    .font(.system(size: 10, weight: .light, design: .rounded))
+                    .font(.caption)
                     .multilineTextAlignment(.trailing)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 8)
