@@ -39,7 +39,7 @@ class NetworkService: ObservableObject {
             }
             
             do {
-                let posts = try JSONDecoder().decode([Post].self, from: data)
+                let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
                 DispatchQueue.main.async {
                     completion(.success(posts))
                 }
@@ -81,9 +81,9 @@ class NetworkService: ObservableObject {
             }
             
             do {
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601
-                let response = try decoder.decode(CloudPosts.self, from: data)
+//                let decoder = JSONDecoder()
+//                decoder.dateDecodingStrategy = .iso8601
+                let response = try JSONDecoder.appDecoder.decode(CloudPosts.self, from: data)
                 DispatchQueue.main.async {
                     completion(.success(response))
                 }

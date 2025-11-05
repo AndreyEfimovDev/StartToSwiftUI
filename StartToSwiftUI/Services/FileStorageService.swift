@@ -51,11 +51,11 @@ class FileStorageService: ObservableObject {
         guard let url = getFileURL(fileName: fileName) else { return }
         
         do {
-            let encoder = JSONEncoder()
+//            let encoder = JSONEncoder()
             // Set the date encoding strategy to ISO8601 (string)
-            encoder.dateEncodingStrategy = .iso8601
+//            encoder.dateEncodingStrategy = .iso8601
             
-            let jsonData = try encoder.encode(posts)
+            let jsonData = try JSONEncoder.appEncoder.encode(posts)
             try jsonData.write(to: url)
             print("✅ FM: Successfully saved в \(url)")
         } catch {
@@ -70,11 +70,11 @@ class FileStorageService: ObservableObject {
         
         do {
             let data = try Data(contentsOf: url)
-            let decoder = JSONDecoder()
+//            let decoder = JSONDecoder()
             // Set the date encoding strategy from ISO8601 (string)
-            decoder.dateDecodingStrategy = .iso8601
+//            decoder.dateDecodingStrategy = .iso8601
             
-            let posts = try decoder.decode([Post].self, from: data)
+            let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
             print("✅ FM: Successfully uploaded \(posts.count) posts")
             return posts
         } catch {
