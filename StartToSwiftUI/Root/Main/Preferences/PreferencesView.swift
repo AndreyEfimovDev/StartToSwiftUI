@@ -94,7 +94,7 @@ struct PreferencesView: View {
     }
     
     private var importFromCloud: some View {
-        NavigationLink("Import posts from Cloud") {
+        NavigationLink("Download the curated collection") {
             ImportPostsFromCloudView()
         }
         .customPreferencesListRowStyle(
