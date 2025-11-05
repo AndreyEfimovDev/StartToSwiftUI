@@ -17,9 +17,15 @@ class PostsViewModel: ObservableObject {
     @Published var filteredPosts: [Post] = []
     @Published var searchText: String = ""
     @Published var isFiltersEmpty: Bool = true
+    @Published var isPostsUpdateAvailable: Bool = false
+    
+    // MARK: Stored preferances
     
     @AppStorage("homeTitleName") var homeTitleName: String = "SwiftUI materials"
-    
+    @AppStorage("isFirstAppLaunch") var isFirstAppLaunch: Bool = true
+    @AppStorage("isFirstPostsLoad") var isFirstImportPostsCompleted: Bool = false
+    @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
+
     // stored filters
     @AppStorage("storedLevel") var storedLevel: StudyLevel?
     @AppStorage("storedFavorite") var storedFavorite: FavoriteChoice?
@@ -40,12 +46,9 @@ class PostsViewModel: ObservableObject {
     @AppStorage("favoriteChoicePostSaved") var favoriteChoicePostSaved: FavoriteChoice?
     @AppStorage("additionalTextPostSaved") var additionalTextPostSaved: String?
     
-    // MARK: Stored preferances
-    
     @AppStorage("isNotification") var isNotification: Bool = false
     // stored the date of the Cloud posts last imported
     @AppStorage("localLastUpdated") var localLastUpdated: Date = (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date())
-    @Published var isPostsUpdateAvailable: Bool = false
     
     // setting filters
     @Published var selectedLevel: StudyLevel? = nil {

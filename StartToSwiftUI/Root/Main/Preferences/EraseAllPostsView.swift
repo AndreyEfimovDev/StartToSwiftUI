@@ -36,6 +36,7 @@ struct EraseAllPostsView: View {
                     vm.eraseAllPosts{
                         isDeleted = true
                         isInProgress = false
+                        vm.isFirstImportPostsCompleted = false
                         hapticManager.notification(type: .success)
                         DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
                             dismiss()
@@ -70,18 +71,19 @@ struct EraseAllPostsView: View {
     private var textSection: some View {
         VStack(spacing: 12) {
             Text("""
-            You are about to delete all posts.
+            You are about to erase all the posts.
             
             What you can do after:
             """
             )
             
             Text("""
-            - create a single post,
-            - import pre-loaded posts, or
+            - download curated collection of links about SwiftUI, 
+            - create own posts, or
             - restore backup.
             """
             )
+            .font(.footnote)
             .multilineTextAlignment(.leading)
             
             Text("""
@@ -89,7 +91,7 @@ struct EraseAllPostsView: View {
             backup posts before
             erasing them.
             """)
-            .foregroundStyle(.red)
+            .foregroundStyle(Color.mycolor.myRed)
             .bold()
         }
     }

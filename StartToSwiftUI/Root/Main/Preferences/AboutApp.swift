@@ -1,16 +1,15 @@
 //
-//  AboutAppView.swift
+//  AboutApp.swift
 //  StartToSwiftUI
 //
-//  Created by Andrey Efimov on 19.09.2025.
+//  Created by Andrey Efimov on 05.11.2025.
 //
 
 import SwiftUI
 
-struct AboutAppView: View {
+struct AboutApp: View {
     
     let frameHeight: CGFloat = 30
-    let frameFontt: Font = .headline
     
     var body: some View {
         
@@ -24,7 +23,7 @@ struct AboutAppView: View {
                     HStack {
                         Text("Name")
                         Spacer()
-                        Text("Start To SwiftUI")
+                        Text("StartToSwiftUI")
                     }
                     .padding(.horizontal)
                     .frame(height: frameHeight)
@@ -62,30 +61,25 @@ struct AboutAppView: View {
                     
                 }
                 .padding(.horizontal)
-
                 
                 Text("""
-            Dear fellow learner,
+                        **StartToSwiftUI** — a free educational link aggregator, created to help organise learning materials for SwiftUI.
                         
-            The StartToSwiftUI app is my first application, designed to help beginners learn SwiftUI from the ground up.
+                        **KEY FEATURES**:
                         
-            My own journey with SwiftUI began with feeling overwhelmed by the wealth of self-study materials. I started gathering tutorials and articles from open sources that explained the concepts in a way that resonated with me. I soon realised that to truly grasp certain topics, I needed to return to these resources time and again. To facilitate easier, I began storing and organising them for quick access. This need ultimately led me to create my first app, which in turn provided me with the perfect opportunity to put my theoretical knowledge into practice and truly cement my understanding.
-            
-            The app offers the following features:
-            - Load pre-loaded posts (collected from available open sources) and work with them as you wish.
-            - Use the search and apply filters to easily work with a large number ofposts.
-            - Add your own posts to create a personal library for learning SwiftUI.
-            - Edit and delete posts.
-            - Share all posts stored in the app or save them in JSON format for data backup and recovery purposes.
-            
-            If you find this app useful, I would be very happy to hear from you.
+                        • Create personal collections of links to educational materials
+                        • Organise learning resources by category
+                        • Download a curated collection of SwiftUI learning links from the developer
                         
-            Good luck with mastering SwiftUI!
+                        **IMPORTANT — ON COPYRIGHT**:
                         
-            Warmly,
-            Andrey
-            
-            """)
+                        The app only stores links to materials from public sources, it does not copy or distribute content. All rights to the materials belong to their respective authors. For each resource, the following is provided: author, source, a direct link to the original, and the publication date (where known).
+                        
+                        The app is intended solely for non-commercial, educational use. The developer makes no claim of authorship over the featured resources and respects the rights of content creators.
+                        
+                        Content authors can request the removal of links via email request.
+                        """)
+                
                 .multilineTextAlignment(.leading)
                 .managingPostsTextFormater()
                 .padding(.horizontal)
@@ -96,6 +90,7 @@ struct AboutAppView: View {
     }
 }
 
+
 #Preview {
-    AboutAppView()
+    AboutApp()
 }

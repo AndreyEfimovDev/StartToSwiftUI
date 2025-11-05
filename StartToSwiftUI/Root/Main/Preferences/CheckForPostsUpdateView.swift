@@ -102,9 +102,9 @@ struct CheckForPostsUpdateView: View {
 
     private var textSection: some View {
         Text("""
-            The pre-loaded posts are a collection of tutorials and articles from open sources that explain the SwiftUI functionality.
+            The curated collection of links to SwiftUI tutorials and articles has been compiled from open sources by the developer for the purpose of learning the SwiftUI functionality.
                        
-            The new version of the pre-loaded posts appends all current posts in the App, excluding duplicates by post title.
+            The collection will be appended to all current posts in the App, excluding duplicates based on the post title.
             """)
     }
     
@@ -130,7 +130,6 @@ struct CheckForPostsUpdateView: View {
             }
         }
     }
-
 
 }
 
