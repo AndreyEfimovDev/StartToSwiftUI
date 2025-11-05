@@ -26,8 +26,8 @@ struct EraseAllPostsView: View {
                 .managingPostsTextFormater()
             
             CapsuleButtonView(
-                primaryTitle: "Erase All Posts",
-                secondaryTitle: "\(postCount) Posts Erased!",
+                primaryTitle: "Delete All Posts",
+                secondaryTitle: "\(postCount) Posts Deleted!",
                 textColorPrimary: Color.mycolor.myButtonTextRed,
                 buttonColorPrimary: Color.mycolor.myButtonBGRed,
                 buttonColorSecondary: Color.mycolor.myButtonBGGreen,
@@ -52,7 +52,7 @@ struct EraseAllPostsView: View {
             Spacer()
             
             if isInProgress {
-                ProgressView("Erasing posts...")
+                ProgressView("Deleting posts...")
                     .padding()
                     .background(.regularMaterial)
                     .cornerRadius(10)
@@ -71,7 +71,7 @@ struct EraseAllPostsView: View {
     private var textSection: some View {
         VStack(spacing: 12) {
             Text("""
-            You are about to erase all the posts.
+            You are about to delete all the posts.
             
             What you can do after:
             """
@@ -89,7 +89,7 @@ struct EraseAllPostsView: View {
             Text("""
             It is recommended to
             backup posts before
-            erasing them.
+            deleting them.
             """)
             .foregroundStyle(Color.mycolor.myRed)
             .bold()

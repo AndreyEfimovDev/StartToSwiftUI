@@ -44,7 +44,7 @@ struct ImportPostsFromCloudView: View {
                 buttonColorPrimary: Color.mycolor.myButtonBGRed) {
                     dismiss()
                 }
-//                .padding(.top, 30)
+                .opacity(vm.isFirstImportPostsCompleted ? 0 : 1)
             
             Spacer()
             
@@ -70,7 +70,7 @@ struct ImportPostsFromCloudView: View {
     private var textSection: some View {
         VStack {
             Text("""
-            The curated collection of links to SwiftUI tutorials and articles has been compiled from open sources by the developer for the purpose of learning the SwiftUI functionality.
+            The curated collection of links to SwiftUI tutorials and articles has been compiled by the developer from open sources for the purpose of learning the SwiftUI functionality.
             """)
             
             Group {
@@ -84,9 +84,9 @@ struct ImportPostsFromCloudView: View {
                 .multilineTextAlignment(.leading)
 
                 Text("""
-                1. Will use the materials only for non-commercial educational purposes
-                2. Understand that all rights to the materials belong to their authors
-                3. Commit to accessing original sources
+                1. Will use the materials only for non-commercial educational purposes.
+                2. Understand that all rights to the materials belong to their authors.
+                3. Commit to accessing original sources.
                 """
                 )
                 .font(.subheadline)

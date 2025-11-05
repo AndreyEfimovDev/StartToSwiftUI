@@ -85,7 +85,7 @@ struct SharePostsView: View {
             You are about to store posts
             in JSON format
             on your local device or
-            share directly via
+            share them directly via
             AirDop / Mail / Messenger / etc.
             
             """)

@@ -124,7 +124,7 @@ struct PreferencesView: View {
     }
     
     private var erasePosts: some View {
-        NavigationLink("Erase all posts") {
+        NavigationLink("Delete all posts") {
             EraseAllPostsView()
         }
         .customPreferencesListRowStyle(

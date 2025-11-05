@@ -12,22 +12,14 @@ struct Functionality: View {
 //        • Organise learning resources by category.
         ScrollView {
             Text("""
-            The **StartToSwiftUI** application provides you with the following functionality:
+            The **StartToSwiftUI** application provides you with the following features:
             
-            • Create personal collections of links to educational materials, add new and edit existing posts.
-            
-            • Download a curated collection of SwiftUI learning links composed by the developer from a cloud service upon your request.
-            
-            • Update a current collection of links from a cloud service upon your request when available.
-            
-            • Toggle a notification to be informed of updates to the curated collection from the developer.
-            
-            • Make a search though posts.
-            
-            • Navigate material by searching and filtering.
-            
-            • Backup, restore, share and erase posts. 
-
+            - Creating personal collections of links to educational materials, adding new posts and editing existing ones.
+            - Downloading a curated collection of links for learning SwiftUI composed by the developer from the cloud service upon your request.
+            - Updating your current collection of links from a cloud service upon your request if updates are available.
+            - Enabling notifications about the availability of updates to the developer's curated collection.
+            - Navigating through materials using search and filtering.
+            - Backing up, restoring, sharing and deleting posts. 
             """)
  
             .multilineTextAlignment(.leading)
