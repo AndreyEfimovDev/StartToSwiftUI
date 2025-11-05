@@ -112,9 +112,12 @@ struct RestoreBackupView: View {
                 showError("Invalid JSON format: expected array of posts")
                 return
             }
-            
+            print("✅   Point before DECODING JSON")
             // Decoding posts
-            let posts = try JSONDecoder().decode([Post].self, from: data)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let posts = try decoder.decode([Post].self, from: data)
+            print("✅ ✅ ✅ Point after DECODING JSON")
             
             DispatchQueue.main.async {
                 isInProgress = false

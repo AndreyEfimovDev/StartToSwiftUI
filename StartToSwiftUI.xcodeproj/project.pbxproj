@@ -15,6 +15,7 @@
 		471DCBD22EBB89E000AFA5F4 /* FairUseNotice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBD12EBB89E000AFA5F4 /* FairUseNotice.swift */; };
 		471DCBD42EBB8A6400AFA5F4 /* TermsOfUse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBD32EBB8A6400AFA5F4 /* TermsOfUse.swift */; };
 		471DCBD62EBBAD9700AFA5F4 /* AboutApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBD52EBBAD9700AFA5F4 /* AboutApp.swift */; };
+		471DCBD92EBBBF2200AFA5F4 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBD82EBBBF2200AFA5F4 /* JSON.swift */; };
 		4732FB2D2EAA2BFC0062269D /* ImportPostsFromCloudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4732FB2C2EAA2BFC0062269D /* ImportPostsFromCloudView.swift */; };
 		4732FB312EAA59B00062269D /* SharePostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4732FB302EAA59B00062269D /* SharePostsView.swift */; };
 		4732FB332EAA5A9E0062269D /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4732FB322EAA5A9E0062269D /* ActivityView.swift */; };
@@ -75,6 +76,7 @@
 		471DCBD12EBB89E000AFA5F4 /* FairUseNotice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FairUseNotice.swift; sourceTree = "<group>"; };
 		471DCBD32EBB8A6400AFA5F4 /* TermsOfUse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfUse.swift; sourceTree = "<group>"; };
 		471DCBD52EBBAD9700AFA5F4 /* AboutApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutApp.swift; sourceTree = "<group>"; };
+		471DCBD82EBBBF2200AFA5F4 /* JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
 		4732FB2C2EAA2BFC0062269D /* ImportPostsFromCloudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportPostsFromCloudView.swift; sourceTree = "<group>"; };
 		4732FB302EAA59B00062269D /* SharePostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePostsView.swift; sourceTree = "<group>"; };
 		4732FB322EAA5A9E0062269D /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
@@ -157,7 +159,7 @@
 			path = Pickers;
 			sourceTree = "<group>";
 		};
-		471DCBD72EBBB97000AFA5F4 /* LegalInformation */ = {
+		471DCBD72EBBB97000AFA5F4 /* Legal_Information */ = {
 			isa = PBXGroup;
 			children = (
 				471DCBCD2EBB83D200AFA5F4 /* LegalInformationView.swift */,
@@ -166,7 +168,7 @@
 				471DCBCF2EBB88A400AFA5F4 /* CopyrightPolicy.swift */,
 				471DCBD12EBB89E000AFA5F4 /* FairUseNotice.swift */,
 			);
-			path = LegalInformation;
+			path = Legal_Information;
 			sourceTree = "<group>";
 		};
 		475997322E5C6901008E20F0 = {
@@ -278,6 +280,7 @@
 				47BAF0C92E635E2800287F10 /* Views.swift */,
 				47AE6C802E7D7FD0006230DA /* Modifiers.swift */,
 				47453E032EAB73A9000D2C16 /* Date.swift */,
+				471DCBD82EBBBF2200AFA5F4 /* JSON.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -336,7 +339,7 @@
 				475997572E5C8688008E20F0 /* ViewModels */,
 				47BAF0EE2E645B0A00287F10 /* Views */,
 				4791CDAD2E70186100687126 /* Preferences */,
-				471DCBD72EBBB97000AFA5F4 /* LegalInformation */,
+				471DCBD72EBBB97000AFA5F4 /* Legal_Information */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -427,6 +430,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				47C57E7F2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift in Sources */,
+				471DCBD92EBBBF2200AFA5F4 /* JSON.swift in Sources */,
 				47453E022EAB51B5000D2C16 /* CloudPosts.swift in Sources */,
 				4765A76D2EAE5F7B00EACDF4 /* PostRowView.swift in Sources */,
 				4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */,
