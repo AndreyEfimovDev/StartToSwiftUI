@@ -9,18 +9,20 @@ import SwiftUI
 
 struct SearchBarView: View {
     
+    @EnvironmentObject private var vm: PostsViewModel
+
     @FocusState private var isFocusedOnSearchBar: Bool
     
-    @Binding var searchText: String
+//    @Binding var searchText: String
     
     var body: some View {
         
         HStack {
             Image(systemName: "magnifyingglass")
                 .foregroundStyle(
-                    searchText.isEmpty ? Color.mycolor.mySecondaryText : Color.mycolor.myAccent
+                    vm.searchText.isEmpty ? Color.mycolor.mySecondaryText : Color.mycolor.myAccent
                 )
-            TextField("Search here ...", text: $searchText)
+            TextField("Search here ...", text: $vm.searchText)
                 .foregroundStyle(Color.mycolor.myAccent)
                 .autocorrectionDisabled(true)
                 .frame(height: isFocusedOnSearchBar ? 40 : 20)
@@ -36,7 +38,7 @@ struct SearchBarView: View {
                         .opacity(isFocusedOnSearchBar ? 1 : 0)
                         .onTapGesture {
                             isFocusedOnSearchBar = false
-                            searchText = ""
+                            vm.searchText = ""
                         }
                     , alignment: .trailing
                 )
@@ -63,9 +65,8 @@ struct SearchBarView: View {
     ZStack {
         Color.pink.opacity(0.1)
             .ignoresSafeArea()
-        VStack {
-            SearchBarView(searchText: .constant(""))
-            SearchBarView(searchText: .constant("sample text types "))
-        }
+            SearchBarView()
     }
+    .environmentObject(PostsViewModel())
+
 }

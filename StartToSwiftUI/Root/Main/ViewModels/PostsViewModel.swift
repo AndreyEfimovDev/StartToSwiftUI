@@ -115,39 +115,52 @@ class PostsViewModel: ObservableObject {
     
     private func addSubscribers() {
         
-        // Subscribe on change of filters
-//        let filters = $selectedLevel
-//            .combineLatest($selectedFavorite, $selectedType)
-        $selectedYear
-            .combineLatest($selectedLevel, $selectedFavorite, $selectedType)
-            .map {year, level, favorite, type -> [Post] in
-//                let (level, favorite, type) = filters
-                return self.filterPosts(
+//         Subscribe on change of filters
+//        $selectedYear
+//            .combineLatest($selectedLevel, $selectedFavorite, $selectedType)
+//            .map {year, level, favorite, type -> [Post] in
+//                return self.filterPosts(
+//                    allPosts: self.allPosts,
+//                    level: level,
+//                    favorite: favorite,
+//                    type: type,
+//                    year: year
+//                )
+//            }
+//            .sink { [weak self] filtered in
+//                self?.filteredPosts = filtered
+//            }
+//            .store(in: &cancellables)
+        
+        let filters = $selectedLevel
+            .combineLatest($selectedFavorite, $selectedType, $selectedYear)
+        
+        $searchText
+            .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
+            .combineLatest(filters)
+            .map { searchText, filters -> [Post] in
+                let (level, favorite, type, year) = filters
+
+                // Getting posts filtered
+                let filtered = self.filterPosts(
                     allPosts: self.allPosts,
                     level: level,
                     favorite: favorite,
                     type: type,
                     year: year
                 )
-            }
-            .sink { [weak self] filtered in
-                self?.filteredPosts = filtered
-            }
-            .store(in: &cancellables)
-        
-        $searchText
-            .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
-            .map { text -> [Post] in
-                guard !text.isEmpty else {
-                    return self.filteredPosts
+                
+                // Applying search text
+                guard !searchText.isEmpty else {
+                    return filtered
                 }
-                let searchedPosts = self.filteredPosts.filter( {
-                    $0.title.lowercased().contains(text.lowercased()) ||
-                    $0.intro.lowercased().contains(text.lowercased())  ||
-                    $0.author.lowercased().contains(text.lowercased()) ||
-                    $0.additionalText.lowercased().contains(text.lowercased())
-                } )
-                return searchedPosts
+                
+                return filtered.filter {
+                    $0.title.lowercased().contains(searchText.lowercased()) ||
+                    $0.intro.lowercased().contains(searchText.lowercased()) ||
+                    $0.author.lowercased().contains(searchText.lowercased()) ||
+                    $0.additionalText.lowercased().contains(searchText.lowercased())
+                }
             }
             .sink { [weak self] searchedPosts in
                 self?.filteredPosts = searchedPosts
@@ -156,22 +169,40 @@ class PostsViewModel: ObservableObject {
         
         // Subscribe on change of posts
         $allPosts
-            .map { posts -> [Post] in
-                return self.filterPosts(
+            .combineLatest($searchText, filters)
+            .map { posts, searchText, filters -> [Post] in
+                
+                let (level, favorite, type, year) = filters
+                
+                let filtered = self.filterPosts(
                     allPosts: posts,
-                    level: self.selectedLevel,
-                    favorite: self.selectedFavorite,
-                    type: self.selectedType,
-                    year: self.selectedYear
+                    level: level,
+                    favorite: favorite,
+                    type: type,
+                    year: year
                 )
+                
+                // Потом поиск
+                guard !searchText.isEmpty else {
+                    return filtered
+                }
+                
+                return filtered.filter {
+                    $0.title.lowercased().contains(searchText.lowercased()) ||
+                    $0.intro.lowercased().contains(searchText.lowercased()) ||
+                    $0.author.lowercased().contains(searchText.lowercased()) ||
+                    $0.additionalText.lowercased().contains(searchText.lowercased())
+                }
             }
             .sink { [weak self] posts in
-                guard let self = self else { return }
-                if !posts.isEmpty {
-                    self.filteredPosts.removeAll()
-                    self.filteredPosts = posts
-                    
-                }
+                self?.filteredPosts = posts
+
+//                guard let self = self else { return }
+//                if !posts.isEmpty {
+//                    self.filteredPosts.removeAll()
+//                    self.filteredPosts = posts
+//                    
+//                }
             }
             .store(in: &cancellables)
     }
