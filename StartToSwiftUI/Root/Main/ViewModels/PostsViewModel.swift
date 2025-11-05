@@ -46,7 +46,7 @@ class PostsViewModel: ObservableObject {
     // stored the date of the Cloud posts last imported
     @AppStorage("localLastUpdated") var localLastUpdated: Date = (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date())
     @Published var isPostsUpdateAvailable: Bool = false
-
+    
     // setting filters
     @Published var selectedLevel: StudyLevel? = nil {
         didSet { storedLevel = selectedLevel }}
@@ -75,7 +75,7 @@ class PostsViewModel: ObservableObject {
     init() {
         
         print("VM(init): Last update date: \(localLastUpdated.formatted(date: .abbreviated, time: .shortened))")
-                
+        
         self.allPosts = fileManager.loadPosts()
         
         // getting a list of years presented in current posts and checking for updates
@@ -109,38 +109,29 @@ class PostsViewModel: ObservableObject {
         
         // initiating subscriptions
         addSubscribers()
+        
+        // "Прогреваем" подписки
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                self?.searchText = ""
+            }
     }
     
     // MARK: PRIVATE FUNCTIONS
     
     private func addSubscribers() {
         
-//         Subscribe on change of filters
-//        $selectedYear
-//            .combineLatest($selectedLevel, $selectedFavorite, $selectedType)
-//            .map {year, level, favorite, type -> [Post] in
-//                return self.filterPosts(
-//                    allPosts: self.allPosts,
-//                    level: level,
-//                    favorite: favorite,
-//                    type: type,
-//                    year: year
-//                )
-//            }
-//            .sink { [weak self] filtered in
-//                self?.filteredPosts = filtered
-//            }
-//            .store(in: &cancellables)
-        
         let filters = $selectedLevel
             .combineLatest($selectedFavorite, $selectedType, $selectedYear)
         
+        // Subscribe on change of seach text and filters
         $searchText
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
             .combineLatest(filters)
+//            .receive(on: DispatchQueue.main)
             .map { searchText, filters -> [Post] in
+                
                 let (level, favorite, type, year) = filters
-
+                
                 // Getting posts filtered
                 let filtered = self.filterPosts(
                     allPosts: self.allPosts,
@@ -151,16 +142,18 @@ class PostsViewModel: ObservableObject {
                 )
                 
                 // Applying search text
-                guard !searchText.isEmpty else {
-                    return filtered
-                }
-                
-                return filtered.filter {
-                    $0.title.lowercased().contains(searchText.lowercased()) ||
-                    $0.intro.lowercased().contains(searchText.lowercased()) ||
-                    $0.author.lowercased().contains(searchText.lowercased()) ||
-                    $0.additionalText.lowercased().contains(searchText.lowercased())
-                }
+                return self.searchPosts(posts: filtered)
+                //
+                //                guard !searchText.isEmpty else {
+                //                    return filtered
+                //                }
+                //
+                //                return filtered.filter {
+                //                    $0.title.lowercased().contains(searchText.lowercased()) ||
+                //                    $0.intro.lowercased().contains(searchText.lowercased()) ||
+                //                    $0.author.lowercased().contains(searchText.lowercased()) ||
+                //                    $0.additionalText.lowercased().contains(searchText.lowercased())
+                //                }
             }
             .sink { [weak self] searchedPosts in
                 self?.filteredPosts = searchedPosts
@@ -170,10 +163,12 @@ class PostsViewModel: ObservableObject {
         // Subscribe on change of posts
         $allPosts
             .combineLatest($searchText, filters)
+//            .receive(on: DispatchQueue.main)
             .map { posts, searchText, filters -> [Post] in
                 
                 let (level, favorite, type, year) = filters
                 
+                // Getting posts filtered
                 let filtered = self.filterPosts(
                     allPosts: posts,
                     level: level,
@@ -182,27 +177,28 @@ class PostsViewModel: ObservableObject {
                     year: year
                 )
                 
-                // Потом поиск
-                guard !searchText.isEmpty else {
-                    return filtered
-                }
-                
-                return filtered.filter {
-                    $0.title.lowercased().contains(searchText.lowercased()) ||
-                    $0.intro.lowercased().contains(searchText.lowercased()) ||
-                    $0.author.lowercased().contains(searchText.lowercased()) ||
-                    $0.additionalText.lowercased().contains(searchText.lowercased())
-                }
+                // Applying search text
+                return self.searchPosts(posts: filtered)
+                //                guard !searchText.isEmpty else {
+                //                    return filtered
+                //                }
+                //
+                //                return filtered.filter {
+                //                    $0.title.lowercased().contains(searchText.lowercased()) ||
+                //                    $0.intro.lowercased().contains(searchText.lowercased()) ||
+                //                    $0.author.lowercased().contains(searchText.lowercased()) ||
+                //                    $0.additionalText.lowercased().contains(searchText.lowercased())
+                //                }
             }
             .sink { [weak self] posts in
                 self?.filteredPosts = posts
-
-//                guard let self = self else { return }
-//                if !posts.isEmpty {
-//                    self.filteredPosts.removeAll()
-//                    self.filteredPosts = posts
-//                    
-//                }
+                
+                //                guard let self = self else { return }
+                //                if !posts.isEmpty {
+                //                    self.filteredPosts.removeAll()
+                //                    self.filteredPosts = posts
+                //
+                //                }
             }
             .store(in: &cancellables)
     }
@@ -224,7 +220,7 @@ class PostsViewModel: ObservableObject {
                 let matchesLevel = level == nil || post.studyLevel == level
                 let matchesFavorite = favorite == nil || post.favoriteChoice == favorite
                 let matchesType = type == nil || post.postType == type
-
+                
                 let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date()))
                 let matchesYear = year == nil || postYear == year
                 
@@ -232,11 +228,11 @@ class PostsViewModel: ObservableObject {
             }
         }
     
-    private func searchPosts() -> [Post] {
+    private func searchPosts(posts: [Post]) -> [Post] {
         guard !searchText.isEmpty else {
-            return filteredPosts
+            return posts
         }
-        let searchedPosts = filteredPosts.filter( {
+        let searchedPosts = posts.filter( {
             $0.title.lowercased().contains(searchText.lowercased()) ||
             $0.intro.lowercased().contains(searchText.lowercased())  ||
             $0.author.lowercased().contains(searchText.lowercased()) ||
