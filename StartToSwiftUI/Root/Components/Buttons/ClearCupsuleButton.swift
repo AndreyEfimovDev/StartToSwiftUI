@@ -40,7 +40,7 @@ struct ClearCupsuleButton: View {
                 .font(.headline)
                 .foregroundColor(isToChange ? secondaryTitleColor : primaryTitleColor)
                 .padding(.vertical, 8)
-                .frame(height: 35)
+                .frame(height: 55)
                 .frame(maxWidth: .infinity)
                 .background(.thinMaterial)
                 .clipShape(Capsule())

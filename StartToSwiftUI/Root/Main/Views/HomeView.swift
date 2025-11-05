@@ -11,7 +11,8 @@ struct HomeView: View {
     
     // MARK: PROPERTIES
     
-    @Environment(\.colorScheme) var colorScheme
+//    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     
     private let hapticManager = HapticService.shared
@@ -23,6 +24,9 @@ struct HomeView: View {
     @State private var showDetailView: Bool = false
     @State private var showPreferancesView: Bool = false
     @State private var showAddPostView: Bool = false
+//    @State private var showDisclaimer: Bool = false
+    @State private var showTermsOfUse: Bool = false
+
     
     @State private var showOnTopButton: Bool = false
     @State private var isFilterButtonPressed: Bool = false
@@ -91,6 +95,12 @@ struct HomeView: View {
 //            }
         }
         .overlay {
+            
+            // Disclaimer at the first launch to accept Terms of Use
+            if !vm.isTermsOfUseAccepted {
+                welcomeAtFirstLauch
+            }
+            
             // Updates available notification
             if vm.isPostsUpdateAvailable && vm.isNotification {
                 updateAvailableDialog
@@ -218,6 +228,60 @@ struct HomeView: View {
         }
     }
     
+    private var welcomeAtFirstLauch: some View {
+        ZStack {
+            Color.mycolor.myAccent.opacity(0.4)
+                .ignoresSafeArea()
+            //        DisclaimerView()
+            NavigationStack {
+                ScrollView {
+                    VStack {
+                        
+                        Text("""
+                    This application is created for educational purposes and helps organise links to learning SwiftUI materials.
+                     
+                    **It is importand to understand:**
+                     
+                    ✓ The app stores only links to materials available from public sources
+                    ✓ All content belongs to its respective authors
+                    ✓ The app is free and intended for non-commercial use
+                    ✓ Users are responsible for respecting copyright when using materials
+                     
+                    **For each material, you have ability to save:**
+                    
+                    - Direct link to the original source
+                    - Author's name
+                    - Source (website, YouTube, etc.)
+                    - Publication date (if known)
+                     
+                    **Terms of Use:**
+                     
+                    To use this application, you need to agree to Terms of Use.
+                    """
+                        )
+                        .multilineTextAlignment(.leading)
+                        .managingPostsTextFormater()
+                        .padding(.horizontal)
+                        
+                        Button {
+                            showTermsOfUse = true
+                        } label: {
+                            Text("Terms of Use")
+                        }
+                        .tint(Color.mycolor.myBlue)
+                        .navigationDestination(isPresented: $showTermsOfUse) {
+                            TermsOfUse() {
+                                    dismiss()
+                            }
+                        }
+                    } // VStack
+                } // ScrollView
+                .navigationTitle("Welcome!")
+
+            } // NavigationStack
+        } // ZStack
+    }
+    
     private var updateAvailableDialog: some View {
             ZStack {
                 Color.mycolor.myAccent.opacity(0.4)
@@ -258,7 +322,7 @@ struct HomeView: View {
                         .bold()
                         .foregroundColor(Color.mycolor.myRed)
                     
-                    Text("Please confirm the deletion of the post?")
+                    Text("Please confirm the action.")
                         .font(.subheadline)
                         .multilineTextAlignment(.center)
                         .foregroundColor(Color.mycolor.myAccent.opacity(0.8))

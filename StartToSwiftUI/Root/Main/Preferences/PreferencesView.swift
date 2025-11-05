@@ -37,16 +37,20 @@ struct PreferencesView: View {
                     notificationSetting
                 }
                 Section(header: sectionHeader("Managing posts (\(postsCount))")) {
-                    if !vm.allPosts.isEmpty {
+                    if (!vm.allPosts.isEmpty || vm.isPostsUpdateAvailable) && vm.isFirstImportPostsCompleted {
                         checkForPostsUpdate
                     }
-                    importFromCloud
+                    
+                    if !vm.isFirstImportPostsCompleted {
+                        importFromCloud
+                    }
                     shareBackup
                     restoreBackup
                     erasePosts
                 }
                 Section {
-                    aboutAppLink
+                    aboutApplication
+                    legalInformation
                     contactDeveloperButton
                 }
             } // Form
@@ -129,14 +133,26 @@ struct PreferencesView: View {
         )
     }
     
-    private var aboutAppLink: some View {
+    private var aboutApplication: some View {
         NavigationLink("About App") {
-            AboutAppView()
+            AboutApp()
         }
         .customPreferencesListRowStyle(
             iconName: "info.circle",
             iconWidth: iconWidth
         )
+    }
+    
+    private var legalInformation: some View {
+        
+        NavigationLink("Legal information") {
+            LegalInformationView()
+        }
+        .customPreferencesListRowStyle(
+            iconName: "long.text.page.and.pencil", // long.text.page.and.pencil receipt exclamationmark.triangle.text.page
+            iconWidth: iconWidth
+        )
+
     }
     
     private var contactDeveloperButton: some View {

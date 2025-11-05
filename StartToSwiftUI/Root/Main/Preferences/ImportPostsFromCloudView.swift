@@ -26,22 +26,22 @@ struct ImportPostsFromCloudView: View {
                 .managingPostsTextFormater()
             
             CapsuleButtonView(
-                primaryTitle: "Import Posts",
-                secondaryTitle: "\(postCount) Posts Imported",
-                isToChange: isImported) {
+                primaryTitle: "Confirm and Download",
+                secondaryTitle: "\(postCount) Posts Downloaded",
+                isToChange: vm.isFirstImportPostsCompleted) {
                     isInProgress = true
                     importFromCloud()
                 }
                 .onChange(of: vm.allPosts.count) { oldValue, newValue in
                     postCount = newValue - oldValue
                 }
-                .disabled(isImported)
+                .disabled(vm.isFirstImportPostsCompleted)
                 .padding(.top, 30)
             
             Spacer()
             
             if isInProgress {
-                ProgressView("Importing posts...")
+                ProgressView("Downloading posts...")
                     .padding()
                     .background(.regularMaterial)
                     .cornerRadius(10)
@@ -50,7 +50,7 @@ struct ImportPostsFromCloudView: View {
         .padding(.horizontal, 30)
         .padding(.top, 30)
         .padding(30)
-        .alert("Import Error", isPresented: $vm.showCloudImportAlert) {
+        .alert("Download Error", isPresented: $vm.showCloudImportAlert) {
             Button("OK", role: .cancel) { }
         } message: {
             Text(vm.cloudImportError ?? "Unknown error")
@@ -60,12 +60,32 @@ struct ImportPostsFromCloudView: View {
     // MARK: Subviews
 
     private var textSection: some View {
-        Text("""
-            You are about to import pre-loaded posts from the cloud.
-                       
-            The pre-loaded posts will append all current posts in the App, excluding duplicates by post title.
-            
+        VStack {
+            Text("""
+            The curated collection of links to SwiftUI tutorials and articles has been compiled from open sources by the developer for the purpose of learning the SwiftUI functionality.
             """)
+            
+            Group {
+                Text("""
+                    
+                    **Please confirm that**:
+                    """)
+//                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .multilineTextAlignment(.leading)
+
+                Text("""
+                1. Will use the materials only for non-commercial educational purposes
+                2. Understand that all rights to the materials belong to their authors
+                3. Commit to accessing original sources
+                """
+                )
+                .font(.footnote)
+                .multilineTextAlignment(.leading)
+            }
+            .foregroundStyle(Color.mycolor.myRed)
+//            .multilineTextAlignment(.leading)
+        }
     }
     
     private func importFromCloud() {
@@ -81,7 +101,7 @@ struct ImportPostsFromCloudView: View {
         
         vm.importPostsFromCloud(urlString: selectedURL) {
             isInProgress = false
-            isImported = true
+            vm.isFirstImportPostsCompleted = true
             hapticManager.notification(type: .success)
             DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
                 dismiss()
