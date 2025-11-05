@@ -13,9 +13,6 @@ struct SearchBarView: View {
 
     @FocusState private var isFocusedOnSearchBar: Bool
     
-//    @Binding var searchText: String
-    @State private var isFirstFocus: Bool = true // ⬅️ Добавьте
-
     var body: some View {
         
         HStack {
@@ -38,8 +35,10 @@ struct SearchBarView: View {
                         .offset(x: 8)
                         .opacity(isFocusedOnSearchBar ? 1 : 0)
                         .onTapGesture {
-                            isFocusedOnSearchBar = false
-                            vm.searchText = ""
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                isFocusedOnSearchBar = false
+                                vm.searchText = ""
+                            }
                         }
                     , alignment: .trailing
                 )
@@ -55,7 +54,6 @@ struct SearchBarView: View {
                     )
             }
         )
-//        .animation(isFirstFocus ? nil : .easeInOut(duration: 0.2), value: isFocusedOnSearchBar)
         .padding(.horizontal, 8)
         .padding(.bottom, 8)
         .background(.ultraThickMaterial)

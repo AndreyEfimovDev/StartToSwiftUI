@@ -83,7 +83,7 @@ struct EraseAllPostsView: View {
             - restore backup.
             """
             )
-            .font(.footnote)
+            .font(.subheadline)
             .multilineTextAlignment(.leading)
             
             Text("""

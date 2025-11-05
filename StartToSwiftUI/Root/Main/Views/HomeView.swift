@@ -267,7 +267,7 @@ struct HomeView: View {
                             showTermsOfUse = true
                         } label: {
                             Text("Terms of Use")
-                                .font(.headline)
+                                .font(.title)
                         }
                         .tint(Color.mycolor.myBlue)
                         .padding()
