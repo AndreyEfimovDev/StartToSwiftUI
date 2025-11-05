@@ -3,7 +3,7 @@
 //  StartToSwiftUI
 //
 //  Created by Andrey Efimov on 05.11.2025.
-//
+// https://github.com/AndreyEfimovDev/StartToSwiftUI/blob/development/privacy-policy-english-github.md
 
 import SwiftUI
 

@@ -78,7 +78,7 @@ struct EraseAllPostsView: View {
             )
             
             Text("""
-            - download curated collection of links about SwiftUI, 
+            - download the curated collection, 
             - create own posts, or
             - restore backup.
             """

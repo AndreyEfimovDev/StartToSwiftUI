@@ -183,7 +183,7 @@ struct HomeView: View {
         ContentUnavailableView(
             "No Posts Stored",
             systemImage: "tray.and.arrow.down",
-            description: Text("You should go to Preferences to upload posts")
+            description: Text("You can create your own posts manually or go to Preferences to download a curated collection of links to  tutorials and articles on SwiftUI compiled by the developer from open sources.")
         )
     }
     
@@ -267,8 +267,10 @@ struct HomeView: View {
                             showTermsOfUse = true
                         } label: {
                             Text("Terms of Use")
+                                .font(.headline)
                         }
                         .tint(Color.mycolor.myBlue)
+                        .padding()
                         .navigationDestination(isPresented: $showTermsOfUse) {
                             TermsOfUse() {
                                     dismiss()

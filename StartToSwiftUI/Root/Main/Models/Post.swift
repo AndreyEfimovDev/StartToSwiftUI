@@ -13,7 +13,6 @@ struct Post: Identifiable, Hashable, Codable {
     var title: String // title of the post
     var intro: String // description of the post
     var author: String // author of the post
-//    var postLanguage: LanguageOptions // Language of the post
     var postType: PostType
     var urlString: String // url link of the post
     var postPlatform: Platform // platform location
@@ -27,7 +26,6 @@ struct Post: Identifiable, Hashable, Codable {
         title: String,
         intro: String,
         author: String,
-//        postLanguage: LanguageOptions = .english,
         postType: PostType = .post,
         urlString: String = "www.apple.com",
         postPlatform: Platform = .youtube,
@@ -40,7 +38,6 @@ struct Post: Identifiable, Hashable, Codable {
         self.title = title
         self.intro = intro
         self.author = author
-//        self.postLanguage = postLanguage
         self.postType = postType
         self.urlString = urlString
         self.postPlatform = postPlatform
