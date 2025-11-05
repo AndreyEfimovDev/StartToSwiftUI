@@ -57,7 +57,8 @@ struct HomeView: View {
                     .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
                     .toolbar { toolbarForMainViewBody() }
                     .safeAreaInset(edge: .top) {
-                        SearchBarView(searchText: $vm.searchText)
+                        SearchBarView()
+//                        SearchBarView(searchText: $vm.searchText)
                     }
                     .navigationDestination(isPresented: $showDetailView) {
                         if let id = selectedPostId {

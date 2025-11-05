@@ -77,7 +77,7 @@ struct HomeView2: View {
                     }
                 }
                 .safeAreaInset(edge: .top) {
-                    SearchBarView(searchText: $vm.searchText)
+                    SearchBarView()
                 }
                 .navigationDestination(isPresented: $showDetailView) {
                     if let id = selectedPostId {
