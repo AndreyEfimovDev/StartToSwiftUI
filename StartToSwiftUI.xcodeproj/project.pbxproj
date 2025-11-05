@@ -157,6 +157,18 @@
 			path = Pickers;
 			sourceTree = "<group>";
 		};
+		471DCBD72EBBB97000AFA5F4 /* LegalInformation */ = {
+			isa = PBXGroup;
+			children = (
+				471DCBCD2EBB83D200AFA5F4 /* LegalInformationView.swift */,
+				471DCBD32EBB8A6400AFA5F4 /* TermsOfUse.swift */,
+				471DCBC92EBB633300AFA5F4 /* PrivacyPolicy.swift */,
+				471DCBCF2EBB88A400AFA5F4 /* CopyrightPolicy.swift */,
+				471DCBD12EBB89E000AFA5F4 /* FairUseNotice.swift */,
+			);
+			path = LegalInformation;
+			sourceTree = "<group>";
+		};
 		475997322E5C6901008E20F0 = {
 			isa = PBXGroup;
 			children = (
@@ -298,11 +310,6 @@
 				47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */,
 				4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */,
 				471DCBD52EBBAD9700AFA5F4 /* AboutApp.swift */,
-				471DCBCD2EBB83D200AFA5F4 /* LegalInformationView.swift */,
-				471DCBD32EBB8A6400AFA5F4 /* TermsOfUse.swift */,
-				471DCBC92EBB633300AFA5F4 /* PrivacyPolicy.swift */,
-				471DCBCF2EBB88A400AFA5F4 /* CopyrightPolicy.swift */,
-				471DCBD12EBB89E000AFA5F4 /* FairUseNotice.swift */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
@@ -329,6 +336,7 @@
 				475997572E5C8688008E20F0 /* ViewModels */,
 				47BAF0EE2E645B0A00287F10 /* Views */,
 				4791CDAD2E70186100687126 /* Preferences */,
+				471DCBD72EBBB97000AFA5F4 /* LegalInformation */,
 			);
 			path = Main;
 			sourceTree = "<group>";
