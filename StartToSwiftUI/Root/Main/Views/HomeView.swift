@@ -29,27 +29,23 @@ struct HomeView: View {
     
     @State private var isShowingDeleteConfirmation: Bool = false
     @State private var isAnyChanges: Bool = false
+    
+//    @State private var dummyText: String = ""
+//    @FocusState private var dummyFocus: Bool
 
-//    
-//    private var searchedPosts: [Post] {
-//        if vm.searchText.isEmpty {
-//            return vm.filteredPosts
-//        } else {
-//            let searchedPosts = vm.filteredPosts.filter( {
-//                $0.title.lowercased().contains(vm.searchText.lowercased()) ||
-//                $0.intro.lowercased().contains(vm.searchText.lowercased())  ||
-//                $0.author.lowercased().contains(vm.searchText.lowercased()) ||
-//                $0.additionalText.lowercased().contains(vm.searchText.lowercased())
-//            } )
-//            return searchedPosts
-//        }
-//    }
     
     // MARK: VIEW BODY
     
     var body: some View {
         NavigationStack {
             ZStack {
+                
+                // An invisible TextField to pre-load the keyboard - to avoid the search bar freezing on first load.
+//                TextField("", text: $dummyText)
+//                    .frame(width: 0, height: 0)
+//                    .opacity(0)
+//                    .focused($dummyFocus)
+
                 mainViewBody
                     .navigationTitle(vm.homeTitleName)
                     .navigationBarBackButtonHidden(true)
@@ -58,7 +54,6 @@ struct HomeView: View {
                     .toolbar { toolbarForMainViewBody() }
                     .safeAreaInset(edge: .top) {
                         SearchBarView()
-//                        SearchBarView(searchText: $vm.searchText)
                     }
                     .navigationDestination(isPresented: $showDetailView) {
                         if let id = selectedPostId {
@@ -87,6 +82,13 @@ struct HomeView: View {
         } // NavigationStack
         .onAppear {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
+//            An invisible TextField to pre-load the keyboard - to avoid the search bar freezing on first load.
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+//                dummyFocus = true
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+//                    dummyFocus = false
+//                }
+//            }
         }
         .overlay {
             // Updates available notification
