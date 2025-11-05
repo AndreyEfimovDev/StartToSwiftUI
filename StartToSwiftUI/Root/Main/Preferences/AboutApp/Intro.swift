@@ -9,16 +9,18 @@ import SwiftUI
 
 struct Intro: View {
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                Text("""
+        //        NavigationStack {
+        ScrollView {
+// • Organise learning resources by category
+            Text("""
                         **StartToSwiftUI** — a free educational link aggregator, created to help organise learning materials for SwiftUI.
                         
                         **KEY FEATURES**:
                         
-                        • Create personal collections of links to educational materials
-                        • Organise learning resources by category
+                        • Create a personal collection of links to educational materials
                         • Download a curated collection of SwiftUI learning links from the developer
+                        • Manupulate collected material by searching and filtering
+                        • Manage backup, restoring, sharing and erasing posts
                         
                         **IMPORTANT — ON COPYRIGHT**:
                         
@@ -28,14 +30,15 @@ struct Intro: View {
                         
                         Content authors can request the removal of links via email request.
                         """)
-                
-                .multilineTextAlignment(.leading)
-                .managingPostsTextFormater()
-                .padding(.horizontal)
-            }
-            .foregroundStyle(Color.mycolor.myAccent)
-            .navigationTitle("Intro")
-        }    }
+            
+            .multilineTextAlignment(.leading)
+            .managingPostsTextFormater()
+            .padding(.horizontal)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+        .navigationTitle("Intro")
+        //    }
+    }
 }
 
 #Preview {

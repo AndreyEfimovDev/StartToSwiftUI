@@ -9,7 +9,37 @@ import SwiftUI
 
 struct WelcomeMessage: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ScrollView {
+            Text("""
+            Dear fellow learner,
+
+            Welcome to the **StartToSwiftUI**!
+            
+            The **StartToSwiftUI** app is designed to help beginners learn SwiftUI from the ground up.
+
+            When I first began learning SwiftUI, I was overwhelmed by the sheer variety of self-study options available. I gradually started collecting tutorials and articles from open sources that explained SwiftUI's functionality in a way that matched how I think. Later, I realised I needed to revisit these posts several times to gain a deeper understanding of particular topics. I found it helpful to store and organise them so I could quickly find and use the relevant information. As a result, I decided to create an app for this purpose. Creating my own app also helped me to put my theoretical knowledge into practice, moving it from my head to my heart.
+
+            The app offers the following features:
+
+            - You can load a curated collection of links to SwiftUI tutorials and articles compiled from open sources and work with them as you wish. You will receive a notification when a new version of the collection is ready to download, allowing you to access new material. I strive to keep the collection up to date, though this cannot be guaranteed at all times.
+            - You can add your own posts to create a personal collection for learning SwiftUI.
+            - You can edit and delete posts.
+            - You can share all posts stored in the app or save them for backup and recovery purposes.
+            
+            If you find this app useful, I would be very happy to hear from you.
+
+            Good luck with mastering SwiftUI!
+
+            Warmly,
+            Andrey
+            """)
+ 
+            .multilineTextAlignment(.leading)
+            .managingPostsTextFormater()
+            .padding(.horizontal)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+        .navigationTitle("Welcome message")
     }
 }
 

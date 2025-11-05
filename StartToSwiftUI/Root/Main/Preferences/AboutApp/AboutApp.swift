@@ -61,21 +61,16 @@ struct AboutApp: View {
             .padding(.horizontal)
             
             Form {
-                NavigationLink("Terms of Use") {
-                    TermsOfUse() {}
+                NavigationLink("Intro") {
+                    Intro()
                 }
-                NavigationLink("Privacy Policy") {
-                    PrivacyPolicy()
-                }
-                
-                NavigationLink("Copyright/DMCA Policy") {
-                    CopyrightPolicy()
+                NavigationLink("Welcome message") {
+                    WelcomeMessage()
                 }
                 
-                NavigationLink("Fair Use Notice") {
-                    FairUseNotice()
+                NavigationLink("App functionality") {
+                    Functionality()
                 }
-                
             } // Form
             .foregroundStyle(Color.mycolor.myAccent)
             .navigationTitle("About App")
@@ -85,5 +80,8 @@ struct AboutApp: View {
 
 
 #Preview {
-    AboutApp()
+    NavigationStack{
+        AboutApp()
+    }
+    .environmentObject(PostsViewModel())
 }
