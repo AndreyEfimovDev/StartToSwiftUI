@@ -16,6 +16,9 @@
 		471DCBD42EBB8A6400AFA5F4 /* TermsOfUse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBD32EBB8A6400AFA5F4 /* TermsOfUse.swift */; };
 		471DCBD62EBBAD9700AFA5F4 /* AboutApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBD52EBBAD9700AFA5F4 /* AboutApp.swift */; };
 		471DCBD92EBBBF2200AFA5F4 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBD82EBBBF2200AFA5F4 /* JSON.swift */; };
+		471DCBDC2EBBC67500AFA5F4 /* Intro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBDB2EBBC67500AFA5F4 /* Intro.swift */; };
+		471DCBDE2EBBC68500AFA5F4 /* Functionality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBDD2EBBC68500AFA5F4 /* Functionality.swift */; };
+		471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBDF2EBBC6B900AFA5F4 /* WelcomeMessage.swift */; };
 		4732FB2D2EAA2BFC0062269D /* ImportPostsFromCloudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4732FB2C2EAA2BFC0062269D /* ImportPostsFromCloudView.swift */; };
 		4732FB312EAA59B00062269D /* SharePostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4732FB302EAA59B00062269D /* SharePostsView.swift */; };
 		4732FB332EAA5A9E0062269D /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4732FB322EAA5A9E0062269D /* ActivityView.swift */; };
@@ -77,6 +80,9 @@
 		471DCBD32EBB8A6400AFA5F4 /* TermsOfUse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfUse.swift; sourceTree = "<group>"; };
 		471DCBD52EBBAD9700AFA5F4 /* AboutApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutApp.swift; sourceTree = "<group>"; };
 		471DCBD82EBBBF2200AFA5F4 /* JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
+		471DCBDB2EBBC67500AFA5F4 /* Intro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Intro.swift; sourceTree = "<group>"; };
+		471DCBDD2EBBC68500AFA5F4 /* Functionality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functionality.swift; sourceTree = "<group>"; };
+		471DCBDF2EBBC6B900AFA5F4 /* WelcomeMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeMessage.swift; sourceTree = "<group>"; };
 		4732FB2C2EAA2BFC0062269D /* ImportPostsFromCloudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportPostsFromCloudView.swift; sourceTree = "<group>"; };
 		4732FB302EAA59B00062269D /* SharePostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePostsView.swift; sourceTree = "<group>"; };
 		4732FB322EAA5A9E0062269D /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
@@ -175,6 +181,9 @@
 			isa = PBXGroup;
 			children = (
 				471DCBD52EBBAD9700AFA5F4 /* AboutApp.swift */,
+				471DCBDB2EBBC67500AFA5F4 /* Intro.swift */,
+				471DCBDF2EBBC6B900AFA5F4 /* WelcomeMessage.swift */,
+				471DCBDD2EBBC68500AFA5F4 /* Functionality.swift */,
 			);
 			path = AboutApp;
 			sourceTree = "<group>";
@@ -444,6 +453,7 @@
 				4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */,
 				47B465802E6867930059CCB7 /* HomeView.swift in Sources */,
 				47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */,
+				471DCBDE2EBBC68500AFA5F4 /* Functionality.swift in Sources */,
 				47BAF0A42E60613200287F10 /* SearchBarView.swift in Sources */,
 				4791CD862E6ED58B00687126 /* ShrinkIconButtonStyle.swift in Sources */,
 				4732FB332EAA5A9E0062269D /* ActivityView.swift in Sources */,
@@ -455,6 +465,7 @@
 				475997552E5C7F81008E20F0 /* PreviewData.swift in Sources */,
 				4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */,
 				4759976E2E5D933C008E20F0 /* SafariWebService.swift in Sources */,
+				471DCBDC2EBBC67500AFA5F4 /* Intro.swift in Sources */,
 				4791CE002E747B2E00687126 /* HapticService.swift in Sources */,
 				475997532E5C7680008E20F0 /* PostsViewModel.swift in Sources */,
 				4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */,
@@ -487,6 +498,7 @@
 				47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */,
 				4791CDC12E708E1300687126 /* DocumentPicker.swift in Sources */,
 				47E439B72EA9290E007001AD /* NetworkService.swift in Sources */,
+				471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */,
 				47AA558A2EA9741D000AF4E9 /* RestoreBackupView.swift in Sources */,
 				4791CDBB2E702E9700687126 /* EraseAllPostsView.swift in Sources */,
 				4732FB372EAA63810062269D /* Constants.swift in Sources */,

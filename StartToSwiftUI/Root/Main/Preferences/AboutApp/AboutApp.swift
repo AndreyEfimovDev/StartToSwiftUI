@@ -12,81 +12,74 @@ struct AboutApp: View {
     let frameHeight: CGFloat = 30
     
     var body: some View {
-        
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 0) {
-                    Divider()
-                        .frame(height: 1)
-                        .padding(.horizontal, 0)
-                    
-                    HStack {
-                        Text("Name")
-                        Spacer()
-                        Text("StartToSwiftUI")
-                    }
-                    .padding(.horizontal)
-                    .frame(height: frameHeight)
-                    .frame(maxWidth: .infinity)
-                    
-                    Divider()
-                        .frame(height: 1)
-                        .padding(.horizontal, 0)
-                    
-                    HStack {
-                        Text("Version")
-                        Spacer()
-                        Text("01.01.01")
-                    }
-                    .padding(.horizontal)
-                    .frame(height: frameHeight)
-                    .frame(maxWidth: .infinity)
-                    Divider()
-                        .frame(height: 1)
-                        .padding(.horizontal, 0)
-                    
-                    HStack {
-                        Text("Developed by")
-                        Spacer()
-                        Text("Andrey Efimov")
-                    }
-                    .padding(.horizontal)
-                    .frame(height: frameHeight)
-                    .frame(maxWidth: .infinity)
-                    
-                    Divider()
-                        .frame(height: 1)
-                        .padding(.horizontal, 0)
-                        .padding(.bottom, 0)
-                    
+//        ScrollView {
+            VStack(spacing: 0) {
+                Divider()
+                    .frame(height: 1)
+                    .padding(.horizontal, 0)
+                
+                HStack {
+                    Text("Name")
+                    Spacer()
+                    Text("StartToSwiftUI")
                 }
                 .padding(.horizontal)
+                .frame(height: frameHeight)
+                .frame(maxWidth: .infinity)
                 
-                Text("""
-                        **StartToSwiftUI** — a free educational link aggregator, created to help organise learning materials for SwiftUI.
-                        
-                        **KEY FEATURES**:
-                        
-                        • Create personal collections of links to educational materials
-                        • Organise learning resources by category
-                        • Download a curated collection of SwiftUI learning links from the developer
-                        
-                        **IMPORTANT — ON COPYRIGHT**:
-                        
-                        The app only stores links to materials from public sources, it does not copy or distribute content. All rights to the materials belong to their respective authors. For each resource, the following is provided: author, source, a direct link to the original, and the publication date (where known).
-                        
-                        The app is intended solely for non-commercial, educational use. The developer makes no claim of authorship over the featured resources and respects the rights of content creators.
-                        
-                        Content authors can request the removal of links via email request.
-                        """)
+                Divider()
+                    .frame(height: 1)
+                    .padding(.horizontal, 0)
                 
-                .multilineTextAlignment(.leading)
-                .managingPostsTextFormater()
+                HStack {
+                    Text("Version")
+                    Spacer()
+                    Text("01.01.01")
+                }
                 .padding(.horizontal)
+                .frame(height: frameHeight)
+                .frame(maxWidth: .infinity)
+                Divider()
+                    .frame(height: 1)
+                    .padding(.horizontal, 0)
+                
+                HStack {
+                    Text("Developed by")
+                    Spacer()
+                    Text("Andrey Efimov")
+                }
+                .padding(.horizontal)
+                .frame(height: frameHeight)
+                .frame(maxWidth: .infinity)
+                
+                Divider()
+                    .frame(height: 1)
+                    .padding(.horizontal, 0)
+                    .padding(.bottom, 0)
+                
             }
+            .padding(.horizontal)
+            
+            Form {
+                NavigationLink("Terms of Use") {
+                    TermsOfUse() {}
+                }
+                NavigationLink("Privacy Policy") {
+                    PrivacyPolicy()
+                }
+                
+                NavigationLink("Copyright/DMCA Policy") {
+                    CopyrightPolicy()
+                }
+                
+                NavigationLink("Fair Use Notice") {
+                    FairUseNotice()
+                }
+                
+            } // Form
             .foregroundStyle(Color.mycolor.myAccent)
             .navigationTitle("About App")
-        }
+//        }
     }
 }
 
