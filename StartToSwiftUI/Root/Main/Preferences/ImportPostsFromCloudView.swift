@@ -38,6 +38,14 @@ struct ImportPostsFromCloudView: View {
                 .disabled(vm.isFirstImportPostsCompleted)
                 .padding(.top, 30)
             
+            CapsuleButtonView(
+                primaryTitle: "Don't confirm",
+                textColorPrimary: Color.mycolor.myButtonTextRed,
+                buttonColorPrimary: Color.mycolor.myButtonBGRed) {
+                    dismiss()
+                }
+//                .padding(.top, 30)
+            
             Spacer()
             
             if isInProgress {
@@ -68,7 +76,8 @@ struct ImportPostsFromCloudView: View {
             Group {
                 Text("""
                     
-                    **Please confirm that**:
+                    **Please confirm that you**:
+                    
                     """)
 //                .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -80,7 +89,7 @@ struct ImportPostsFromCloudView: View {
                 3. Commit to accessing original sources
                 """
                 )
-                .font(.footnote)
+                .font(.subheadline)
                 .multilineTextAlignment(.leading)
             }
             .foregroundStyle(Color.mycolor.myRed)

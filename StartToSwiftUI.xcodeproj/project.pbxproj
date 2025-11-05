@@ -171,6 +171,14 @@
 			path = Legal_Information;
 			sourceTree = "<group>";
 		};
+		471DCBDA2EBBC60E00AFA5F4 /* AboutApp */ = {
+			isa = PBXGroup;
+			children = (
+				471DCBD52EBBAD9700AFA5F4 /* AboutApp.swift */,
+			);
+			path = AboutApp;
+			sourceTree = "<group>";
+		};
 		475997322E5C6901008E20F0 = {
 			isa = PBXGroup;
 			children = (
@@ -312,7 +320,8 @@
 				4732FB302EAA59B00062269D /* SharePostsView.swift */,
 				47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */,
 				4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */,
-				471DCBD52EBBAD9700AFA5F4 /* AboutApp.swift */,
+				471DCBDA2EBBC60E00AFA5F4 /* AboutApp */,
+				471DCBD72EBBB97000AFA5F4 /* Legal_Information */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
@@ -339,7 +348,6 @@
 				475997572E5C8688008E20F0 /* ViewModels */,
 				47BAF0EE2E645B0A00287F10 /* Views */,
 				4791CDAD2E70186100687126 /* Preferences */,
-				471DCBD72EBBB97000AFA5F4 /* Legal_Information */,
 			);
 			path = Main;
 			sourceTree = "<group>";
