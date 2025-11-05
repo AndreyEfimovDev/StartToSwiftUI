@@ -308,7 +308,7 @@ struct AddEditPostSheet: View {
                 )
             ZStack {
                 HStack {
-                    Button(editedPost.postDate == nil ? "Set date" : "Reset date") {
+                    Button(editedPost.postDate == nil ? "Set date" : "Unknown date") {
                         if editedPost.postDate == nil {
                             editedPost.postDate = Date()
                         } else {
@@ -342,10 +342,6 @@ struct AddEditPostSheet: View {
                 in: RoundedRectangle(cornerRadius: sectionCornerRadius)
             )
         }
-//        .onChange(of: bindingPostDate.wrappedValue) { _, newValue in
-//            editedPost.postDate = newValue
-//        }
-        
     }
     
     private var typeSection: some View {

@@ -183,7 +183,7 @@ struct HomeView: View {
         ContentUnavailableView(
             "No Posts Stored",
             systemImage: "tray.and.arrow.down",
-            description: Text("You can create your own posts manually or go to Preferences to download a curated collection of links to  tutorials and articles on SwiftUI compiled by the developer from open sources.")
+            description: Text("You can create your own posts manually or go to Preferences to download a curated collection of links to SwiftUI tutorials and articles compiled by the developer from open sources.")
         )
     }
     
@@ -242,21 +242,19 @@ struct HomeView: View {
                      
                     **It is importand to understand:**
                      
-                    ✓ The app stores only links to materials available from public sources
-                    ✓ All content belongs to its respective authors
-                    ✓ The app is free and intended for non-commercial use
-                    ✓ Users are responsible for respecting copyright when using materials
+                    ✓ The app stores only links to materials available from public sources.
+                    ✓ All content belongs to its respective authors.
+                    ✓ The app is free and intended for non-commercial use.
+                    ✓ Users are responsible for respecting copyright when using materials.
                      
                     **For each material, you have ability to save:**
                     
-                    - Direct link to the original source
-                    - Author's name
-                    - Source (website, YouTube, etc.)
-                    - Publication date (if known)
-                     
-                    **Terms of Use:**
-                     
-                    To use this application, you need to agree to Terms of Use.
+                    - Direct link to the original source.
+                    - Author's name.
+                    - Source (website, YouTube, etc.).
+                    - Publication date (if known).
+                                         
+                    To use this application, you need to agree to **Terms of Use**.
                     """
                         )
                         .multilineTextAlignment(.leading)
@@ -278,7 +276,7 @@ struct HomeView: View {
                         }
                     } // VStack
                 } // ScrollView
-                .navigationTitle("Welcome!")
+                .navigationTitle("Affirmation")
 
             } // NavigationStack
         } // ZStack

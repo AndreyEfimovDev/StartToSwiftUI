@@ -23,11 +23,10 @@ struct TermsOfUse: View {
     }
     var body: some View {
         
-        NavigationStack {
-            ScrollView {
-                VStack {
-                    //                     **TERMS OF USE FOR THE APPLICATION**
-                    Text("""
+        ScrollView {
+            VStack {
+                //                     **TERMS OF USE FOR THE APPLICATION**
+                Text("""
                         **Last Updated:** November 8, 2025
                         
                         Please read and accept these Terms of Use carefully before using the StartToSwiftUI application.
@@ -187,28 +186,27 @@ struct TermsOfUse: View {
                         **Effective Date:** November 8, 2025
                         
                         """)
-                    
-                    .multilineTextAlignment(.leading)
-                    .managingPostsTextFormater()
-                    .padding(.horizontal)
-                    
-                    CapsuleButtonView(
-                        primaryTitle: "I have read and accept",
-                        secondaryTitle: "Accepted",
-                        isToChange: isAccepted || vm.isTermsOfUseAccepted) {
-                            isAccepted = true
-                            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                                vm.isTermsOfUseAccepted = true
-                                action()
-                            }
+                
+                .multilineTextAlignment(.leading)
+                .managingPostsTextFormater()
+                .padding(.horizontal)
+                
+                CapsuleButtonView(
+                    primaryTitle: "I have read and accept",
+                    secondaryTitle: "Accepted",
+                    isToChange: isAccepted || vm.isTermsOfUseAccepted) {
+                        isAccepted = true
+                        DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+                            vm.isTermsOfUseAccepted = true
+                            action()
                         }
-                        .padding(.horizontal, 30)
-                        .padding(30)
-                        .disabled(vm.isTermsOfUseAccepted)
-                }
+                    }
+                    .padding(.horizontal, 30)
+                    .padding(30)
+                    .disabled(vm.isTermsOfUseAccepted)
             }
-            .navigationTitle("Terms of Use")
         }
+        .navigationTitle("Terms of Use")
     }
 }
 
