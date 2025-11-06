@@ -15,7 +15,6 @@ class FileStorageService: ObservableObject {
     let fileName = Constants.localFileName // "posts_app.json"
 
     var fileURL: URL? {
-        
         guard
             let path = FileManager
                 .default
@@ -32,7 +31,6 @@ class FileStorageService: ObservableObject {
     
     // getting a full path of the JSON data file stored by File Manager
     func getFileURL(fileName: String) -> URL? {
-        
         guard
             let path = FileManager
                 .default
@@ -51,10 +49,7 @@ class FileStorageService: ObservableObject {
         guard let url = getFileURL(fileName: fileName) else { return }
         
         do {
-//            let encoder = JSONEncoder()
-            // Set the date encoding strategy to ISO8601 (string)
-//            encoder.dateEncodingStrategy = .iso8601
-            
+            // We use the date encoding strategy to ISO8601 (string)
             let jsonData = try JSONEncoder.appEncoder.encode(posts)
             try jsonData.write(to: url)
             print("✅ FM: Successfully saved в \(url)")
@@ -70,10 +65,7 @@ class FileStorageService: ObservableObject {
         
         do {
             let data = try Data(contentsOf: url)
-//            let decoder = JSONDecoder()
-            // Set the date encoding strategy from ISO8601 (string)
-//            decoder.dateDecodingStrategy = .iso8601
-            
+            // We use the date decoding strategy from ISO8601 (string)
             let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
             print("✅ FM: Successfully uploaded \(posts.count) posts")
             return posts

@@ -83,7 +83,7 @@ struct PostDetailsView: View {
                 }
             }
         } else {
-            Text("Post not found")
+            Text("Post is not found")
         }
     }
     
@@ -190,7 +190,7 @@ struct PostDetailsView: View {
                 }
             } // if isShowingFullFreeTextField
         } // VStack
-    } // private var additionalText
+    }
     
     @ToolbarContentBuilder
     private func toolbarForPostDetails(validPost: Post) -> some ToolbarContent {

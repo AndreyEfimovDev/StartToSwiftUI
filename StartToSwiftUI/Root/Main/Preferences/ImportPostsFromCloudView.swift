@@ -78,7 +78,6 @@ struct ImportPostsFromCloudView: View {
                     
                     **Please confirm that you**:
                     """)
-//                .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .multilineTextAlignment(.leading)
 
@@ -92,7 +91,6 @@ struct ImportPostsFromCloudView: View {
                 .multilineTextAlignment(.leading)
             }
             .foregroundStyle(Color.mycolor.myRed)
-//            .multilineTextAlignment(.leading)
         }
     }
     
@@ -115,7 +113,6 @@ struct ImportPostsFromCloudView: View {
                 dismiss()
             }
         }
-        
     } // func importFromCloud()
     
 }

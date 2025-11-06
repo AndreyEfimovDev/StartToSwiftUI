@@ -113,10 +113,6 @@ class PostsViewModel: ObservableObject {
         // initiating subscriptions
         addSubscribers()
         
-        // "Прогреваем" подписки
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                self?.searchText = ""
-            }
     }
     
     // MARK: PRIVATE FUNCTIONS
@@ -252,7 +248,6 @@ class PostsViewModel: ObservableObject {
         } else {
             print("VM.deletePost: passed post is nil")
         }
-        
     }
     
     func eraseAllPosts(_ completion: @escaping () -> ()) {
@@ -446,7 +441,6 @@ class PostsViewModel: ObservableObject {
         // check if all filters are empty
         if selectedLevel == nil &&
             selectedFavorite == nil &&
-//            selectedLanguage == nil &&
             selectedType == nil &&
             selectedYear == nil {
             return true
