@@ -271,12 +271,12 @@ struct HomeView: View {
                         .bold()
                         .foregroundColor(Color.mycolor.myAccent)
                     
-                    Text("You can go to Preferenses for updates.")
+                    Text("You can go to Preferences for updates.")
                         .font(.subheadline)
                         .multilineTextAlignment(.center)
                         .foregroundColor(Color.mycolor.mySecondaryText)
                     ClearCupsuleButton(
-                        primaryTitle: "OK",
+                        primaryTitle: "OK, got it",
                         primaryTitleColor: Color.mycolor.myBlue) {
                             vm.isPostsUpdateAvailable = false
                         }

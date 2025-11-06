@@ -38,15 +38,27 @@ enum PostType: String, CaseIterable, Codable {
     }
 }
 
+enum PostOrigin: String, CaseIterable, Codable {
+    case local
+    case cloud
+    
+//    var displayName: String {
+//        switch self {
+//        case .local: return "Local"
+//        case .cloud: return "Cloud"
+//        }
+//    }
+}
+
 
 enum FavoriteChoice: String, CaseIterable, Codable {
-    case yes
     case no
+    case yes
     
     var displayName: String {
         switch self {
-        case .yes: return "Yes"
         case .no: return "No"
+        case .yes: return "Yes"
         }
     }
 

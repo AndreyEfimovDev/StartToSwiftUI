@@ -55,7 +55,7 @@ struct AddEditPostSheet: View {
     let templateForNewPost: Post = Post(
         title: "", intro: "", author: "", urlString: "",
         postPlatform: .youtube, postDate: nil, studyLevel: .beginner,
-        favoriteChoice: .no, additionalText: ""
+        favoriteChoice: .no, additionalText: "", origin: .local
     )
     
     enum PostAlerts {
