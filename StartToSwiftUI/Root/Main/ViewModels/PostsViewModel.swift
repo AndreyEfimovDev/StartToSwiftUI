@@ -232,7 +232,7 @@ class PostsViewModel: ObservableObject {
             $0.title.lowercased().contains(searchText.lowercased()) ||
             $0.intro.lowercased().contains(searchText.lowercased())  ||
             $0.author.lowercased().contains(searchText.lowercased()) ||
-            $0.additionalText.lowercased().contains(searchText.lowercased())
+            $0.notes.lowercased().contains(searchText.lowercased())
         })
     }
 

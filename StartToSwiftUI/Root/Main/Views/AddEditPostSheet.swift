@@ -53,9 +53,9 @@ struct AddEditPostSheet: View {
     @State var alertMessage: String = ""
     
     let templateForNewPost: Post = Post(
-        title: "", intro: "", author: "", urlString: "",
+        category: "", title: "", intro: "", author: "", urlString: "",
         postPlatform: .youtube, postDate: nil, studyLevel: .beginner,
-        favoriteChoice: .no, additionalText: "", origin: .local
+        favoriteChoice: .no, notes: "", origin: .local
     )
     
     enum PostAlerts {
@@ -446,7 +446,7 @@ struct AddEditPostSheet: View {
                     colorSubheader: colorSubheader
                 )
             HStack(spacing: 0) {
-                TextEditor(text: $editedPost.additionalText)
+                TextEditor(text: $editedPost.notes)
                     .font(fontTextInput)
                     .frame(minHeight: 200)
                     .scrollContentBackground(.hidden)
@@ -454,11 +454,11 @@ struct AddEditPostSheet: View {
                     .onSubmit {focusedField = nil }
                     .submitLabel(.return)
                 VStack {
-                    textEditorRightButton(text: editedPost.additionalText) {
-                        editedPost.additionalText = ""
+                    textEditorRightButton(text: editedPost.notes) {
+                        editedPost.notes = ""
                     }
                     textEditorRightButton(
-                        text: editedPost.additionalText,
+                        text: editedPost.notes,
                         iconName: "arrow.turn.right.down",
                         iconColor: Color.mycolor.myBlue) {
                             focusedField = nil

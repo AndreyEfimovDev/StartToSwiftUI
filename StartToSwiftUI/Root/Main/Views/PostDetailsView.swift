@@ -64,7 +64,7 @@ struct PostDetailsView: View {
                         .background(
                             sectionBackground,
                             in: RoundedRectangle(cornerRadius: sectionCornerRadius)
-                        ).opacity(validPost.additionalText.isEmpty ? 0 : 1)
+                        ).opacity(validPost.notes.isEmpty ? 0 : 1)
                 }
                 .foregroundStyle(Color.mycolor.myAccent)
             }
@@ -178,14 +178,14 @@ struct PostDetailsView: View {
                     .padding(.top, 0)
                 
                 Spacer()
-                if !post.additionalText.isEmpty {
+                if !post.notes.isEmpty {
                     MoreLessTextButton(showText: $showFullFreeTextField)
                 }
             }
             
             if showFullFreeTextField {
                 VStack {
-                    Text(post.additionalText)
+                    Text(post.notes)
                         .font(fullFreeTextFieldFont)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 8)
