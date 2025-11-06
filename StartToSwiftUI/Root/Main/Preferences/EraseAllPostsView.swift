@@ -71,29 +71,40 @@ struct EraseAllPostsView: View {
     private var textSection: some View {
         VStack(spacing: 12) {
             Text("""
-            You are about to delete all the posts.
-            
-            What you can do after:
+            **You are about to delete all the posts.**
             """
             )
-            
+            .font(.subheadline)
+            .frame(maxWidth: .infinity)
+            .multilineTextAlignment(.center)
+//            .border(.red)
+
             Text("""
+            What you can do after:
             - download the curated collection, 
             - create own posts, or
             - restore backup.
             """
             )
             .font(.subheadline)
+            .frame(maxWidth: .infinity)
             .multilineTextAlignment(.leading)
+//            .border(.red)
             
             Text("""
-            It is recommended to
-            backup posts before
-            deleting them.
+            
+            It is recommended
+            to backup posts before deleting them.
             """)
             .foregroundStyle(Color.mycolor.myRed)
             .bold()
+            .frame(maxWidth: .infinity)
+            .multilineTextAlignment(.center)
+//            .border(.red)
         }
+        .font(.subheadline)
+//        .multilineTextAlignment(.leading)
+
     }
 }
 

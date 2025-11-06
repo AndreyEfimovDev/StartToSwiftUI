@@ -27,6 +27,7 @@ class PostsViewModel: ObservableObject {
     @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
 
     // stored filters
+    @AppStorage("storedCategory") var storedCategory: String?
     @AppStorage("storedLevel") var storedLevel: StudyLevel?
     @AppStorage("storedFavorite") var storedFavorite: FavoriteChoice?
     @AppStorage("storedType") var storedType: PostType?
@@ -59,7 +60,13 @@ class PostsViewModel: ObservableObject {
         didSet { storedType = selectedType }}
     @Published var selectedYear: String? = nil {
         didSet { storedYear = selectedYear }}
-    
+    @Published var selectedCategory: String? = nil {
+        didSet {
+            storedCategory = selectedCategory
+            homeTitleName = selectedCategory ?? "Study materials"
+        }
+    }
+
     private var cancellables = Set<AnyCancellable>()
     private let fileManager = FileStorageService.shared
     private let hapticManager = HapticService.shared
@@ -70,7 +77,8 @@ class PostsViewModel: ObservableObject {
     @Published var showCloudImportAlert = false
     
     private var utcCalendar = Calendar.current
-    var listOfYearsInPosts: [String]? = nil
+    var allYears: [String]? = nil
+    var allCategories: [String]? = nil
     var dispatchTime: DispatchTime { .now() + 2 }
     
     // MARK: INIT() SECTION
@@ -81,10 +89,12 @@ class PostsViewModel: ObservableObject {
         
         self.allPosts = fileManager.loadPosts()
         
-        // getting a list of years presented in current posts and checking for updates
         if !self.allPosts.isEmpty {
-            
-            self.listOfYearsInPosts = getListOfPostedYearsOfPosts()
+            // getting a list of unique years from the current posts
+            self.allYears = getAllYears()
+            // getting a list of unique years from the current posts
+            self.allCategories = getAllCategories()
+            // checking for updates
             checkCloudForUpdates { hasUpdates in
                 if hasUpdates {
                     self.isPostsUpdateAvailable = true
@@ -97,6 +107,7 @@ class PostsViewModel: ObservableObject {
         self.filteredPosts = self.allPosts
         
         // filters initilazation
+        self.selectedCategory = self.storedCategory
         self.selectedLevel = self.storedLevel
         self.selectedFavorite = self.storedFavorite
         self.selectedType = self.storedType
@@ -125,18 +136,19 @@ class PostsViewModel: ObservableObject {
         // Subscribe on change of seach text and filters
         $searchText
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
-            .combineLatest(filters)
-            .map { searchText, filters -> [Post] in
+            .combineLatest(filters, $selectedCategory)
+            .map { searchText, filters, category -> [Post] in
                 
                 let (level, favorite, type, year) = filters
                 
                 // Getting posts filtered
                 let filtered = self.filterPosts(
                     allPosts: self.allPosts,
+                    category: category,
                     level: level,
                     favorite: favorite,
                     type: type,
-                    year: year
+                    year: year,
                 )
                 
                 // Applying search text
@@ -149,14 +161,15 @@ class PostsViewModel: ObservableObject {
         
         // Subscribe on change of posts
         $allPosts
-            .combineLatest($searchText, filters)
-            .map { posts, searchText, filters -> [Post] in
+            .combineLatest($searchText, filters, $selectedCategory)
+            .map { posts, searchText, filters, category -> [Post] in
                 
                 let (level, favorite, type, year) = filters
                 
                 // Getting posts filtered
                 let filtered = self.filterPosts(
                     allPosts: posts,
+                    category: category,
                     level: level,
                     favorite: favorite,
                     type: type,
@@ -181,6 +194,7 @@ class PostsViewModel: ObservableObject {
     
     private func filterPosts(
         allPosts: [Post],
+        category: String?,
         level: StudyLevel?,
         favorite: FavoriteChoice?,
         type: PostType?,
@@ -192,29 +206,34 @@ class PostsViewModel: ObservableObject {
                 year == nil {
                 return allPosts
             }
-            return allPosts.filter { post in
+            let filteredPosts = allPosts.filter { post in
                 let matchesLevel = level == nil || post.studyLevel == level
                 let matchesFavorite = favorite == nil || post.favoriteChoice == favorite
                 let matchesType = type == nil || post.postType == type
-                
                 let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date()))
                 let matchesYear = year == nil || postYear == year
                 
                 return matchesLevel && matchesFavorite && matchesType && matchesYear
             }
+            
+            if let category = category {
+                return filteredPosts.filter { $0.category == category }
+            } else {
+                return filteredPosts
+            }
+
         }
     
     private func searchPosts(posts: [Post]) -> [Post] {
         guard !searchText.isEmpty else {
             return posts
         }
-        let searchedPosts = posts.filter( {
+        return posts.filter( {
             $0.title.lowercased().contains(searchText.lowercased()) ||
             $0.intro.lowercased().contains(searchText.lowercased())  ||
             $0.author.lowercased().contains(searchText.lowercased()) ||
             $0.additionalText.lowercased().contains(searchText.lowercased())
-        } )
-        return searchedPosts
+        })
     }
 
     
@@ -230,7 +249,8 @@ class PostsViewModel: ObservableObject {
         if let index = allPosts.firstIndex(where: { $0.id == updatedPost.id }) {
             print("✅ VM(updatePost): Updating a current edited post")
             allPosts[index] = updatedPost
-            listOfYearsInPosts = getListOfPostedYearsOfPosts()
+            allYears = getAllYears()
+            allCategories = getAllCategories()
             fileManager.savePosts(allPosts)
         } else {
             print("❌ VM(updatePost): Can't find the index")
@@ -242,7 +262,8 @@ class PostsViewModel: ObservableObject {
         if let validPost = post {
             if let index = allPosts.firstIndex(of: validPost) {
                 allPosts.remove(at: index)
-                listOfYearsInPosts = getListOfPostedYearsOfPosts()
+                allYears = getAllYears()
+                allCategories = getAllCategories()
                 fileManager.savePosts(allPosts)
             }
         } else {
@@ -254,7 +275,8 @@ class PostsViewModel: ObservableObject {
         
         filteredPosts = []
         allPosts = []
-        listOfYearsInPosts = getListOfPostedYearsOfPosts()
+        allYears = getAllYears()
+        allCategories = getAllCategories()
         fileManager.savePosts(allPosts)
         completion()
     }
@@ -295,7 +317,8 @@ class PostsViewModel: ObservableObject {
         if !newPosts.isEmpty {
             allPosts.append(contentsOf: newPosts)
             fileManager.savePosts(allPosts)
-            listOfYearsInPosts = getListOfPostedYearsOfPosts()
+            allYears = getAllYears()
+            allCategories = getAllCategories()
         }
         completion()
     }
@@ -454,14 +477,14 @@ class PostsViewModel: ObservableObject {
     /// The result is used in the FilterSheetView for selecting a year for the filter.
     ///
     /// ```
-    /// getListOfPostedYearsOfPosts() -> [String]?
+    /// getAllYears() -> [String]?
     /// ```
     ///
     /// - Warning: This app is made for self study purpose only.
     /// - Returns: Returns an array of strings with the values of years available in the current posts.
     ///
     
-    private func getListOfPostedYearsOfPosts() -> [String]? {
+    private func getAllYears() -> [String]? {
         
         let list = allPosts.compactMap({ (post) -> String? in
             if let date = post.postDate {
@@ -474,6 +497,11 @@ class PostsViewModel: ObservableObject {
         let result = Array(Set(list)).sorted(by: {$0 < $1})
         print("✅ VM: Final years list: \(result)")
         return result
+    }
+    
+    private func getAllCategories() -> [String]? {
+        
+        return Array(Set(allPosts.map { $0.category })).sorted()
     }
     
 }

@@ -82,6 +82,8 @@ struct RestoreBackupView: View {
               The posts from backup will replace
               all current posts in App.
             """)
+        .multilineTextAlignment(.leading)
+
     }
     
     private func restorePosts(from url: URL) {

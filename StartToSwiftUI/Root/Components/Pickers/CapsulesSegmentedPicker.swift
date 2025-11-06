@@ -22,7 +22,7 @@ struct CustomOneCapsulesLineSegmentedPicker<T: Hashable>: View {
     
     // parameters for optional values
     var showNilOption: Bool = true
-    var nilTitle: String = "None"
+    var nilTitle: String = "All"
     
     
     var body: some View {
@@ -104,9 +104,8 @@ fileprivate struct CustomOneCapsulesLineSegmentedPickerPreview: View {
                 selectedTextColor: .white,
                 unselectedTextColor: .red,
                 selectedBackground: .red,
-                unselectedBackground: Color(.systemGray6),
-                showNilOption: true,
-                nilTitle: "None"
+                unselectedBackground: Color(.systemGray3),
+                showNilOption: true
             )
             .frame(height: 40)
             .padding()
@@ -139,7 +138,7 @@ fileprivate struct CustomOneCapsulesLineSegmentedPickerPreview2: View {
                     selectedTextColor: .white,
                     unselectedTextColor: .red,
                     selectedBackground: .red,
-                    unselectedBackground: Color(.systemGray6),
+                    unselectedBackground: Color(.systemGray5),
                     showNilOption: true,
                     nilTitle: "None"
                 )
@@ -151,9 +150,47 @@ fileprivate struct CustomOneCapsulesLineSegmentedPickerPreview2: View {
     }
 }
 
+fileprivate struct CustomOneCapsulesLineSegmentedPickerPreview3: View {
+
+    // String type
+    
+    @AppStorage("selectedString") var selectedForPreview: String?
+    
+    let listOfSelectedForPreview: [String] = ["One", "Two", "Three"]
+    
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            
+            
+            VStack(spacing: 20) {
+                
+                Text("Selected from [Sting]: \(selectedForPreview ?? "None")")
+                
+                CustomOneCapsulesLineSegmentedPicker(
+                    selection: $selectedForPreview,
+                    allItems: listOfSelectedForPreview,
+                    titleForCase: { $0 },
+                    selectedTextColor: .white,
+                    unselectedTextColor: .red,
+                    selectedBackground: .red,
+                    unselectedBackground: Color(.systemGray5),
+                    showNilOption: true,
+                    nilTitle: "None"
+                )
+                .frame(height: 40)
+                .padding()
+            }
+            .padding()
+        }
+    }
+}
+
+
 #Preview {
     VStack {
         CustomOneCapsulesLineSegmentedPickerPreview()
         CustomOneCapsulesLineSegmentedPickerPreview2()
+        CustomOneCapsulesLineSegmentedPickerPreview3()
+
     }
 }
