@@ -63,7 +63,7 @@ class PostsViewModel: ObservableObject {
     @Published var selectedCategory: String? = nil {
         didSet {
             storedCategory = selectedCategory
-            homeTitleName = selectedCategory ?? "Study materials"
+//            homeTitleName = selectedCategory ?? "Study materials"
         }
     }
 

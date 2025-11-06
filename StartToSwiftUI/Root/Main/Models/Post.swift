@@ -21,6 +21,7 @@ struct Post: Identifiable, Hashable, Codable {
     var studyLevel: StudyLevel // study level of the post
     var favoriteChoice: FavoriteChoice
     var additionalText: String // free text field to enter everything you wish
+    let origin: PostOrigin // source of origin
     let date: Date // the date of creating the post
     
     init(
@@ -36,6 +37,7 @@ struct Post: Identifiable, Hashable, Codable {
         studyLevel: StudyLevel = .beginner,
         favoriteChoice: FavoriteChoice = .no,
         additionalText: String = "",
+        origin: PostOrigin = .cloud,
         date: Date = .now
     ) {
         self.id = id
@@ -50,6 +52,7 @@ struct Post: Identifiable, Hashable, Codable {
         self.studyLevel = studyLevel
         self.favoriteChoice = favoriteChoice
         self.additionalText = additionalText
+        self.origin = origin
         self.date = date
     }
 }

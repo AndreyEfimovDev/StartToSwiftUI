@@ -31,8 +31,8 @@ struct FiltersSheetView: View {
                     .font(.largeTitle)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.top, 55)
-                categoryFilter
-                    .opacity(vm.allCategories == nil ? 0 : 1)
+//                categoryFilter
+//                    .opacity(vm.allCategories == nil ? 0 : 1)
                 studyLevelFilter
                 favoriteFilter
                 typeFilter
