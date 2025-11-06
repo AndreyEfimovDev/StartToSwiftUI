@@ -569,15 +569,15 @@ struct AddEditPostSheet: View {
     
     private func checkPostAndSave() {
         
-            if !textIsAppropriate(text: editedPost.title) {
+        if !textIsAppropriate(text: editedPost.title, limit: 3) {
                 alertType = .error
                 alertTitle = "The Title must contain at least 3 characters."
                 alertMessage = "Please correct the Title."
                 focusedField = .postTitle
                 showAlert.toggle()
-            } else if !textIsAppropriate(text: editedPost.author) {
+        } else if !textIsAppropriate(text: editedPost.author, limit: 2) {
                 alertType = .error
-                alertTitle = "The Author must contain at least 3 characters."
+                alertTitle = "The Author must contain at least 2 characters."
                 alertMessage = "Please correct the Author."
                 focusedField = .author
                 showAlert.toggle()
@@ -604,8 +604,8 @@ struct AddEditPostSheet: View {
         }
     
     
-    private func textIsAppropriate(text: String) -> Bool {
-        return text.count >= 3
+    private func textIsAppropriate(text: String, limit: Int) -> Bool {
+        return text.count >= limit
     }
     
     private func getAlert(
