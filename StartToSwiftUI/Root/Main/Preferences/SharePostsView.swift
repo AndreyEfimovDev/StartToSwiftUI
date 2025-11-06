@@ -89,6 +89,8 @@ struct SharePostsView: View {
             AirDop / Mail / Messenger / etc.
             
             """)
+        .multilineTextAlignment(.leading)
+
     }
 }
 

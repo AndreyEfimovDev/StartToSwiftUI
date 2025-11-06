@@ -10,7 +10,7 @@ import SwiftUI
 
 struct Post: Identifiable, Hashable, Codable {
     let id: UUID
-    var caregory: String // gategory the post belongs to
+    var category: String // gategory the post belongs to
     var title: String // title of the post
     var intro: String // description of the post
     var author: String // author of the post
@@ -39,7 +39,7 @@ struct Post: Identifiable, Hashable, Codable {
         date: Date = .now
     ) {
         self.id = id
-        self.caregory = category
+        self.category = category
         self.title = title
         self.intro = intro
         self.author = author

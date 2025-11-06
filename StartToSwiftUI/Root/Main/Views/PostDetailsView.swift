@@ -104,6 +104,14 @@ struct PostDetailsView: View {
                     .font(.caption)
                     .frame(maxWidth: .infinity)
                 
+                if vm.selectedCategory == nil {
+                    Text(post.category)
+                        .font(.body)
+                        .fontWeight(.medium)
+                        .foregroundStyle(Color.mycolor.myYellow)
+                        .frame(maxWidth: .infinity)
+                } else {
+                                    }
                 Text(post.studyLevel.rawValue.capitalized + " level")
                     .font(.body)
                     .fontWeight(.medium)
