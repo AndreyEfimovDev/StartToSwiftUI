@@ -99,7 +99,6 @@ struct CheckForPostsUpdateView: View {
         .listRowBackground(Color.clear)
     }
 
-
     private var textSection: some View {
         Text("""
             The curated collection of links to SwiftUI tutorials and articles has been compiled from open sources by the developer for the purpose of learning the SwiftUI functionality.
@@ -107,7 +106,6 @@ struct CheckForPostsUpdateView: View {
             The collection will be appended to all current posts in the App, excluding duplicates based on the post title.
             """)
     }
-    
     
     // MARK: Functions
     

@@ -36,7 +36,7 @@ struct SearchBarView: View {
                         .offset(x: 8)
                         .opacity(isFocusedOnSearchBar ? 1 : 0)
                         .onTapGesture {
-                            withAnimation(.easeInOut(duration: 0.2)) {
+                            withAnimation(.easeInOut(duration: 0.5)) {
                                 isFocusedOnSearchBar = false
                                 vm.searchText = ""
                             }

@@ -15,10 +15,10 @@ struct FairUseNotice: View {
                     
                     **Why the Application is Legitimate:**
                     
-                    - **Educational Purpose** - The app serves exclusively for non-commercial educational use, helping users organise learning materials.
-                    - **Links, Not Content** - We store only references to materials through links, never copying, hosting, or distributing the actual content.
-                    - **Author Attribution** - Complete authorship information is preserved and displayed for each resource (author name, source, publication date).
-                    - **Direct Source Access** - All links lead directly to original sources, ensuring content creators receive proper traffic and recognition.
+                    **Educational Purpose**: The app serves exclusively for non-commercial educational use, helping users organise learning materials.
+                    **Links, Not Content**: We store only references to materials through links, never copying, hosting, or distributing the actual content.
+                    **Author Attribution**: Complete authorship information is preserved and displayed for each resource (author name, source, publication date).
+                    **Direct Source Access**: All links lead directly to original sources, ensuring content creators receive proper traffic and recognition.
                     
                     The application acts as an organisational tool that respects intellectual property rights while supporting the educational community. We encourage users to always access materials through the original sources and respect creators' rights.
                     """)

@@ -88,7 +88,7 @@ struct PreferencesView: View {
             CheckForPostsUpdateView()
         }
         .customPreferencesListRowStyle(
-            iconName: "arrow.trianglehead.counterclockwise", // arrow.counterclockwise.circle
+            iconName: "arrow.trianglehead.counterclockwise",
             iconWidth: iconWidth
         )
     }
@@ -149,10 +149,9 @@ struct PreferencesView: View {
             LegalInformationView()
         }
         .customPreferencesListRowStyle(
-            iconName: "long.text.page.and.pencil", // long.text.page.and.pencil receipt exclamationmark.triangle.text.page
+            iconName: "long.text.page.and.pencil",
             iconWidth: iconWidth
         )
-
     }
     
     private var contactDeveloperButton: some View {
@@ -189,6 +188,8 @@ struct LazyView<Content: View>: View {
 
 
 #Preview {
-    PreferencesView ()
-        .environmentObject(PostsViewModel())
+    NavigationStack {
+        PreferencesView ()
+            .environmentObject(PostsViewModel())
+    }
 }

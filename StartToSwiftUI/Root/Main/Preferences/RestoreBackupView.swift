@@ -113,9 +113,6 @@ struct RestoreBackupView: View {
                 return
             }
             print("✅   Point before DECODING JSON")
-            // Decoding posts
-//            let decoder = JSONDecoder()
-//            decoder.dateDecodingStrategy = .iso8601
             let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
             print("✅ ✅ ✅ Point after DECODING JSON")
             

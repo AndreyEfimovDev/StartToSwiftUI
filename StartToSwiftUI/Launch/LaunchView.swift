@@ -47,9 +47,8 @@ struct LaunchView: View {
         .onAppear {
             showLoadingText.toggle()
         }
-        .onReceive(timer, perform: { _ in
+        .onReceive(timer) { _ in
             withAnimation(.spring()) {
-                
                 let lastIndex = loadingText.count - 1
                 if counter == lastIndex {
                     counter = 0
@@ -61,7 +60,7 @@ struct LaunchView: View {
                     counter += 1
                 }
             }
-        })
+        }
     }
 }
 

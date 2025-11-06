@@ -11,7 +11,6 @@ struct HomeView: View {
     
     // MARK: PROPERTIES
     
-//    @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     
@@ -24,7 +23,6 @@ struct HomeView: View {
     @State private var showDetailView: Bool = false
     @State private var showPreferancesView: Bool = false
     @State private var showAddPostView: Bool = false
-//    @State private var showDisclaimer: Bool = false
     @State private var showTermsOfUse: Bool = false
 
     
@@ -34,22 +32,11 @@ struct HomeView: View {
     @State private var isShowingDeleteConfirmation: Bool = false
     @State private var isAnyChanges: Bool = false
     
-//    @State private var dummyText: String = ""
-//    @FocusState private var dummyFocus: Bool
-
-    
     // MARK: VIEW BODY
     
     var body: some View {
         NavigationStack {
             ZStack {
-                
-                // An invisible TextField to pre-load the keyboard - to avoid the search bar freezing on first load.
-//                TextField("", text: $dummyText)
-//                    .frame(width: 0, height: 0)
-//                    .opacity(0)
-//                    .focused($dummyFocus)
-
                 mainViewBody
                     .navigationTitle(vm.homeTitleName)
                     .navigationBarBackButtonHidden(true)
@@ -86,21 +73,12 @@ struct HomeView: View {
         } // NavigationStack
         .onAppear {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-//            An invisible TextField to pre-load the keyboard - to avoid the search bar freezing on first load.
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-//                dummyFocus = true
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-//                    dummyFocus = false
-//                }
-//            }
         }
         .overlay {
-            
-            // Disclaimer at the first launch to accept Terms of Use
+            // Affirmation at the first launch to accept Terms of Use
             if !vm.isTermsOfUseAccepted {
                 welcomeAtFirstLauch
             }
-            
             // Updates available notification
             if vm.isPostsUpdateAvailable && vm.isNotification {
                 updateAvailableDialog
@@ -152,9 +130,9 @@ struct HomeView: View {
                                         vm.favoriteToggle(post: post)
                                     }
                                     .tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondaryText : Color.mycolor.myYellow)
-                                } // lefut side swipe action buttonss
+                                } // left side swipe action buttons
                         } // ForEach
-                        // .buttonStyle(.plain) // it makes the buttons accessable
+                        // .buttonStyle(.plain) // it makes the buttons accessable through the List elements
                     } // List
                     .listStyle(.plain)
                     .background(Color.mycolor.myBackground)
@@ -174,7 +152,7 @@ struct HomeView: View {
                             }
                             .padding(.trailing, 35)
                     } // if showButtonOnTop
-                }
+                } // else-if
             } // ZStack
         } // ScrollViewReader
     }
@@ -232,7 +210,6 @@ struct HomeView: View {
         ZStack {
             Color.mycolor.myAccent.opacity(0.4)
                 .ignoresSafeArea()
-            //        DisclaimerView()
             NavigationStack {
                 ScrollView {
                     VStack {

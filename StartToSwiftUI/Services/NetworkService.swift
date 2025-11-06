@@ -81,8 +81,7 @@ class NetworkService: ObservableObject {
             }
             
             do {
-//                let decoder = JSONDecoder()
-//                decoder.dateDecodingStrategy = .iso8601
+                // We use the date decoding strategy from ISO8601 (string)
                 let response = try JSONDecoder.appDecoder.decode(CloudPosts.self, from: data)
                 DispatchQueue.main.async {
                     completion(.success(response))

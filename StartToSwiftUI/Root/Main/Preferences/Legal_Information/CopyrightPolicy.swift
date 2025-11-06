@@ -12,31 +12,31 @@ struct CopyrightPolicy: View {
         ScrollView {
             //                     COPYRIGHT/DMCA POLICY
             Text("""
-                    **StartToSwiftUI** respects intellectual property rights and complies with copyright laws.
+                    **StartToSwiftUI** respects intellectual property rights and complies with copyright legislation.
                     
-                    **WHAT THE APPLICATION STORES:**
+                    **WHAT THE APPLICATION STORES**
                     
-                    The application provides users with ability to dowlonad a curated collection of SwiftUI learning links and stores only metadata (links, titles, author names) and does not copy, host, or distribute the content itself.
+                    The application allows users to download a curated collection of SwiftUI learning links. It stores only metadata—such as titles, author names, and direct URLs—and does not copy, host, or distribute the actual content.
                     
-                    **FOR CONTENT AUTHORS:**
+                    **FOR CONTENT AUTHORS**
                     
-                    If you are the author of material linked within the application's curated collection and wish to have the link removed, please contact me at: andrey.efimov.dev@gmail.com.
+                    If you are the author of material linked within the application's curated collection and would like the link removed, please contact me at: andrey.efimov.dev@gmail.com.
                     
-                    I commit to:
-                    - Review your request within 24-48 hours
-                    - Remove the link from the curated collection upon confirmation of authorship
-                    - Confirm removal via email
+                    We are committed to the following:
+                    - Reviewing your request within 24–48 hours
+                    - Removing the link from the curated collection upon confirmation of authorship
+                    - Sending you confirmation of the removal via email
                     
-                    **REQUEST PROCEDURE:**
+                    **REQUEST PROCEDURE**
                     
-                    Please include in your email:
-                    - Link to the material in the original source
-                    - Proof of authorship (link to your author profile)
-                    - Reason for the removal request
+                    Please include the following in your email:
+                    - The link to the material on the original source
+                    - Proof of authorship (e.g., a link to your author profile or website)
+                    - v
                     
                     **FAIR USE:**
                     
-                    The application is created in accordance with Fair Use principles for educational purposes and does not replace original sources.
+                    The application has been developed in accordance with Fair Use principles for educational, non-commercial purposes. It is designed to direct users to original sources and does not replace or replicate them.
                     """)
             
             .multilineTextAlignment(.leading)
