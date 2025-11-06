@@ -46,9 +46,3 @@
 
 ### Download
 Available on the App Store: [Download StartToSwiftUI](#) *(link to be added)*
-
-### Development Setup
-```bash
-git clone https://github.com/yourusername/StartToSwiftUI.git
-cd StartToSwiftUI
-open StartToSwiftUI.xcodeproj
