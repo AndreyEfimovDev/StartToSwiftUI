@@ -23,6 +23,7 @@ struct SearchBarView: View {
             TextField("Search here ...", text: $vm.searchText)
                 .foregroundStyle(Color.mycolor.myAccent)
                 .autocorrectionDisabled(true)
+                .keyboardType(.asciiCapable)
                 .frame(height: isFocusedOnSearchBar ? 40 : 20)
                 .focused($isFocusedOnSearchBar)
                 .submitLabel(.search)
@@ -57,7 +58,6 @@ struct SearchBarView: View {
         .padding(.horizontal, 8)
         .padding(.bottom, 8)
         .background(.ultraThickMaterial)
-
     }
 }
 

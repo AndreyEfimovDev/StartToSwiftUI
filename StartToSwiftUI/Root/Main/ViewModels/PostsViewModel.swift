@@ -130,7 +130,6 @@ class PostsViewModel: ObservableObject {
         $searchText
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
             .combineLatest(filters)
-//            .receive(on: DispatchQueue.main)
             .map { searchText, filters -> [Post] in
                 
                 let (level, favorite, type, year) = filters
@@ -146,17 +145,6 @@ class PostsViewModel: ObservableObject {
                 
                 // Applying search text
                 return self.searchPosts(posts: filtered)
-                //
-                //                guard !searchText.isEmpty else {
-                //                    return filtered
-                //                }
-                //
-                //                return filtered.filter {
-                //                    $0.title.lowercased().contains(searchText.lowercased()) ||
-                //                    $0.intro.lowercased().contains(searchText.lowercased()) ||
-                //                    $0.author.lowercased().contains(searchText.lowercased()) ||
-                //                    $0.additionalText.lowercased().contains(searchText.lowercased())
-                //                }
             }
             .sink { [weak self] searchedPosts in
                 self?.filteredPosts = searchedPosts
@@ -166,7 +154,6 @@ class PostsViewModel: ObservableObject {
         // Subscribe on change of posts
         $allPosts
             .combineLatest($searchText, filters)
-//            .receive(on: DispatchQueue.main)
             .map { posts, searchText, filters -> [Post] in
                 
                 let (level, favorite, type, year) = filters
@@ -182,16 +169,6 @@ class PostsViewModel: ObservableObject {
                 
                 // Applying search text
                 return self.searchPosts(posts: filtered)
-                //                guard !searchText.isEmpty else {
-                //                    return filtered
-                //                }
-                //
-                //                return filtered.filter {
-                //                    $0.title.lowercased().contains(searchText.lowercased()) ||
-                //                    $0.intro.lowercased().contains(searchText.lowercased()) ||
-                //                    $0.author.lowercased().contains(searchText.lowercased()) ||
-                //                    $0.additionalText.lowercased().contains(searchText.lowercased())
-                //                }
             }
             .sink { [weak self] posts in
                 self?.filteredPosts = posts
@@ -300,9 +277,9 @@ class PostsViewModel: ObservableObject {
         }
     }
     
-    /// Import manually pre-saved posts mainly for the development purpose.
+    /// Import manually collected posts for the development purpose.
     ///
-    /// Manually pre-saved posts are also used for creating remote posts in the Cloud .
+    /// Manually collected posts are also used for creating curated posts in the Cloud .
     ///
     /// ```
     /// loadPersistentPosts() -> Void
