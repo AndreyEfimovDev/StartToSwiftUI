@@ -11,10 +11,10 @@ struct LaunchView: View {
     
     let action: () -> ()
     
-    @State private var showLoadingText: Bool = false
+    @State private var showLoadingProgress: Bool = false
     @State private var counter: Int = 0
     @State private var loops: Int = 0
-    @State private var loadingText: [String] = "............. loading .............".map { String($0) }
+    @State private var loadingString: [String] = "............. loading .............".map { String($0) }
     
     private let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
     
@@ -30,10 +30,10 @@ struct LaunchView: View {
                 .frame(width: 200, height: 200)
 
             ZStack {
-                if showLoadingText {
+                if showLoadingProgress {
                     HStack(spacing: 0) {
-                        ForEach(loadingText.indices, id: \.self) { index in
-                            Text(loadingText[index])
+                        ForEach(loadingString.indices, id: \.self) { index in
+                            Text(loadingString[index])
                                 .offset(y: counter == index ? -11 : 0)
                         }
                     }
@@ -45,11 +45,11 @@ struct LaunchView: View {
         }
         .foregroundColor(Color.launch.accent)
         .onAppear {
-            showLoadingText.toggle()
+            showLoadingProgress.toggle()
         }
         .onReceive(timer) { _ in
-            withAnimation(.spring()) {
-                let lastIndex = loadingText.count - 1
+            withAnimation() {
+                let lastIndex = loadingString.count - 1
                 if counter == lastIndex {
                     counter = 0
                     loops += 1
