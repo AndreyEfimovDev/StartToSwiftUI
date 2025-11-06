@@ -77,7 +77,6 @@ struct ImportPostsFromCloudView: View {
                 Text("""
                     
                     **Please confirm that you**:
-                    
                     """)
 //                .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
