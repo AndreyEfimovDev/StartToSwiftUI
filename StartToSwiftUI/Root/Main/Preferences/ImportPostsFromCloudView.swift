@@ -77,7 +77,7 @@ struct ImportPostsFromCloudView: View {
             Group {
                 Text("""
                     
-                    **NOTICE**
+                    **IMPORTANT NOTICE**
                     
                     **Clicking
                     "Confirm and Download"
@@ -88,7 +88,7 @@ struct ImportPostsFromCloudView: View {
                 Text("""
                 1. The materials will be used solely for non-commercial educational purposes.
                 2. All intellectual property rights in the materials are retained by the original authors.
-                3. You will endeavour to access and reference the original source materials.
+                3. You will make every effort to access and reference the original source materials.
                 """
                 )
                 .font(.subheadline)

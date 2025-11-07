@@ -41,9 +41,9 @@ struct PreferencesView: View {
                         checkForPostsUpdate
                     }
                     
-                    if !vm.isFirstImportPostsCompleted {
+//                    if !vm.isFirstImportPostsCompleted {
                         importFromCloud
-                    }
+//                    }
                     shareBackup
                     restoreBackup
                     erasePosts
