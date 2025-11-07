@@ -96,13 +96,13 @@ enum StudyLevel: String, CaseIterable, Codable {
 enum Platform: String, CaseIterable, Codable {
     case youtube
     case website
-    case others
+//    case others
     
     var displayName: String {
         switch self {
         case .youtube: return "YouTube"
         case .website: return "Website"
-        case .others: return "Others"
+//        case .others: return "Others"
         }
     }
 }

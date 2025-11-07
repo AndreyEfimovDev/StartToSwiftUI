@@ -26,6 +26,17 @@ struct PostDetailsView: View {
         vm.allPosts.first(where: { $0.id == postId })
     }
     
+    private var buttonTitle: String {
+        switch post?.postPlatform {
+        case .youtube:
+            "Watch the Video"
+        case .website:
+            "Read the Article"
+        case nil:
+            "Go to the Source"
+        }
+    }
+    
     @State private var lineCountIntro: Int = 0
     private let introFont: Font = .subheadline
     private let introLineSpacing: CGFloat = 0
@@ -57,7 +68,7 @@ struct PostDetailsView: View {
                             sectionBackground,
                             in: RoundedRectangle(cornerRadius: sectionCornerRadius)
                         )
-                    watchTheSourceButton(for: validPost)
+                    goToTheSourceButton(for: validPost)
                         .padding(.horizontal, 55)
                     
                     notesToPost(for: validPost)
@@ -127,8 +138,8 @@ struct PostDetailsView: View {
             VStack {
                 let dateChecked = post.postDate == nil ? "" : (post.postDate?.formatted(date: .numeric, time: .omitted) ?? "")
                 let prefixToDate = post.postDate == nil ? "" : " posted "
-                let platform = post.postPlatform == .others ? "" : post.postPlatform.displayName
-                let postType = post.postPlatform == .others ? "" : post.postType.displayName
+                let platform = post.postPlatform.displayName
+                let postType = post.postType.displayName
                 let titleForIntro = postType + " on " + platform + prefixToDate + dateChecked
                 
                 Text(titleForIntro)
@@ -159,11 +170,12 @@ struct PostDetailsView: View {
         }
     }
     
-    private func watchTheSourceButton(for post: Post) -> some View {
+    private func goToTheSourceButton(for post: Post) -> some View {
+        
         Button {
             showSafariView = true
         } label: {
-            RedCupsuleButton(buttonTitle: "Watch the Source")
+            RedCupsuleButton(buttonTitle: buttonTitle)
         }
     }
     
