@@ -77,15 +77,18 @@ struct ImportPostsFromCloudView: View {
             Group {
                 Text("""
                     
-                    **Please confirm that you**:
+                    **NOTICE**
+                    
+                    **Clicking
+                    "Confirm and Download"
+                    constitutes your agreement to the following terms:**:
                     
                     """)
-                .frame(maxWidth: .infinity, alignment: .leading)
 
                 Text("""
-                1. Will use the materials only for non-commercial educational purposes.
-                2. Understand that all rights to the materials belong to their authors.
-                3. Commit to accessing original sources.
+                1. The materials will be used solely for non-commercial educational purposes.
+                2. All intellectual property rights in the materials are retained by the original authors.
+                3. You will endeavour to access and reference the original source materials.
                 """
                 )
                 .font(.subheadline)
