@@ -60,7 +60,7 @@ struct PostDetailsView: View {
                     watchTheSourceButton(for: validPost)
                         .padding(.horizontal, 55)
                     
-                    addInfoField(for: validPost)
+                    notesToPost(for: validPost)
                         .background(
                             sectionBackground,
                             in: RoundedRectangle(cornerRadius: sectionCornerRadius)
@@ -167,10 +167,10 @@ struct PostDetailsView: View {
         }
     }
     
-    private func addInfoField(for post: Post) -> some View {
+    private func notesToPost(for post: Post) -> some View {
         VStack(spacing: 0) {
             HStack {
-                Text("Additional information")
+                Text("Notes")
                     .font(.headline)
                     .frame(height: 55)
                     .frame(maxWidth: .infinity, alignment: .leading)
