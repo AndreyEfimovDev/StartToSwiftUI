@@ -22,7 +22,7 @@ struct DevPreview {
         postDate: Date.from(year: 2021, month: 3, day: 26),
         studyLevel: .beginner,
         favoriteChoice: .yes,
-        additionalText: "",
+        notes: "",
     )
     
     static let samplePost2 = Post(
@@ -51,7 +51,7 @@ struct DevPreview {
         postDate: Date.from(year: 2022, month: 8, day: 11),
         studyLevel: .middle,
         favoriteChoice: .no,
-        additionalText: """
+        notes: """
         In this video we are going to explore how we can stylize text for our Text views in SwiftUI.
         We will start by looking at how we can create a `Text` view with the Markdown-formatted base postLanguage version of the string as the localization key,
         We will also see how we can utilize string interpolation to combine and stylize our strings and present them in a text view.
@@ -864,7 +864,13 @@ struct DevPreview {
 
     ]
         
-        // MARK: My Private Posts
+    
+    
+    
+    // MARK: My Private Posts
+    
+    
+    
     
     static let myPrivatePosts = [
 // 2025-10-30
@@ -948,7 +954,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2021, month: 6, day: 24),
             studyLevel: .middle,
-            additionalText: """
+            notes: """
         The Swift Programming Language (6.2)
         Properties
         https://docs.swift.org/swift-book/documentation/the-swift-programming-language/properties/
@@ -1009,7 +1015,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2022, month: 4, day: 5),
             studyLevel: .beginner,
-        additionalText: """
+        notes: """
             SF Symbols is a library of icons designed to be used with the San Francisco font, the system font for Apple platforms. You can have access to the library of over 3,000 symbols by downloading the mac app available on the official Apple Website.
             
             https://developer.apple.com/sf-symbols/?ref=createwithswift.com
@@ -1231,7 +1237,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 4, day: 4),
             studyLevel: .middle,
-        additionalText: """
+        notes: """
             AVFoundation
             """),
         Post(
@@ -1274,7 +1280,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 4, day: 16),
             studyLevel: .beginner,
-        additionalText: """
+        notes: """
             The searchable modifier has many variations and you can find them all on the official page for search in the Apple documentation:
             
             https://developer.apple.com/documentation/swiftui/search?ref=createwithswift.com
@@ -1383,7 +1389,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 6, day: 23),
             studyLevel: .beginner,
-            additionalText: """
+            notes: """
                 TimelineView()
                 .Date.FormatStyle
                 SystemFormatStyle.DateOffset
@@ -1405,7 +1411,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 6, day: 7),
             studyLevel: .beginner,
-            additionalText: """
+            notes: """
                 Measurement()
                 Measurement.FormatStyle
                 .measurement
@@ -1456,7 +1462,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 6, day: 26),
             studyLevel: .beginner,
-            additionalText: """
+            notes: """
                 symbolEffect(_:options:value:)
             
                 Appear (AppearSymbolEffect)
@@ -1491,7 +1497,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 8, day: 1),
             studyLevel: .middle,
-            additionalText: """
+            notes: """
                 translationPresentation
             """),
         Post(
@@ -1509,7 +1515,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 8, day: 2),
             studyLevel: .middle,
-            additionalText: """
+            notes: """
                 TranslationSession.Configuration
                 translationTask
                 translate
@@ -1530,7 +1536,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 28),
             studyLevel: .middle,
-            additionalText: """
+            notes: """
                 The key is combining:
                 - TextRenderer -> custom drawing logic;
                 - Animatable -> time-based changes;
@@ -1558,7 +1564,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 9, day: 26),
             studyLevel: .middle,
-            additionalText: """
+            notes: """
                 @Namespace
                 .zoom
                 .matchedTransitionSource
@@ -1576,7 +1582,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 10, day: 3),
             studyLevel: .middle,
-            additionalText: """
+            notes: """
                 @Namespace
                 .zoom
                 .matchedTransitionSource
@@ -1603,7 +1609,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 10, day: 10),
             studyLevel: .middle,
-            additionalText: """
+            notes: """
                 visualEffect
                 .hueRotation
             """),
@@ -1642,7 +1648,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 10, day: 24),
             studyLevel: .middle,
-            additionalText: """
+            notes: """
                 Transition
                 TransitionPhase
                 move, slide, push, scale
@@ -1663,7 +1669,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 10, day: 29),
             studyLevel: .middle,
-            additionalText: """
+            notes: """
                 blur
                 """),
         Post(
@@ -1747,7 +1753,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 12, day: 11),
             studyLevel: .beginner,
-        additionalText: """
+        notes: """
             TextField
             """),
         Post(
@@ -1783,7 +1789,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 1, day: 7),
             studyLevel: .beginner,
-            additionalText: """
+            notes: """
                     .confirmationDialog(
                         // 1. The title of the Sheet
                         "Title for the confirmation Dialog Sheet",
@@ -1832,7 +1838,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 1, day: 9),
             studyLevel: .beginner,
-        additionalText: """
+        notes: """
             @FocusState
             .focusable
             .focused
@@ -1857,7 +1863,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 1, day: 10),
             studyLevel: .beginner,
-        additionalText: """
+        notes: """
             @FocusState
             .focusable
             .focused
@@ -1883,7 +1889,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 1, day: 30),
             studyLevel: .beginner,
-        additionalText: """
+        notes: """
             When you use custom symbol in tab bar remember to have a look at the Human Interface Guidelines to export them in the correct size.
             
             https://developer.apple.com/design/human-interface-guidelines/tab-bars?ref=createwithswift.com#Target-dimensions
@@ -1908,7 +1914,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 2, day: 6),
             studyLevel: .beginner,
-        additionalText: """
+        notes: """
             ImageResource
             .controlGroupStyle
             """),
@@ -1925,7 +1931,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 2, day: 18),
             studyLevel: .middle,
-            additionalText: """
+            notes: """
                 Table
                 TableColumn
                 TableRow
@@ -1975,7 +1981,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 2, day: 6),
             studyLevel: .beginner,
-        additionalText: """
+        notes: """
             ImageResource
             .controlGroupStyle
             """),
@@ -1992,7 +1998,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 2, day: 18),
             studyLevel: .middle,
-            additionalText: """
+            notes: """
                 Table
                 TableColumn
                 TableRow
@@ -2054,7 +2060,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 2, day: 27),
             studyLevel: .middle,
-        additionalText: """
+        notes: """
             scrollTransition
             ScrollTransitionConfiguration
             ScrollTransitionPhase
@@ -2087,7 +2093,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 3, day: 20),
             studyLevel: .advanced,
-        additionalText: """
+        notes: """
             ViewThatFits
             @ViewBuilder 
             """),
@@ -2104,7 +2110,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 4, day: 1),
             studyLevel: .advanced,
-        additionalText: """
+        notes: """
             iPad
             NavigationStack
             NavigationSplitView
@@ -2125,7 +2131,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 4, day: 4),
             studyLevel: .advanced,
-        additionalText: """
+        notes: """
             Toggling multiple options at once
             isOn
             bundle
@@ -2146,7 +2152,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 4, day: 1),
             studyLevel: .advanced,
-        additionalText: """
+        notes: """
             containerRelativeFrame
             """),
         Post(
@@ -2175,7 +2181,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 6, day: 10),
             studyLevel: .advanced,
-        additionalText: """
+        notes: """
             CoreSpotlight
             AppIntent
             IndexedEntity
@@ -2234,7 +2240,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 8, day: 5),
             studyLevel: .advanced,
-        additionalText: """
+        notes: """
             Speech
             AVFoundation
             AVAudioApplication
@@ -2305,7 +2311,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 9, day: 16),
             studyLevel: .middle,
-        additionalText: """
+        notes: """
             CNContactStore
             requestAccess
             authorizationStatus
@@ -2341,7 +2347,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 18),
             studyLevel: .middle,
-        additionalText: """
+        notes: """
             CNContactStore
             requestAccess
             authorizationStatus
@@ -2360,7 +2366,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 19),
             studyLevel: .middle,
-        additionalText: """
+        notes: """
             CNContactStore
             requestAccess
             authorizationStatus
@@ -2392,7 +2398,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 3),
             studyLevel: .beginner,
-        additionalText: """
+        notes: """
             navigationDestination
             NavigationPath
             """),
@@ -2411,7 +2417,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 9),
             studyLevel: .beginner,
-        additionalText: """
+        notes: """
                 navigationDestination
                 NavigationPath
             """),
@@ -2430,7 +2436,7 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 17),
             studyLevel: .beginner,
-            additionalText: """
+            notes: """
             AttributedString
             AttributeContainer
             AttributedTextSelection
@@ -2460,7 +2466,7 @@ struct DevPreview {
             postPlatform: .youtube,
             postDate: Date.from(year: 2025, month: 1, day: 2),
             studyLevel: .beginner,
-            additionalText: """
+            notes: """
                 https://fuckingformatstyle.com/
                 https://github.com/brettohland/fuckingformatstyle
                 """),
