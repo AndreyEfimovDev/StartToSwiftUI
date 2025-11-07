@@ -13,7 +13,13 @@ class PostsViewModel: ObservableObject {
     
     // MARK: PROPERTIES
     
-    @Published var allPosts: [Post] = []
+    @Published var allPosts: [Post] = [] {
+        didSet {
+            allYears = getAllYears()
+            allCategories = getAllCategories()
+            fileManager.savePosts(allPosts)
+        }
+    }
     @Published var filteredPosts: [Post] = []
     @Published var searchText: String = ""
     @Published var isFiltersEmpty: Bool = true
@@ -91,9 +97,9 @@ class PostsViewModel: ObservableObject {
         
         if !self.allPosts.isEmpty {
             // getting a list of unique years from the current posts
-            self.allYears = getAllYears()
+//            self.allYears = getAllYears()
             // getting a list of unique years from the current posts
-            self.allCategories = getAllCategories()
+//            self.allCategories = getAllCategories()
             // checking for updates
             checkCloudForUpdates { hasUpdates in
                 if hasUpdates {
@@ -175,7 +181,7 @@ class PostsViewModel: ObservableObject {
                     type: type,
                     year: year
                 )
-                
+
                 // Applying search text
                 return self.searchPosts(posts: filtered)
             }
@@ -242,16 +248,16 @@ class PostsViewModel: ObservableObject {
     func addPost(_ newPost: Post) {
         print("✅ VM(addPost): Adding a new post")
         allPosts.append(newPost)
-        fileManager.savePosts(allPosts)
+//        fileManager.savePosts(allPosts)
     }
     
     func updatePost(_ updatedPost: Post) {
         if let index = allPosts.firstIndex(where: { $0.id == updatedPost.id }) {
             print("✅ VM(updatePost): Updating a current edited post")
             allPosts[index] = updatedPost
-            allYears = getAllYears()
-            allCategories = getAllCategories()
-            fileManager.savePosts(allPosts)
+//            allYears = getAllYears()
+//            allCategories = getAllCategories()
+//            fileManager.savePosts(allPosts)
         } else {
             print("❌ VM(updatePost): Can't find the index")
         }
@@ -262,9 +268,9 @@ class PostsViewModel: ObservableObject {
         if let validPost = post {
             if let index = allPosts.firstIndex(of: validPost) {
                 allPosts.remove(at: index)
-                allYears = getAllYears()
-                allCategories = getAllCategories()
-                fileManager.savePosts(allPosts)
+//                allYears = getAllYears()
+//                allCategories = getAllCategories()
+//                fileManager.savePosts(allPosts)
             }
         } else {
             print("VM.deletePost: passed post is nil")
@@ -275,9 +281,9 @@ class PostsViewModel: ObservableObject {
         
         filteredPosts = []
         allPosts = []
-        allYears = getAllYears()
-        allCategories = getAllCategories()
-        fileManager.savePosts(allPosts)
+//        allYears = getAllYears()
+//        allCategories = getAllCategories()
+//        fileManager.savePosts(allPosts)
         completion()
     }
     
@@ -290,7 +296,7 @@ class PostsViewModel: ObservableObject {
             case .yes:
                 allPosts[index].favoriteChoice = .no
             }
-            fileManager.savePosts(allPosts)
+//            fileManager.savePosts(allPosts)
         }
     }
     
@@ -316,9 +322,9 @@ class PostsViewModel: ObservableObject {
         
         if !newPosts.isEmpty {
             allPosts.append(contentsOf: newPosts)
-            fileManager.savePosts(allPosts)
-            allYears = getAllYears()
-            allCategories = getAllCategories()
+//            fileManager.savePosts(allPosts)
+//            allYears = getAllYears()
+//            allCategories = getAllCategories()
         }
         completion()
     }
@@ -362,7 +368,7 @@ class PostsViewModel: ObservableObject {
                     if !newCloudPosts2ndCheck.isEmpty {
                         // Updating App posts
                         self?.allPosts.append(contentsOf: newCloudPosts2ndCheck)
-                        self?.fileManager.savePosts(self?.allPosts ?? [])
+//                        self?.fileManager.savePosts(self?.allPosts ?? [])
                         
                         self?.hapticManager.notification(type: .success)
                         // Saving the date stamp of the Cloud posts

@@ -79,8 +79,7 @@ struct RestoreBackupView: View {
         Text("""
               You are about to restore posts from backup on the device.
               
-              The posts from backup will replace
-              all current posts in App.
+              The posts from backup will replace all current posts in App.
             """)
         .multilineTextAlignment(.leading)
 
@@ -114,17 +113,16 @@ struct RestoreBackupView: View {
                 showError("Invalid JSON format: expected array of posts")
                 return
             }
-            print("✅   Point before DECODING JSON")
+            print("✅ Point before DECODING JSON")
             let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
             print("✅ ✅ ✅ Point after DECODING JSON")
             
             DispatchQueue.main.async {
                 isInProgress = false
                 isBackedUp = true
-                vm.allPosts = posts
-                fileManager.savePosts(posts)
+                vm.allPosts.append(contentsOf: posts)
+//                fileManager.savePosts(vm.allPosts)
                 postCount = posts.count
-                
                 hapticManager.notification(type: .success)
                 print("✅ Restored \(postCount) posts from \(url.lastPathComponent)")
             }
