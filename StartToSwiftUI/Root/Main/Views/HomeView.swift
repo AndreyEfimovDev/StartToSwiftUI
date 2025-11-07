@@ -30,7 +30,7 @@ struct HomeView: View {
     @State private var isFilterButtonPressed: Bool = false
     
     @State private var isShowingDeleteConfirmation: Bool = false
-    @State private var isAnyChanges: Bool = false
+//    @State private var isAnyChanges: Bool = false
     
     // MARK: VIEW BODY
     
