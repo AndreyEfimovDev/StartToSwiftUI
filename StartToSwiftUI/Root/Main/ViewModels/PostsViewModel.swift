@@ -479,7 +479,7 @@ class PostsViewModel: ObservableObject {
         }
     }
     
-    /// Gets a list of years presented in current posts.
+    /// Gets a list of years presented in the local posts.
     ///
     /// The result is used in the FilterSheetView for selecting a year for the filter.
     ///
@@ -505,6 +505,8 @@ class PostsViewModel: ObservableObject {
         print("✅ VM: Final years list: \(result)")
         return result
     }
+    
+    // get a list of categories presented in the local posts
     
     private func getAllCategories() -> [String]? {
         
