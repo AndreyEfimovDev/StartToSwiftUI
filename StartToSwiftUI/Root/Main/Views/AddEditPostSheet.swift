@@ -92,7 +92,7 @@ struct AddEditPostSheet: View {
                     platformSection
                     studyLevelSection
                     favoviteChoiceSection
-                    addInforSection
+                    notesSection
                 } // ScrollView
                 .foregroundStyle(Color.mycolor.myAccent)
                 .padding(.horizontal, 8)
@@ -437,9 +437,9 @@ struct AddEditPostSheet: View {
         }
     }
     
-    private var addInforSection: some View {
+    private var notesSection: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("Additional Information")
+            Text("Notes")
                 .textCase(.uppercase)
                 .sectionSubheaderFormater(
                     fontSubheader: fontSubheader,
