@@ -517,7 +517,7 @@ struct AddEditPostSheet: View {
                         ClearCupsuleButton(
                             primaryTitle: "Yes",
                             primaryTitleColor: Color.mycolor.myRed) {
-                                vm.isPostDraftSaved = false // потом убрать
+//                                vm.isPostDraftSaved = false // потом убрать
                                 dismiss()
                             }
                             .disabled(isMenuConfirmationBlocked)

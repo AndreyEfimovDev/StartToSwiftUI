@@ -13,11 +13,15 @@ class PostsViewModel: ObservableObject {
     
     // MARK: PROPERTIES
     
+    private let fileManager = FileStorageService.shared
+    private let hapticManager = HapticService.shared
+    private let networkService = NetworkService()
+    
     @Published var allPosts: [Post] = [] {
         didSet {
+            fileManager.savePosts(allPosts)
             allYears = getAllYears()
             allCategories = getAllCategories()
-            fileManager.savePosts(allPosts)
         }
     }
     @Published var filteredPosts: [Post] = []
@@ -40,7 +44,7 @@ class PostsViewModel: ObservableObject {
     @AppStorage("storedPlatform") var storedPlatform: Platform?
     @AppStorage("storedYear") var storedYear: String?
     
-    // Stored draft of the port from AddEdit
+    // Stored draft of the post in AddEditView
     @AppStorage("isPostDraftSaved") var isPostDraftSaved: Bool = false
     @AppStorage("titlePostSaved") var titlePostSaved: String?
     @AppStorage("introPostSaved") var introPostSaved: String?
@@ -74,9 +78,6 @@ class PostsViewModel: ObservableObject {
     }
 
     private var cancellables = Set<AnyCancellable>()
-    private let fileManager = FileStorageService.shared
-    private let hapticManager = HapticService.shared
-    private let networkService = NetworkService()
     
     @Published var isLoadingFromCloud = false
     @Published var cloudImportError: String?
@@ -141,8 +142,8 @@ class PostsViewModel: ObservableObject {
         
         // Subscribe on change of seach text and filters
         $searchText
-            .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
             .combineLatest(filters, $selectedCategory)
+            .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
             .map { searchText, filters, category -> [Post] in
                 
                 let (level, favorite, type, year) = filters
