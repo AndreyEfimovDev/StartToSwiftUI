@@ -89,6 +89,10 @@ struct RestoreBackupView: View {
                 
         // Checking file for existence
         
+        
+        print("Restore: Selected file URL: \(url)")
+              print("Restore: File path: \(url.path)")
+        
         if !fileManager.checkIfFileExists(at: url) {
             isInProgress = false
             showError("File does not exist")

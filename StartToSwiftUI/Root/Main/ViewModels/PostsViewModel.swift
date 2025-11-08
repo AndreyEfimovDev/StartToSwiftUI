@@ -19,15 +19,19 @@ class PostsViewModel: ObservableObject {
     
     @Published var allPosts: [Post] = [] {
         didSet {
-            fileManager.savePosts(allPosts, fileName: Constants.localFileName) { [weak self] result in
+            fileManager.savePosts(
+                allPosts,
+                fileName: Constants.localFileName
+            ) { [weak self] result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success:
-                        print("✅ VM(allPosts - didSet: Posts saved successfully")
+                        print("✅ VM(allPosts - didSet): Posts saved successfully")
                         self?.errorMessage = nil
                         
                     case .failure(let error):
                         self?.errorMessage = error.localizedDescription
+                        self?.showError("VM(allPosts - didSet): Failed to save posts: \(error.localizedDescription)")
                         print("❌ Failed to save posts: \(error)")
                     }
                 }
@@ -96,6 +100,7 @@ class PostsViewModel: ObservableObject {
     @Published var showImportNetworkAlert = false
     
     @Published var errorMessage: String?
+    @Published var showFileManagerErrorAlert = false
 
     
     private var utcCalendar = Calendar.current
@@ -109,7 +114,9 @@ class PostsViewModel: ObservableObject {
         
         print("VM(init): Last update date: \(localLastUpdated.formatted(date: .abbreviated, time: .shortened))")
         
-        fileManager.loadPosts(fileName: Constants.localFileName) { [weak self] (result: Result<[Post], FileStorageError>) in
+        fileManager.loadPosts(
+            fileName: Constants.localFileName
+        ) { [weak self] (result: Result<[Post], FileStorageError>) in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let posts):
@@ -448,11 +455,12 @@ class PostsViewModel: ObservableObject {
     /// - Warning: This app is made for self study purpose only.
     /// - Returns: Returns a boolean result or error within completion handler.
     
-    func importPostsFromCloud(urlString: String = Constants.cloudPostsURL, completion: @escaping () -> Void) {
-        
+    func importPostsFromCloud(
+        urlString: String = Constants.cloudPostsURL,
+        completion: @escaping () -> Void
+    ) {
         networkErrorMessage = nil
-        
-        networkService.fetchCloudPosts(from: urlString) { [weak self] (result: Result<[Post], Error>) in
+        networkService.fetchPostsFromURL(from: urlString) { [weak self] (result: Result<[Post], Error>) in
             
             DispatchQueue.main.async {
                 switch result {
@@ -489,97 +497,74 @@ class PostsViewModel: ObservableObject {
         }
     }
     
-    @State private var showErrorAlert = false
 //    @State private var errorMessage = ""
     
-    func getPostsFromBackup(url: URL, completion: @escaping () -> Void){
-        
-//        if !fileManager.checkIfFileExists(at: url) {
-////            isInProgress = false
-//            showError("File does not exist")
-//            return
-//        }
-        let urlResult = fileManager.getFileURL(fileName: url)
-
-        do {
-            // Read data from the selected file
-            let data = try Data(contentsOf: url)
-            
-            guard !data.isEmpty else {
-                showError("The selected file is empty")
-                return
-            }
-            
-            // Checking JSON structure
-            let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-            guard jsonObject is [Any] else {
-                showError("Invalid JSON format: expected array of posts")
-                return
-            }
-            let decodedPosts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
-            
-           
-            let postsCheckedForUnique = checkAndReturnUniquePosts(posts: decodedPosts)
-            
+    func getPostsFromBackup(
+        url: URL,
+        completion: @escaping () -> Void
+    ){
+        fileManager.loadPosts(fileName: url.path) { [weak self] (result: Result<[Post], FileStorageError>) in
             DispatchQueue.main.async {
-//                isInProgress = false
-//                isBackedUp = true
-//                postCount = postsAfterCheckForUniqueID.count
-                
-                self.allPosts.append(contentsOf: postsCheckedForUnique)
-                print("✅ Restore: Restored \(postsCheckedForUnique.count) posts from \(url.lastPathComponent)")
-                self.hapticManager.notification(type: .success)
+                switch result {
+                case .success(let posts):
+                    let postsCheckedForUnique = self?.checkAndReturnUniquePosts(posts: posts)
+                    self?.allPosts.append(contentsOf: postsCheckedForUnique ?? [])
+                    self?.errorMessage = nil
+                    self?.hapticManager.notification(type: .success)
+                    print("✅ Restore: Restored \(String(describing: postsCheckedForUnique?.count)) posts from \(url.lastPathComponent)")
+                    
+                case .failure(let error):
+                    self?.errorMessage = error.localizedDescription
+                    self?.showError("Failed to get from Backup: \(error.localizedDescription)")
+                    print("Failed to load posts: \(error)")
+                }
                 completion()
             }
-            
-        } catch let decodingError as DecodingError {
-//            isInProgress = false
-            handleDecodingError(decodingError)
-            return
-
-        } catch {
-//            isInProgress = false
-            showError("Failed to import: \(error.localizedDescription)")
-            return
-
         }
+        
+//        let urlResult = fileManager.getFileURL(fileName: url)
 
-//        cloudImportError = nil
-//        
-//        networkService.fetchCloudPosts(from: urlString) { [weak self] (result: Result<[Post], Error>) in
+//        do {
+//            // Read data from the selected file
+//            let data = try Data(contentsOf: url)
+//            
+//            guard !data.isEmpty else {
+//                showError("The selected file is empty")
+//                return
+//            }
+//            
+//            // Checking JSON structure
+//            let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+//            guard jsonObject is [Any] else {
+//                showError("Invalid JSON format: expected array of posts")
+//                return
+//            }
+//            let decodedPosts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
+//            
+//           
+//            let postsCheckedForUnique = checkAndReturnUniquePosts(posts: decodedPosts)
 //            
 //            DispatchQueue.main.async {
-//                switch result {
-//                case .success(let cloudResponse):
-//                    // Selecting Cloud posts with unique Titles only -  - do not append such posts from Cloud
-//                    let cloudPostsAfterCheckForUniqueTitle = cloudResponse.filter { postFromCloud in
-//                        !(self?.allPosts.contains(where: { $0.title == postFromCloud.title }) ?? false)
-//                    }
-//                    // Checking Cloud posts with the same ID to local App posts - do not append such posts from Cloud
-//                    let cloudPostsAfterCheckForUniqueID = cloudPostsAfterCheckForUniqueTitle.filter { postFromCloud in
-//                        !(self?.allPosts.contains(where: { $0.id == postFromCloud.id }) ?? false)
-//                    }
-//                    if !cloudPostsAfterCheckForUniqueID.isEmpty {
-//                        // Updating App posts
-//                        self?.allPosts.append(contentsOf: cloudPostsAfterCheckForUniqueID)
-//                        self?.hapticManager.notification(type: .success)
-//                        print("✅ Successfully imported \(cloudPostsAfterCheckForUniqueID.count) posts from the cloud")
-//                    } else {
-//                        self?.hapticManager.impact(style: .light)
-//                        print("☑️ No new posts from the cloud.")
-//
-//                    }
-//                    
-//                    self?.cloudImportError = nil
-//                    
-//                case .failure(let error):
-//                    self?.cloudImportError = error.localizedDescription
-//                    self?.showCloudImportAlert = true
-//                    self?.hapticManager.notification(type: .error)
-//                    print("❌ Cloud import error: \(error.localizedDescription)")
-//                }
+////                isInProgress = false
+////                isBackedUp = true
+////                postCount = postsAfterCheckForUniqueID.count
+//                
+//                self.allPosts.append(contentsOf: postsCheckedForUnique)
+//                print("✅ Restore: Restored \(postsCheckedForUnique.count) posts from \(url.lastPathComponent)")
+//                self.hapticManager.notification(type: .success)
 //                completion()
 //            }
+//            
+//        } catch let decodingError as DecodingError {
+////            isInProgress = false
+//            handleDecodingError(decodingError)
+//            return
+//
+//        } catch {
+////            isInProgress = false
+//            showError("Failed to import: \(error.localizedDescription)")
+//            return
+//
 //        }
     }
     
@@ -603,25 +588,25 @@ class PostsViewModel: ObservableObject {
 //            }
         return postsAfterCheckForUniqueID
     }
-    
-    private func handleDecodingError(_ error: DecodingError) {
-        switch error {
-        case .dataCorrupted(let context):
-            showError("Invalid JSON format: \(context.debugDescription)")
-        case .keyNotFound(let key, let context):
-            showError("Missing field '\(key.stringValue)' in JSON: \(context.debugDescription)")
-        case .typeMismatch(let type, let context):
-            showError("Type mismatch for '\(type)' in JSON: \(context.debugDescription)")
-        case .valueNotFound(let type, let context):
-            showError("Missing value for type '\(type)' in JSON: \(context.debugDescription)")
-        @unknown default:
-            showError("Unknown JSON decoding error")
-        }
-    }
+//    
+//    private func handleDecodingError(_ error: DecodingError) {
+//        switch error {
+//        case .dataCorrupted(let context):
+//            showError("Invalid JSON format: \(context.debugDescription)")
+//        case .keyNotFound(let key, let context):
+//            showError("Missing field '\(key.stringValue)' in JSON: \(context.debugDescription)")
+//        case .typeMismatch(let type, let context):
+//            showError("Type mismatch for '\(type)' in JSON: \(context.debugDescription)")
+//        case .valueNotFound(let type, let context):
+//            showError("Missing value for type '\(type)' in JSON: \(context.debugDescription)")
+//        @unknown default:
+//            showError("Unknown JSON decoding error")
+//        }
+//    }
     
     private func showError(_ message: String) {
         errorMessage = message
-        showErrorAlert = true
+        showFileManagerErrorAlert = true
         hapticManager.notification(type: .error)
     }
     
