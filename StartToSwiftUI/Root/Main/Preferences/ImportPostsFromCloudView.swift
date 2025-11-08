@@ -13,47 +13,46 @@ struct ImportPostsFromCloudView: View {
     @EnvironmentObject private var vm: PostsViewModel
     
     private let hapticManager = HapticService.shared
-//    private let selectedURL = Constants.cloudPostsURL
+    //    private let selectedURL = Constants.cloudPostsURL
     
     @State private var isInProgress: Bool = false
     @State private var isLoaded: Bool = false
-
+    
     @State private var postCount: Int = 0
     
     var body: some View {
         
-        VStack {
-            textSection
-                .managingPostsTextFormater()
-            
-            CapsuleButtonView(
-                primaryTitle: "Confirm and Download",
-                secondaryTitle: "\(postCount) Posts Downloaded",
-                isToChange: isLoaded) {
-                    isInProgress = true
-                    importFromCloud()
-                }
-                .onChange(of: vm.allPosts.count) { oldValue, newValue in
-                    postCount = newValue - oldValue
-                }
-                .disabled(isLoaded)
-                .padding(.top, 30)
-            
-            CapsuleButtonView(
-                primaryTitle: "Don't confirm",
-                textColorPrimary: Color.mycolor.myButtonTextRed,
-                buttonColorPrimary: Color.mycolor.myButtonBGRed) {
-                    dismiss()
-                }
-                .opacity(isLoaded ? 0 : 1)
-            
-            Spacer()
-            
+        ZStack(alignment: .bottom) {
+            VStack {
+                textSection
+                    .managingPostsTextFormater()
+                
+                CapsuleButtonView(
+                    primaryTitle: "Confirm and Download",
+                    secondaryTitle: "\(postCount) Posts Downloaded",
+                    isToChange: isLoaded) {
+                        isInProgress = true
+                        importFromCloud()
+                    }
+                    .onChange(of: vm.allPosts.count) { oldValue, newValue in
+                        postCount = newValue - oldValue
+                    }
+                    .disabled(isLoaded)
+                    .padding(.top, 30)
+                
+                CapsuleButtonView(
+                    primaryTitle: "Don't confirm",
+                    textColorPrimary: Color.mycolor.myButtonTextRed,
+                    buttonColorPrimary: Color.mycolor.myButtonBGRed) {
+                        dismiss()
+                    }
+                    .opacity(isLoaded ? 0 : 1)
+                
+                Spacer()
+                
+            }
             if isInProgress {
-                ProgressView("Downloading posts...")
-                    .padding()
-                    .background(.regularMaterial)
-                    .cornerRadius(10)
+                RotatingRingProgressView()
             }
         }
         .padding(.horizontal, 30)
@@ -67,29 +66,28 @@ struct ImportPostsFromCloudView: View {
             Text(vm.errorMessage ?? "Unknown error")
         }
     }
-
+    
     
     // MARK: Subviews
-
+    
     private var textSection: some View {
         VStack {
-            Text("""
-            The curated collection of links to SwiftUI tutorials and articles are compiled by the developer from open sources for the purpose of learning the SwiftUI functionality.
-            """)
-            .multilineTextAlignment(.leading)
-
-            
             Group {
                 Text("""
-                    
-                    **IMPORTANT NOTICE**
-                    
-                    **Clicking
-                    "Confirm and Download"
-                    constitutes your agreement to the following terms:**:
-                    
-                    """)
-
+            The curated collection of links to SwiftUI tutorials and articles are compiled by the developer from open sources for the purpose of learning the SwiftUI functionality.
+            
+            """)
+            
+            Text("**IMPORTANT NOTICE:**")
+                .foregroundStyle(Color.mycolor.myRed)
+                .frame(maxWidth: .infinity, alignment: .leading)
+          
+                Text("""
+                
+                Clicking **Confirm and Download** constitutes your agreement to the following terms:
+                
+                """)
+                
                 Text("""
                 1. The materials will be used solely for non-commercial educational purposes.
                 2. All intellectual property rights in the materials are retained by the original authors.
@@ -97,24 +95,24 @@ struct ImportPostsFromCloudView: View {
                 """
                 )
                 .font(.subheadline)
-                .multilineTextAlignment(.leading)
             }
-            .foregroundStyle(Color.mycolor.myRed)
+            .multilineTextAlignment(.leading)
         }
+
     }
     
     private func importFromCloud() {
-
-//        vm.loadPersistentPosts() {
-//            isInProgress = false
-//            isLoaded = true
-////            vm.isFirstImportPostsCompleted = true
-//            hapticManager.notification(type: .success)
-//            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-//                dismiss()
-//            }
-//        }
-
+        
+        //        vm.loadPersistentPosts() {
+        //            isInProgress = false
+        //            isLoaded = true
+        ////            vm.isFirstImportPostsCompleted = true
+        //            hapticManager.notification(type: .success)
+        //            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+        //                dismiss()
+        //            }
+        //        }
+        
         
         vm.importPostsFromCloud() {
             isInProgress = false

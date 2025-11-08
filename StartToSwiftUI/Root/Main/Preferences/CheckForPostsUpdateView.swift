@@ -53,9 +53,7 @@ struct CheckForPostsUpdateView: View {
                     .foregroundStyle(followingTextColor)
                 Spacer()
                 if isInProgress {
-                    ProgressView()
-                        .background(.regularMaterial)
-                }
+                    RotatingRingProgressView()                }
             }
             HStack {
                 Text("Last update from:")

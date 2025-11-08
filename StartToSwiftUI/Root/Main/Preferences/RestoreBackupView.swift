@@ -42,10 +42,7 @@ struct RestoreBackupView: View {
             Spacer()
             
             if isInProgress {
-                ProgressView("Restoring posts...")
-                    .padding()
-                    .background(.regularMaterial)
-                    .cornerRadius(10)
+                RotatingRingProgressView()
             }
         }
         .padding(.horizontal, 30)
