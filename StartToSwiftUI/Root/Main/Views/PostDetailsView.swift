@@ -20,7 +20,7 @@ struct PostDetailsView: View {
     @State private var showFullFreeTextField: Bool = false
     @State private var showEditPostView: Bool = false
     
-    let postId: UUID
+    let postId: String
     
     private var post: Post? {
         vm.allPosts.first(where: { $0.id == postId })

@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct Post: Identifiable, Hashable, Codable {
-    let id: UUID
+    let id: String
     var category: String // gategory the post belongs to, e.g. "SwiftUI", "C++", "JavaScript"
     var title: String // title of the post
     var intro: String // a short intro/description of the post
@@ -25,7 +25,7 @@ struct Post: Identifiable, Hashable, Codable {
     let date: Date // date of creating the post
     
     init(
-        id: UUID = UUID(),
+        id: String = UUID().uuidString,
         category: String = "SwiftUI",
         title: String,
         intro: String,

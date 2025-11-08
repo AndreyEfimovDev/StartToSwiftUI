@@ -14,7 +14,7 @@ struct HomeView2: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject private var vm: PostsViewModel
     
-    @State private var selectedPostId: UUID?
+    @State private var selectedPostId: String?
     @State private var selectedPost: Post?
     
     @State private var showDetailView: Bool = false

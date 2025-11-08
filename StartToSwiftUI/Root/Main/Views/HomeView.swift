@@ -16,7 +16,7 @@ struct HomeView: View {
     
     private let hapticManager = HapticService.shared
     
-    @State private var selectedPostId: UUID?
+    @State private var selectedPostId: String?
     @State private var selectedPost: Post?
     @State private var selectedPostToDelete: Post?
     
