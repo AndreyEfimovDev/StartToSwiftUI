@@ -97,21 +97,22 @@ class PostsViewModel: ObservableObject {
         let loadedLocalPosts: [Post]? = fileManager.loadPosts(fileName: Constants.localFileName)
         self.allPosts = loadedLocalPosts ?? []
         
-//        if !self.allPosts.isEmpty {
-//            checkCloudForUpdates { hasUpdates in
-//                if hasUpdates {
-//                    self.isPostsUpdateAvailable = true
-//                    print(self.isPostsUpdateAvailable.description)
-//                }
-//            }
-//        }
-        print("VM(init): начало теста testDetailedDecoding()")
-        testDetailedDecoding()
-        print("VM(init): конец теста testDetailedDecoding()")
+        if !self.allPosts.isEmpty {
+            checkCloudForUpdates { hasUpdates in
+                if hasUpdates {
+                    self.isPostsUpdateAvailable = true
+                    print(self.isPostsUpdateAvailable.description)
+                }
+            }
+        }
         
-        print("VM(init): начало теста validateJSONFile()")
-        validateJSONFile()
-        print("VM(init): конец теста validateJSONFile()")
+//        print("VM(init): начало теста testDetailedDecoding()")
+//        testDetailedDecoding()
+//        print("VM(init): конец теста testDetailedDecoding()")
+//        
+//        print("VM(init): начало теста validateJSONFile()")
+//        validateJSONFile()
+//        print("VM(init): конец теста validateJSONFile()")
         
         self.filteredPosts = self.allPosts
         
