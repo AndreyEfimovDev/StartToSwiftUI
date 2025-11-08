@@ -98,22 +98,12 @@ class PostsViewModel: ObservableObject {
         self.allPosts = loadedLocalPosts ?? []
         
 //        if !self.allPosts.isEmpty {
-
             checkCloudForUpdates { hasUpdates in
                 if hasUpdates {
                     self.isPostsUpdateAvailable = true
                     print(self.isPostsUpdateAvailable.description)
                 }
             }
-
-//            checkCloudForUpdates { hasUpdates in
-//                if hasUpdates {
-//                    self.isPostsUpdateAvailable = true
-//                    print("VM(init): Posts update is available")
-//                    print(self.isPostsUpdateAvailable.description)
-//                }
-//            }
-
 //        }
         
         self.filteredPosts = self.allPosts
@@ -340,7 +330,7 @@ class PostsViewModel: ObservableObject {
         
         cloudImportError = nil
         
-        networkService.fetchPostsFromURL(from: urlString) { [weak self] (result: Result<[Post], Error>) in
+        networkService.fetchCloudPosts(from: urlString) { [weak self] (result: Result<[Post], Error>) in
             
             DispatchQueue.main.async {
                 switch result {
@@ -395,7 +385,7 @@ class PostsViewModel: ObservableObject {
     /// - Returns: Returns a boolean result or error within completion handler.
     
     func checkCloudForUpdates(completion: @escaping (Bool) -> Void) {
-        networkService.fetchPostsFromURL(from: Constants.cloudPostsURL) { (result: Result<[Post], Error>) in
+        networkService.fetchCloudPosts(from: Constants.cloudPostsURL) { (result: Result<[Post], Error>) in
             switch result {
             case .success(let cloudResponse):
                 
