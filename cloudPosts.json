@@ -1,1 +1,50 @@
-[{"intro":"In this video we are going to explore how we can stylize text for our Text views in SwiftUI.\nWe will start by looking at how we can create a `Text` view with the Markdown-formatted base postLanguage version of the string as the localization key,\nWe will also see how we can utilize string interpolation to combine and stylize our strings and present them in a text view.\nAnd finally, we will take a quick look at the power of Attributed strings in SwiftUI.","id":"A453B503-3FE0-4BA6-A351-4693D730A00B","notes":"","postPlatform":"youtube","date":784300744.135742,"origin":"cloud","author":"Stewart Lynch","favoriteChoice":"no","category":"SwiftUI","title":"Styling SwiftUI Text Views","urlString":"https:\/\/www.youtube.com\/watch?v=rbtIcKKxQ38","studyLevel":"middle","postDate":642038400,"postType":"post"},{"intro":"Symbol images are vector-based icons from Apple's SF Symbols library, designed for use across Apple platforms. These scalable images adapt to different sizes and weights, ensuring consistent, high-quality icons throughout our apps. Using symbol images in SwiftUI is straightforward with the Image view and the system name of the desired symbol.","id":"1C18111C-4F4C-40CD-8B0B-F204270FDCF8","notes":"","postPlatform":"website","date":784300744.135767,"origin":"cloud","author":"Natalia Panferova","favoriteChoice":"no","category":"SwiftUI","title":"Customizing the appearance of symbol images in SwiftUI","urlString":"https:\/\/nilcoalescing.com\/blog\/CustomizingTheAppearanceOfSymbolImagesInSwiftUI\/","studyLevel":"beginner","postDate":748656000,"postType":"post"},{"intro":"ViewBuilders in SwiftUI are an excellent way to keep your code clean and organized. They make your code easier to read and maintain by allowing you to structure your views more clearly. This simplifies the process of building complex user interfaces, ensuring that your code remains elegant and efficient. Embracing ViewBuilders enhances both the readability and manageability of your SwiftUI projects.","id":"3AE88733-4061-493E-8C80-BCBAE4C3BBE7","notes":"","postPlatform":"website","date":784300744.135783,"origin":"cloud","author":"softwareanders.com","favoriteChoice":"no","category":"SwiftUI","title":"ViewBuilder: Organize your views","urlString":"https:\/\/softwareanders.com\/swiftui-viewbuilder-organize-your-views\/","studyLevel":"advanced","postDate":741139200,"postType":"post"}]
+[
+  {
+    "postType" : "post",
+    "notes" : "",
+    "title" : "Styling SwiftUI Text Views",
+    "urlString" : "https:\/\/www.youtube.com\/watch?v=rbtIcKKxQ38",
+    "category" : "SwiftUI",
+    "postPlatform" : "youtube",
+    "favoriteChoice" : "no",
+    "origin" : "cloud",
+    "postDate" : "2021-05-07T00:00:00Z",
+    "intro" : "In this video we are going to explore how we can stylize text for our Text views in SwiftUI.\nWe will start by looking at how we can create a `Text` view with the Markdown-formatted base postLanguage version of the string as the localization key,\nWe will also see how we can utilize string interpolation to combine and stylize our strings and present them in a text view.\nAnd finally, we will take a quick look at the power of Attributed strings in SwiftUI.",
+    "author" : "Stewart Lynch",
+    "studyLevel" : "middle",
+    "date" : "2025-11-08T13:45:07Z",
+    "id" : "F9E12A88-0E62-402D-B6AD-1A1F895F5421"
+  },
+  {
+    "postType" : "post",
+    "notes" : "",
+    "title" : "Customizing the appearance of symbol images in SwiftUI",
+    "urlString" : "https:\/\/nilcoalescing.com\/blog\/CustomizingTheAppearanceOfSymbolImagesInSwiftUI\/",
+    "category" : "SwiftUI",
+    "postPlatform" : "website",
+    "favoriteChoice" : "no",
+    "origin" : "cloud",
+    "postDate" : "2024-09-22T00:00:00Z",
+    "intro" : "Symbol images are vector-based icons from Apple's SF Symbols library, designed for use across Apple platforms. These scalable images adapt to different sizes and weights, ensuring consistent, high-quality icons throughout our apps. Using symbol images in SwiftUI is straightforward with the Image view and the system name of the desired symbol.",
+    "author" : "Natalia Panferova",
+    "studyLevel" : "beginner",
+    "date" : "2025-11-08T13:45:07Z",
+    "id" : "A7275858-6601-4613-AC27-C111EE92C572"
+  },
+  {
+    "postType" : "post",
+    "notes" : "",
+    "title" : "ViewBuilder: Organize your views",
+    "urlString" : "https:\/\/softwareanders.com\/swiftui-viewbuilder-organize-your-views\/",
+    "category" : "SwiftUI",
+    "postPlatform" : "website",
+    "favoriteChoice" : "no",
+    "origin" : "cloud",
+    "postDate" : "2024-06-27T00:00:00Z",
+    "intro" : "ViewBuilders in SwiftUI are an excellent way to keep your code clean and organized. They make your code easier to read and maintain by allowing you to structure your views more clearly. This simplifies the process of building complex user interfaces, ensuring that your code remains elegant and efficient. Embracing ViewBuilders enhances both the readability and manageability of your SwiftUI projects.",
+    "author" : "softwareanders.com",
+    "studyLevel" : "advanced",
+    "date" : "2025-11-08T13:45:07Z",
+    "id" : "D47FF871-52C4-4106-987A-F624D9D05937"
+  }
+]
