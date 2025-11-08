@@ -22,7 +22,7 @@ extension JSONEncoder {
     static var appEncoder: JSONEncoder {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
-        encoder.outputFormatting = .prettyPrinted // for readability
+        encoder.outputFormatting = .prettyPrinted
         return encoder
     }
 }
