@@ -19,7 +19,7 @@ class PostsViewModel: ObservableObject {
     
     @Published var allPosts: [Post] = [] {
         didSet {
-            fileManager.savePosts(allPosts)
+            fileManager.savePosts(allPosts, filename: Constants.localFileName)
             allYears = getAllYears()
             allCategories = getAllCategories()
         }
@@ -94,14 +94,10 @@ class PostsViewModel: ObservableObject {
         
         print("VM(init): Last update date: \(localLastUpdated.formatted(date: .abbreviated, time: .shortened))")
         
-        self.allPosts = fileManager.loadPosts()
+        let loadedPosts: [Post]? = fileManager.loadPosts(fileName: Constants.localFileName)
+        self.allPosts = loadedPosts ?? []
         
         if !self.allPosts.isEmpty {
-            // getting a list of unique years from the current posts
-//            self.allYears = getAllYears()
-            // getting a list of unique years from the current posts
-//            self.allCategories = getAllCategories()
-            // checking for updates
             checkCloudForUpdates { hasUpdates in
                 if hasUpdates {
                     self.isPostsUpdateAvailable = true
