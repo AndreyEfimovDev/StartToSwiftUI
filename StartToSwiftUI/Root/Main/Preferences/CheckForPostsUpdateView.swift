@@ -12,7 +12,7 @@ struct CheckForPostsUpdateView: View {
     @EnvironmentObject private var vm: PostsViewModel
     
     private let hapticManager = HapticService.shared
-    private let selectedURL = Constants.cloudPostsURL
+//    private let selectedURL = Constants.cloudPostsURL
     
     @State private var followingText: String = "Checking for updates..."
     @State private var followingTextColor: Color = Color.mycolor.myAccent
@@ -34,10 +34,10 @@ struct CheckForPostsUpdateView: View {
             .onAppear {
                 checkForUpdates()
             }
-            .alert("Import Error", isPresented: $vm.showCloudImportAlert) {
+            .alert("Import Error", isPresented: $vm.showImportNetworkAlert) {
                 Button("OK", role: .cancel) { }
             } message: {
-                Text(vm.cloudImportError ?? "Unknown error")
+                Text(vm.networkErrorMessage ?? "Unknown error")
             }
         }
     }
@@ -78,7 +78,7 @@ struct CheckForPostsUpdateView: View {
                     isToChange: isImported) {
                         
                         isInProgress = true
-                        vm.importPostsFromCloud(urlString: selectedURL) {
+                        vm.importPostsFromCloud() {
                             isInProgress = false
                             isImported = true
                             hapticManager.notification(type: .success)

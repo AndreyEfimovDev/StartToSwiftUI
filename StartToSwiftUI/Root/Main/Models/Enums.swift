@@ -8,17 +8,35 @@
 import Foundation
 import SwiftUI
 
-//enum LanguageOptions: String, CaseIterable, Codable {
-//    case english
-//    case russian
-//    
-//    var displayName: String {
-//        switch self {
-//        case .english: return "EN"
-//        case .russian: return "RU"
-//        }
-//    }
-//}
+
+// MARK: Colour scheme
+
+enum Theme: String, CaseIterable, Codable {
+    case light, dark, system
+
+    var displayName: String {
+        switch self {
+        case .light: return "🌞 Light"
+        case .dark: return "🌙 Dark"
+        case .system: return "⚙️ System"
+        }
+    }
+}
+
+
+// MARK: Focusing post fields in AddEditPostView
+
+enum PostFields: Hashable {
+    case postTitle
+    case intro
+    case author
+    case urlString
+    case additionalInfo
+//    case postDate
+}
+
+
+// MARK: - DataModel Errors
 
 enum PostType: String, CaseIterable, Codable {
     case post
@@ -41,13 +59,6 @@ enum PostType: String, CaseIterable, Codable {
 enum PostOrigin: String, CaseIterable, Codable {
     case local
     case cloud
-    
-//    var displayName: String {
-//        switch self {
-//        case .local: return "Local"
-//        case .cloud: return "Cloud"
-//        }
-//    }
 }
 
 
@@ -107,26 +118,46 @@ enum Platform: String, CaseIterable, Codable {
     }
 }
 
+// MARK: - Network Errors
 
-enum Theme: String, CaseIterable, Codable {
-    case light, dark, system
-
-    var displayName: String {
+enum NetworkError: LocalizedError {
+    case invalidURL
+    case invalidResponse
+    case noData
+    
+    var errorDescription: String? {
         switch self {
-        case .light: return "🌞 Light"
-        case .dark: return "🌙 Dark"
-        case .system: return "⚙️ System"
+        case .invalidURL:
+            return "Invalid URL"
+        case .invalidResponse:
+            return "Invalid server response"
+        case .noData:
+            return "No data received"
         }
     }
 }
 
+// MARK: - File Storage Errors
 
-// for AddEditPostView
-enum PostFields: Hashable {
-    case postTitle
-    case intro
-    case author
-    case urlString
-    case additionalInfo
-//    case postDate
+enum FileStorageError: LocalizedError {
+    case fileNotFound
+    case invalidURL
+    case encodingFailed(Error)
+    case decodingFailed(Error)
+    case fileSystemError(Error)
+    
+    var errorDescription: String? {
+        switch self {
+        case .fileNotFound:
+            return "File not found"
+        case .invalidURL:
+            return "Invalid file URL"
+        case .encodingFailed(let error):
+            return "Encoding failed: \(error.localizedDescription)"
+        case .decodingFailed(let error):
+            return "Decoding failed: \(error.localizedDescription)"
+        case .fileSystemError(let error):
+            return "File system error: \(error.localizedDescription)"
+        }
+    }
 }

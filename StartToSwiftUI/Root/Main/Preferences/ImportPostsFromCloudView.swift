@@ -13,7 +13,7 @@ struct ImportPostsFromCloudView: View {
     @EnvironmentObject private var vm: PostsViewModel
     
     private let hapticManager = HapticService.shared
-    private let selectedURL = Constants.cloudPostsURL
+//    private let selectedURL = Constants.cloudPostsURL
     
     @State private var isInProgress: Bool = false
     @State private var isLoaded: Bool = false
@@ -59,10 +59,10 @@ struct ImportPostsFromCloudView: View {
         .padding(.horizontal, 30)
         .padding(.top, 30)
         .padding(30)
-        .alert("Download Error", isPresented: $vm.showCloudImportAlert) {
+        .alert("Download Error", isPresented: $vm.showImportNetworkAlert) {
             Button("OK", role: .cancel) { }
         } message: {
-            Text(vm.cloudImportError ?? "Unknown error")
+            Text(vm.networkErrorMessage ?? "Unknown error")
         }
     }
     
@@ -113,7 +113,7 @@ struct ImportPostsFromCloudView: View {
 //        }
 
         
-        vm.importPostsFromCloud(urlString: selectedURL) {
+        vm.importPostsFromCloud() {
             isInProgress = false
             isLoaded = true
             vm.isFirstImportPostsCompleted = true

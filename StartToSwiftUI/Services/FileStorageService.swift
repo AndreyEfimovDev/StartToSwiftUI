@@ -15,17 +15,18 @@ class FileStorageService: ObservableObject {
     // MARK: FILE MANAGER FUNCIONS
     
     // Getting a full path of the JSON data file stored by File Manager
-    func getFileURL(fileName: String) -> URL? {
+    func getFileURL(fileName: String) -> Result<URL, FileStorageError> {
         guard
-            let path = FileManager
+            let documentsDirectory = FileManager
                 .default
                 .urls(for: .documentDirectory, in: .userDomainMask)
-                .first?
-                .appendingPathComponent(fileName) else {
+                .first else {
             print("❌ FM(getFileURL): Error in getting path: \(fileName).")
-            return nil
+            return .failure(.invalidURL)
         }
-        return path
+        
+        let fileURL = documentsDirectory.appendingPathComponent(fileName)
+        return .success(fileURL)
     }
     
     // Saving posts with encoding into JSON data
@@ -33,41 +34,71 @@ class FileStorageService: ObservableObject {
     func savePosts<T: Codable>(
         _ data: T,
         fileName: String,
-        encoder: JSONEncoder = .appEncoder // we use the date encoding strategy - ISO8601 (string)
+        encoder: JSONEncoder = .appEncoder, // we use the date encoding strategy - ISO8601 (string)
+        completion: @escaping (Result<Void, FileStorageError>) -> Void
     ) {
         
-        guard let url = getFileURL(fileName: fileName) else {
-            print("❌ FM(savePosts): Error in getting url: \(fileName)")
-            return
-        }
+        let urlResult = getFileURL(fileName: fileName)
         
-        do {
-            let jsonData = try encoder.encode(data)
-            try jsonData.write(to: url)
-            print("✅ FM(savePosts): Successfully saved в \(url)")
-        } catch {
-            print("❌ FM(savePosts): Error in saving posts: \(error)")
+        switch urlResult {
+        case .success(let url):
+            do {
+                let jsonData = try encoder.encode(data)
+                try jsonData.write(to: url)
+                print("✅ FM(savePosts): Successfully saved в \(url)")
+                completion(.success(()))
+            } catch {
+                print("❌ FM(savePosts): Error in saving posts: \(error)")
+                completion(.failure(.encodingFailed(error)))
+            }
+            
+        case .failure(let error):
+            completion(.failure(error))
         }
     }
     
     // Loading and decoding JSON data into posts
     func loadPosts<T: Codable>(
         fileName: String,
-        decoder: JSONDecoder = .appDecoder // we use the date decoding strategy - ISO8601 (string)
-    ) -> T? {
+        decoder: JSONDecoder = .appDecoder, // we use the date decoding strategy - ISO8601 (string)
+        completion: @escaping (Result<T, FileStorageError>) -> Void
+    ) {
         
-        guard let url = getFileURL(fileName: fileName) else { return nil }
+        let urlResult = getFileURL(fileName: fileName)
         
-        do {
-            let jsonData = try Data(contentsOf: url)
-            let decodedData = try decoder.decode(T.self, from: jsonData)
-            print("✅ FM(loadPosts): Successfully uploaded")
-            return decodedData
-        } catch {
-            print("☑️ FM(loadPosts): There are no saved posts on the device.: \(error)")
-            return nil
-        }
+        switch urlResult {
+        case .success(let url):
+            // Check the file for existance
+            guard FileManager.default.fileExists(atPath: url.path) else {
+                print("☑️ FM(loadPosts): No saved posts found")
+                completion(.failure(.fileNotFound))
+                return
+            }
+            
+            
+            do {
+                let jsonData = try Data(contentsOf: url)
+                let decodedData = try decoder.decode(T.self, from: jsonData)
+                print("✅ FM(loadPosts): Successfully uploaded")
+                completion(.success(decodedData))
+            } catch {
+                print("☑️ FM(loadPosts): Decoding error: \(error)")
+                completion(.failure(.decodingFailed(error)))
+            }
+            
+        case .failure(let error):
+                    completion(.failure(error))
+                }
+
     }
+    
+    func checkIfFileExists(fileName: String) -> Bool {
+            guard case .success(let url) = getFileURL(fileName: fileName) else {
+                return false
+            }
+            return FileManager.default.fileExists(atPath: url.path)
+        }
+
 }
 
 

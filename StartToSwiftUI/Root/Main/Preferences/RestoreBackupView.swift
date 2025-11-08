@@ -55,7 +55,7 @@ struct RestoreBackupView: View {
             DocumentPicker(
                 onDocumentPicked: { url in
                     isInProgress = true
-                    restorePosts(from: url)
+                    restorePostsFromBackup(from: url)
                     DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
                         dismiss()
                     }
@@ -85,18 +85,16 @@ struct RestoreBackupView: View {
 
     }
     
-    private func restorePosts(from url: URL) {
-        
-        // Tracking url for debug
-        print("Restore: Selected file URL: \(url)")
-        print("Restore: File path: \(url.path)")
-        
+    private func restorePostsFromBackup(from url: URL) {
+                
         // Checking file for existence
-        guard FileManager.default.fileExists(atPath: url.path) else {
+        
+        if !fileManager.checkIfFileExists(at: url) {
             isInProgress = false
             showError("File does not exist")
             return
         }
+        
         
         do {
             // Read data from the selected file
@@ -134,10 +132,12 @@ struct RestoreBackupView: View {
             DispatchQueue.main.async {
                 isInProgress = false
                 isBackedUp = true
-                vm.allPosts.append(contentsOf: postsAfterCheckForUniqueID)
                 postCount = postsAfterCheckForUniqueID.count
+                
+                vm.allPosts.append(contentsOf: postsAfterCheckForUniqueID)
+                print("✅ Restore: Restored \(postsAfterCheckForUniqueID.count) posts from \(url.lastPathComponent)")
+
                 hapticManager.notification(type: .success)
-                print("✅ Restore: Restored \(postCount) posts from \(url.lastPathComponent)")
             }
             
         } catch let decodingError as DecodingError {

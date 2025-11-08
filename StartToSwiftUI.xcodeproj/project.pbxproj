@@ -277,9 +277,9 @@
 		4759976C2E5D931F008E20F0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				47E439B62EA9290E007001AD /* NetworkService.swift */,
 				4791CDFD2E747AC100687126 /* FileStorageService.swift */,
 				4791CDFF2E747B2E00687126 /* HapticService.swift */,
-				47E439B62EA9290E007001AD /* NetworkService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
