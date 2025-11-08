@@ -34,7 +34,7 @@ struct HomeView2: View {
                 $0.title.lowercased().contains(vm.searchText.lowercased()) ||
                 $0.intro.lowercased().contains(vm.searchText.lowercased())  ||
                 $0.author.lowercased().contains(vm.searchText.lowercased()) ||
-                $0.additionalText.lowercased().contains(vm.searchText.lowercased())
+                $0.notes.lowercased().contains(vm.searchText.lowercased())
             } )
             return searchedPosts
         }

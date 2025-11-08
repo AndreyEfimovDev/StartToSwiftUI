@@ -24,13 +24,13 @@ struct HomeView: View {
     @State private var showPreferancesView: Bool = false
     @State private var showAddPostView: Bool = false
     @State private var showTermsOfUse: Bool = false
-
+    
     
     @State private var showOnTopButton: Bool = false
     @State private var isFilterButtonPressed: Bool = false
     
     @State private var isShowingDeleteConfirmation: Bool = false
-    @State private var isAnyChanges: Bool = false
+//    @State private var isAnyChanges: Bool = false
     
     // MARK: VIEW BODY
     
@@ -65,7 +65,7 @@ struct HomeView: View {
                             isFilterButtonPressed: $isFilterButtonPressed
                         )
                         .presentationBackground(.clear)
-                        .presentationDetents([.height(550)])
+                        .presentationDetents([.height(600)])
                         .presentationDragIndicator(.visible)
                         .presentationCornerRadius(30)
                     }
@@ -119,7 +119,7 @@ struct HomeView: View {
                                         hapticManager.notification(type: .warning)
                                         isShowingDeleteConfirmation = true
                                     }.tint(Color.mycolor.myRed)
-
+                                    
                                     Button("Edit", systemImage: "pencil") {
                                         selectedPost = post
                                     }
@@ -248,80 +248,84 @@ struct HomeView: View {
                         .padding()
                         .navigationDestination(isPresented: $showTermsOfUse) {
                             TermsOfUse() {
-                                    dismiss()
+                                dismiss()
                             }
                         }
                     } // VStack
                 } // ScrollView
                 .navigationTitle("Affirmation")
-
+                
             } // NavigationStack
         } // ZStack
     }
     
     private var updateAvailableDialog: some View {
-            ZStack {
-                Color.mycolor.myAccent.opacity(0.4)
-                    .ignoresSafeArea()
+        ZStack {
+            Color.mycolor.myAccent.opacity(0.4)
+                .ignoresSafeArea()
+            
+            VStack(spacing: 20) {
+                Text("Posts update is available")
+                    .textCase(.uppercase)
+                    .font(.headline)
+                    .bold()
+                    .foregroundColor(Color.mycolor.myAccent)
                 
-                VStack(spacing: 20) {
-                    Text("Posts update is available")
-                        .textCase(.uppercase)
-                        .font(.headline)
-                        .bold()
-                        .foregroundColor(Color.mycolor.myAccent)
-                    
-                    Text("You can go to Preferenses for updates.")
-                        .font(.subheadline)
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(Color.mycolor.mySecondaryText)
-                    ClearCupsuleButton(
-                        primaryTitle: "OK",
-                        primaryTitleColor: Color.mycolor.myBlue) {
-                            vm.isPostsUpdateAvailable = false
-                        }
-                }
-                .padding()
-                .background(.regularMaterial)
-                .cornerRadius(30)
-                .padding(.horizontal, 40)
+                Text("You can go to Preferences for updates.")
+                    .font(.subheadline)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color.mycolor.mySecondaryText)
+                ClearCupsuleButton(
+                    primaryTitle: "OK, got it",
+                    primaryTitleColor: Color.mycolor.myBlue) {
+                        vm.isPostsUpdateAvailable = false
+                    }
             }
+            .padding()
+            .background(.regularMaterial)
+            .cornerRadius(30)
+            .padding(.horizontal, 40)
+        }
     }
     
     private var deletionConfirmationDialog: some View {
-            ZStack {
-                Color.mycolor.myAccent.opacity(0.4)
-                    .ignoresSafeArea()
+        ZStack {
+            Color.mycolor.myAccent.opacity(0.4)
+                .ignoresSafeArea()
+            
+            VStack(spacing: 20) {
+                Text("DELETE THE POST?")
+                    .font(.headline)
+                    .bold()
+                    .foregroundColor(Color.mycolor.myRed)
                 
-                VStack(spacing: 20) {
-                    Text("DELETE THE POST?")
-                        .font(.headline)
-                        .bold()
-                        .foregroundColor(Color.mycolor.myRed)
-                    
-                    Text("Please confirm the action.")
-                        .font(.subheadline)
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
-                    ClearCupsuleButton(
-                        primaryTitle: "YES",
-                        primaryTitleColor: Color.mycolor.myRed) {
+                Text("Please confirm the action.")
+                    .font(.subheadline)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
+                ClearCupsuleButton(
+                    primaryTitle: "YES",
+                    primaryTitleColor: Color.mycolor.myRed) {
+                        withAnimation {
                             vm.deletePost(post: selectedPostToDelete ?? nil)
                             hapticManager.notification(type: .success)
                             isShowingDeleteConfirmation = false
                         }
-                    
-                    ClearCupsuleButton(
-                        primaryTitle: "Cancel",
-                        primaryTitleColor: Color.mycolor.myAccent) {
+                    }
+                
+                ClearCupsuleButton(
+                    primaryTitle: "Cancel",
+                    primaryTitleColor: Color.mycolor.myAccent) {
+                        withAnimation {
                             isShowingDeleteConfirmation = false
                         }
-                }
-                .padding()
-                .background(.regularMaterial)
-                .cornerRadius(30)
-                .padding(.horizontal, 40)
+                    }
             }
+            .padding()
+            .background(.regularMaterial)
+            .cornerRadius(30)
+            .padding(.horizontal, 40)
+        }
     }
 }
 

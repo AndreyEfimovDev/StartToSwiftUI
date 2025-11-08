@@ -53,9 +53,9 @@ struct AddEditPostSheet: View {
     @State var alertMessage: String = ""
     
     let templateForNewPost: Post = Post(
-        title: "", intro: "", author: "", urlString: "",
+        category: "", title: "", intro: "", author: "", urlString: "",
         postPlatform: .youtube, postDate: nil, studyLevel: .beginner,
-        favoriteChoice: .no, additionalText: ""
+        favoriteChoice: .no, notes: "", origin: .local
     )
     
     enum PostAlerts {
@@ -92,7 +92,7 @@ struct AddEditPostSheet: View {
                     platformSection
                     studyLevelSection
                     favoviteChoiceSection
-                    addInforSection
+                    notesSection
                 } // ScrollView
                 .foregroundStyle(Color.mycolor.myAccent)
                 .padding(.horizontal, 8)
@@ -437,16 +437,16 @@ struct AddEditPostSheet: View {
         }
     }
     
-    private var addInforSection: some View {
+    private var notesSection: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("Additional Information")
+            Text("Notes")
                 .textCase(.uppercase)
                 .sectionSubheaderFormater(
                     fontSubheader: fontSubheader,
                     colorSubheader: colorSubheader
                 )
             HStack(spacing: 0) {
-                TextEditor(text: $editedPost.additionalText)
+                TextEditor(text: $editedPost.notes)
                     .font(fontTextInput)
                     .frame(minHeight: 200)
                     .scrollContentBackground(.hidden)
@@ -454,11 +454,11 @@ struct AddEditPostSheet: View {
                     .onSubmit {focusedField = nil }
                     .submitLabel(.return)
                 VStack {
-                    textEditorRightButton(text: editedPost.additionalText) {
-                        editedPost.additionalText = ""
+                    textEditorRightButton(text: editedPost.notes) {
+                        editedPost.notes = ""
                     }
                     textEditorRightButton(
-                        text: editedPost.additionalText,
+                        text: editedPost.notes,
                         iconName: "arrow.turn.right.down",
                         iconColor: Color.mycolor.myBlue) {
                             focusedField = nil
@@ -517,7 +517,7 @@ struct AddEditPostSheet: View {
                         ClearCupsuleButton(
                             primaryTitle: "Yes",
                             primaryTitleColor: Color.mycolor.myRed) {
-                                vm.isPostDraftSaved = false // потом убрать
+//                                vm.isPostDraftSaved = false // потом убрать
                                 dismiss()
                             }
                             .disabled(isMenuConfirmationBlocked)

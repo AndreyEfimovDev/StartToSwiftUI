@@ -26,6 +26,17 @@ struct PostDetailsView: View {
         vm.allPosts.first(where: { $0.id == postId })
     }
     
+    private var buttonTitle: String {
+        switch post?.postPlatform {
+        case .youtube:
+            "Watch the Video"
+        case .website:
+            "Read the Article"
+        case nil:
+            "Go to the Source"
+        }
+    }
+    
     @State private var lineCountIntro: Int = 0
     private let introFont: Font = .subheadline
     private let introLineSpacing: CGFloat = 0
@@ -57,14 +68,14 @@ struct PostDetailsView: View {
                             sectionBackground,
                             in: RoundedRectangle(cornerRadius: sectionCornerRadius)
                         )
-                    watchTheSourceButton(for: validPost)
+                    goToTheSourceButton(for: validPost)
                         .padding(.horizontal, 55)
                     
-                    addInfoField(for: validPost)
+                    notesToPost(for: validPost)
                         .background(
                             sectionBackground,
                             in: RoundedRectangle(cornerRadius: sectionCornerRadius)
-                        ).opacity(validPost.additionalText.isEmpty ? 0 : 1)
+                        ).opacity(validPost.notes.isEmpty ? 0 : 1)
                 }
                 .foregroundStyle(Color.mycolor.myAccent)
             }
@@ -104,6 +115,14 @@ struct PostDetailsView: View {
                     .font(.caption)
                     .frame(maxWidth: .infinity)
                 
+//                if vm.selectedCategory == nil {
+//                    Text(post.category)
+//                        .font(.body)
+//                        .fontWeight(.medium)
+//                        .foregroundStyle(Color.mycolor.myYellow)
+//                        .frame(maxWidth: .infinity)
+//                }
+//                
                 Text(post.studyLevel.rawValue.capitalized + " level")
                     .font(.body)
                     .fontWeight(.medium)
@@ -119,8 +138,8 @@ struct PostDetailsView: View {
             VStack {
                 let dateChecked = post.postDate == nil ? "" : (post.postDate?.formatted(date: .numeric, time: .omitted) ?? "")
                 let prefixToDate = post.postDate == nil ? "" : " posted "
-                let platform = post.postPlatform == .others ? "" : post.postPlatform.displayName
-                let postType = post.postPlatform == .others ? "" : post.postType.displayName
+                let platform = post.postPlatform.displayName
+                let postType = post.postType.displayName
                 let titleForIntro = postType + " on " + platform + prefixToDate + dateChecked
                 
                 Text(titleForIntro)
@@ -151,18 +170,19 @@ struct PostDetailsView: View {
         }
     }
     
-    private func watchTheSourceButton(for post: Post) -> some View {
+    private func goToTheSourceButton(for post: Post) -> some View {
+        
         Button {
             showSafariView = true
         } label: {
-            RedCupsuleButton(buttonTitle: "Watch the Source")
+            RedCupsuleButton(buttonTitle: buttonTitle)
         }
     }
     
-    private func addInfoField(for post: Post) -> some View {
+    private func notesToPost(for post: Post) -> some View {
         VStack(spacing: 0) {
             HStack {
-                Text("Additional information")
+                Text("Notes")
                     .font(.headline)
                     .frame(height: 55)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -170,14 +190,14 @@ struct PostDetailsView: View {
                     .padding(.top, 0)
                 
                 Spacer()
-                if !post.additionalText.isEmpty {
+                if !post.notes.isEmpty {
                     MoreLessTextButton(showText: $showFullFreeTextField)
                 }
             }
             
             if showFullFreeTextField {
                 VStack {
-                    Text(post.additionalText)
+                    Text(post.notes)
                         .font(fullFreeTextFieldFont)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 8)
