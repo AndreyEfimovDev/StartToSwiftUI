@@ -11,7 +11,7 @@ class NetworkService: ObservableObject {
     
     func fetchPostsFromURL<T: Codable>(
         from urlString: String,
-        decoder: JSONDecoder = .appDecoder, // we use the data decoding strategy - ISO8601 (string)
+        decoder: JSONDecoder = .appDecoder, //ISO8601 (string) encoding strategy
         completion: @escaping (Result<T, Error>) -> Void
     ) {
                
@@ -58,7 +58,7 @@ class NetworkService: ObservableObject {
     
     func fetchCloudPosts<T: Codable>(
         from urlString: String,
-        decoder: JSONDecoder = .appDecoder, // we use the data decoding strategy - ISO8601 (string)
+        decoder: JSONDecoder = .appDecoder, // ISO8601 (string) decoding strategy
         completion: @escaping (Result<T, Error>) -> Void
     ) {
         guard let url = URL(string: urlString) else {
@@ -101,24 +101,6 @@ class NetworkService: ObservableObject {
         }
         
         task.resume()
-    }
-
-    
-    enum NetworkError: LocalizedError {
-        case invalidURL
-        case invalidResponse
-        case noData
-        
-        var errorDescription: String? {
-            switch self {
-            case .invalidURL:
-                return "Invalid URL"
-            case .invalidResponse:
-                return "Invalid server response"
-            case .noData:
-                return "No data received"
-            }
-        }
     }
 }
 
