@@ -23,15 +23,18 @@ class PostsViewModel: ObservableObject {
                 allPosts,
                 fileName: Constants.localFileName
             ) { [weak self] result in
+                
+                self?.errorMessage = nil
+                self?.showErrorMessageAlert = false
+
                 DispatchQueue.main.async {
                     switch result {
                     case .success:
                         print("✅ VM(allPosts - didSet): Posts saved successfully")
-                        self?.errorMessage = nil
-                        
                     case .failure(let error):
                         self?.errorMessage = error.localizedDescription
-                        self?.showError("VM(allPosts - didSet): Failed to save posts: \(error.localizedDescription)")
+                        self?.showErrorMessageAlert = true
+                        self?.hapticManager.notification(type: .error)
                         print("❌ Failed to save posts: \(error)")
                     }
                 }
@@ -49,7 +52,9 @@ class PostsViewModel: ObservableObject {
     
     @AppStorage("homeTitleName") var homeTitleName: String = "SwiftUI materials"
     //    @AppStorage("isFirstAppLaunch") var isFirstAppLaunch: Bool = true
-    @AppStorage("isFirstPostsLoad") var isFirstImportPostsCompleted: Bool = false
+    @AppStorage("isFirstPostsLoad") var isFirstImportPostsCompleted: Bool = false {
+        didSet { localLastUpdated = .now }
+    }
     @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
     @AppStorage("isNotification") var isNotification: Bool = false
     
@@ -96,11 +101,11 @@ class PostsViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
 //    @Published var isLoadingFromCloud = false
-    @Published var networkErrorMessage: String?
-    @Published var showImportNetworkAlert = false
+//    @Published var networkErrorMessage: String?
+//    @Published var showImportNetworkAlert = false
     
     @Published var errorMessage: String?
-    @Published var showFileManagerErrorAlert = false
+    @Published var showErrorMessageAlert = false
 
     
     private var utcCalendar = Calendar.current
@@ -117,21 +122,22 @@ class PostsViewModel: ObservableObject {
         fileManager.loadPosts(
             fileName: Constants.localFileName
         ) { [weak self] (result: Result<[Post], FileStorageError>) in
+            
+            self?.errorMessage = nil
+            self?.showErrorMessageAlert = false
+
             DispatchQueue.main.async {
                 switch result {
                 case .success(let posts):
                     self?.allPosts = posts
-                    self?.errorMessage = nil
-                    
                 case .failure(let error):
                     self?.errorMessage = error.localizedDescription
-                    print("Failed to load posts: \(error)")
+                    self?.showErrorMessageAlert = true
+                    print("VM(init): Failed to load posts: \(error)")
                 }
             }
         }
-        
-//        self.allPosts = loadedLocalPosts ?? []
-        
+                
         if !self.allPosts.isEmpty {
             checkCloudForUpdates { hasUpdates in
                 if hasUpdates {
@@ -459,7 +465,9 @@ class PostsViewModel: ObservableObject {
         urlString: String = Constants.cloudPostsURL,
         completion: @escaping () -> Void
     ) {
-        networkErrorMessage = nil
+        self.errorMessage = nil
+        self.showErrorMessageAlert = false
+        
         networkService.fetchPostsFromURL(from: urlString) { [weak self] (result: Result<[Post], Error>) in
             
             DispatchQueue.main.async {
@@ -484,11 +492,9 @@ class PostsViewModel: ObservableObject {
                         
                     }
                     
-                    self?.networkErrorMessage = nil
-                    
                 case .failure(let error):
-                    self?.networkErrorMessage = error.localizedDescription
-                    self?.showImportNetworkAlert = true
+                    self?.errorMessage = error.localizedDescription
+                    self?.showErrorMessageAlert = true
                     self?.hapticManager.notification(type: .error)
                     print("❌ Cloud import error: \(error.localizedDescription)")
                 }
@@ -501,71 +507,30 @@ class PostsViewModel: ObservableObject {
     
     func getPostsFromBackup(
         url: URL,
-        completion: @escaping () -> Void
-    ){
-        fileManager.loadPosts(fileName: url.path) { [weak self] (result: Result<[Post], FileStorageError>) in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let posts):
-                    let postsCheckedForUnique = self?.checkAndReturnUniquePosts(posts: posts)
-                    self?.allPosts.append(contentsOf: postsCheckedForUnique ?? [])
-                    self?.errorMessage = nil
-                    self?.hapticManager.notification(type: .success)
-                    print("✅ Restore: Restored \(String(describing: postsCheckedForUnique?.count)) posts from \(url.lastPathComponent)")
-                    
-                case .failure(let error):
-                    self?.errorMessage = error.localizedDescription
-                    self?.showError("Failed to get from Backup: \(error.localizedDescription)")
-                    print("Failed to load posts: \(error)")
-                }
-                completion()
-            }
+        completion: @escaping (Int) -> Void
+    ) {
+        self.errorMessage = nil
+        self.showErrorMessageAlert = false
+        var postsCount: Int = 0
+
+        do {
+            let jsonData = try Data(contentsOf: url)
+            let posts = try JSONDecoder.appDecoder.decode([Post].self, from: jsonData)
+            
+            let postsCheckedForUnique = self.checkAndReturnUniquePosts(posts: posts)
+            postsCount = postsCheckedForUnique.count
+            self.allPosts.append(contentsOf: postsCheckedForUnique)
+            self.hapticManager.notification(type: .success)
+            print("✅ Restore: Restored \(postsCount) posts from \(url.lastPathComponent)")
+            
+        } catch {
+            self.errorMessage = error.localizedDescription
+            self.showErrorMessageAlert = true
+            self.hapticManager.notification(type: .error)
+            print("Failed to load posts: \(error)")
         }
         
-//        let urlResult = fileManager.getFileURL(fileName: url)
-
-//        do {
-//            // Read data from the selected file
-//            let data = try Data(contentsOf: url)
-//            
-//            guard !data.isEmpty else {
-//                showError("The selected file is empty")
-//                return
-//            }
-//            
-//            // Checking JSON structure
-//            let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-//            guard jsonObject is [Any] else {
-//                showError("Invalid JSON format: expected array of posts")
-//                return
-//            }
-//            let decodedPosts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
-//            
-//           
-//            let postsCheckedForUnique = checkAndReturnUniquePosts(posts: decodedPosts)
-//            
-//            DispatchQueue.main.async {
-////                isInProgress = false
-////                isBackedUp = true
-////                postCount = postsAfterCheckForUniqueID.count
-//                
-//                self.allPosts.append(contentsOf: postsCheckedForUnique)
-//                print("✅ Restore: Restored \(postsCheckedForUnique.count) posts from \(url.lastPathComponent)")
-//                self.hapticManager.notification(type: .success)
-//                completion()
-//            }
-//            
-//        } catch let decodingError as DecodingError {
-////            isInProgress = false
-//            handleDecodingError(decodingError)
-//            return
-//
-//        } catch {
-////            isInProgress = false
-//            showError("Failed to import: \(error.localizedDescription)")
-//            return
-//
-//        }
+        completion(postsCount)
     }
     
     
@@ -588,27 +553,12 @@ class PostsViewModel: ObservableObject {
 //            }
         return postsAfterCheckForUniqueID
     }
-//    
-//    private func handleDecodingError(_ error: DecodingError) {
-//        switch error {
-//        case .dataCorrupted(let context):
-//            showError("Invalid JSON format: \(context.debugDescription)")
-//        case .keyNotFound(let key, let context):
-//            showError("Missing field '\(key.stringValue)' in JSON: \(context.debugDescription)")
-//        case .typeMismatch(let type, let context):
-//            showError("Type mismatch for '\(type)' in JSON: \(context.debugDescription)")
-//        case .valueNotFound(let type, let context):
-//            showError("Missing value for type '\(type)' in JSON: \(context.debugDescription)")
-//        @unknown default:
-//            showError("Unknown JSON decoding error")
-//        }
-//    }
     
-    private func showError(_ message: String) {
-        errorMessage = message
-        showFileManagerErrorAlert = true
-        hapticManager.notification(type: .error)
-    }
+//    private func showError(_ message: String) {
+//        errorMessage = message
+//        showErrorMessageAlert = true
+//        hapticManager.notification(type: .error)
+//    }
     
     
     
@@ -624,7 +574,12 @@ class PostsViewModel: ObservableObject {
     /// - Returns: Returns a boolean result or error within completion handler.
     
     func checkCloudForUpdates(completion: @escaping (Bool) -> Void) {
-        networkService.fetchCloudPosts(from: Constants.cloudPostsURL) { (result: Result<[Post], Error>) in
+        networkService.fetchPostsFromURL(
+            from: Constants.cloudPostsURL
+        ) { (result: Result<[Post], Error>) in
+            self.errorMessage = nil
+            self.showErrorMessageAlert = false
+            
             switch result {
             case .success(let cloudResponse):
                 
@@ -643,13 +598,12 @@ class PostsViewModel: ObservableObject {
                 } else {
                     print("☑️ checkCloudForUpdates: No Updates available")
                 }
-                
                 DispatchQueue.main.async {
                     completion(hasUpdates)
                 }
             case .failure (let error):
-                self.networkErrorMessage = error.localizedDescription
-                self.showImportNetworkAlert = true
+                self.errorMessage = error.localizedDescription
+                self.showErrorMessageAlert = true
                 self.hapticManager.notification(type: .error)
                 
                 DispatchQueue.main.async {

@@ -34,10 +34,12 @@ struct CheckForPostsUpdateView: View {
             .onAppear {
                 checkForUpdates()
             }
-            .alert("Import Error", isPresented: $vm.showImportNetworkAlert) {
-                Button("OK", role: .cancel) { }
+            .alert("Import Error", isPresented: $vm.showErrorMessageAlert) {
+                Button("OK", role: .cancel) {
+                    dismiss()
+                }
             } message: {
-                Text(vm.networkErrorMessage ?? "Unknown error")
+                Text(vm.errorMessage ?? "Unknown error")
             }
         }
     }

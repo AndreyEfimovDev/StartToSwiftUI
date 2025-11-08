@@ -17,8 +17,8 @@ struct RestoreBackupView: View {
     
     @State private var isBackedUp: Bool = false
     @State private var postCount: Int = 0
-    @State private var showErrorAlert = false
-    @State private var errorMessage = ""
+//    @State private var showErrorAlert = false
+//    @State private var errorMessage = ""
     @State private var isInProgress = false
     
     @State private var showDocumentPicker = false
@@ -55,9 +55,15 @@ struct RestoreBackupView: View {
             DocumentPicker(
                 onDocumentPicked: { url in
                     isInProgress = true
-                    restorePostsFromBackup(from: url)
-                    DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                        dismiss()
+                    vm.getPostsFromBackup(url: url) { count in
+                        postCount = count
+                        isBackedUp = true
+                        isInProgress = false
+                        if !vm.showErrorMessageAlert {
+                            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+                                dismiss()
+                            }
+                        }
                     }
                 },
                 onCancel: {
@@ -66,10 +72,12 @@ struct RestoreBackupView: View {
                 }
             )
         }
-        .alert("Error", isPresented: $showErrorAlert) {
-            Button("OK", role: .cancel) { }
+        .alert("Error", isPresented: $vm.showErrorMessageAlert) {
+            Button("OK", role: .cancel) {
+                dismiss()
+            }
         } message: {
-            Text(errorMessage)
+            Text(vm.errorMessage ?? "Unknown error")
         }
     }
     
@@ -85,94 +93,94 @@ struct RestoreBackupView: View {
 
     }
     
-    private func restorePostsFromBackup(from url: URL) {
-                
-        // Checking file for existence
-        
-        
-        print("Restore: Selected file URL: \(url)")
-              print("Restore: File path: \(url.path)")
-        
-        if !fileManager.checkIfFileExists(at: url) {
-            isInProgress = false
-            showError("File does not exist")
-            return
-        }
-        
-        
-        do {
-            // Read data from the selected file
-            let data = try Data(contentsOf: url)
-            
-            guard !data.isEmpty else {
-                showError("The selected file is empty")
-                return
-            }
-            
-            // Checking JSON structure
-            let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-            guard jsonObject is [Any] else {
-                showError("Invalid JSON format: expected array of posts")
-                return
-            }
-            let decodedPosts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
-            
-            // Checking posts with the same Title to local posts - do not append such posts from BackUp
-            let existingTitlesInLocalPosts = Set(vm.allPosts.map { $0.title })
-            let postsAfterCheckForUniqueTitle = decodedPosts.filter { !existingTitlesInLocalPosts.contains($0.title) }
-            
-//            let postsAfterCheckForUniqueTitle = posts.filter { post in
-//                !vm.allPosts.contains(where: { $0.title == post.title })
+//    private func restorePostsFromBackup(from url: URL) {
+//                
+//        // Checking file for existence
+//        
+//        
+//        print("Restore: Selected file URL: \(url)")
+//              print("Restore: File path: \(url.path)")
+//        
+//        if !fileManager.checkIfFileExists(at: url) {
+//            isInProgress = false
+//            showError("File does not exist")
+//            return
+//        }
+//        
+//        
+//        do {
+//            // Read data from the selected file
+//            let data = try Data(contentsOf: url)
+//            
+//            guard !data.isEmpty else {
+//                showError("The selected file is empty")
+//                return
 //            }
 //            
-            // Checking posts with the same ID to local posts - do not append such posts from BackUp
-            let existingIdInLocalPosts = Set(vm.allPosts.map { $0.id })
-            let postsAfterCheckForUniqueID = postsAfterCheckForUniqueTitle.filter { !existingIdInLocalPosts.contains($0.id) }
-
-//            let postsAfterCheckForUniqueID = postsAfterCheckForUniqueTitle.filter { post in
-//                !vm.allPosts.contains(where: { $0.id == post.id })
+//            // Checking JSON structure
+//            let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+//            guard jsonObject is [Any] else {
+//                showError("Invalid JSON format: expected array of posts")
+//                return
 //            }
-
-            DispatchQueue.main.async {
-                isInProgress = false
-                isBackedUp = true
-                postCount = postsAfterCheckForUniqueID.count
-                
-                vm.allPosts.append(contentsOf: postsAfterCheckForUniqueID)
-                print("✅ Restore: Restored \(postsAfterCheckForUniqueID.count) posts from \(url.lastPathComponent)")
-
-                hapticManager.notification(type: .success)
-            }
-            
-        } catch let decodingError as DecodingError {
-            isInProgress = false
-            handleDecodingError(decodingError)
-        } catch {
-            isInProgress = false
-            showError("Failed to import: \(error.localizedDescription)")
-        }
-    }
-    
-    private func handleDecodingError(_ error: DecodingError) {
-        switch error {
-        case .dataCorrupted(let context):
-            showError("Invalid JSON format: \(context.debugDescription)")
-        case .keyNotFound(let key, let context):
-            showError("Missing field '\(key.stringValue)' in JSON: \(context.debugDescription)")
-        case .typeMismatch(let type, let context):
-            showError("Type mismatch for '\(type)' in JSON: \(context.debugDescription)")
-        case .valueNotFound(let type, let context):
-            showError("Missing value for type '\(type)' in JSON: \(context.debugDescription)")
-        @unknown default:
-            showError("Unknown JSON decoding error")
-        }
-    }
-    
-    private func showError(_ message: String) {
-        errorMessage = message
-        showErrorAlert = true
-        hapticManager.notification(type: .error)
-    }
+//            let decodedPosts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
+//            
+//            // Checking posts with the same Title to local posts - do not append such posts from BackUp
+//            let existingTitlesInLocalPosts = Set(vm.allPosts.map { $0.title })
+//            let postsAfterCheckForUniqueTitle = decodedPosts.filter { !existingTitlesInLocalPosts.contains($0.title) }
+//            
+////            let postsAfterCheckForUniqueTitle = posts.filter { post in
+////                !vm.allPosts.contains(where: { $0.title == post.title })
+////            }
+////            
+//            // Checking posts with the same ID to local posts - do not append such posts from BackUp
+//            let existingIdInLocalPosts = Set(vm.allPosts.map { $0.id })
+//            let postsAfterCheckForUniqueID = postsAfterCheckForUniqueTitle.filter { !existingIdInLocalPosts.contains($0.id) }
+//
+////            let postsAfterCheckForUniqueID = postsAfterCheckForUniqueTitle.filter { post in
+////                !vm.allPosts.contains(where: { $0.id == post.id })
+////            }
+//
+//            DispatchQueue.main.async {
+//                isInProgress = false
+//                isBackedUp = true
+//                postCount = postsAfterCheckForUniqueID.count
+//                
+//                vm.allPosts.append(contentsOf: postsAfterCheckForUniqueID)
+//                print("✅ Restore: Restored \(postsAfterCheckForUniqueID.count) posts from \(url.lastPathComponent)")
+//
+//                hapticManager.notification(type: .success)
+//            }
+//            
+//        } catch let decodingError as DecodingError {
+//            isInProgress = false
+//            handleDecodingError(decodingError)
+//        } catch {
+//            isInProgress = false
+//            showError("Failed to import: \(error.localizedDescription)")
+//        }
+//    }
+//    
+//    private func handleDecodingError(_ error: DecodingError) {
+//        switch error {
+//        case .dataCorrupted(let context):
+//            showError("Invalid JSON format: \(context.debugDescription)")
+//        case .keyNotFound(let key, let context):
+//            showError("Missing field '\(key.stringValue)' in JSON: \(context.debugDescription)")
+//        case .typeMismatch(let type, let context):
+//            showError("Type mismatch for '\(type)' in JSON: \(context.debugDescription)")
+//        case .valueNotFound(let type, let context):
+//            showError("Missing value for type '\(type)' in JSON: \(context.debugDescription)")
+//        @unknown default:
+//            showError("Unknown JSON decoding error")
+//        }
+//    }
+//    
+//    private func showError(_ message: String) {
+//        errorMessage = message
+//        showErrorAlert = true
+//        hapticManager.notification(type: .error)
+//    }
 }
 
 
