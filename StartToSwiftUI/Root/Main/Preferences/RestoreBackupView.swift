@@ -113,15 +113,25 @@ struct RestoreBackupView: View {
                 showError("Invalid JSON format: expected array of posts")
                 return
             }
-            print("✅ Restore: Point before DECODING JSON")
             let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
-            print("✅ ✅ ✅ Restore: Point after DECODING JSON")
             
+            // Checking posts with the same Title to local posts - do not append such posts from BackUp
+            let postsAfterCheckForUniqueTitle = posts.filter { post in
+                !vm.allPosts.contains(where: { $0.title == post.title })
+            }
+            
+//            let existingTitles = Set(vm.allPosts.map { $0.title })
+//            let postsAfterCheckForUniqueTitle = posts.filter { !existingTitles.contains($0.title) }
+
+            // Checking posts with the same ID to local posts - do not append such posts from BackUp
+            let postsAfterCheckForUniqueID = postsAfterCheckForUniqueTitle.filter { post in
+                !vm.allPosts.contains(where: { $0.id == post.id })
+            }
+
             DispatchQueue.main.async {
                 isInProgress = false
                 isBackedUp = true
                 vm.allPosts.append(contentsOf: posts)
-//                fileManager.savePosts(vm.allPosts)
                 postCount = posts.count
                 hapticManager.notification(type: .success)
                 print("✅ Restore: Restored \(postCount) posts from \(url.lastPathComponent)")
