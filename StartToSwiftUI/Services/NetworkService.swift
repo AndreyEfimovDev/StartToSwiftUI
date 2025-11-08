@@ -9,7 +9,11 @@ import Foundation
 
 class NetworkService: ObservableObject {
     
-    func fetchPostsFromURL(_ urlString: String, completion: @escaping (Result<[Post], Error>) -> Void) {
+    func fetchPostsFromURL<T: Codable>(
+        from urlString: String,
+        decoder: JSONDecoder = .appDecoder, // we use the data decoding strategy - ISO8601 (string)
+        completion: @escaping (Result<T, Error>) -> Void
+    ) {
                
         guard let url = URL(string: urlString) else {
             completion(.failure(NetworkError.invalidURL))
@@ -31,7 +35,7 @@ class NetworkService: ObservableObject {
                 return
             }
             
-            guard let data = data else {
+            guard let jsonData = data else {
                 DispatchQueue.main.async {
                     completion(.failure(NetworkError.noData))
                 }
@@ -39,9 +43,9 @@ class NetworkService: ObservableObject {
             }
             
             do {
-                let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
+                let decodedData = try JSONDecoder.appDecoder.decode(T.self, from: jsonData)
                 DispatchQueue.main.async {
-                    completion(.success(posts))
+                    completion(.success(decodedData))
                 }
             } catch {
                 DispatchQueue.main.async {
@@ -52,49 +56,52 @@ class NetworkService: ObservableObject {
         task.resume()
     }
     
-    func fetchCloudPosts(from urlString: String, completion: @escaping (Result<CloudPosts, Error>) -> Void) {
-        guard let url = URL(string: urlString) else {
-            completion(.failure(NetworkError.invalidURL))
-            return
-        }
-        
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                DispatchQueue.main.async {
-                    completion(.failure(error))
-                }
-                return
-            }
-            
-            guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
-                DispatchQueue.main.async {
-                    completion(.failure(NetworkError.invalidResponse))
-                }
-                return
-            }
-            
-            guard let data = data else {
-                DispatchQueue.main.async {
-                    completion(.failure(NetworkError.noData))
-                }
-                return
-            }
-            
-            do {
-                // We use the date decoding strategy from ISO8601 (string)
-                let response = try JSONDecoder.appDecoder.decode(CloudPosts.self, from: data)
-                DispatchQueue.main.async {
-                    completion(.success(response))
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    completion(.failure(error))
-                }
-            }
-        }
-        
-        task.resume()
-    }
+//    func fetchCloudPosts<T: Codable>(
+//        from urlString: String,
+//        decoder: JSONDecoder = .appDecoder, // we use the data decoding strategy - ISO8601 (string)
+//        completion: @escaping (Result<T, Error>) -> Void
+//    ) {
+//        guard let url = URL(string: urlString) else {
+//            completion(.failure(NetworkError.invalidURL))
+//            return
+//        }
+//        
+//        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+//            if let error = error {
+//                DispatchQueue.main.async {
+//                    completion(.failure(error))
+//                }
+//                return
+//            }
+//            
+//            guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+//                DispatchQueue.main.async {
+//                    completion(.failure(NetworkError.invalidResponse))
+//                }
+//                return
+//            }
+//            
+//            guard let jsonData = data else {
+//                DispatchQueue.main.async {
+//                    completion(.failure(NetworkError.noData))
+//                }
+//                return
+//            }
+//            
+//            do {
+//                let decodedData = try decoder.decode(T.self, from: jsonData)
+//                DispatchQueue.main.async {
+//                    completion(.success(decodedData))
+//                }
+//            } catch {
+//                DispatchQueue.main.async {
+//                    completion(.failure(error))
+//                }
+//            }
+//        }
+//        
+//        task.resume()
+//    }
 
     
     enum NetworkError: LocalizedError {

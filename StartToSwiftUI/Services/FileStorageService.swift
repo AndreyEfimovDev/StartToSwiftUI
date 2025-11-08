@@ -11,25 +11,10 @@ import SwiftUI
 class FileStorageService: ObservableObject {
     
     static let shared = FileStorageService()
-    
-//    let fileName = Constants.localFileName // "posts_app.json"
-
-//    var fileURL: URL? {
-//        guard
-//            let path = FileManager
-//                .default
-//                .urls(for: .documentDirectory, in: .userDomainMask)
-//                .first?
-//                .appendingPathComponent(fileName) else {
-//            print("❌ FM: Error getting path.")
-//            return nil
-//        }
-//        return path
-//    }
 
     // MARK: FILE MANAGER FUNCIONS
     
-    // getting a full path of the JSON data file stored by File Manager
+    // Getting a full path of the JSON data file stored by File Manager
     func getFileURL(fileName: String) -> URL? {
         guard
             let path = FileManager
@@ -43,7 +28,7 @@ class FileStorageService: ObservableObject {
         return path
     }
     
-    // Encoding posts and saving into JSON data
+    // Saving posts with encoding into JSON data
     func savePosts<T: Codable>(
         _ data: T,
         fileName: String,
@@ -67,14 +52,14 @@ class FileStorageService: ObservableObject {
     // Loading and decoding JSON data into posts
     func loadPosts<T: Codable>(
         fileName: String,
-        encoder: JSONDecoder = .appDecoder // we use the date decoding strategy - ISO8601 (string)
+        decoder: JSONDecoder = .appDecoder // we use the date decoding strategy - ISO8601 (string)
     ) -> T? {
         
         guard let url = getFileURL(fileName: fileName) else { return nil }
         
         do {
             let jsonData = try Data(contentsOf: url)
-            let decodedData = try encoder.decode(T.self, from: jsonData)
+            let decodedData = try decoder.decode(T.self, from: jsonData)
             print("✅ FM(loadPosts): Successfully uploaded")
             return decodedData
         } catch {

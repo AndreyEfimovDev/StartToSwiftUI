@@ -23,6 +23,7 @@ struct DevPreview {
         studyLevel: .beginner,
         favoriteChoice: .yes,
         notes: "",
+        origin: .cloud
     )
     
     static let samplePost2 = Post(
@@ -34,7 +35,8 @@ struct DevPreview {
         postType: .course,
         urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
         postDate: Date.from(year: 2021, month: 8, day: 30),
-        studyLevel: .advanced
+        studyLevel: .advanced,
+        origin: .local
     )
     
     static let samplePost3 = Post(
@@ -66,8 +68,12 @@ struct DevPreview {
         We will start by looking at how we can create a `Text` view with the Markdown-formatted base postLanguage version of the string as the localization key,
         We will also see how we can utilize string interpolation to combine and stylize our strings and present them in a text view.
         And finally, we will take a quick look at the power of Attributed strings in SwiftUI.
-        """
+        """,
+        origin: .local
     )
+    
+    
+    
     
     static let postsForCloud = [
         Post(
@@ -82,14 +88,18 @@ struct DevPreview {
             urlString: "https://www.youtube.com/watch?v=rbtIcKKxQ38",
             postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 5, day: 7),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Customizing the appearance of symbol images in SwiftUI",
             intro: "Symbol images are vector-based icons from Apple's SF Symbols library, designed for use across Apple platforms. These scalable images adapt to different sizes and weights, ensuring consistent, high-quality icons throughout our apps. Using symbol images in SwiftUI is straightforward with the Image view and the system name of the desired symbol.",
             author: "Natalia Panferova",
             urlString: "https://nilcoalescing.com/blog/CustomizingTheAppearanceOfSymbolImagesInSwiftUI/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 9, day: 22)),
+            postDate: Date.from(year: 2024, month: 9, day: 22),
+            origin: .cloud
+        ),
         Post(
             title: "ViewBuilder: Organize your views",
             intro: "ViewBuilders in SwiftUI are an excellent way to keep your code clean and organized. They make your code easier to read and maintain by allowing you to structure your views more clearly. This simplifies the process of building complex user interfaces, ensuring that your code remains elegant and efficient. Embracing ViewBuilders enhances both the readability and manageability of your SwiftUI projects.",
@@ -97,7 +107,9 @@ struct DevPreview {
             urlString: "https://softwareanders.com/swiftui-viewbuilder-organize-your-views/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 6, day: 27),
-            studyLevel: .advanced),
+            studyLevel: .advanced,
+            origin: .cloud
+        ),
         Post(
             title: "ClipShape: Shape Your Application",
             intro: """
@@ -108,15 +120,18 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-clipshape-shape-your-application/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 6, day: 13)),
+            postDate: Date.from(year: 2024, month: 6, day: 13),
+            origin: .cloud
+        ),
         Post(
             title: "Long Press Gesture: Complete How-To Guide",
             intro: "The Long Press gesture in SwiftUI is a powerful interaction that triggers when a user presses and holds a view for a specific duration. This essential gesture recognizer is frequently implemented in modern iOS apps for context menus, drag and drop functionality, or revealing additional information to enhance user experience.",
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-long-press-how-to-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 5, day: 7)),
-        
+            postDate: Date.from(year: 2024, month: 5, day: 7),
+            origin: .cloud
+        ),
         Post(
             title: "Toggle: Turn On And Off",
             intro: """
@@ -127,7 +142,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-toggle-turn-on-and-off/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 5, day: 2)),
+            postDate: Date.from(year: 2024, month: 5, day: 2),
+            origin: .cloud
+        ),
         Post(
             title: "Animate SF Symbols",
             intro: """
@@ -138,7 +155,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-animate-sf-symbols/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 4, day: 24)),
+            postDate: Date.from(year: 2024, month: 4, day: 24),
+            origin: .cloud
+        ),
         Post(
             title: "Shadow: Create depth and dimension",
             intro: """
@@ -149,8 +168,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-shadow-create-depth-and-dimension/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 4, day: 3)),
-        
+            postDate: Date.from(year: 2024, month: 4, day: 3),
+            origin: .cloud
+        ),
         Post(
             title: "ShareLink: Share with ease",
             intro: """
@@ -161,14 +181,18 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-sharelink-share-with-ease/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 3, day: 28)),
+            postDate: Date.from(year: 2024, month: 3, day: 28),
+            origin: .cloud
+        ),
         Post(
             title: "Launch screen: First Impressions Matters",
             intro: "In this blog post, we cover how to create a launch screen in SwiftUI, exploring why they’re not just a good idea, but a crucial element in crafting an exceptional user experience.",
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-launch-screen-first-impressions-matters/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 3, day: 21)),
+            postDate: Date.from(year: 2024, month: 3, day: 21),
+            origin: .cloud
+        ),
         Post(
             title: "Swift check network connection",
             intro: """
@@ -181,7 +205,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swift-check-network-connection/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 3, day: 28)),
+            postDate: Date.from(year: 2024, month: 3, day: 28),
+            origin: .cloud
+        ),
         Post(
             title: "Request review: Complete guide",
             intro: """
@@ -193,7 +219,9 @@ struct DevPreview {
             urlString: "https://softwareanders.com/swiftui-request-review-complete-guide/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 2, day: 22),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Segmented control: Easy to follow guide",
             intro: """
@@ -204,7 +232,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-segmented-control/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 2, day: 21)),
+            postDate: Date.from(year: 2024, month: 2, day: 21),
+            origin: .cloud
+        ),
         Post(
             title: "Email: A Complete Guide",
             intro: """
@@ -215,7 +245,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-email-a-complete-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 3, day: 12)),
+            postDate: Date.from(year: 2024, month: 3, day: 12),
+            origin: .cloud
+        ),
         Post(
             title: "Material: How to use material",
             intro: """
@@ -226,7 +258,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-material-how-to-use-material/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 1, day: 14)),
+            postDate: Date.from(year: 2024, month: 1, day: 14),
+            origin: .cloud
+        ),
 // 3 page
         Post(
             title: "Blur: A short guide",
@@ -238,7 +272,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-blur-a-short-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 1, day: 11)),
+            postDate: Date.from(year: 2024, month: 1, day: 11),
+            origin: .cloud
+        ),
         Post(
             title: "Pull to refresh: Easy guide",
             intro: """
@@ -249,14 +285,18 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-pull-to-refresh-easy-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 12, day: 29)),
+            postDate: Date.from(year: 2023, month: 12, day: 29),
+            origin: .cloud
+        ),
         Post(
             title: "Link: How to guide",
             intro: "Link is a great and hassle-free way of opening a website from your application. In this article, we will cover how you use SwiftUI Link and how you can customize it to fit inside your application.",
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-link-how-to-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 12, day: 28)),
+            postDate: Date.from(year: 2023, month: 12, day: 28),
+            origin: .cloud
+        ),
         Post(
             title: "Divider: A powerful line",
             intro: """
@@ -267,7 +307,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-divider-a-powerful-line/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 12, day: 20)),
+            postDate: Date.from(year: 2023, month: 12, day: 20),
+            origin: .cloud
+        ),
         Post(
             title: "Swift convert strings into different data types: Easy guide",
             intro: """
@@ -278,7 +320,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/converting-strings-into-different-data-types-easy-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 12, day: 8)),
+            postDate: Date.from(year: 2023, month: 12, day: 8),
+            origin: .cloud
+        ),
         Post(
             title: "ColorPicker: A complete guide to Color Selection",
             intro: """
@@ -289,14 +333,18 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-colorpicker-a-complete-guide-to-color-selection/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 11, day: 28)),
+            postDate: Date.from(year: 2023, month: 11, day: 28),
+            origin: .cloud
+        ),
         Post(
             title: "Swipe Actions: Complete guide with examples",
             intro: "One awesome and helpful feature in SwiftUI that enhances user interaction is swipe actions. In this blog post, we’ll explore the world of SwiftUI swipe actions, we will learn how to implement them and customize them to fit into your application, so you can provide even more value for your users.",
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-swipe-actions-complete-guide-with-examples/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 11, day: 27)),
+            postDate: Date.from(year: 2023, month: 11, day: 27),
+            origin: .cloud
+        ),
         Post(
             title: "SF Symbols: A easy guide",
             intro: """
@@ -307,7 +355,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-sf-symbols-a-easy-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 11, day: 23)),
+            postDate: Date.from(year: 2023, month: 11, day: 23),
+            origin: .cloud
+        ),
         Post(
             title: "DatePicker: Integrating dates in your app",
             intro: """
@@ -318,7 +368,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-datepicker-integrating-dates-in-your-app/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 11, day: 21)),
+            postDate: Date.from(year: 2023, month: 11, day: 21),
+            origin: .cloud
+        ),
 // 4 page
 
         Post(
@@ -331,7 +383,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-texteditor-character-limit/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 11, day: 9)),
+            postDate: Date.from(year: 2023, month: 11, day: 9),
+            origin: .cloud
+        ),
         Post(
             title: "TextEditor: A user friendly guide",
             intro: """
@@ -342,7 +396,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 11, day: 7)),
+            postDate: Date.from(year: 2023, month: 11, day: 7),
+            origin: .cloud
+        ),
         Post(
             title: "Line chart: Complete guide with examples",
             intro: """
@@ -353,7 +409,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-line-chart-complete-guide-with-examples/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 10, day: 11)),
+            postDate: Date.from(year: 2023, month: 10, day: 11),
+            origin: .cloud
+        ),
         Post(
             title: "TabView: All you need to know",
             intro: """
@@ -364,7 +422,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-tabview-all-you-need-to-know/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 10, day: 10)),
+            postDate: Date.from(year: 2023, month: 10, day: 10),
+            origin: .cloud
+        ),
         Post(
             title: "Menu: A complete Guide",
             intro: """
@@ -375,14 +435,18 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-menu-a-complete-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 08, day: 31)),
+            postDate: Date.from(year: 2023, month: 08, day: 31),
+            origin: .cloud
+        ),
         Post(
             title: "Toolbar: A complete Guide with examples",
             intro: "Toolbar is a powerful tool for designing elegant and functional user interfaces. In this blog post, we’ll be working with the native SwiftUI Toolbar and exploring its capabilities, providing examples, and showing you how to customize things like its background color to match your app’s design.",
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-toolbar-a-complete-guide-with-examples/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 08, day: 24)),
+            postDate: Date.from(year: 2023, month: 08, day: 24),
+            origin: .cloud
+        ),
         Post(
             title: "Search: Enhance User Experience with SwiftUI Searchable",
             intro: """
@@ -394,14 +458,18 @@ struct DevPreview {
             urlString: "https://softwareanders.com/swiftui-search-enhance-user-experience-with-swiftui-searchable/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 08, day: 22),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Swift UserDefaults: All you need to know",
             intro: "Swift UserDefaults is a lightweight and convenient data persistence store provided by Apple’s Foundation framework. It allows you to store small pieces of data, such as user preferences, settings, and simple configuration values. These values are automatically saved to the device’s file system, making them accessible even after the app is closed or the device is rebooted.",
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swift-userdefaults-all-you-need-to-know/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 08, day: 15)),
+            postDate: Date.from(year: 2023, month: 08, day: 15),
+            origin: .cloud
+        ),
         Post(
             title: "PhotoPicker: A Hands-On Guide with Examples",
             intro: """
@@ -412,7 +480,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-photopicker-a-hands-on-guide-with-examples/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 08, day: 10)),
+            postDate: Date.from(year: 2023, month: 08, day: 10),
+            origin: .cloud
+        ),
 // 5 page
         
         Post(
@@ -425,7 +495,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-confirmationdialog-with-examples/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 8, day: 8)),
+            postDate: Date.from(year: 2023, month: 8, day: 8),
+            origin: .cloud
+        ),
         
         Post(
             title: "TextField clear button",
@@ -439,7 +511,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-textfield-clear-button/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 8, day: 4)),
+            postDate: Date.from(year: 2023, month: 8, day: 4),
+            origin: .cloud
+        ),
         
         Post(
             title: "TextField Placeholder: Best Practices and Tips",
@@ -447,7 +521,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-textfield-placeholder-best-practices-and-tips/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 8, day: 3)),
+            postDate: Date.from(year: 2023, month: 8, day: 3),
+            origin: .cloud
+        ),
         
         Post(
             title: "Swift EventKit: Calendar management",
@@ -460,14 +536,18 @@ struct DevPreview {
             urlString: "https://softwareanders.com/swift-eventkit-calendar-management/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 7, day: 28),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Password: Show and Hide",
             intro: "When creating an app security is very important but so is convenience therefore the ability to show and hide passwords has become a crucial feature for mobile applications. In this blog post, we will explore how to create a secure text field that hides the password but also learn how to create the ability to show/hide the password.",
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-password-show-and-hide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 7, day: 26)),
+            postDate: Date.from(year: 2023, month: 7, day: 26),
+            origin: .cloud
+        ),
         Post(
             title: "TextField Background Color",
             intro: """
@@ -478,14 +558,18 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-textfield-background-color/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 7, day: 25)),
+            postDate: Date.from(year: 2023, month: 7, day: 25),
+            origin: .cloud
+        ),
         Post(
             title: "TextField: A User-Friendly Guide",
             intro: "SwiftUI’s TextField is a powerful user interface element that enables developers to effortlessly capture user input and create interactive experiences in their applications. Whether you’re a seasoned SwiftUI developer or just starting your journey, this blog post will walk you through the ins and outs of SwiftUI TextFields, providing valuable insights, use cases, and code examples along the way. Let’s dive in!",
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-textfield-a-user-friendly-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 7, day: 24)),
+            postDate: Date.from(year: 2023, month: 7, day: 24),
+            origin: .cloud
+        ),
         Post(
             title: "AsyncImage: Asynchronous Image Loading",
             intro: """
@@ -496,14 +580,18 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-asyncimage/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 6, day: 28)),
+            postDate: Date.from(year: 2023, month: 6, day: 28),
+            origin: .cloud
+        ),
         Post(
             title: "Alert: Best Practices and Examples",
             intro: "When creating a mobile app it’s important to notify the users when something happens like an API request went OK or failed. With SwiftUI Alerts, you can quickly inform users, gather input, and prompt them to take specific actions. In this article, we’ll explore the power of SwiftUI Alerts and learn how to leverage them to enhance user interaction in your apps.",
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-alert/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 6, day: 29)),
+            postDate: Date.from(year: 2023, month: 6, day: 29),
+            origin: .cloud
+        ),
         Post(
             title: "Navigation Bar: A Complete Guide",
             intro: """
@@ -514,7 +602,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-navigation-bar-a-complete-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 6, day: 15)),
+            postDate: Date.from(year: 2023, month: 6, day: 15),
+            origin: .cloud
+        ),
 // 6 page
                 
         Post(
@@ -527,7 +617,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-buttons/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 6, day: 13)),
+            postDate: Date.from(year: 2023, month: 6, day: 13),
+            origin: .cloud
+        ),
         Post(
             title: "ScrollView: Building Dynamic and Interactive Interfaces",
             intro: """
@@ -538,35 +630,45 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-scrollview-building-dynamic-and-interactive-interfaces/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 6, day: 6)),
+            postDate: Date.from(year: 2023, month: 6, day: 6),
+            origin: .cloud
+        ),
         Post(
             title: "Mastering Picker: A Powerful Tool for User Input",
             intro: "The Picker is a powerful and versatile user interface component in SwiftUI that allows users to select an option from a predefined list. In this blog post, we will explore the capabilities of the SwiftUI Picker and how you can leverage its features to enhance your app’s user experience.",
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-picker/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 6, day: 2)),
+            postDate: Date.from(year: 2023, month: 6, day: 2),
+            origin: .cloud
+        ),
         Post(
             title: "Rotation Animation: Bringing Your App to Life",
             intro: "is a powerful framework for building user interfaces in iOS apps. One of the many features it offers is the ability to create animations easily, including rotation animations. In this post, we will explore how to use SwiftUI rotation animation, as well as some use cases and examples.",
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-rotation-animation/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 5, day: 16)),
+            postDate: Date.from(year: 2023, month: 5, day: 16),
+            origin: .cloud
+        ),
         Post(
             title: "Mastering Redacted: Hide data and show loading",
             intro: "In this article, we’ll explore the power of SwiftUI’s redacted views, including their use cases and examples. You will be able to implement redated in no time",
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-redacted/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 5, day: 8)),
+            postDate: Date.from(year: 2023, month: 5, day: 8),
+            origin: .cloud
+        ),
         Post(
             title: "ProgressView: An Overview",
             intro: "As developers, we strive to create applications that are easy to use and visually appealing. Part of achieving this goal is incorporating a user interface that provides clear feedback to the user about the state of the application. One way to achieve this is through the use of progress indicators. In SwiftUI, we have the ProgressView, a view that displays the progress of a task or process. In this post, we’ll explore what ProgressView is, how to use it, and why it’s a good idea.",
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-progressview/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 4, day: 12)),
+            postDate: Date.from(year: 2023, month: 4, day: 12),
+            origin: .cloud
+        ),
         Post(
             title: "Sheet – with examples",
             intro: """
@@ -579,14 +681,18 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-sheet/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 4, day: 1)),
+            postDate: Date.from(year: 2023, month: 4, day: 1),
+            origin: .cloud
+        ),
         Post(
             title: "Swift guard statement — need to know with examples",
             intro: "In Swift the guard statement is a control flow statement that is used to check for certain conditions, and if those conditions are not met, it will exit the current scope early, returning from the current function, method, or closure.",
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swift-guard-statement-need-to-know-with-examples/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 4, day: 1)),
+            postDate: Date.from(year: 2023, month: 4, day: 1),
+            origin: .cloud
+        ),
         Post(
             title: "Stepper: A Powerful Tool for User Input — with examples",
             intro: """
@@ -597,14 +703,18 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-stepper-a-powerful-tool-for-user-input-with-examples/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 3, day: 28)),
+            postDate: Date.from(year: 2023, month: 3, day: 28),
+            origin: .cloud
+        ),
         Post(
             title: "Forms",
             intro: "One of the most commonly used views in SwiftUI is the Form view, which is a container for grouping related controls and data entry fields in a structured way. In this post, we’ll explore the basics of SwiftUI Form, along with some examples and use cases.",
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swiftui-form/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 3, day: 27)),
+            postDate: Date.from(year: 2023, month: 3, day: 27),
+            origin: .cloud
+        ),
 // 7 page
         Post(
             title: "List — the basics with examples",
@@ -616,7 +726,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 3, day: 18)),
+            postDate: Date.from(year: 2023, month: 3, day: 18),
+            origin: .cloud
+        ),
         Post(
             title: "MVVM in SwiftUI — a easy guide",
             intro: """
@@ -627,7 +739,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/mvvm-in-swiftui-a-easy-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 3, day: 16)),
+            postDate: Date.from(year: 2023, month: 3, day: 16),
+            origin: .cloud
+        ),
         Post(
             title: "Swift error handling — with examples",
             intro: """
@@ -638,7 +752,9 @@ struct DevPreview {
             author: "softwareanders.com",
             urlString: "https://softwareanders.com/swift-error-handling-with-examples/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 3, day: 13)),
+            postDate: Date.from(year: 2023, month: 3, day: 13),
+            origin: .cloud
+        ),
         
 // Stewart Lynch
         Post(
@@ -651,7 +767,9 @@ struct DevPreview {
             author: "Stewart Lynch",
             urlString: "https://www.youtube.com/watch?v=IiLDbrtBsn0",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2025, month: 9, day: 14)),
+            postDate: Date.from(year: 2025, month: 9, day: 14),
+            origin: .cloud
+        ),
         
         Post(
             title: "Mastering Liquid Glass in SwiftUI – Buttons, Containers & Transitions",
@@ -665,7 +783,9 @@ struct DevPreview {
             author: "Stewart Lynch",
             urlString: "https://www.youtube.com/watch?v=E2nQsw0El8M",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2025, month: 8, day: 31)),
+            postDate: Date.from(year: 2025, month: 8, day: 31),
+            origin: .cloud
+        ),
 // 2025-10-25 DONE
         Post(
             title: "Swift Basics",
@@ -675,7 +795,9 @@ struct DevPreview {
             author: "Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiLvzZFJI6rVIBtdolrJBVB",
-            postPlatform: .youtube),
+            postPlatform: .youtube,
+            origin: .cloud
+        ),
         Post(
             title: "SwiftUI Bootcamp",
             intro: """
@@ -684,7 +806,9 @@ struct DevPreview {
             author: "Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO",
-            postPlatform: .youtube),
+            postPlatform: .youtube,
+            origin: .cloud
+        ),
         Post(
             title: "SwiftUI Todo List",
             intro: """
@@ -694,7 +818,9 @@ struct DevPreview {
             postType: .solution,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpheGqemblOIA7v3oq0MS30i",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 3, day: 14)),
+            postDate: Date.from(year: 2021, month: 3, day: 14),
+            origin: .cloud
+        ),
         Post(
             title: "Git & Source Control",
             intro: """
@@ -703,7 +829,9 @@ struct DevPreview {
             author: "Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiALKk34l9mUS2f4mdJPvXq",
-            postPlatform: .youtube),
+            postPlatform: .youtube,
+            origin: .cloud
+        ),
         Post(
             title: "SwiftUI Map App",
             intro: """
@@ -713,7 +841,9 @@ struct DevPreview {
             postType: .solution,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdpha5eVTjLM0eRlJ7-yDDwBk",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 12, day: 20)),
+            postDate: Date.from(year: 2021, month: 12, day: 20),
+            origin: .cloud
+        ),
         Post(
             title: "SwiftUI Continued Learning",
             intro: """
@@ -722,7 +852,9 @@ struct DevPreview {
             author: "Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar",
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "SwiftUI Crypto App",
             intro: """
@@ -732,7 +864,9 @@ struct DevPreview {
             postType: .solution,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
             postDate: Date.from(year: 2021, month: 5, day: 24),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "SwiftUI Advanced Learning",
             intro: """
@@ -741,7 +875,9 @@ struct DevPreview {
             author: "Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
-            studyLevel: .advanced),
+            studyLevel: .advanced,
+            origin: .cloud
+        ),
 // 2025-10-26 DONE
         Post(
             title: "Tips to Git",
@@ -752,7 +888,9 @@ struct DevPreview {
             postType: .post,
             urlString: "https://www.atlassian.com/git/tutorials",
             postDate: nil,
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
 // 2025-10-27 DONE
         Post(
             title: "List or LazyVStack: Choosing the Right Lazy Container in SwiftUI",
@@ -764,7 +902,9 @@ struct DevPreview {
             urlString: "https://fatbobman.com/en/posts/list-or-lazyvstack/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 7, day: 10),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "Encapsulating SwiftUI view styles",
             intro: """
@@ -781,7 +921,9 @@ struct DevPreview {
             urlString: "https://www.swiftbysundell.com/articles/encapsulating-swiftui-view-styles/",
             postPlatform: .website,
             postDate: Date.from(year: 2020, month: 9, day: 27),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
 // 2025-10-28
         Post(
             title: "How to use AnyLayout in SwiftUI | Bootcamp #70",
@@ -793,7 +935,9 @@ struct DevPreview {
             urlString: "https://www.youtube.com/watch?v=7BAW70amSCA&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=73",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 11, day: 9),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "How to use ViewThatFits in SwiftUI | Bootcamp #71",
             intro: """
@@ -804,7 +948,9 @@ struct DevPreview {
             urlString: "https://www.youtube.com/watch?v=oN3Rqo6V6Uc&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=74",
             postPlatform: .website,
             postDate: Date.from(year: 2021, month: 11, day: 14),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "How to use ControlGroup in SwiftUI | Bootcamp #75",
             intro: """
@@ -815,7 +961,9 @@ struct DevPreview {
             urlString: "https://www.youtube.com/watch?v=oN3Rqo6V6Uc&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=74",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 02, day: 26),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
 
         Post(
             title: "How to make a reusable ActionSheet in SwiftUI | Bootcamp #33",
@@ -827,7 +975,9 @@ struct DevPreview {
             urlString: "https://www.youtube.com/watch?v=tNwnihqJf2I&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=36",
             postPlatform: .website,
             postDate: Date.from(year: 2021, month: 2, day: 21),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "How to safely unwrap optionals in Swift with if-let and guard statements | Bootcamp #47",
             intro: """
@@ -838,7 +988,9 @@ struct DevPreview {
             urlString: "https://www.youtube.com/watch?v=wmQIl0O9HBY&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=50",
             postPlatform: .website,
             postDate: Date.from(year: 2021, month: 3, day: 7),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "How to select text with TextSelection in SwiftUI | Bootcamp #56",
             intro: """
@@ -849,7 +1001,9 @@ struct DevPreview {
             urlString: "https://www.youtube.com/watch?v=AiSLtya25ac&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=59",
             postPlatform: .website,
             postDate: Date.from(year: 2021, month: 12, day: 7),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
 // 2025-10-30
         Post(
             title: "SwiftUI Crypto App",
@@ -860,7 +1014,9 @@ struct DevPreview {
             postType: .solution,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2024, month: 8, day: 8)),
+            postDate: Date.from(year: 2024, month: 8, day: 8),
+            origin: .cloud
+        ),
 
     ]
         
@@ -880,7 +1036,8 @@ struct DevPreview {
             author: "Evgenia Bruyko",
             urlString: "https://youtu.be/ExwwrvOT8mI?si=SU__YwU8UlR461Zb",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 3, day: 26)
+            postDate: Date.from(year: 2021, month: 3, day: 26),
+            origin: .cloud
         ),
         Post(
             title: "Combine – швейцарский нож iOS-разработчика. Или нет?",
@@ -892,7 +1049,9 @@ struct DevPreview {
             urlString: "https://habr.com/ru/companies/banki/articles/958650/",
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 22),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Xcode: ключевые инструменты для ручного тестирования мобильных приложений",
             intro: """
@@ -903,7 +1062,9 @@ struct DevPreview {
             urlString: "https://habr.com/ru/companies/sovcombank_technologies/articles/956112/",
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 14),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         
  // Create With Swift: www.createwithswift.com
         Post(
@@ -915,7 +1076,9 @@ struct DevPreview {
             postType: .course,
             urlString: "https://www.createwithswift.com/tag/swiftui/",
             postPlatform: .website,
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "Swift 6.2: Расширяем границы производительности и безопасности",
             intro: """
@@ -928,7 +1091,9 @@ struct DevPreview {
             urlString: "https://habr.com/ru/articles/957390/",
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 17),
-            studyLevel: .advanced),
+            studyLevel: .advanced,
+            origin: .cloud
+        ),
         Post(
             title: "Combine",
             intro: """
@@ -938,7 +1103,9 @@ struct DevPreview {
             postType: .course,
             urlString: "https://www.createwithswift.com/tag/combine/",
             postPlatform: .website,
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "@propertyWrapper: Encoding Strings to Valid URL Characters",
             intro: """
@@ -955,25 +1122,29 @@ struct DevPreview {
             postDate: Date.from(year: 2021, month: 6, day: 24),
             studyLevel: .middle,
             notes: """
-        The Swift Programming Language (6.2)
-        Properties
-        https://docs.swift.org/swift-book/documentation/the-swift-programming-language/properties/
-        """),
+                The Swift Programming Language (6.2)
+                Properties
+                https://docs.swift.org/swift-book/documentation/the-swift-programming-language/properties/
+                """,
+            origin: .cloud
+        ),
         Post(
             title: "Combine: Combining Operators",
             intro: """
-            With these short code snippets you will be able to combine operators when configuring publishers in Combine.
+                With these short code snippets you will be able to combine operators when configuring publishers in Combine.
             
-            This brief overview will demonstrate some basic features that may come in handy when working with publishers in Combine, Apple's framework to handle asynchronous events by combining event-processing operators. The Publisher protocol declares a type that transmits a sequence of values over time that subscribers can receive as input by adopting the Subscriber protocol.
+                This brief overview will demonstrate some basic features that may come in handy when working with publishers in Combine, Apple's framework to handle asynchronous events by combining event-processing operators. The Publisher protocol declares a type that transmits a sequence of values over time that subscribers can receive as input by adopting the Subscriber protocol.
             
-            Using a sequence as values to publish, Combine allows typical operators available in Swift to shape the values that will be published or received. These operators can also be combined to customize results to your liking.
+                Using a sequence as values to publish, Combine allows typical operators available in Swift to shape the values that will be published or received. These operators can also be combined to customize results to your liking.
             """,
             author: "Moritz Philip Recke",
             postType: .post,
             urlString: "https://www.createwithswift.com/reference-combine-combining-operators/",
             postPlatform: .website,
             postDate: Date.from(year: 2021, month: 9, day: 1),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Combine: switchToLatest",
             intro: """
@@ -988,7 +1159,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/reference-combine-switchtolatest/",
             postPlatform: .website,
             postDate: Date.from(year: 2022, month: 1, day: 27),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Publishing DocC Documentation as a Static Website on GitHub Pages",
             intro: """
@@ -1003,7 +1176,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/publishing-docc-documention-as-a-static-website-on-github-pages/",
             postPlatform: .website,
             postDate: Date.from(year: 2022, month: 2, day: 22),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "Using SF Symbols in SwiftUI",
             intro: """
@@ -1015,15 +1190,17 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2022, month: 4, day: 5),
             studyLevel: .beginner,
-        notes: """
-            SF Symbols is a library of icons designed to be used with the San Francisco font, the system font for Apple platforms. You can have access to the library of over 3,000 symbols by downloading the mac app available on the official Apple Website.
-            
-            https://developer.apple.com/sf-symbols/?ref=createwithswift.com
-            
-            And for guidelines on how to use them on your applications check the Human Interface Guidelines page dedicated to them. In there you can see all the different properties you can change and even how to create your custom symbols.
-            
-            https://developer.apple.com/design/human-interface-guidelines/sf-symbols/overview/?ref=createwithswift.com
-            """),
+            notes: """
+                SF Symbols is a library of icons designed to be used with the San Francisco font, the system font for Apple platforms. You can have access to the library of over 3,000 symbols by downloading the mac app available on the official Apple Website.
+
+                https://developer.apple.com/sf-symbols/?ref=createwithswift.com
+
+                And for guidelines on how to use them on your applications check the Human Interface Guidelines page dedicated to them. In there you can see all the different properties you can change and even how to create your custom symbols.
+
+                https://developer.apple.com/design/human-interface-guidelines/sf-symbols/overview/?ref=createwithswift.com
+                """,
+            origin: .cloud
+        ),
         Post(
             title: "Using ViewThatFits to replace GeometryReader in SwiftUI",
             intro: """
@@ -1034,7 +1211,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/using-viewthatfits-to-replace-geometryreader-in-swiftui/",
             postPlatform: .website,
             postDate: Date.from(year: 2022, month: 6, day: 16),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "Adaptive layouts with ViewThatFits",
             intro: """
@@ -1047,7 +1226,9 @@ struct DevPreview {
             urlString: "https://nilcoalescing.com/blog/AdaptiveLayoutsWithViewThatFits/?ref=createwithswift.com",
             postPlatform: .website,
             postDate: Date.from(year: 2022, month: 7, day: 11),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "How to check if Text is truncated in SwiftUI?",
             intro: """
@@ -1062,7 +1243,9 @@ struct DevPreview {
             urlString: "https://www.fivestars.blog/articles/trucated-text/",
             postPlatform: .website,
             postDate: Date.from(year: 2021, month: 1, day: 12),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "Prototyping SwiftUI interfaces with OpenAI's ChatGPT",
             intro: """
@@ -1075,7 +1258,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/building-a-swiftui-app-to-interact-with-the-openai-chatgpt-api/",
             postPlatform: .website,
             postDate: Date.from(year: 2022, month: 12, day: 3),
-            studyLevel: .advanced),
+            studyLevel: .advanced,
+            origin: .cloud
+        ),
         Post(
             title: "Creating a SwiftUI App to interact with the OpenAI ChatGPT API",
             intro: """
@@ -1088,7 +1273,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/building-a-swiftui-app-to-interact-with-the-openai-chatgpt-api/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 2, day: 14),
-            studyLevel: .advanced),
+            studyLevel: .advanced,
+            origin: .cloud
+        ),
         Post(
             title: "Creating a SwiftUI App to generate Text Completions with GPT-3.5 through the OpenAI API",
             intro: """
@@ -1105,7 +1292,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/creating-a-swiftui-app-to-generate-text-completions-with-gpt-3-5-through-the-openai-api/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 5, day: 23),
-            studyLevel: .advanced),
+            studyLevel: .advanced,
+            origin: .cloud
+        ),
         Post(
             title: "Updating the User’s Location with Core Location and Swift Concurrency in SwiftUI",
             intro: """
@@ -1120,7 +1309,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/updating-the-users-location-with-core-location-and-swift-concurrency-in-swiftui/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 10, day: 10),
-            studyLevel: .advanced),
+            studyLevel: .advanced,
+            origin: .cloud
+        ),
         Post(
             title: "Animating numeric text in SwiftUI with the Content Transition modifier",
             intro: """
@@ -1133,7 +1324,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/animating-numeric-text-in-swiftui-with-the-content-transition-modifier/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 11, day: 17),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "Accessing the app life cycle within a SwiftUI app",
             intro: """
@@ -1150,7 +1343,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/accessing-the-app-life-cycle-within-a-swiftui-app/",
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 11, day: 28),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Picking an Image from the Photos Library in a SwiftUI App",
             intro: """
@@ -1163,7 +1358,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/picking-an-image-from-the-photos-library-in-a-swiftui-app/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 1, day: 16),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Create an animated transition with Matched Geometry Effect in SwiftUI",
             intro: """
@@ -1176,7 +1373,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/create-an-animated-transition-with-matched-geometry-effect-in-swiftui/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 2, day: 9),
-            studyLevel: .advanced),
+            studyLevel: .advanced,
+            origin: .cloud
+        ),
         Post(
             title: "Using Swift Charts on a SwiftUI app",
             intro: """
@@ -1190,7 +1389,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/using-swift-charts-on-a-swiftui-app/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 3, day: 1),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Sign in with Apple on a SwiftUI application",
             intro: """
@@ -1205,7 +1406,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/sign-in-with-apple-on-a-swiftui-application/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 3, day: 5),
-            studyLevel: .advanced),
+            studyLevel: .advanced,
+            origin: .cloud
+        ),
         Post(
             title: "Creating a custom view modifier in SwiftUI",
             intro: """
@@ -1222,7 +1425,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/creating-a-custom-view-modifier-in-swiftui/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 3, day: 21),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Camera capture setup in a SwiftUI app",
             intro: """
@@ -1237,9 +1442,11 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 4, day: 4),
             studyLevel: .middle,
-        notes: """
-            AVFoundation
-            """),
+            notes: """
+                AVFoundation
+                """,
+            origin: .cloud
+        ),
         Post(
             title: "Display empty states with ContentUnavailableView in SwiftUI",
             intro: """
@@ -1262,7 +1469,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/display-empty-states-with-contentunavailableview-in-swiftui/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 4, day: 9),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "Making your lists searchable in a SwiftUI app",
             intro: """
@@ -1280,11 +1489,13 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 4, day: 16),
             studyLevel: .beginner,
-        notes: """
-            The searchable modifier has many variations and you can find them all on the official page for search in the Apple documentation:
-            
-            https://developer.apple.com/documentation/swiftui/search?ref=createwithswift.com
-            """),
+            notes: """
+                The searchable modifier has many variations and you can find them all on the official page for search in the Apple documentation:
+
+                https://developer.apple.com/documentation/swiftui/search?ref=createwithswift.com
+                """,
+            origin: .cloud
+        ),
         Post(
             title: "Using gradients in SwiftUI",
             intro: """
@@ -1304,7 +1515,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/using-gradients-in-swiftui/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 5, day: 7),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "Using materials with SwiftUI",
             intro: """
@@ -1321,7 +1534,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/using-materials-with-swiftui/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 5, day: 14),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "Providing feedback with the sensory feedback modifier",
             intro: """
@@ -1338,7 +1553,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/providing-feedback-sensory-feedback-modifier/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 5, day: 21),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Using App Intents in a SwiftUI app",
             intro: """
@@ -1355,7 +1572,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/using-app-intents-swiftui-app/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 6, day: 4),
-            studyLevel: .advanced),
+            studyLevel: .advanced,
+            origin: .cloud
+        ),
         Post(
             title: "Using multi-step animations in SwiftUI",
             intro: """
@@ -1370,7 +1589,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/using-multi-step-animations-in-swiftui/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 6, day: 25),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Formatting time in a Text view in SwiftUI",
             intro: """
@@ -1397,7 +1618,9 @@ struct DevPreview {
                 SystemFormatStyle.Stopwatch
                 SystemFormatStyle.Timer
                 .addingTimeInterval
-            """),
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Formatting data in a Text view in SwiftUI",
             intro: """
@@ -1418,8 +1641,10 @@ struct DevPreview {
                 Date.FormatStyle
                 ListFormatStyle
                 PersonNameComponents
-                inflect:
-            """),
+                inflect
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Converting between image formats",
             intro: """
@@ -1434,7 +1659,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/converting-between-image-formats/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 6, day: 17),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Preparing your App Icon for dark and tinted appearance",
             intro: """
@@ -1447,7 +1674,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/preparing-your-app-icon-for-dark-and-tinted-appearance/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 6, day: 20),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Animating SF Symbols with the symbol effect modifier",
             intro: """
@@ -1481,7 +1710,9 @@ struct DevPreview {
                 IndefiniteSymbolEffect
                 TransitionSymbolEffect
                 ContentTransitionSymbolEffect
-            """),
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Translating text in your SwiftUI app with the Translation framework",
             intro: """
@@ -1499,7 +1730,9 @@ struct DevPreview {
             studyLevel: .middle,
             notes: """
                 translationPresentation
-            """),
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Using the Translation framework for language-to-language translation",
             intro: """
@@ -1520,7 +1753,9 @@ struct DevPreview {
                 translationTask
                 translate
                 prepareTranslation
-            """),
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Text Effects using TextRenderer in SwiftUI",
             intro: """
@@ -1548,7 +1783,9 @@ struct DevPreview {
                 bounce effect
                 BounceAttribute
                 BounceRenderer
-            """),
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Using the zoom navigation transition in SwiftUI",
             intro: """
@@ -1568,7 +1805,9 @@ struct DevPreview {
                 @Namespace
                 .zoom
                 .matchedTransitionSource
-            """),
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Giving depth to your App Icons",
             intro: """
@@ -1586,7 +1825,10 @@ struct DevPreview {
                 @Namespace
                 .zoom
                 .matchedTransitionSource
-            """),        Post(
+            """,
+            origin: .cloud
+        ),
+        Post(
             title: "Applying visual effects combined with scrolling in SwiftUI",
             intro: """
                 Learn how to apply visual effects to your views while scrolling with SwiftUI.
@@ -1612,7 +1854,9 @@ struct DevPreview {
             notes: """
                 visualEffect
                 .hueRotation
-            """),
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Plotting math equations using Swift Charts",
             intro: """
@@ -1625,7 +1869,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/plotting-math-equation-using-swift-charts/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 10, day: 11),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Creating view transitions in SwiftUI",
             intro: """
@@ -1653,7 +1899,9 @@ struct DevPreview {
                 TransitionPhase
                 move, slide, push, scale
                 combined
-                """),
+                """,
+            origin: .cloud
+        ),
         Post(
             title: "Implement blurring when multitasking in SwiftUI",
             intro: """
@@ -1671,7 +1919,9 @@ struct DevPreview {
             studyLevel: .middle,
             notes: """
                 blur
-                """),
+                """,
+            origin: .cloud
+        ),
         Post(
             title: "Prevent screenshot capture of sensitive SwiftUI views",
             intro: """
@@ -1684,7 +1934,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/prevent-screenshot-capture-of-sensitive-swiftui-views/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 11, day: 5),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Exploring Interactive Bottom Sheets in SwiftUI",
             intro: """
@@ -1697,7 +1949,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/exploring-interactive-bottom-sheets-in-swiftui/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 11, day: 19),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "Implementing search suggestions in SwiftUI",
             intro: """
@@ -1718,7 +1972,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/implementing-search-suggestions-in-swiftui/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 11, day: 26),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Mastering Forms in SwiftUI: Creating and Styling",
             intro: """
@@ -1737,7 +1993,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/mastering-forms-in-swiftui-creating-and-styling/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 12, day: 8),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "Mastering Forms in SwiftUI: Selecting Information",
             intro: """
@@ -1753,9 +2011,11 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 12, day: 11),
             studyLevel: .beginner,
-        notes: """
-            TextField
-            """),
+            notes: """
+                TextField
+                """,
+            origin: .cloud
+        ),
         Post(
             title: "Mastering Forms in SwiftUI: Creating and Styling",
             intro: """
@@ -1770,19 +2030,21 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/mastering-forms-in-swiftui-text-fields/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 12, day: 17),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "Enhance UI/UX with the confirmation dialog component",
             intro: """
                 Understand how to use confirmation dialogs within a SwiftUI app.
-            
+
                 The confirmationDialog sheet is a SwiftUI component that presents a temporary dialog to confirm an action or provide a set of related options. It appears from the bottom of the screen and offers buttons for users to make a choice which can include destructive actions, multiple choices, or simply canceling the operation.
-            
+
                 In the Apple ecosystem, it is used when you want to:
                 - Present the user with a set of options or a specific context;
                 - Confirm their intent before proceeding with an action that can be potentially destructive;
                 - Offering a way to cancel or back out of an action.
-            """,
+                """,
             author: "Antonella Giugliano",
             postType: .post,
             urlString: "https://www.createwithswift.com/enhance-ui-ux-with-the-confirmation-dialog-component/",
@@ -1822,7 +2084,9 @@ struct DevPreview {
                             isPresented = false
                         }
                     }
-            """),
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Keyboard-driven actions in SwiftUI with onKeyPress",
             intro: """
@@ -1838,40 +2102,44 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 1, day: 9),
             studyLevel: .beginner,
-        notes: """
-            @FocusState
-            .focusable
-            .focused
-            .onKeyPress
-            """),
+            notes: """
+                @FocusState
+                .focusable
+                .focused
+                .onKeyPress
+                """,
+            origin: .cloud
+        ),
         Post(
             title: "Controlling keyboard events with keys and phases",
             intro: """
                 Learn how to respond to pressed keys and phases in a hardware keyboard in a SwiftUI app.
-            
+
                 The onKeyPress(_:action:) method is present in several variations, providing complete control over triggering actions. These variations allow the developer to specify exactly how and when actions should be executed in response to key presses.
-            
+
                 The behavior can be customized by specifying:
                 - particular keys being pressed;
                 - the phase of a key press;
                 - a combination of both keys and their phases;
                 - the characters produced by the pressed keys.
-            """,
+                """,
             author: "Antonella Giugliano",
             postType: .post,
             urlString: "https://www.createwithswift.com/controlling-keyboard-events-with-keys-and-phases/",
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 1, day: 10),
             studyLevel: .beginner,
-        notes: """
-            @FocusState
-            .focusable
-            .focused
-            .onKeyPress
-            KeyEquivalent
-            KeyPress.Phases
-            CharacterSet
-            """),
+            notes: """
+                @FocusState
+                .focusable
+                .focused
+                .onKeyPress
+                KeyEquivalent
+                KeyPress.Phases
+                CharacterSet
+                """,
+            origin: .cloud
+        ),
         Post(
             title: "Implementing tab bar in a SwiftUI app",
             intro: """
@@ -1889,13 +2157,15 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 1, day: 30),
             studyLevel: .beginner,
-        notes: """
-            When you use custom symbol in tab bar remember to have a look at the Human Interface Guidelines to export them in the correct size.
-            
-            https://developer.apple.com/design/human-interface-guidelines/tab-bars?ref=createwithswift.com#Target-dimensions
-            
-            Additionally to automatically enable the accent color for your custom symbol set the"Render As" option as "Template Image, you can find this option in the Attribute Inspector section.
-            """),
+            notes: """
+                When you use custom symbol in tab bar remember to have a look at the Human Interface Guidelines to export them in the correct size.
+
+                https://developer.apple.com/design/human-interface-guidelines/tab-bars?ref=createwithswift.com#Target-dimensions
+
+                Additionally to automatically enable the accent color for your custom symbol set the"Render As" option as "Template Image, you can find this option in the Attribute Inspector section.
+                """,
+            origin: .cloud
+        ),
         Post(
             title: "Grouping Controls with ControlGroup",
             intro: """
@@ -1917,7 +2187,9 @@ struct DevPreview {
         notes: """
             ImageResource
             .controlGroupStyle
-            """),
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Enabling Interaction with Table View in SwiftUI",
             intro: """
@@ -1937,7 +2209,9 @@ struct DevPreview {
                 TableRow
                 .contextMenu
                 DisclosureTableRow
-                """),
+                """,
+            origin: .cloud
+        ),
         Post(
             title: "Creating Custom SF Symbols",
             intro: """
@@ -1962,7 +2236,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/creating-custom-sf-symbols/",
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 2, day: 20),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Grouping Controls with ControlGroup",
             intro: """
@@ -1981,10 +2257,12 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 2, day: 6),
             studyLevel: .beginner,
-        notes: """
-            ImageResource
-            .controlGroupStyle
-            """),
+            notes: """
+                ImageResource
+                .controlGroupStyle
+                """,
+            origin: .cloud
+        ),
         Post(
             title: "Enabling Interaction with Table View in SwiftUI",
             intro: """
@@ -2004,7 +2282,9 @@ struct DevPreview {
                 TableRow
                 .contextMenu
                 DisclosureTableRow
-                """),
+                """,
+            origin: .cloud
+        ),
         Post(
             title: "Generating images programmatically with Image Playground",
             intro: """
@@ -2026,7 +2306,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/generating-images-programmatically-with-image-playground/",
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 2, day: 26),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Generating images programmatically with Image Playground",
             intro: """
@@ -2048,7 +2330,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/generating-images-programmatically-with-image-playground/",
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 2, day: 26),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Symmetrical and asymmetrical transitions in SwiftUI with the Scroll Transition modifier",
             intro: """
@@ -2064,7 +2348,9 @@ struct DevPreview {
             scrollTransition
             ScrollTransitionConfiguration
             ScrollTransitionPhase
-            """),
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Placing UI components within the Safe Area Inset",
             intro: """
@@ -2075,7 +2361,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/placing-ui-components-within-the-safe-area-inset/",
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 3, day: 13),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "Dynamically adapting to available space with ViewThatFits",
             intro: """
@@ -2093,10 +2381,12 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 3, day: 20),
             studyLevel: .advanced,
-        notes: """
-            ViewThatFits
-            @ViewBuilder 
-            """),
+            notes: """
+                ViewThatFits
+                @ViewBuilder 
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Presenting an Inspector with SwiftUI",
             intro: """
@@ -2110,12 +2400,14 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 4, day: 1),
             studyLevel: .advanced,
-        notes: """
-            iPad
-            NavigationStack
-            NavigationSplitView
-            navigationBar 
-            """),
+            notes: """
+                iPad
+                NavigationStack
+                NavigationSplitView
+                navigationBar 
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Mastering Forms in SwiftUI: Toggles",
             intro: """
@@ -2131,14 +2423,16 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 4, day: 4),
             studyLevel: .advanced,
-        notes: """
-            Toggling multiple options at once
-            isOn
-            bundle
-            toggleStyle(.switch)
-            toggleStyle(.button)
-            toggleStyle(.checkbox)
-            """),
+            notes: """
+                Toggling multiple options at once
+                isOn
+                bundle
+                toggleStyle(.switch)
+                toggleStyle(.button)
+                toggleStyle(.checkbox)
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Create flexible interfaces in SwiftUI",
             intro: """
@@ -2152,9 +2446,11 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 4, day: 1),
             studyLevel: .advanced,
-        notes: """
-            containerRelativeFrame
-            """),
+            notes: """
+                containerRelativeFrame
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Integrating TimelineView in a SwiftUI app",
             intro: """
@@ -2167,7 +2463,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/integrating-timelineview-in-a-swiftui-app/",
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 4, day: 10),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Donate content to Spotlight and open it using NSUserActivity",
             intro: """
@@ -2181,20 +2479,22 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 6, day: 10),
             studyLevel: .advanced,
-        notes: """
-            CoreSpotlight
-            AppIntent
-            IndexedEntity
-            OpenIntent
-            CSSearchableItem
-            CSSearchableIndex
-            indexSearchableItems
-            Deep Link
-            NSUserActivity
-            CSSearchableItemActionType
-            IndexedEntity
-            CSSearchableItemAttributeSet 
-            """),
+            notes: """
+                CoreSpotlight
+                AppIntent
+                IndexedEntity
+                OpenIntent
+                CSSearchableItem
+                CSSearchableIndex
+                indexSearchableItems
+                Deep Link
+                NSUserActivity
+                CSSearchableItemActionType
+                IndexedEntity
+                CSSearchableItemAttributeSet 
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Creating valid dates using the Swift language",
             intro: """
@@ -2211,7 +2511,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/creating-valid-dates-using-the-swift-language/",
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 6, day: 19),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Triggering actions after a time interval with Timers",
             intro: """
@@ -2224,7 +2526,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/triggering-actions-after-a-time-interval-with-timers/",
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 6, day: 17),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Implementing advanced speech-to-text in your SwiftUI app",
             intro: """
@@ -2240,17 +2544,19 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 8, day: 5),
             studyLevel: .advanced,
-        notes: """
-            Speech
-            AVFoundation
-            AVAudioApplication
-            AVAudioPCMBuffer
-            .measurement
-            .duckOthers
-            stopAudioStream()
-            SFSpeechRecognizer
-            SpeechTranscriber
-            """),
+            notes: """
+                Speech
+                AVFoundation
+                AVAudioApplication
+                AVAudioPCMBuffer
+                .measurement
+                .duckOthers
+                stopAudioStream()
+                SFSpeechRecognizer
+               SpeechTranscriber
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Making the tab bar collapse while scrolling",
             intro: """
@@ -2265,7 +2571,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/making-the-tab-bar-collapse-while-scrolling/",
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 8, day: 28),
-            studyLevel: .middle),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
         Post(
             title: "Exploring Concentricity in SwiftUI",
             intro: """
@@ -2278,7 +2586,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/exploring-concentricity-in-swiftui/",
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 9, day: 5),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "Displaying web content in SwiftUI",
             intro: """
@@ -2293,7 +2603,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/displaying-web-content-in-swiftui/",
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 9, day: 11),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "Creating custom layouts with SwiftUI",
             intro: """
@@ -2311,12 +2623,14 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 9, day: 16),
             studyLevel: .middle,
-        notes: """
-            CNContactStore
-            requestAccess
-            authorizationStatus
-            CNAuthorizationStatus
-            """),
+            notes: """
+                CNContactStore
+                requestAccess
+                authorizationStatus
+                CNAuthorizationStatus
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Presenting critical information in SwiftUI with alerts",
             intro: """
@@ -2333,7 +2647,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/presenting-critical-information-in-swiftui-with-alerts/",
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 9, day: 30),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "Getting started with the Contacts framework",
             intro: """
@@ -2347,12 +2663,14 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 18),
             studyLevel: .middle,
-        notes: """
-            CNContactStore
-            requestAccess
-            authorizationStatus
-            CNAuthorizationStatus
-            """),
+            notes: """
+                CNContactStore
+                requestAccess
+                authorizationStatus
+                CNAuthorizationStatus
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Listing contacts with the Contacts framework",
             intro: """
@@ -2366,12 +2684,14 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 19),
             studyLevel: .middle,
-        notes: """
-            CNContactStore
-            requestAccess
-            authorizationStatus
-            CNAuthorizationStatus
-            """),
+            notes: """
+                CNContactStore
+                requestAccess
+                authorizationStatus
+                CNAuthorizationStatus
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Implementing draw animations for SF Symbols in SwiftUI",
             intro: """
@@ -2384,7 +2704,9 @@ struct DevPreview {
             urlString: "https://www.createwithswift.com/implementing-draw-animations-for-sf-symbols-in-swiftui/",
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 30),
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         Post(
             title: "Programmatic navigation with navigation destination in SwiftUI",
             intro: """
@@ -2398,10 +2720,12 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 3),
             studyLevel: .beginner,
-        notes: """
-            navigationDestination
-            NavigationPath
-            """),
+            notes: """
+                navigationDestination
+                NavigationPath
+            """,
+            origin: .cloud
+        ),
         Post(
             title: "Taking control of your navigation in SwiftUI with NavigationPath",
             intro: """
@@ -2417,10 +2741,12 @@ struct DevPreview {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 9),
             studyLevel: .beginner,
-        notes: """
+            notes: """
                 navigationDestination
                 NavigationPath
-            """),
+                """,
+            origin: .cloud
+        ),
         Post(
             title: "Using rich text in the TextEditor with SwiftUI",
             intro: """
@@ -2437,18 +2763,20 @@ struct DevPreview {
             postDate: Date.from(year: 2025, month: 10, day: 17),
             studyLevel: .beginner,
             notes: """
-            AttributedString
-            AttributeContainer
-            AttributedTextSelection
-            typingAttributes
-            transformAttributes
-            """),
+                AttributedString
+                AttributeContainer
+                AttributedTextSelection
+                typingAttributes
+                transformAttributes
+                """,
+            origin: .cloud
+        ),
 // 2025-10-31
         Post(
             title: "Swift Codable",
             intro: """
                 Swift Codable - протокол, позволяющий преобразовывать структуры в бинарные данные и обратно. В этой cтатье раскрыт механизм его работы "под капотом".
-            """,
+                """,
             author: "Grandschtien",
             postType: .post,
             urlString: "https://habr.com/ru/articles/953560/",
@@ -2459,7 +2787,7 @@ struct DevPreview {
             title: "Swift: Dead Simple Formatting (Dates, Numbers, Currency, Measurement, Time)",
             intro: """
                 In this video I show you the power of the FormatStyle API as well as a resource that shows examples of all the ways you can format numbers, currency, dates, measurements, time, and more. You can now easily create any format you like with this powerful API.
-            """,
+                """,
             author: "Sean Allen",
             postType: .post,
             urlString: "https://habr.com/ru/articles/953560/",
@@ -2469,7 +2797,9 @@ struct DevPreview {
             notes: """
                 https://fuckingformatstyle.com/
                 https://github.com/brettohland/fuckingformatstyle
-                """),
+                """,
+            origin: .cloud
+        ),
         Post(
             title: "Format Styles In Excruciating Detail",
             intro: """
@@ -2482,7 +2812,9 @@ struct DevPreview {
             urlString: "https://fuckingformatstyle.com/#the-basics",
             postPlatform: .website,
             postDate: nil,
-            studyLevel: .beginner),
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
         
         
         
