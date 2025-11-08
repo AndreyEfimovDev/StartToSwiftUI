@@ -113,9 +113,9 @@ struct RestoreBackupView: View {
                 showError("Invalid JSON format: expected array of posts")
                 return
             }
-            print("✅ Point before DECODING JSON")
+            print("✅ Restore: Point before DECODING JSON")
             let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
-            print("✅ ✅ ✅ Point after DECODING JSON")
+            print("✅ ✅ ✅ Restore: Point after DECODING JSON")
             
             DispatchQueue.main.async {
                 isInProgress = false
@@ -124,7 +124,7 @@ struct RestoreBackupView: View {
 //                fileManager.savePosts(vm.allPosts)
                 postCount = posts.count
                 hapticManager.notification(type: .success)
-                print("✅ Restored \(postCount) posts from \(url.lastPathComponent)")
+                print("✅ Restore: Restored \(postCount) posts from \(url.lastPathComponent)")
             }
             
         } catch let decodingError as DecodingError {

@@ -19,7 +19,7 @@ class PostsViewModel: ObservableObject {
     
     @Published var allPosts: [Post] = [] {
         didSet {
-            fileManager.savePosts(allPosts, filename: Constants.localFileName)
+            fileManager.savePosts(allPosts, fileName: Constants.localFileName)
             allYears = getAllYears()
             allCategories = getAllCategories()
         }
@@ -94,18 +94,18 @@ class PostsViewModel: ObservableObject {
         
         print("VM(init): Last update date: \(localLastUpdated.formatted(date: .abbreviated, time: .shortened))")
         
-        let loadedPosts: [Post]? = fileManager.loadPosts(fileName: Constants.localFileName)
-        self.allPosts = loadedPosts ?? []
+        let loadedLocalPosts: [Post]? = fileManager.loadPosts(fileName: Constants.localFileName)
+        self.allPosts = loadedLocalPosts ?? []
         
-        if !self.allPosts.isEmpty {
-            checkCloudForUpdates { hasUpdates in
-                if hasUpdates {
-                    self.isPostsUpdateAvailable = true
-                    print("VM(init): Posts update is available")
-                    print(self.isPostsUpdateAvailable.description)
-                }
-            }
-        }
+//        if !self.allPosts.isEmpty {
+//            checkCloudForUpdates { hasUpdates in
+//                if hasUpdates {
+//                    self.isPostsUpdateAvailable = true
+//                    print("VM(init): Posts update is available")
+//                    print(self.isPostsUpdateAvailable.description)
+//                }
+//            }
+//        }
         
         self.filteredPosts = self.allPosts
         
@@ -319,9 +319,6 @@ class PostsViewModel: ObservableObject {
         
         if !newPosts.isEmpty {
             allPosts.append(contentsOf: newPosts)
-//            fileManager.savePosts(allPosts)
-//            allYears = getAllYears()
-//            allCategories = getAllCategories()
         }
         completion()
     }
