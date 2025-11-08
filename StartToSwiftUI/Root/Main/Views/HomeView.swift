@@ -304,7 +304,7 @@ struct HomeView: View {
                     .multilineTextAlignment(.center)
                     .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
                 ClearCupsuleButton(
-                    primaryTitle: "YES",
+                    primaryTitle: "Yes",
                     primaryTitleColor: Color.mycolor.myRed) {
                         withAnimation {
                             vm.deletePost(post: selectedPostToDelete ?? nil)
@@ -314,7 +314,7 @@ struct HomeView: View {
                     }
                 
                 ClearCupsuleButton(
-                    primaryTitle: "Cancel",
+                    primaryTitle: "No",
                     primaryTitleColor: Color.mycolor.myAccent) {
                         withAnimation {
                             isShowingDeleteConfirmation = false
