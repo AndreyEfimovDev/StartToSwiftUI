@@ -440,7 +440,7 @@ class PostsViewModel: ObservableObject {
     /// - Warning: This app is made for self study purpose only.
     /// - Returns: Returns a boolean, true if a title of a post is unique and false if not unique.
     
-    func checkNewPostForUniqueTitle(_ postTitle: String, editingPostId: UUID?) -> Bool {
+    func checkNewPostForUniqueTitle(_ postTitle: String, editingPostId: String?) -> Bool {
         //        If there is a post with the same title and its id is not equal to excludingPostId, then the title is not unique
         return allPosts.contains(where: { $0.title == postTitle && $0.id != editingPostId })
         

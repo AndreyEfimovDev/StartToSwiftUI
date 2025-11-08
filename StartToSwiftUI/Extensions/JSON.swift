@@ -13,7 +13,7 @@ import SwiftUI
 extension JSONDecoder {
     static var appDecoder: JSONDecoder {
         let decoder = JSONDecoder()
-//        decoder.dateDecodingStrategy = .iso8601
+        decoder.dateDecodingStrategy = .iso8601
         return decoder
     }
 }
@@ -21,8 +21,8 @@ extension JSONDecoder {
 extension JSONEncoder {
     static var appEncoder: JSONEncoder {
         let encoder = JSONEncoder()
-//        encoder.dateEncodingStrategy = .iso8601
-//        encoder.outputFormatting = .prettyPrinted // for readability
+        encoder.dateEncodingStrategy = .iso8601
+        encoder.outputFormatting = .prettyPrinted // for readability
         return encoder
     }
 }
