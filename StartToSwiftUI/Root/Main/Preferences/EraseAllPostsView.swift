@@ -51,10 +51,7 @@ struct EraseAllPostsView: View {
             Spacer()
             
             if isInProgress {
-                ProgressView("Deleting posts...")
-                    .padding()
-                    .background(.regularMaterial)
-                    .cornerRadius(10)
+                RotatingRingProgressView()
             }
         }
         .padding(.horizontal, 30)
