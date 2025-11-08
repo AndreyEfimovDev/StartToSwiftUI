@@ -113,26 +113,29 @@ struct RestoreBackupView: View {
                 showError("Invalid JSON format: expected array of posts")
                 return
             }
-            let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
+            let decodedPosts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
             
             // Checking posts with the same Title to local posts - do not append such posts from BackUp
-            let postsAfterCheckForUniqueTitle = posts.filter { post in
-                !vm.allPosts.contains(where: { $0.title == post.title })
-            }
+            let existingTitlesInLocalPosts = Set(vm.allPosts.map { $0.title })
+            let postsAfterCheckForUniqueTitle = decodedPosts.filter { !existingTitlesInLocalPosts.contains($0.title) }
             
-//            let existingTitles = Set(vm.allPosts.map { $0.title })
-//            let postsAfterCheckForUniqueTitle = posts.filter { !existingTitles.contains($0.title) }
-
+//            let postsAfterCheckForUniqueTitle = posts.filter { post in
+//                !vm.allPosts.contains(where: { $0.title == post.title })
+//            }
+//            
             // Checking posts with the same ID to local posts - do not append such posts from BackUp
-            let postsAfterCheckForUniqueID = postsAfterCheckForUniqueTitle.filter { post in
-                !vm.allPosts.contains(where: { $0.id == post.id })
-            }
+            let existingIdInLocalPosts = Set(vm.allPosts.map { $0.id })
+            let postsAfterCheckForUniqueID = postsAfterCheckForUniqueTitle.filter { !existingIdInLocalPosts.contains($0.id) }
+
+//            let postsAfterCheckForUniqueID = postsAfterCheckForUniqueTitle.filter { post in
+//                !vm.allPosts.contains(where: { $0.id == post.id })
+//            }
 
             DispatchQueue.main.async {
                 isInProgress = false
                 isBackedUp = true
-                vm.allPosts.append(contentsOf: posts)
-                postCount = posts.count
+                vm.allPosts.append(contentsOf: postsAfterCheckForUniqueID)
+                postCount = postsAfterCheckForUniqueID.count
                 hapticManager.notification(type: .success)
                 print("✅ Restore: Restored \(postCount) posts from \(url.lastPathComponent)")
             }
