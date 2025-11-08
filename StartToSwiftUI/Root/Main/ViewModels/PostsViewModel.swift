@@ -98,12 +98,22 @@ class PostsViewModel: ObservableObject {
         self.allPosts = loadedLocalPosts ?? []
         
 //        if !self.allPosts.isEmpty {
+<<<<<<< HEAD
             checkCloudForUpdates { hasUpdates in
                 if hasUpdates {
                     self.isPostsUpdateAvailable = true
                     print(self.isPostsUpdateAvailable.description)
                 }
             }
+=======
+//            checkCloudForUpdates { hasUpdates in
+//                if hasUpdates {
+//                    self.isPostsUpdateAvailable = true
+//                    print("VM(init): Posts update is available")
+//                    print(self.isPostsUpdateAvailable.description)
+//                }
+//            }
+>>>>>>> origin/development
 //        }
         
         self.filteredPosts = self.allPosts
