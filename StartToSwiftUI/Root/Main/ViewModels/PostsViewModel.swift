@@ -35,7 +35,7 @@ class PostsViewModel: ObservableObject {
     @AppStorage("isFirstAppLaunch") var isFirstAppLaunch: Bool = true
     @AppStorage("isFirstPostsLoad") var isFirstImportPostsCompleted: Bool = false
     @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
-
+    
     // stored filters
     @AppStorage("storedCategory") var storedCategory: String?
     @AppStorage("storedLevel") var storedLevel: StudyLevel?
@@ -73,10 +73,10 @@ class PostsViewModel: ObservableObject {
     @Published var selectedCategory: String? = nil {
         didSet {
             storedCategory = selectedCategory
-//            homeTitleName = selectedCategory ?? "Study materials"
+            //            homeTitleName = selectedCategory ?? "Study materials"
         }
     }
-
+    
     private var cancellables = Set<AnyCancellable>()
     
     @Published var isLoadingFromCloud = false
@@ -98,13 +98,12 @@ class PostsViewModel: ObservableObject {
         self.allPosts = loadedLocalPosts ?? []
         
 //        if !self.allPosts.isEmpty {
-//            checkCloudForUpdates { hasUpdates in
-//                if hasUpdates {
-//                    self.isPostsUpdateAvailable = true
-//                    print("VM(init): Posts update is available")
-//                    print(self.isPostsUpdateAvailable.description)
-//                }
-//            }
+            checkCloudForUpdates { hasUpdates in
+                if hasUpdates {
+                    self.isPostsUpdateAvailable = true
+                    print(self.isPostsUpdateAvailable.description)
+                }
+            }
 //        }
         
         self.filteredPosts = self.allPosts
@@ -178,7 +177,7 @@ class PostsViewModel: ObservableObject {
                     type: type,
                     year: year
                 )
-
+                
                 // Applying search text
                 return self.searchPosts(posts: filtered)
             }
@@ -224,7 +223,7 @@ class PostsViewModel: ObservableObject {
             } else {
                 return filteredPosts
             }
-
+            
         }
     
     private func searchPosts(posts: [Post]) -> [Post] {
@@ -238,36 +237,28 @@ class PostsViewModel: ObservableObject {
             $0.notes.lowercased().contains(searchText.lowercased())
         })
     }
-
+    
     
     // MARK: PUBLIC FUNCTIONS
     
     func addPost(_ newPost: Post) {
         print("✅ VM(addPost): Adding a new post")
         allPosts.append(newPost)
-//        fileManager.savePosts(allPosts)
     }
     
     func updatePost(_ updatedPost: Post) {
         if let index = allPosts.firstIndex(where: { $0.id == updatedPost.id }) {
             print("✅ VM(updatePost): Updating a current edited post")
             allPosts[index] = updatedPost
-//            allYears = getAllYears()
-//            allCategories = getAllCategories()
-//            fileManager.savePosts(allPosts)
         } else {
             print("❌ VM(updatePost): Can't find the index")
         }
     }
     
     func deletePost(post: Post?) {
-        
         if let validPost = post {
             if let index = allPosts.firstIndex(of: validPost) {
                 allPosts.remove(at: index)
-//                allYears = getAllYears()
-//                allCategories = getAllCategories()
-//                fileManager.savePosts(allPosts)
             }
         } else {
             print("VM.deletePost: passed post is nil")
@@ -275,12 +266,8 @@ class PostsViewModel: ObservableObject {
     }
     
     func eraseAllPosts(_ completion: @escaping () -> ()) {
-        
-        filteredPosts = []
+        //        filteredPosts = []
         allPosts = []
-//        allYears = getAllYears()
-//        allCategories = getAllCategories()
-//        fileManager.savePosts(allPosts)
         completion()
     }
     
@@ -293,7 +280,7 @@ class PostsViewModel: ObservableObject {
             case .yes:
                 allPosts[index].favoriteChoice = .no
             }
-//            fileManager.savePosts(allPosts)
+            //            fileManager.savePosts(allPosts)
         }
     }
     
@@ -307,7 +294,7 @@ class PostsViewModel: ObservableObject {
     ///
     /// - Warning: This app is made for self study purpose only.
     /// - Returns: Returns a boolean result or error within completion handler.
-
+    
     func loadPersistentPosts(_ completion: @escaping () -> ()) {
         
         let receivedPosts: [Post] = DevPreview.postsForCloud
@@ -340,50 +327,43 @@ class PostsViewModel: ObservableObject {
     /// - Returns: Returns a boolean result or error within completion handler.
     
     func importPostsFromCloud(urlString: String = Constants.cloudPostsURL, completion: @escaping () -> Void = {}) {
-
+        
         cloudImportError = nil
         
-        networkService.fetchCloudPosts(from: urlString) { [weak self] result in
+        networkService.fetchPostsFromURL(from: urlString) { [weak self] (result: Result<[Post], Error>) in
             
             DispatchQueue.main.async {
                 switch result {
                 case .success(let cloudResponse):
-                    
                     // Selecting Cloud posts with unique Titles only -  - do not append such posts from Cloud
-                    let newCloudPosts1stCheck = cloudResponse.cloudPosts.filter { newPost in
-                        !(self?.allPosts.contains(where: { $0.title == newPost.title }) ?? false)
+                    let cloudPostsAfterCheckForUniqueTitle = cloudResponse.filter { postFromCloud in
+                        !(self?.allPosts.contains(where: { $0.title == postFromCloud.title }) ?? false)
                     }
-                    
                     // Checking Cloud posts with the same ID to local App posts - do not append such posts from Cloud
-                    let newCloudPosts2ndCheck = newCloudPosts1stCheck.filter { newPost in
-                        !(self?.allPosts.contains(where: { $0.id == newPost.id }) ?? false)
+                    let cloudPostsAfterCheckForUniqueID = cloudPostsAfterCheckForUniqueTitle.filter { postFromCloud in
+                        !(self?.allPosts.contains(where: { $0.id == postFromCloud.id }) ?? false)
                     }
-
-                    if !newCloudPosts2ndCheck.isEmpty {
+                    if !cloudPostsAfterCheckForUniqueID.isEmpty {
                         // Updating App posts
-                        self?.allPosts.append(contentsOf: newCloudPosts2ndCheck)
-//                        self?.fileManager.savePosts(self?.allPosts ?? [])
-                        
+                        self?.allPosts.append(contentsOf: cloudPostsAfterCheckForUniqueID)
                         self?.hapticManager.notification(type: .success)
                         // Saving the date stamp of the Cloud posts
-                        print(self?.localLastUpdated.formatted(date: .abbreviated, time: .shortened) ?? Date())
-                        self?.localLastUpdated = cloudResponse.dateStamp
-                        print(cloudResponse.dateStamp.formatted(date: .abbreviated, time: .shortened))
-
-                        print("✅ Successfully imported \(newCloudPosts2ndCheck.count) posts from cloud")
+//                        print(self?.localLastUpdated.formatted(date: .abbreviated, time: .shortened) ?? Date())
+//                        self?.localLastUpdated = cloudResponse.dateStamp
+//                        print(cloudResponse.dateStamp.formatted(date: .abbreviated, time: .shortened))
+                        
+                        print("✅ Successfully imported \(cloudPostsAfterCheckForUniqueID.count) posts from cloud")
                         
                     } else {
-                        print("✅ No new posts from cloud. \(newCloudPosts2ndCheck.count) imported posts ")
+                        print("✅ No new posts from cloud. \(cloudPostsAfterCheckForUniqueID.count) imported posts ")
                         self?.hapticManager.impact(style: .heavy)
                     }
                     
                     self?.cloudImportError = nil
-
+                    
                 case .failure(let error):
                     self?.cloudImportError = error.localizedDescription
                     self?.showCloudImportAlert = true
-                    
-                    // Haptic feedback for error
                     self?.hapticManager.notification(type: .error)
                     
                     print("❌ Cloud import error: \(error.localizedDescription)")
@@ -405,10 +385,26 @@ class PostsViewModel: ObservableObject {
     /// - Returns: Returns a boolean result or error within completion handler.
     
     func checkCloudForUpdates(completion: @escaping (Bool) -> Void) {
-        networkService.fetchCloudPosts(from: Constants.cloudPostsURL) { result in
+        networkService.fetchPostsFromURL(from: Constants.cloudPostsURL) { (result: Result<[Post], Error>) in
             switch result {
             case .success(let cloudResponse):
-                let hasUpdates = cloudResponse.dateStamp > self.localLastUpdated
+                
+                var hasUpdates = false
+                let localPosts = self.allPosts.filter { $0.origin == .cloud }
+                let cloudPosts = cloudResponse.filter { $0.origin == .cloud }
+                
+                if let theLatestDateInLocalPosts = self.getLatestDateFromPosts(posts: localPosts),
+                   let theLatestDateInCloudPosts = self.getLatestDateFromPosts(posts: cloudPosts) {
+                    hasUpdates = theLatestDateInLocalPosts < theLatestDateInCloudPosts
+                }
+                
+                if hasUpdates {
+                    print("✅ checkCloudForUpdates: Posts update is available")
+
+                } else {
+                    print("☑️ checkCloudForUpdates: No Updates available")
+                }
+                
                 DispatchQueue.main.async {
                     completion(hasUpdates)
                 }
@@ -416,14 +412,23 @@ class PostsViewModel: ObservableObject {
                 self.cloudImportError = error.localizedDescription
                 self.showCloudImportAlert = true
                 self.hapticManager.notification(type: .error)
-
+                
                 DispatchQueue.main.async {
+                    print("❌ checkCloudForUpdates: Error \(error.localizedDescription)")
                     completion(false)
                 }
             }
         }
     }
+    
+    private func getLatestDateFromPosts(posts: [Post]) -> Date? {
         
+        guard !posts.isEmpty else { return nil }
+        
+        return posts.max(by: { $0.date < $1.date })?.date
+
+    }
+    
     /// Checking if a title of a new/editing post is not in the array of existing posts.
     ///
     /// The result is used to avoid doublied posts with the same titles.
