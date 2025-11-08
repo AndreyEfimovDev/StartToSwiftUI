@@ -98,13 +98,20 @@ class PostsViewModel: ObservableObject {
         self.allPosts = loadedLocalPosts ?? []
         
 //        if !self.allPosts.isEmpty {
-            checkCloudForUpdates { hasUpdates in
-                if hasUpdates {
-                    self.isPostsUpdateAvailable = true
-                    print(self.isPostsUpdateAvailable.description)
-                }
-            }
+//            checkCloudForUpdates { hasUpdates in
+//                if hasUpdates {
+//                    self.isPostsUpdateAvailable = true
+//                    print(self.isPostsUpdateAvailable.description)
+//                }
+//            }
 //        }
+        print("VM(init): начало теста testDetailedDecoding()")
+        testDetailedDecoding()
+        print("VM(init): конец теста testDetailedDecoding()")
+        
+        print("VM(init): начало теста validateJSONFile()")
+        validateJSONFile()
+        print("VM(init): конец теста validateJSONFile()")
         
         self.filteredPosts = self.allPosts
         
@@ -127,6 +134,100 @@ class PostsViewModel: ObservableObject {
         addSubscribers()
         
     }
+    
+    
+    func testDetailedDecoding() {
+        let testJSON = """
+        [
+          {
+            "postType" : "post",
+            "notes" : "",
+            "title" : "Styling SwiftUI Text Views",
+            "urlString" : "https://www.youtube.com/watch?v=rbtIcKKxQ38",
+            "category" : "SwiftUI",
+            "postPlatform" : "youtube",
+            "favoriteChoice" : "no",
+            "origin" : "cloud",
+            "postDate" : "2021-05-07T00:00:00Z",
+            "intro" : "Test intro",
+            "author" : "Stewart Lynch",
+            "studyLevel" : "middle",
+            "date" : "2025-11-08T13:45:07Z",
+            "id" : "F9E12A88-0E62-402D-B6AD-1A1F895F5421"
+          }
+        ]
+        """
+        
+        do {
+            let data = testJSON.data(using: .utf8)!
+            print("📦 JSON data length: \(data.count) bytes")
+            
+            // Попробуем декодировать как общий тип сначала
+            let anyObject = try JSONSerialization.jsonObject(with: data, options: [])
+            print("✅ JSONSerialization success: \(anyObject)")
+            
+            // Теперь попробуем декодировать как [Post]
+            let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
+            print("✅ Post decoding SUCCESS: \(posts.count) posts")
+            
+        } catch {
+            print("❌ FAILED: \(error)")
+            
+            // Детальная информация об ошибке декодирования
+            if let decodingError = error as? DecodingError {
+                switch decodingError {
+                case .typeMismatch(let type, let context):
+                    print("🔍 Type mismatch:")
+                    print("   - Expected type: \(type)")
+                    print("   - Coding path: \(context.codingPath)")
+                    print("   - Debug: \(context.debugDescription)")
+                case .valueNotFound(let type, let context):
+                    print("🔍 Value not found:")
+                    print("   - Type: \(type)")
+                    print("   - Coding path: \(context.codingPath)")
+                case .keyNotFound(let key, let context):
+                    print("🔍 Key not found:")
+                    print("   - Missing key: \(key)")
+                    print("   - Coding path: \(context.codingPath)")
+                    print("   - Available keys in container")
+                case .dataCorrupted(let context):
+                    print("🔍 Data corrupted:")
+                    print("   - Context: \(context)")
+                    if let underlyingError = context.underlyingError {
+                        print("   - Underlying error: \(underlyingError)")
+                    }
+                @unknown default:
+                    print("🔍 Unknown decoding error")
+                }
+            }
+        }
+    }
+
+    
+    func validateJSONFile() {
+        // Если JSON файл локальный
+        if let url = Bundle.main.url(forResource: "cloudPosts", withExtension: "json"),
+           let data = try? Data(contentsOf: url) {
+            
+            print("📁 File exists, size: \(data.count) bytes")
+            
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print("📄 File content: \(jsonString.prefix(200))...")
+            }
+            
+            do {
+                let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
+                print("✅ Local file decoding SUCCESS: \(posts.count) posts")
+            } catch {
+                print("❌ Local file decoding FAILED: \(error)")
+            }
+        } else {
+            print("❌ JSON file not found")
+        }
+    }
+
+    
+    
     
     // MARK: PRIVATE FUNCTIONS
     
