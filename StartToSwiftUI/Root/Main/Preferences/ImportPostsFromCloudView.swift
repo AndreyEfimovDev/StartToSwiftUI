@@ -59,12 +59,15 @@ struct ImportPostsFromCloudView: View {
         .padding(.horizontal, 30)
         .padding(.top, 30)
         .padding(30)
-        .alert("Download Error", isPresented: $vm.showImportNetworkAlert) {
-            Button("OK", role: .cancel) { }
+        .alert("Download Error", isPresented: $vm.showErrorMessageAlert) {
+            Button("OK", role: .cancel) {
+                dismiss()
+            }
         } message: {
-            Text(vm.networkErrorMessage ?? "Unknown error")
+            Text(vm.errorMessage ?? "Unknown error")
         }
     }
+
     
     // MARK: Subviews
 
@@ -115,11 +118,15 @@ struct ImportPostsFromCloudView: View {
         
         vm.importPostsFromCloud() {
             isInProgress = false
-            isLoaded = true
-            vm.isFirstImportPostsCompleted = true
-            hapticManager.notification(type: .success)
-            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                dismiss()
+            if !vm.showErrorMessageAlert {
+                isLoaded = true
+                if !vm.isFirstImportPostsCompleted {
+                    vm.isFirstImportPostsCompleted = true
+                }
+                hapticManager.notification(type: .success)
+                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+                    dismiss()
+                }
             }
         }
         

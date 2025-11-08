@@ -20,6 +20,10 @@ struct SharePostsView: View {
     @State private var showActivityView = false
     @State private var isShareCompleted = false
     @State private var isInProgress = false
+    
+    @State private var shareURL: URL?
+//    @State private var showShareError = false
+//    @State private var shareErrorMessage = ""
         
     var body: some View {
         VStack {
@@ -33,6 +37,7 @@ struct SharePostsView: View {
             ) {
                 isInProgress = true
                 showActivityView = true
+                prepareDocumentSharing()
             }
             .disabled(isShareCompleted)
             .padding(.top, 30)
@@ -50,11 +55,29 @@ struct SharePostsView: View {
         .padding(.top, 30)
         .padding(30)
         .sheet(isPresented: $showActivityView) {
-            if let fileURL = fileManager.getFileURL(fileName: fileName) {
-                handleDocumentSharing(fileURL: fileURL)
+            if let url = shareURL {
+                handleDocumentSharing(fileURL: url)
             }
         }
+        .alert("Sharing Error", isPresented: $vm.showErrorMessageAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(vm.errorMessage ?? "Unknown error")
+        }
     }
+    
+    private func prepareDocumentSharing() {
+        let fileURL = fileManager.getFileURL(fileName: fileName)
+        switch fileURL {
+        case .success(let url):
+            shareURL = url
+            showActivityView = true
+        case .failure(let error):
+            vm.errorMessage = error.localizedDescription
+            vm.showErrorMessageAlert = true
+        }
+    }
+
     
     // MARK: Subviews
 

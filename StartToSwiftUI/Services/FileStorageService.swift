@@ -92,12 +92,12 @@ class FileStorageService: ObservableObject {
 
     }
     
-    func checkIfFileExists(fileName: String) -> Bool {
-            guard case .success(let url) = getFileURL(fileName: fileName) else {
-                return false
-            }
-            return FileManager.default.fileExists(atPath: url.path)
-        }
+//    func checkIfFileExists(fileName: String) -> Bool {
+//            guard case .success(let url) = getFileURL(fileName: fileName) else {
+//                return false
+//            }
+//            return FileManager.default.fileExists(atPath: url.path)
+//        }
 
 }
 
