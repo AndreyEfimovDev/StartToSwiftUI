@@ -16,7 +16,6 @@ struct ImportPostsFromCloudView: View {
     private let selectedURL = Constants.cloudPostsURL
     
     @State private var isInProgress: Bool = false
-    @State private var isImported: Bool = false
     @State private var postCount: Int = 0
     
     var body: some View {
@@ -70,21 +69,26 @@ struct ImportPostsFromCloudView: View {
     private var textSection: some View {
         VStack {
             Text("""
-            The curated collection of links to SwiftUI tutorials and articles has been compiled by the developer from open sources for the purpose of learning the SwiftUI functionality.
+            The curated collection of links to SwiftUI tutorials and articles are compiled by the developer from open sources for the purpose of learning the SwiftUI functionality.
             """)
+            .multilineTextAlignment(.leading)
+
             
             Group {
                 Text("""
                     
-                    **Please confirm that you**:
+                    **IMPORTANT NOTICE**
+                    
+                    **Clicking
+                    "Confirm and Download"
+                    constitutes your agreement to the following terms:**:
+                    
                     """)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .multilineTextAlignment(.leading)
 
                 Text("""
-                1. Will use the materials only for non-commercial educational purposes.
-                2. Understand that all rights to the materials belong to their authors.
-                3. Commit to accessing original sources.
+                1. The materials will be used solely for non-commercial educational purposes.
+                2. All intellectual property rights in the materials are retained by the original authors.
+                3. You will make every effort to access and reference the original source materials.
                 """
                 )
                 .font(.subheadline)
@@ -96,16 +100,7 @@ struct ImportPostsFromCloudView: View {
     
     private func importFromCloud() {
 
-//        vm.loadPersistentPosts() {
-//            isInProgress = false
-//            isImported = true
-//            hapticManager.notification(type: .success)
-//            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-//                dismiss()
-//            }
-//        }
-        
-        vm.importPostsFromCloud(urlString: selectedURL) {
+        vm.loadPersistentPosts() {
             isInProgress = false
             vm.isFirstImportPostsCompleted = true
             hapticManager.notification(type: .success)
@@ -113,6 +108,15 @@ struct ImportPostsFromCloudView: View {
                 dismiss()
             }
         }
+        
+//        vm.importPostsFromCloud(urlString: selectedURL) {
+//            isInProgress = false
+//            vm.isFirstImportPostsCompleted = true
+//            hapticManager.notification(type: .success)
+//            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+//                dismiss()
+//            }
+//        }
     } // func importFromCloud()
     
 }

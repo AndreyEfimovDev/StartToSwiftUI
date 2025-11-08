@@ -105,6 +105,8 @@ struct CheckForPostsUpdateView: View {
                        
             The collection will be appended to all current posts in the App, excluding duplicates based on the post title.
             """)
+        .multilineTextAlignment(.leading)
+
     }
     
     // MARK: Functions

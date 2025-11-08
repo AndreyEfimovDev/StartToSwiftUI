@@ -38,15 +38,27 @@ enum PostType: String, CaseIterable, Codable {
     }
 }
 
+enum PostOrigin: String, CaseIterable, Codable {
+    case local
+    case cloud
+    
+//    var displayName: String {
+//        switch self {
+//        case .local: return "Local"
+//        case .cloud: return "Cloud"
+//        }
+//    }
+}
+
 
 enum FavoriteChoice: String, CaseIterable, Codable {
-    case yes
     case no
+    case yes
     
     var displayName: String {
         switch self {
-        case .yes: return "Yes"
         case .no: return "No"
+        case .yes: return "Yes"
         }
     }
 
@@ -84,13 +96,13 @@ enum StudyLevel: String, CaseIterable, Codable {
 enum Platform: String, CaseIterable, Codable {
     case youtube
     case website
-    case others
+//    case others
     
     var displayName: String {
         switch self {
         case .youtube: return "YouTube"
         case .website: return "Website"
-        case .others: return "Others"
+//        case .others: return "Others"
         }
     }
 }
