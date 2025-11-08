@@ -12,7 +12,7 @@ class FileStorageService: ObservableObject {
     
     static let shared = FileStorageService()
     
-    let fileName = Constants.localFileName // "posts_app.json"
+//    let fileName = Constants.localFileName // "posts_app.json"
 
 //    var fileURL: URL? {
 //        guard
@@ -37,7 +37,7 @@ class FileStorageService: ObservableObject {
                 .urls(for: .documentDirectory, in: .userDomainMask)
                 .first?
                 .appendingPathComponent(fileName) else {
-            print("❌ FM: rror getting path.")
+            print("❌ FM(getFileURL): Error in getting path: \(fileName).")
             return nil
         }
         return path
@@ -46,12 +46,12 @@ class FileStorageService: ObservableObject {
     // Encoding posts and saving into JSON data
     func savePosts<T: Codable>(
         _ data: T,
-        filename: String,
-        encoder: JSONEncoder = .appEncoder // We use the date encoding strategy - ISO8601 (string)
+        fileName: String,
+        encoder: JSONEncoder = .appEncoder // we use the date encoding strategy - ISO8601 (string)
     ) {
         
         guard let url = getFileURL(fileName: fileName) else {
-            print("❌ FM(savePosts): Error in getting url: \(filename)")
+            print("❌ FM(savePosts): Error in getting url: \(fileName)")
             return
         }
         
@@ -67,7 +67,7 @@ class FileStorageService: ObservableObject {
     // Loading and decoding JSON data into posts
     func loadPosts<T: Codable>(
         fileName: String,
-        encoder: JSONDecoder = .appDecoder // We use the date decoding strategy - ISO8601 (string)
+        encoder: JSONDecoder = .appDecoder // we use the date decoding strategy - ISO8601 (string)
     ) -> T? {
         
         guard let url = getFileURL(fileName: fileName) else { return nil }

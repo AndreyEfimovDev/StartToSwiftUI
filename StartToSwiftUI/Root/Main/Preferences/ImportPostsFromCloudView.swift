@@ -16,6 +16,8 @@ struct ImportPostsFromCloudView: View {
     private let selectedURL = Constants.cloudPostsURL
     
     @State private var isInProgress: Bool = false
+    @State private var isLoaded: Bool = false
+
     @State private var postCount: Int = 0
     
     var body: some View {
@@ -27,14 +29,14 @@ struct ImportPostsFromCloudView: View {
             CapsuleButtonView(
                 primaryTitle: "Confirm and Download",
                 secondaryTitle: "\(postCount) Posts Downloaded",
-                isToChange: vm.isFirstImportPostsCompleted) {
+                isToChange: isLoaded) {
                     isInProgress = true
                     importFromCloud()
                 }
                 .onChange(of: vm.allPosts.count) { oldValue, newValue in
                     postCount = newValue - oldValue
                 }
-                .disabled(vm.isFirstImportPostsCompleted)
+                .disabled(isLoaded)
                 .padding(.top, 30)
             
             CapsuleButtonView(
@@ -43,7 +45,7 @@ struct ImportPostsFromCloudView: View {
                 buttonColorPrimary: Color.mycolor.myButtonBGRed) {
                     dismiss()
                 }
-                .opacity(vm.isFirstImportPostsCompleted ? 0 : 1)
+                .opacity(isLoaded ? 0 : 1)
             
             Spacer()
             
@@ -102,7 +104,8 @@ struct ImportPostsFromCloudView: View {
 
         vm.loadPersistentPosts() {
             isInProgress = false
-            vm.isFirstImportPostsCompleted = true
+            isLoaded = true
+//            vm.isFirstImportPostsCompleted = true
             hapticManager.notification(type: .success)
             DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
                 dismiss()
@@ -111,6 +114,7 @@ struct ImportPostsFromCloudView: View {
         
 //        vm.importPostsFromCloud(urlString: selectedURL) {
 //            isInProgress = false
+//            isLoaded = true
 //            vm.isFirstImportPostsCompleted = true
 //            hapticManager.notification(type: .success)
 //            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
