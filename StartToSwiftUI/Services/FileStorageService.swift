@@ -12,23 +12,6 @@ class FileStorageService: ObservableObject {
     
     static let shared = FileStorageService()
 
-    
-//    let fileName = Constants.localFileName // "posts_app.json"
-
-//    var fileURL: URL? {
-//        guard
-//            let path = FileManager
-//                .default
-//                .urls(for: .documentDirectory, in: .userDomainMask)
-//                .first?
-//                .appendingPathComponent(fileName) else {
-//            print("❌ FM: Error getting path.")
-//            return nil
-//        }
-//        return path
-//    }
-
-
     // MARK: FILE MANAGER FUNCIONS
     
     // Getting a full path of the JSON data file stored by File Manager
@@ -71,7 +54,6 @@ class FileStorageService: ObservableObject {
     func loadPosts<T: Codable>(
         fileName: String,
         decoder: JSONDecoder = .appDecoder // we use the date decoding strategy - ISO8601 (string)
-
     ) -> T? {
         
         guard let url = getFileURL(fileName: fileName) else { return nil }
