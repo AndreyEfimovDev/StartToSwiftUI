@@ -121,10 +121,13 @@ struct HomeView: View {
                                         isShowingDeleteConfirmation = true
                                     }.tint(Color.mycolor.myRed)
                                     
-                                    Button("Edit", systemImage: "pencil") {
+                                    //                                    if post.origin == .cloud {
+                                    Button("Edit", systemImage: post.origin == .cloud ? "pencil.slash" : "pencil") {
                                         selectedPost = post
                                     }
                                     .tint(Color.mycolor.myButtonBGBlue)
+                                    .disabled(post.origin == .cloud)
+                                    //                                    }
                                 } // right side swipe action buttonss
                                 .swipeActions(edge: .leading, allowsFullSwipe: false) {
                                     Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: post.favoriteChoice == .yes ?  "heart.slash.fill" : "heart.fill") {

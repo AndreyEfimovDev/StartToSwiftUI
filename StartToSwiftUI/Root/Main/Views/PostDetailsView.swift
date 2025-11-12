@@ -136,11 +136,11 @@ struct PostDetailsView: View {
     private func intro(for post: Post) -> some View {
         VStack(spacing: 0) {
             VStack {
-                let dateChecked = post.postDate == nil ? "" : (post.postDate?.formatted(date: .numeric, time: .omitted) ?? "")
+                let postDate = post.postDate == nil ? "" : (post.postDate?.formatted(date: .numeric, time: .omitted) ?? "")
                 let prefixToDate = post.postDate == nil ? "" : " posted "
                 let platform = post.postPlatform.displayName
                 let postType = post.postType.displayName
-                let titleForIntro = postType + " on " + platform + prefixToDate + dateChecked
+                let titleForIntro = postType + prefixToDate +  postDate + " on " + platform
                 
                 Text(titleForIntro)
                     .font(.caption)
@@ -242,12 +242,14 @@ struct PostDetailsView: View {
                 vm.favoriteToggle(post: validPost)
             }
             
+            
             CircleStrokeButtonView(
-                iconName: "pencil",
+                iconName: post?.origin == .cloud ? "pencil.slash" : "pencil",
                 isShownCircle: false)
             {
                 showEditPostView.toggle()
             }
+            .disabled(post?.origin == .cloud)
         }
     }
 }
