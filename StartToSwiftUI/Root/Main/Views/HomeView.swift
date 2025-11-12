@@ -30,7 +30,7 @@ struct HomeView: View {
     @State private var isFilterButtonPressed: Bool = false
     
     @State private var isShowingDeleteConfirmation: Bool = false
-//    @State private var isAnyChanges: Bool = false
+    //    @State private var isAnyChanges: Bool = false
     
     // MARK: VIEW BODY
     
@@ -97,7 +97,9 @@ struct HomeView: View {
         ScrollViewReader { proxy in
             ZStack (alignment: .bottomTrailing) {
                 if vm.allPosts.isEmpty {
-                    postsIsEmpty
+                    allPostsIsEmpty
+                } else if vm.filteredPosts.isEmpty {
+                    filteredPostsIsEmpty
                 } else {
                     List {
                         ForEach(vm.filteredPosts) { post in
@@ -141,6 +143,7 @@ struct HomeView: View {
                     .listStyle(.plain)
                     .background(Color.mycolor.myBackground)
                     
+                    
                     if showOnTopButton {
                         CircleStrokeButtonView(
                             iconName: "control", // control arrow.up
@@ -155,20 +158,29 @@ struct HomeView: View {
                                 }
                             }
                             .frame(maxWidth: .infinity, alignment: .center)
-//                            .padding(.trailing, 35)
+                        //                            .padding(.trailing, 35)
                     } // if showButtonOnTop
                 } // else-if
             } // ZStack
         } // ScrollViewReader
     }
     
-    private var postsIsEmpty: some View {
+    private var allPostsIsEmpty: some View {
         ContentUnavailableView(
             "No Posts Stored",
             systemImage: "tray.and.arrow.down",
             description: Text("You can create your own posts manually or go to Preferences to download a curated collection of links to SwiftUI tutorials and articles compiled by the developer from open sources.")
         )
     }
+    
+    private var filteredPostsIsEmpty: some View {
+        ContentUnavailableView(
+            "No Posts found matching your search criteria",
+            systemImage: "magnifyingglass",
+            description: Text("Please change the search criteria.")
+        )
+    }
+    
     
     @ViewBuilder
     private func trackingFistPostInList(post: Post) -> some View {
