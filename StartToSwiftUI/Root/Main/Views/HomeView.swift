@@ -38,7 +38,7 @@ struct HomeView: View {
         NavigationStack {
             ZStack {
                 mainViewBody
-                    .navigationTitle(vm.homeTitleName)
+                    .navigationTitle(vm.allPosts.isEmpty ? "" : vm.homeTitleName)
                     .navigationBarTitleDisplayMode(.inline)
                     .navigationBarBackButtonHidden(true)
                     .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
