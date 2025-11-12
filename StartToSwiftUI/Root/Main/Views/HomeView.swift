@@ -151,7 +151,8 @@ struct HomeView: View {
                                     }
                                 }
                             }
-                            .padding(.trailing, 35)
+                            .frame(maxWidth: .infinity, alignment: .center)
+//                            .padding(.trailing, 35)
                     } // if showButtonOnTop
                 } // else-if
             } // ZStack
