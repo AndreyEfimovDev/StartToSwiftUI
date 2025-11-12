@@ -15,15 +15,11 @@ struct SharePostsView: View {
     private let fileManager = FileStorageService.shared
     private let hapticManager = HapticService.shared
     
-    let fileName = Constants.localFileName
-
     @State private var showActivityView = false
     @State private var isShareCompleted = false
     @State private var isInProgress = false
     
     @State private var shareURL: URL?
-//    @State private var showShareError = false
-//    @State private var shareErrorMessage = ""
         
     var body: some View {
         VStack {
@@ -36,8 +32,8 @@ struct SharePostsView: View {
                 isToChange: isShareCompleted
             ) {
                 isInProgress = true
-                showActivityView = true
                 prepareDocumentSharing()
+                showActivityView = true
             }
             .disabled(isShareCompleted)
             .padding(.top, 30)
@@ -64,7 +60,7 @@ struct SharePostsView: View {
     }
     
     private func prepareDocumentSharing() {
-        let fileURL = fileManager.getFileURL(fileName: fileName)
+        let fileURL = fileManager.getFileURL(fileName: Constants.localFileName)
         switch fileURL {
         case .success(let url):
             shareURL = url
