@@ -119,33 +119,39 @@ class PostsViewModel: ObservableObject {
         
         print("VM(init): Last update date: \(localLastUpdated.formatted(date: .abbreviated, time: .shortened))")
         
-        fileManager.loadPosts(
-            fileName: Constants.localFileName
-        ) { [weak self] (result: Result<[Post], FileStorageError>) in
-            
-            self?.errorMessage = nil
-            self?.showErrorMessageAlert = false
-
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let posts):
-                    self?.allPosts = posts
-                case .failure(let error):
-                    self?.errorMessage = error.localizedDescription
-                    self?.showErrorMessageAlert = true
-                    print("VM(init): Failed to load posts: \(error)")
-                }
-            }
-        }
+        // checking if the local JSON file with posts exists
+        if fileManager.checkIfFileExists(fileName: Constants.localFileName) {
+            fileManager.loadPosts(
+                fileName: Constants.localFileName
+            ) { [weak self] (result: Result<[Post], FileStorageError>) in
                 
-        if !self.allPosts.isEmpty {
-            checkCloudForUpdates { hasUpdates in
-                if hasUpdates {
-                    self.isPostsUpdateAvailable = true
-                    print(self.isPostsUpdateAvailable.description)
+                self?.errorMessage = nil
+                self?.showErrorMessageAlert = false
+
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let posts):
+                        self?.allPosts = posts
+                    case .failure(let error):
+                        self?.errorMessage = error.localizedDescription
+                        self?.showErrorMessageAlert = true
+                        print("VM(init): Failed to load posts: \(error)")
+                    }
                 }
             }
+                    
+            if !self.allPosts.isEmpty {
+                checkCloudForUpdates { hasUpdates in
+                    if hasUpdates {
+                        self.isPostsUpdateAvailable = true
+                        print(self.isPostsUpdateAvailable.description)
+                    }
+                }
+            }
+            
+            self.filteredPosts = self.allPosts
         }
+        
         
         //        print("VM(init): начало теста testDetailedDecoding()")
         //        testDetailedDecoding()
@@ -155,7 +161,6 @@ class PostsViewModel: ObservableObject {
         //        validateJSONFile()
         //        print("VM(init): конец теста validateJSONFile()")
         
-        self.filteredPosts = self.allPosts
         
         // filters initilazation
         self.selectedCategory = self.storedCategory
@@ -204,18 +209,18 @@ class PostsViewModel: ObservableObject {
             let data = testJSON.data(using: .utf8)!
             print("📦 JSON data length: \(data.count) bytes")
             
-            // Попробуем декодировать как общий тип сначала
+            // Try decode as generil type
             let anyObject = try JSONSerialization.jsonObject(with: data, options: [])
             print("✅ JSONSerialization success: \(anyObject)")
             
-            // Теперь попробуем декодировать как [Post]
+            // Try decode as generil type [Post]
             let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
             print("✅ Post decoding SUCCESS: \(posts.count) posts")
             
         } catch {
             print("❌ FAILED: \(error)")
             
-            // Детальная информация об ошибке декодирования
+            // Detailed information about the decoding error
             if let decodingError = error as? DecodingError {
                 switch decodingError {
                 case .typeMismatch(let type, let context):
@@ -247,7 +252,7 @@ class PostsViewModel: ObservableObject {
     
     
     func validateJSONFile() {
-        // Если JSON файл локальный
+        
         if let url = Bundle.main.url(forResource: "cloudPosts", withExtension: "json"),
            let data = try? Data(contentsOf: url) {
             
