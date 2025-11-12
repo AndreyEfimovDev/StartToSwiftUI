@@ -110,10 +110,18 @@ struct PostDetailsView: View {
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)
                 
-                Text("@" + post.author)
-                    .font(.body)
-                    .font(.caption)
-                    .frame(maxWidth: .infinity)
+                HStack {
+                    if post.origin == .cloud {
+                        Image(systemName: "cloud")
+                            .font(.caption2)
+                            .foregroundStyle(Color.mycolor.mySecondaryText)
+                    }
+
+                    Text("@" + post.author)
+                        .font(.body)
+                        .font(.caption)
+                }
+                .frame(maxWidth: .infinity)
                 
 //                if vm.selectedCategory == nil {
 //                    Text(post.category)
