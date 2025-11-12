@@ -43,12 +43,19 @@ struct PostRowView: View {
                 .fontWeight(.bold)
                 .minimumScaleFactor(0.75)
                 .lineLimit(1)
-                .padding(.top, 8)
             Spacer()
-            Image(systemName: "heart.fill") // heart star.fill
+            if post.origin == .cloud {
+                Image(systemName: "cloud")
+                    .font(.caption2)
+                    .foregroundStyle(Color.mycolor.mySecondaryText)
+            }
+
+            Image(systemName: post.favoriteChoice == .yes ? "heart.fill" : "heart")
+                .font(.caption2)
                 .foregroundStyle(post.favoriteChoice == .yes ? Color.mycolor.myYellow : Color.mycolor.mySecondaryText)
-                .padding(.top, 8)
         }
+        .padding(.top, 8)
+
     }
     
     private var author: some View {

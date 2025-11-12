@@ -93,7 +93,9 @@ struct DevPreview {
         ),
         Post(
             title: "Customizing the appearance of symbol images in SwiftUI",
-            intro: "Symbol images are vector-based icons from Apple's SF Symbols library, designed for use across Apple platforms. These scalable images adapt to different sizes and weights, ensuring consistent, high-quality icons throughout our apps. Using symbol images in SwiftUI is straightforward with the Image view and the system name of the desired symbol.",
+            intro: """
+            Symbol images are vector-based icons from Apple's SF Symbols library, designed for use across Apple platforms. These scalable images adapt to different sizes and weights, ensuring consistent, high-quality icons throughout our apps. Using symbol images in SwiftUI is straightforward with the Image view and the system name of the desired symbol.
+            """,
             author: "Natalia Panferova",
             urlString: "https://nilcoalescing.com/blog/CustomizingTheAppearanceOfSymbolImagesInSwiftUI/",
             postPlatform: .website,
