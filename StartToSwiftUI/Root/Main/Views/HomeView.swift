@@ -127,7 +127,7 @@ struct HomeView: View {
                                     .tint(Color.mycolor.myButtonBGBlue)
                                 } // right side swipe action buttonss
                                 .swipeActions(edge: .leading, allowsFullSwipe: false) {
-                                    Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: "star.fill") {
+                                    Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: post.favoriteChoice == .yes ?  "heart.slash.fill" : "heart.fill") {
                                         vm.favoriteToggle(post: post)
                                     }
                                     .tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondaryText : Color.mycolor.myYellow)

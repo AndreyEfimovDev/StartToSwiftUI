@@ -45,7 +45,7 @@ struct PostRowView: View {
                 .lineLimit(1)
                 .padding(.top, 8)
             Spacer()
-            Image(systemName: "star.fill")
+            Image(systemName: "heart.fill") // heart star.fill
                 .foregroundStyle(post.favoriteChoice == .yes ? Color.mycolor.myYellow : Color.mycolor.mySecondaryText)
                 .padding(.top, 8)
         }
