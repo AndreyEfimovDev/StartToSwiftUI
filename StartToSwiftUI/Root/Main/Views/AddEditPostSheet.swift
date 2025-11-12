@@ -98,6 +98,7 @@ struct AddEditPostSheet: View {
                 .padding(.horizontal, 8)
             }
             .navigationTitle(viewTitle)
+            .navigationBarTitleDisplayMode(.inline)
             .background(Color.mycolor.myBackground)
             .scrollIndicators(.hidden)
             .toolbarBackground(.ultraThinMaterial, for: .navigationBar)

@@ -39,6 +39,7 @@ struct HomeView: View {
             ZStack {
                 mainViewBody
                     .navigationTitle(vm.homeTitleName)
+                    .navigationBarTitleDisplayMode(.inline)
                     .navigationBarBackButtonHidden(true)
                     .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
                     .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
