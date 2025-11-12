@@ -889,6 +889,7 @@ struct DevPreview {
             author: "www.atlassian.com",
             postType: .post,
             urlString: "https://www.atlassian.com/git/tutorials",
+            postPlatform: .website,
             postDate: nil,
             studyLevel: .beginner,
             origin: .cloud
@@ -935,7 +936,7 @@ struct DevPreview {
             author: "Swiftful Thinking",
             postType: .post,
             urlString: "https://www.youtube.com/watch?v=7BAW70amSCA&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=73",
-            postPlatform: .website,
+            postPlatform: .youtube,
             postDate: Date.from(year: 2023, month: 11, day: 9),
             studyLevel: .beginner,
             origin: .cloud
@@ -948,7 +949,7 @@ struct DevPreview {
             author: "Swiftful Thinking",
             postType: .post,
             urlString: "https://www.youtube.com/watch?v=oN3Rqo6V6Uc&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=74",
-            postPlatform: .website,
+            postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 11, day: 14),
             studyLevel: .beginner,
             origin: .cloud
@@ -961,7 +962,7 @@ struct DevPreview {
             author: "Swiftful Thinking",
             postType: .post,
             urlString: "https://www.youtube.com/watch?v=oN3Rqo6V6Uc&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=74",
-            postPlatform: .website,
+            postPlatform: .youtube,
             postDate: Date.from(year: 2024, month: 02, day: 26),
             studyLevel: .beginner,
             origin: .cloud
@@ -975,7 +976,7 @@ struct DevPreview {
             author: "Swiftful Thinking",
             postType: .post,
             urlString: "https://www.youtube.com/watch?v=tNwnihqJf2I&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=36",
-            postPlatform: .website,
+            postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 2, day: 21),
             studyLevel: .beginner,
             origin: .cloud
@@ -988,7 +989,7 @@ struct DevPreview {
             author: "Swiftful Thinking",
             postType: .post,
             urlString: "https://www.youtube.com/watch?v=wmQIl0O9HBY&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=50",
-            postPlatform: .website,
+            postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 3, day: 7),
             studyLevel: .beginner,
             origin: .cloud
@@ -1001,7 +1002,7 @@ struct DevPreview {
             author: "Swiftful Thinking",
             postType: .post,
             urlString: "https://www.youtube.com/watch?v=AiSLtya25ac&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=59",
-            postPlatform: .website,
+            postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 12, day: 7),
             studyLevel: .beginner,
             origin: .cloud
