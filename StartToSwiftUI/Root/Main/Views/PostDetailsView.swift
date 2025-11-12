@@ -233,7 +233,7 @@ struct PostDetailsView: View {
         }
         ToolbarItemGroup(placement: .topBarTrailing) {
             CircleStrokeButtonView(
-                iconName: validPost.favoriteChoice == .yes ? "star.fill" : "star",
+                iconName: validPost.favoriteChoice == .yes ? "heart.fill" : "heart",
                 iconFont: .headline,
                 isIconColorToChange: validPost.favoriteChoice == .yes ? true : false,
                 imageColorSecondary: Color.mycolor.myYellow,
