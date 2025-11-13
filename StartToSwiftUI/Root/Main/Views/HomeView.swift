@@ -169,7 +169,7 @@ struct HomeView: View {
         ContentUnavailableView(
             "No Posts",
             systemImage: "tray.and.arrow.down",
-            description: Text("Posts will appear here when you create them or download a curated collection.")
+            description: Text("Posts will appear here when you create your own or download a curated collection.")
         )
     }
     
