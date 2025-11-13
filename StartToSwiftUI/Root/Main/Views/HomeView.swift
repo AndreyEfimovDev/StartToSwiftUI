@@ -167,17 +167,17 @@ struct HomeView: View {
     
     private var allPostsIsEmpty: some View {
         ContentUnavailableView(
-            "No Posts Stored",
+            "No Posts",
             systemImage: "tray.and.arrow.down",
-            description: Text("You can create your own posts manually or go to Preferences to download a curated collection of links to SwiftUI tutorials and articles compiled by the developer from open sources.")
+            description: Text("Posts will appear here when you create them or download a curated collection.")
         )
     }
     
     private var filteredPostsIsEmpty: some View {
         ContentUnavailableView(
-            "No Posts found matching your search criteria",
+            "No Results matching your search criteria",
             systemImage: "magnifyingglass",
-            description: Text("Please change the search criteria.")
+            description: Text("Check the spelling or try a new search.")
         )
     }
     
