@@ -32,13 +32,9 @@ struct PostRowView: View {
         .padding(8)
         .padding(.horizontal, 8)
         .background(Color.mycolor.mySectionBackground)
-//        .background(
-//            Color.mycolor.mySectionBackground,
-//            in: RoundedRectangle(cornerRadius: 8)
-//        )
     }
         
-    // MARK: VIEW VARS
+    // MARK: Subviews
     
     private var title: some View {
         HStack {
@@ -47,21 +43,25 @@ struct PostRowView: View {
                 .fontWeight(.bold)
                 .minimumScaleFactor(0.75)
                 .lineLimit(1)
-                .padding(.top, 8)
             Spacer()
-            Image(systemName: "star.fill")
+            if post.origin == .cloud {
+                Image(systemName: "cloud")
+                    .font(.caption2)
+                    .foregroundStyle(Color.mycolor.mySecondaryText)
+            }
+
+            Image(systemName: post.favoriteChoice == .yes ? "heart.fill" : "heart")
+                .font(.caption2)
                 .foregroundStyle(post.favoriteChoice == .yes ? Color.mycolor.myYellow : Color.mycolor.mySecondaryText)
-                .padding(.top, 8)
         }
-        
+        .padding(.top, 8)
+
     }
     
     private var author: some View {
         HStack {
             Text("@" + post.author + ", ") +
-//            Text(post.postLanguage.displayName)
-//            +
-            Text(", \(post.postDate?.formatted(date: .numeric, time: .omitted) ?? "post date missed")") +
+            Text("\(post.postDate?.formatted(date: .numeric, time: .omitted) ?? "post date missed")") +
             Text(post.postType == .other ? "" : ", " + post.postType.displayName)
         }
         .font(.footnote)
@@ -72,8 +72,8 @@ struct PostRowView: View {
             .font(.body)
             .fontWeight(.medium)
             .foregroundStyle(post.studyLevel.color)
-
     }
+    
 }
 
 fileprivate struct PostRowPreView: View {

@@ -13,7 +13,7 @@ struct AddEditPostSheet: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     
-    private let hapticManager = HapticManager.shared
+    private let hapticManager = HapticService.shared
     
     @FocusState private var focusedField: PostFields?
     @State private var focusedFieldSaved: PostFields?
@@ -38,9 +38,8 @@ struct AddEditPostSheet: View {
     private let fontTextInput: Font = .callout
     private let colorSubheader: Color = Color.mycolor.myAccent.opacity(0.5)
     
-    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date() // set the limit to the beginning year for choice
-    private let endingDate: Date = Date()
-    
+    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date() // set beginning year for choice
+    private let endingDate: Date = .now
     private var bindingPostDate: Binding<Date> {
         Binding<Date>(
             get: { editedPost.postDate ?? Date() },
@@ -53,6 +52,12 @@ struct AddEditPostSheet: View {
     @State var alertTitle: String = ""
     @State var alertMessage: String = ""
     
+    let templateForNewPost: Post = Post(
+        category: "", title: "", intro: "", author: "", urlString: "",
+        postPlatform: .youtube, postDate: nil, studyLevel: .beginner,
+        favoriteChoice: .no, notes: "", origin: .local
+    )
+    
     enum PostAlerts {
         case success
         case error
@@ -60,22 +65,13 @@ struct AddEditPostSheet: View {
     
     init(post: Post?) {
         
-        if let post = post { // Post for editing initialising
+        if let post = post { // if post is passed - post for editing initialising
             _editedPost = State(initialValue: post)
             _draftPost = State(initialValue: post)
             self.isNewPost = false
-        } else { // Add a new post initialising
-            _editedPost = State(initialValue: Post(
-                title: "",
-                intro: "",
-                author: "",
-                urlString: "",
-                postPlatform: .youtube,
-                postDate: nil,
-                studyLevel: .beginner,
-                favoriteChoice: .no,
-                additionalText: "",
-            ))
+        } else { // if post is not passed (nil) - add a new post initialising
+            _editedPost = State(initialValue: templateForNewPost)
+            _draftPost = State(initialValue: templateForNewPost)
             self.isNewPost = true
         }
     }
@@ -91,49 +87,22 @@ struct AddEditPostSheet: View {
                     introSection
                     authorSection
                     urlSection
-//                    languageSection
                     postDateSection
                     typeSection
                     platformSection
                     studyLevelSection
                     favoviteChoiceSection
-                    addInforSection
+                    notesSection
                 } // ScrollView
                 .foregroundStyle(Color.mycolor.myAccent)
                 .padding(.horizontal, 8)
-            } // VStack
+            }
             .navigationTitle(viewTitle)
+            .navigationBarTitleDisplayMode(.inline)
             .background(Color.mycolor.myBackground)
             .scrollIndicators(.hidden)
             .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    CircleStrokeButtonView(
-                        iconName: "checkmark",
-                        isShownCircle: false)
-                    {
-                        checkPostAndSave()
-                    }
-                    .alert(isPresented: $showAlert) {
-                        getAlert(
-                            alertTitle: alertTitle,
-                            alertMessage: alertMessage)
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) { //
-                    CircleStrokeButtonView(
-                        iconName: "xmark",
-                        isIconColorToChange: true,
-                        imageColorSecondary: Color.mycolor.myRed,
-                        isShownCircle: false)
-                    {
-                        hapticManager.notification(type: .warning)
-                        focusedFieldSaved = focusedField ?? nil
-                        focusedField = nil
-                        isShowingMenuConfirmation = true
-                    }
-                }
-            }
+            .toolbar { toolbarForAddEditView() }
             .overlay(
                 hideKeybordButton
             )
@@ -141,13 +110,51 @@ struct AddEditPostSheet: View {
         .onAppear {
             focusedField = .postTitle
         }
-        .overlay (
-            menuConfitmation
-        )
-            
+        .overlay {
+            if isShowingMenuConfirmation {
+                exitMenuConfirmation
+            }
+        }
     }
     
-    // MARK: ViewBuilders
+    // MARK: Subviews
+    
+    @ToolbarContentBuilder
+    private func toolbarForAddEditView() -> some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            CircleStrokeButtonView(
+                iconName: "checkmark",
+                isShownCircle: false)
+            {
+                if editedPost == draftPost {  // if no changes
+                    dismiss()
+                } else {
+                    checkPostAndSave()
+                }
+            }
+            .alert(isPresented: $showAlert) {
+                getAlert(
+                    alertTitle: alertTitle,
+                    alertMessage: alertMessage)
+            }
+        }
+        ToolbarItem(placement: .topBarTrailing) { //
+            CircleStrokeButtonView(
+                iconName: "xmark",
+                imageColorPrimary: Color.mycolor.myRed,
+                isShownCircle: false)
+            {
+                if editedPost == draftPost {  // if no changes
+                    dismiss()
+                } else {
+                    hapticManager.notification(type: .warning)
+                    focusedFieldSaved = focusedField ?? nil
+                    focusedField = nil
+                    isShowingMenuConfirmation = true
+                }
+            }
+        }
+    }
     
     @ViewBuilder
     private func textEditorRightButton(
@@ -169,10 +176,7 @@ struct AddEditPostSheet: View {
         }
     }
     
-    // MARK: Subviews
-    
     private var titleSection: some View {
-        
         VStack(alignment: .leading, spacing: 0) {
             Text("Title")
                 .textCase(.uppercase)
@@ -202,7 +206,6 @@ struct AddEditPostSheet: View {
     }
     
     private var introSection: some View {
-        
         VStack(alignment: .leading, spacing: 0) {
             Text("Intro")
                 .textCase(.uppercase)
@@ -268,7 +271,6 @@ struct AddEditPostSheet: View {
     }
         
     private var urlSection: some View {
-        
         VStack(alignment: .leading, spacing: 0) {
             Text("URL")
                 .sectionSubheaderFormater(
@@ -297,40 +299,7 @@ struct AddEditPostSheet: View {
         }
     }
     
-//    private var languageSection: some View {
-//        
-//        VStack(alignment: .leading, spacing: 0) {
-//            Text("Language")
-//                .textCase(.uppercase)
-//                .sectionSubheaderFormater(
-//                    fontSubheader: fontSubheader,
-//                    colorSubheader: colorSubheader
-//                )
-//            HStack {
-//                Text("Select Language:")
-//                    .font(fontTextInput)
-//                    .padding(.leading, 5)
-//                Spacer()
-//                Picker("", selection: $editedPost.postLanguage) {
-//                    ForEach(LanguageOptions.allCases, id: \.self) { language in
-//                        Text(language.displayName)
-//                            .tag(language)
-//                            .foregroundColor(Color.mycolor.myBlue)
-//                    }
-//                }
-//                .pickerStyle(.menu)
-//                .tint(Color.mycolor.myBlue)
-//                .frame(height: 50)
-//            }
-//            .background(
-//                sectionBackground,
-//                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
-//            )
-//        }
-//    }
-    
     private var postDateSection: some View {
-        
         VStack(alignment: .leading, spacing: 0) {
             Text("Post Date")
                 .textCase(.uppercase)
@@ -338,29 +307,45 @@ struct AddEditPostSheet: View {
                     fontSubheader: fontSubheader,
                     colorSubheader: colorSubheader
                 )
-            DatePicker(
-                "Pick up date:",
-                selection: bindingPostDate,
-                in: startingDate...endingDate,
-                displayedComponents: .date
-            )
-            .font(fontTextInput)
-            .padding(.leading, 5)
-            .tint(Color.mycolor.myBlue)
-            .padding(.trailing, 4)
-            .frame(height: 50)
+            ZStack {
+                HStack {
+                    Button(editedPost.postDate == nil ? "Set date" : "Unknown date") {
+                        if editedPost.postDate == nil {
+                            editedPost.postDate = Date()
+                        } else {
+                            editedPost.postDate = nil
+                        }
+                    }
+                    .foregroundColor(editedPost.postDate == nil ? .blue : .red)
+                    .padding(8)
+                    .background(
+                        .ultraThinMaterial,
+                        in: .capsule
+                    )
+                    Spacer()
+                }
+                .padding(8)
+                .zIndex(1)
+                
+                DatePicker("",
+                    selection: bindingPostDate,
+                    in: startingDate...endingDate,
+                    displayedComponents: .date
+                )
+                .tint(Color.mycolor.myBlue)
+                .padding(.trailing, 8)
+                .datePickerStyle(.compact)
+                .disabled(editedPost.postDate == nil)
+                .opacity(editedPost.postDate == nil ? 0 : 1)
+            }
             .background(
                 sectionBackground,
-                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                in: RoundedRectangle(cornerRadius: sectionCornerRadius)
             )
-        }
-        .onChange(of: bindingPostDate.wrappedValue) { _, newValue in
-            editedPost.postDate = newValue
         }
     }
     
     private var typeSection: some View {
-        
         VStack(alignment: .leading, spacing: 0) {
             Text("Post Type")
                 .textCase(.uppercase)
@@ -385,7 +370,6 @@ struct AddEditPostSheet: View {
     }
     
     private var platformSection: some View {
-        
         VStack(alignment: .leading, spacing: 0) {
             Text("Platform")
                 .textCase(.uppercase)
@@ -408,7 +392,6 @@ struct AddEditPostSheet: View {
     }
     
     private var studyLevelSection: some View {
-        
         VStack(alignment: .leading, spacing: 0) {
             Text("Study Level")
                 .textCase(.uppercase)
@@ -431,7 +414,6 @@ struct AddEditPostSheet: View {
     }
     
     private var favoviteChoiceSection: some View {
-        
         VStack(alignment: .leading, spacing: 0) {
             Text("Favorite")
                 .textCase(.uppercase)
@@ -456,18 +438,16 @@ struct AddEditPostSheet: View {
         }
     }
     
-    
-    private var addInforSection: some View {
-        
+    private var notesSection: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("Additional Information")
+            Text("Notes")
                 .textCase(.uppercase)
                 .sectionSubheaderFormater(
                     fontSubheader: fontSubheader,
                     colorSubheader: colorSubheader
                 )
             HStack(spacing: 0) {
-                TextEditor(text: $editedPost.additionalText)
+                TextEditor(text: $editedPost.notes)
                     .font(fontTextInput)
                     .frame(minHeight: 200)
                     .scrollContentBackground(.hidden)
@@ -475,11 +455,11 @@ struct AddEditPostSheet: View {
                     .onSubmit {focusedField = nil }
                     .submitLabel(.return)
                 VStack {
-                    textEditorRightButton(text: editedPost.additionalText) {
-                        editedPost.additionalText = ""
+                    textEditorRightButton(text: editedPost.notes) {
+                        editedPost.notes = ""
                     }
                     textEditorRightButton(
-                        text: editedPost.additionalText,
+                        text: editedPost.notes,
                         iconName: "arrow.turn.right.down",
                         iconColor: Color.mycolor.myBlue) {
                             focusedField = nil
@@ -495,7 +475,6 @@ struct AddEditPostSheet: View {
     }
     
     private var hideKeybordButton: some View {
-        
         Group {
             if focusedField != nil {
                 VStack {
@@ -520,9 +499,7 @@ struct AddEditPostSheet: View {
         .animation(.easeInOut(duration: 0.3), value: focusedField != nil)
     }
     
-    private var menuConfitmation: some View {
-        Group {
-            if isShowingMenuConfirmation {
+    private var exitMenuConfirmation: some View {
                 ZStack {
                     Color.mycolor.myAccent.opacity(0.4)
                         .ignoresSafeArea()
@@ -541,43 +518,42 @@ struct AddEditPostSheet: View {
                         ClearCupsuleButton(
                             primaryTitle: "Yes",
                             primaryTitleColor: Color.mycolor.myRed) {
-                                vm.isPostDraftSaved = false // потом убрать
+//                          vm.isPostDraftSaved = false // потом убрать
                                 dismiss()
                             }
                             .disabled(isMenuConfirmationBlocked)
-                        
-                        ClearCupsuleButton(
-                            primaryTitle: "Save draft",
-                            secondaryTitle: "Draft saved",
-                            secondaryTitleColor: Color.mycolor.myGreen,
-                            isToChange: vm.isPostDraftSaved) {
-                                
-                                vm.titlePostDraft = editedPost.title
-                                vm.introPostDraft = editedPost.intro
-                                vm.authorPostDraft = editedPost.author
-//                                vm.languagePostDraft = editedPost.postLanguage
-                                vm.typePostDraft = editedPost.postType
-                                vm.urlStringPostDraft = editedPost.urlString
-                                vm.platformPostDraft = editedPost.postPlatform
-                                vm.datePostDraft = editedPost.postDate
-                                vm.studyLevelPostDraft = editedPost.studyLevel
-                                vm.favoriteChoicePostDraft = editedPost.favoriteChoice
-                                vm.additionalTextPostDraft = editedPost.additionalText
-                                
-                                isMenuConfirmationBlocked = true
-                                hapticManager.notification(type: .success)
-                                vm.isPostDraftSaved = true
-                                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                                    isMenuConfirmationBlocked = false
-                                    dismiss()
-                                }
-                            }
-                            .disabled(isMenuConfirmationBlocked)
+//                        
+//                        ClearCupsuleButton(
+//                            primaryTitle: "Save draft",
+//                            secondaryTitle: "Draft saved",
+//                            secondaryTitleColor: Color.mycolor.myGreen,
+//                            isToChange: vm.isPostDraftSaved) {
+//                                
+//                                vm.titlePostSaved = editedPost.title
+//                                vm.introPostSaved = editedPost.intro
+//                                vm.authorPostSaved = editedPost.author
+//                                vm.typePostSaved = editedPost.postType
+//                                vm.urlStringPostSaved = editedPost.urlString
+//                                vm.platformPostSaved = editedPost.postPlatform
+//                                vm.datePostSaved = editedPost.postDate
+//                                vm.studyLevelPostSaved = editedPost.studyLevel
+//                                vm.favoriteChoicePostSaved = editedPost.favoriteChoice
+//                                vm.additionalTextPostSaved = editedPost.additionalText
+//                                
+//                                isMenuConfirmationBlocked = true
+//                                hapticManager.notification(type: .success)
+//                                vm.isPostDraftSaved = true
+//                                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+//                                    isMenuConfirmationBlocked = false
+//                                    dismiss()
+//                                }
+//                            }
+//                            .disabled(isMenuConfirmationBlocked)
 
                         ClearCupsuleButton(
                             primaryTitle: "No",
-                            primaryTitleColor: Color.mycolor.myGreen) {
-                                vm.isPostDraftSaved = false // потом убрать
+                            primaryTitleColor: Color.mycolor.myAccent) {
+//                          vm.isPostDraftSaved = false // потом убрать
                                 focusedField = focusedFieldSaved
                                 isShowingMenuConfirmation = false
                             }
@@ -588,53 +564,55 @@ struct AddEditPostSheet: View {
                     .cornerRadius(30)
                     .padding(.horizontal, 40)
                 }
-            }
-        }
     }
     
     // MARK: Functions
     
     private func checkPostAndSave() {
-        if !textIsAppropriate(text: editedPost.title) {
-            alertType = .error
-            alertTitle = "The Title must contain at least 3 characters."
-            alertMessage = "Please correct the Title."
-            focusedField = .postTitle
-            showAlert.toggle()
-        } else if !textIsAppropriate(text: editedPost.author) {
-            alertType = .error
-            alertTitle = "The Author must contain at least 3 characters."
-            alertMessage = "Please correct the Author."
-            focusedField = .author
-            showAlert.toggle()
-        } else if vm.checkNewPostForUniqueTitle(editedPost.title, excludingPostId: isNewPost ? nil : editedPost.id) {
-            alertType = .error
-            alertTitle = "The Title must be unique."
-            alertMessage = "Please correct the Title."
-            focusedField = .postTitle
-            showAlert.toggle()
-        } else {
-            switch isNewPost {
-            case true:
-                print("Added a new post: \(editedPost.title)")
-                print("\(isNewPost.description)")
-                vm.addPost(editedPost)
-            case false:
-                print("Updated a current post : \(editedPost.title)")
-                print("\(isNewPost.description)")
-                vm.updatePost(editedPost)
+        
+        if !textIsAppropriate(text: editedPost.title, limit: 3) {
+                alertType = .error
+                alertTitle = "The Title must contain at least 3 characters."
+                alertMessage = "Please correct the Title."
+                focusedField = .postTitle
+                showAlert.toggle()
+        } else if !textIsAppropriate(text: editedPost.author, limit: 2) {
+                alertType = .error
+                alertTitle = "The Author must contain at least 2 characters."
+                alertMessage = "Please correct the Author."
+                focusedField = .author
+                showAlert.toggle()
+            } else if vm.checkNewPostForUniqueTitle(editedPost.title, editingPostId: isNewPost ? nil : editedPost.id) {
+                alertType = .error
+                alertTitle = "The Title must be unique."
+                alertMessage = "Please correct the Title."
+                focusedField = .postTitle
+                showAlert.toggle()
+            } else {
+                switch isNewPost {
+                case true:
+    //                print("Added a new post: \(editedPost.title)")
+    //                print("\(isNewPost.description)")
+                    vm.addPost(editedPost)
+                case false:
+    //                print("Updated edited post : \(editedPost.title)")
+    //                print("\(isNewPost.description)")
+                    vm.updatePost(editedPost)
+                }
+                alertType = .success
+                showAlert.toggle()
             }
-            alertType = .success
-            showAlert.toggle()
         }
+    
+    
+    private func textIsAppropriate(text: String, limit: Int) -> Bool {
+        return text.count >= limit
     }
     
-    private func textIsAppropriate(text: String) -> Bool {
-        return text.count >= 3
-    }
-    
-    private func getAlert(alertTitle: String,
-                          alertMessage: String) -> Alert {
+    private func getAlert(
+        alertTitle: String,
+        alertMessage: String
+    ) -> Alert {
         switch alertType {
         case .error:
             return Alert(
@@ -643,15 +621,18 @@ struct AddEditPostSheet: View {
                 dismissButton: .default(Text("OK")))
         case .success:
             if isNewPost {
-                return Alert(title: Text("New Post added successfully"), message: Text("Tap OK to continue"), dismissButton: .default(Text("OK"), action: {
-                    dismiss()
-                }))
+                return Alert(
+                    title: Text("New Post added successfully"),
+                    message: Text("Tap OK to continue"),
+                    dismissButton: .default(Text("OK")) { dismiss() }
+                )
             } else {
-                return Alert(title: Text("Edited Post saved successfully"), message: Text("Tap OK to continue"), dismissButton: .default(Text("OK"), action: {
-                    dismiss()
-                }))
+                return Alert(
+                    title: Text("Edited Post saved successfully"),
+                    message: Text("Tap OK to continue"),
+                    dismissButton: .default(Text("OK")) { dismiss() }
+                )
             }
-            
         default:
             return Alert(title: Text("ERROR"))
         }

@@ -14,7 +14,7 @@ struct HomeView2: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject private var vm: PostsViewModel
     
-    @State private var selectedPostId: UUID?
+    @State private var selectedPostId: String?
     @State private var selectedPost: Post?
     
     @State private var showDetailView: Bool = false
@@ -34,7 +34,7 @@ struct HomeView2: View {
                 $0.title.lowercased().contains(vm.searchText.lowercased()) ||
                 $0.intro.lowercased().contains(vm.searchText.lowercased())  ||
                 $0.author.lowercased().contains(vm.searchText.lowercased()) ||
-                $0.additionalText.lowercased().contains(vm.searchText.lowercased())
+                $0.notes.lowercased().contains(vm.searchText.lowercased())
             } )
             return searchedPosts
         }
@@ -77,7 +77,7 @@ struct HomeView2: View {
                     }
                 }
                 .safeAreaInset(edge: .top) {
-                    SearchBarView(searchText: $vm.searchText)
+                    SearchBarView()
                 }
                 .navigationDestination(isPresented: $showDetailView) {
                     if let id = selectedPostId {

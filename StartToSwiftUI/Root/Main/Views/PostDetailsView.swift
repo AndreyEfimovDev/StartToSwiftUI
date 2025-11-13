@@ -14,16 +14,27 @@ struct PostDetailsView: View {
     @EnvironmentObject private var vm: PostsViewModel
     
     private let fileManager = FileStorageService.shared
-
+    
     @State private var showSafariView = false
     @State private var showFullIntro: Bool = false
     @State private var showFullFreeTextField: Bool = false
     @State private var showEditPostView: Bool = false
     
-    let postId: UUID
+    let postId: String
     
     private var post: Post? {
         vm.allPosts.first(where: { $0.id == postId })
+    }
+    
+    private var buttonTitle: String {
+        switch post?.postPlatform {
+        case .youtube:
+            "Watch the Video"
+        case .website:
+            "Read the Article"
+        case nil:
+            "Go to the Source"
+        }
     }
     
     @State private var lineCountIntro: Int = 0
@@ -38,7 +49,7 @@ struct PostDetailsView: View {
     
     private let sectionBackground: Color = Color.mycolor.myBackground
     private let sectionCornerRadius: CGFloat = 15
-
+    
     
     var body: some View {
         
@@ -51,65 +62,28 @@ struct PostDetailsView: View {
                             in: RoundedRectangle(cornerRadius: sectionCornerRadius)
                         )
                         .padding(.top, 30)
-
+                    
                     intro(for: validPost)
                         .background(
                             sectionBackground,
                             in: RoundedRectangle(cornerRadius: sectionCornerRadius)
                         )
-                    watchTheSourceButton(for: validPost)
+                    goToTheSourceButton(for: validPost)
                         .padding(.horizontal, 55)
                     
-                    addInfoField(for: validPost)
+                    notesToPost(for: validPost)
                         .background(
                             sectionBackground,
                             in: RoundedRectangle(cornerRadius: sectionCornerRadius)
-                        ).opacity(validPost.additionalText.isEmpty ? 0 : 1)
+                        ).opacity(validPost.notes.isEmpty ? 0 : 1)
                 }
                 .foregroundStyle(Color.mycolor.myAccent)
             }
-//            .padding(.top, 30)
             .padding(.horizontal)
-//            .background(.thinMaterial)
             .navigationBarBackButtonHidden(true)
-//            .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
             .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbar {
-                ToolbarItemGroup(placement: .topBarLeading) {
-                    CircleStrokeButtonView(
-                        iconName: "chevron.left",
-                        isShownCircle: false)
-                    {
-                        dismiss()
-                    }
-
-                    ShareLink(item: validPost.urlString) {
-                        Image(systemName: "square.and.arrow.up")
-                            .font(.headline)
-                            .foregroundStyle(Color.mycolor.mySecondaryText)
-                            .offset(y: -2)
-                            .frame(width: 30, height: 30)
-                            .background(.black.opacity(0.001))
-                    }
-                }
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    CircleStrokeButtonView(
-                        iconName: validPost.favoriteChoice == .yes ? "star.fill" : "star",
-                        iconFont: .headline,
-                        isIconColorToChange: validPost.favoriteChoice == .yes ? true : false,
-                        imageColorSecondary: Color.mycolor.myYellow,
-                        isShownCircle: false)
-                    {
-                        vm.favoriteToggle(post: validPost)
-                    }
-
-                    CircleStrokeButtonView(
-                        iconName: "pencil",
-                        isShownCircle: false)
-                    {
-                        showEditPostView.toggle()
-                    }
-                }
+                toolbarForPostDetails(validPost: validPost)
             }
             .fullScreenCover(isPresented: $showEditPostView, content: {
                 AddEditPostSheet(post: post)
@@ -120,9 +94,11 @@ struct PostDetailsView: View {
                 }
             }
         } else {
-            Text("Post not found")
+            Text("Post is not found")
         }
     }
+    
+    // MARK: Subviews
     
     private func header(for post: Post) -> some View {
         
@@ -133,18 +109,33 @@ struct PostDetailsView: View {
                     .fontWeight(.semibold)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)
-                let author = "@" + post.author
-                Text(author)
-                    .font(.body)
-                    .font(.caption)
-                    .frame(maxWidth: .infinity)
+                
+                HStack {
+                    if post.origin == .cloud {
+                        Image(systemName: "cloud")
+                            .font(.caption2)
+                            .foregroundStyle(Color.mycolor.mySecondaryText)
+                    }
 
+                    Text("@" + post.author)
+                        .font(.body)
+                        .font(.caption)
+                }
+                .frame(maxWidth: .infinity)
+                
+//                if vm.selectedCategory == nil {
+//                    Text(post.category)
+//                        .font(.body)
+//                        .fontWeight(.medium)
+//                        .foregroundStyle(Color.mycolor.myYellow)
+//                        .frame(maxWidth: .infinity)
+//                }
+//                
                 Text(post.studyLevel.rawValue.capitalized + " level")
                     .font(.body)
                     .fontWeight(.medium)
                     .foregroundStyle(post.studyLevel.color)
                     .frame(maxWidth: .infinity)
-
             }
             .padding(.vertical, 8)
         }
@@ -153,14 +144,14 @@ struct PostDetailsView: View {
     private func intro(for post: Post) -> some View {
         VStack(spacing: 0) {
             VStack {
-                let dateChecked = post.postDate == nil ? "" : (post.postDate?.formatted(date: .numeric, time: .omitted) ?? "")
-                let prefecsToDate = post.postDate == nil ? "" : " posted "
-                let platform = post.postPlatform == .others ? "" : post.postPlatform.displayName
-                let postType = post.postPlatform == .others ? "" : post.postType.displayName
-                let titleForIntro = postType + " on " + platform + prefecsToDate + dateChecked
+                let postDate = post.postDate == nil ? "" : (post.postDate?.formatted(date: .numeric, time: .omitted) ?? "")
+                let prefixToDate = post.postDate == nil ? "" : " posted "
+                let platform = post.postPlatform.displayName
+                let postType = post.postType.displayName
+                let titleForIntro = postType + prefixToDate +  postDate + " on " + platform
                 
                 Text(titleForIntro)
-                    .font(.system(size: 10, weight: .light, design: .rounded))
+                    .font(.caption)
                     .multilineTextAlignment(.trailing)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 8)
@@ -187,18 +178,19 @@ struct PostDetailsView: View {
         }
     }
     
-    private func watchTheSourceButton(for post: Post) -> some View {
+    private func goToTheSourceButton(for post: Post) -> some View {
+        
         Button {
             showSafariView = true
         } label: {
-            RedCupsuleButton(buttonTitle: "Watch the Source")
+            RedCupsuleButton(buttonTitle: buttonTitle)
         }
     }
     
-    private func addInfoField(for post: Post) -> some View {
+    private func notesToPost(for post: Post) -> some View {
         VStack(spacing: 0) {
             HStack {
-                Text("Additional information")
+                Text("Notes")
                     .font(.headline)
                     .frame(height: 55)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -206,14 +198,14 @@ struct PostDetailsView: View {
                     .padding(.top, 0)
                 
                 Spacer()
-                if !post.additionalText.isEmpty {
+                if !post.notes.isEmpty {
                     MoreLessTextButton(showText: $showFullFreeTextField)
                 }
             }
             
             if showFullFreeTextField {
                 VStack {
-                    Text(post.additionalText)
+                    Text(post.notes)
                         .font(fullFreeTextFieldFont)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 8)
@@ -226,23 +218,64 @@ struct PostDetailsView: View {
                 }
             } // if isShowingFullFreeTextField
         } // VStack
-    } // private var additionalText
+    }
+    
+    @ToolbarContentBuilder
+    private func toolbarForPostDetails(validPost: Post) -> some ToolbarContent {
+        ToolbarItemGroup(placement: .topBarLeading) {
+            CircleStrokeButtonView(
+                iconName: "chevron.left",
+                isShownCircle: false)
+            {
+                dismiss()
+            }
+            
+            ShareLink(item: validPost.urlString) {
+                Image(systemName: "square.and.arrow.up")
+                    .font(.headline)
+                    .foregroundStyle(Color.mycolor.mySecondaryText)
+                    .offset(y: -2)
+                    .frame(width: 30, height: 30)
+                    .background(.black.opacity(0.001))
+            }
+        }
+        ToolbarItemGroup(placement: .topBarTrailing) {
+            CircleStrokeButtonView(
+                iconName: validPost.favoriteChoice == .yes ? "heart.fill" : "heart",
+                iconFont: .headline,
+                isIconColorToChange: validPost.favoriteChoice == .yes ? true : false,
+                imageColorSecondary: Color.mycolor.myYellow,
+                isShownCircle: false)
+            {
+                vm.favoriteToggle(post: validPost)
+            }
+            
+            
+            CircleStrokeButtonView(
+                iconName: post?.origin == .cloud ? "pencil.slash" : "pencil",
+                isShownCircle: false)
+            {
+                showEditPostView.toggle()
+            }
+            .disabled(post?.origin == .cloud)
+        }
+    }
 }
 
 
 fileprivate struct PostDetailsPreView: View {
     var body: some View {
         NavigationStack {
-            PostDetailsView(postId: DevPreview.samplePosts.first!.id)
+            PostDetailsView(postId: DevPreview.postsForCloud.first!.id)
                 .environmentObject(createPreviewViewModel())
         }
-            }
+    }
     private func createPreviewViewModel() -> PostsViewModel {
         let viewModel = PostsViewModel()
-        viewModel.allPosts = DevPreview.samplePosts
+        viewModel.allPosts = DevPreview.postsForCloud
         return viewModel
     }
-
+    
 }
 
 #Preview {

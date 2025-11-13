@@ -1,0 +1,111 @@
+//
+//  EraseAllPostsView.swift
+//  StartToSwiftUI
+//
+//  Created by Andrey Efimov on 09.09.2025.
+//
+
+import SwiftUI
+
+struct EraseAllPostsView: View {
+    
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var vm: PostsViewModel
+    
+    private let hapticManager = HapticService.shared
+    
+    @State private var isDeleted: Bool = false
+    @State private var isShowingShareBackupSheet: Bool = false
+    @State private var isInProgress = false
+    
+    @State private var postCount: Int = 0
+    
+    var body: some View {
+        VStack {
+            textSection
+                .managingPostsTextFormater()
+            
+            CapsuleButtonView(
+                primaryTitle: "Delete All Posts",
+                secondaryTitle: "\(postCount) Posts Deleted!",
+                textColorPrimary: Color.mycolor.myButtonTextRed,
+                buttonColorPrimary: Color.mycolor.myButtonBGRed,
+                buttonColorSecondary: Color.mycolor.myButtonBGGreen,
+                isToChange: isDeleted) {
+                    isInProgress = true
+                    vm.eraseAllPosts{
+                        isDeleted = true
+                        isInProgress = false
+                        vm.isFirstImportPostsCompleted = false
+                        DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+                            dismiss()
+                        }
+                    }
+                }
+                .padding(.top, 30)
+                .onChange(of: vm.allPosts.count, { oldValue, _ in
+                    postCount = oldValue
+                })
+                .disabled(isDeleted)
+            
+            Spacer()
+            
+            if isInProgress {
+                RotatingRingProgressView()
+            }
+        }
+        .padding(.horizontal, 30)
+        .padding(.top, 30)
+        .padding(30)
+        .onAppear {
+            hapticManager.notification(type: .warning)
+        }
+    }
+    
+    // MARK: Subviews
+
+    private var textSection: some View {
+        VStack(spacing: 12) {
+            Text("""
+            **You are about to delete all the posts.**
+            """
+            )
+            .font(.subheadline)
+            .frame(maxWidth: .infinity)
+            .multilineTextAlignment(.center)
+//            .border(.red)
+
+            Text("""
+            What you can do after:
+            - download the curated collection, 
+            - create own posts, or
+            - restore backup.
+            """
+            )
+            .font(.subheadline)
+            .frame(maxWidth: .infinity)
+            .multilineTextAlignment(.leading)
+//            .border(.red)
+            
+            Text("""
+            
+            It is recommended
+            to backup posts before deleting them.
+            """)
+            .foregroundStyle(Color.mycolor.myRed)
+            .bold()
+            .frame(maxWidth: .infinity)
+            .multilineTextAlignment(.center)
+//            .border(.red)
+        }
+        .font(.subheadline)
+//        .multilineTextAlignment(.leading)
+
+    }
+}
+
+#Preview {
+    EraseAllPostsView()
+        .environmentObject(PostsViewModel())
+    
+}
