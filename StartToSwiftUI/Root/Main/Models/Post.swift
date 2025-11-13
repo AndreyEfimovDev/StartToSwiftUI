@@ -22,6 +22,7 @@ struct Post: Identifiable, Hashable, Codable {
     var favoriteChoice: FavoriteChoice // to mark favourite posts
     var notes: String // free text field/notes to enter everything you wish
     let origin: PostOrigin // origin source of the post: local created or downloaded from cloud curated by the developer
+    var draft: Bool // draft sign: true - draft, false - not draft
     let date: Date // date of creating the post
     
     init(
@@ -38,6 +39,7 @@ struct Post: Identifiable, Hashable, Codable {
         favoriteChoice: FavoriteChoice = .no,
         notes: String = "",
         origin: PostOrigin = .cloud,
+        draft: Bool = false,
         date: Date = .now
     ) {
         self.id = id
@@ -53,6 +55,7 @@ struct Post: Identifiable, Hashable, Codable {
         self.favoriteChoice = favoriteChoice
         self.notes = notes
         self.origin = origin
+        self.draft = draft
         self.date = date
     }
 }

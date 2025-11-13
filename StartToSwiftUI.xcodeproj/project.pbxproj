@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		47069F002EAFF6210082AE12 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47069EFF2EAFF6210082AE12 /* LaunchView.swift */; };
 		470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */; };
+		471BBF9A2EC5F6170004AC45 /* PostDraftsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471BBF992EC5F6170004AC45 /* PostDraftsView.swift */; };
 		471DCBCA2EBB633300AFA5F4 /* PrivacyPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBC92EBB633300AFA5F4 /* PrivacyPolicy.swift */; };
 		471DCBCE2EBB83D200AFA5F4 /* LegalInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBCD2EBB83D200AFA5F4 /* LegalInformationView.swift */; };
 		471DCBD02EBB88A400AFA5F4 /* CopyrightPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBCF2EBB88A400AFA5F4 /* CopyrightPolicy.swift */; };
@@ -74,6 +75,7 @@
 /* Begin PBXFileReference section */
 		47069EFF2EAFF6210082AE12 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleStrokeButtonView.swift; sourceTree = "<group>"; };
+		471BBF992EC5F6170004AC45 /* PostDraftsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDraftsView.swift; sourceTree = "<group>"; };
 		471BEF4F2EA793880093F962 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		471DCBC92EBB633300AFA5F4 /* PrivacyPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicy.swift; sourceTree = "<group>"; };
 		471DCBCD2EBB83D200AFA5F4 /* LegalInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegalInformationView.swift; sourceTree = "<group>"; };
@@ -371,6 +373,7 @@
 			isa = PBXGroup;
 			children = (
 				47B4657F2E6867930059CCB7 /* HomeView.swift */,
+				471BBF992EC5F6170004AC45 /* PostDraftsView.swift */,
 				4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */,
 				475997602E5CC0F8008E20F0 /* PostDetailsView.swift */,
 				4791CE032E748DA200687126 /* AddEditPostSheet.swift */,
@@ -497,6 +500,7 @@
 				471DCBCA2EBB633300AFA5F4 /* PrivacyPolicy.swift in Sources */,
 				470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */,
 				47BAF0F62E6485B000287F10 /* SegmentedOneLinePicker.swift in Sources */,
+				471BBF9A2EC5F6170004AC45 /* PostDraftsView.swift in Sources */,
 				4791CDAF2E70187E00687126 /* PreferencesView.swift in Sources */,
 				47453E042EAB73A9000D2C16 /* Date.swift in Sources */,
 				47069F002EAFF6210082AE12 /* LaunchView.swift in Sources */,

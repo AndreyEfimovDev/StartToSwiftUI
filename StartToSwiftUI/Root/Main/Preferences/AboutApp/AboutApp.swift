@@ -61,14 +61,13 @@ struct AboutApp: View {
         .padding(.horizontal)
         
         Form {
-            NavigationLink("Intro") {
-                Intro()
-            }
-            NavigationLink("Welcome message") {
+            NavigationLink("Welcome") {
                 WelcomeMessage()
             }
-            
-            NavigationLink("App functionality") {
+            NavigationLink("Introduction") {
+                Intro()
+            }
+            NavigationLink("Functionality") {
                 Functionality()
             }
         } // Form
