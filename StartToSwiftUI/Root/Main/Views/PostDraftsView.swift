@@ -39,7 +39,14 @@ struct PostDraftsView: View {
         
         ForEach(vm.allPosts.filter { $0.draft == true }) { post in
             PostRowView(post: post)
+                .onTapGesture {
+                    selectedPost = post
+                }
         }
+        .fullScreenCover(item: $selectedPost) { post in
+            AddEditPostSheet(post: post)
+        }
+
     }
 }
 

@@ -347,8 +347,8 @@ struct HomeView: View {
 }
 
 #Preview {
-    NavigationStack {
+//    NavigationStack {
         HomeView()
             .environmentObject(PostsViewModel())
-    }
+//    }
 }
