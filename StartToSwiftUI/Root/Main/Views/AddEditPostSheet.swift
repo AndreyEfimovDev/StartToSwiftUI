@@ -26,8 +26,9 @@ struct AddEditPostSheet: View {
     @State private var draftPost: Post?
     @State private var isNewPost: Bool
     
-    @State var isShowingMenuConfirmation: Bool = false
-    @State var isMenuConfirmationBlocked: Bool = false
+    @State private var isPostDraftSaved: Bool = false
+    @State private var isShowingMenuConfirmation: Bool = false
+    @State private var isMenuConfirmationBlocked: Bool = false
     
     @State private var deleteItem = false
     
@@ -53,9 +54,9 @@ struct AddEditPostSheet: View {
     @State var alertMessage: String = ""
     
     let templateForNewPost: Post = Post(
-        category: "", title: "", intro: "", author: "", urlString: "",
+        category: "", title: "", intro: "", author: "", urlString: "https://",
         postPlatform: .youtube, postDate: nil, studyLevel: .beginner,
-        favoriteChoice: .no, notes: "", origin: .local
+        favoriteChoice: .no, notes: "", origin: .local, draft: true
     )
     
     enum PostAlerts {
@@ -126,9 +127,10 @@ struct AddEditPostSheet: View {
                 iconName: "checkmark",
                 isShownCircle: false)
             {
-                if editedPost == draftPost {  // if no changes
+                if editedPost.draft == false && editedPost == draftPost {  // if no changes
                     dismiss()
                 } else {
+                    editedPost.draft = false
                     checkPostAndSave()
                 }
             }
@@ -515,54 +517,41 @@ struct AddEditPostSheet: View {
                             .multilineTextAlignment(.center)
                             .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
                         
+                        
+                            ClearCupsuleButton(
+                                primaryTitle: "Yes",
+                                primaryTitleColor: Color.mycolor.myRed) {
+                                    dismiss()
+                                }
+                                .disabled(isMenuConfirmationBlocked)
+                        
                         ClearCupsuleButton(
-                            primaryTitle: "Yes",
-                            primaryTitleColor: Color.mycolor.myRed) {
-//                          vm.isPostDraftSaved = false // потом убрать
-                                dismiss()
+                            primaryTitle: "Save draft",
+                            primaryTitleColor: Color.mycolor.myBlue) {
+                                editedPost.draft = true
+                                checkPostAndSave()
+                                hapticManager.notification(type: .success)
+                                isPostDraftSaved = true
+                                isMenuConfirmationBlocked = true
+                                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+                                    isMenuConfirmationBlocked = false
+                                }
                             }
                             .disabled(isMenuConfirmationBlocked)
-//                        
-//                        ClearCupsuleButton(
-//                            primaryTitle: "Save draft",
-//                            secondaryTitle: "Draft saved",
-//                            secondaryTitleColor: Color.mycolor.myGreen,
-//                            isToChange: vm.isPostDraftSaved) {
-//                                
-//                                vm.titlePostSaved = editedPost.title
-//                                vm.introPostSaved = editedPost.intro
-//                                vm.authorPostSaved = editedPost.author
-//                                vm.typePostSaved = editedPost.postType
-//                                vm.urlStringPostSaved = editedPost.urlString
-//                                vm.platformPostSaved = editedPost.postPlatform
-//                                vm.datePostSaved = editedPost.postDate
-//                                vm.studyLevelPostSaved = editedPost.studyLevel
-//                                vm.favoriteChoicePostSaved = editedPost.favoriteChoice
-//                                vm.additionalTextPostSaved = editedPost.additionalText
-//                                
-//                                isMenuConfirmationBlocked = true
-//                                hapticManager.notification(type: .success)
-//                                vm.isPostDraftSaved = true
-//                                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-//                                    isMenuConfirmationBlocked = false
-//                                    dismiss()
-//                                }
-//                            }
-//                            .disabled(isMenuConfirmationBlocked)
 
-                        ClearCupsuleButton(
-                            primaryTitle: "No",
-                            primaryTitleColor: Color.mycolor.myAccent) {
-//                          vm.isPostDraftSaved = false // потом убрать
-                                focusedField = focusedFieldSaved
-                                isShowingMenuConfirmation = false
-                            }
-                            .disabled(isMenuConfirmationBlocked)
+                            ClearCupsuleButton(
+                                primaryTitle: "Cancel",
+                                primaryTitleColor: Color.mycolor.myAccent) {
+                                    focusedField = focusedFieldSaved
+                                    isShowingMenuConfirmation = false
+                                }
+                                .disabled(isMenuConfirmationBlocked)
                     }
                     .padding()
                     .background(.regularMaterial)
                     .cornerRadius(30)
                     .padding(.horizontal, 40)
+                    .opacity(isPostDraftSaved ? 0.2 : 1)
                 }
     }
     
@@ -620,19 +609,25 @@ struct AddEditPostSheet: View {
                 message: Text(alertMessage),
                 dismissButton: .default(Text("OK")))
         case .success:
-            if isNewPost {
+//            if isNewPost {
                 return Alert(
-                    title: Text("New Post added successfully"),
+                    title: Text(
+                        isNewPost ? "New Post added successfully" : "Edited Post saved successfully"
+                    ),
                     message: Text("Tap OK to continue"),
-                    dismissButton: .default(Text("OK")) { dismiss() }
+                    dismissButton: .default(Text("OK")) {
+                        dismiss()
+                    }
                 )
-            } else {
-                return Alert(
-                    title: Text("Edited Post saved successfully"),
-                    message: Text("Tap OK to continue"),
-                    dismissButton: .default(Text("OK")) { dismiss() }
-                )
-            }
+//            } else {
+//                return Alert(
+//                    title: Text("Edited Post saved successfully"),
+//                    message: Text("Tap OK to continue"),
+//                    dismissButton: .default(Text("OK")) {
+//                        dismiss()
+//                    }
+//                )
+//            }
         default:
             return Alert(title: Text("ERROR"))
         }

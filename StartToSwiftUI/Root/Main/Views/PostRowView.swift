@@ -37,25 +37,13 @@ struct PostRowView: View {
     // MARK: Subviews
     
     private var title: some View {
-        HStack {
-            Text(post.title)
-                .font(.title3)
-                .fontWeight(.bold)
-                .minimumScaleFactor(0.75)
-                .lineLimit(1)
-            Spacer()
-            if post.origin == .cloud {
-                Image(systemName: "cloud")
-                    .font(.caption2)
-                    .foregroundStyle(Color.mycolor.mySecondaryText)
-            }
-
-            Image(systemName: post.favoriteChoice == .yes ? "heart.fill" : "heart")
-                .font(.caption2)
-                .foregroundStyle(post.favoriteChoice == .yes ? Color.mycolor.myYellow : Color.mycolor.mySecondaryText)
-        }
-        .padding(.top, 8)
-
+        Text(post.title)
+            .font(.title3)
+            .fontWeight(.bold)
+            .minimumScaleFactor(0.75)
+            .lineLimit(1)
+            .padding(.top, 8)
+        
     }
     
     private var author: some View {
@@ -68,10 +56,29 @@ struct PostRowView: View {
     }
     
     private var level: some View {
-        Text(post.studyLevel.rawValue.capitalized + " level")
-            .font(.body)
-            .fontWeight(.medium)
-            .foregroundStyle(post.studyLevel.color)
+        
+        HStack {
+            Text(post.studyLevel.rawValue.capitalized + " level")
+                .font(.body)
+                .fontWeight(.medium)
+                .foregroundStyle(post.studyLevel.color)
+            Spacer()
+            
+            if post.draft == true {
+                Image(systemName: "square.stack.3d.up")
+                    .font(.caption2)
+                    .foregroundStyle(Color.mycolor.mySecondaryText)
+            }
+            if post.origin == .cloud {
+                Image(systemName: "cloud")
+                    .font(.caption2)
+                    .foregroundStyle(Color.mycolor.mySecondaryText)
+            }
+            
+            Image(systemName: post.favoriteChoice == .yes ? "heart.fill" : "heart")
+                .font(.caption2)
+                .foregroundStyle(post.favoriteChoice == .yes ? Color.mycolor.myYellow : Color.mycolor.mySecondaryText)
+        }
     }
     
 }

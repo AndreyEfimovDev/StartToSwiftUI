@@ -23,7 +23,7 @@ struct DevPreview {
         studyLevel: .beginner,
         favoriteChoice: .yes,
         notes: "",
-        origin: .cloud
+        origin: .cloud,
     )
     
     static let samplePost2 = Post(
