@@ -42,7 +42,7 @@ struct WelcomeMessage: View {
             .padding(.horizontal)
         }
         .foregroundStyle(Color.mycolor.myAccent)
-        .navigationTitle("Welcome message")
+        .navigationTitle("Welcome")
     }
 }
 
