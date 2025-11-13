@@ -18,5 +18,3 @@ struct Constants {
     static let localFileName = "posts_app.json"
     
 }
-
-// https://github.com/AndreyEfimovDev/StartToSwiftUI/blob/development/cloudPosts.json
