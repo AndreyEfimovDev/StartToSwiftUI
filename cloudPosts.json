@@ -1,21 +1,5 @@
 [
   {
-    "urlString" : "https:\/\/www.youtube.com\/watch?v=rbtIcKKxQ38",
-    "intro" : "In this video we are going to explore how we can stylize text for our Text views in SwiftUI.\nWe will start by looking at how we can create a `Text` view with the Markdown-formatted base postLanguage version of the string as the localization key,\nWe will also see how we can utilize string interpolation to combine and stylize our strings and present them in a text view.\nAnd finally, we will take a quick look at the power of Attributed strings in SwiftUI.",
-    "notes" : "",
-    "title" : "Styling SwiftUI Text Views",
-    "category" : "SwiftUI",
-    "postDate" : "2021-05-07T00:00:00Z",
-    "studyLevel" : "middle",
-    "postType" : "post",
-    "id" : "A6FDFAFB-AD7F-4FDD-885A-9F4B7B8C6F45",
-    "date" : "2025-11-08T14:34:40Z",
-    "favoriteChoice" : "no",
-    "origin" : "cloud",
-    "postPlatform" : "youtube",
-    "author" : "Stewart Lynch"
-  },
-  {
     "urlString" : "https:\/\/nilcoalescing.com\/blog\/CustomizingTheAppearanceOfSymbolImagesInSwiftUI\/",
     "intro" : "Symbol images are vector-based icons from Apple's SF Symbols library, designed for use across Apple platforms. These scalable images adapt to different sizes and weights, ensuring consistent, high-quality icons throughout our apps. Using symbol images in SwiftUI is straightforward with the Image view and the system name of the desired symbol.",
     "notes" : "",
