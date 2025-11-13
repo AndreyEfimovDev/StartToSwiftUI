@@ -81,7 +81,7 @@ struct DevPreview {
             intro: """
             In this video we will add local push notifications to our app! We will learn how to request permissions from the user and then schedule the notifications with 3 different triggers. The 1st will be based on time, the 2nd based on date, and the 3rd based on location. Apple has made adding these notifications extremely easy and they will give your app a very professional feel!
             """,
-            author: "Swiftful Thinking",
+            author: "Swiftful Thinking", // Nick Sarno
             urlString: "https://www.youtube.com/watch?v=mG9BVAs8AIo",
             postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 4, day: 9),
