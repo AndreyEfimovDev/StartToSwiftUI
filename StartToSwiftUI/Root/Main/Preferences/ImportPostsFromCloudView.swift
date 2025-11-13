@@ -102,16 +102,16 @@ struct ImportPostsFromCloudView: View {
     }
     
     private func importFromCloud() {
-        
-        //        vm.loadPersistentPosts() {
-        //            isInProgress = false
-        //            isLoaded = true
-        ////            vm.isFirstImportPostsCompleted = true
-        //            hapticManager.notification(type: .success)
-        //            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-        //                dismiss()
-        //            }
-        //        }
+//        
+//                vm.loadPersistentPosts() {
+//                    isInProgress = false
+//                    isLoaded = true
+//        //            vm.isFirstImportPostsCompleted = true
+//                    hapticManager.notification(type: .success)
+//                    DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+//                        dismiss()
+//                    }
+//                }
         
         
         vm.importPostsFromCloud() {
