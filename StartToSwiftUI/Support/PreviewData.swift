@@ -48,7 +48,7 @@ struct DevPreview {
         And finally, we will take a quick look at the power of Attributed strings in SwiftUI.
         """,
         author: "Stewart Lynch",
-        urlString: "https://www.youtube.com/watch?v=rbtIcKKxQ38", //
+        urlString: "https://www.youtube.com/watch?v=rbtIcKKxQ38/",
         postPlatform: .website,
         postDate: Date.from(year: 2022, month: 8, day: 11),
         studyLevel: .middle,
@@ -85,11 +85,12 @@ struct DevPreview {
             And finally, we will take a quick look at the power of Attributed strings in SwiftUI.
             """,
             author: "Stewart Lynch",
-            urlString: "https://www.youtube.com/watch?v=rbtIcKKxQ38",
+            urlString: "https://www.youtube.com/watch?v=rbtIcKKxQ38/",
             postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 5, day: 7),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloud,
+            draft: true
         ),
         Post(
             title: "Customizing the appearance of symbol images in SwiftUI",
@@ -109,7 +110,7 @@ struct DevPreview {
             urlString: "https://softwareanders.com/swiftui-viewbuilder-organize-your-views/",
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 6, day: 27),
-            studyLevel: .advanced,
+            studyLevel: .middle,
             origin: .cloud
         ),
         Post(

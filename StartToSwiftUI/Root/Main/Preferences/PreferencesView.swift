@@ -37,13 +37,14 @@ struct PreferencesView: View {
                     notificationSetting
                 }
                 Section(header: sectionHeader("Managing posts (\(postsCount))")) {
+                    
+                    workingWithDrafts
+                    
                     if (!vm.allPosts.isEmpty || vm.isPostsUpdateAvailable) && vm.isFirstImportPostsCompleted {
                         checkForPostsUpdate
                     }
                     
-//                    if !vm.isFirstImportPostsCompleted {
-                        importFromCloud
-//                    }
+                    importFromCloud
                     shareBackup
                     restoreBackup
                     erasePosts
@@ -83,6 +84,15 @@ struct PreferencesView: View {
         }
     }
     
+    private var workingWithDrafts: some View {
+        NavigationLink("Post drafts") {
+                    }
+        .customPreferencesListRowStyle(
+            iconName: "square.stack.3d.up",
+            iconWidth: iconWidth
+        )
+    }
+    
     private var checkForPostsUpdate: some View {
         NavigationLink("Check posts updates") {
             CheckForPostsUpdateView()
@@ -92,6 +102,7 @@ struct PreferencesView: View {
             iconWidth: iconWidth
         )
     }
+
     
     private var importFromCloud: some View {
         NavigationLink("Download the curated collection") {
@@ -170,21 +181,20 @@ struct PreferencesView: View {
 }
 
 
-// MARK: - Wrapping all child views for lazy loading (for testing)
-
-struct LazyView<Content: View>: View {
-    
-    let build: () -> Content
-    
-    init(_ build: @escaping () -> Content) {
-        self.build = build
-    }
-    
-    var body: Content {
-        build()
-    }
-}
-
+//// MARK: - Wrapping all child views for lazy loading (for testing)
+//
+//struct LazyView<Content: View>: View {
+//    
+//    let build: () -> Content
+//    
+//    init(_ build: @escaping () -> Content) {
+//        self.build = build
+//    }
+//    
+//    var body: Content {
+//        build()
+//    }
+//}
 
 
 #Preview {
