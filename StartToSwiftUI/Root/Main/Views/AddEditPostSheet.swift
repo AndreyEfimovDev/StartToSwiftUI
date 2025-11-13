@@ -28,9 +28,9 @@ struct AddEditPostSheet: View {
     
     @State private var isPostDraftSaved: Bool = false
     @State private var isShowingMenuConfirmation: Bool = false
-    @State private var isMenuConfirmationBlocked: Bool = false
+//    @State private var isMenuConfirmationBlocked: Bool = false
     
-    @State private var deleteItem = false
+//    @State private var deleteItem = false
     
     private let sectionBackground: Color = Color.mycolor.mySectionBackground
     private let sectionCornerRadius: CGFloat = 8
@@ -123,6 +123,7 @@ struct AddEditPostSheet: View {
     @ToolbarContentBuilder
     private func toolbarForAddEditView() -> some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
+            // SAVE button
             CircleStrokeButtonView(
                 iconName: "checkmark",
                 isShownCircle: false)
@@ -140,7 +141,8 @@ struct AddEditPostSheet: View {
                     alertMessage: alertMessage)
             }
         }
-        ToolbarItem(placement: .topBarTrailing) { //
+        ToolbarItem(placement: .topBarTrailing) {
+            // Exit button
             CircleStrokeButtonView(
                 iconName: "xmark",
                 imageColorPrimary: Color.mycolor.myRed,
@@ -502,70 +504,63 @@ struct AddEditPostSheet: View {
     }
     
     private var exitMenuConfirmation: some View {
-                ZStack {
-                    Color.mycolor.myAccent.opacity(0.4)
-                        .ignoresSafeArea()
-                    
-                    VStack(spacing: 20) {
-                        Text("DATA IS NOT SAVED!")
-                            .font(.headline)
-                            .bold()
-                            .foregroundColor(Color.mycolor.myRed)
-                        
-                        Text("Are you sure to exit without saving your data?")
-                            .font(.subheadline)
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
-                        
-                        
-                            ClearCupsuleButton(
-                                primaryTitle: "Yes",
-                                primaryTitleColor: Color.mycolor.myRed) {
-                                    dismiss()
-                                }
-                                .disabled(isMenuConfirmationBlocked)
-                        
-                        ClearCupsuleButton(
-                            primaryTitle: "Save draft",
-                            primaryTitleColor: Color.mycolor.myBlue) {
-                                editedPost.draft = true
-                                checkPostAndSave()
-                                hapticManager.notification(type: .success)
-                                isPostDraftSaved = true
-                                isMenuConfirmationBlocked = true
-                                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                                    isMenuConfirmationBlocked = false
-                                }
-                            }
-                            .disabled(isMenuConfirmationBlocked)
-
-                            ClearCupsuleButton(
-                                primaryTitle: "Cancel",
-                                primaryTitleColor: Color.mycolor.myAccent) {
-                                    focusedField = focusedFieldSaved
-                                    isShowingMenuConfirmation = false
-                                }
-                                .disabled(isMenuConfirmationBlocked)
+        ZStack {
+            Color.mycolor.myAccent.opacity(0.4)
+                .ignoresSafeArea()
+            
+            VStack(spacing: 8) {
+                Text("DATA IS NOT SAVED!")
+                    .font(.headline)
+                    .bold()
+                    .foregroundColor(Color.mycolor.myRed)
+                
+                Text("Are you sure to exit without saving your data?")
+                    .font(.subheadline)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
+                
+                
+                ClearCupsuleButton(
+                    primaryTitle: "Yes",
+                    primaryTitleColor: Color.mycolor.myRed) {
+                        dismiss()
                     }
-                    .padding()
-                    .background(.regularMaterial)
-                    .cornerRadius(30)
-                    .padding(.horizontal, 40)
-                    .opacity(isPostDraftSaved ? 0.2 : 1)
-                }
+                
+                ClearCupsuleButton(
+                    primaryTitle: "Save draft",
+                    primaryTitleColor: Color.mycolor.myBlue) {
+                        editedPost.draft = true
+                        isPostDraftSaved = true
+                        hapticManager.notification(type: .success)
+                        checkPostAndSave()
+                    }
+                
+                ClearCupsuleButton(
+                    primaryTitle: "Cancel",
+                    primaryTitleColor: Color.mycolor.myAccent) {
+                        focusedField = focusedFieldSaved
+                        isShowingMenuConfirmation = false
+                    }
+            }
+            .padding()
+            .background(.regularMaterial)
+            .cornerRadius(30)
+            .padding(.horizontal, 40)
+            .opacity(isPostDraftSaved ? 0 : 1)
+        }
     }
     
     // MARK: Functions
     
     private func checkPostAndSave() {
         
-        if !textIsAppropriate(text: editedPost.title, limit: 3) {
+        if !isTexLengthAppropriate(text: editedPost.title, limit: 3) {
                 alertType = .error
                 alertTitle = "The Title must contain at least 3 characters."
                 alertMessage = "Please correct the Title."
                 focusedField = .postTitle
                 showAlert.toggle()
-        } else if !textIsAppropriate(text: editedPost.author, limit: 2) {
+        } else if !isTexLengthAppropriate(text: editedPost.author, limit: 2) {
                 alertType = .error
                 alertTitle = "The Author must contain at least 2 characters."
                 alertMessage = "Please correct the Author."
@@ -594,7 +589,7 @@ struct AddEditPostSheet: View {
         }
     
     
-    private func textIsAppropriate(text: String, limit: Int) -> Bool {
+    private func isTexLengthAppropriate(text: String, limit: Int) -> Bool {
         return text.count >= limit
     }
     
@@ -609,25 +604,33 @@ struct AddEditPostSheet: View {
                 message: Text(alertMessage),
                 dismissButton: .default(Text("OK")))
         case .success:
-//            if isNewPost {
+            if isPostDraftSaved {
                 return Alert(
-                    title: Text(
-                        isNewPost ? "New Post added successfully" : "Edited Post saved successfully"
-                    ),
+                    title: Text("Draft saved successfully"),
                     message: Text("Tap OK to continue"),
                     dismissButton: .default(Text("OK")) {
                         dismiss()
                     }
                 )
-//            } else {
-//                return Alert(
-//                    title: Text("Edited Post saved successfully"),
-//                    message: Text("Tap OK to continue"),
-//                    dismissButton: .default(Text("OK")) {
-//                        dismiss()
-//                    }
-//                )
-//            }
+            }
+            
+            if isNewPost {
+                return Alert(
+                    title: Text("New Post added successfully"),
+                    message: Text("Tap OK to continue"),
+                    dismissButton: .default(Text("OK")) {
+                        dismiss()
+                    }
+                )
+            }
+            return Alert(
+                title: Text("Post saved successfully"),
+                message: Text("Tap OK to continue"),
+                dismissButton: .default(Text("OK")) {
+                    dismiss()
+                }
+            )
+            
         default:
             return Alert(title: Text("ERROR"))
         }

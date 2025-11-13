@@ -80,6 +80,7 @@ class PostsViewModel: ObservableObject {
 //    @AppStorage("additionalTextPostSaved") var additionalTextPostSaved: String?
 //    
     // stored the date of the Cloud posts last imported
+    let beginningDate: Date = (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date())
     @AppStorage("localLastUpdated") var localLastUpdated: Date = (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date())
     
     // setting filters
@@ -490,6 +491,8 @@ class PostsViewModel: ObservableObject {
                         // Updating App posts
                         self?.allPosts.append(contentsOf: cloudPostsAfterCheckForUniqueID)
                         self?.hapticManager.notification(type: .success)
+                        self?.localLastUpdated = self?.getLatestDateFromPosts(posts: cloudPostsAfterCheckForUniqueID) ?? .now
+
                         print("✅ Successfully imported \(cloudPostsAfterCheckForUniqueID.count) posts from the cloud")
                     } else {
                         self?.hapticManager.impact(style: .light)
@@ -596,7 +599,6 @@ class PostsViewModel: ObservableObject {
                    let theLatestDateInCloudPosts = self.getLatestDateFromPosts(posts: cloudPosts) {
                     hasUpdates = theLatestDateInLocalPosts < theLatestDateInCloudPosts
                 }
-                
                 if hasUpdates {
                     print("✅ checkCloudForUpdates: Posts update is available")
 
