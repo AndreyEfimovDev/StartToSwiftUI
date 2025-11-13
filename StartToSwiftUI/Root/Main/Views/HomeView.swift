@@ -58,8 +58,8 @@ struct HomeView: View {
                     .fullScreenCover(isPresented: $showAddPostView) {
                         AddEditPostSheet(post: nil)
                     }
-                    .fullScreenCover(item: $selectedPost) { post in
-                        AddEditPostSheet(post: post)
+                    .fullScreenCover(item: $selectedPost) { selectedPostToEdit in
+                        AddEditPostSheet(post: selectedPostToEdit)
                     }
                     .sheet(isPresented: $isFilterButtonPressed) {
                         FiltersSheetView(
@@ -347,8 +347,8 @@ struct HomeView: View {
 }
 
 #Preview {
-    NavigationStack {
+//    NavigationStack {
         HomeView()
             .environmentObject(PostsViewModel())
-    }
+//    }
 }

@@ -29,6 +29,12 @@ struct PreferencesView: View {
     private var postsCount: Int {
             vm.allPosts.count
         }
+    
+    private var draftsCount: Int {
+        let postDrafts = vm.allPosts.filter { $0.draft == true }
+        return postDrafts.count
+        }
+
         
     var body: some View {
         NavigationStack {
@@ -38,7 +44,7 @@ struct PreferencesView: View {
                 }
                 Section(header: sectionHeader("Managing posts (\(postsCount))")) {
                     
-                    workingWithDrafts
+                    postDrafts
                     
                     if (!vm.allPosts.isEmpty || vm.isPostsUpdateAvailable) && vm.isFirstImportPostsCompleted {
                         checkForPostsUpdate
@@ -79,14 +85,15 @@ struct PreferencesView: View {
             Image(systemName: "bell")
                 .frame(width: iconWidth)
                 .foregroundStyle(Color.mycolor.myBlue)
-            Toggle("Notification", isOn: $vm.isNotification)
+            Toggle("Notification for posts update", isOn: $vm.isNotification)
                 .tint(Color.mycolor.myBlue)
         }
     }
     
-    private var workingWithDrafts: some View {
-        NavigationLink("Post drafts") {
-                    }
+    private var postDrafts: some View {
+        NavigationLink("Post drafts (\(draftsCount))") {
+            PostDraftsView()
+        }
         .customPreferencesListRowStyle(
             iconName: "square.stack.3d.up",
             iconWidth: iconWidth

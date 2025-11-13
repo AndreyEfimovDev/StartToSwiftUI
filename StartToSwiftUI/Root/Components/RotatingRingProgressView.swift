@@ -17,7 +17,7 @@ struct RotatingRingProgressView: View {
             .frame(width: 20, height: 20)
             .rotationEffect(Angle(degrees: isRotating ? 360 : 0))
             .animation(
-                .linear(duration: 1.0)
+                .linear(duration: 0.5)
                 .repeatForever(autoreverses: false),
                 value: isRotating
             )
