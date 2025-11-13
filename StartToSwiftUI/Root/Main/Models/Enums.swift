@@ -8,17 +8,35 @@
 import Foundation
 import SwiftUI
 
-//enum LanguageOptions: String, CaseIterable, Codable {
-//    case english
-//    case russian
-//    
-//    var displayName: String {
-//        switch self {
-//        case .english: return "EN"
-//        case .russian: return "RU"
-//        }
-//    }
-//}
+
+// MARK: Colour scheme
+
+enum Theme: String, CaseIterable, Codable {
+    case light, dark, system
+
+    var displayName: String {
+        switch self {
+        case .light: return "🌞 Light"
+        case .dark: return "🌙 Dark"
+        case .system: return "⚙️ System"
+        }
+    }
+}
+
+
+// MARK: Focusing post fields in AddEditPostView
+
+enum PostFields: Hashable {
+    case postTitle
+    case intro
+    case author
+    case urlString
+    case additionalInfo
+//    case postDate
+}
+
+
+// MARK: - DataModel Errors
 
 enum PostType: String, CaseIterable, Codable {
     case post
@@ -29,8 +47,8 @@ enum PostType: String, CaseIterable, Codable {
     
     var displayName: String {
         switch self {
-        case .post: return "Post"
-        case .course: return "Course"
+        case .post: return "Single"
+        case .course: return "Collection"
         case .solution: return "Solution"
         case .bug: return "Bug"
         case .other: return "Other"
@@ -38,28 +56,27 @@ enum PostType: String, CaseIterable, Codable {
     }
 }
 
+enum PostOrigin: String, CaseIterable, Codable {
+    case local
+    case cloud
+}
+
 
 enum FavoriteChoice: String, CaseIterable, Codable {
-    case yes
     case no
+    case yes
     
     var displayName: String {
         switch self {
-        case .yes: return "Yes"
         case .no: return "No"
+        case .yes: return "Yes"
         }
     }
 
     var icon: Image {
         switch self {
         case .yes: return Image(systemName: "star")
-//                .font(.body)
-//                .foregroundStyle(Color.mycolor.yellow)
-//                .frame(width: 30, height: 30)
         case .no: return Image(systemName: "star.fill")
-//                .font(.body)
-//                .foregroundStyle(Color.mycolor.secondaryText)
-//                .frame(width: 30, height: 30)
         }
     }
 
@@ -81,7 +98,7 @@ enum StudyLevel: String, CaseIterable, Codable {
     var color: Color {
         switch self {
         case .beginner: return Color.mycolor.myGreen
-        case .middle: return Color.mycolor.middle
+        case .middle: return Color.mycolor.myBlue
         case .advanced: return Color.mycolor.myRed
         }
     }
@@ -90,37 +107,57 @@ enum StudyLevel: String, CaseIterable, Codable {
 enum Platform: String, CaseIterable, Codable {
     case youtube
     case website
-    case others
+//    case others
     
     var displayName: String {
         switch self {
         case .youtube: return "YouTube"
-        case .website: return "WebSite"
-        case .others: return "Others"
+        case .website: return "Website"
+//        case .others: return "Others"
         }
     }
 }
 
+// MARK: - Network Errors
 
-enum Theme: String, CaseIterable, Codable {
-    case light, dark, system
-
-    var displayName: String {
+enum NetworkError: LocalizedError {
+    case invalidURL
+    case invalidResponse
+    case noData
+    
+    var errorDescription: String? {
         switch self {
-        case .light: return "🌞 Light"
-        case .dark: return "🌙 Dark"
-        case .system: return "⚙️ System"
+        case .invalidURL:
+            return "Invalid URL"
+        case .invalidResponse:
+            return "Invalid server response"
+        case .noData:
+            return "No data received"
         }
     }
 }
 
+// MARK: - File Storage Errors
 
-// edit and add cards
-enum PostFields: Hashable {
-    case postTitle
-    case intro
-    case author
-    case urlString
-    case additionalInfo
-//    case postDate
+enum FileStorageError: LocalizedError {
+    case fileNotFound
+    case invalidURL
+    case encodingFailed(Error)
+    case decodingFailed(Error)
+    case fileSystemError(Error)
+    
+    var errorDescription: String? {
+        switch self {
+        case .fileNotFound:
+            return "File not found"
+        case .invalidURL:
+            return "Invalid file URL"
+        case .encodingFailed(let error):
+            return "Encoding failed: \(error.localizedDescription)"
+        case .decodingFailed(let error):
+            return "Decoding failed: \(error.localizedDescription)"
+        case .fileSystemError(let error):
+            return "File system error: \(error.localizedDescription)"
+        }
+    }
 }

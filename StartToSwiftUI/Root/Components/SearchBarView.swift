@@ -9,20 +9,21 @@ import SwiftUI
 
 struct SearchBarView: View {
     
+    @EnvironmentObject private var vm: PostsViewModel
+
     @FocusState private var isFocusedOnSearchBar: Bool
-    
-    @Binding var searchText: String
     
     var body: some View {
         
         HStack {
             Image(systemName: "magnifyingglass")
                 .foregroundStyle(
-                    searchText.isEmpty ? Color.mycolor.mySecondaryText : Color.mycolor.myAccent
+                    vm.searchText.isEmpty ? Color.mycolor.mySecondaryText : Color.mycolor.myAccent
                 )
-            TextField("Search here ...", text: $searchText)
+            TextField("Search here ...", text: $vm.searchText)
                 .foregroundStyle(Color.mycolor.myAccent)
                 .autocorrectionDisabled(true)
+                .keyboardType(.asciiCapable)
                 .frame(height: isFocusedOnSearchBar ? 40 : 20)
                 .focused($isFocusedOnSearchBar)
                 .submitLabel(.search)
@@ -35,8 +36,10 @@ struct SearchBarView: View {
                         .offset(x: 8)
                         .opacity(isFocusedOnSearchBar ? 1 : 0)
                         .onTapGesture {
-                            isFocusedOnSearchBar = false
-                            searchText = ""
+                            withAnimation(.easeInOut(duration: 0.5)) {
+                                isFocusedOnSearchBar = false
+                                vm.searchText = ""
+                            }
                         }
                     , alignment: .trailing
                 )
@@ -45,19 +48,16 @@ struct SearchBarView: View {
         .padding(8)
         .background(
             ZStack {
-//                Capsule()
-//                    .fill(.ultraThickMaterial)
                 Capsule()
                     .stroke(
-                        searchText.isEmpty ? Color.mycolor.myAccent.opacity(0.3) : Color.mycolor.myAccent,
-                        lineWidth: 1
+                        !isFocusedOnSearchBar ? Color.mycolor.myAccent.opacity(0.3) : Color.mycolor.myBlue,
+                        lineWidth: !isFocusedOnSearchBar ? 1 : 3
                     )
             }
         )
         .padding(.horizontal, 8)
         .padding(.bottom, 8)
         .background(.ultraThickMaterial)
-
     }
 }
 
@@ -65,9 +65,8 @@ struct SearchBarView: View {
     ZStack {
         Color.pink.opacity(0.1)
             .ignoresSafeArea()
-        VStack {
-            SearchBarView(searchText: .constant(""))
-            SearchBarView(searchText: .constant("sample text types "))
-        }
+            SearchBarView()
     }
+    .environmentObject(PostsViewModel())
+
 }

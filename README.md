@@ -1,18 +1,48 @@
-Dear fellow learner,
-            
-The StartToSwiftUI app is designed to help beginners learn SwiftUI from the ground up.
-            
-When I first started learning SwiftUI, I was overwhelmed by the variety of self-study options available. Gradually, I began collecting lessons and articles (let's name them posts) from open sources with high-quality explanations of SwiftUI functionality. Later, I realised that I needed to revisit these posts several times to gain a deeper understanding of particular topics. I found it helpful to store and organise them so I could quickly find and use the information. As a result, I decided to create an app for this purpose. Creating my own app also helped me to put my theoretical knowledge into practice, moving it from my head to my heart.
-            
-The app offers the following features:
-- You can load pre-loaded posts (collected from available open sources) and work with them as you wish. You will receive a notification when a new version of the pre-loaded content is ready to download, allowing you to access new material. I strive to keep the pre-loaded articles up to date, though this cannot be guaranteed at all times.
-- You can add your own posts to create a personal library for learning SwiftUI.
-- You can edit and delete posts.
-- You can share all posts stored in the app or save them for backup and recovery purposes.
-            
-If you find this app useful, I would be very happy to hear from you.
-            
-Good luck with mastering SwiftUI!
-            
-Warmly,
-Andrey
+# StartToSwiftUI
+
+<p align="center">
+  <img src="https://img.shields.io/badge/SwiftUI-6+-blue.svg" alt="SwiftUI 6+">
+  <img src="https://img.shields.io/badge/iOS-18+-lightgrey.svg" alt="iOS 18+">
+  <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
+  <img src="https://img.shields.io/badge/price-Free-success.svg" alt="Free">
+</p>
+
+## 📖 Overview
+
+**StartToSwiftUI** is a free educational link aggregator designed to help you organise and manage learning materials for SwiftUI and related technologies. Created from personal learning experience, it provides a structured approach to collecting and accessing programming resources.
+
+> **The Story Behind the App**  
+> When I first began learning SwiftUI, I was overwhelmed by the sheer variety of learning resources. I created StartToSwiftUI to solve this—offering both a curated collection of quality materials and a personal space to build your own learning library.
+
+## ✨ Key Features
+
+### 🗂️ Personal Library
+- Create and manage your own collection of educational links
+- Add custom notes and categorise resources
+- Edit and organise materials to match your learning style
+
+### 🎯 Curated Collection
+- Access a pre-prepared collection of quality SwiftUI resources
+- Regular updates with new learning materials
+- Resources carefully selected for clarity and educational value
+
+### 🔍 Smart Organisation
+- Categorise resources by topic, difficulty level, post dates
+- Powerful search and filtering capabilities
+- Quick access to your frequently used favourite materials
+
+### ☁️ Sync & Backup
+- Cloud-synchronised curated collection
+- Backup and restore your personal library
+- Share collections with other learners
+
+## 🚀 Installation
+
+### Requirements
+- **iOS 18.0+ / iPadOS 18.0+**
+- **Xcode 16.0+** (for development)
+- **Swift 6.0** (language)
+- **SwiftUI 6.0** (framework)
+
+### Download
+Available on the App Store: [Download StartToSwiftUI](#) *(link to be added)*

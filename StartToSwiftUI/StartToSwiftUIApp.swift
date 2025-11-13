@@ -12,7 +12,10 @@ import SwiftUI
 struct StartToSwiftUIApp: App {
     
     @StateObject private var vm = PostsViewModel()
+    @State private var showLaunchView: Bool = true
     
+    private let hapticManager = HapticService.shared
+
     init() { // to set a custom colour for the magnifying class in the search bar
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor : UIColor(Color.mycolor.myAccent)]
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor(Color.mycolor.myAccent)]
@@ -22,9 +25,22 @@ struct StartToSwiftUIApp: App {
     
     var body: some Scene {
         WindowGroup {
-            HomeView()
-                .environmentObject(vm)
-//            CustomSwipActionButtons()
+            ZStack{
+                ZStack {
+                    if showLaunchView {
+                        LaunchView() {
+                            showLaunchView = false
+                            hapticManager.impact(style: .light)
+                        }
+                        .transition(.move(edge: .leading))
+                    }
+                }
+                .zIndex(1)
+
+                HomeView()
+                
+            }
+            .environmentObject(vm)
         }
     }
 }

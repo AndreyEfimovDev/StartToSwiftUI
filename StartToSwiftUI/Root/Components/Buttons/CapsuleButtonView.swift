@@ -1,8 +1,8 @@
 //
-//  CupsuleButtonView.swift
+//  CapsuleButtonView2.swift
 //  StartToSwiftUI
 //
-//  Created by Andrey Efimov on 12.09.2025.
+//  Created by Andrey Efimov on 30.10.2025.
 //
 
 import SwiftUI
@@ -11,24 +11,30 @@ struct CapsuleButtonView: View {
     
     let primaryTitle: String
     let secondaryTitle: String
+    let textColorPrimary: Color
+    let textColorSecondary: Color
     let buttonColorPrimary: Color
     let buttonColorSecondary: Color
-    let isToChangeTitle: Bool
+    let isToChange: Bool
     let action: () -> ()
     
     init(
         primaryTitle: String,
         secondaryTitle: String = "",
-        buttonColorPrimary: Color = Color.mycolor.myBlue,
-        buttonColorSecondary: Color = Color.mycolor.myGreen,
-        isToChangeTitile: Bool = false,
+        textColorPrimary: Color = Color.mycolor.myButtonTextPrimary,
+        textColorSecondary: Color = Color.mycolor.myButtonTextPrimary,
+        buttonColorPrimary: Color = Color.mycolor.myButtonBGBlue,
+        buttonColorSecondary: Color = Color.mycolor.myButtonBGGreen,
+        isToChange: Bool = false,
         action: @escaping () -> Void
     ) {
         self.primaryTitle = primaryTitle
         self.secondaryTitle = secondaryTitle
+        self.textColorPrimary = textColorPrimary
+        self.textColorSecondary = textColorSecondary
         self.buttonColorPrimary = buttonColorPrimary
         self.buttonColorSecondary = buttonColorSecondary
-        self.isToChangeTitle = isToChangeTitile
+        self.isToChange = isToChange
         self.action = action
     }
         
@@ -37,13 +43,16 @@ struct CapsuleButtonView: View {
         Button {
             action()
         } label: {
-            Text(isToChangeTitle ? secondaryTitle : primaryTitle)
+            Text(isToChange ? secondaryTitle : primaryTitle)
                 .font(.body)
                 .fontWeight(.semibold)
-                .foregroundColor(Color.mycolor.myBackground)
+                .foregroundColor(isToChange ? textColorSecondary : textColorPrimary)
                 .frame(height: 55)
                 .frame(maxWidth: .infinity)
-                .background(isToChangeTitle ? buttonColorSecondary : buttonColorPrimary, in: .capsule)
+                .background(
+                    isToChange ? buttonColorSecondary : buttonColorPrimary,
+                    in: .capsule
+                )
         }
     }
 }
@@ -57,13 +66,47 @@ fileprivate struct CupsuleButtonPreview: View {
         CapsuleButtonView(
             primaryTitle: "Primary title",
             secondaryTitle: "Secondary title",
-            buttonColorPrimary: .blue,
-            buttonColorSecondary: .green,
-            isToChangeTitile: true) {
+            isToChange: false) {
                 count += 1
             }
+        
+        
+        CapsuleButtonView(
+            primaryTitle: "Primary title",
+            secondaryTitle: "Secondary title",
+            textColorPrimary: Color.mycolor.myButtonTextPrimary,
+            isToChange: true) {
+                count += 1
+            }
+        
+        CapsuleButtonView(
+            primaryTitle: "Primary title",
+            secondaryTitle: "Secondary title",
+            textColorPrimary: Color.mycolor.myButtonTextRed,
+            buttonColorPrimary: Color.mycolor.myButtonBGRed) {
+                count += 1
+            }
+        
+        
+        CapsuleButtonView(
+            primaryTitle: "Primary title",
+            secondaryTitle: "Secondary title",
+            textColorPrimary: Color.mycolor.myButtonTextRed,
+            isToChange: true) {
+                count += 1
+            }
+        
+        CapsuleButtonView(
+            primaryTitle: "Primary title",
+            secondaryTitle: "Secondary title",
+            textColorPrimary: Color.mycolor.myButtonTextSecondary,
+            buttonColorPrimary: Color.mycolor.myButtonBGGray) {
+                count += 1
+            }
+
     }
 }
+
 
 #Preview {
     CupsuleButtonPreview()

@@ -13,6 +13,7 @@ struct FiltersSheetView: View {
     
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var vm: PostsViewModel
+    
     @Binding var isFilterButtonPressed: Bool
     @State private var updateFiltersSheetView: Bool = false
     
@@ -24,35 +25,29 @@ struct FiltersSheetView: View {
     var body: some View {
         
         VStack {
-            ZStack {
-                Capsule()
-                    .fill(Color.mycolor.myBackground)
-                    .overlay(
-                        Capsule()
-                            .stroke(Color.mycolor.myAccent.opacity(0.5), lineWidth: 1)
-                    )
-                    .frame(width: 100, height: 3)
-                    .frame(height: 30, alignment: .top)
-                    .padding(.bottom, 15)
-            }
-            .padding(.top, 5)
-            
+//            drugHundler
             VStack (alignment: .leading) {
                 Text("Filters")
                     .font(.largeTitle)
                     .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.top, 55)
+//                categoryFilter
+//                    .opacity(vm.allCategories == nil ? 0 : 1)
                 studyLevelFilter
                 favoriteFilter
-//                languageFilter
                 typeFilter
                 yearFilter
-                    .padding(.bottom, 50)
+                    .opacity(vm.allYears == nil ? 0 : 1)
+                
+                Spacer()
+                
+                applyFiltersButton
                 resetAllFiltersButton
                 resetAllFiltersAndExitButton
             }
             .foregroundStyle(Color.mycolor.myAccent)
             .padding(.top, -40)
-            .padding()
+            .padding(.horizontal)
             
             Spacer()
         }
@@ -63,7 +58,20 @@ struct FiltersSheetView: View {
         }
     }
     
-    // MARK: VAR VIEWS
+    // MARK: Subviews
+    
+//    private var drugHundler: some View {
+//        Capsule()
+//            .fill(Color.mycolor.myBackground)
+//            .overlay(
+//                Capsule()
+//                    .stroke(Color.mycolor.myAccent.opacity(0.5), lineWidth: 1)
+//            )
+//            .frame(width: 100, height: 3)
+//            .frame(height: 30, alignment: .top)
+//            .padding(.top, 10)
+//            .padding(.bottom, 15)
+//    }
     
     private var studyLevelFilter: some View {
         VStack {
@@ -78,7 +86,7 @@ struct FiltersSheetView: View {
                 selectedFont: selectedFont,
                 selectedTextColor: Color.mycolor.myBackground,
                 unselectedTextColor: Color.mycolor.myAccent,
-                selectedBackground: Color.mycolor.myBlue,
+                selectedBackground: Color.mycolor.myButtonBGBlue,
                 unselectedBackground: .clear,
                 showNilOption: true,
                 nilTitle: "All"
@@ -88,7 +96,7 @@ struct FiltersSheetView: View {
     
     private var favoriteFilter: some View {
         VStack {
-            Text("Favorite")
+            Text("Favorite:")
                 .font(.footnote)
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -99,34 +107,13 @@ struct FiltersSheetView: View {
                 selectedFont: selectedFont,
                 selectedTextColor: Color.mycolor.myBackground,
                 unselectedTextColor: Color.mycolor.myAccent,
-                selectedBackground: Color.mycolor.myBlue,
+                selectedBackground: Color.mycolor.myButtonBGBlue,
                 unselectedBackground: .clear,
                 showNilOption: true,
                 nilTitle: "All"
             )
         }
     }
-    
-//    private var languageFilter: some View {
-//        VStack {
-//            Text("Language:")
-//                .font(.footnote)
-//                .fontWeight(.semibold)
-//                .frame(maxWidth: .infinity, alignment: .leading)
-//            SegmentedOneLinePicker(
-//                selection: $vm.selectedLanguage,
-//                allItems: LanguageOptions.allCases,
-//                titleForCase: { $0.displayName },
-//                selectedFont: selectedFont,
-//                selectedTextColor: Color.mycolor.myBackground,
-//                unselectedTextColor: Color.mycolor.myAccent,
-//                selectedBackground: Color.mycolor.myBlue,
-//                unselectedBackground: .clear,
-//                showNilOption: true,
-//                nilTitle: "All"
-//            )
-//        }
-//    }
     
     private var typeFilter: some View {
         VStack {
@@ -142,7 +129,7 @@ struct FiltersSheetView: View {
                 selectedFont: selectedFont,
                 selectedTextColor: Color.mycolor.myBackground,
                 unselectedTextColor: Color.mycolor.myAccent,
-                selectedBackground: Color.mycolor.myBlue,
+                selectedBackground: Color.mycolor.myButtonBGBlue,
                 unselectedBackground: .clear,
                 showNilOption: true,
                 nilTitle: "All"
@@ -157,7 +144,7 @@ struct FiltersSheetView: View {
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            if let list = vm.listOfYearsInPosts {
+            if let list = vm.allYears {
                 CustomOneCapsulesLineSegmentedPicker(
                     selection: $vm.selectedYear,
                     allItems: list,
@@ -165,7 +152,7 @@ struct FiltersSheetView: View {
                     selectedFont: selectedFont,
                     selectedTextColor: Color.mycolor.myBackground,
                     unselectedTextColor: Color.mycolor.myAccent,
-                    selectedBackground: Color.mycolor.myBlue,
+                    selectedBackground: Color.mycolor.myButtonBGBlue,
                     unselectedBackground: .clear,
                     showNilOption: true,
                     nilTitle: "All"
@@ -174,34 +161,71 @@ struct FiltersSheetView: View {
         }
     }
     
+    private var categoryFilter: some View {
+        VStack(alignment: .leading) {
+            Text("Category:")
+                .font(.footnote)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            if let list = vm.allCategories {
+                CustomOneCapsulesLineSegmentedPicker(
+                    selection: $vm.selectedCategory,
+                    allItems: list,
+                    titleForCase: { $0 },
+                    selectedFont: selectedFont,
+                    selectedTextColor: Color.mycolor.myBackground,
+                    unselectedTextColor: Color.mycolor.myAccent,
+                    selectedBackground: Color.mycolor.myButtonBGBlue,
+                    unselectedBackground: .clear,
+                    showNilOption: true,
+                    nilTitle: "All"
+                )
+            }
+        }
+    }
+
+    
+    private var applyFiltersButton: some View {
+        
+        CapsuleButtonView(
+            primaryTitle: "Apply") {
+                isFilterButtonPressed.toggle()
+            }
+            .padding(.horizontal, 55)
+
+    }
+
     private var resetAllFiltersButton: some View {
         
-        ClearCupsuleButton(
+        
+        CapsuleButtonView(
             primaryTitle: "Reset All",
-            primaryTitleColor: Color.mycolor.myRed) {
+            textColorPrimary: Color.mycolor.myButtonTextRed,
+            buttonColorPrimary: Color.mycolor.myButtonBGRed) {
                 vm.selectedLevel = nil
                 vm.selectedFavorite = nil
-//                vm.selectedLanguage = nil
                 vm.selectedType = nil
                 vm.selectedYear = nil
                 updateFiltersSheetView.toggle()
             }
-        .padding(.horizontal, 55)
+            .padding(.horizontal, 55)
     }
     
     private var resetAllFiltersAndExitButton: some View {
         
-        ClearCupsuleButton(
+        
+        CapsuleButtonView(
             primaryTitle: "Reset All & Exit",
-            primaryTitleColor: Color.mycolor.myRed) {
+            textColorPrimary: Color.mycolor.myButtonTextRed,
+            buttonColorPrimary: Color.mycolor.myButtonBGRed) {
                 vm.selectedLevel = nil
                 vm.selectedFavorite = nil
-//                vm.selectedLanguage = nil
                 vm.selectedType = nil
                 vm.selectedYear = nil
                 isFilterButtonPressed.toggle()
             }
-        .padding(.horizontal, 55)
+            .padding(.horizontal, 55)
     }
 }
 
