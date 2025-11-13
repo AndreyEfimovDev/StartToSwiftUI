@@ -111,6 +111,13 @@ struct PostDetailsView: View {
                     .frame(maxWidth: .infinity)
                 
                 HStack {
+                    
+                    if post.draft == true {
+                        Image(systemName: "square.stack.3d.up")
+                            .font(.caption2)
+                            .foregroundStyle(Color.mycolor.mySecondaryText)
+                    }
+                    
                     if post.origin == .cloud {
                         Image(systemName: "cloud")
                             .font(.caption2)
