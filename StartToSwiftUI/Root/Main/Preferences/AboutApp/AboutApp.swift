@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AboutApp: View {
     
+    let iconWidth: CGFloat = 18
     let frameHeight: CGFloat = 30
     
     var body: some View {
@@ -64,12 +65,24 @@ struct AboutApp: View {
             NavigationLink("Welcome") {
                 WelcomeMessage()
             }
+            .customPreferencesListRowStyle(
+                iconName: "apple.books.pages",
+                iconWidth: iconWidth
+            )
             NavigationLink("Introduction") {
                 Intro()
             }
-            NavigationLink("Functionality") {
+            .customPreferencesListRowStyle(
+                iconName: "character.text.justify",
+                iconWidth: iconWidth
+            )
+            NavigationLink("Functionality") { //  list.bullet list.bullet.circle square.fill.text.grid.1x2
                 Functionality()
             }
+            .customPreferencesListRowStyle(
+                iconName: "helm",
+                iconWidth: iconWidth
+            )
         } // Form
         .foregroundStyle(Color.mycolor.myAccent)
         .navigationTitle("About App")
