@@ -19,6 +19,10 @@ struct Constants {
     static let notificationsURL = ""
     
     // Filename for File Manager to keep all posts locally saved
-    static let localFileName = "posts_app.json"
+    static let localPostsFileName = "posts_app.json"
+    
+    // Filename for File Manager to keep all notificaions locally saved
+    static let localNotificationsFileName = "notificaions_app.json"
+
     
 }

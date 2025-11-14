@@ -13,67 +13,72 @@ struct AboutApp: View {
     let frameHeight: CGFloat = 30
     
     var body: some View {
-        VStack(spacing: 0) {
-            Divider()
-                .frame(height: 1)
-                .padding(.horizontal, 0)
-            
-            HStack {
-                Text("Name")
-                Spacer()
-                Text("StartToSwiftUI")
-            }
-            .padding(.horizontal)
-            .frame(height: frameHeight)
-            .frame(maxWidth: .infinity)
-            
-            Divider()
-                .frame(height: 1)
-                .padding(.horizontal, 0)
-            
-            HStack {
-                Text("Version")
-                Spacer()
-                Text("01.01.01")
-            }
-            .padding(.horizontal)
-            .frame(height: frameHeight)
-            .frame(maxWidth: .infinity)
-            Divider()
-                .frame(height: 1)
-                .padding(.horizontal, 0)
-            
-            HStack {
-                Text("Developed by")
-                Spacer()
-                Text("Andrey Efimov")
-            }
-            .padding(.horizontal)
-            .frame(height: frameHeight)
-            .frame(maxWidth: .infinity)
-            
-            Divider()
-                .frame(height: 1)
-                .padding(.horizontal, 0)
-                .padding(.bottom, 0)
-            
-        }
-        .foregroundStyle(Color.mycolor.myAccent)
-        .padding(.horizontal)
         
         Form {
+            
+            Section {
+    //            Divider()
+    //                .frame(height: 1)
+    //                .padding(.horizontal, 0)
+                
+                HStack {
+                    Text("Name")
+                    Spacer()
+                    Text("StartToSwiftUI")
+                }
+    //
+    //            Divider()
+    //                .frame(height: 1)
+    //                .padding(.horizontal, 0)
+                
+                HStack {
+                    Text("Version")
+                    Spacer()
+                    Text("01.01.01")
+                }
+//                .padding(.horizontal)
+//                .frame(height: frameHeight)
+//                .frame(maxWidth: .infinity)
+                
+    //            Divider()
+    //                .frame(height: 1)
+    //                .padding(.horizontal, 0)
+                
+                HStack {
+                    Text("Developed by")
+                    Spacer()
+                    Text("Andrey Efimov")
+                }
+//                .padding(.horizontal)
+//                .frame(height: frameHeight)
+//                .frame(maxWidth: .infinity)
+                
+    //            Divider()
+    //                .frame(height: 1)
+    //                .padding(.horizontal, 0)
+    //                .padding(.bottom, 0)
+    //
+            }
+            .foregroundStyle(Color.mycolor.myAccent)
+            .padding(.horizontal)
+//            .frame(height: frameHeight)
+            .frame(maxWidth: .infinity)
+
+    //        .padding(.horizontal)
+            
+            
             NavigationLink("Welcome") {
                 WelcomeMessage()
             }
             .customPreferencesListRowStyle(
-                iconName: "apple.books.pages",
+                iconName: "suit.heart",
                 iconWidth: iconWidth
             )
             NavigationLink("Introduction") {
                 Intro()
             }
             .customPreferencesListRowStyle(
-                iconName: "character.text.justify",
+                iconName: "textformat.size.larger",
                 iconWidth: iconWidth
             )
             NavigationLink("Functionality") { //  list.bullet list.bullet.circle square.fill.text.grid.1x2

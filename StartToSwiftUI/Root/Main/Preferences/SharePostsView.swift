@@ -60,7 +60,7 @@ struct SharePostsView: View {
     }
     
     private func prepareDocumentSharing() {
-        let fileURL = fileManager.getFileURL(fileName: Constants.localFileName)
+        let fileURL = fileManager.getFileURL(fileName: Constants.localPostsFileName)
         switch fileURL {
         case .success(let url):
             shareURL = url

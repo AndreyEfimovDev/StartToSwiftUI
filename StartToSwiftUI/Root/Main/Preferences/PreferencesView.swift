@@ -56,6 +56,7 @@ struct PreferencesView: View {
                     erasePosts
                 }
                 Section {
+                    thankfullness
                     aboutApplication
                     legalInformation
                     contactDeveloperButton
@@ -151,6 +152,18 @@ struct PreferencesView: View {
             iconWidth: iconWidth
         )
     }
+    
+    private var thankfullness: some View {
+        
+        NavigationLink("Thankfullness") {
+            
+        }
+        .customPreferencesListRowStyle(
+            iconName: "hand.thumbsup",
+            iconWidth: iconWidth
+        )
+    }
+
     
     private var aboutApplication: some View {
         NavigationLink("About App") {

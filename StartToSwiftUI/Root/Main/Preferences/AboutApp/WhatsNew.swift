@@ -1,5 +1,5 @@
 //
-//  Functionality.swift
+//  WhatsNew.swift
 //  StartToSwiftUI
 //
 //  Created by Andrey Efimov on 05.11.2025.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Functionality: View {
+struct WhatsNew: View {
     var body: some View {
 //        • Organise learning resources by category.
         ScrollView {
@@ -34,10 +34,10 @@ struct Functionality: View {
             .padding(.horizontal)
         }
         .foregroundStyle(Color.mycolor.myAccent)
-        .navigationTitle("Functionality")
+        .navigationTitle("What's New")
     }
 }
 
 #Preview {
-    Functionality()
+    WhatsNew()
 }

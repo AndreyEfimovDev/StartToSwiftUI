@@ -21,7 +21,7 @@ class PostsViewModel: ObservableObject {
         didSet {
             fileManager.savePosts(
                 allPosts,
-                fileName: Constants.localFileName
+                fileName: Constants.localPostsFileName
             ) { [weak self] result in
                 
                 self?.errorMessage = nil
@@ -103,9 +103,9 @@ class PostsViewModel: ObservableObject {
         print("VM(init): Last update date: \(localLastUpdated.formatted(date: .abbreviated, time: .shortened))")
         
         // checking if the local JSON file with posts exists
-        if fileManager.checkIfFileExists(fileName: Constants.localFileName) {
+        if fileManager.checkIfFileExists(fileName: Constants.localPostsFileName) {
             fileManager.loadPosts(
-                fileName: Constants.localFileName
+                fileName: Constants.localPostsFileName
             ) { [weak self] (result: Result<[Post], FileStorageError>) in
                 
                 self?.errorMessage = nil
