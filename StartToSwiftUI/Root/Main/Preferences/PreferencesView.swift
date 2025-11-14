@@ -208,6 +208,6 @@ struct PreferencesView: View {
 #Preview {
     NavigationStack {
         PreferencesView ()
-            .environmentObject(PostsViewModel())
     }
+    .environmentObject(PostsViewModel())
 }

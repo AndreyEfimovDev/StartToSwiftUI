@@ -120,4 +120,6 @@ struct PrivacyPolicy: View {
 
 #Preview {
     PrivacyPolicy()
+        .environmentObject(PostsViewModel())
+
 }
