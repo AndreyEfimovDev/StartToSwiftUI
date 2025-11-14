@@ -85,7 +85,6 @@ struct ImportPostsFromCloudView: View {
                 Text("""
                 
                 Clicking **Confirm and Download** constitutes your agreement to the following terms:
-                
                 """)
                 
                 Text("""
