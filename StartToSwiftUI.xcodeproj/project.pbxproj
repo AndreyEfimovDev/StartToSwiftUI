@@ -13,6 +13,7 @@
 		471BBF9C2EC620D70004AC45 /* PostDraftsRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471BBF9B2EC620D70004AC45 /* PostDraftsRowView.swift */; };
 		471BBF9F2EC721480004AC45 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471BBF9E2EC721480004AC45 /* Notification.swift */; };
 		471BBFA12EC7251D0004AC45 /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471BBFA02EC7251D0004AC45 /* NotificationViewModel.swift */; };
+		471BBFA32EC731CB0004AC45 /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471BBFA22EC731CB0004AC45 /* News.swift */; };
 		471DCBCA2EBB633300AFA5F4 /* PrivacyPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBC92EBB633300AFA5F4 /* PrivacyPolicy.swift */; };
 		471DCBCE2EBB83D200AFA5F4 /* LegalInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBCD2EBB83D200AFA5F4 /* LegalInformationView.swift */; };
 		471DCBD02EBB88A400AFA5F4 /* CopyrightPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBCF2EBB88A400AFA5F4 /* CopyrightPolicy.swift */; };
@@ -20,8 +21,8 @@
 		471DCBD42EBB8A6400AFA5F4 /* TermsOfUse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBD32EBB8A6400AFA5F4 /* TermsOfUse.swift */; };
 		471DCBD62EBBAD9700AFA5F4 /* AboutApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBD52EBBAD9700AFA5F4 /* AboutApp.swift */; };
 		471DCBD92EBBBF2200AFA5F4 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBD82EBBBF2200AFA5F4 /* JSON.swift */; };
-		471DCBDC2EBBC67500AFA5F4 /* Intro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBDB2EBBC67500AFA5F4 /* Intro.swift */; };
-		471DCBDE2EBBC68500AFA5F4 /* Functionality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBDD2EBBC68500AFA5F4 /* Functionality.swift */; };
+		471DCBDC2EBBC67500AFA5F4 /* Introduction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBDB2EBBC67500AFA5F4 /* Introduction.swift */; };
+		471DCBDE2EBBC68500AFA5F4 /* WhatsNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBDD2EBBC68500AFA5F4 /* WhatsNew.swift */; };
 		471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBDF2EBBC6B900AFA5F4 /* WelcomeMessage.swift */; };
 		4732FB2D2EAA2BFC0062269D /* ImportPostsFromCloudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4732FB2C2EAA2BFC0062269D /* ImportPostsFromCloudView.swift */; };
 		4732FB312EAA59B00062269D /* SharePostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4732FB302EAA59B00062269D /* SharePostsView.swift */; };
@@ -82,6 +83,7 @@
 		471BBF9B2EC620D70004AC45 /* PostDraftsRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDraftsRowView.swift; sourceTree = "<group>"; };
 		471BBF9E2EC721480004AC45 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		471BBFA02EC7251D0004AC45 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
+		471BBFA22EC731CB0004AC45 /* News.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
 		471BEF4F2EA793880093F962 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		471DCBC92EBB633300AFA5F4 /* PrivacyPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicy.swift; sourceTree = "<group>"; };
 		471DCBCD2EBB83D200AFA5F4 /* LegalInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegalInformationView.swift; sourceTree = "<group>"; };
@@ -90,8 +92,8 @@
 		471DCBD32EBB8A6400AFA5F4 /* TermsOfUse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfUse.swift; sourceTree = "<group>"; };
 		471DCBD52EBBAD9700AFA5F4 /* AboutApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutApp.swift; sourceTree = "<group>"; };
 		471DCBD82EBBBF2200AFA5F4 /* JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
-		471DCBDB2EBBC67500AFA5F4 /* Intro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Intro.swift; sourceTree = "<group>"; };
-		471DCBDD2EBBC68500AFA5F4 /* Functionality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functionality.swift; sourceTree = "<group>"; };
+		471DCBDB2EBBC67500AFA5F4 /* Introduction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Introduction.swift; sourceTree = "<group>"; };
+		471DCBDD2EBBC68500AFA5F4 /* WhatsNew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNew.swift; sourceTree = "<group>"; };
 		471DCBDF2EBBC6B900AFA5F4 /* WelcomeMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeMessage.swift; sourceTree = "<group>"; };
 		4732FB2C2EAA2BFC0062269D /* ImportPostsFromCloudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportPostsFromCloudView.swift; sourceTree = "<group>"; };
 		4732FB302EAA59B00062269D /* SharePostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePostsView.swift; sourceTree = "<group>"; };
@@ -193,9 +195,9 @@
 			isa = PBXGroup;
 			children = (
 				471DCBD52EBBAD9700AFA5F4 /* AboutApp.swift */,
-				471DCBDB2EBBC67500AFA5F4 /* Intro.swift */,
 				471DCBDF2EBBC6B900AFA5F4 /* WelcomeMessage.swift */,
-				471DCBDD2EBBC68500AFA5F4 /* Functionality.swift */,
+				471DCBDB2EBBC67500AFA5F4 /* Introduction.swift */,
+				471DCBDD2EBBC68500AFA5F4 /* WhatsNew.swift */,
 			);
 			path = AboutApp;
 			sourceTree = "<group>";
@@ -220,9 +222,8 @@
 			isa = PBXGroup;
 			children = (
 				4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */,
-				475997622E5CF0C3008E20F0 /* ThirdPartComponents */,
+				475997622E5CF0C3008E20F0 /* Support */,
 				4765A76E2EAE669200EACDF4 /* InProgress */,
-				475997712E5D9B1A008E20F0 /* Support */,
 				475997722E5DA436008E20F0 /* Extensions */,
 				4759976C2E5D931F008E20F0 /* Services */,
 				47069EFC2EAFF2E30082AE12 /* Launch */,
@@ -241,6 +242,8 @@
 				47453E012EAB51B5000D2C16 /* CloudPosts.swift */,
 				47BAF0F72E64A77A00287F10 /* Enums.swift */,
 				4732FB362EAA63810062269D /* Constants.swift */,
+				475997542E5C7F81008E20F0 /* DevData.swift */,
+				471BBFA22EC731CB0004AC45 /* News.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -275,7 +278,7 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
-		475997622E5CF0C3008E20F0 /* ThirdPartComponents */ = {
+		475997622E5CF0C3008E20F0 /* Support */ = {
 			isa = PBXGroup;
 			children = (
 				4759976D2E5D933C008E20F0 /* SafariWebService.swift */,
@@ -284,7 +287,7 @@
 				4759975E2E5CA789008E20F0 /* CountingLinesInTextBlock.swift */,
 				4791CDFB2E746FF100687126 /* EmailService.swift */,
 			);
-			path = ThirdPartComponents;
+			path = Support;
 			sourceTree = "<group>";
 		};
 		4759976C2E5D931F008E20F0 /* Services */ = {
@@ -295,14 +298,6 @@
 				4791CDFF2E747B2E00687126 /* HapticService.swift */,
 			);
 			path = Services;
-			sourceTree = "<group>";
-		};
-		475997712E5D9B1A008E20F0 /* Support */ = {
-			isa = PBXGroup;
-			children = (
-				475997542E5C7F81008E20F0 /* DevData.swift */,
-			);
-			path = Support;
 			sourceTree = "<group>";
 		};
 		475997722E5DA436008E20F0 /* Extensions */ = {
@@ -472,7 +467,7 @@
 				47B465802E6867930059CCB7 /* HomeView.swift in Sources */,
 				47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */,
 				471BBF9C2EC620D70004AC45 /* PostDraftsRowView.swift in Sources */,
-				471DCBDE2EBBC68500AFA5F4 /* Functionality.swift in Sources */,
+				471DCBDE2EBBC68500AFA5F4 /* WhatsNew.swift in Sources */,
 				47BAF0A42E60613200287F10 /* SearchBarView.swift in Sources */,
 				4791CD862E6ED58B00687126 /* ShrinkIconButtonStyle.swift in Sources */,
 				4732FB332EAA5A9E0062269D /* ActivityView.swift in Sources */,
@@ -484,7 +479,7 @@
 				475997552E5C7F81008E20F0 /* DevData.swift in Sources */,
 				4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */,
 				4759976E2E5D933C008E20F0 /* SafariWebService.swift in Sources */,
-				471DCBDC2EBBC67500AFA5F4 /* Intro.swift in Sources */,
+				471DCBDC2EBBC67500AFA5F4 /* Introduction.swift in Sources */,
 				4791CE002E747B2E00687126 /* HapticService.swift in Sources */,
 				475997532E5C7680008E20F0 /* PostsViewModel.swift in Sources */,
 				4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */,
@@ -527,6 +522,7 @@
 				4791CDBB2E702E9700687126 /* EraseAllPostsView.swift in Sources */,
 				4732FB372EAA63810062269D /* Constants.swift in Sources */,
 				4791CDFC2E746FF100687126 /* EmailService.swift in Sources */,
+				471BBFA32EC731CB0004AC45 /* News.swift in Sources */,
 				475997612E5CC0F8008E20F0 /* PostDetailsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
