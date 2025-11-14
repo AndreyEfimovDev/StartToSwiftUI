@@ -46,7 +46,7 @@ struct RestoreBackupView: View {
             }
         }
         .padding(.horizontal, 30)
-        .padding(.top, 30)
+//        .padding(.top, 30)
         .padding(30)
         .sheet(isPresented: $showDocumentPicker) {
             DocumentPicker(

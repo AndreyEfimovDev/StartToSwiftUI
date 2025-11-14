@@ -9,35 +9,50 @@ import SwiftUI
 
 struct WhatsNew: View {
     var body: some View {
-//        • Organise learning resources by category.
         ScrollView {
-            Text("""
-            **StartToSwiftUI** offers the following features:
-            
-            **Personal Library**: Create and manage your own collection of links to learning materials by adding, editing, saving drafts.
+            VStack (alignment: .leading) {
+                ForEach(WhatsNews.releases) { release in
+                    Text(release.release)
+                        .bold()
+                    
+                    VStack (spacing: 20) {
+                        ForEach(release.news) { news in
+                            VStack (alignment: .leading) {
+                                Text(news.title)
+                                    .font(.headline)
+                                    .foregroundStyle(Color.mycolor.myBlue)
+                                    .padding(.bottom, 4)
+//                                    .border(.red)
+                                Text(news.newsText)
+                                    .font(.callout)
+                                    .foregroundStyle(Color.mycolor.myAccent)
+//                                    .border(.yellow)
+                            }
+                            .padding(.horizontal)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+//                            .border(.green)
 
-            **Curated Collection**:
-            - Download a pre-prepared collection of SwiftUI learning links, curated by the developer, directly from the cloud service.
-            - Update your existing collection from the cloud when new materials become available.
-            - Receive notifications when updates to the developer's curated collection is ready for download.
-            
-            **Posts Management**:
-            - Specify posts by categories such as year of posts, level of study, type of source/media, etc.
-            - Create a collection of favourite posts.
-            
-            **Smart Search & Filter**: Quickly find what you need using search and filtering tools.
-
-            **Data Management**: Backup, restore, share, or delete your posts as needed.
-            """)
-            .multilineTextAlignment(.leading)
-            .managingPostsTextFormater()
-            .padding(.horizontal)
+//                            .border(.red)
+                        } // ForEach 2nd
+                    } // VStack
+                    .padding(.vertical)
+                    .background(.ultraThinMaterial)
+//                                    .border(.green)
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 15)
+                            .stroke(Color.mycolor.myAccent.opacity(0.3), lineWidth: 1)
+                    )
+                } // ForEach 1st
+                .padding(.horizontal)
+            }
+            .navigationTitle("What's New")
         }
-        .foregroundStyle(Color.mycolor.myAccent)
-        .navigationTitle("What's New")
     }
 }
 
 #Preview {
-    WhatsNew()
+    NavigationStack {
+        WhatsNew()
+    }
 }

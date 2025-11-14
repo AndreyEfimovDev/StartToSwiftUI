@@ -15,58 +15,27 @@ struct AboutApp: View {
     var body: some View {
         
         Form {
-            
             Section {
-    //            Divider()
-    //                .frame(height: 1)
-    //                .padding(.horizontal, 0)
-                
                 HStack {
                     Text("Name")
                     Spacer()
                     Text("StartToSwiftUI")
                 }
-    //
-    //            Divider()
-    //                .frame(height: 1)
-    //                .padding(.horizontal, 0)
-                
                 HStack {
                     Text("Version")
                     Spacer()
                     Text("01.01.01")
                 }
-//                .padding(.horizontal)
-//                .frame(height: frameHeight)
-//                .frame(maxWidth: .infinity)
-                
-    //            Divider()
-    //                .frame(height: 1)
-    //                .padding(.horizontal, 0)
-                
                 HStack {
                     Text("Developed by")
                     Spacer()
                     Text("Andrey Efimov")
                 }
-//                .padding(.horizontal)
-//                .frame(height: frameHeight)
-//                .frame(maxWidth: .infinity)
-                
-    //            Divider()
-    //                .frame(height: 1)
-    //                .padding(.horizontal, 0)
-    //                .padding(.bottom, 0)
-    //
             }
             .foregroundStyle(Color.mycolor.myAccent)
             .padding(.horizontal)
-//            .frame(height: frameHeight)
             .frame(maxWidth: .infinity)
 
-    //        .padding(.horizontal)
-            
-            
             NavigationLink("Welcome") {
                 WelcomeMessage()
             }
@@ -75,17 +44,17 @@ struct AboutApp: View {
                 iconWidth: iconWidth
             )
             NavigationLink("Introduction") {
-                Intro()
+                Introduction()
             }
             .customPreferencesListRowStyle(
                 iconName: "textformat.size.larger",
                 iconWidth: iconWidth
             )
-            NavigationLink("Functionality") { //  list.bullet list.bullet.circle square.fill.text.grid.1x2
-                Functionality()
+            NavigationLink("What's New") { //  list.bullet list.bullet.circle square.fill.text.grid.1x2
+                WhatsNew()
             }
             .customPreferencesListRowStyle(
-                iconName: "helm",
+                iconName: "newspaper",
                 iconWidth: iconWidth
             )
         } // Form

@@ -56,7 +56,7 @@ struct ImportPostsFromCloudView: View {
             }
         }
         .padding(.horizontal, 30)
-        .padding(.top, 30)
+//        .padding(.top, 30)
         .padding(30)
         .alert("Download Error", isPresented: $vm.showErrorMessageAlert) {
             Button("OK", role: .cancel) {
