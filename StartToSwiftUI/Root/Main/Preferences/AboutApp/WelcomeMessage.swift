@@ -25,7 +25,7 @@ struct WelcomeMessage: View {
 
             **Personal Library**: Add your own posts to create a personal collection for learning SwiftUI.
 
-            **Full Control**: Edit and delete your posts as needed.
+            **Full Control**: Edit and delete your posts as needed, save drafts for further processing.
 
             **Data Management**: Share all posts stored in the app or save them for backup and recovery purposes.
             
