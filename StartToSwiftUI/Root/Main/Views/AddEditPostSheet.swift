@@ -642,7 +642,7 @@ struct AddEditPostSheet: View {
 #Preview {
     
     NavigationStack {
-        AddEditPostSheet(post: DevPreview.samplePost1)
+        AddEditPostSheet(post: DevData.samplePost1)
             .environmentObject(PostsViewModel())
     }
 }

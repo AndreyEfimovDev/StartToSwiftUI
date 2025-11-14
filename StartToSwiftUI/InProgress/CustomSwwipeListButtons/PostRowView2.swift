@@ -222,9 +222,9 @@ fileprivate struct PostRowPreView: View {
                 .ignoresSafeArea()
 
             VStack {
-                PostRowView2(post: DevPreview.samplePost1)
-                PostRowView2(post: DevPreview.samplePost2)
-                PostRowView2(post: DevPreview.samplePost3)
+                PostRowView2(post: DevData.samplePost1)
+                PostRowView2(post: DevData.samplePost2)
+                PostRowView2(post: DevData.samplePost3)
             }
 //            .padding()
         }

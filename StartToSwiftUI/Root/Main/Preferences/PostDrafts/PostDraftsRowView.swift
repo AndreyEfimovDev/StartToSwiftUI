@@ -65,9 +65,9 @@ fileprivate struct PostDraftsRowPreView: View {
                 .ignoresSafeArea()
 
             VStack {
-                PostDraftsRowView(post: DevPreview.samplePost1)
-                PostDraftsRowView(post: DevPreview.samplePost2)
-                PostDraftsRowView(post: DevPreview.samplePost3)
+                PostDraftsRowView(post: DevData.samplePost1)
+                PostDraftsRowView(post: DevData.samplePost2)
+                PostDraftsRowView(post: DevData.samplePost3)
             }
             .padding()
         }

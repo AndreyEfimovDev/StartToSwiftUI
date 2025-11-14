@@ -31,7 +31,7 @@
 		4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */; };
 		475997512E5C6C9D008E20F0 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997502E5C6C9D008E20F0 /* Post.swift */; };
 		475997532E5C7680008E20F0 /* PostsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997522E5C7680008E20F0 /* PostsViewModel.swift */; };
-		475997552E5C7F81008E20F0 /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997542E5C7F81008E20F0 /* PreviewData.swift */; };
+		475997552E5C7F81008E20F0 /* DevData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997542E5C7F81008E20F0 /* DevData.swift */; };
 		4759975F2E5CA789008E20F0 /* CountingLinesInTextBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4759975E2E5CA789008E20F0 /* CountingLinesInTextBlock.swift */; };
 		475997612E5CC0F8008E20F0 /* PostDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997602E5CC0F8008E20F0 /* PostDetailsView.swift */; };
 		4759976E2E5D933C008E20F0 /* SafariWebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4759976D2E5D933C008E20F0 /* SafariWebService.swift */; };
@@ -100,7 +100,7 @@
 		4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartToSwiftUIApp.swift; sourceTree = "<group>"; };
 		475997502E5C6C9D008E20F0 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		475997522E5C7680008E20F0 /* PostsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsViewModel.swift; sourceTree = "<group>"; };
-		475997542E5C7F81008E20F0 /* PreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewData.swift; sourceTree = "<group>"; };
+		475997542E5C7F81008E20F0 /* DevData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevData.swift; sourceTree = "<group>"; };
 		4759975E2E5CA789008E20F0 /* CountingLinesInTextBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountingLinesInTextBlock.swift; sourceTree = "<group>"; };
 		475997602E5CC0F8008E20F0 /* PostDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailsView.swift; sourceTree = "<group>"; };
 		4759976D2E5D933C008E20F0 /* SafariWebService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebService.swift; sourceTree = "<group>"; };
@@ -303,7 +303,7 @@
 		475997712E5D9B1A008E20F0 /* Support */ = {
 			isa = PBXGroup;
 			children = (
-				475997542E5C7F81008E20F0 /* PreviewData.swift */,
+				475997542E5C7F81008E20F0 /* DevData.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -483,7 +483,7 @@
 				4765A7672EAE277A00EACDF4 /* SwipeListButton.swift in Sources */,
 				471DCBD02EBB88A400AFA5F4 /* CopyrightPolicy.swift in Sources */,
 				47BAF0F82E64A77A00287F10 /* Enums.swift in Sources */,
-				475997552E5C7F81008E20F0 /* PreviewData.swift in Sources */,
+				475997552E5C7F81008E20F0 /* DevData.swift in Sources */,
 				4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */,
 				4759976E2E5D933C008E20F0 /* SafariWebService.swift in Sources */,
 				471DCBDC2EBBC67500AFA5F4 /* Intro.swift in Sources */,
