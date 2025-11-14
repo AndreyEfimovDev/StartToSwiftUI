@@ -86,7 +86,7 @@ struct PreferencesView: View {
             Image(systemName: "bell")
                 .frame(width: iconWidth)
                 .foregroundStyle(Color.mycolor.myBlue)
-            Toggle("Notification for posts update", isOn: $vm.isNotification)
+            Toggle("Notifications", isOn: $vm.isNotification)
                 .tint(Color.mycolor.myBlue)
         }
     }
