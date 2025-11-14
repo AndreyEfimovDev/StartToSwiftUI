@@ -16,7 +16,7 @@ class PostsViewModel: ObservableObject {
     private let fileManager = FileStorageService.shared
     private let hapticManager = HapticService.shared
     private let networkService = NetworkService()
-    private let noticeService = NotificationService()
+    private let noticeService = NotificationCentre()
     
     @Published var allPosts: [Post] = [] {
         didSet {
@@ -460,7 +460,7 @@ class PostsViewModel: ObservableObject {
         self.errorMessage = nil
         self.showErrorMessageAlert = false
         
-        networkService.fetchPostsFromURL(from: urlString) { [weak self] (result: Result<[Post], Error>) in
+        networkService.fetchDataFromURL(from: urlString) { [weak self] (result: Result<[Post], Error>) in
             
             DispatchQueue.main.async {
                 switch result {
@@ -569,7 +569,7 @@ class PostsViewModel: ObservableObject {
     /// - Returns: Returns a boolean result or error within completion handler.
     
     func checkCloudForUpdates(completion: @escaping (Bool) -> Void) {
-        networkService.fetchPostsFromURL(
+        networkService.fetchDataFromURL(
             from: Constants.cloudPostsURL
         ) { (result: Result<[Post], Error>) in
             self.errorMessage = nil

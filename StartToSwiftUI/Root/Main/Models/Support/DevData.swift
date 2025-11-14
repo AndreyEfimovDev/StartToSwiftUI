@@ -13,6 +13,10 @@ struct DevData {
     
     //    static let shared = PreviewPosts()
     
+    static let sampleNotices: [Notice] = [
+        Notice(noticeDate: .now, noticeMessage: "Notice Sample")
+    ]
+    
     static let samplePost1 = Post(
         title: "Property Wrappers",
         intro: "В этом видео я расскажу вам обо всех оболочках, которые нам предлагает SwiftUI для хранения временных данных. Так же вы поймете, в чем отличие между такими оболочки как @State, @StateObject, @ObservedObject, @EnvironmentObject. Эти оболочки очень похожи друг на друга и знание того, когда и какую лучше использовать, имеет решающее значение.",
