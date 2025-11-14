@@ -63,6 +63,7 @@ struct PreferencesView: View {
             } // Form
             .foregroundStyle(Color.mycolor.myAccent)
             .navigationTitle("Preferences")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
