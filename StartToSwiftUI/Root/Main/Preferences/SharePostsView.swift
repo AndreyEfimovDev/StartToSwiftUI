@@ -41,7 +41,7 @@ struct SharePostsView: View {
             Spacer()
             
             if isInProgress {
-                RotatingRingProgressView()
+                CustomProgressView()
             }
         }
         .padding(.horizontal, 30)

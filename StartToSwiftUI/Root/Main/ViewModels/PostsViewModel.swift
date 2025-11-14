@@ -53,7 +53,7 @@ class PostsViewModel: ObservableObject {
     @AppStorage("homeTitleName") var homeTitleName: String = "SwiftUI materials"
     //    @AppStorage("isFirstAppLaunch") var isFirstAppLaunch: Bool = true
     @AppStorage("isFirstPostsLoad") var isFirstImportPostsCompleted: Bool = false {
-        didSet { localLastUpdated = .now }
+        didSet { localLastUpdated = getLatestDateFromPosts(posts: allPosts) ?? .now }
     }
     @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
     @AppStorage("isNotification") var isNotification: Bool = false
@@ -65,20 +65,7 @@ class PostsViewModel: ObservableObject {
     @AppStorage("storedType") var storedType: PostType?
     @AppStorage("storedPlatform") var storedPlatform: Platform?
     @AppStorage("storedYear") var storedYear: String?
-    
-//    // Stored draft of the post in AddEditView
-//    @AppStorage("isPostDraftSaved") var isPostDraftSaved: Bool = false
-//    @AppStorage("titlePostSaved") var titlePostSaved: String?
-//    @AppStorage("introPostSaved") var introPostSaved: String?
-//    @AppStorage("authorPostSaved") var authorPostSaved: String?
-//    @AppStorage("typePostSaved") var typePostSaved: PostType?
-//    @AppStorage("urlStringPostSaved") var urlStringPostSaved: String?
-//    @AppStorage("platformPostSaved") var platformPostSaved: Platform?
-//    @AppStorage("datePostSaved") var datePostSaved: Date?
-//    @AppStorage("studyLevelPostSaved") var studyLevelPostSaved: StudyLevel?
-//    @AppStorage("favoriteChoicePostSaved") var favoriteChoicePostSaved: FavoriteChoice?
-//    @AppStorage("additionalTextPostSaved") var additionalTextPostSaved: String?
-//    
+
     // stored the date of the Cloud posts last imported
     let beginningDate: Date = (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date())
     @AppStorage("localLastUpdated") var localLastUpdated: Date = (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date())
@@ -101,13 +88,8 @@ class PostsViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     
-//    @Published var isLoadingFromCloud = false
-//    @Published var networkErrorMessage: String?
-//    @Published var showImportNetworkAlert = false
-    
     @Published var errorMessage: String?
     @Published var showErrorMessageAlert = false
-
     
     private var utcCalendar = Calendar.current
     var allYears: [String]? = nil
