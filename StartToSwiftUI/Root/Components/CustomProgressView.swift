@@ -11,7 +11,7 @@ struct CustomProgressView: View {
     
     private let scale: CGFloat
     
-    init(scale: CGFloat = 2.0) {
+    init(scale: CGFloat = 1.5) {
         self.scale = scale
     }
     
