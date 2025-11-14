@@ -17,7 +17,31 @@ class NotificationService: ObservableObject {
     @Published var errorMessage: String?
     @Published var showErrorMessageAlert = false
 
-    @Published var notices: [Notice] = []
+    @Published var notices: [Notice] = [] {
+        didSet {
+            fileManager.saveData(
+                notices,
+                fileName: Constants.localNotificationsFileName
+            ) { [weak self] result in
+                
+                self?.errorMessage = nil
+                self?.showErrorMessageAlert = false
+                
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        print("✅ VM(allPosts - didSet): Notices saved successfully")
+                    case .failure(let error):
+                        self?.errorMessage = error.localizedDescription
+                        self?.showErrorMessageAlert = true
+                        self?.hapticManager.notification(type: .error)
+                        print("❌ Failed to save notices: \(error)")
+                    }
+                }
+            }
+            
+        }
+    }
         
     func importNotificationsFromCloud(
         urlString: String = Constants.cloudNotificationsURL,
@@ -42,9 +66,6 @@ class NotificationService: ObservableObject {
                         // Appending loaded notifications to notices[]
                         self?.notices.append(contentsOf: cloudNoticesAfterCheckForUniqueID)
                         self?.hapticManager.notification(type: .success)
-//                        if let latestDateOfPost = self?.getLatestDateFromNotifications(notes: cloudResponse) {
-//                            self?.dateOfLastNotice = latestDateOfPost
-//                        }
                         print("✅ Successfully appended \(cloudNoticesAfterCheckForUniqueID.count) notifications from the cloud")
                     } else {
                         self?.hapticManager.impact(style: .light)
