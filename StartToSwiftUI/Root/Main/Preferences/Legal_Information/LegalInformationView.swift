@@ -26,7 +26,7 @@ struct LegalInformationView: View {
                 PrivacyPolicy()
             }
             .customPreferencesListRowStyle(
-                iconName: "lock.heart",
+                iconName: "lock",
                 iconWidth: iconWidth
             )
 

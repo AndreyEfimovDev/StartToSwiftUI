@@ -11,6 +11,8 @@
 		470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */; };
 		471BBF9A2EC5F6170004AC45 /* PostDraftsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471BBF992EC5F6170004AC45 /* PostDraftsView.swift */; };
 		471BBF9C2EC620D70004AC45 /* PostDraftsRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471BBF9B2EC620D70004AC45 /* PostDraftsRowView.swift */; };
+		471BBF9F2EC721480004AC45 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471BBF9E2EC721480004AC45 /* Notification.swift */; };
+		471BBFA12EC7251D0004AC45 /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471BBFA02EC7251D0004AC45 /* NotificationViewModel.swift */; };
 		471DCBCA2EBB633300AFA5F4 /* PrivacyPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBC92EBB633300AFA5F4 /* PrivacyPolicy.swift */; };
 		471DCBCE2EBB83D200AFA5F4 /* LegalInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBCD2EBB83D200AFA5F4 /* LegalInformationView.swift */; };
 		471DCBD02EBB88A400AFA5F4 /* CopyrightPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBCF2EBB88A400AFA5F4 /* CopyrightPolicy.swift */; };
@@ -78,6 +80,8 @@
 		470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleStrokeButtonView.swift; sourceTree = "<group>"; };
 		471BBF992EC5F6170004AC45 /* PostDraftsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDraftsView.swift; sourceTree = "<group>"; };
 		471BBF9B2EC620D70004AC45 /* PostDraftsRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDraftsRowView.swift; sourceTree = "<group>"; };
+		471BBF9E2EC721480004AC45 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
+		471BBFA02EC7251D0004AC45 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
 		471BEF4F2EA793880093F962 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		471DCBC92EBB633300AFA5F4 /* PrivacyPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicy.swift; sourceTree = "<group>"; };
 		471DCBCD2EBB83D200AFA5F4 /* LegalInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegalInformationView.swift; sourceTree = "<group>"; };
@@ -173,13 +177,6 @@
 			path = Pickers;
 			sourceTree = "<group>";
 		};
-		471BBF9D2EC621210004AC45 /* PostDrafts */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = PostDrafts;
-			sourceTree = "<group>";
-		};
 		471DCBD72EBBB97000AFA5F4 /* Legal_Information */ = {
 			isa = PBXGroup;
 			children = (
@@ -240,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				475997502E5C6C9D008E20F0 /* Post.swift */,
+				471BBF9E2EC721480004AC45 /* Notification.swift */,
 				47453E012EAB51B5000D2C16 /* CloudPosts.swift */,
 				47BAF0F72E64A77A00287F10 /* Enums.swift */,
 				4732FB362EAA63810062269D /* Constants.swift */,
@@ -251,6 +249,7 @@
 			isa = PBXGroup;
 			children = (
 				475997522E5C7680008E20F0 /* PostsViewModel.swift */,
+				471BBFA02EC7251D0004AC45 /* NotificationViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -348,7 +347,6 @@
 				4732FB302EAA59B00062269D /* SharePostsView.swift */,
 				47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */,
 				4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */,
-				471BBF9D2EC621210004AC45 /* PostDrafts */,
 				471DCBDA2EBBC60E00AFA5F4 /* AboutApp */,
 				471DCBD72EBBB97000AFA5F4 /* Legal_Information */,
 			);
@@ -504,8 +502,10 @@
 				4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */,
 				4791CDFE2E747AC100687126 /* FileStorageService.swift in Sources */,
 				475997512E5C6C9D008E20F0 /* Post.swift in Sources */,
+				471BBF9F2EC721480004AC45 /* Notification.swift in Sources */,
 				4732FB2D2EAA2BFC0062269D /* ImportPostsFromCloudView.swift in Sources */,
 				4732FB312EAA59B00062269D /* SharePostsView.swift in Sources */,
+				471BBFA12EC7251D0004AC45 /* NotificationViewModel.swift in Sources */,
 				4791CE082E75AAB000687126 /* UnderlineSermentedPickerNotOptional.swift in Sources */,
 				471DCBD22EBB89E000AFA5F4 /* FairUseNotice.swift in Sources */,
 				4791CDEA2E72E8CC00687126 /* Arrays.swift in Sources */,
