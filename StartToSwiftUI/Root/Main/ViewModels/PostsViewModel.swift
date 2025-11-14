@@ -16,6 +16,7 @@ class PostsViewModel: ObservableObject {
     private let fileManager = FileStorageService.shared
     private let hapticManager = HapticService.shared
     private let networkService = NetworkService()
+    private let noticeService = NotificationService()
     
     @Published var allPosts: [Post] = [] {
         didSet {
@@ -67,7 +68,7 @@ class PostsViewModel: ObservableObject {
     @AppStorage("storedYear") var storedYear: String?
 
     // stored the date of the Cloud posts last imported
-    let beginningDate: Date = (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date())
+//    let beginningDate: Date = (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date())
     @AppStorage("localLastUpdated") var localLastUpdated: Date = (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date())
     
     // setting filters
@@ -159,6 +160,8 @@ class PostsViewModel: ObservableObject {
         } else {
             print("❌ VM(init): TimeZone is not set")
         }
+        
+        noticeService.importNotificationsFromCloud() { }
         
         // initiating subscriptions
         addSubscribers()
@@ -461,6 +464,7 @@ class PostsViewModel: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let cloudResponse):
+                    print("✅ Successfully imported \(cloudResponse.count) posts from the cloud")
                     // Selecting Cloud posts with unique Titles only -  - do not append such posts from Cloud
                     let cloudPostsAfterCheckForUniqueTitle = cloudResponse.filter { postFromCloud in
                         !(self?.allPosts.contains(where: { $0.title == postFromCloud.title }) ?? false)
@@ -475,7 +479,7 @@ class PostsViewModel: ObservableObject {
                         self?.hapticManager.notification(type: .success)
                         self?.localLastUpdated = self?.getLatestDateFromPosts(posts: cloudPostsAfterCheckForUniqueID) ?? .now
 
-                        print("✅ Successfully imported \(cloudPostsAfterCheckForUniqueID.count) posts from the cloud")
+                        print("✅ Successfully appended \(cloudPostsAfterCheckForUniqueID.count) posts from the cloud")
                     } else {
                         self?.hapticManager.impact(style: .light)
                         print("☑️ No new posts from the cloud.")

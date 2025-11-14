@@ -8,20 +8,22 @@
 import Foundation
 
 
-struct Notice: Codable {
+struct Notice: Codable, Equatable {
     
     let id: String
-    let noteDate: Date
-    let noteMessage: String
+    let noticeDate: Date
+    let noticeMessage: String
+    var isRead: Bool
     
     init(
         id: String = UUID().uuidString,
-        noteDate: Date,
-        noteMessage: String
+        noticeDate: Date,
+        noticeMessage: String,
+        isRead: Bool = false
     ) {
         self.id = id
-        self.noteDate = noteDate
-        self.noteMessage = noteMessage
+        self.noticeDate = noticeDate
+        self.noticeMessage = noticeMessage
+        self.isRead = isRead
     }
-    
 }

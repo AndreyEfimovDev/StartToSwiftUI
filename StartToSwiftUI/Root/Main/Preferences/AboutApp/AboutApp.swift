@@ -15,65 +15,65 @@ struct AboutApp: View {
     var body: some View {
         
         ZStack {
-            VStack{
-                HStack (spacing: 0) {
-                    Image(systemName: "pencil.and.outline")
-                        .resizable()
-                        .frame(width: 50, height: 50)
-                        .foregroundStyle(Color.mycolor.myBlue)
-                        .padding()
-                    VStack (alignment: .leading) {
-                        Text("StartToSwiftUI")
-                            .font(.headline)
-                        Text("SwiftUI Hub Study")
-                            .font(.caption)
-                    }
-                }
-                
                 Form {
                     Section {
-                        HStack {
-                            Text("Version")
-                            Spacer()
-                            Text("01.01.01")
-                        }
-                        HStack {
-                            Text("Developed by")
-                            Spacer()
-                            Text("Andrey Efimov")
+                        HStack (spacing: 0) {
+                            Image(systemName: "pencil.and.outline")
+                                .resizable()
+                                .bold()
+                                .frame(width: 80, height: 80)
+                                .foregroundStyle(Color.mycolor.myBlue)
+                                .padding()
+                            VStack (alignment: .leading) {
+                                Text("StartToSwiftUI")
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                                    Text("SwiftUI Study Hub")
+                                        .font(.subheadline)
+                                Group {
+                                    HStack {
+                                        Text("Version")
+                                        Text("01.01.01")
+                                    }
+                                    Text("Developed by Andrey Efimov")
+                                }
+                                .font(.caption)
+                            }
                         }
                     }
-                    .foregroundStyle(Color.mycolor.myAccent)
-                    .padding(.horizontal)
+                    .listRowBackground(Color.clear)
                     .frame(maxWidth: .infinity)
                     
-                    NavigationLink("Welcome") {
-                        WelcomeMessage()
+                    Section {
+                        NavigationLink("Welcome") {
+                            WelcomeMessage()
+                        }
+                        .customPreferencesListRowStyle(
+                            iconName: "suit.heart",
+                            iconWidth: iconWidth
+                        )
+                        NavigationLink("Introduction") {
+                            Introduction()
+                        }
+                        .customPreferencesListRowStyle(
+                            iconName: "textformat.size.larger",
+                            iconWidth: iconWidth
+                        )
+                        NavigationLink("What's New") { //  list.bullet list.bullet.circle square.fill.text.grid.1x2
+                            WhatsNew()
+                        }
+                        .customPreferencesListRowStyle(
+                            iconName: "newspaper",
+                            iconWidth: iconWidth
+                        )
                     }
-                    .customPreferencesListRowStyle(
-                        iconName: "suit.heart",
-                        iconWidth: iconWidth
-                    )
-                    NavigationLink("Introduction") {
-                        Introduction()
-                    }
-                    .customPreferencesListRowStyle(
-                        iconName: "textformat.size.larger",
-                        iconWidth: iconWidth
-                    )
-                    NavigationLink("What's New") { //  list.bullet list.bullet.circle square.fill.text.grid.1x2
-                        WhatsNew()
-                    }
-                    .customPreferencesListRowStyle(
-                        iconName: "newspaper",
-                        iconWidth: iconWidth
-                    )
                 } // Form
-                .navigationTitle("About App")
                 .scrollContentBackground(.hidden)
+                .listSectionSpacing(8)
                 .background(.clear)
-            }
         } // ZStack
+        .navigationTitle("About App")
+        .navigationBarTitleDisplayMode(.large)
         .foregroundStyle(Color.mycolor.myAccent)
         .background(.thickMaterial)
     }
