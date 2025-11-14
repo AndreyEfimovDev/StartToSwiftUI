@@ -34,7 +34,7 @@ struct LegalInformationView: View {
                 CopyrightPolicy()
             }
             .customPreferencesListRowStyle(
-                iconName: "lock.circle",
+                iconName: "c.circle",
                 iconWidth: iconWidth
             )
 
@@ -56,5 +56,5 @@ struct LegalInformationView: View {
     NavigationStack{
         LegalInformationView()
     }
-//    .environmentObject(PostsViewModel())
+    .environmentObject(PostsViewModel())
 }

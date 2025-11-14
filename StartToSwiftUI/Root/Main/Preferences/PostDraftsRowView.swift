@@ -76,4 +76,5 @@ fileprivate struct PostDraftsRowPreView: View {
 
 #Preview {
     PostDraftsRowPreView()
+        .environmentObject(PostsViewModel())
 }
