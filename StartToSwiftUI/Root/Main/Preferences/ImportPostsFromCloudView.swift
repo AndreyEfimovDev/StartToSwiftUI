@@ -52,7 +52,7 @@ struct ImportPostsFromCloudView: View {
                 
             }
             if isInProgress {
-                RotatingRingProgressView()
+                CustomProgressView()
             }
         }
         .padding(.horizontal, 30)
@@ -85,7 +85,6 @@ struct ImportPostsFromCloudView: View {
                 Text("""
                 
                 Clicking **Confirm and Download** constitutes your agreement to the following terms:
-                
                 """)
                 
                 Text("""
@@ -102,7 +101,7 @@ struct ImportPostsFromCloudView: View {
     }
     
     private func importFromCloud() {
-//        
+        
 //                vm.loadPersistentPosts() {
 //                    isInProgress = false
 //                    isLoaded = true
