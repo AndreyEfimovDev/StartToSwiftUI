@@ -20,7 +20,7 @@ class PostsViewModel: ObservableObject {
     
     @Published var allPosts: [Post] = [] {
         didSet {
-            fileManager.savePosts(
+            fileManager.saveData(
                 allPosts,
                 fileName: Constants.localPostsFileName
             ) { [weak self] result in
@@ -44,6 +44,7 @@ class PostsViewModel: ObservableObject {
             allCategories = getAllCategories()
         }
     }
+    
     @Published var filteredPosts: [Post] = []
     @Published var searchText: String = ""
     @Published var isFiltersEmpty: Bool = true
@@ -105,7 +106,7 @@ class PostsViewModel: ObservableObject {
         
         // checking if the local JSON file with posts exists
         if fileManager.checkIfFileExists(fileName: Constants.localPostsFileName) {
-            fileManager.loadPosts(
+            fileManager.loadData(
                 fileName: Constants.localPostsFileName
             ) { [weak self] (result: Result<[Post], FileStorageError>) in
                 

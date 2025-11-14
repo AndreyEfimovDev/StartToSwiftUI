@@ -26,12 +26,13 @@ class FileStorageService: ObservableObject {
         }
         
         let fileURL = documentsDirectory.appendingPathComponent(fileName)
+        print("✅ FM(getFileURL): Successfully appended file: \(fileName) in: \(fileURL).")
         return .success(fileURL)
     }
     
     // Saving posts with encoding into JSON data
 
-    func savePosts<T: Codable>(
+    func saveData<T: Codable>(
         _ data: T,
         fileName: String,
         encoder: JSONEncoder = .appEncoder, // we use the date encoding strategy - ISO8601 (string)
@@ -58,7 +59,7 @@ class FileStorageService: ObservableObject {
     }
     
     // Loading and decoding JSON data into posts
-    func loadPosts<T: Codable>(
+    func loadData<T: Codable>(
         fileName: String,
         decoder: JSONDecoder = .appDecoder, // we use the date decoding strategy - ISO8601 (string)
         completion: @escaping (Result<T, FileStorageError>) -> Void
