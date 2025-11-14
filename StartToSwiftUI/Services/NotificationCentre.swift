@@ -1,5 +1,5 @@
 //
-//  NotificationService.swift
+//  NotificationCentre.swift
 //  StartToSwiftUI
 //
 //  Created by Andrey Efimov on 14.11.2025.
@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class NotificationService: ObservableObject {
+class NotificationCentre: ObservableObject {
     
     private let fileManager = FileStorageService.shared
     private let hapticManager = HapticService.shared
@@ -50,7 +50,7 @@ class NotificationService: ObservableObject {
         errorMessage = nil
         showErrorMessageAlert = false
         
-        networkService.fetchPostsFromURL(from: urlString) { [weak self] (result: Result<[Notice], Error>) in
+        networkService.fetchDataFromURL(from: urlString) { [weak self] (result: Result<[Notice], Error>) in
             
             DispatchQueue.main.async {
                 switch result {

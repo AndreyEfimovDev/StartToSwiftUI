@@ -9,7 +9,7 @@ import Foundation
 
 class NetworkService: ObservableObject {
     
-    func fetchPostsFromURL<T: Codable>(
+    func fetchDataFromURL<T: Codable>(
         from urlString: String,
         decoder: JSONDecoder = .appDecoder, //ISO8601 (string) encoding strategy
         completion: @escaping (Result<T, Error>) -> Void
@@ -56,7 +56,7 @@ class NetworkService: ObservableObject {
         task.resume()
     }
     
-    func fetchCloudPosts<T: Codable>(
+    func fetchCloudData<T: Codable>(
         from urlString: String,
         decoder: JSONDecoder = .appDecoder, // ISO8601 (string) decoding strategy
         completion: @escaping (Result<T, Error>) -> Void
