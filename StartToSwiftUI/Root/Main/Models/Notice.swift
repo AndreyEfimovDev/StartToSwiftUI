@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct Notification: Codable {
+struct Notice: Codable {
     
     let id: String
     let noteDate: Date
