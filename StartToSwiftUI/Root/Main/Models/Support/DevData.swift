@@ -13,9 +13,37 @@ struct DevData {
     
     //    static let shared = PreviewPosts()
     
-    static let sampleNotices: [Notice] = [
-        Notice(noticeDate: .now, noticeMessage: "Notice Sample")
-    ]
+    static let sampleNotice1 = Notice(
+        title: "Update for the curated posts in available",
+        noticeDate: .now,
+        noticeMessage: "New Update includes the following:",
+        isRead: true
+    )
+    static let sampleNotice2 = Notice(
+        title: "New App release 01.01.02 is availavle New App release 01.01.02 is availavle",
+        noticeDate: .now + 1,
+        noticeMessage: """
+            New release includes the following:
+            Line 1
+            Line 2
+            Line 3
+            """,
+        isRead: true
+    )
+    static let sampleNotice3 = Notice(
+        title: "New App release 01.01.03 is availavle",
+        noticeDate: .now + 2,
+        noticeMessage: """
+            New release includes the following:
+            Line 1
+            Line 2
+            Line 3
+            """
+    )
+    
+    static let sampleNotices: [Notice] = [sampleNotice1, sampleNotice2, sampleNotice3]
+    
+    
     
     static let samplePost1 = Post(
         title: "Property Wrappers",
@@ -121,8 +149,11 @@ struct DevData {
             title: "Styling SwiftUI Text Views",
             intro: """
             In this video we are going to explore how we can stylize text for our Text views in SwiftUI.
-            We will start by looking at how we can create a `Text` view with the Markdown-formatted base postLanguage version of the string as the localization key,
+            
+            We will start by looking at how we can create a `Text` view with the Markdown-formatted base postLanguage version of the string as the localization key.
+            
             We will also see how we can utilize string interpolation to combine and stylize our strings and present them in a text view.
+            
             And finally, we will take a quick look at the power of Attributed strings in SwiftUI.
             """,
             author: "Stewart Lynch",

@@ -10,7 +10,7 @@ import SwiftUI
 struct PostDetailsView: View {
     
     @Environment(\.dismiss) var dismiss
-    @Environment(\.colorScheme) var colorScheme
+//    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject private var vm: PostsViewModel
     
     private let fileManager = FileStorageService.shared
@@ -78,7 +78,7 @@ struct PostDetailsView: View {
                         ).opacity(validPost.notes.isEmpty ? 0 : 1)
                 }
                 .foregroundStyle(Color.mycolor.myAccent)
-            }
+            } // ScrollView
             .padding(.horizontal)
             .navigationBarBackButtonHidden(true)
             .toolbarBackground(.ultraThinMaterial, for: .navigationBar)

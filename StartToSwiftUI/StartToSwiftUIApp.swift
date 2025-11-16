@@ -12,6 +12,8 @@ import SwiftUI
 struct StartToSwiftUIApp: App {
     
     @StateObject private var vm = PostsViewModel()
+    @StateObject private var nvm = NotificationCentre()
+
     @State private var showLaunchView: Bool = true
     
     private let hapticManager = HapticService.shared
@@ -41,6 +43,7 @@ struct StartToSwiftUIApp: App {
                 
             }
             .environmentObject(vm)
+            .environmentObject(nvm)
         }
     }
 }

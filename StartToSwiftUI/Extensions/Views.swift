@@ -63,7 +63,7 @@ extension View {
 
 extension View {
     
-    func customPreferencesListRowStyle(iconName: String, iconWidth: CGFloat) -> some View {
+    func customListRowStyle(iconName: String, iconWidth: CGFloat) -> some View {
         HStack {
             Image(systemName: iconName)
                 .frame(width: iconWidth)

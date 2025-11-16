@@ -55,7 +55,6 @@ struct EraseAllPostsView: View {
             }
         }
         .padding(.horizontal, 30)
-//        .padding(.top, 30)
         .padding(30)
         .onAppear {
             hapticManager.notification(type: .warning)
@@ -73,7 +72,6 @@ struct EraseAllPostsView: View {
             .font(.subheadline)
             .frame(maxWidth: .infinity)
             .multilineTextAlignment(.center)
-//            .border(.red)
 
             Text("""
             What you can do after:
@@ -85,7 +83,6 @@ struct EraseAllPostsView: View {
             .font(.subheadline)
             .frame(maxWidth: .infinity)
             .multilineTextAlignment(.leading)
-//            .border(.red)
             
             Text("""
             
@@ -96,12 +93,10 @@ struct EraseAllPostsView: View {
             .bold()
             .frame(maxWidth: .infinity)
             .multilineTextAlignment(.center)
-//            .border(.red)
         }
         .font(.subheadline)
-//        .multilineTextAlignment(.leading)
-
     }
+    
 }
 
 #Preview {
