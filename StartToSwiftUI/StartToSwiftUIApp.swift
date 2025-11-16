@@ -12,7 +12,7 @@ import SwiftUI
 struct StartToSwiftUIApp: App {
     
     @StateObject private var vm = PostsViewModel()
-    @StateObject private var nvm = NotificationCentre()
+    @StateObject private var noticevm = NoticeViewModel()
 
     @State private var showLaunchView: Bool = true
     
@@ -43,7 +43,7 @@ struct StartToSwiftUIApp: App {
                 
             }
             .environmentObject(vm)
-            .environmentObject(nvm)
+            .environmentObject(noticevm)
         }
     }
 }

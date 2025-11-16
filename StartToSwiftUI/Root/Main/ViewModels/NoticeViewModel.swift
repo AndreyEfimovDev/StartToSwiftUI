@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class NotificationViewModel: ObservableObject {
+class NoticeViewModel: ObservableObject {
     
     private let fileManager = FileStorageService.shared
     private let hapticManager = HapticService.shared
@@ -21,7 +21,7 @@ class NotificationViewModel: ObservableObject {
         didSet {
             fileManager.saveData(
                 notices,
-                fileName: Constants.localNotificationsFileName
+                fileName: Constants.localNoticesFileName
             ) { [weak self] result in
                 
                 self?.errorMessage = nil
@@ -30,12 +30,12 @@ class NotificationViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     switch result {
                     case .success:
-                        print("✅ NC(notices - didSet): Notices saved successfully")
+                        print("✅ NVM(notices - didSet): Notices saved successfully.")
                     case .failure(let error):
                         self?.errorMessage = error.localizedDescription
                         self?.showErrorMessageAlert = true
                         self?.hapticManager.notification(type: .error)
-                        print("❌ NC(notices - didSet): Failed to save notices: \(error)")
+                        print("❌ NVM(notices - didSet): Failed to save notices: \(error)")
                     }
                 }
             }
@@ -43,8 +43,8 @@ class NotificationViewModel: ObservableObject {
         }
     }
         
-    func importNotificationsFromCloud(
-        urlString: String = Constants.cloudNotificationsURL,
+    func importNoticesFromCloud(
+        urlString: String = Constants.cloudNoticesURL,
         completion: @escaping () -> Void
     ) {
         errorMessage = nil
@@ -57,27 +57,32 @@ class NotificationViewModel: ObservableObject {
                 case .success(let cloudResponse):
                     
                     if !cloudResponse.isEmpty {
-                        print("✅ Successfully imported \(cloudResponse.count) notifications from the cloud")
+                        print("✅ NVN: Successfully imported \(cloudResponse.count) notices from the cloud")
 
-                        // Selecting Cloud posts with unique Titles only -  - do not append such posts from Cloud
+                        // Selecting Cloud notices with unique ID - append such posts from Cloud
                         let cloudNoticesAfterCheckForUniqueID = cloudResponse.filter { noticeFromCloud in
                             !(self?.notices.contains(where: { $0.id == noticeFromCloud.id }) ?? false)
                         }
-                        // Appending loaded notifications to notices[]
-                        self?.notices.append(contentsOf: cloudNoticesAfterCheckForUniqueID)
-                        self?.hapticManager.notification(type: .success)
-                        print("✅ Successfully appended \(cloudNoticesAfterCheckForUniqueID.count) notifications from the cloud")
+                        print("✅ NVN: Cloud notices with unique ID  \(cloudNoticesAfterCheckForUniqueID.count)")
+
+                        
+                        if !cloudNoticesAfterCheckForUniqueID.isEmpty {
+                            self?.notices.append(contentsOf: cloudNoticesAfterCheckForUniqueID)
+                            self?.hapticManager.notification(type: .success)
+                            print("✅ NVN: Successfully appended \(cloudNoticesAfterCheckForUniqueID.count) notifications from the cloud")
+                        } else {
+                            print("✅ NVN: No new notices from the cloud")
+                        }
                     } else {
                         self?.hapticManager.impact(style: .light)
-                        print("☑️ No new notifications from the cloud.")
-                        
+                        print("☑️ NVN: Array of notifications from the cloud is empty.")
                     }
                     
                 case .failure(let error):
                     self?.errorMessage = error.localizedDescription
                     self?.showErrorMessageAlert = true
                     self?.hapticManager.notification(type: .error)
-                    print("❌ Cloud import error: \(error.localizedDescription)")
+                    print("❌ NVN: Cloud import error: \(error.localizedDescription)")
                 }
                 completion()
             }
@@ -90,13 +95,13 @@ class NotificationViewModel: ObservableObject {
         return notes.max(by: { $0.noticeDate < $1.noticeDate })?.noticeDate
     }
     
-    func isReadSet(notice: Notice) {
+    func isReadSetTrue(notice: Notice) {
         if let index = notices.firstIndex(of: notice) {
             notices[index].isRead = true
         }
     }
     
-    func readToggle(notice: Notice) {
+    func isReadToggle(notice: Notice) {
         if let index = notices.firstIndex(of: notice) {
                 notices[index].isRead.toggle()
         }

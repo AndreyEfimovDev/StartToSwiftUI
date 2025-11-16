@@ -10,7 +10,7 @@ import SwiftUI
 struct NoticeDetailsView: View {
     
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject private var noticevm: NotificationCentre
+    @EnvironmentObject private var noticevm: NoticeViewModel
 
     let noticeId: String
     
@@ -33,7 +33,7 @@ struct NoticeDetailsView: View {
                 toolbarForNoticeDetails()
             }
             .onDisappear {
-                noticevm.isReadSet(notice: validNotice)
+                noticevm.isReadSetTrue(notice: validNotice)
             }
         }
 
@@ -107,5 +107,5 @@ fileprivate struct NoticeDetailsPreView: View {
     NavigationStack{
         NoticeDetailsPreView()
     }
-    .environmentObject(NotificationCentre())
+    .environmentObject(NoticeViewModel())
 }

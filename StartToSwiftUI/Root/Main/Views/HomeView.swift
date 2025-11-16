@@ -13,6 +13,8 @@ struct HomeView: View {
     
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
+//    @EnvironmentObject private var noticevm: NotificationViewModel
+
     
     private let hapticManager = HapticService.shared
 
@@ -36,7 +38,7 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
                 ScrollViewReader { proxy in
-                    ZStack (alignment: .bottomTrailing) {
+                    ZStack (alignment: .bottom) {
                         if vm.allPosts.isEmpty {
                             allPostsIsEmpty
                         } else if vm.filteredPosts.isEmpty {
@@ -56,7 +58,7 @@ struct HomeView: View {
                                             }
                                         }
                                     }
-                                    .frame(maxWidth: .infinity, alignment: .center)
+//                                    .frame(maxWidth: .infinity, alignment: .center)
                             } // if showButtonOnTop
                         } // else-if
                     } // ZStack
@@ -346,5 +348,7 @@ struct HomeView: View {
     //    NavigationStack {
     HomeView()
         .environmentObject(PostsViewModel())
+        .environmentObject(NoticeViewModel())
+
     //    }
 }

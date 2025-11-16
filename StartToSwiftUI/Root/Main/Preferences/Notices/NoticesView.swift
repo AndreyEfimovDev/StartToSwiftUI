@@ -10,18 +10,21 @@ import SwiftUI
 struct NoticesView: View {
     
     private let hapticManager = HapticService.shared
-    @EnvironmentObject private var nvm: NotificationCentre
-
+    @EnvironmentObject private var noticevm: NoticeViewModel
+    
     @State private var selectedNoticeId: String?
     @State private var selectedNotice: Notice?
     @State private var showDetailView: Bool = false
-
+    
     
     var body: some View {
-        
-            List {
-                ForEach(nvm.notices) { notice in
-//                    HStack {
+        ScrollView {
+            if noticevm.notices.isEmpty {
+                noticesIsEmpty
+            } else {
+                List {
+                    ForEach(noticevm.notices) { notice in
+                        //                    HStack {
                         //                        Circle()
                         //                        .fill(.white)
                         //                        .frame(width: 15, height: 15)
@@ -49,20 +52,31 @@ struct NoticesView: View {
                             } // right side swipe action buttonss
                             .swipeActions(edge: .leading, allowsFullSwipe: false) {
                                 Button(notice.isRead ? "Unread" : "Read" , systemImage: notice.isRead ?  "heart.slash.fill" : "heart.fill") {
-                                    nvm.isReadSet(notice: notice)
+                                    noticevm.isReadSetTrue(notice: notice)
                                 }
                                 .tint(notice.isRead ? Color.mycolor.mySecondaryText : Color.mycolor.myYellow)
                             } // left side swipe action buttons
-//                    }
-                } // ForEach
-                
-            } // List
-            .navigationDestination(isPresented: $showDetailView) {
-                
-                if let id = selectedNoticeId {                    NoticeDetailsView(noticeId: id)
-                }
+                        //                    }
+                    } // ForEach
+                    
+                } // List
+            } // if empty
+        }
+        .navigationDestination(isPresented: $showDetailView) {
+            
+            if let id = selectedNoticeId {                    NoticeDetailsView(noticeId: id)
             }
         }
+    }
+    
+    private var noticesIsEmpty: some View {
+        ContentUnavailableView(
+            "No notices",
+            systemImage: "tray.and.arrow.down",
+            description: Text("Notices will appear here when are available.")
+        )
+    }
+
     
 }
 
@@ -70,6 +84,6 @@ struct NoticesView: View {
     NavigationStack {
         NoticesView()
     }
-    .environmentObject(NotificationCentre())
-
+    .environmentObject(NoticeViewModel())
+    
 }
