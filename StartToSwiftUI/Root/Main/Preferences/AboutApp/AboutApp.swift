@@ -48,21 +48,21 @@ struct AboutApp: View {
                         NavigationLink("Welcome") {
                             WelcomeMessage()
                         }
-                        .customPreferencesListRowStyle(
+                        .customListRowStyle(
                             iconName: "suit.heart",
                             iconWidth: iconWidth
                         )
                         NavigationLink("Introduction") {
                             Introduction()
                         }
-                        .customPreferencesListRowStyle(
+                        .customListRowStyle(
                             iconName: "textformat.size.larger",
                             iconWidth: iconWidth
                         )
                         NavigationLink("What's New") { //  list.bullet list.bullet.circle square.fill.text.grid.1x2
                             WhatsNew()
                         }
-                        .customPreferencesListRowStyle(
+                        .customListRowStyle(
                             iconName: "newspaper",
                             iconWidth: iconWidth
                         )

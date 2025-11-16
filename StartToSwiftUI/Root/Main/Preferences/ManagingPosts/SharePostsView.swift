@@ -45,7 +45,6 @@ struct SharePostsView: View {
             }
         }
         .padding(.horizontal, 30)
-//        .padding(.top, 30)
         .padding(30)
         .sheet(isPresented: $showActivityView) {
             if let url = shareURL {

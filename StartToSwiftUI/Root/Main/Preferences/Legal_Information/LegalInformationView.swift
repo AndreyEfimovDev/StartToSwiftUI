@@ -17,7 +17,7 @@ struct LegalInformationView: View {
             NavigationLink("Terms of Use") {
                 TermsOfUse() {}
             }
-            .customPreferencesListRowStyle(
+            .customListRowStyle(
                 iconName: "hand.raised",
                 iconWidth: iconWidth
             )
@@ -25,7 +25,7 @@ struct LegalInformationView: View {
             NavigationLink("Privacy Policy") {
                 PrivacyPolicy()
             }
-            .customPreferencesListRowStyle(
+            .customListRowStyle(
                 iconName: "lock",
                 iconWidth: iconWidth
             )
@@ -33,7 +33,7 @@ struct LegalInformationView: View {
             NavigationLink("Copyright/DMCA Policy") {
                 CopyrightPolicy()
             }
-            .customPreferencesListRowStyle(
+            .customListRowStyle(
                 iconName: "c.circle",
                 iconWidth: iconWidth
             )
@@ -41,7 +41,7 @@ struct LegalInformationView: View {
             NavigationLink("Fair Use Notice") {
                 FairUseNotice()
             }
-            .customPreferencesListRowStyle(
+            .customListRowStyle(
                 iconName: "book",
                 iconWidth: iconWidth
             )

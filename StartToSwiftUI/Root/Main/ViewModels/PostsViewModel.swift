@@ -36,7 +36,7 @@ class PostsViewModel: ObservableObject {
                         self?.errorMessage = error.localizedDescription
                         self?.showErrorMessageAlert = true
                         self?.hapticManager.notification(type: .error)
-                        print("❌ Failed to save posts: \(error)")
+                        print("❌ VM(allPosts - didSet): Failed to save posts: \(error)")
                     }
                 }
             }
@@ -162,7 +162,9 @@ class PostsViewModel: ObservableObject {
             print("❌ VM(init): TimeZone is not set")
         }
         
-        noticeService.importNotificationsFromCloud() { }
+        noticeService.importNotificationsFromCloud() {
+            print("Notises have been uploaded")
+        }
         
         // initiating subscriptions
         addSubscribers()

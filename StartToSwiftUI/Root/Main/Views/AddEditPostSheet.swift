@@ -28,9 +28,6 @@ struct AddEditPostSheet: View {
     
     @State private var isPostDraftSaved: Bool = false
     @State private var isShowingMenuConfirmation: Bool = false
-//    @State private var isMenuConfirmationBlocked: Bool = false
-    
-//    @State private var deleteItem = false
     
     private let sectionBackground: Color = Color.mycolor.mySectionBackground
     private let sectionCornerRadius: CGFloat = 8

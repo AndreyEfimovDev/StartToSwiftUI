@@ -40,11 +40,15 @@ struct PreferencesView: View {
         NavigationStack {
             Form {
                 Section(header: sectionHeader("Settings")) {
-                    notificationSetting
+                    appearance
+                    notificationToggle
+                    notifications
                 }
                 Section(header: sectionHeader("Managing posts (\(postsCount))")) {
                     
-                    postDrafts
+                    if !vm.allPosts.filter({ $0.draft == true }).isEmpty {
+                        postDrafts
+                    }
                     
                     if (!vm.allPosts.isEmpty || vm.isPostsUpdateAvailable) && vm.isFirstImportPostsCompleted {
                         checkForPostsUpdate
@@ -55,7 +59,7 @@ struct PreferencesView: View {
                     restoreBackup
                     erasePosts
                 }
-                Section {
+                Section(header: sectionHeader("Сommunication")){
                     thankfullness
                     aboutApplication
                     legalInformation
@@ -82,7 +86,17 @@ struct PreferencesView: View {
             .foregroundStyle(Color.mycolor.myAccent)
     }
     
-    private var notificationSetting: some View {
+    
+    private var appearance: some View {
+        HStack {
+            Image(systemName: "sun.max")
+                .frame(width: iconWidth)
+                .foregroundStyle(Color.mycolor.myBlue)
+            Toggle("Appearance", isOn: $vm.isNotification)
+                .tint(Color.mycolor.myBlue)
+        }
+    }
+    private var notificationToggle: some View {
         HStack {
             Image(systemName: "bell")
                 .frame(width: iconWidth)
@@ -92,11 +106,22 @@ struct PreferencesView: View {
         }
     }
     
+    private var notifications: some View {
+        NavigationLink("Notifications") {
+            NoticesView()
+        }
+        .customListRowStyle(
+            iconName: "bell",
+            iconWidth: iconWidth
+        )
+    }
+
+    
     private var postDrafts: some View {
         NavigationLink("Post drafts (\(draftsCount))") {
             PostDraftsView()
         }
-        .customPreferencesListRowStyle(
+        .customListRowStyle(
             iconName: "square.stack.3d.up",
             iconWidth: iconWidth
         )
@@ -106,7 +131,7 @@ struct PreferencesView: View {
         NavigationLink("Check posts updates") {
             CheckForPostsUpdateView()
         }
-        .customPreferencesListRowStyle(
+        .customListRowStyle(
             iconName: "arrow.trianglehead.counterclockwise",
             iconWidth: iconWidth
         )
@@ -117,7 +142,7 @@ struct PreferencesView: View {
         NavigationLink("Download the curated collection") {
             ImportPostsFromCloudView()
         }
-        .customPreferencesListRowStyle(
+        .customListRowStyle(
             iconName: "icloud.and.arrow.down",
             iconWidth: iconWidth
         )
@@ -127,7 +152,7 @@ struct PreferencesView: View {
         NavigationLink("Share/Backup posts") {
             SharePostsView()
         }
-        .customPreferencesListRowStyle(
+        .customListRowStyle(
             iconName: "square.and.arrow.up",
             iconWidth: iconWidth
         )
@@ -137,7 +162,7 @@ struct PreferencesView: View {
         NavigationLink("Restore backup") {
             RestoreBackupView()
         }
-        .customPreferencesListRowStyle(
+        .customListRowStyle(
             iconName: "tray.and.arrow.up",
             iconWidth: iconWidth
         )
@@ -147,7 +172,7 @@ struct PreferencesView: View {
         NavigationLink("Delete all posts") {
             EraseAllPostsView()
         }
-        .customPreferencesListRowStyle(
+        .customListRowStyle(
             iconName: "trash",
             iconWidth: iconWidth
         )
@@ -158,7 +183,7 @@ struct PreferencesView: View {
         NavigationLink("Thankfullness") {
             
         }
-        .customPreferencesListRowStyle(
+        .customListRowStyle(
             iconName: "hand.thumbsup",
             iconWidth: iconWidth
         )
@@ -169,7 +194,7 @@ struct PreferencesView: View {
         NavigationLink("About App") {
             AboutApp()
         }
-        .customPreferencesListRowStyle(
+        .customListRowStyle(
             iconName: "info.circle",
             iconWidth: iconWidth
         )
@@ -180,7 +205,7 @@ struct PreferencesView: View {
         NavigationLink("Legal information") {
             LegalInformationView()
         }
-        .customPreferencesListRowStyle(
+        .customListRowStyle(
             iconName: "long.text.page.and.pencil",
             iconWidth: iconWidth
         )
@@ -194,7 +219,7 @@ struct PreferencesView: View {
                 body: ""
             )
         }
-        .customPreferencesListRowStyle(
+        .customListRowStyle(
             iconName: "envelope",
             iconWidth: iconWidth
         )

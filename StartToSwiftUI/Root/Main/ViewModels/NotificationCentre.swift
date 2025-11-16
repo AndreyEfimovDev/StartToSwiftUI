@@ -30,12 +30,12 @@ class NotificationCentre: ObservableObject {
                 DispatchQueue.main.async {
                     switch result {
                     case .success:
-                        print("✅ VM(allPosts - didSet): Notices saved successfully")
+                        print("✅ NC(notices - didSet): Notices saved successfully")
                     case .failure(let error):
                         self?.errorMessage = error.localizedDescription
                         self?.showErrorMessageAlert = true
                         self?.hapticManager.notification(type: .error)
-                        print("❌ Failed to save notices: \(error)")
+                        print("❌ NC(notices - didSet): Failed to save notices: \(error)")
                     }
                 }
             }
@@ -91,9 +91,25 @@ class NotificationCentre: ObservableObject {
     }
     
     func isReadSet(notice: Notice) {
-        
         if let index = notices.firstIndex(of: notice) {
-                notices[index].isRead = true
+            notices[index].isRead = true
+        }
+    }
+    
+    func readToggle(notice: Notice) {
+        if let index = notices.firstIndex(of: notice) {
+                notices[index].isRead.toggle()
+        }
+    }
+
+
+    func deleteNotice(notice: Notice?) {
+        if let validNotice = notice {
+            if let index = notices.firstIndex(of: validNotice) {
+                notices.remove(at: index)
+            }
+        } else {
+            print("NS.deletePost: passed notice is nil")
         }
     }
 

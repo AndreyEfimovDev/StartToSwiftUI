@@ -15,7 +15,7 @@ struct HomeView: View {
     @EnvironmentObject private var vm: PostsViewModel
     
     private let hapticManager = HapticService.shared
-    
+
     @State private var selectedPostId: String?
     @State private var selectedPost: Post?
     @State private var selectedPostToDelete: Post?
@@ -30,47 +30,69 @@ struct HomeView: View {
     @State private var isFilterButtonPressed: Bool = false
     
     @State private var isShowingDeleteConfirmation: Bool = false
-    //    @State private var isAnyChanges: Bool = false
     
     // MARK: VIEW BODY
     
     var body: some View {
         NavigationStack {
-            ZStack {
-                mainViewBody
-                    .navigationTitle(vm.allPosts.isEmpty ? "" : vm.homeTitleName)
-                    .navigationBarTitleDisplayMode(.inline)
-                    .navigationBarBackButtonHidden(true)
-                    .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
-                    .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-                    .toolbar { toolbarForMainViewBody() }
-                    .safeAreaInset(edge: .top) {
-                        SearchBarView()
+                ScrollViewReader { proxy in
+                    ZStack (alignment: .bottomTrailing) {
+                        if vm.allPosts.isEmpty {
+                            allPostsIsEmpty
+                        } else if vm.filteredPosts.isEmpty {
+                            filteredPostsIsEmpty
+                        } else {
+                            mainViewBody
+                            if showOnTopButton {
+                                CircleStrokeButtonView(
+                                    iconName: "control", // control arrow.up
+                                    iconFont: .title,
+                                    imageColorPrimary: Color.mycolor.myBlue,
+                                    widthIn: 55,
+                                    heightIn: 55) {
+                                        withAnimation {
+                                            if let firstID = vm.filteredPosts.first?.id {
+                                                proxy.scrollTo(firstID, anchor: .top)
+                                            }
+                                        }
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                            } // if showButtonOnTop
+                        } // else-if
+                    } // ZStack
+                } // ScrollViewReader
+                .navigationTitle(vm.allPosts.isEmpty ? "Study materials" : vm.homeTitleName)
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarBackButtonHidden(true)
+                .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+                .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+                .toolbar { toolbarForMainViewBody() }
+                .safeAreaInset(edge: .top) {
+                    SearchBarView()
+                }
+                .navigationDestination(isPresented: $showDetailView) {
+                    if let id = selectedPostId {
+                        PostDetailsView(postId: id)
                     }
-                    .navigationDestination(isPresented: $showDetailView) {
-                        if let id = selectedPostId {
-                            PostDetailsView(postId: id)
-                        }
-                    }
-                    .fullScreenCover(isPresented: $showPreferancesView) {
-                        PreferencesView()
-                    }
-                    .fullScreenCover(isPresented: $showAddPostView) {
-                        AddEditPostSheet(post: nil)
-                    }
-                    .fullScreenCover(item: $selectedPost) { selectedPostToEdit in
-                        AddEditPostSheet(post: selectedPostToEdit)
-                    }
-                    .sheet(isPresented: $isFilterButtonPressed) {
-                        FiltersSheetView(
-                            isFilterButtonPressed: $isFilterButtonPressed
-                        )
-                        .presentationBackground(.clear)
-                        .presentationDetents([.height(600)])
-                        .presentationDragIndicator(.visible)
-                        .presentationCornerRadius(30)
-                    }
-            } // ZStack
+                }
+                .fullScreenCover(isPresented: $showPreferancesView) {
+                    PreferencesView()
+                }
+                .fullScreenCover(isPresented: $showAddPostView) {
+                    AddEditPostSheet(post: nil)
+                }
+                .fullScreenCover(item: $selectedPost) { selectedPostToEdit in
+                    AddEditPostSheet(post: selectedPostToEdit)
+                }
+                .sheet(isPresented: $isFilterButtonPressed) {
+                    FiltersSheetView(
+                        isFilterButtonPressed: $isFilterButtonPressed
+                    )
+                    .presentationBackground(.clear)
+                    .presentationDetents([.height(600)])
+                    .presentationDragIndicator(.visible)
+                    .presentationCornerRadius(30)
+                }
         } // NavigationStack
         .onAppear {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
@@ -94,75 +116,49 @@ struct HomeView: View {
     // MARK: Subviews
     
     private var mainViewBody: some View {
-        ScrollViewReader { proxy in
-            ZStack (alignment: .bottomTrailing) {
-                if vm.allPosts.isEmpty {
-                    allPostsIsEmpty
-                } else if vm.filteredPosts.isEmpty {
-                    filteredPostsIsEmpty
-                } else {
-                    List {
-                        ForEach(vm.filteredPosts) { post in
-                            PostRowView(post: post)
-                                .id(post.id)
-                                .background(trackingFistPostInList(post: post))
-                                .padding(.bottom, 4)
-                                .listRowSeparator(.hidden)
-                                .listRowBackground(Color.clear)
-                                .listRowInsets(
-                                    EdgeInsets(top: 0, leading: 1, bottom: 1, trailing: 1)
-                                )
-                                .onTapGesture {
-                                    selectedPostId = post.id
-                                    showDetailView.toggle()
-                                }
-                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                    Button("Delete", systemImage: "trash") {
-                                        selectedPostToDelete = post
-                                        hapticManager.notification(type: .warning)
-                                        isShowingDeleteConfirmation = true
-                                    }.tint(Color.mycolor.myRed)
-                                    
-                                    //                                    if post.origin == .cloud {
-                                    Button("Edit", systemImage: post.origin == .cloud ? "pencil.slash" : "pencil") {
-                                        selectedPost = post
-                                    }
-                                    .tint(Color.mycolor.myButtonBGBlue)
-                                    .disabled(post.origin == .cloud)
-                                    //                                    }
-                                } // right side swipe action buttonss
-                                .swipeActions(edge: .leading, allowsFullSwipe: false) {
-                                    Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: post.favoriteChoice == .yes ?  "heart.slash.fill" : "heart.fill") {
-                                        vm.favoriteToggle(post: post)
-                                    }
-                                    .tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondaryText : Color.mycolor.myYellow)
-                                } // left side swipe action buttons
-                        } // ForEach
-                        // .buttonStyle(.plain) // it makes the buttons accessable through the List elements
-                    } // List
-                    .listStyle(.plain)
-                    .background(Color.mycolor.myBackground)
-                    
-                    
-                    if showOnTopButton {
-                        CircleStrokeButtonView(
-                            iconName: "control", // control arrow.up
-                            iconFont: .title,
-                            imageColorPrimary: Color.mycolor.myBlue,
-                            widthIn: 55,
-                            heightIn: 55) {
-                                withAnimation {
-                                    if let firstID = vm.filteredPosts.first?.id {
-                                        proxy.scrollTo(firstID, anchor: .top)
-                                    }
-                                }
+        ZStack {
+            List {
+                ForEach(vm.filteredPosts) { post in
+                    PostRowView(post: post)
+                        .id(post.id)
+                        .background(trackingFistPostInList(post: post))
+                        .padding(.bottom, 4)
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(
+                            EdgeInsets(top: 0, leading: 1, bottom: 1, trailing: 1)
+                        )
+                        .onTapGesture {
+                            selectedPostId = post.id
+                            showDetailView.toggle()
+                        }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            Button("Delete", systemImage: "trash") {
+                                selectedPostToDelete = post
+                                hapticManager.notification(type: .warning)
+                                isShowingDeleteConfirmation = true
+                            }.tint(Color.mycolor.myRed)
+                            
+                            //                                    if post.origin == .cloud {
+                            Button("Edit", systemImage: post.origin == .cloud ? "pencil.slash" : "pencil") {
+                                selectedPost = post
                             }
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        //                            .padding(.trailing, 35)
-                    } // if showButtonOnTop
-                } // else-if
-            } // ZStack
-        } // ScrollViewReader
+                            .tint(Color.mycolor.myButtonBGBlue)
+                            .disabled(post.origin == .cloud)
+                            //                                    }
+                        } // right side swipe action buttonss
+                        .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                            Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: post.favoriteChoice == .yes ?  "heart.slash.fill" : "heart.fill") {
+                                vm.favoriteToggle(post: post)
+                            }
+                            .tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondaryText : Color.mycolor.myYellow)
+                        } // left side swipe action buttons
+                } // ForEach
+                // .buttonStyle(.plain) // it makes the buttons accessable through the List elements
+            } // List
+            .listStyle(.plain)
+            .background(Color.mycolor.myBackground)
+        }
     }
     
     private var allPostsIsEmpty: some View {
@@ -347,8 +343,8 @@ struct HomeView: View {
 }
 
 #Preview {
-//    NavigationStack {
-        HomeView()
-            .environmentObject(PostsViewModel())
-//    }
+    //    NavigationStack {
+    HomeView()
+        .environmentObject(PostsViewModel())
+    //    }
 }
