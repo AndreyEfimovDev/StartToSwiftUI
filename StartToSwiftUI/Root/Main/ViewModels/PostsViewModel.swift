@@ -16,7 +16,7 @@ class PostsViewModel: ObservableObject {
     private let fileManager = FileStorageService.shared
     private let hapticManager = HapticService.shared
     private let networkService = NetworkService()
-    private let noticeService = NotificationCentre()
+    private let noticeService = NoticeViewModel()
     
     @Published var allPosts: [Post] = [] {
         didSet {
@@ -162,8 +162,8 @@ class PostsViewModel: ObservableObject {
             print("❌ VM(init): TimeZone is not set")
         }
         
-        noticeService.importNotificationsFromCloud() {
-            print("Notises have been uploaded")
+        noticeService.importNoticesFromCloud() {
+            print("✅ VM(init): Notices have been uploaded from the Cloud")
         }
         
         // initiating subscriptions

@@ -46,10 +46,10 @@ class FileStorageService: ObservableObject {
             do {
                 let jsonData = try encoder.encode(data)
                 try jsonData.write(to: url)
-                print("✅ FM(savePosts): Successfully saved в \(url)")
+                print("✅ FM(saveData): Successfully saved in: \(url)")
                 completion(.success(()))
             } catch {
-                print("❌ FM(savePosts): Error in saving posts: \(error)")
+                print("❌ FM(saveData): Error in saving posts: \(error)")
                 completion(.failure(.encodingFailed(error)))
             }
             
@@ -71,7 +71,7 @@ class FileStorageService: ObservableObject {
         case .success(let url):
             // Check the file for existance
             guard FileManager.default.fileExists(atPath: url.path) else {
-                print("☑️ FM(loadPosts): No saved posts found")
+                print("☑️ FM(loadData): No saved data found")
                 completion(.failure(.fileNotFound))
                 return
             }
@@ -80,10 +80,10 @@ class FileStorageService: ObservableObject {
             do {
                 let jsonData = try Data(contentsOf: url)
                 let decodedData = try decoder.decode(T.self, from: jsonData)
-                print("✅ FM(loadPosts): Successfully uploaded")
+                print("✅ FM(loadData): Successfully uploaded")
                 completion(.success(decodedData))
             } catch {
-                print("☑️ FM(loadPosts): Decoding error: \(error)")
+                print("☑️ FM(loadData): Decoding error: \(error)")
                 completion(.failure(.decodingFailed(error)))
             }
             

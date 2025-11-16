@@ -248,4 +248,6 @@ struct PreferencesView: View {
         PreferencesView ()
     }
     .environmentObject(PostsViewModel())
+    .environmentObject(NoticeViewModel())
+
 }

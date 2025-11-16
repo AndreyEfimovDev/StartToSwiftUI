@@ -27,8 +27,12 @@ struct NoticeRowView: View {
 //                .border(.green)
                 .lineLimit(1)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
         .fontWeight(notice.isRead ? .regular : .bold)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .clipShape(
+            RoundedRectangle(cornerRadius: 10)
+                
+        )
         .border(.red)
 
     }
