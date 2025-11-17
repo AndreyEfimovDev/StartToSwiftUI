@@ -14,79 +14,51 @@ class NoticeViewModel: ObservableObject {
     private let hapticManager = HapticService.shared
     private let networkService: NetworkService
 
+    @Published var notices: [Notice] = []
+    @Published var errorMessage: String?
+    @Published var showErrorMessageAlert = false
+    
     init(
         networkService: NetworkService = NetworkService(baseURL: Constants.cloudNoticesURL)
     ) {
         self.networkService = networkService
         
-        // Loading notices from a local JSON file
-        if fileManager.checkIfFileExists(fileName: Constants.localNoticesFileName) {
-            self.loadNotices()
+        // Loading notices from a local JSON file and after notices imported from Cloud
+        self.loadLocalNotices(from: Constants.localNoticesFileName) {[weak self] localNotices in
+            self?.importNoticesFromCloud(localNotices: localNotices)
         }
-        // Import notices from Cloud
-        self.importNoticesFromCloud()
-
     }
 
-    @Published var errorMessage: String?
-    @Published var showErrorMessageAlert = false
-
-    @Published var notices: [Notice] = [] {
-        didSet {
-            fileManager.saveData(
-                notices,
-                fileName: Constants.localNoticesFileName
-            ) { [weak self] result in
-                
-                self?.errorMessage = nil
-                self?.showErrorMessageAlert = false
-                
+    private func loadLocalNotices(from urlOnLocalNotices: String, completion: @escaping ([Notice]) -> Void) {
+        
+            fileManager.loadData(fileName: urlOnLocalNotices) { [weak self] (result: Result<[Notice], FileStorageError>) in
                 DispatchQueue.main.async {
                     switch result {
-                    case .success:
-                        print("🍉 NVM(notices - didSet): Notices saved successfully.")
+                    case .success(let loadedNotices):
+                        print("🍉 NVM(loadNotices): Successfully received array of notices from JSON file.")
+                        if !loadedNotices.isEmpty {
+                            // Updating App posts
+                            self?.notices = loadedNotices
+                            print("🍉 NVM(loadNotices): Successfully loaded \(loadedNotices.count) notices a local JSON file.")
+                        } else {
+                            print("🍉☑️ NVM(loadNotices): Array of notices from a local JSON file is empty.")
+                        }
+                        completion(loadedNotices)
+                        
                     case .failure(let error):
                         self?.errorMessage = error.localizedDescription
                         self?.showErrorMessageAlert = true
                         self?.hapticManager.notification(type: .error)
-                        print("🍉❌ NVM(notices - didSet): Failed to save notices: \(error)")
+                        print("🍉❌ NVM(loadNotices): Local load error: \(error.localizedDescription)")
+                        completion([])
                     }
                 }
             }
-            
-        }
     }
+    
+    
+    private func importNoticesFromCloud(localNotices: [Notice]) {
         
-    private func loadNotices() {
-        fileManager.loadData(
-            fileName: Constants.localNoticesFileName
-        ) { [weak self] (result: Result<[Notice], FileStorageError>) in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let loadedNotices):
-                    print("🍉 NVM(loadNotices): Successfully received array of notices from JSON file.")
-                    if !loadedNotices.isEmpty {
-                        // Updating App posts
-                        self?.notices = loadedNotices
-                        self?.hapticManager.notification(type: .success)
-                        print("🍉 NVM(loadNotices): Successfully loaded \(loadedNotices.count) notices a local JSON file.")
-                    } else {
-                        self?.notices = []
-                        self?.hapticManager.impact(style: .light)
-                        print("🍉☑️ NVM(loadNotices): Array of notices from a local JSON file is empty.")
-                        
-                    }
-                case .failure(let error):
-                    self?.errorMessage = error.localizedDescription
-                    self?.showErrorMessageAlert = true
-                    self?.hapticManager.notification(type: .error)
-                    print("🍉❌ NVM(loadNotices): Local load error: \(error.localizedDescription)")
-                }
-            }
-        }
-    }
-
-    private func importNoticesFromCloud() {
         errorMessage = nil
         showErrorMessageAlert = false
         
@@ -103,58 +75,113 @@ class NoticeViewModel: ObservableObject {
                         let cloudNoticesAfterCheckForUniqueID = cloudResponse.filter { noticeFromCloud in
                             !(self?.notices.contains(where: { $0.id == noticeFromCloud.id }) ?? false)
                         }
-                        print("🍉 NVN: Cloud notices with unique ID  \(cloudNoticesAfterCheckForUniqueID.count)")
+                        print("🍉 NVN(importNoticesFromCloud): Cloud notices with unique ID  \(cloudNoticesAfterCheckForUniqueID.count)")
 
                         
                         if !cloudNoticesAfterCheckForUniqueID.isEmpty {
-                            self?.notices.append(contentsOf: cloudNoticesAfterCheckForUniqueID)
-                            self?.hapticManager.notification(type: .success)
-                            print("🍉 NVN: Successfully appended \(cloudNoticesAfterCheckForUniqueID.count) notifications from the cloud")
+                            let mergedNotices = localNotices + cloudNoticesAfterCheckForUniqueID
+                            self?.notices = mergedNotices
+                            self?.saveNotices()
+                            print("🍉 NVN(importNoticesFromCloud): Successfully appended \(cloudNoticesAfterCheckForUniqueID.count) notifications from the cloud")
                         } else {
-                            print("🍉 NVN: No new notices from the cloud")
+                            print("🍉 NVN(importNoticesFromCloud): No new notices from the cloud")
                         }
                     } else {
-                        self?.hapticManager.impact(style: .light)
-                        print("🍉☑️ NVN: Array of notifications from the cloud is empty.")
+                        print("🍉☑️ NVN(importNoticesFromCloud): Array of notifications from the cloud is empty.")
                     }
                     
                 case .failure(let error):
                     self?.errorMessage = error.localizedDescription
                     self?.showErrorMessageAlert = true
                     self?.hapticManager.notification(type: .error)
-                    print("🍉❌ NVN: Cloud import error: \(error.localizedDescription)")
+                    print("🍉❌ NVN(importNoticesFromCloud): Cloud import error: \(error.localizedDescription)")
                 }
             }
         }
     }
 
-    private func getLatestDateFromNotifications(notes: [Notice]) -> Date? {
-        guard !notes.isEmpty else { return nil }
+    
+    private func saveNotices() {
         
-        return notes.max(by: { $0.noticeDate < $1.noticeDate })?.noticeDate
+        fileManager.saveData(notices, fileName: Constants.localNoticesFileName) { [weak self] result in
+            
+            self?.errorMessage = nil
+            self?.showErrorMessageAlert = false
+            
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    print("🍉 NVM(saveNotices): Notices saved successfully.")
+                case .failure(let error):
+                    self?.errorMessage = error.localizedDescription
+                    self?.showErrorMessageAlert = true
+                    self?.hapticManager.notification(type: .error)
+                    print("🍉❌ NVM(saveNotices): Failed to save notices: \(error)")
+                }
+            }
+        }
+    }
+
+    
+    private func getLatestDateFromNotices(notices: [Notice]) -> Date? {
+        guard !notices.isEmpty else {
+            print("🍉 ☑️ NVN(getLatestDateFromNotices): notices is empty")
+
+            return nil
+        }
+        
+        return notices.max(by: { $0.noticeDate < $1.noticeDate })?.noticeDate
     }
     
     func isReadSetTrue(notice: Notice) {
         if let index = notices.firstIndex(of: notice) {
             notices[index].isRead = true
+            saveNotices()
+        } else {
+            print("🍉 ❌ NVN(isReadSetTrue): passed notice is nil")
         }
     }
     
     func isReadToggle(notice: Notice) {
         if let index = notices.firstIndex(of: notice) {
-                notices[index].isRead.toggle()
+            notices[index].isRead.toggle()
+            saveNotices()
+        }
+        else {
+            print("🍉 ❌ NVN(isReadToggle): passed notice is nil")
         }
     }
-
 
     func deleteNotice(notice: Notice?) {
         if let validNotice = notice {
             if let index = notices.firstIndex(of: validNotice) {
                 notices.remove(at: index)
+                saveNotices()
             }
         } else {
             print("🍉 ❌ NVN(deletePost): passed notice is nil")
         }
     }
+    
+//    private func saveNotices() {
+//        
+//        fileManager.saveData(notices, fileName: Constants.localNoticesFileName) { [weak self] result in
+//            
+//            self?.errorMessage = nil
+//            self?.showErrorMessageAlert = false
+//            
+//            DispatchQueue.main.async {
+//                switch result {
+//                case .success:
+//                    print("🍉 NVM(saveNotices): Notices saved successfully.")
+//                case .failure(let error):
+//                    self?.errorMessage = error.localizedDescription
+//                    self?.showErrorMessageAlert = true
+//                    self?.hapticManager.notification(type: .error)
+//                    print("🍉❌ NVM(saveNotices): Failed to save notices: \(error)")
+//                }
+//            }
+//        }
+//    }
 
 }
