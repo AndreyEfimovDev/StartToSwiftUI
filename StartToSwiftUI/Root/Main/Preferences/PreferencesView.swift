@@ -37,22 +37,29 @@ struct PreferencesView: View {
         return postDrafts.count
         }
 
-    @State private var theme: Theme = .dark
+//    @State private var theme: Theme = .dark
 
         
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 Section(header: sectionHeader("Appearance")) {
 //                    appearance
-                    UnderlineSermentedPickerNotOptional(
-                        selection: $theme,
-                        allItems: Theme.allCases,
-                        titleForCase: { $0.displayName },
-                        selectedFont: .footnote,
-                        selectedTextColor: Color.mycolor.myBlue,
-                        unselectedTextColor: Color.mycolor.mySecondaryText
-                    )
+                    
+                    Picker("Appearance", selection: $vm.selectedTheme) {
+                        ForEach(Theme.allCases, id: \.self) { theme in
+                            Text(theme.displayName)
+                                .tag(theme)
+                        }
+                    }
+//                    UnderlineSermentedPickerNotOptional(
+//                        selection: $vm.selectedTheme,
+//                        allItems: Theme.allCases,
+//                        titleForCase: { $0.displayName },
+//                        selectedFont: .footnote,
+//                        selectedTextColor: Color.mycolor.myBlue,
+//                        unselectedTextColor: Color.mycolor.mySecondaryText
+//                    )
                 }
                 Section(header: sectionHeader("Notifications")) {
                     notificationToggle
@@ -91,6 +98,7 @@ struct PreferencesView: View {
                     }
                 }
             }
+            .preferredColorScheme(vm.selectedTheme.colorScheme)
         } // NavigationStack
     }
     

@@ -11,13 +11,13 @@ import SwiftUI
 
 // MARK: CUSTOM BACKGROUND
 
-extension View {
-    func myBackground(colorScheme: ColorScheme) -> some View {
-        self
-            .background(.thinMaterial)
-//            .ignoresSafeArea()
-    }
-}
+//extension View {
+//    func myBackground(colorScheme: ColorScheme) -> some View {
+//        self
+//            .background(.thinMaterial)
+////            .ignoresSafeArea()
+//    }
+//}
 
 
 extension View {

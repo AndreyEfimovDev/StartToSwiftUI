@@ -18,6 +18,10 @@ class NoticeViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var showErrorMessageAlert = false
     
+    @Published var selectedNoticeIDs: Set<String> = []
+    @Published var isSelectionMode: Bool = false
+
+    
     init(
         networkService: NetworkService = NetworkService(baseURL: Constants.cloudNoticesURL)
     ) {

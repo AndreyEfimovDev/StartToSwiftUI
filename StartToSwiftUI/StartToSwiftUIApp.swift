@@ -11,14 +11,13 @@ import SwiftUI
 @main
 struct StartToSwiftUIApp: App {
     
-    private let hapticManager = HapticService.shared
 
     @StateObject private var vm = PostsViewModel()
     @StateObject private var noticevm = NoticeViewModel()
+    private let hapticManager = HapticService.shared
 
     @State private var showLaunchView: Bool = true
     
-
     init() { // to set a custom colour for the magnifying class in the search bar
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor : UIColor(Color.mycolor.myAccent)]
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor(Color.mycolor.myAccent)]
@@ -41,10 +40,11 @@ struct StartToSwiftUIApp: App {
                 .zIndex(1)
 
                 HomeView()
-                
             }
             .environmentObject(vm)
             .environmentObject(noticevm)
+            .preferredColorScheme(vm.selectedTheme.colorScheme)
+
         }
     }
 }

@@ -46,6 +46,7 @@ struct NoticesView: View {
                                         showNoticeDetails = false
                                     }
                                 }
+                                .opacity(showNoticeDetails ? 1.0 : 0.0)
                                 .transition(.move(edge: .trailing))
                                 .zIndex(1)
                             }

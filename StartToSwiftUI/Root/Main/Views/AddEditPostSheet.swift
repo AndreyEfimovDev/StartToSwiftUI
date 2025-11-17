@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AddEditPostSheet: View {
     
-    @Environment(\.colorScheme) private var colorScheme
+//    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     
