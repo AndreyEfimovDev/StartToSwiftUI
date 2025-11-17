@@ -27,7 +27,7 @@ struct NoticeRowView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
 //        .background(.ultraThinMaterial)
 //        .clipShape(
-//            RoundedRectangle(cornerRadius: 10)
+//            RoundedRectangle(cornerRadius: 3)
 //                
 //        )
     }
