@@ -31,6 +31,7 @@ class PostsViewModel: ObservableObject {
     
     // MARK: Stored preferances
     
+    @AppStorage("selectedTheme") var selectedTheme: Theme = .system
     @AppStorage("homeTitleName") var homeTitleName: String = "SwiftUI materials"
     //    @AppStorage("isFirstAppLaunch") var isFirstAppLaunch: Bool = true
     @AppStorage("isFirstPostsLoad") var isFirstImportPostsCompleted: Bool = false {

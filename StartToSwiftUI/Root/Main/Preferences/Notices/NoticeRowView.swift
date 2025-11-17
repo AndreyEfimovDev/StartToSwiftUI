@@ -47,7 +47,7 @@ struct NoticeRowView: View {
 
 fileprivate struct NoticeRowPreView: View {
     
-    @Environment(\.colorScheme) var colorScheme
+//    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         List {

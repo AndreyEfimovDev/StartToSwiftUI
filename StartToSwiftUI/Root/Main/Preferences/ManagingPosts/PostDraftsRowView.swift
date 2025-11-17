@@ -57,7 +57,7 @@ struct PostDraftsRowView: View {
 
 fileprivate struct PostDraftsRowPreView: View {
     
-    @Environment(\.colorScheme) var colorScheme
+//    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         ZStack {

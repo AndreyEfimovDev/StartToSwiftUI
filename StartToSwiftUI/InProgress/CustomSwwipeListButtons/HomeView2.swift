@@ -11,7 +11,7 @@ struct HomeView2: View {
     
     // MARK: PROPERTIES
     
-    @Environment(\.colorScheme) var colorScheme
+//    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject private var vm: PostsViewModel
     
     @State private var selectedPostId: String?

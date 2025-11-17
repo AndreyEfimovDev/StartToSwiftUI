@@ -214,7 +214,7 @@ struct PostRowView2: View {
 
 fileprivate struct PostRowPreView: View {
     
-    @Environment(\.colorScheme) var colorScheme
+//    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         ZStack {
