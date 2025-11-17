@@ -12,13 +12,10 @@ struct RestoreBackupView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
 
-    private let fileManager = JSONFileManager.shared
     private let hapticManager = HapticService.shared
     
     @State private var isBackedUp: Bool = false
     @State private var postCount: Int = 0
-//    @State private var showErrorAlert = false
-//    @State private var errorMessage = ""
     @State private var isInProgress = false
     
     @State private var showDocumentPicker = false
