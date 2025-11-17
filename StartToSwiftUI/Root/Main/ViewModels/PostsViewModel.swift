@@ -16,30 +16,9 @@ class PostsViewModel: ObservableObject {
     private let fileManager = JSONFileManager.shared
     private let hapticManager = HapticService.shared
     private let networkService: NetworkService
-    private let noticeService = NoticeViewModel()
     
     @Published var allPosts: [Post] = [] {
         didSet {
-            fileManager.saveData(
-                allPosts,
-                fileName: Constants.localPostsFileName
-            ) { [weak self] result in
-                
-                self?.errorMessage = nil
-                self?.showErrorMessageAlert = false
-
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success:
-                        print("✅ VM(allPosts - didSet): Posts saved successfully")
-                    case .failure(let error):
-                        self?.errorMessage = error.localizedDescription
-                        self?.showErrorMessageAlert = true
-                        self?.hapticManager.notification(type: .error)
-                        print("❌ VM(allPosts - didSet): Failed to save posts: \(error)")
-                    }
-                }
-            }
             allYears = getAllYears()
             allCategories = getAllCategories()
         }
@@ -67,7 +46,7 @@ class PostsViewModel: ObservableObject {
     @AppStorage("storedType") var storedType: PostType?
     @AppStorage("storedPlatform") var storedPlatform: Platform?
     @AppStorage("storedYear") var storedYear: String?
-
+    
     // stored the date of the Cloud posts last imported
     @AppStorage("localLastUpdated") var localLastUpdated: Date = (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date())
     
@@ -95,7 +74,7 @@ class PostsViewModel: ObservableObject {
     private var utcCalendar = Calendar.current
     var allYears: [String]? = nil
     var allCategories: [String]? = nil
-    var dispatchTime: DispatchTime { .now() + 2 }
+    var dispatchTime: DispatchTime { .now() + 1.5 }
     
     // MARK: INIT() SECTION
     
@@ -103,40 +82,35 @@ class PostsViewModel: ObservableObject {
         networkService: NetworkService = NetworkService(baseURL: Constants.cloudPostsURL)
     ) {
         self.networkService = networkService
-
-        print("🍓VM(init): Last update date: \(localLastUpdated.formatted(date: .abbreviated, time: .shortened))")
         
-        // checking if the local JSON file with posts exists
-        if fileManager.checkIfFileExists(fileName: Constants.localPostsFileName) {
-            fileManager.loadData(
-                fileName: Constants.localPostsFileName
-            ) { [weak self] (result: Result<[Post], FileStorageError>) in
-                
-                self?.errorMessage = nil
-                self?.showErrorMessageAlert = false
-
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let posts):
-                        self?.allPosts = posts
-                    case .failure(let error):
-                        self?.errorMessage = error.localizedDescription
-                        self?.showErrorMessageAlert = true
-                        print("🍓VM(init): Failed to load posts: \(error)")
-                    }
-                }
-            }
-                    
-            if !self.allPosts.isEmpty {
-                checkCloudForUpdates { hasUpdates in
-                    if hasUpdates {
-                        self.isPostsUpdateAvailable = true
-                        print(self.isPostsUpdateAvailable.description)
-                    }
-                }
-            }
+        //        print("🍓VM(init): Last update date: \(localLastUpdated.formatted(date: .abbreviated, time: .shortened))")
+        
+        // Load local JSON file with notices
+        fileManager.loadData(fileName: Constants.localPostsFileName) { [weak self] (result: Result<[Post], FileStorageError>) in
             
-            self.filteredPosts = self.allPosts
+            self?.errorMessage = nil
+            self?.showErrorMessageAlert = false
+            
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let posts):
+                    self?.allPosts = posts
+                    print("🍓 VM(init): Successfully loaded \(posts.count) posts")
+                case .failure(let error):
+                    self?.errorMessage = error.localizedDescription
+                    self?.showErrorMessageAlert = true
+                    print("🍓 ❌ VM(init): Failed to load posts: \(error)")
+                }
+            }
+        }
+        
+        if !self.allPosts.isEmpty {
+            checkCloudForUpdates { hasUpdates in
+                if hasUpdates {
+                    self.isPostsUpdateAvailable = true
+                    print(self.isPostsUpdateAvailable.description)
+                }
+            }
         }
         
         // filters initilazation
@@ -149,11 +123,10 @@ class PostsViewModel: ObservableObject {
         
         if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
             utcCalendar.timeZone = utcTimeZone
-            print("🍓 VM(init): TimeZone is set successfully")
         } else {
             print("🍓❌ VM(init): TimeZone is not set")
         }
-                
+        
         // initiating subscriptions
         addSubscribers()
         
@@ -203,7 +176,6 @@ class PostsViewModel: ObservableObject {
                     type: type,
                     year: year
                 )
-                
                 // Applying search text
                 return self.searchPosts(posts: filtered)
             }
@@ -270,12 +242,14 @@ class PostsViewModel: ObservableObject {
     func addPost(_ newPost: Post) {
         print("🍓 VM(addPost): Adding a new post")
         allPosts.append(newPost)
+        savePosts()
     }
     
     func updatePost(_ updatedPost: Post) {
         if let index = allPosts.firstIndex(where: { $0.id == updatedPost.id }) {
             print("🍓 VM(updatePost): Updating a current edited post")
             allPosts[index] = updatedPost
+            savePosts()
         } else {
             print("🍓❌ VM(updatePost): Can't find the index")
         }
@@ -285,6 +259,7 @@ class PostsViewModel: ObservableObject {
         if let validPost = post {
             if let index = allPosts.firstIndex(of: validPost) {
                 allPosts.remove(at: index)
+                savePosts()
             }
         } else {
             print("🍓VM.deletePost: passed post is nil")
@@ -292,8 +267,8 @@ class PostsViewModel: ObservableObject {
     }
     
     func eraseAllPosts(_ completion: @escaping () -> ()) {
-        //        filteredPosts = []
         allPosts = []
+        savePosts()
         completion()
     }
     
@@ -306,7 +281,28 @@ class PostsViewModel: ObservableObject {
             case .yes:
                 allPosts[index].favoriteChoice = .no
             }
-            //            fileManager.savePosts(allPosts)
+            savePosts()
+        }
+    }
+    
+    private func savePosts() {
+        
+        fileManager.saveData(allPosts, fileName: Constants.localPostsFileName) { [weak self] result in
+            
+            self?.errorMessage = nil
+            self?.showErrorMessageAlert = false
+            
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    print("🍓 VM(savePosts): Posts saved successfully")
+                case .failure(let error):
+                    self?.errorMessage = error.localizedDescription
+                    self?.showErrorMessageAlert = true
+                    self?.hapticManager.notification(type: .error)
+                    print("🍓❌ VM(savePosts): Failed to save posts: \(error)")
+                }
+            }
         }
     }
     
@@ -338,17 +334,19 @@ class PostsViewModel: ObservableObject {
     
     func getFilePath(fileName: String) -> Result<URL, FileStorageError> {
         
+        print("🍓FM(getFilePath): Getting url.")
+        
         let urlResult = fileManager.getFileURL(fileName: fileName)
         
         switch urlResult {
         case .success(let url):
-            print("✅ FM(getFileURL): Successfully got file url: \(url).")
+            print("🍓FM(getFilePath): Successfully got file url: \(url).")
             return .success(url)
         case .failure(let error):
             return .failure(error)
         }
     }
-
+    
     
     /// Import posts from the Cloud using the specified URL string.
     ///
@@ -390,7 +388,7 @@ class PostsViewModel: ObservableObject {
                         self?.allPosts.append(contentsOf: cloudPostsAfterCheckForUniqueID)
                         self?.hapticManager.notification(type: .success)
                         self?.localLastUpdated = self?.getLatestDateFromPosts(posts: cloudPostsAfterCheckForUniqueID) ?? .now
-
+                        
                         print("🍓 Successfully appended \(cloudPostsAfterCheckForUniqueID.count) posts from the cloud")
                     } else {
                         self?.hapticManager.impact(style: .light)
@@ -409,14 +407,12 @@ class PostsViewModel: ObservableObject {
         }
     }
     
-//    @State private var errorMessage = ""
-    
     func getPostsFromBackup(url: URL, completion: @escaping (Int) -> Void) {
         
         self.errorMessage = nil
         self.showErrorMessageAlert = false
         var postsCount: Int = 0
-
+        
         do {
             let jsonData = try Data(contentsOf: url)
             let posts = try JSONDecoder.appDecoder.decode([Post].self, from: jsonData)
@@ -447,24 +443,9 @@ class PostsViewModel: ObservableObject {
         // Checking posts with the same ID to local posts - do not append such posts from BackUp
         let existingIdInLocalPosts = Set(allPosts.map { $0.id })
         let postsAfterCheckForUniqueID = postsAfterCheckForUniqueTitle.filter { !existingIdInLocalPosts.contains($0.id) }
-
-//            let postsAfterCheckForUniqueTitle = posts.filter { post in
-//                !vm.allPosts.contains(where: { $0.title == post.title })
-//            }
-//
-//            let postsAfterCheckForUniqueID = postsAfterCheckForUniqueTitle.filter { post in
-//                !vm.allPosts.contains(where: { $0.id == post.id })
-//            }
+        
         return postsAfterCheckForUniqueID
     }
-    
-//    private func showError(_ message: String) {
-//        errorMessage = message
-//        showErrorMessageAlert = true
-//        hapticManager.notification(type: .error)
-//    }
-    
-    
     
     /// Checking for available posts update in the Cloud.
     ///
@@ -495,7 +476,7 @@ class PostsViewModel: ObservableObject {
                 }
                 if hasUpdates {
                     print("🍓 checkCloudForUpdates: Posts update is available")
-
+                    
                 } else {
                     print("🍓☑️ checkCloudForUpdates: No Updates available")
                 }
@@ -520,7 +501,7 @@ class PostsViewModel: ObservableObject {
         guard !posts.isEmpty else { return nil }
         
         return posts.max(by: { $0.date < $1.date })?.date
-
+        
     }
     
     /// Checking if a title of a new/editing post is not in the array of existing posts.
@@ -594,7 +575,7 @@ class PostsViewModel: ObservableObject {
         })
         
         let result = Array(Set(list)).sorted(by: {$0 < $1})
-        print("✅ VM: Final years list: \(result)")
+        print("🍓 VM(getAllYears): Final years list: \(result)")
         return result
     }
     

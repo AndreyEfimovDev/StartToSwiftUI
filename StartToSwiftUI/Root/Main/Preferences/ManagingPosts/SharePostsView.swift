@@ -12,7 +12,6 @@ struct SharePostsView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
 
-//    private let fileManager = JSONFileManager.shared
     private let hapticManager = HapticService.shared
     
     @State private var showActivityView = false
@@ -69,17 +68,6 @@ struct SharePostsView: View {
             vm.errorMessage = error.localizedDescription
             vm.showErrorMessageAlert = true
         }
-
-        
-//        let fileURL = fileManager.getFileURL(fileName: Constants.localNoticesFileName)
-//        switch fileURL {
-//        case .success(let url):
-//            shareURL = url
-//            showActivityView = true
-//        case .failure(let error):
-//            vm.errorMessage = error.localizedDescription
-//            vm.showErrorMessageAlert = true
-//        }
     }
 
     

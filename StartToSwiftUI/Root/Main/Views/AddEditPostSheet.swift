@@ -310,7 +310,7 @@ struct AddEditPostSheet: View {
                 )
             ZStack {
                 HStack {
-                    Button(editedPost.postDate == nil ? "Set date" : "Unknown date") {
+                    Button(editedPost.postDate == nil ? "Set date" : "Reset date") {
                         if editedPost.postDate == nil {
                             editedPost.postDate = Date()
                         } else {
