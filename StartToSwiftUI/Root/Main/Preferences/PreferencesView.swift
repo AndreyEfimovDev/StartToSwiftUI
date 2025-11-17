@@ -8,13 +8,13 @@
 import SwiftUI
 
 
-enum PreferencesDestination: Hashable {
-    case cloudImport
-    case shareBackup
-    case restoreBackup
-    case erasePosts
-    case aboutApp
-}
+//enum PreferencesDestination: Hashable {
+//    case cloudImport
+//    case shareBackup
+//    case restoreBackup
+//    case erasePosts
+//    case aboutApp
+//}
 
 struct PreferencesView: View {
     
@@ -22,7 +22,7 @@ struct PreferencesView: View {
     @EnvironmentObject private var vm: PostsViewModel
     
     @State private var navigationPath = NavigationPath()
-    @State private var selectedDestination: PreferencesDestination?
+//    @State private var selectedDestination: PreferencesDestination?
     
     let iconWidth: CGFloat = 18
     
@@ -35,12 +35,24 @@ struct PreferencesView: View {
         return postDrafts.count
         }
 
+    @State private var theme: Theme = .dark
+
         
     var body: some View {
-        NavigationStack {
+        NavigationView {
             Form {
-                Section(header: sectionHeader("Settings")) {
-                    appearance
+                Section(header: sectionHeader("Appearance")) {
+//                    appearance
+                    UnderlineSermentedPickerNotOptional(
+                        selection: $theme,
+                        allItems: Theme.allCases,
+                        titleForCase: { $0.displayName },
+                        selectedFont: .footnote,
+                        selectedTextColor: Color.mycolor.myBlue,
+                        unselectedTextColor: Color.mycolor.mySecondaryText
+                    )
+                }
+                Section(header: sectionHeader("Notifications")) {
                     notificationToggle
                     notifications
                 }
@@ -68,7 +80,8 @@ struct PreferencesView: View {
             } // Form
             .foregroundStyle(Color.mycolor.myAccent)
             .navigationTitle("Preferences")
-            .navigationBarTitleDisplayMode(.inline)
+//            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
@@ -101,17 +114,17 @@ struct PreferencesView: View {
             Image(systemName: "bell")
                 .frame(width: iconWidth)
                 .foregroundStyle(Color.mycolor.myBlue)
-            Toggle("Notifications", isOn: $vm.isNotification)
+            Toggle(vm.isNotification ? "On" : "Off", isOn: $vm.isNotification)
                 .tint(Color.mycolor.myBlue)
         }
     }
     
     private var notifications: some View {
-        NavigationLink("Notifications") {
+        NavigationLink("Notice messages") {
             NoticesView()
         }
         .customListRowStyle(
-            iconName: "bell",
+            iconName: "message",
             iconWidth: iconWidth
         )
     }

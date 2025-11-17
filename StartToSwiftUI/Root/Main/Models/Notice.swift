@@ -17,7 +17,7 @@ struct Notice: Identifiable, Codable, Equatable, Hashable {
     var isRead: Bool
     
     init(
-        id: String = UUID().uuidString,
+        id: String,
         title: String,
         noticeDate: Date,
         noticeMessage: String,

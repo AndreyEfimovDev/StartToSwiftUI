@@ -13,7 +13,7 @@ struct PostDetailsView: View {
 //    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject private var vm: PostsViewModel
     
-    private let fileManager = FileStorageService.shared
+    private let fileManager = JSONFileManager.shared
     
     @State private var showSafariView = false
     @State private var showFullIntro: Bool = false
@@ -24,6 +24,7 @@ struct PostDetailsView: View {
     
     private var post: Post? {
         vm.allPosts.first(where: { $0.id == postId })
+//        DevData.samplePost1
     }
     
     private var buttonTitle: String {
@@ -47,9 +48,6 @@ struct PostDetailsView: View {
     private let fullFreeTextFieldLineSpacing: CGFloat = 0
     private let FreeTextFieldLinesCountLimit: Int = 2
     
-    private let sectionBackground: Color = Color.mycolor.myBackground
-    private let sectionCornerRadius: CGFloat = 15
-    
     
     var body: some View {
         
@@ -58,23 +56,23 @@ struct PostDetailsView: View {
                 VStack {
                     header(for: validPost)
                         .background(
-                            sectionBackground,
-                            in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                            .thinMaterial,
+                            in: RoundedRectangle(cornerRadius: 15)
                         )
                         .padding(.top, 30)
                     
                     intro(for: validPost)
                         .background(
-                            sectionBackground,
-                            in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                            .thinMaterial,
+                            in: RoundedRectangle(cornerRadius: 15)
                         )
                     goToTheSourceButton(for: validPost)
                         .padding(.horizontal, 55)
                     
                     notesToPost(for: validPost)
                         .background(
-                            sectionBackground,
-                            in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                            .thinMaterial,
+                            in: RoundedRectangle(cornerRadius: 15)
                         ).opacity(validPost.notes.isEmpty ? 0 : 1)
                 }
                 .foregroundStyle(Color.mycolor.myAccent)

@@ -31,7 +31,7 @@ struct PostRowView: View {
         }
         .padding(8)
         .padding(.horizontal, 8)
-        .background(Color.mycolor.mySectionBackground)
+        .background(.ultraThinMaterial)
     }
         
     // MARK: Subviews

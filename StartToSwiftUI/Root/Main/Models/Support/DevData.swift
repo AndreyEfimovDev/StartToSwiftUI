@@ -14,12 +14,14 @@ struct DevData {
     //    static let shared = PreviewPosts()
     
     static let sampleNotice1 = Notice(
+        id: "001",
         title: "Update for the curated posts in available",
         noticeDate: .now,
         noticeMessage: "New Update includes the following:",
         isRead: true
     )
     static let sampleNotice2 = Notice(
+        id: "002",
         title: "New App release 01.01.02 is availavle New App release 01.01.02 is availavle",
         noticeDate: .now + 1,
         noticeMessage: """
@@ -31,6 +33,7 @@ struct DevData {
         isRead: true
     )
     static let sampleNotice3 = Notice(
+        id: "003",
         title: "New App release 01.01.03 is availavle",
         noticeDate: .now + 2,
         noticeMessage: """

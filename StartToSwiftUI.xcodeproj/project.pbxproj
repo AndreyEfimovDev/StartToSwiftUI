@@ -56,7 +56,7 @@
 		4791CDF12E7428EE00687126 /* CircleShadowButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDF02E7428EE00687126 /* CircleShadowButtonView.swift */; };
 		4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDF92E744AD400687126 /* CapsuleButtonView.swift */; };
 		4791CDFC2E746FF100687126 /* EmailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDFB2E746FF100687126 /* EmailService.swift */; };
-		4791CDFE2E747AC100687126 /* FileStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDFD2E747AC100687126 /* FileStorageService.swift */; };
+		4791CDFE2E747AC100687126 /* JSONFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDFD2E747AC100687126 /* JSONFileManager.swift */; };
 		4791CE002E747B2E00687126 /* HapticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDFF2E747B2E00687126 /* HapticService.swift */; };
 		4791CE042E748DA200687126 /* AddEditPostSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE032E748DA200687126 /* AddEditPostSheet.swift */; };
 		4791CE082E75AAB000687126 /* UnderlineSermentedPickerNotOptional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE072E75AAAF00687126 /* UnderlineSermentedPickerNotOptional.swift */; };
@@ -131,7 +131,7 @@
 		4791CDF02E7428EE00687126 /* CircleShadowButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleShadowButtonView.swift; sourceTree = "<group>"; };
 		4791CDF92E744AD400687126 /* CapsuleButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleButtonView.swift; sourceTree = "<group>"; };
 		4791CDFB2E746FF100687126 /* EmailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailService.swift; sourceTree = "<group>"; };
-		4791CDFD2E747AC100687126 /* FileStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorageService.swift; sourceTree = "<group>"; };
+		4791CDFD2E747AC100687126 /* JSONFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONFileManager.swift; sourceTree = "<group>"; };
 		4791CDFF2E747B2E00687126 /* HapticService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticService.swift; sourceTree = "<group>"; };
 		4791CE032E748DA200687126 /* AddEditPostSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditPostSheet.swift; sourceTree = "<group>"; };
 		4791CE072E75AAAF00687126 /* UnderlineSermentedPickerNotOptional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineSermentedPickerNotOptional.swift; sourceTree = "<group>"; };
@@ -308,7 +308,7 @@
 			isa = PBXGroup;
 			children = (
 				47E439B62EA9290E007001AD /* NetworkService.swift */,
-				4791CDFD2E747AC100687126 /* FileStorageService.swift */,
+				4791CDFD2E747AC100687126 /* JSONFileManager.swift */,
 				4791CDFF2E747B2E00687126 /* HapticService.swift */,
 			);
 			path = Services;
@@ -529,7 +529,7 @@
 				47E2AF4F2EBCD86000B0214F /* CategoryFilterView.swift in Sources */,
 				478116462EBFF9DD00EF25F8 /* CustomProgressView.swift in Sources */,
 				4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */,
-				4791CDFE2E747AC100687126 /* FileStorageService.swift in Sources */,
+				4791CDFE2E747AC100687126 /* JSONFileManager.swift in Sources */,
 				475997512E5C6C9D008E20F0 /* Post.swift in Sources */,
 				47C56FEE2EC9C94100F0796C /* NoticeRowView.swift in Sources */,
 				471BBF9F2EC721480004AC45 /* Notice.swift in Sources */,

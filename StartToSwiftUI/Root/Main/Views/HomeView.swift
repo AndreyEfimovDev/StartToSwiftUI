@@ -13,7 +13,7 @@ struct HomeView: View {
     
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
-//    @EnvironmentObject private var noticevm: NotificationViewModel
+    @EnvironmentObject private var noticevm: NoticeViewModel
 
     
     private let hapticManager = HapticService.shared
@@ -44,7 +44,9 @@ struct HomeView: View {
                         } else if vm.filteredPosts.isEmpty {
                             filteredPostsIsEmpty
                         } else {
+                            
                             mainViewBody
+                            
                             if showOnTopButton {
                                 CircleStrokeButtonView(
                                     iconName: "control", // control arrow.up
@@ -58,13 +60,12 @@ struct HomeView: View {
                                             }
                                         }
                                     }
-//                                    .frame(maxWidth: .infinity, alignment: .center)
                             } // if showButtonOnTop
                         } // else-if
                     } // ZStack
                 } // ScrollViewReader
                 .navigationTitle(vm.allPosts.isEmpty ? "Study materials" : vm.homeTitleName)
-                .navigationBarTitleDisplayMode(.inline)
+//                .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
                 .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
                 .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
@@ -74,7 +75,9 @@ struct HomeView: View {
                 }
                 .navigationDestination(isPresented: $showDetailView) {
                     if let id = selectedPostId {
-                        PostDetailsView(postId: id)
+                        withAnimation {
+                            PostDetailsView(postId: id)
+                        }
                     }
                 }
                 .fullScreenCover(isPresented: $showPreferancesView) {
@@ -118,7 +121,7 @@ struct HomeView: View {
     // MARK: Subviews
     
     private var mainViewBody: some View {
-        ZStack {
+//        ZStack {
             List {
                 ForEach(vm.filteredPosts) { post in
                     PostRowView(post: post)
@@ -160,7 +163,7 @@ struct HomeView: View {
             } // List
             .listStyle(.plain)
             .background(Color.mycolor.myBackground)
-        }
+//        }
     }
     
     private var allPostsIsEmpty: some View {

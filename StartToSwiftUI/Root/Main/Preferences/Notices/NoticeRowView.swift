@@ -12,32 +12,33 @@ struct NoticeRowView: View {
     let notice: Notice
     
     var body: some View {
+        
         VStack (alignment: .leading) {
             Text("\(notice.noticeDate.formatted(date: .numeric, time: .omitted))")
                 .font(.caption)
-//                            .border(.blue)
             
             Text(notice.title)
                 .font(.body)
-//                .border(.green)
                 .lineLimit(1)
-            
-            Text(notice.id)
-                .font(.caption2)
-//                .border(.green)
-                .lineLimit(1)
+                .padding(.vertical, 8)
         }
+//        .padding(.horizontal)
         .fontWeight(notice.isRead ? .regular : .bold)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .clipShape(
-            RoundedRectangle(cornerRadius: 10)
-                
-        )
-        .border(.red)
-
+//        .background(.ultraThinMaterial)
+//        .clipShape(
+//            RoundedRectangle(cornerRadius: 10)
+//                
+//        )
     }
 }
 
 #Preview {
-    NoticeRowView(notice: DevData.sampleNotice1)
+    ZStack {
+        Color.blue
+            .ignoresSafeArea()
+        List {
+            NoticeRowView(notice: DevData.sampleNotice1)
+        }
+    }
 }

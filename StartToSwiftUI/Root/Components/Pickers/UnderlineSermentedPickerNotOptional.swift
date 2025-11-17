@@ -36,6 +36,7 @@ struct UnderlineSermentedPickerNotOptional<T: Hashable>: View {
                         .frame(maxWidth: .infinity)
                     
                     if selection == item {
+                        
                         RoundedRectangle(cornerRadius: 2)
                             .frame(height: 1.5)
                             .matchedGeometryEffect(id: "selection", in: namespace)

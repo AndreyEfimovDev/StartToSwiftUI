@@ -13,7 +13,7 @@ class PostsViewModel: ObservableObject {
     
     // MARK: PROPERTIES
     
-    private let fileManager = FileStorageService.shared
+    private let fileManager = JSONFileManager.shared
     private let hapticManager = HapticService.shared
     private let networkService = NetworkService()
     private let noticeService = NoticeViewModel()
@@ -102,7 +102,7 @@ class PostsViewModel: ObservableObject {
     
     init() {
         
-        print("VM(init): Last update date: \(localLastUpdated.formatted(date: .abbreviated, time: .shortened))")
+        print("🍓VM(init): Last update date: \(localLastUpdated.formatted(date: .abbreviated, time: .shortened))")
         
         // checking if the local JSON file with posts exists
         if fileManager.checkIfFileExists(fileName: Constants.localPostsFileName) {
@@ -120,7 +120,7 @@ class PostsViewModel: ObservableObject {
                     case .failure(let error):
                         self?.errorMessage = error.localizedDescription
                         self?.showErrorMessageAlert = true
-                        print("VM(init): Failed to load posts: \(error)")
+                        print("🍓VM(init): Failed to load posts: \(error)")
                     }
                 }
             }
@@ -157,110 +157,106 @@ class PostsViewModel: ObservableObject {
         
         if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
             utcCalendar.timeZone = utcTimeZone
-            print("✅ VM(init): TimeZone is set successfully")
+            print("🍓✅ VM(init): TimeZone is set successfully")
         } else {
-            print("❌ VM(init): TimeZone is not set")
+            print("🍓❌ VM(init): TimeZone is not set")
         }
-        
-        noticeService.importNoticesFromCloud() {
-            print("✅ VM(init): Notices have been uploaded from the Cloud")
-        }
-        
+                
         // initiating subscriptions
         addSubscribers()
         
     }
     
     
-    func testDetailedDecoding() {
-        let testJSON = """
-        [
-          {
-            "postType" : "post",
-            "notes" : "",
-            "title" : "Styling SwiftUI Text Views",
-            "urlString" : "https://www.youtube.com/watch?v=rbtIcKKxQ38",
-            "category" : "SwiftUI",
-            "postPlatform" : "youtube",
-            "favoriteChoice" : "no",
-            "origin" : "cloud",
-            "postDate" : "2021-05-07T00:00:00Z",
-            "intro" : "Test intro",
-            "author" : "Stewart Lynch",
-            "studyLevel" : "middle",
-            "date" : "2025-11-08T13:45:07Z",
-            "id" : "F9E12A88-0E62-402D-B6AD-1A1F895F5421"
-          }
-        ]
-        """
-        
-        do {
-            let data = testJSON.data(using: .utf8)!
-            print("📦 JSON data length: \(data.count) bytes")
-            
-            // Try decode as generil type
-            let anyObject = try JSONSerialization.jsonObject(with: data, options: [])
-            print("✅ JSONSerialization success: \(anyObject)")
-            
-            // Try decode as generil type [Post]
-            let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
-            print("✅ Post decoding SUCCESS: \(posts.count) posts")
-            
-        } catch {
-            print("❌ FAILED: \(error)")
-            
-            // Detailed information about the decoding error
-            if let decodingError = error as? DecodingError {
-                switch decodingError {
-                case .typeMismatch(let type, let context):
-                    print("🔍 Type mismatch:")
-                    print("   - Expected type: \(type)")
-                    print("   - Coding path: \(context.codingPath)")
-                    print("   - Debug: \(context.debugDescription)")
-                case .valueNotFound(let type, let context):
-                    print("🔍 Value not found:")
-                    print("   - Type: \(type)")
-                    print("   - Coding path: \(context.codingPath)")
-                case .keyNotFound(let key, let context):
-                    print("🔍 Key not found:")
-                    print("   - Missing key: \(key)")
-                    print("   - Coding path: \(context.codingPath)")
-                    print("   - Available keys in container")
-                case .dataCorrupted(let context):
-                    print("🔍 Data corrupted:")
-                    print("   - Context: \(context)")
-                    if let underlyingError = context.underlyingError {
-                        print("   - Underlying error: \(underlyingError)")
-                    }
-                @unknown default:
-                    print("🔍 Unknown decoding error")
-                }
-            }
-        }
-    }
-    
-    
-    func validateJSONFile() {
-        
-        if let url = Bundle.main.url(forResource: "cloudPosts", withExtension: "json"),
-           let data = try? Data(contentsOf: url) {
-            
-            print("📁 File exists, size: \(data.count) bytes")
-            
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("📄 File content: \(jsonString.prefix(200))...")
-            }
-            
-            do {
-                let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
-                print("✅ Local file decoding SUCCESS: \(posts.count) posts")
-            } catch {
-                print("❌ Local file decoding FAILED: \(error)")
-            }
-        } else {
-            print("❌ JSON file not found")
-        }
-    }
+//    func testDetailedDecoding() {
+//        let testJSON = """
+//        [
+//          {
+//            "postType" : "post",
+//            "notes" : "",
+//            "title" : "Styling SwiftUI Text Views",
+//            "urlString" : "https://www.youtube.com/watch?v=rbtIcKKxQ38",
+//            "category" : "SwiftUI",
+//            "postPlatform" : "youtube",
+//            "favoriteChoice" : "no",
+//            "origin" : "cloud",
+//            "postDate" : "2021-05-07T00:00:00Z",
+//            "intro" : "Test intro",
+//            "author" : "Stewart Lynch",
+//            "studyLevel" : "middle",
+//            "date" : "2025-11-08T13:45:07Z",
+//            "id" : "F9E12A88-0E62-402D-B6AD-1A1F895F5421"
+//          }
+//        ]
+//        """
+//        
+//        do {
+//            let data = testJSON.data(using: .utf8)!
+//            print("🍓 JSON data length: \(data.count) bytes")
+//            
+//            // Try decode as generil type
+//            let anyObject = try JSONSerialization.jsonObject(with: data, options: [])
+//            print("✅ JSONSerialization success: \(anyObject)")
+//            
+//            // Try decode as generil type [Post]
+//            let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
+//            print("✅ Post decoding SUCCESS: \(posts.count) posts")
+//            
+//        } catch {
+//            print("❌ FAILED: \(error)")
+//            
+//            // Detailed information about the decoding error
+//            if let decodingError = error as? DecodingError {
+//                switch decodingError {
+//                case .typeMismatch(let type, let context):
+//                    print("🔍 Type mismatch:")
+//                    print("   - Expected type: \(type)")
+//                    print("   - Coding path: \(context.codingPath)")
+//                    print("   - Debug: \(context.debugDescription)")
+//                case .valueNotFound(let type, let context):
+//                    print("🔍 Value not found:")
+//                    print("   - Type: \(type)")
+//                    print("   - Coding path: \(context.codingPath)")
+//                case .keyNotFound(let key, let context):
+//                    print("🔍 Key not found:")
+//                    print("   - Missing key: \(key)")
+//                    print("   - Coding path: \(context.codingPath)")
+//                    print("   - Available keys in container")
+//                case .dataCorrupted(let context):
+//                    print("🔍 Data corrupted:")
+//                    print("   - Context: \(context)")
+//                    if let underlyingError = context.underlyingError {
+//                        print("   - Underlying error: \(underlyingError)")
+//                    }
+//                @unknown default:
+//                    print("🔍 Unknown decoding error")
+//                }
+//            }
+//        }
+//    }
+//    
+//    
+//    func validateJSONFile() {
+//        
+//        if let url = Bundle.main.url(forResource: "cloudPosts", withExtension: "json"),
+//           let data = try? Data(contentsOf: url) {
+//            
+//            print("📁 File exists, size: \(data.count) bytes")
+//            
+//            if let jsonString = String(data: data, encoding: .utf8) {
+//                print("📄 File content: \(jsonString.prefix(200))...")
+//            }
+//            
+//            do {
+//                let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
+//                print("✅ Local file decoding SUCCESS: \(posts.count) posts")
+//            } catch {
+//                print("❌ Local file decoding FAILED: \(error)")
+//            }
+//        } else {
+//            print("❌ JSON file not found")
+//        }
+//    }
     
     // MARK: PRIVATE FUNCTIONS
     
@@ -371,16 +367,16 @@ class PostsViewModel: ObservableObject {
     // MARK: PUBLIC FUNCTIONS
     
     func addPost(_ newPost: Post) {
-        print("✅ VM(addPost): Adding a new post")
+        print("🍓✅ VM(addPost): Adding a new post")
         allPosts.append(newPost)
     }
     
     func updatePost(_ updatedPost: Post) {
         if let index = allPosts.firstIndex(where: { $0.id == updatedPost.id }) {
-            print("✅ VM(updatePost): Updating a current edited post")
+            print("🍓✅ VM(updatePost): Updating a current edited post")
             allPosts[index] = updatedPost
         } else {
-            print("❌ VM(updatePost): Can't find the index")
+            print("🍓❌ VM(updatePost): Can't find the index")
         }
     }
     
@@ -390,7 +386,7 @@ class PostsViewModel: ObservableObject {
                 allPosts.remove(at: index)
             }
         } else {
-            print("VM.deletePost: passed post is nil")
+            print("🍓VM.deletePost: passed post is nil")
         }
     }
     
@@ -467,7 +463,7 @@ class PostsViewModel: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let cloudResponse):
-                    print("✅ Successfully imported \(cloudResponse.count) posts from the cloud")
+                    print("🍓✅ Successfully imported \(cloudResponse.count) posts from the cloud")
                     // Selecting Cloud posts with unique Titles only -  - do not append such posts from Cloud
                     let cloudPostsAfterCheckForUniqueTitle = cloudResponse.filter { postFromCloud in
                         !(self?.allPosts.contains(where: { $0.title == postFromCloud.title }) ?? false)
@@ -482,10 +478,10 @@ class PostsViewModel: ObservableObject {
                         self?.hapticManager.notification(type: .success)
                         self?.localLastUpdated = self?.getLatestDateFromPosts(posts: cloudPostsAfterCheckForUniqueID) ?? .now
 
-                        print("✅ Successfully appended \(cloudPostsAfterCheckForUniqueID.count) posts from the cloud")
+                        print("🍓✅ Successfully appended \(cloudPostsAfterCheckForUniqueID.count) posts from the cloud")
                     } else {
                         self?.hapticManager.impact(style: .light)
-                        print("☑️ No new posts from the cloud.")
+                        print("🍓☑️ No new posts from the cloud.")
                         
                     }
                     
@@ -493,7 +489,7 @@ class PostsViewModel: ObservableObject {
                     self?.errorMessage = error.localizedDescription
                     self?.showErrorMessageAlert = true
                     self?.hapticManager.notification(type: .error)
-                    print("❌ Cloud import error: \(error.localizedDescription)")
+                    print("🍓❌ Cloud import error: \(error.localizedDescription)")
                 }
                 completion()
             }
@@ -518,13 +514,13 @@ class PostsViewModel: ObservableObject {
             postsCount = postsCheckedForUnique.count
             self.allPosts.append(contentsOf: postsCheckedForUnique)
             self.hapticManager.notification(type: .success)
-            print("✅ Restore: Restored \(postsCount) posts from \(url.lastPathComponent)")
+            print("🍓✅ Restore: Restored \(postsCount) posts from \(url.lastPathComponent)")
             
         } catch {
             self.errorMessage = error.localizedDescription
             self.showErrorMessageAlert = true
             self.hapticManager.notification(type: .error)
-            print("Failed to load posts: \(error)")
+            print("🍓❌ Restore:Failed to load posts: \(error)")
         }
         
         completion(postsCount)
@@ -589,10 +585,10 @@ class PostsViewModel: ObservableObject {
                     hasUpdates = theLatestDateInLocalPosts < theLatestDateInCloudPosts
                 }
                 if hasUpdates {
-                    print("✅ checkCloudForUpdates: Posts update is available")
+                    print("🍓✅ checkCloudForUpdates: Posts update is available")
 
                 } else {
-                    print("☑️ checkCloudForUpdates: No Updates available")
+                    print("🍓☑️ checkCloudForUpdates: No Updates available")
                 }
                 DispatchQueue.main.async {
                     completion(hasUpdates)
@@ -603,7 +599,7 @@ class PostsViewModel: ObservableObject {
                 self.hapticManager.notification(type: .error)
                 
                 DispatchQueue.main.async {
-                    print("❌ checkCloudForUpdates: Error \(error.localizedDescription)")
+                    print("🍓❌ checkCloudForUpdates: Error \(error.localizedDescription)")
                     completion(false)
                 }
             }

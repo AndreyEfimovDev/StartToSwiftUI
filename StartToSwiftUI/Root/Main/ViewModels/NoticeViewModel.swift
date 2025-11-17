@@ -10,7 +10,7 @@ import SwiftUI
 
 class NoticeViewModel: ObservableObject {
     
-    private let fileManager = FileStorageService.shared
+    private let fileManager = JSONFileManager.shared
     private let hapticManager = HapticService.shared
     private let networkService = NetworkService()
 
@@ -30,61 +30,102 @@ class NoticeViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     switch result {
                     case .success:
-                        print("✅ NVM(notices - didSet): Notices saved successfully.")
+                        print("🍉✅ NVM(notices - didSet): Notices saved successfully.")
                     case .failure(let error):
                         self?.errorMessage = error.localizedDescription
                         self?.showErrorMessageAlert = true
                         self?.hapticManager.notification(type: .error)
-                        print("❌ NVM(notices - didSet): Failed to save notices: \(error)")
+                        print("🍉❌ NVM(notices - didSet): Failed to save notices: \(error)")
                     }
                 }
             }
             
         }
     }
+    
+    init() {
         
+        // Loading notices from a local JSON file
+        if fileManager.checkIfFileExists(fileName: Constants.localNoticesFileName) {
+            self.loadNotices()
+        }
+        // Import notices from Cloud
+        self.importNoticesFromCloud()
+        
+    }
+    
+    
+    private func loadNotices() {
+        fileManager.loadData(
+            fileName: Constants.localNoticesFileName
+        ) { [weak self] (result: Result<[Notice], FileStorageError>) in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let loadedNotices):
+                    print("🍉✅ NVM(loadNotices): Successfully received array of notices from JSON file.")
+                    if !loadedNotices.isEmpty {
+                        // Updating App posts
+                        self?.notices = loadedNotices
+                        self?.hapticManager.notification(type: .success)
+                        print("🍉✅ NVM(loadNotices): Successfully loaded \(loadedNotices.count) notices a local JSON file.")
+                    } else {
+                        self?.notices = []
+                        self?.hapticManager.impact(style: .light)
+                        print("🍉☑️ NVM(loadNotices): Array of notices from a local JSON file is empty.")
+                        
+                    }
+                case .failure(let error):
+                    self?.errorMessage = error.localizedDescription
+                    self?.showErrorMessageAlert = true
+                    self?.hapticManager.notification(type: .error)
+                    print("🍉❌ NVM(loadNotices): Local load error: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+
     func importNoticesFromCloud(
-        urlString: String = Constants.cloudNoticesURL,
-        completion: @escaping () -> Void
+        urlString: String = Constants.cloudNoticesURL
     ) {
         errorMessage = nil
         showErrorMessageAlert = false
         
-        networkService.fetchDataFromURL(from: urlString) { [weak self] (result: Result<[Notice], Error>) in
+        networkService.fetchDataFromURL(
+            from: urlString
+        ) { [weak self] (result: Result<[Notice], Error>) in
             
             DispatchQueue.main.async {
                 switch result {
                 case .success(let cloudResponse):
                     
                     if !cloudResponse.isEmpty {
-                        print("✅ NVN: Successfully imported \(cloudResponse.count) notices from the cloud")
+                        print("🍉✅ NVN: Successfully imported \(cloudResponse.count) notices from the cloud")
 
                         // Selecting Cloud notices with unique ID - append such posts from Cloud
                         let cloudNoticesAfterCheckForUniqueID = cloudResponse.filter { noticeFromCloud in
                             !(self?.notices.contains(where: { $0.id == noticeFromCloud.id }) ?? false)
                         }
-                        print("✅ NVN: Cloud notices with unique ID  \(cloudNoticesAfterCheckForUniqueID.count)")
+                        print("🍉✅ NVN: Cloud notices with unique ID  \(cloudNoticesAfterCheckForUniqueID.count)")
 
                         
                         if !cloudNoticesAfterCheckForUniqueID.isEmpty {
                             self?.notices.append(contentsOf: cloudNoticesAfterCheckForUniqueID)
                             self?.hapticManager.notification(type: .success)
-                            print("✅ NVN: Successfully appended \(cloudNoticesAfterCheckForUniqueID.count) notifications from the cloud")
+                            print("🍉✅ NVN: Successfully appended \(cloudNoticesAfterCheckForUniqueID.count) notifications from the cloud")
                         } else {
-                            print("✅ NVN: No new notices from the cloud")
+                            print("🍉✅ NVN: No new notices from the cloud")
                         }
                     } else {
                         self?.hapticManager.impact(style: .light)
-                        print("☑️ NVN: Array of notifications from the cloud is empty.")
+                        print("🍉☑️ NVN: Array of notifications from the cloud is empty.")
                     }
                     
                 case .failure(let error):
                     self?.errorMessage = error.localizedDescription
                     self?.showErrorMessageAlert = true
                     self?.hapticManager.notification(type: .error)
-                    print("❌ NVN: Cloud import error: \(error.localizedDescription)")
+                    print("🍉❌ NVN: Cloud import error: \(error.localizedDescription)")
                 }
-                completion()
             }
         }
     }
@@ -114,7 +155,7 @@ class NoticeViewModel: ObservableObject {
                 notices.remove(at: index)
             }
         } else {
-            print("NS.deletePost: passed notice is nil")
+            print("🍉 ❌ NVN(deletePost): passed notice is nil")
         }
     }
 

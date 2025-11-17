@@ -12,7 +12,7 @@ struct SharePostsView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
 
-    private let fileManager = FileStorageService.shared
+    private let fileManager = JSONFileManager.shared
     private let hapticManager = HapticService.shared
     
     @State private var showActivityView = false
@@ -59,7 +59,7 @@ struct SharePostsView: View {
     }
     
     private func prepareDocumentSharing() {
-        let fileURL = fileManager.getFileURL(fileName: Constants.localPostsFileName)
+        let fileURL = fileManager.getFileURL(fileName: Constants.localNoticesFileName)
         switch fileURL {
         case .success(let url):
             shareURL = url
