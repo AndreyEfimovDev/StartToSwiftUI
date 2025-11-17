@@ -20,8 +20,10 @@ struct PreferencesView: View {
     
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
+    @EnvironmentObject private var noticevm: NoticeViewModel
+
     
-    @State private var navigationPath = NavigationPath()
+//    @State private var navigationPath = NavigationPath()
 //    @State private var selectedDestination: PreferencesDestination?
     
     let iconWidth: CGFloat = 18
@@ -120,7 +122,7 @@ struct PreferencesView: View {
     }
     
     private var notifications: some View {
-        NavigationLink("Notice messages") {
+        NavigationLink("Notice messages \(noticevm.notices.count)") {
             NoticesView()
         }
         .customListRowStyle(

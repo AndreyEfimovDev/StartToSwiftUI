@@ -13,14 +13,14 @@ struct NoticeDetailsView: View {
     @EnvironmentObject private var noticevm: NoticeViewModel
     
     let noticeId: String
-    let action: () -> ()
+    let completion: () -> ()
     
     init(
         noticeId: String,
         action: @escaping () -> Void
     ) {
         self.noticeId = noticeId
-        self.action = action
+        self.completion = action
     }
     
     private var notice: Notice? {
@@ -65,13 +65,17 @@ struct NoticeDetailsView: View {
                         } //VStack
                     } // ScrollView
                     .padding(.horizontal)
-//                    .onDisappear {
-//                        noticevm.isReadSetTrue(notice: validNotice)
-//                    }
                 } else {
                     Text("Notice is not found")
                 }
             } // ZStack
+        }
+        .onAppear {
+            if let notice = notice {
+                if notice.isRead == false {
+                    noticevm.isReadSetTrue(notice: notice)
+                }
+            }
         }
         .navigationTitle("Notice details")
         .navigationBarBackButtonHidden(true)
@@ -90,15 +94,16 @@ struct NoticeDetailsView: View {
                 iconName: "chevron.left",
                 isShownCircle: false)
             {
-                action()
+                withAnimation {
+                    completion()
+                }
             }
         }
         ToolbarItem(placement: .topBarTrailing) {
             CircleStrokeButtonView(iconName: "trash", isShownCircle: false) {
                 withAnimation {
                     noticevm.deleteNotice(notice: notice)
-                    dismiss()
-                    
+                    completion()
                 }
             }
         }

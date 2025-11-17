@@ -33,7 +33,6 @@ struct NoticesView: View {
                                 .listRowInsets(
                                     EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
                                 )
-                            
                         } // ForEach
                     } // List
                     .listStyle(.plain)
@@ -44,7 +43,6 @@ struct NoticesView: View {
                             NavigationStack {
                                 NoticeDetailsView(noticeId: selectedNotice.id) {
                                     withAnimation {
-                                        noticevm.isReadSetTrue(notice: selectedNotice)
                                         showNoticeDetails = false
                                     }
                                 }
@@ -97,9 +95,7 @@ struct NoticesView: View {
             } // right side swipe action buttonss
             .swipeActions(edge: .leading, allowsFullSwipe: false) {
                 Button(notice.isRead ? "Unread" : "Read", systemImage: notice.isRead ?  "eye.slash.circle" : "eye.circle") {
-                    withAnimation {
-                        noticevm.isReadToggle(notice: notice)
-                    }
+                    noticevm.isReadToggle(notice: notice)
                 }
                 .tint(notice.isRead ? Color.mycolor.mySecondaryText : Color.mycolor.myBlue)
             } // left side swipe action buttons

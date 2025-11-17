@@ -24,8 +24,14 @@ class NoticeViewModel: ObservableObject {
         self.networkService = networkService
         
         // Loading notices from a local JSON file and after notices imported from Cloud
-        self.loadLocalNotices(from: Constants.localNoticesFileName) {[weak self] localNotices in
-            self?.importNoticesFromCloud(localNotices: localNotices)
+        
+        if fileManager.checkIfFileExists(fileName: Constants.localNoticesFileName) {
+            
+            self.loadLocalNotices(from: Constants.localNoticesFileName) {[weak self] localNotices in
+                self?.importNoticesFromCloud(localNotices: localNotices)
+            }
+        } else {
+            self.importNoticesFromCloud(localNotices: [])
         }
     }
 
