@@ -12,9 +12,7 @@ struct PostDetailsView: View {
     @Environment(\.dismiss) var dismiss
 //    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject private var vm: PostsViewModel
-    
-    private let fileManager = JSONFileManager.shared
-    
+        
     @State private var showSafariView = false
     @State private var showFullIntro: Bool = false
     @State private var showFullFreeTextField: Bool = false

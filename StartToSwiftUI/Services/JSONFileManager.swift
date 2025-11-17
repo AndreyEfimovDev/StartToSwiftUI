@@ -12,10 +12,10 @@ class JSONFileManager: ObservableObject {
     
     static let shared = JSONFileManager()
     
+    private init() {}
 
     // MARK: FILE MANAGER FUNCIONS
     
-
     // Getting a full path of the JSON file
 
     func getFileURL(fileName: String) -> Result<URL, FileStorageError> {
