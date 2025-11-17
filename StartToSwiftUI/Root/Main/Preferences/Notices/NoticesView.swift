@@ -23,34 +23,41 @@ struct NoticesView: View {
             } else {
                 List {
                     ForEach(noticevm.notices) { notice in
-                        Button {
-                            selectedNotice = notice
-                        } label: {
-                            NoticeRowView(notice: notice)
-                        }
-                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        HStack {
+                            Circle()
+                                .fill(Color.mycolor.myBlue)
+                                .frame(width: 5, height: 5)
+                                .opacity(notice.isRead ? 0 : 1)
+
                             Button {
-                                withAnimation {
-                                    noticevm.deleteNotice(notice: notice)
-                                    hapticManager.notification(type: .success)
-                                }
+                                selectedNotice = notice
                             } label: {
-                                VStack {
-                                    Image(systemName: "trash")
-                                    Text("Delete")
-                                        .font(.caption2)
-                                }
+                                NoticeRowView(notice: notice)
                             }
-                            .tint(Color.mycolor.myRed)
-                        } // right side swipe action buttonss
-                        .swipeActions(edge: .leading, allowsFullSwipe: false) {
-                            Button(notice.isRead ? "Unread" : "Read", systemImage: notice.isRead ?  "eye.slash.circle" : "eye.circle") {
-                                withAnimation {
-                                    noticevm.isReadToggle(notice: notice)
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                Button {
+                                    withAnimation {
+                                        noticevm.deleteNotice(notice: notice)
+                                        hapticManager.notification(type: .success)
+                                    }
+                                } label: {
+                                    VStack {
+                                        Image(systemName: "trash")
+                                        Text("Delete")
+                                            .font(.caption2)
+                                    }
                                 }
-                            }
-                            .tint(notice.isRead ? Color.mycolor.mySecondaryText : Color.mycolor.myBlue)
-                        } // left side swipe action buttons
+                                .tint(Color.mycolor.myRed)
+                            } // right side swipe action buttonss
+                            .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                                Button(notice.isRead ? "Unread" : "Read", systemImage: notice.isRead ?  "eye.slash.circle" : "eye.circle") {
+                                    withAnimation {
+                                        noticevm.isReadToggle(notice: notice)
+                                    }
+                                }
+                                .tint(notice.isRead ? Color.mycolor.mySecondaryText : Color.mycolor.myBlue)
+                            } // left side swipe action buttons
+                        } // HStack
                     } // ForEach
                 } // List
                 .sheet(item: $selectedNotice) { notice in
@@ -88,16 +95,3 @@ struct NoticesView: View {
     
 }
 
-
-//                    HStack {
-//                        Circle()
-//                        .fill(.white)
-//                        .frame(width: 15, height: 15)
-//                        .overlay(
-//                            Capsule()
-//                                .stroke(Color.mycolor.myBlue, lineWidth: 1)
-//                        )
-//                        .frame(width: 30, height: 30)
-//                        .padding(4)
-//                        .border(.accent)
-//                        .opacity(0)
