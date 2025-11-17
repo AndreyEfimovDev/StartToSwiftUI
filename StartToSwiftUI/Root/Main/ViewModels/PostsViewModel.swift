@@ -86,31 +86,38 @@ class PostsViewModel: ObservableObject {
         //        print("🍓VM(init): Last update date: \(localLastUpdated.formatted(date: .abbreviated, time: .shortened))")
         
         // Load local JSON file with notices
-        fileManager.loadData(fileName: Constants.localPostsFileName) { [weak self] (result: Result<[Post], FileStorageError>) in
-            
-            self?.errorMessage = nil
-            self?.showErrorMessageAlert = false
-            
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let posts):
-                    self?.allPosts = posts
-                    print("🍓 VM(init): Successfully loaded \(posts.count) posts")
-                case .failure(let error):
-                    self?.errorMessage = error.localizedDescription
-                    self?.showErrorMessageAlert = true
-                    print("🍓 ❌ VM(init): Failed to load posts: \(error)")
-                }
-            }
-        }
         
-        if !self.allPosts.isEmpty {
-            checkCloudForUpdates { hasUpdates in
-                if hasUpdates {
-                    self.isPostsUpdateAvailable = true
-                    print(self.isPostsUpdateAvailable.description)
+        
+        if fileManager.checkIfFileExists(fileName: Constants.localPostsFileName) {
+            fileManager.loadData(fileName: Constants.localPostsFileName) { [weak self] (result: Result<[Post], FileStorageError>) in
+                
+                self?.errorMessage = nil
+                self?.showErrorMessageAlert = false
+                
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let posts):
+                        self?.allPosts = posts
+                        print("🍓 VM(init): Successfully loaded \(posts.count) posts")
+                    case .failure(let error):
+                        self?.errorMessage = error.localizedDescription
+                        self?.showErrorMessageAlert = true
+                        print("🍓 ❌ VM(init): Failed to load posts: \(error)")
+                    }
                 }
             }
+            
+            if !self.allPosts.isEmpty {
+                checkCloudForUpdates { hasUpdates in
+                    if hasUpdates {
+                        self.isPostsUpdateAvailable = true
+                        print(self.isPostsUpdateAvailable.description)
+                    }
+                }
+            }
+        } else {
+            print("🍓 ❌ VM(init): File \(Constants.localPostsFileName) does not exist")
+
         }
         
         // filters initilazation
@@ -386,6 +393,7 @@ class PostsViewModel: ObservableObject {
                     if !cloudPostsAfterCheckForUniqueID.isEmpty {
                         // Updating App posts
                         self?.allPosts.append(contentsOf: cloudPostsAfterCheckForUniqueID)
+                        self?.savePosts()
                         self?.hapticManager.notification(type: .success)
                         self?.localLastUpdated = self?.getLatestDateFromPosts(posts: cloudPostsAfterCheckForUniqueID) ?? .now
                         
@@ -393,9 +401,7 @@ class PostsViewModel: ObservableObject {
                     } else {
                         self?.hapticManager.impact(style: .light)
                         print("🍓☑️ No new posts from the cloud.")
-                        
                     }
-                    
                 case .failure(let error):
                     self?.errorMessage = error.localizedDescription
                     self?.showErrorMessageAlert = true

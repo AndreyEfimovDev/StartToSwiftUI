@@ -13,58 +13,73 @@ struct NoticeDetailsView: View {
     @EnvironmentObject private var noticevm: NoticeViewModel
     
     let noticeId: String
+    let action: () -> ()
+    
+    init(
+        noticeId: String,
+        action: @escaping () -> Void
+    ) {
+        self.noticeId = noticeId
+        self.action = action
+    }
     
     private var notice: Notice? {
         noticevm.notices.first(where: { $0.id == noticeId })
-        //        DevData.sampleNotice2
+//        DevData.sampleNotice2
     }
+    
     
     private let sectionCornerRadius: CGFloat = 15
     
     var body: some View {
-        NavigationView{
-            if let validNotice = notice {
-                ScrollView(showsIndicators: false) {
-                    VStack (alignment: .leading){
-                        Text(validNotice.noticeDate.formatted(date: .numeric, time: .omitted))
-                            .font(.caption)
-                            .padding()
-                        
-                        Text(validNotice.title)
-                            .font(.headline)
-                            .padding()
-                        
-                            .frame(maxWidth: .infinity,  alignment: .leading)
-                            .background(
-                                .thinMaterial,
-                                in: RoundedRectangle(cornerRadius: 15)
-                            )
-                        Text(validNotice.noticeMessage)
-                            .font(.body)
-                            .padding()
-                            .frame(maxWidth: .infinity,  alignment: .leading)
-                            .background(
-                                .thinMaterial,
-                                in: RoundedRectangle(cornerRadius: 15)
-                            )
-                    } //VStack
-                } // ScrollView
-                .padding(.horizontal)
-                .navigationBarBackButtonHidden(true)
-                .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-                .toolbar {
-                    toolbarForNoticeDetails()
+        ZStack {
+            Color.clear
+                .ignoresSafeArea()
+            Rectangle()
+                .fill(Color.mycolor.myBackground)
+            ZStack {
+                if let validNotice = notice {
+                    ScrollView(showsIndicators: false) {
+                        VStack (alignment: .leading){
+                            Text(validNotice.noticeDate.formatted(date: .numeric, time: .omitted))
+                                .font(.caption)
+                                .padding()
+                            
+                            Text(validNotice.title)
+                                .font(.headline)
+                                .padding()
+                            
+                                .frame(maxWidth: .infinity,  alignment: .leading)
+                                .background(
+                                    .thinMaterial,
+                                    in: RoundedRectangle(cornerRadius: 15)
+                                )
+                            Text(validNotice.noticeMessage)
+                                .font(.body)
+                                .padding()
+                                .frame(maxWidth: .infinity,  alignment: .leading)
+                                .background(
+                                    .thinMaterial,
+                                    in: RoundedRectangle(cornerRadius: 15)
+                                )
+                        } //VStack
+                    } // ScrollView
+                    .padding(.horizontal)
+//                    .onDisappear {
+//                        noticevm.isReadSetTrue(notice: validNotice)
+//                    }
+                } else {
+                    Text("Notice is not found")
                 }
-                .onDisappear {
-                    if !validNotice.isRead {
-                        noticevm.isReadSetTrue(notice: validNotice)
-                    }
-                }
-            } else {
-                Text("Notice is not found")
-            }
+            } // ZStack
         }
-        
+        .navigationTitle("Notice details")
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .toolbar {
+            toolbarForNoticeDetails()
+        }
     }
     
     
@@ -75,28 +90,25 @@ struct NoticeDetailsView: View {
                 iconName: "chevron.left",
                 isShownCircle: false)
             {
-                dismiss()
+                action()
             }
         }
         ToolbarItem(placement: .topBarTrailing) {
-                CircleStrokeButtonView(iconName: "trash", isShownCircle: false) {
-                    withAnimation {
-                        noticevm.deleteNotice(notice: notice)
-//                        hapticManager.notification(type: .success)
-                        dismiss()
-
-                    }
-//                                        dismiss()
+            CircleStrokeButtonView(iconName: "trash", isShownCircle: false) {
+                withAnimation {
+                    noticevm.deleteNotice(notice: notice)
+                    dismiss()
+                    
                 }
             }
-
+        }
     }
     
 }
 
 #Preview {
     NavigationStack{
-        NoticeDetailsView(noticeId: "001")
+        NoticeDetailsView(noticeId: "001") {}
     }
     .environmentObject(NoticeViewModel())
 }

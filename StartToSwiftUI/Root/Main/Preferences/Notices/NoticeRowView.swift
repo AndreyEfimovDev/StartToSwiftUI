@@ -13,32 +13,63 @@ struct NoticeRowView: View {
     
     var body: some View {
         
-        VStack (alignment: .leading) {
-            Text("\(notice.noticeDate.formatted(date: .numeric, time: .omitted))")
-                .font(.caption)
+        HStack {
+
+            Circle()
+                .fill(Color.mycolor.myBlue)
+                .frame(width: 8, height: 8)
+                .padding(.leading, 8)
+                .opacity(notice.isRead ? 0 : 1)
             
-            Text(notice.title)
-                .font(.body)
-                .lineLimit(1)
-                .padding(.vertical, 8)
+//            Spacer()
+            
+            VStack (alignment: .leading) {
+                Text("\(notice.noticeDate.formatted(date: .numeric, time: .omitted))")
+                    .font(.caption)
+//                    .border(.yellow)
+                
+                Text(notice.title)
+                    .font(.body)
+                    .lineLimit(1)
+//                    .border(.green)
+
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .foregroundStyle(Color.mycolor.myAccent)
+            .fontWeight(notice.isRead ? .regular : .bold)
+            .padding(.vertical, 16)
         }
-//        .padding(.horizontal)
-        .fontWeight(notice.isRead ? .regular : .bold)
-        .frame(maxWidth: .infinity, alignment: .leading)
-//        .background(.ultraThinMaterial)
-//        .clipShape(
-//            RoundedRectangle(cornerRadius: 3)
-//                
-//        )
+        .background(.ultraThinMaterial)
+
+//        .border(.red)
     }
 }
 
-#Preview {
-    ZStack {
-        Color.blue
-            .ignoresSafeArea()
+fileprivate struct NoticeRowPreView: View {
+    
+    @Environment(\.colorScheme) var colorScheme
+    
+    var body: some View {
         List {
-            NoticeRowView(notice: DevData.sampleNotice1)
+            ZStack {
+                Color.pink.opacity(0.1)
+                    .ignoresSafeArea()
+                
+                VStack {
+                    NoticeRowView(notice: DevData.sampleNotice1)
+                    NoticeRowView(notice: DevData.sampleNotice2)
+                    NoticeRowView(notice: DevData.sampleNotice3)
+                }
+                .padding()
+            }
         }
+        .listStyle(.plain)
+
     }
+}
+
+
+#Preview {
+    NoticeRowPreView()
+    
 }

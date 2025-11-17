@@ -82,11 +82,10 @@ class JSONFileManager: ObservableObject {
                 return
             }
             
-            
             do {
                 let jsonData = try Data(contentsOf: url)
                 let decodedData = try decoder.decode(T.self, from: jsonData)
-                print("🍎 FM(loadData): Successfully uploaded")
+                print("🍎 FM(loadData): Successfully uploaded \(T.self)")
                 completion(.success(decodedData))
             } catch {
                 print("🍎☑️ FM(loadData): Decoding error: \(error)")
@@ -99,15 +98,15 @@ class JSONFileManager: ObservableObject {
         
     }
     
-//    func checkIfFileExists(fileName: String) -> Bool {
-//        
-//        print("🍎 FM(checkIfFileExists): Getting URL")
-//
-//            guard case .success(let url) = getFileURL(fileName: fileName) else {
-//                return false
-//            }
-//            return FileManager.default.fileExists(atPath: url.path)
-//        }
+    func checkIfFileExists(fileName: String) -> Bool {
+        
+        print("🍎 FM(checkIfFileExists): Getting URL")
+
+            guard case .success(let url) = getFileURL(fileName: fileName) else {
+                return false
+            }
+            return FileManager.default.fileExists(atPath: url.path)
+        }
     
 
 }
