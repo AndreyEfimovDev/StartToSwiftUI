@@ -9,62 +9,62 @@ import SwiftUI
 
 struct NoticesView: View {
     
+    @Environment(\.dismiss) private var dismiss
+    
     private let hapticManager = HapticService.shared
     @EnvironmentObject private var noticevm: NoticeViewModel
     
-    @State private var selectedNoticeId: String?
     @State private var selectedNotice: Notice?
-    @State private var showDetailView: Bool = false
-    
     
     var body: some View {
-        ScrollView {
+        ZStack {
             if noticevm.notices.isEmpty {
                 noticesIsEmpty
             } else {
                 List {
                     ForEach(noticevm.notices) { notice in
-                        //                    HStack {
-                        //                        Circle()
-                        //                        .fill(.white)
-                        //                        .frame(width: 15, height: 15)
-                        //                        .overlay(
-                        //                            Capsule()
-                        //                                .stroke(Color.mycolor.myBlue, lineWidth: 1)
-                        //                        )
-                        //                        .frame(width: 30, height: 30)
-                        //                        .padding(4)
-                        //                        .border(.accent)
-                        //                        .opacity(0)
-                        
-                        NoticeRowView(notice: notice)
-                            .border(.red)
-                            .onTapGesture {
-                                selectedNoticeId = notice.id
-                                showDetailView.toggle()
-                            }
-                        
-                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                Button("Delete", systemImage: "trash") {
-                                    selectedNotice = notice
-                                    hapticManager.notification(type: .warning)
-                                }.tint(Color.mycolor.myRed)
-                            } // right side swipe action buttonss
-                            .swipeActions(edge: .leading, allowsFullSwipe: false) {
-                                Button(notice.isRead ? "Unread" : "Read" , systemImage: notice.isRead ?  "heart.slash.fill" : "heart.fill") {
-                                    noticevm.isReadSetTrue(notice: notice)
+                        Button {
+                            selectedNotice = notice
+                        } label: {
+                            NoticeRowView(notice: notice)
+                        }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            Button {
+                                withAnimation {
+                                    noticevm.deleteNotice(notice: notice)
+                                    hapticManager.notification(type: .success)
                                 }
-                                .tint(notice.isRead ? Color.mycolor.mySecondaryText : Color.mycolor.myYellow)
-                            } // left side swipe action buttons
-                        //                    }
+                            } label: {
+                                VStack {
+                                    Image(systemName: "trash")
+                                    Text("Delete")
+                                        .font(.caption2)
+                                }
+                            }
+                            .tint(Color.mycolor.myRed)
+                        } // right side swipe action buttonss
+                        .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                            Button(notice.isRead ? "Unread" : "Read", systemImage: notice.isRead ?  "eye.slash.circle" : "eye.circle") {
+                                withAnimation {
+                                    noticevm.isReadToggle(notice: notice)
+                                }
+                            }
+                            .tint(notice.isRead ? Color.mycolor.mySecondaryText : Color.mycolor.myBlue)
+                        } // left side swipe action buttons
                     } // ForEach
-                    
                 } // List
+                .sheet(item: $selectedNotice) { notice in
+                        NoticeDetailsView(noticeId: notice.id)
+                }
             } // if empty
-        }
-        .navigationDestination(isPresented: $showDetailView) {
-            
-            if let id = selectedNoticeId {                    NoticeDetailsView(noticeId: id)
+        } // ZStack
+        .navigationTitle("Notifications")
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                    dismiss()
+                }
             }
         }
     }
@@ -76,7 +76,7 @@ struct NoticesView: View {
             description: Text("Notices will appear here when are available.")
         )
     }
-
+    
     
 }
 
@@ -87,3 +87,17 @@ struct NoticesView: View {
     .environmentObject(NoticeViewModel())
     
 }
+
+
+//                    HStack {
+//                        Circle()
+//                        .fill(.white)
+//                        .frame(width: 15, height: 15)
+//                        .overlay(
+//                            Capsule()
+//                                .stroke(Color.mycolor.myBlue, lineWidth: 1)
+//                        )
+//                        .frame(width: 30, height: 30)
+//                        .padding(4)
+//                        .border(.accent)
+//                        .opacity(0)

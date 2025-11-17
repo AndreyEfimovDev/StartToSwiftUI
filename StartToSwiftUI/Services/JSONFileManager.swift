@@ -8,27 +8,31 @@
 import Foundation
 import SwiftUI
 
-class FileStorageService: ObservableObject {
+class JSONFileManager: ObservableObject {
     
-    static let shared = FileStorageService()
+    static let shared = JSONFileManager()
+    
 
     // MARK: FILE MANAGER FUNCIONS
     
-    // Getting a full path of the JSON data file stored by File Manager
+
+    // Getting a full path of the JSON file
+
     func getFileURL(fileName: String) -> Result<URL, FileStorageError> {
+        
         guard
             let documentsDirectory = FileManager
                 .default
                 .urls(for: .documentDirectory, in: .userDomainMask)
                 .first else {
-            print("❌ FM(getFileURL): Error in getting path: \(fileName).")
+            print("❌ FM(getFileURL): Error in getting path for \(fileName).")
             return .failure(.invalidURL)
         }
-        
+
         let fileURL = documentsDirectory.appendingPathComponent(fileName)
-        print("✅ FM(getFileURL): Successfully appended file: \(fileName) in: \(fileURL).")
-        return .success(fileURL)
-    }
+                print("✅ FM(getFileURL): Successfully got file url: \(fileURL).")
+                return .success(fileURL)
+        }
     
     // Saving posts with encoding into JSON data
 
@@ -46,10 +50,10 @@ class FileStorageService: ObservableObject {
             do {
                 let jsonData = try encoder.encode(data)
                 try jsonData.write(to: url)
-                print("✅ FM(saveData): Successfully saved in: \(url)")
+                print("🍎✅ FM(saveData): Data successfully saved in: \(url)")
                 completion(.success(()))
             } catch {
-                print("❌ FM(saveData): Error in saving posts: \(error)")
+                print("🍎❌ FM(saveData): Error in saving data: \(error)")
                 completion(.failure(.encodingFailed(error)))
             }
             
@@ -71,7 +75,7 @@ class FileStorageService: ObservableObject {
         case .success(let url):
             // Check the file for existance
             guard FileManager.default.fileExists(atPath: url.path) else {
-                print("☑️ FM(loadData): No saved data found")
+                print("🍎☑️ FM(loadData): No JSON file found")
                 completion(.failure(.fileNotFound))
                 return
             }
@@ -80,17 +84,17 @@ class FileStorageService: ObservableObject {
             do {
                 let jsonData = try Data(contentsOf: url)
                 let decodedData = try decoder.decode(T.self, from: jsonData)
-                print("✅ FM(loadData): Successfully uploaded")
+                print("🍎✅ FM(loadData): Successfully uploaded")
                 completion(.success(decodedData))
             } catch {
-                print("☑️ FM(loadData): Decoding error: \(error)")
+                print("🍎☑️ FM(loadData): Decoding error: \(error)")
                 completion(.failure(.decodingFailed(error)))
             }
             
         case .failure(let error):
-                    completion(.failure(error))
-                }
-
+            completion(.failure(error))
+        }
+        
     }
     
     func checkIfFileExists(fileName: String) -> Bool {
@@ -99,6 +103,7 @@ class FileStorageService: ObservableObject {
             }
             return FileManager.default.fileExists(atPath: url.path)
         }
+    
 
 }
 
