@@ -74,7 +74,7 @@ class PostsViewModel: ObservableObject {
     private var utcCalendar = Calendar.current
     var allYears: [String]? = nil
     var allCategories: [String]? = nil
-    var dispatchTime: DispatchTime { .now() + 1.5 }
+    var dispatchTime: DispatchTime { .now() + 0.5 }
     
     // MARK: INIT() SECTION
     
@@ -102,7 +102,7 @@ class PostsViewModel: ObservableObject {
                     case .failure(let error):
                         self?.errorMessage = error.localizedDescription
                         self?.showErrorMessageAlert = true
-                        print("🍓 ❌ VM(init): Failed to load posts: \(error)")
+                        print("🍓 ☑️ VM(init): Failed to load posts: \(error)")
                     }
                 }
             }
@@ -116,7 +116,7 @@ class PostsViewModel: ObservableObject {
                 }
             }
         } else {
-            print("🍓 ❌ VM(init): File \(Constants.localPostsFileName) does not exist")
+            print("🍓 ☑️ VM(init): File \(Constants.localPostsFileName) does not exist")
 
         }
         
