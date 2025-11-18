@@ -16,9 +16,9 @@ enum Theme: String, CaseIterable, Codable {
 
     var displayName: String {
         switch self {
-        case .light: return "Light"
-        case .dark: return "Dark"
-        case .system: return "System"
+        case .light: return "🌞 Light"
+        case .dark: return "🌙 Dark"
+        case .system: return "⚙️ System"
         }
     }
     
@@ -29,6 +29,24 @@ enum Theme: String, CaseIterable, Codable {
         case .system: return nil
         }
     }
+    
+    var iconName: String {
+            switch self {
+            case .light: return "sun.max"
+            case .dark: return "moon"
+            case .system: return "iphone"
+            }
+        }
+    
+    func colorScheme(for systemScheme: ColorScheme) -> ColorScheme? {
+            switch self {
+            case .light: return .light
+            case .dark: return .dark
+            case .system: return systemScheme // Возвращаем системную схему
+            }
+        }
+
+
 }
 
 

@@ -16,15 +16,16 @@ import SwiftUI
 //    case aboutApp
 //}
 
+
+
 struct PreferencesView: View {
     
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
-
     
-//    @State private var navigationPath = NavigationPath()
-//    @State private var selectedDestination: PreferencesDestination?
+    var onThemeChange: (() -> Void)? = nil
+
     
     let iconWidth: CGFloat = 18
     
@@ -36,73 +37,96 @@ struct PreferencesView: View {
         let postDrafts = vm.allPosts.filter { $0.draft == true }
         return postDrafts.count
         }
-
-//    @State private var theme: Theme = .dark
-
         
     var body: some View {
-        NavigationStack {
-            Form {
-                Section(header: sectionHeader("Appearance")) {
-//                    appearance
+            NavigationStack {
+                
+                Form {
+                    Section(header: sectionHeader("Appearance")) {
+                        //                    appearance
+                        Picker("Appearance", selection: $vm.selectedTheme) {
+                            ForEach(Theme.allCases, id: \.self) { theme in
+                                Text(theme.displayName)
+                                    .tag(theme)
+                            }
+                        }
+                        .onChange(of: vm.selectedTheme) { _, newValue in
+                            applyThemeToWindow(newValue)
+                            // Вызываем callback для перезагрузки родительского View
+                            onThemeChange?()
+                        }
+                        
+                        //                    UnderlineSermentedPickerNotOptional(
+                        //                        selection: $vm.selectedTheme,
+                        //                        allItems: Theme.allCases,
+                        //                        titleForCase: { $0.displayName },
+                        //                        selectedFont: .footnote,
+                        //                        selectedTextColor: Color.mycolor.myBlue,
+                        //                        unselectedTextColor: Color.mycolor.mySecondaryText
+                        //                    )
+                    }
                     
-                    Picker("Appearance", selection: $vm.selectedTheme) {
-                        ForEach(Theme.allCases, id: \.self) { theme in
-                            Text(theme.displayName)
-                                .tag(theme)
+                    Section(header: sectionHeader("Notifications")) {
+                        notificationToggle
+                        notifications
+                    }
+                    Section(header: sectionHeader("Managing posts (\(postsCount))")) {
+                        
+                        if !vm.allPosts.filter({ $0.draft == true }).isEmpty {
+                            postDrafts
+                        }
+                        
+                        if (!vm.allPosts.isEmpty || vm.isPostsUpdateAvailable) && vm.isFirstImportPostsCompleted {
+                            checkForPostsUpdate
+                        }
+                        
+                        importFromCloud
+                        shareBackup
+                        restoreBackup
+                        erasePosts
+                    }
+                    Section(header: sectionHeader("Сommunication")){
+                        thankfullness
+                        aboutApplication
+                        legalInformation
+                        contactDeveloperButton
+                    }
+                } // Form
+                .foregroundStyle(Color.mycolor.myAccent)
+                .navigationTitle("Preferences")
+                //            .navigationBarTitleDisplayMode(.inline)
+                .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                            dismiss()
                         }
                     }
-//                    UnderlineSermentedPickerNotOptional(
-//                        selection: $vm.selectedTheme,
-//                        allItems: Theme.allCases,
-//                        titleForCase: { $0.displayName },
-//                        selectedFont: .footnote,
-//                        selectedTextColor: Color.mycolor.myBlue,
-//                        unselectedTextColor: Color.mycolor.mySecondaryText
-//                    )
                 }
-                Section(header: sectionHeader("Notifications")) {
-                    notificationToggle
-                    notifications
-                }
-                Section(header: sectionHeader("Managing posts (\(postsCount))")) {
-                    
-                    if !vm.allPosts.filter({ $0.draft == true }).isEmpty {
-                        postDrafts
-                    }
-                    
-                    if (!vm.allPosts.isEmpty || vm.isPostsUpdateAvailable) && vm.isFirstImportPostsCompleted {
-                        checkForPostsUpdate
-                    }
-                    
-                    importFromCloud
-                    shareBackup
-                    restoreBackup
-                    erasePosts
-                }
-                Section(header: sectionHeader("Сommunication")){
-                    thankfullness
-                    aboutApplication
-                    legalInformation
-                    contactDeveloperButton
-                }
-            } // Form
-            .foregroundStyle(Color.mycolor.myAccent)
-            .navigationTitle("Preferences")
-//            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
-                        dismiss()
-                    }
-                }
-            }
-            .preferredColorScheme(vm.selectedTheme.colorScheme)
-        } // NavigationStack
+            } // NavigationStack
+//            .preferredColorScheme(vm.colorSchemeForViews)
     }
     
     // MARK: - Subviews
+    
+    private func applyThemeToWindow(_ theme: Theme) {
+            DispatchQueue.main.async {
+                UIApplication.shared.connectedScenes
+                    .compactMap { $0 as? UIWindowScene }
+                    .flatMap { $0.windows }
+                    .forEach { window in
+                        switch theme {
+                        case .light:
+                            window.overrideUserInterfaceStyle = .light
+                        case .dark:
+                            window.overrideUserInterfaceStyle = .dark
+                        case .system:
+                            window.overrideUserInterfaceStyle = .unspecified
+                        }
+                    }
+            }
+        }
+
     
     private func sectionHeader(_ text: String) -> some View {
         Text(text)
