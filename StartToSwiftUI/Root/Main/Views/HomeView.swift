@@ -68,7 +68,11 @@ struct HomeView: View {
                 .navigationBarBackButtonHidden(true)
                 .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
                 .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-                .toolbar { toolbarForMainViewBody() }
+                .toolbar {
+                    if vm.isTermsOfUseAccepted {
+                        toolbarForMainViewBody()
+                    }
+                }
                 .safeAreaInset(edge: .top) {
                     SearchBarView()
                 }
@@ -106,7 +110,7 @@ struct HomeView: View {
                 welcomeAtFirstLauch
             }
             // Updates available notification
-            if vm.isPostsUpdateAvailable && vm.isNotification {
+            if vm.isPostsUpdateAvailable && noticevm.isNotification {
                 updateAvailableDialog
             }
             // Deletion confirmation dialog

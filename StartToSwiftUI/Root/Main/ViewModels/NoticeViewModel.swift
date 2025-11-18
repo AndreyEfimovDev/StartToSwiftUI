@@ -21,7 +21,9 @@ class NoticeViewModel: ObservableObject {
     @Published var selectedNoticeIDs: Set<String> = []
     @Published var isSelectionMode: Bool = false
 
-    
+    @AppStorage("isNotification") var isNotification: Bool = false
+    @AppStorage("dateOfLatestNoticesUpdate") var dateOfLatestNoticesUpdate: Date = Date.distantPast
+
     init(
         networkService: NetworkService = NetworkService(baseURL: Constants.cloudNoticesURL)
     ) {
@@ -32,10 +34,10 @@ class NoticeViewModel: ObservableObject {
         if fileManager.checkIfFileExists(fileName: Constants.localNoticesFileName) {
             
             self.loadLocalNotices(from: Constants.localNoticesFileName) {[weak self] localNotices in
-                self?.importNoticesFromCloud(localNotices: localNotices)
+                self?.importNoticesFromCloud()
             }
         } else {
-            self.importNoticesFromCloud(localNotices: [])
+            self.importNoticesFromCloud()
         }
     }
 
@@ -67,7 +69,7 @@ class NoticeViewModel: ObservableObject {
     }
     
     
-    private func importNoticesFromCloud(localNotices: [Notice]) {
+    private func importNoticesFromCloud() {
         
         errorMessage = nil
         showErrorMessageAlert = false
@@ -79,23 +81,41 @@ class NoticeViewModel: ObservableObject {
                 case .success(let cloudResponse):
                     
                     if !cloudResponse.isEmpty {
-                        print("🍉 NVN: Successfully imported \(cloudResponse.count) notices from the cloud")
+                        print("🍉 NVN(importNoticesFromCloud): Successfully imported \(cloudResponse.count) notices from the cloud")
+                        print("🍉 NVN(importNoticesFromCloud): The latest notices update  \(self?.dateOfLatestNoticesUpdate.formatted(date: .abbreviated, time: .shortened) ?? "")")
 
-                        // Selecting Cloud notices with unique ID - append such posts from Cloud
-                        let cloudNoticesAfterCheckForUniqueID = cloudResponse.filter { noticeFromCloud in
-                            !(self?.notices.contains(where: { $0.id == noticeFromCloud.id }) ?? false)
+                        // Select Cloud notices with date older than date of latest notices update
+                        let cloudNoticesWithNewerDates = cloudResponse.filter {
+                            $0.noticeDate > (self?.dateOfLatestNoticesUpdate ?? .distantPast)
                         }
-                        print("🍉 NVN(importNoticesFromCloud): Cloud notices with unique ID  \(cloudNoticesAfterCheckForUniqueID.count)")
+                        print("🍉 NVN(importNoticesFromCloud): Cloud notices with newer dates  \(cloudNoticesWithNewerDates.count)")
 
+                        // Set a new date of latest notices update
+                        if let latestNoticeDate = cloudNoticesWithNewerDates.map({ $0.noticeDate }).max() {
+                            self?.dateOfLatestNoticesUpdate = latestNoticeDate
+                        }
+                        print("🍉 NVN(importNoticesFromCloud): New date of latest notices update  \(self?.dateOfLatestNoticesUpdate.formatted(date: .abbreviated, time: .shortened) ?? "")")
+
+                        // Selecting Cloud notices with unique ID
+                        let newLoadedNotices = cloudNoticesWithNewerDates.filter { notice in
+                            !(self?.notices.contains(where: { $0.id == notice.id }) ?? false)
+                        }
                         
-                        if !cloudNoticesAfterCheckForUniqueID.isEmpty {
-                            let mergedNotices = localNotices + cloudNoticesAfterCheckForUniqueID
-                            self?.notices = mergedNotices
+                        // Selecting Cloud notices with unique ID by Set
+//                        let localIDs = Set(localNotices.map(\.id))
+//                        let newNotices = cloudNoticesWithNewerDates.filter { !localIDs.contains($0.id) }
+
+                        print("🍉 NVN(importNoticesFromCloud): Cloud notices with unique ID  \(newLoadedNotices.count)")
+                        
+                        if !newLoadedNotices.isEmpty {
+                            self?.notices.append(contentsOf: newLoadedNotices)
                             self?.saveNotices()
-                            print("🍉 NVN(importNoticesFromCloud): Successfully appended \(cloudNoticesAfterCheckForUniqueID.count) notifications from the cloud")
+                            print("🍉 NVN(importNoticesFromCloud): Successfully appended \(newLoadedNotices.count) notifications from the cloud")
                         } else {
                             print("🍉 NVN(importNoticesFromCloud): No new notices from the cloud")
                         }
+                        
+                        
                     } else {
                         print("🍉☑️ NVN(importNoticesFromCloud): Array of notifications from the cloud is empty.")
                     }

@@ -36,7 +36,9 @@ struct AddEditPostSheet: View {
     private let fontTextInput: Font = .callout
     private let colorSubheader: Color = Color.mycolor.myAccent.opacity(0.5)
     
-    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date() // set beginning year for choice
+    // set beginning year for choice
+    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date.distantPast
+    
     private let endingDate: Date = .now
     private var bindingPostDate: Binding<Date> {
         Binding<Date>(
