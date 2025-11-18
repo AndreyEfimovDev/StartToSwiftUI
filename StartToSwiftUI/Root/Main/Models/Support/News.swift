@@ -49,7 +49,7 @@ struct WhatsNews {
             release: "01.01.01",
             news: [
                 News(
-                    title: "Initial Deployment",
+                    title: "Initial deployment",
                     newsText: """
                             The App's features are described in the 'Introduction/About App' section.
                             """),

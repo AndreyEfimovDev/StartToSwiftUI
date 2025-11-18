@@ -64,7 +64,6 @@ struct NoticeMessagesView: View {
         } // ZStack
         .navigationTitle("Notifications")
         .navigationBarBackButtonHidden(true)
-//        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -85,9 +84,9 @@ struct NoticeMessagesView: View {
     
     private var noticesIsEmpty: some View {
         ContentUnavailableView(
-            "No notices",
+            "No notifications",
             systemImage: "tray.and.arrow.down",
-            description: Text("Notices will appear here when are available.")
+            description: Text("Messages will appear here when are available.")
         )
     }
     

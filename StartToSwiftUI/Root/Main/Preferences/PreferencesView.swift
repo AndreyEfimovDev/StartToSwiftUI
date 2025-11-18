@@ -40,14 +40,14 @@ struct PreferencesView: View {
     var body: some View {
         Form {
             Section(header: sectionHeader("Appearance")) {
-//                UnderlineSermentedPickerNotOptional(
-//                    selection: $vm.selectedTheme,
-//                    allItems: Theme.allCases,
-//                    titleForCase: { $0.displayName },
-//                    selectedFont: .footnote,
-//                    selectedTextColor: Color.mycolor.myBlue,
-//                    unselectedTextColor: Color.mycolor.myAccent
-//                )
+                UnderlineSermentedPickerNotOptional(
+                    selection: $vm.selectedTheme,
+                    allItems: Theme.allCases,
+                    titleForCase: { $0.displayName },
+                    selectedFont: .footnote,
+                    selectedTextColor: Color.mycolor.myBlue,
+                    unselectedTextColor: Color.mycolor.myAccent
+                )
             }
             
             Section(header: sectionHeader("Notifications")) {
@@ -80,7 +80,6 @@ struct PreferencesView: View {
         .listSectionSpacing(0)
         .navigationTitle("Preferences")
         .navigationBarBackButtonHidden(true)
-//        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
