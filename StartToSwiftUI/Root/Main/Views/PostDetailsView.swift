@@ -10,7 +10,6 @@ import SwiftUI
 struct PostDetailsView: View {
     
     @Environment(\.dismiss) var dismiss
-//    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject private var vm: PostsViewModel
         
     @State private var showSafariView = false
@@ -96,6 +95,47 @@ struct PostDetailsView: View {
     
     // MARK: Subviews
     
+    @ToolbarContentBuilder
+    private func toolbarForPostDetails(validPost: Post) -> some ToolbarContent {
+        ToolbarItemGroup(placement: .topBarLeading) {
+            CircleStrokeButtonView(
+                iconName: "chevron.left",
+                isShownCircle: false)
+            {
+                dismiss()
+            }
+            
+            ShareLink(item: validPost.urlString) {
+                Image(systemName: "square.and.arrow.up")
+                    .font(.headline)
+                    .foregroundStyle(Color.mycolor.mySecondaryText)
+                    .offset(y: -2)
+                    .frame(width: 30, height: 30)
+                    .background(.black.opacity(0.001))
+            }
+        }
+        ToolbarItemGroup(placement: .topBarTrailing) {
+            CircleStrokeButtonView(
+                iconName: validPost.favoriteChoice == .yes ? "heart.fill" : "heart",
+                iconFont: .headline,
+                isIconColorToChange: validPost.favoriteChoice == .yes ? true : false,
+                imageColorSecondary: Color.mycolor.myYellow,
+                isShownCircle: false)
+            {
+                vm.favoriteToggle(post: validPost)
+            }
+            
+            
+            CircleStrokeButtonView(
+                iconName: post?.origin == .cloud ? "pencil.slash" : "pencil",
+                isShownCircle: false)
+            {
+                showEditPostView.toggle()
+            }
+            .disabled(post?.origin == .cloud)
+        }
+    }
+
     private func header(for post: Post) -> some View {
         
         ZStack(alignment: .topTrailing) {
@@ -223,46 +263,6 @@ struct PostDetailsView: View {
         } // VStack
     }
     
-    @ToolbarContentBuilder
-    private func toolbarForPostDetails(validPost: Post) -> some ToolbarContent {
-        ToolbarItemGroup(placement: .topBarLeading) {
-            CircleStrokeButtonView(
-                iconName: "chevron.left",
-                isShownCircle: false)
-            {
-                dismiss()
-            }
-            
-            ShareLink(item: validPost.urlString) {
-                Image(systemName: "square.and.arrow.up")
-                    .font(.headline)
-                    .foregroundStyle(Color.mycolor.mySecondaryText)
-                    .offset(y: -2)
-                    .frame(width: 30, height: 30)
-                    .background(.black.opacity(0.001))
-            }
-        }
-        ToolbarItemGroup(placement: .topBarTrailing) {
-            CircleStrokeButtonView(
-                iconName: validPost.favoriteChoice == .yes ? "heart.fill" : "heart",
-                iconFont: .headline,
-                isIconColorToChange: validPost.favoriteChoice == .yes ? true : false,
-                imageColorSecondary: Color.mycolor.myYellow,
-                isShownCircle: false)
-            {
-                vm.favoriteToggle(post: validPost)
-            }
-            
-            
-            CircleStrokeButtonView(
-                iconName: post?.origin == .cloud ? "pencil.slash" : "pencil",
-                isShownCircle: false)
-            {
-                showEditPostView.toggle()
-            }
-            .disabled(post?.origin == .cloud)
-        }
-    }
 }
 
 

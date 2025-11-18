@@ -39,37 +39,37 @@ class PostsViewModel: ObservableObject {
             print(selectedTheme.displayName)
             print(selectedTheme.colorScheme.debugDescription)
 
-            updateAppearance()
+//            updateAppearance()
         }
     }
-    private func updateAppearance() {
-            DispatchQueue.main.async {
-                guard let window = UIApplication.shared.connectedScenes
-                    .compactMap({ $0 as? UIWindowScene })
-                    .flatMap({ $0.windows })
-                    .first else { return }
-                
-                switch self.selectedTheme {
-                case .light:
-                    window.overrideUserInterfaceStyle = .light
-                case .dark:
-                    window.overrideUserInterfaceStyle = .dark
-                case .system:
-                    window.overrideUserInterfaceStyle = .unspecified
-                }
-            }
-        }
-        
-        // Для использования в .preferredColorScheme
-        var colorSchemeForViews: ColorScheme {
-            switch selectedTheme {
-            case .light: return .light
-            case .dark: return .dark
-            case .system:
-                let currentStyle = UITraitCollection.current.userInterfaceStyle
-                return currentStyle == .dark ? .dark : .light
-            }
-        }
+//    private func updateAppearance() {
+//            DispatchQueue.main.async {
+//                guard let window = UIApplication.shared.connectedScenes
+//                    .compactMap({ $0 as? UIWindowScene })
+//                    .flatMap({ $0.windows })
+//                    .first else { return }
+//                
+//                switch self.selectedTheme {
+//                case .light:
+//                    window.overrideUserInterfaceStyle = .light
+//                case .dark:
+//                    window.overrideUserInterfaceStyle = .dark
+//                case .system:
+//                    window.overrideUserInterfaceStyle = .unspecified
+//                }
+//            }
+//        }
+//        
+//        // Для использования в .preferredColorScheme
+//        var colorSchemeForViews: ColorScheme {
+//            switch selectedTheme {
+//            case .light: return .light
+//            case .dark: return .dark
+//            case .system:
+//                let currentStyle = UITraitCollection.current.userInterfaceStyle
+//                return currentStyle == .dark ? .dark : .light
+//            }
+//        }
     
     @AppStorage("homeTitleName") var homeTitleName: String = "SwiftUI materials"
     //    @AppStorage("isFirstAppLaunch") var isFirstAppLaunch: Bool = true
@@ -173,7 +173,7 @@ class PostsViewModel: ObservableObject {
         } else {
             print("🍓❌ VM(init): TimeZone is not set")
         }
-        updateAppearance()
+//        updateAppearance()
         // initiating subscriptions
         addSubscribers()
         

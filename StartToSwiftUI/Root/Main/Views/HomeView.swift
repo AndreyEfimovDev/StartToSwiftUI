@@ -81,9 +81,7 @@ struct HomeView: View {
                     }
                 }
                 .fullScreenCover(isPresented: $showPreferancesView) {
-                    PreferencesView {
-                        
-                    }
+                    PreferencesView()
                 }
                 .fullScreenCover(isPresented: $showAddPostView) {
                     AddEditPostSheet(post: nil)
@@ -123,7 +121,6 @@ struct HomeView: View {
     // MARK: Subviews
     
     private var mainViewBody: some View {
-//        ZStack {
             List {
                 ForEach(vm.filteredPosts) { post in
                     PostRowView(post: post)
@@ -145,14 +142,11 @@ struct HomeView: View {
                                 hapticManager.notification(type: .warning)
                                 isShowingDeleteConfirmation = true
                             }.tint(Color.mycolor.myRed)
-                            
-                            //                                    if post.origin == .cloud {
                             Button("Edit", systemImage: post.origin == .cloud ? "pencil.slash" : "pencil") {
                                 selectedPost = post
                             }
                             .tint(Color.mycolor.myButtonBGBlue)
                             .disabled(post.origin == .cloud)
-                            //                                    }
                         } // right side swipe action buttonss
                         .swipeActions(edge: .leading, allowsFullSwipe: false) {
                             Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: post.favoriteChoice == .yes ?  "heart.slash.fill" : "heart.fill") {
@@ -161,11 +155,10 @@ struct HomeView: View {
                             .tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondaryText : Color.mycolor.myYellow)
                         } // left side swipe action buttons
                 } // ForEach
-                // .buttonStyle(.plain) // it makes the buttons accessable through the List elements
+// .buttonStyle(.plain) // it makes the buttons accessable through the List elements
             } // List
             .listStyle(.plain)
             .background(Color.mycolor.myBackground)
-//        }
     }
     
     private var allPostsIsEmpty: some View {
@@ -274,7 +267,6 @@ struct HomeView: View {
                     } // VStack
                 } // ScrollView
                 .navigationTitle("Affirmation")
-                
             } // NavigationStack
         } // ZStack
     }
