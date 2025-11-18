@@ -13,19 +13,19 @@ struct NoticeDetailsView: View {
     @EnvironmentObject private var noticevm: NoticeViewModel
     
     let noticeId: String
-    let completion: () -> ()
+    //    let completion: () -> ()
     
     init(
         noticeId: String,
-        action: @escaping () -> Void
+        //        action: @escaping () -> Void
     ) {
         self.noticeId = noticeId
-        self.completion = action
+        //        self.completion = action
     }
     
     private var notice: Notice? {
         noticevm.notices.first(where: { $0.id == noticeId })
-//        DevData.sampleNotice2
+        //        DevData.sampleNotice2
     }
     
     
@@ -33,43 +33,44 @@ struct NoticeDetailsView: View {
     
     var body: some View {
         ZStack {
-            Color.clear
-                .ignoresSafeArea()
-            Rectangle()
-                .fill(Color.mycolor.myBackground)
-            ZStack {
-                if let validNotice = notice {
-                    ScrollView(showsIndicators: false) {
-                        VStack (alignment: .leading){
-                            Text(validNotice.noticeDate.formatted(date: .numeric, time: .omitted))
-                                .font(.caption)
-                                .padding()
-                            
-                            Text(validNotice.title)
-                                .font(.headline)
-                                .padding()
-                            
-                                .frame(maxWidth: .infinity,  alignment: .leading)
-                                .background(
-                                    .thinMaterial,
-                                    in: RoundedRectangle(cornerRadius: 15)
-                                )
-                            Text(validNotice.noticeMessage)
-                                .font(.body)
-                                .padding()
-                                .frame(maxWidth: .infinity,  alignment: .leading)
-                                .background(
-                                    .thinMaterial,
-                                    in: RoundedRectangle(cornerRadius: 15)
-                                )
-                        } //VStack
-                    } // ScrollView
+            //            Color.clear
+            //                .ignoresSafeArea()
+            //            Rectangle()
+            //                .fill(Color.mycolor.myBackground)
+            
+            if let validNotice = notice {
+                ScrollView(showsIndicators: false) {
+                    
+                    VStack (alignment: .leading){
+                        Text(validNotice.noticeDate.formatted(date: .numeric, time: .omitted))
+                            .font(.caption)
+                            .padding()
+                        
+                        Text(validNotice.title)
+                            .font(.headline)
+                            .padding()
+                        
+                            .frame(maxWidth: .infinity,  alignment: .leading)
+                            .background(
+                                .thinMaterial,
+                                in: RoundedRectangle(cornerRadius: 15)
+                            )
+                        Text(validNotice.noticeMessage)
+                            .font(.body)
+                            .padding()
+                            .frame(maxWidth: .infinity,  alignment: .leading)
+                            .background(
+                                .thinMaterial,
+                                in: RoundedRectangle(cornerRadius: 15)
+                            )
+                    } //VStack
+                    .foregroundStyle(Color.mycolor.myAccent)
                     .padding(.horizontal)
-                } else {
-                    Text("Notice is not found")
-                }
-            } // ZStack
-        }
+                } // ScrollView
+            } else {
+                Text("Notice is not found")
+            }
+        } // ZStack root
         .onAppear {
             if let notice = notice {
                 if notice.isRead == false {
@@ -79,7 +80,6 @@ struct NoticeDetailsView: View {
         }
         .navigationTitle("Notice details")
         .navigationBarBackButtonHidden(true)
-        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             toolbarForNoticeDetails()
@@ -95,7 +95,7 @@ struct NoticeDetailsView: View {
                 isShownCircle: false)
             {
                 withAnimation {
-                    completion()
+                    dismiss()
                 }
             }
         }
@@ -103,7 +103,7 @@ struct NoticeDetailsView: View {
             CircleStrokeButtonView(iconName: "trash", isShownCircle: false) {
                 withAnimation {
                     noticevm.deleteNotice(notice: notice)
-                    completion()
+                    dismiss()
                 }
             }
         }
@@ -113,7 +113,7 @@ struct NoticeDetailsView: View {
 
 #Preview {
     NavigationStack{
-        NoticeDetailsView(noticeId: "001") {}
+        NoticeDetailsView(noticeId: "001")
     }
     .environmentObject(NoticeViewModel())
 }
