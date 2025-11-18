@@ -26,8 +26,8 @@ struct SharePostsView: View {
                 .managingPostsTextFormater()
             
             CapsuleButtonView(
-                primaryTitle: "Share/Store posts",
-                secondaryTitle: "Posts Shared/Stored",
+                primaryTitle: "Perform",
+                secondaryTitle: "Completed",
                 isToChange: isShareCompleted
             ) {
                 isInProgress = true
@@ -44,7 +44,7 @@ struct SharePostsView: View {
             }
         }
         .padding(.horizontal, 30)
-        .padding(30)
+        .padding(.top, 30)
         .sheet(isPresented: $showActivityView) {
             if let url = shareURL {
                 handleDocumentSharing(fileURL: url)
@@ -54,6 +54,18 @@ struct SharePostsView: View {
             Button("OK", role: .cancel) { }
         } message: {
             Text(vm.errorMessage ?? "Unknown error")
+        }
+        .navigationTitle("Share/Store posts")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                    dismiss()
+                }
+            }
         }
     }
     
@@ -110,7 +122,10 @@ struct SharePostsView: View {
 }
 
 #Preview {
-    SharePostsView()
-        .environmentObject(PostsViewModel())
+    NavigationStack{
+        
+        SharePostsView()
+            .environmentObject(PostsViewModel())
+    }
 }
 

@@ -8,13 +8,16 @@
 import SwiftUI
 
 struct WhatsNew: View {
+    
+    @Environment(\.dismiss) private var dismiss
+
     var body: some View {
         ScrollView {
             VStack (alignment: .leading) {
                 ForEach(WhatsNews.releases) { release in
+                    
                     Text(release.release)
                         .bold()
-                    
                     VStack (spacing: 20) {
                         ForEach(release.news) { news in
                             VStack (alignment: .leading) {
@@ -22,22 +25,16 @@ struct WhatsNew: View {
                                     .font(.headline)
                                     .foregroundStyle(Color.mycolor.myBlue)
                                     .padding(.bottom, 4)
-//                                    .border(.red)
                                 Text(news.newsText)
                                     .font(.callout)
                                     .foregroundStyle(Color.mycolor.myAccent)
-//                                    .border(.yellow)
                             }
                             .padding(.horizontal)
                             .frame(maxWidth: .infinity, alignment: .leading)
-//                            .border(.green)
-
-//                            .border(.red)
                         } // ForEach 2nd
                     } // VStack
                     .padding(.vertical)
                     .background(.ultraThinMaterial)
-//                                    .border(.green)
                     .clipShape(RoundedRectangle(cornerRadius: 15))
                     .overlay(
                         RoundedRectangle(cornerRadius: 15)
@@ -46,7 +43,18 @@ struct WhatsNew: View {
                 } // ForEach 1st
                 .padding(.horizontal)
             }
+            .padding(.top, 30)
             .navigationTitle("What's New")
+            .navigationBarBackButtonHidden(true)
+            .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                        dismiss()
+                    }
+                }
+            }
         }
     }
 }

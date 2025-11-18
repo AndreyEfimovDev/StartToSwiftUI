@@ -198,7 +198,7 @@ struct TermsOfUse: View {
                         isAccepted = true
                         DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
                             vm.isTermsOfUseAccepted = true
-                            action()
+                            dismiss()
                         }
                     }
                     .padding(.horizontal, 30)

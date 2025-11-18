@@ -24,7 +24,6 @@ struct CheckForPostsUpdateView: View {
     @State private var postCount: Int = 0
     
     var body: some View {
-        NavigationStack {
             VStack {
                 Form {
                     section_1
@@ -32,7 +31,7 @@ struct CheckForPostsUpdateView: View {
                 }
             }
             .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime + 1) {
                     checkForUpdates()
                 }
             }
@@ -43,7 +42,18 @@ struct CheckForPostsUpdateView: View {
             } message: {
                 Text(vm.errorMessage ?? "Unknown error")
             }
-        }
+            .navigationTitle("Check for posts update")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                        dismiss()
+                    }
+                }
+            }
     }
     
     // MARK: Subviews
@@ -137,6 +147,8 @@ struct CheckForPostsUpdateView: View {
 }
 
 #Preview {
-    CheckForPostsUpdateView()
-        .environmentObject(PostsViewModel())
+    NavigationStack{
+        CheckForPostsUpdateView()
+            .environmentObject(PostsViewModel())
+    }
 }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct NoticesView: View {
+struct NoticeMessagesView: View {
     
     @Environment(\.dismiss) private var dismiss
     
@@ -64,9 +64,12 @@ struct NoticesView: View {
                 } // ZStack
             } // if empty
         } // ZStack
+        .padding(.top, 30)
         .navigationTitle("Notice messages")
+        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-        .toolbar(showNoticeDetails ? .hidden : .visible, for: .navigationBar)
+        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
@@ -97,7 +100,7 @@ struct NoticesView: View {
 
 #Preview {
     NavigationStack {
-        NoticesView()
+        NoticeMessagesView()
     }
     .environmentObject(NoticeViewModel())
     

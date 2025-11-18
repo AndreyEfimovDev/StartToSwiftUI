@@ -55,10 +55,23 @@ struct EraseAllPostsView: View {
             }
         }
         .padding(.horizontal, 30)
-        .padding(30)
+        .padding(.top, 30)
         .onAppear {
             hapticManager.notification(type: .warning)
         }
+        .navigationTitle("Delete all posts")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                    dismiss()
+                }
+            }
+        }
+
     }
     
     // MARK: Subviews
@@ -100,7 +113,9 @@ struct EraseAllPostsView: View {
 }
 
 #Preview {
-    EraseAllPostsView()
-        .environmentObject(PostsViewModel())
-    
+    NavigationStack{
+        
+        EraseAllPostsView()
+            .environmentObject(PostsViewModel())
+    }
 }
