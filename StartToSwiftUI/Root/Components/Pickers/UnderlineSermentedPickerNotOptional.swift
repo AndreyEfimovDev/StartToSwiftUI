@@ -73,6 +73,8 @@ fileprivate struct UnderlineSermentedPickerNotOptionalPreview: View {
             .padding()
         }
         .padding()
+        .preferredColorScheme(theme.colorScheme)
+
     }
 }
 

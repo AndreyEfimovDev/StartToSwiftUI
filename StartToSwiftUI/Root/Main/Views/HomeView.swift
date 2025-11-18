@@ -81,7 +81,9 @@ struct HomeView: View {
                     }
                 }
                 .fullScreenCover(isPresented: $showPreferancesView) {
-                        PreferencesView()
+                    PreferencesView {
+                        
+                    }
                 }
                 .fullScreenCover(isPresented: $showAddPostView) {
                     AddEditPostSheet(post: nil)
