@@ -40,7 +40,6 @@ struct WelcomeMessage: View {
         }
         .navigationTitle("Welcome")
         .navigationBarBackButtonHidden(true)
-//        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

@@ -48,9 +48,14 @@ struct PostRowView: View {
     
     private var author: some View {
         HStack {
-            Text("@" + post.author + ", ") +
-            Text("\(post.postDate?.formatted(date: .numeric, time: .omitted) ?? "post date missed")") +
-            Text(post.postType == .other ? "" : ", " + post.postType.displayName)
+            if let postDate = post.postDate {
+                Text("@" + post.author + ", ") +
+                Text(postDate.formatted(date: .numeric, time: .omitted)) +
+                Text(post.postType == .other ? "" : ", " + post.postType.displayName)
+            } else  {
+                Text("@" + post.author) +
+                Text(post.postType == .other ? "" : ", " + post.postType.displayName)
+            }
         }
         .font(.footnote)
     }

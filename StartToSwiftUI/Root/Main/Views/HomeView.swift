@@ -219,7 +219,7 @@ struct HomeView: View {
     
     private var welcomeAtFirstLauch: some View {
         ZStack {
-            Color.mycolor.myAccent.opacity(0.4)
+            Color.mycolor.myBackground
                 .ignoresSafeArea()
             NavigationStack {
                 ScrollView {

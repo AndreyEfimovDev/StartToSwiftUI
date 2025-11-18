@@ -189,6 +189,7 @@
 			isa = PBXGroup;
 			children = (
 				475997542E5C7F81008E20F0 /* DevData.swift */,
+				471BBFA22EC731CB0004AC45 /* News.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -253,7 +254,6 @@
 			children = (
 				475997502E5C6C9D008E20F0 /* Post.swift */,
 				471BBF9E2EC721480004AC45 /* Notice.swift */,
-				471BBFA22EC731CB0004AC45 /* News.swift */,
 				47BAF0F72E64A77A00287F10 /* Enums.swift */,
 				4732FB362EAA63810062269D /* Constants.swift */,
 				471BBFA42EC77C3D0004AC45 /* Support */,

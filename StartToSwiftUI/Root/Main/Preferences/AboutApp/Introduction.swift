@@ -46,7 +46,6 @@ struct Introduction: View {
         }
         .navigationTitle("Introduction")
         .navigationBarBackButtonHidden(true)
-//        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

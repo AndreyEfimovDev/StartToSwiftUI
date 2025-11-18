@@ -34,8 +34,8 @@ class PostsViewModel: ObservableObject {
     @AppStorage("selectedTheme") var selectedTheme: Theme = .system
     
     @AppStorage("homeTitleName") var homeTitleName: String = "SwiftUI materials"
-    //    @AppStorage("isFirstAppLaunch") var isFirstAppLaunch: Bool = true
-    @AppStorage("isFirstPostsLoad") var isFirstImportPostsCompleted: Bool = false {
+//    @AppStorage("isFirstTimeAppLaunch") var isFirstTimeAppLaunch: Bool = true
+    @AppStorage("isFirstImportPostsCompleted") var isFirstImportPostsCompleted: Bool = false {
         didSet { localLastUpdated = getLatestDateFromPosts(posts: allPosts) ?? .now }
     }
     @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
@@ -88,8 +88,6 @@ class PostsViewModel: ObservableObject {
         //        print("🍓VM(init): Last update date: \(localLastUpdated.formatted(date: .abbreviated, time: .shortened))")
         
         // Load local JSON file with notices and then 
-        
-        
         if fileManager.checkIfFileExists(fileName: Constants.localPostsFileName) {
             fileManager.loadData(fileName: Constants.localPostsFileName) { [weak self] (result: Result<[Post], FileStorageError>) in
                 
@@ -119,7 +117,9 @@ class PostsViewModel: ObservableObject {
             }
         } else {
             print("🍓 ☑️ VM(init): File \(Constants.localPostsFileName) does not exist")
-
+            allPosts = StaticPost.staticPosts
+            savePosts()
+            print("🍓 ☑️ VM(init): Loaded static posts")
         }
         
         // filters initilazation
