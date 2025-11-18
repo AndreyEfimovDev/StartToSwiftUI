@@ -31,16 +31,21 @@ class PostsViewModel: ObservableObject {
     
     // MARK: Stored preferances
     
-    @AppStorage("selectedTheme") var selectedTheme: Theme = .system
-    
     @AppStorage("homeTitleName") var homeTitleName: String = "SwiftUI materials"
+    @AppStorage("selectedTheme") var selectedTheme: Theme = .system
+    @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
+
+    
 //    @AppStorage("isFirstTimeAppLaunch") var isFirstTimeAppLaunch: Bool = true
     @AppStorage("isFirstImportPostsCompleted") var isFirstImportPostsCompleted: Bool = false {
         didSet {
             localLastUpdated = getLatestDateFromPosts(posts: allPosts) ?? .now
         }
     }
-    @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
+    
+    // stored the date of the Cloud posts last imported (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date.distantPast)
+    @AppStorage("localLastUpdated") var localLastUpdated: Date = Date.distantPast
+
     
     // stored filters
     @AppStorage("storedCategory") var storedCategory: String?
@@ -49,9 +54,6 @@ class PostsViewModel: ObservableObject {
     @AppStorage("storedType") var storedType: PostType?
     @AppStorage("storedPlatform") var storedPlatform: Platform?
     @AppStorage("storedYear") var storedYear: String?
-    
-    // stored the date of the Cloud posts last imported (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date.distantPast)
-    @AppStorage("localLastUpdated") var localLastUpdated: Date = Date.distantPast
     
     // setting filters
     @Published var selectedLevel: StudyLevel? = nil {
@@ -118,18 +120,6 @@ class PostsViewModel: ObservableObject {
                 }
                 
             }
-            
-//            if !self.allPosts.isEmpty {
-//                print("🍓🍓🍓 VM(init): Check for posts update")
-//
-//                checkCloudForUpdates { hasUpdates in
-//                    if hasUpdates {
-//                        self.isPostsUpdateAvailable = true
-//                        print(self.isPostsUpdateAvailable.description)
-//                    }
-//                    print("🍓 ☑️  VM(init): Afer check for posts update - NO UPDATES")
-//                }
-//            }
         } else {
             print("🍓 ☑️ VM(init): File \(Constants.localPostsFileName) does not exist")
             allPosts = StaticPost.staticPosts
