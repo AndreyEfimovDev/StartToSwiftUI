@@ -21,7 +21,7 @@ class NoticeViewModel: ObservableObject {
     @Published var selectedNoticeIDs: Set<String> = []
     @Published var isSelectionMode: Bool = false
 
-    @AppStorage("isNotification") var isNotification: Bool = false
+    @AppStorage("isNotification") var isNotification: Bool = true
     @AppStorage("dateOfLatestNoticesUpdate") var dateOfLatestNoticesUpdate: Date = Date.distantPast
 
     init(
