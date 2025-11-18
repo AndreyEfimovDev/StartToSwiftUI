@@ -9,11 +9,11 @@ import SwiftUI
 
 struct RedCupsuleButton: View {
     
-    let buttonTitle: String
+    let title: String
     
     var body: some View {
         
-        Text(buttonTitle)
+        Text(title)
             .font(.title3)
             .fontWeight(.semibold)
             .frame(height: 55)
@@ -28,6 +28,6 @@ struct RedCupsuleButton: View {
     ZStack {
         Color.blue.opacity(0.1)
             .ignoresSafeArea()
-        RedCupsuleButton(buttonTitle: "Watch the Source")
+        RedCupsuleButton(title: "Watch the Source")
     }
 }

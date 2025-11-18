@@ -24,16 +24,16 @@ struct PostDetailsView: View {
 //        DevData.samplePost1
     }
     
-    private var buttonTitle: String {
-        switch post?.postPlatform {
-        case .youtube:
-            "Watch the Video"
-        case .website:
-            "Read the Article"
-        case nil:
-            "Go to the Source"
-        }
-    }
+//    private var buttonTitle: String {
+//        switch post?.postPlatform {
+//        case .youtube:
+//            "Watch the Video"
+//        case .website:
+//            "Read the Article"
+//        case nil:
+//            "Go to the Source"
+//        }
+//    }
     
     @State private var lineCountIntro: Int = 0
     private let introFont: Font = .subheadline
@@ -64,8 +64,10 @@ struct PostDetailsView: View {
                             in: RoundedRectangle(cornerRadius: 15)
                         )
                     goToTheSourceButton(for: validPost)
-                        .padding(.horizontal, 55)
-                    
+                        .padding(.top, 30)
+
+                        .padding(.horizontal, 50)
+
                     notesToPost(for: validPost)
                         .background(
                             .thinMaterial,
@@ -83,11 +85,11 @@ struct PostDetailsView: View {
             .fullScreenCover(isPresented: $showEditPostView, content: {
                 AddEditPostSheet(post: post)
             })
-            .fullScreenCover(isPresented: $showSafariView) {
-                if let url = URL(string: validPost.urlString) {
-                    SafariWebService(url: url)
-                }
-            }
+//            .fullScreenCover(isPresented: $showSafariView) {
+//                if let url = URL(string: validPost.urlString) {
+//                    SafariWebService(url: url)
+//                }
+//            }
         } else {
             Text("Post is not found")
         }
@@ -222,12 +224,16 @@ struct PostDetailsView: View {
     }
     
     private func goToTheSourceButton(for post: Post) -> some View {
-        
-        Button {
-            showSafariView = true
-        } label: {
-            RedCupsuleButton(buttonTitle: buttonTitle)
-        }
+                
+        LinkButtonURL(
+            buttonTitle: "Go to the Source",
+            urlString: post.urlString
+        )
+//        Button {
+//            showSafariView = true
+//        } label: {
+//            RedCupsuleButton(title: buttonTitle)
+//        }
     }
     
     private func notesToPost(for post: Post) -> some View {

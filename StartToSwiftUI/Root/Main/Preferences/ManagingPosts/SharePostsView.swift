@@ -36,7 +36,8 @@ struct SharePostsView: View {
             }
             .disabled(isShareCompleted)
             .padding(.top, 30)
-                        
+            .padding(.horizontal, 50)
+
             Spacer()
             
             if isInProgress {

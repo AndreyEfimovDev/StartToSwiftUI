@@ -230,10 +230,10 @@ struct HomeView: View {
                      
                     **It is importand to understand:**
                      
-                    ✓ The app stores only links to materials available from public sources.
-                    ✓ All content belongs to its respective authors.
-                    ✓ The app is free and intended for non-commercial use.
-                    ✓ Users are responsible for respecting copyright when using materials.
+                    - The app stores only links to materials available from public sources.
+                    - All content belongs to its respective authors.
+                    - The app is free and intended for non-commercial use.
+                    - Users are responsible for respecting copyright when using materials.
                      
                     **For each material, you have ability to save:**
                     
