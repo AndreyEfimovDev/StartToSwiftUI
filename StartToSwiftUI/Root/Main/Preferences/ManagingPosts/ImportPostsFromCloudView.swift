@@ -56,8 +56,7 @@ struct ImportPostsFromCloudView: View {
             }
         }
         .padding(.horizontal, 30)
-//        .padding(.top, 30)
-        .padding(30)
+        .padding(.top, 30)
         .alert("Download Error", isPresented: $vm.showErrorMessageAlert) {
             Button("OK", role: .cancel) {
                 dismiss()
@@ -65,6 +64,19 @@ struct ImportPostsFromCloudView: View {
         } message: {
             Text(vm.errorMessage ?? "Unknown error")
         }
+        .navigationTitle("Import posts from cloud")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                    dismiss()
+                }
+            }
+        }
+
     }
     
     
@@ -74,18 +86,20 @@ struct ImportPostsFromCloudView: View {
         VStack {
             Group {
                 Text("""
-            The curated collection of links to SwiftUI tutorials and articles are compiled by the developer from open sources for the purpose of learning the SwiftUI functionality.
-            
-            """)
-            
-            Text("**IMPORTANT NOTICE:**")
-                .foregroundStyle(Color.mycolor.myRed)
+                    The curated collection of links to SwiftUI tutorials and articles are compiled by the developer from open sources for the purpose of learning the SwiftUI functionality.
+
+                    """)
                 .frame(maxWidth: .infinity, alignment: .leading)
-          
-                Text("""
                 
+                Text("**IMPORTANT NOTICE:**")
+                    .foregroundStyle(Color.mycolor.myRed)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                Text("""
                 Clicking **Confirm and Download** constitutes your agreement to the following terms:
+                
                 """)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Text("""
                 1. The materials will be used solely for non-commercial educational purposes.
@@ -133,6 +147,8 @@ struct ImportPostsFromCloudView: View {
 }
 
 #Preview {
-    ImportPostsFromCloudView()
-        .environmentObject(PostsViewModel())
+    NavigationStack{
+        ImportPostsFromCloudView()
+            .environmentObject(PostsViewModel())
+    }
 }

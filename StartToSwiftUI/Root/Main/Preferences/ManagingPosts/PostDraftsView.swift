@@ -41,17 +41,22 @@ struct PostDraftsView: View {
                                     }.tint(Color.mycolor.myRed)
                                 }
                         }
-//                        .onDelete(perform: deleteDraftPost)
                     } // List
                     .navigationTitle("Post drafts")
-//                    .navigationBarTitleDisplayMode(.inline)
+                    .navigationBarTitleDisplayMode(.inline)
+                    .navigationBarBackButtonHidden(true)
+                    .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
                     .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-
-//                    .toolbar {
-//                        ToolbarItem(placement: .topBarTrailing) {
-//                            EditButton()
-//                        }
-//                    }
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            CircleStrokeButtonView(
+                                iconName: "chevron.left",
+                                isShownCircle: false
+                            ) {
+                                dismiss()
+                            }
+                        }
+                    }
             }
         }
         .fullScreenCover(item: $selectedPost) { selectedPostToEdit in

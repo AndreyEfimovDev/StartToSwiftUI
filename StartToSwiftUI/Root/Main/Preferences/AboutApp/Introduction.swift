@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct Introduction: View {
+    
+    @Environment(\.dismiss) private var dismiss
+    
     var body: some View {
         ScrollView {
 // • Organise learning resources by category
@@ -41,11 +44,24 @@ struct Introduction: View {
             .managingPostsTextFormater()
             .padding(.horizontal)
         }
-        .foregroundStyle(Color.mycolor.myAccent)
+        .padding(.top, 30)
         .navigationTitle("Introduction")
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                    dismiss()
+                }
+            }
+        }
     }
 }
 
 #Preview {
-    Introduction()
+    NavigationStack {
+        Introduction()
+    }
 }
+

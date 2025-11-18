@@ -36,7 +36,6 @@ struct HomeView: View {
     // MARK: VIEW BODY
     
     var body: some View {
-        NavigationStack {
                 ScrollViewReader { proxy in
                     ZStack (alignment: .bottom) {
                         if vm.allPosts.isEmpty {
@@ -64,7 +63,7 @@ struct HomeView: View {
                         } // else-if
                     } // ZStack
                 } // ScrollViewReader
-                .navigationTitle(vm.allPosts.isEmpty ? "Study materials" : vm.homeTitleName)
+                .navigationTitle(vm.homeTitleName)
 //                .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
                 .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
@@ -80,7 +79,7 @@ struct HomeView: View {
                         }
                     }
                 }
-                .fullScreenCover(isPresented: $showPreferancesView) {
+                .navigationDestination(isPresented: $showPreferancesView) {
                     PreferencesView()
                 }
                 .fullScreenCover(isPresented: $showAddPostView) {
@@ -98,7 +97,6 @@ struct HomeView: View {
                     .presentationDragIndicator(.visible)
                     .presentationCornerRadius(30)
                 }
-        } // NavigationStack
         .onAppear {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
         }

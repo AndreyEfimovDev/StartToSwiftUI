@@ -27,8 +27,8 @@ struct RestoreBackupView: View {
                 .managingPostsTextFormater()
             
             CapsuleButtonView(
-                primaryTitle: "Restore Backup",
-                secondaryTitle: "\(postCount) Posts Restored!",
+                primaryTitle: "Perform",
+                secondaryTitle: "\(postCount) posts restored!",
                 isToChange: isBackedUp
             ) {
                 showDocumentPicker = true
@@ -43,7 +43,7 @@ struct RestoreBackupView: View {
             }
         }
         .padding(.horizontal, 30)
-        .padding(30)
+        .padding(.top, 30)
         .sheet(isPresented: $showDocumentPicker) {
             DocumentPicker(
                 onDocumentPicked: { url in
@@ -72,6 +72,19 @@ struct RestoreBackupView: View {
         } message: {
             Text(vm.errorMessage ?? "Unknown error")
         }
+        .navigationTitle("Restore backup")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                    dismiss()
+                }
+            }
+        }
+
     }
     
     // MARK: Subviews
@@ -89,7 +102,9 @@ struct RestoreBackupView: View {
 
 
 #Preview {
-    RestoreBackupView()
-        .environmentObject(PostsViewModel())
-
+    NavigationStack{
+        
+        RestoreBackupView()
+            .environmentObject(PostsViewModel())
+    }
 }

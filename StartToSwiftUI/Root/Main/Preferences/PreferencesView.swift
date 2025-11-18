@@ -25,94 +25,85 @@ struct PreferencesView: View {
     let iconWidth: CGFloat = 18
     
     private var postsCount: Int {
-            vm.allPosts.count
-        }
+        vm.allPosts.count
+    }
     
     private var draftsCount: Int {
         let postDrafts = vm.allPosts.filter { $0.draft == true }
         return postDrafts.count
-        }
-        
+    }
+    
+    private var newNoticesCount: Int {
+        noticevm.notices.filter { $0.isRead == false }.count
+    }
+    
     var body: some View {
-            NavigationStack {
-                    Form {
-                        Section(header: sectionHeader("Appearance")) {
-                            UnderlineSermentedPickerNotOptional(
-                                selection: $vm.selectedTheme,
-                                allItems: Theme.allCases,
-                                titleForCase: { $0.displayName },
-                                selectedFont: .footnote,
-                                selectedTextColor: Color.mycolor.myBlue,
-                                unselectedTextColor: Color.mycolor.mySecondaryText
-                            )
-                            .onChange(of: vm.selectedTheme) { _, newValue in
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                    dismiss()
-                                }
-                            }
-
-                        }
-                        
-                        Section(header: sectionHeader("Notices")) {
-                            notificationToggle
-                            notifications
-                        }
-                        Section(header: sectionHeader("Managing posts (\(postsCount))")) {
-                            
-                            if !vm.allPosts.filter({ $0.draft == true }).isEmpty {
-                                postDrafts
-                            }
-                            
-                            if (!vm.allPosts.isEmpty || vm.isPostsUpdateAvailable) && vm.isFirstImportPostsCompleted {
-                                checkForPostsUpdate
-                            }
-                            
-                            importFromCloud
-                            shareBackup
-                            restoreBackup
-                            erasePosts
-                        }
-                        Section(header: sectionHeader("Сommunication")){
-                            thankfullness
-                            aboutApplication
-                            legalInformation
-                            contactDeveloperButton
-                        }
-                    } // Form
-                    .foregroundStyle(Color.mycolor.myAccent)
-                    .navigationTitle("Preferences")
-                    .navigationBarBackButtonHidden(true)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
-                                dismiss()
-                            }
-                        }
-                    }
-            } // NavigationStack
-//            .preferredColorScheme(vm.selectedTheme.colorScheme)
+        Form {
+            Section(header: sectionHeader("Appearance")) {
+                UnderlineSermentedPickerNotOptional(
+                    selection: $vm.selectedTheme,
+                    allItems: Theme.allCases,
+                    titleForCase: { $0.displayName },
+                    selectedFont: .footnote,
+                    selectedTextColor: Color.mycolor.myBlue,
+                    unselectedTextColor: Color.mycolor.myAccent
+                )
+            }
+            
+            Section(header: sectionHeader("Notification")) {
+                notificationToggle
+                noticeMessages
+            }
+            Section(header: sectionHeader("Managing posts (\(postsCount))")) {
+                
+                if !vm.allPosts.filter({ $0.draft == true }).isEmpty {
+                    postDrafts
+                }
+                
+                if (!vm.allPosts.isEmpty || vm.isPostsUpdateAvailable) && vm.isFirstImportPostsCompleted {
+                    checkForPostsUpdate
+                }
+                
+                importFromCloud
+                shareBackup
+                restoreBackup
+                erasePosts
+            }
+            Section(header: sectionHeader("Сommunication")){
+                thankfullness
+                aboutApplication
+                legalInformation
+                contactDeveloperButton
+            }
+        } // Form
+        .foregroundStyle(Color.mycolor.myAccent)
+//        .listSectionSpacing(.compact)
+        .listSectionSpacing(0)
+        .navigationTitle("Preferences")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                    dismiss()
+                }
+            }
+        }
     }
     
     // MARK: - Subviews
-   
+    
     
     private func sectionHeader(_ text: String) -> some View {
         Text(text)
             .foregroundStyle(Color.mycolor.myAccent)
     }
     
-    private var appearance: some View {
-        HStack {
-            Image(systemName: "sun.max")
-                .frame(width: iconWidth)
-                .foregroundStyle(Color.mycolor.myBlue)
-            Toggle("Appearance", isOn: $vm.isNotification)
-                .tint(Color.mycolor.myBlue)
-        }
-    }
     private var notificationToggle: some View {
         HStack {
-            Image(systemName: "bell")
+            Image(systemName: vm.isNotification ? "bell" : "bell.slash")
                 .frame(width: iconWidth)
                 .foregroundStyle(Color.mycolor.myBlue)
             Toggle(vm.isNotification ? "On" : "Off", isOn: $vm.isNotification)
@@ -120,12 +111,12 @@ struct PreferencesView: View {
         }
     }
     
-    private var notifications: some View {
-        NavigationLink("Notice messages (\(noticevm.notices.count))") {
-            NoticesView()
+    private var noticeMessages: some View {
+        NavigationLink("Notice messages (\(newNoticesCount)/\(noticevm.notices.count))") {
+            NoticeMessagesView()
         }
         .customListRowStyle(
-            iconName: "message",
+            iconName: newNoticesCount == 0 ? "message" : "message.badge",
             iconWidth: iconWidth
         )
     }
@@ -193,14 +184,13 @@ struct PreferencesView: View {
     private var thankfullness: some View {
         
         NavigationLink("Thankfullness") {
-            
+            ThankfullnessView()
         }
         .customListRowStyle(
             iconName: "hand.thumbsup",
             iconWidth: iconWidth
         )
     }
-
     
     private var aboutApplication: some View {
         NavigationLink("About App") {
@@ -242,13 +232,13 @@ struct PreferencesView: View {
 //// MARK: - Wrapping all child views for lazy loading (for testing)
 //
 //struct LazyView<Content: View>: View {
-//    
+//
 //    let build: () -> Content
-//    
+//
 //    init(_ build: @escaping () -> Content) {
 //        self.build = build
 //    }
-//    
+//
 //    var body: Content {
 //        build()
 //    }
@@ -261,5 +251,5 @@ struct PreferencesView: View {
     }
     .environmentObject(PostsViewModel())
     .environmentObject(NoticeViewModel())
-
+    
 }

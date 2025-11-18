@@ -31,45 +31,7 @@ class PostsViewModel: ObservableObject {
     
     // MARK: Stored preferances
     
-//    @Environment(\.colorScheme) private var systemColorScheme
-
-    
-    @AppStorage("selectedTheme") var selectedTheme: Theme = .system {
-        didSet {
-            print(selectedTheme.displayName)
-            print(selectedTheme.colorScheme.debugDescription)
-
-//            updateAppearance()
-        }
-    }
-//    private func updateAppearance() {
-//            DispatchQueue.main.async {
-//                guard let window = UIApplication.shared.connectedScenes
-//                    .compactMap({ $0 as? UIWindowScene })
-//                    .flatMap({ $0.windows })
-//                    .first else { return }
-//                
-//                switch self.selectedTheme {
-//                case .light:
-//                    window.overrideUserInterfaceStyle = .light
-//                case .dark:
-//                    window.overrideUserInterfaceStyle = .dark
-//                case .system:
-//                    window.overrideUserInterfaceStyle = .unspecified
-//                }
-//            }
-//        }
-//        
-//        // Для использования в .preferredColorScheme
-//        var colorSchemeForViews: ColorScheme {
-//            switch selectedTheme {
-//            case .light: return .light
-//            case .dark: return .dark
-//            case .system:
-//                let currentStyle = UITraitCollection.current.userInterfaceStyle
-//                return currentStyle == .dark ? .dark : .light
-//            }
-//        }
+    @AppStorage("selectedTheme") var selectedTheme: Theme = .system
     
     @AppStorage("homeTitleName") var homeTitleName: String = "SwiftUI materials"
     //    @AppStorage("isFirstAppLaunch") var isFirstAppLaunch: Bool = true
@@ -125,7 +87,7 @@ class PostsViewModel: ObservableObject {
         
         //        print("🍓VM(init): Last update date: \(localLastUpdated.formatted(date: .abbreviated, time: .shortened))")
         
-        // Load local JSON file with notices
+        // Load local JSON file with notices and then 
         
         
         if fileManager.checkIfFileExists(fileName: Constants.localPostsFileName) {
@@ -173,7 +135,7 @@ class PostsViewModel: ObservableObject {
         } else {
             print("🍓❌ VM(init): TimeZone is not set")
         }
-//        updateAppearance()
+        
         // initiating subscriptions
         addSubscribers()
         

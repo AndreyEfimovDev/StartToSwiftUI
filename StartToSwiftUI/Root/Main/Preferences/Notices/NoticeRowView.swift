@@ -12,43 +12,35 @@ struct NoticeRowView: View {
     let notice: Notice
     
     var body: some View {
-        
         HStack {
-
-            Circle()
-                .fill(Color.mycolor.myBlue)
-                .frame(width: 8, height: 8)
-                .padding(.leading, 8)
-                .opacity(notice.isRead ? 0 : 1)
-            
-//            Spacer()
-            
+//            Circle()
+//                .fill(Color.mycolor.myBlue)
+//                .frame(width: 8, height: 8)
+//                .padding(.leading, 8)
+//                .opacity(notice.isRead ? 0 : 1)
+//                        
             VStack (alignment: .leading) {
                 Text("\(notice.noticeDate.formatted(date: .numeric, time: .omitted))")
                     .font(.caption)
-//                    .border(.yellow)
                 
                 Text(notice.title)
                     .font(.body)
                     .lineLimit(1)
-//                    .border(.green)
 
             }
+            .padding(.leading, 16)
             .frame(maxWidth: .infinity, alignment: .leading)
             .foregroundStyle(Color.mycolor.myAccent)
             .fontWeight(notice.isRead ? .regular : .bold)
+            .opacity(notice.isRead ? 0.5 : 1)
             .padding(.vertical, 16)
         }
         .background(.ultraThinMaterial)
-
-//        .border(.red)
     }
 }
 
 fileprivate struct NoticeRowPreView: View {
-    
-//    @Environment(\.colorScheme) var colorScheme
-    
+        
     var body: some View {
         List {
             ZStack {
