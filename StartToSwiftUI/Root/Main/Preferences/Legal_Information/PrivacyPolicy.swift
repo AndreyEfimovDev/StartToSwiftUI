@@ -3,12 +3,14 @@
 //  StartToSwiftUI
 //
 //  Created by Andrey Efimov on 05.11.2025.
-// https://github.com/AndreyEfimovDev/StartToSwiftUI/blob/development/privacy-policy-english-github.md
+//
 
 import SwiftUI
 
 struct PrivacyPolicy: View {
     
+    @Environment(\.dismiss) private var dismiss
+
     var body: some View {
         ScrollView {
             Text("""
@@ -115,6 +117,15 @@ struct PrivacyPolicy: View {
             .padding(.horizontal)
         }
         .navigationTitle("Privacy Policy")
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                    dismiss()
+                }
+            }
+        }
     }
 }
 

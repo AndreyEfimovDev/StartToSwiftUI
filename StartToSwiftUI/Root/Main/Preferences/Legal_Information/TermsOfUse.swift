@@ -207,6 +207,15 @@ struct TermsOfUse: View {
             }
         }
         .navigationTitle("Terms of Use")
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                    dismiss()
+                }
+            }
+        }
     }
 }
 

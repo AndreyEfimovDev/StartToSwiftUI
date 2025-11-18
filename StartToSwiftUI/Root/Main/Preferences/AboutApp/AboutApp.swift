@@ -70,7 +70,6 @@ struct AboutApp: View {
                     )
                 }
             } // Form
-            .offset(y: -40)
             .scrollContentBackground(.hidden)
             .listSectionSpacing(8)
             .background(.clear)
@@ -78,9 +77,8 @@ struct AboutApp: View {
         .foregroundStyle(Color.mycolor.myAccent)
         .background(.thickMaterial)
         .navigationTitle("About App")
-        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+//        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

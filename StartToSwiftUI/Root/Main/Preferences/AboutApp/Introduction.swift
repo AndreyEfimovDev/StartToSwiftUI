@@ -44,10 +44,9 @@ struct Introduction: View {
             .managingPostsTextFormater()
             .padding(.horizontal)
         }
-        .padding(.top, 30)
         .navigationTitle("Introduction")
         .navigationBarBackButtonHidden(true)
-        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+//        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

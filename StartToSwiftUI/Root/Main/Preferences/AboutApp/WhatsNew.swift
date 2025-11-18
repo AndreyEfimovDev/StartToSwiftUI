@@ -43,10 +43,9 @@ struct WhatsNew: View {
                 } // ForEach 1st
                 .padding(.horizontal)
             }
-            .padding(.top, 30)
             .navigationTitle("What's New")
             .navigationBarBackButtonHidden(true)
-            .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+//            .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
             .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

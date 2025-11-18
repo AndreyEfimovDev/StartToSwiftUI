@@ -59,16 +59,12 @@ struct NoticeMessagesView: View {
                                 } // left side swipe action buttons
                         } // ForEach
                     } // List
-                    .listStyle(.plain)
-                    .background(Color.mycolor.myBackground)
                 } // ZStack
             } // if empty
         } // ZStack
-        .padding(.top, 30)
-        .navigationTitle("Notice messages")
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("Notifications")
         .navigationBarBackButtonHidden(true)
-        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+//        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

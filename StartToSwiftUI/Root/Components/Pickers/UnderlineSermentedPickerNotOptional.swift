@@ -23,20 +23,17 @@ struct UnderlineSermentedPickerNotOptional<T: Hashable>: View {
     @Namespace private var namespace
 
     var body: some View {
+        
         HStack(alignment: .top) {
             
-            // Regular buttons for enum's values
             ForEach(allItems, id: \.self) { item in
                 VStack(spacing: 5) {
                     Text(titleForCase(item))
                         .font(selectedFont)
-                        .frame(maxWidth: .infinity)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
+                        .fontWeight(selection == item ? .bold : .regular)
                         .frame(maxWidth: .infinity)
                     
                     if selection == item {
-                        
                         RoundedRectangle(cornerRadius: 2)
                             .frame(height: 1.5)
                             .matchedGeometryEffect(id: "selection", in: namespace)
@@ -45,11 +42,13 @@ struct UnderlineSermentedPickerNotOptional<T: Hashable>: View {
                 .padding(.top, 8)
                 .foregroundStyle(selection == item ? selectedTextColor : unselectedTextColor)
                 .onTapGesture {
-                    selection = item
+                    withAnimation {
+                        selection = item
+                    }
                 }
             }
         }
-        .animation(.smooth, value: selection)
+//        .animation(.smooth, value: selection)
     }
 }
 

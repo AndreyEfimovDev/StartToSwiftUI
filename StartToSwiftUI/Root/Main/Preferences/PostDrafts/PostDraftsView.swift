@@ -43,9 +43,9 @@ struct PostDraftsView: View {
                         }
                     } // List
                     .navigationTitle("Post drafts")
-                    .navigationBarTitleDisplayMode(.inline)
+//                    .navigationBarTitleDisplayMode(.inline)
                     .navigationBarBackButtonHidden(true)
-                    .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+//                    .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
                     .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading) {

@@ -43,9 +43,8 @@ struct CheckForPostsUpdateView: View {
                 Text(vm.errorMessage ?? "Unknown error")
             }
             .navigationTitle("Check for posts update")
-            .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+//            .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
             .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
