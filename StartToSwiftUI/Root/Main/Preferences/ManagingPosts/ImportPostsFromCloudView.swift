@@ -27,26 +27,29 @@ struct ImportPostsFromCloudView: View {
                 textSection
                     .managingPostsTextFormater()
                 
-                CapsuleButtonView(
-                    primaryTitle: "Confirm and Download",
-                    secondaryTitle: "\(postCount) Posts Downloaded",
-                    isToChange: isLoaded) {
-                        isInProgress = true
-                        importFromCloud()
-                    }
-                    .onChange(of: vm.allPosts.count) { oldValue, newValue in
-                        postCount = newValue - oldValue
-                    }
-                    .disabled(isLoaded)
-                    .padding(.top, 30)
-                
-                CapsuleButtonView(
-                    primaryTitle: "Don't confirm",
-                    textColorPrimary: Color.mycolor.myButtonTextRed,
-                    buttonColorPrimary: Color.mycolor.myButtonBGRed) {
-                        dismiss()
-                    }
-                    .opacity(isLoaded ? 0 : 1)
+                Group {
+                    CapsuleButtonView(
+                        primaryTitle: "Confirm and Download",
+                        secondaryTitle: "\(postCount) Posts Downloaded",
+                        isToChange: isLoaded) {
+                            isInProgress = true
+                            importFromCloud()
+                        }
+                        .onChange(of: vm.allPosts.count) { oldValue, newValue in
+                            postCount = newValue - oldValue
+                        }
+                        .disabled(isLoaded)
+                        .padding(.top, 30)
+                    
+                    CapsuleButtonView(
+                        primaryTitle: "Don't confirm",
+                        textColorPrimary: Color.mycolor.myButtonTextRed,
+                        buttonColorPrimary: Color.mycolor.myButtonBGRed) {
+                            dismiss()
+                        }
+                        .opacity(isLoaded ? 0 : 1)
+                }
+                .padding(.horizontal, 50)
                 
                 Spacer()
                 

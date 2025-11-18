@@ -35,7 +35,8 @@ struct RestoreBackupView: View {
             }
             .disabled(isBackedUp)
             .padding(.top, 30)
-            
+            .padding(.horizontal, 50)
+
             Spacer()
             
             if isInProgress {

@@ -24,7 +24,7 @@ struct StaticPost {
             studyLevel: .beginner,
             favoriteChoice: .no,
             notes: "",
-            origin: .local,
+            origin: .cloud,
         ),
         Post(
             title: "SwiftUI Documentation",
@@ -38,7 +38,7 @@ struct StaticPost {
             studyLevel: .beginner,
             favoriteChoice: .no,
             notes: "",
-            origin: .local,
+            origin: .cloud,
         ),
         Post(
             title: "SwiftUI Tutorials",
@@ -54,7 +54,7 @@ struct StaticPost {
             studyLevel: .beginner,
             favoriteChoice: .no,
             notes: "",
-            origin: .local,
+            origin: .cloud,
         ),
         Post(
             title: "SwiftUI Sample Apps",
@@ -70,7 +70,7 @@ struct StaticPost {
             studyLevel: .beginner,
             favoriteChoice: .no,
             notes: "",
-            origin: .local,
+            origin: .cloud,
         ),
         Post(
             title: "What’s new in SwiftUI",
@@ -84,7 +84,7 @@ struct StaticPost {
             studyLevel: .beginner,
             favoriteChoice: .no,
             notes: "",
-            origin: .local,
+            origin: .cloud,
         ),
         Post(
             title: "Apple Developer Forums: SwiftUI",
@@ -98,7 +98,7 @@ struct StaticPost {
             studyLevel: .beginner,
             favoriteChoice: .no,
             notes: "",
-            origin: .local,
+            origin: .cloud,
         )
         ]
 }
