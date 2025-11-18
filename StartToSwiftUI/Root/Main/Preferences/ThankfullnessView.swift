@@ -21,11 +21,8 @@ struct ThankfullnessView: View {
             .managingPostsTextFormater()
             .padding(.horizontal)
         }
-        .padding(.top, 30)
         .navigationTitle("Thankfullness")
-        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

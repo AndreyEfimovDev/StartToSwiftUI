@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct FairUseNotice: View {
+    
+    @Environment(\.dismiss) private var dismiss
+
     var body: some View {
         ScrollView {
             Text("""
@@ -30,6 +33,15 @@ struct FairUseNotice: View {
             .padding(.horizontal)
         }
         .navigationTitle("Fair Use Notice")
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                    dismiss()
+                }
+            }
+        }
     }
 }
 

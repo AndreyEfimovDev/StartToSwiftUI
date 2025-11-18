@@ -25,38 +25,35 @@ struct NoticeRowView: View {
                 
                 Text(notice.title)
                     .font(.body)
-                    .lineLimit(1)
-
+                    .lineLimit(2)
+                    .padding(.top, 8)
             }
-            .padding(.leading, 16)
-            .frame(maxWidth: .infinity, alignment: .leading)
             .foregroundStyle(Color.mycolor.myAccent)
             .fontWeight(notice.isRead ? .regular : .bold)
+            .padding(.leading, 8)
+            .frame(height: 100)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .opacity(notice.isRead ? 0.5 : 1)
-            .padding(.vertical, 16)
+//            .padding(.vertical, 8)
         }
-        .background(.ultraThinMaterial)
+        .background(Color.mycolor.mySectionBackground)
     }
 }
 
 fileprivate struct NoticeRowPreView: View {
         
     var body: some View {
-        List {
             ZStack {
                 Color.pink.opacity(0.1)
                     .ignoresSafeArea()
                 
-                VStack {
+                List {
                     NoticeRowView(notice: DevData.sampleNotice1)
                     NoticeRowView(notice: DevData.sampleNotice2)
                     NoticeRowView(notice: DevData.sampleNotice3)
                 }
                 .padding()
             }
-        }
-        .listStyle(.plain)
-
     }
 }
 

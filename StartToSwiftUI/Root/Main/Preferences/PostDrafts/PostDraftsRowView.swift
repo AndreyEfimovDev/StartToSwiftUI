@@ -22,8 +22,6 @@ struct PostDraftsRowView: View {
             .foregroundStyle(Color.mycolor.myAccent)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-//        .padding(8)
-//        .padding(.horizontal, 8)
         .background(Color.mycolor.mySectionBackground)
     }
         
@@ -35,7 +33,6 @@ struct PostDraftsRowView: View {
             .fontWeight(.bold)
             .minimumScaleFactor(0.75)
             .lineLimit(1)
-//            .padding(.top, 8)
     }
     
     private var author: some View {

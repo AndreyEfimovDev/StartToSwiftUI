@@ -9,7 +9,8 @@ import SwiftUI
 
 struct LegalInformationView: View {
 
-//    @Environment(\.dismiss) private var dismiss
+    @Environment(\.dismiss) private var dismiss
+    
     let iconWidth: CGFloat = 18
 
     var body: some View {
@@ -49,6 +50,17 @@ struct LegalInformationView: View {
         } // Form
         .foregroundStyle(Color.mycolor.myAccent)
         .navigationTitle("Legal Information")
+        .navigationBarBackButtonHidden(true)
+        //        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                    dismiss()
+                }
+            }
+        }
+
     }
 }
 

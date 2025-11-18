@@ -34,9 +34,7 @@ struct UnderlineSermentedPicker<T: Hashable>: View {
                     Text(nilTitle)
                         .font(selectedFont)
                         .frame(maxWidth: .infinity)
-                        .font(.subheadline)
                         .fontWeight(.medium)
-                        .frame(maxWidth: .infinity)
                     
                     if selection == nil {
                         RoundedRectangle(cornerRadius: 2)
@@ -56,8 +54,6 @@ struct UnderlineSermentedPicker<T: Hashable>: View {
                 VStack(spacing: 5) {
                     Text(titleForCase(item))
                         .font(selectedFont)
-                        .frame(maxWidth: .infinity)
-                        .font(.subheadline)
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
                     
