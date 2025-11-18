@@ -36,10 +36,11 @@ class PostsViewModel: ObservableObject {
     @AppStorage("homeTitleName") var homeTitleName: String = "SwiftUI materials"
 //    @AppStorage("isFirstTimeAppLaunch") var isFirstTimeAppLaunch: Bool = true
     @AppStorage("isFirstImportPostsCompleted") var isFirstImportPostsCompleted: Bool = false {
-        didSet { localLastUpdated = getLatestDateFromPosts(posts: allPosts) ?? .now }
+        didSet {
+            localLastUpdated = getLatestDateFromPosts(posts: allPosts) ?? .now
+        }
     }
     @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
-    @AppStorage("isNotification") var isNotification: Bool = false
     
     // stored filters
     @AppStorage("storedCategory") var storedCategory: String?
@@ -49,8 +50,8 @@ class PostsViewModel: ObservableObject {
     @AppStorage("storedPlatform") var storedPlatform: Platform?
     @AppStorage("storedYear") var storedYear: String?
     
-    // stored the date of the Cloud posts last imported
-    @AppStorage("localLastUpdated") var localLastUpdated: Date = (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date())
+    // stored the date of the Cloud posts last imported (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date.distantPast)
+    @AppStorage("localLastUpdated") var localLastUpdated: Date = Date.distantPast
     
     // setting filters
     @Published var selectedLevel: StudyLevel? = nil {
@@ -99,27 +100,41 @@ class PostsViewModel: ObservableObject {
                     case .success(let posts):
                         self?.allPosts = posts
                         print("🍓 VM(init): Successfully loaded \(posts.count) posts")
+                        
+                        print("🍓🍓🍓 VM(init): Check for posts update")
+
+                        self?.checkCloudForUpdates { hasUpdates in
+                            if hasUpdates {
+                                self?.isPostsUpdateAvailable = true
+                                print(self?.isPostsUpdateAvailable.description ?? "")
+                            }
+                            print("🍓 ☑️  VM(init): Afer check for posts update - NO UPDATES")
+                        }
                     case .failure(let error):
                         self?.errorMessage = error.localizedDescription
                         self?.showErrorMessageAlert = true
                         print("🍓 ☑️ VM(init): Failed to load posts: \(error)")
                     }
                 }
+                
             }
             
-            if !self.allPosts.isEmpty {
-                checkCloudForUpdates { hasUpdates in
-                    if hasUpdates {
-                        self.isPostsUpdateAvailable = true
-                        print(self.isPostsUpdateAvailable.description)
-                    }
-                }
-            }
+//            if !self.allPosts.isEmpty {
+//                print("🍓🍓🍓 VM(init): Check for posts update")
+//
+//                checkCloudForUpdates { hasUpdates in
+//                    if hasUpdates {
+//                        self.isPostsUpdateAvailable = true
+//                        print(self.isPostsUpdateAvailable.description)
+//                    }
+//                    print("🍓 ☑️  VM(init): Afer check for posts update - NO UPDATES")
+//                }
+//            }
         } else {
             print("🍓 ☑️ VM(init): File \(Constants.localPostsFileName) does not exist")
             allPosts = StaticPost.staticPosts
             savePosts()
-            print("🍓 ☑️ VM(init): Loaded static posts")
+            print("🍓 VM(init): Loaded static posts")
         }
         
         // filters initilazation
@@ -219,7 +234,7 @@ class PostsViewModel: ObservableObject {
                 let matchesLevel = level == nil || post.studyLevel == level
                 let matchesFavorite = favorite == nil || post.favoriteChoice == favorite
                 let matchesType = type == nil || post.postType == type
-                let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date()))
+                let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date.distantPast))
                 let matchesYear = year == nil || postYear == year
                 
                 return matchesLevel && matchesFavorite && matchesType && matchesYear

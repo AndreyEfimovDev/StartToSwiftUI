@@ -100,10 +100,10 @@ struct PreferencesView: View {
     
     private var notificationToggle: some View {
         HStack {
-            Image(systemName: vm.isNotification ? "bell" : "bell.slash")
+            Image(systemName: noticevm.isNotification ? "bell" : "bell.slash")
                 .frame(width: iconWidth)
                 .foregroundStyle(Color.mycolor.myBlue)
-            Toggle(vm.isNotification ? "On" : "Off", isOn: $vm.isNotification)
+            Toggle(noticevm.isNotification ? "On" : "Off", isOn: $noticevm.isNotification)
                 .tint(Color.mycolor.myBlue)
         }
     }

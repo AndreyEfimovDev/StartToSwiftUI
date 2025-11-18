@@ -31,7 +31,7 @@ struct NoticeRowView: View {
             .foregroundStyle(Color.mycolor.myAccent)
             .fontWeight(notice.isRead ? .regular : .bold)
             .padding(.leading, 8)
-            .frame(height: 100)
+            .frame(height: 80)
             .frame(maxWidth: .infinity, alignment: .leading)
             .opacity(notice.isRead ? 0.5 : 1)
 //            .padding(.vertical, 8)
