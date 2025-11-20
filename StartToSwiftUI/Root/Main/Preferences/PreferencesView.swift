@@ -60,7 +60,7 @@ struct PreferencesView: View {
                     postDrafts
                 }
                 
-                if (!vm.allPosts.isEmpty || vm.isPostsUpdateAvailable) && vm.isFirstImportPostsCompleted {
+                if (!vm.allPosts.isEmpty /*|| vm.isPostsUpdateAvailable*/) && vm.isFirstImportPostsCompleted {
                     checkForPostsUpdate
                 }
                 
@@ -110,7 +110,7 @@ struct PreferencesView: View {
     
     private var noticeMessages: some View {
         NavigationLink("Messages (\(newNoticesCount)/\(noticevm.notices.count))") {
-            NoticeMessagesView()
+            NoticesView()
         }
         .customListRowStyle(
             iconName: newNoticesCount == 0 ? "message" : "message.badge",

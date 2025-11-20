@@ -27,7 +27,7 @@ class PostsViewModel: ObservableObject {
     @Published var filteredPosts: [Post] = []
     @Published var searchText: String = ""
     @Published var isFiltersEmpty: Bool = true
-    @Published var isPostsUpdateAvailable: Bool = false
+//    @Published var isPostsUpdateAvailable: Bool = false
     
     // MARK: Stored preferances
     
@@ -105,13 +105,13 @@ class PostsViewModel: ObservableObject {
                         
                         print("🍓🍓🍓 VM(init): Check for posts update")
 
-                        self?.checkCloudForUpdates { hasUpdates in
-                            if hasUpdates {
-                                self?.isPostsUpdateAvailable = true
-                                print(self?.isPostsUpdateAvailable.description ?? "")
-                            }
-                            print("🍓☑️ VM(init): Afer check for posts update - NO UPDATES")
-                        }
+//                        self?.checkCloudForUpdates { hasUpdates in
+//                            if hasUpdates {
+//                                self?.isPostsUpdateAvailable = true
+//                                print(self?.isPostsUpdateAvailable.description ?? "")
+//                            }
+//                            print("🍓☑️ VM(init): Afer check for posts update - NO UPDATES")
+//                        }
                     case .failure(let error):
                         self?.errorMessage = error.localizedDescription
                         self?.showErrorMessageAlert = true

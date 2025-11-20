@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct NoticeMessagesView: View {
+struct NoticesView: View {
     
     @Environment(\.dismiss) private var dismiss
     
@@ -95,7 +95,7 @@ struct NoticeMessagesView: View {
 
 #Preview {
     NavigationStack {
-        NoticeMessagesView()
+        NoticesView()
     }
     .environmentObject(NoticeViewModel())
     
