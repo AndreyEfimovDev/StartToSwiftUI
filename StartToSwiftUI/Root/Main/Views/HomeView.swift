@@ -144,7 +144,7 @@ struct HomeView: View {
                                 hapticManager.notification(type: .warning)
                                 isShowingDeleteConfirmation = true
                             }.tint(Color.mycolor.myRed)
-                            Button("Edit", systemImage: post.origin == .cloud ? "pencil.slash" : "pencil") {
+                            Button("Edit", systemImage: post.origin == .cloud  || post.origin == .statical ? "pencil.slash" : "pencil") {
                                 selectedPost = post
                             }
                             .tint(Color.mycolor.myButtonBGBlue)

@@ -129,7 +129,7 @@ struct PostDetailsView: View {
             
             
             CircleStrokeButtonView(
-                iconName: post?.origin == .cloud ? "pencil.slash" : "pencil",
+                iconName: post?.origin == .cloud || post?.origin == .statical ? "pencil.slash" : "pencil",
                 isShownCircle: false)
             {
                 showEditPostView.toggle()
@@ -155,12 +155,18 @@ struct PostDetailsView: View {
                             .font(.caption2)
                             .foregroundStyle(Color.mycolor.mySecondaryText)
                     }
-                    
-                    if post.origin == .cloud {
-                        Image(systemName: "cloud")
-                            .font(.caption2)
-                            .foregroundStyle(Color.mycolor.mySecondaryText)
+                    Group {
+                        switch post.origin {
+                        case .cloud:
+                            post.origin.icon
+                        case .statical:
+                            post.origin.icon
+                        case .local:
+                            EmptyView()
+                        }
                     }
+                    .font(.caption2)
+                    .foregroundStyle(Color.mycolor.mySecondaryText)
 
                     Text("@" + post.author)
                         .font(.body)

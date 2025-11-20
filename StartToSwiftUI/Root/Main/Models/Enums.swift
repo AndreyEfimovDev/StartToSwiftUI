@@ -93,8 +93,16 @@ enum PostType: String, CaseIterable, Codable {
 enum PostOrigin: String, CaseIterable, Codable {
     case local
     case cloud
+    case statical
+    
+    var icon: Image {
+        switch self {
+        case .local: return Image(systemName: "")
+        case .cloud: return Image(systemName: "cloud")
+        case .statical: return Image(systemName: "square.grid.2x2") // line.3.horizontal square.grid.2x2 s.circle
+        }
+    }
 }
-
 
 enum FavoriteChoice: String, CaseIterable, Codable {
     case no
