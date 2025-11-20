@@ -10,11 +10,8 @@ import SwiftUI
 struct PostDetailsView: View {
     
     @Environment(\.dismiss) var dismiss
-    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject private var vm: PostsViewModel
-    
-    private let fileManager = FileStorageService.shared
-    
+        
     @State private var showSafariView = false
     @State private var showFullIntro: Bool = false
     @State private var showFullFreeTextField: Bool = false
@@ -24,18 +21,19 @@ struct PostDetailsView: View {
     
     private var post: Post? {
         vm.allPosts.first(where: { $0.id == postId })
+//        DevData.samplePost1
     }
     
-    private var buttonTitle: String {
-        switch post?.postPlatform {
-        case .youtube:
-            "Watch the Video"
-        case .website:
-            "Read the Article"
-        case nil:
-            "Go to the Source"
-        }
-    }
+//    private var buttonTitle: String {
+//        switch post?.postPlatform {
+//        case .youtube:
+//            "Watch the Video"
+//        case .website:
+//            "Read the Article"
+//        case nil:
+//            "Go to the Source"
+//        }
+//    }
     
     @State private var lineCountIntro: Int = 0
     private let introFont: Font = .subheadline
@@ -47,9 +45,6 @@ struct PostDetailsView: View {
     private let fullFreeTextFieldLineSpacing: CGFloat = 0
     private let FreeTextFieldLinesCountLimit: Int = 2
     
-    private let sectionBackground: Color = Color.mycolor.myBackground
-    private let sectionCornerRadius: CGFloat = 15
-    
     
     var body: some View {
         
@@ -58,27 +53,29 @@ struct PostDetailsView: View {
                 VStack {
                     header(for: validPost)
                         .background(
-                            sectionBackground,
-                            in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                            .thinMaterial,
+                            in: RoundedRectangle(cornerRadius: 15)
                         )
                         .padding(.top, 30)
                     
                     intro(for: validPost)
                         .background(
-                            sectionBackground,
-                            in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                            .thinMaterial,
+                            in: RoundedRectangle(cornerRadius: 15)
                         )
                     goToTheSourceButton(for: validPost)
-                        .padding(.horizontal, 55)
-                    
+                        .padding(.top, 30)
+
+                        .padding(.horizontal, 50)
+
                     notesToPost(for: validPost)
                         .background(
-                            sectionBackground,
-                            in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                            .thinMaterial,
+                            in: RoundedRectangle(cornerRadius: 15)
                         ).opacity(validPost.notes.isEmpty ? 0 : 1)
                 }
                 .foregroundStyle(Color.mycolor.myAccent)
-            }
+            } // ScrollView
             .padding(.horizontal)
             .navigationBarBackButtonHidden(true)
             .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
@@ -88,11 +85,11 @@ struct PostDetailsView: View {
             .fullScreenCover(isPresented: $showEditPostView, content: {
                 AddEditPostSheet(post: post)
             })
-            .fullScreenCover(isPresented: $showSafariView) {
-                if let url = URL(string: validPost.urlString) {
-                    SafariWebService(url: url)
-                }
-            }
+//            .fullScreenCover(isPresented: $showSafariView) {
+//                if let url = URL(string: validPost.urlString) {
+//                    SafariWebService(url: url)
+//                }
+//            }
         } else {
             Text("Post is not found")
         }
@@ -100,6 +97,47 @@ struct PostDetailsView: View {
     
     // MARK: Subviews
     
+    @ToolbarContentBuilder
+    private func toolbarForPostDetails(validPost: Post) -> some ToolbarContent {
+        ToolbarItemGroup(placement: .topBarLeading) {
+            CircleStrokeButtonView(
+                iconName: "chevron.left",
+                isShownCircle: false)
+            {
+                dismiss()
+            }
+            
+            ShareLink(item: validPost.urlString) {
+                Image(systemName: "square.and.arrow.up")
+                    .font(.headline)
+                    .foregroundStyle(Color.mycolor.mySecondaryText)
+                    .offset(y: -2)
+                    .frame(width: 30, height: 30)
+                    .background(.black.opacity(0.001))
+            }
+        }
+        ToolbarItemGroup(placement: .topBarTrailing) {
+            CircleStrokeButtonView(
+                iconName: validPost.favoriteChoice == .yes ? "heart.fill" : "heart",
+                iconFont: .headline,
+                isIconColorToChange: validPost.favoriteChoice == .yes ? true : false,
+                imageColorSecondary: Color.mycolor.myYellow,
+                isShownCircle: false)
+            {
+                vm.favoriteToggle(post: validPost)
+            }
+            
+            
+            CircleStrokeButtonView(
+                iconName: post?.origin == .cloud ? "pencil.slash" : "pencil",
+                isShownCircle: false)
+            {
+                showEditPostView.toggle()
+            }
+            .disabled(post?.origin == .cloud)
+        }
+    }
+
     private func header(for post: Post) -> some View {
         
         ZStack(alignment: .topTrailing) {
@@ -186,12 +224,16 @@ struct PostDetailsView: View {
     }
     
     private func goToTheSourceButton(for post: Post) -> some View {
-        
-        Button {
-            showSafariView = true
-        } label: {
-            RedCupsuleButton(buttonTitle: buttonTitle)
-        }
+                
+        LinkButtonURL(
+            buttonTitle: "Go to the Source",
+            urlString: post.urlString
+        )
+//        Button {
+//            showSafariView = true
+//        } label: {
+//            RedCupsuleButton(title: buttonTitle)
+//        }
     }
     
     private func notesToPost(for post: Post) -> some View {
@@ -227,59 +269,19 @@ struct PostDetailsView: View {
         } // VStack
     }
     
-    @ToolbarContentBuilder
-    private func toolbarForPostDetails(validPost: Post) -> some ToolbarContent {
-        ToolbarItemGroup(placement: .topBarLeading) {
-            CircleStrokeButtonView(
-                iconName: "chevron.left",
-                isShownCircle: false)
-            {
-                dismiss()
-            }
-            
-            ShareLink(item: validPost.urlString) {
-                Image(systemName: "square.and.arrow.up")
-                    .font(.headline)
-                    .foregroundStyle(Color.mycolor.mySecondaryText)
-                    .offset(y: -2)
-                    .frame(width: 30, height: 30)
-                    .background(.black.opacity(0.001))
-            }
-        }
-        ToolbarItemGroup(placement: .topBarTrailing) {
-            CircleStrokeButtonView(
-                iconName: validPost.favoriteChoice == .yes ? "heart.fill" : "heart",
-                iconFont: .headline,
-                isIconColorToChange: validPost.favoriteChoice == .yes ? true : false,
-                imageColorSecondary: Color.mycolor.myYellow,
-                isShownCircle: false)
-            {
-                vm.favoriteToggle(post: validPost)
-            }
-            
-            
-            CircleStrokeButtonView(
-                iconName: post?.origin == .cloud ? "pencil.slash" : "pencil",
-                isShownCircle: false)
-            {
-                showEditPostView.toggle()
-            }
-            .disabled(post?.origin == .cloud)
-        }
-    }
 }
 
 
 fileprivate struct PostDetailsPreView: View {
     var body: some View {
         NavigationStack {
-            PostDetailsView(postId: DevPreview.postsForCloud.first!.id)
+            PostDetailsView(postId: DevData.postsForCloud.first!.id)
                 .environmentObject(createPreviewViewModel())
         }
     }
     private func createPreviewViewModel() -> PostsViewModel {
         let viewModel = PostsViewModel()
-        viewModel.allPosts = DevPreview.postsForCloud
+        viewModel.allPosts = DevData.postsForCloud
         return viewModel
     }
     

@@ -8,93 +8,121 @@
 import SwiftUI
 
 
-enum PreferencesDestination: Hashable {
-    case cloudImport
-    case shareBackup
-    case restoreBackup
-    case erasePosts
-    case aboutApp
-}
+//enum PreferencesDestination: Hashable {
+//    case cloudImport
+//    case shareBackup
+//    case restoreBackup
+//    case erasePosts
+//    case aboutApp
+//}
 
 struct PreferencesView: View {
     
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
-    
-    @State private var navigationPath = NavigationPath()
-    @State private var selectedDestination: PreferencesDestination?
+    @EnvironmentObject private var noticevm: NoticeViewModel
     
     let iconWidth: CGFloat = 18
     
     private var postsCount: Int {
-            vm.allPosts.count
-        }
+        vm.allPosts.count
+    }
     
     private var draftsCount: Int {
         let postDrafts = vm.allPosts.filter { $0.draft == true }
         return postDrafts.count
-        }
-
-        
+    }
+    
+    private var newNoticesCount: Int {
+        noticevm.notices.filter { $0.isRead == false }.count
+    }
+    
     var body: some View {
-        NavigationStack {
-            Form {
-                Section(header: sectionHeader("Settings")) {
-                    notificationSetting
-                }
-                Section(header: sectionHeader("Managing posts (\(postsCount))")) {
-                    
+        Form {
+            Section(header: sectionHeader("Appearance")) {
+                UnderlineSermentedPickerNotOptional(
+                    selection: $vm.selectedTheme,
+                    allItems: Theme.allCases,
+                    titleForCase: { $0.displayName },
+                    selectedFont: .footnote,
+                    selectedTextColor: Color.mycolor.myBlue,
+                    unselectedTextColor: Color.mycolor.myAccent
+                )
+            }
+            
+            Section(header: sectionHeader("Notifications")) {
+                notificationToggle
+                noticeMessages
+            }
+            Section(header: sectionHeader("Managing posts (\(postsCount))")) {
+                
+                if !vm.allPosts.filter({ $0.draft == true }).isEmpty {
                     postDrafts
-                    
-                    if (!vm.allPosts.isEmpty || vm.isPostsUpdateAvailable) && vm.isFirstImportPostsCompleted {
-                        checkForPostsUpdate
-                    }
-                    
-                    importFromCloud
-                    shareBackup
-                    restoreBackup
-                    erasePosts
                 }
-                Section {
-                    aboutApplication
-                    legalInformation
-                    contactDeveloperButton
+                
+                if (!vm.allPosts.isEmpty || vm.isPostsUpdateAvailable) && vm.isFirstImportPostsCompleted {
+                    checkForPostsUpdate
                 }
-            } // Form
-            .foregroundStyle(Color.mycolor.myAccent)
-            .navigationTitle("Preferences")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
-                        dismiss()
-                    }
+                
+                importFromCloud
+                shareBackup
+                restoreBackup
+                erasePosts
+            }
+            Section(header: sectionHeader("Сommunication")){
+                thankfullness
+                aboutApplication
+                legalInformation
+                contactDeveloperButton
+            }
+        } // Form
+        .foregroundStyle(Color.mycolor.myAccent)
+        .listSectionSpacing(0)
+        .navigationTitle("Preferences")
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                    dismiss()
                 }
             }
-        } // NavigationStack
+        }
     }
     
     // MARK: - Subviews
+    
     
     private func sectionHeader(_ text: String) -> some View {
         Text(text)
             .foregroundStyle(Color.mycolor.myAccent)
     }
     
-    private var notificationSetting: some View {
+    private var notificationToggle: some View {
         HStack {
-            Image(systemName: "bell")
+            Image(systemName: noticevm.isNotification ? "bell" : "bell.slash")
                 .frame(width: iconWidth)
                 .foregroundStyle(Color.mycolor.myBlue)
-            Toggle("Notification for posts update", isOn: $vm.isNotification)
+            Toggle(noticevm.isNotification ? "On" : "Off", isOn: $noticevm.isNotification)
                 .tint(Color.mycolor.myBlue)
         }
+    }
+    
+    private var noticeMessages: some View {
+        NavigationLink("Messages (\(newNoticesCount)/\(noticevm.notices.count))") {
+            NoticeMessagesView()
+        }
+        .customListRowStyle(
+            iconName: newNoticesCount == 0 ? "message" : "message.badge",
+            iconWidth: iconWidth
+        )
     }
     
     private var postDrafts: some View {
         NavigationLink("Post drafts (\(draftsCount))") {
             PostDraftsView()
         }
-        .customPreferencesListRowStyle(
+        .customListRowStyle(
             iconName: "square.stack.3d.up",
             iconWidth: iconWidth
         )
@@ -104,18 +132,17 @@ struct PreferencesView: View {
         NavigationLink("Check posts updates") {
             CheckForPostsUpdateView()
         }
-        .customPreferencesListRowStyle(
+        .customListRowStyle(
             iconName: "arrow.trianglehead.counterclockwise",
             iconWidth: iconWidth
         )
     }
-
     
     private var importFromCloud: some View {
         NavigationLink("Download the curated collection") {
             ImportPostsFromCloudView()
         }
-        .customPreferencesListRowStyle(
+        .customListRowStyle(
             iconName: "icloud.and.arrow.down",
             iconWidth: iconWidth
         )
@@ -125,7 +152,7 @@ struct PreferencesView: View {
         NavigationLink("Share/Backup posts") {
             SharePostsView()
         }
-        .customPreferencesListRowStyle(
+        .customListRowStyle(
             iconName: "square.and.arrow.up",
             iconWidth: iconWidth
         )
@@ -135,7 +162,7 @@ struct PreferencesView: View {
         NavigationLink("Restore backup") {
             RestoreBackupView()
         }
-        .customPreferencesListRowStyle(
+        .customListRowStyle(
             iconName: "tray.and.arrow.up",
             iconWidth: iconWidth
         )
@@ -145,8 +172,19 @@ struct PreferencesView: View {
         NavigationLink("Delete all posts") {
             EraseAllPostsView()
         }
-        .customPreferencesListRowStyle(
+        .customListRowStyle(
             iconName: "trash",
+            iconWidth: iconWidth
+        )
+    }
+    
+    private var thankfullness: some View {
+        
+        NavigationLink("Thankfullness") {
+            ThankfullnessView()
+        }
+        .customListRowStyle(
+            iconName: "hand.thumbsup",
             iconWidth: iconWidth
         )
     }
@@ -155,7 +193,7 @@ struct PreferencesView: View {
         NavigationLink("About App") {
             AboutApp()
         }
-        .customPreferencesListRowStyle(
+        .customListRowStyle(
             iconName: "info.circle",
             iconWidth: iconWidth
         )
@@ -166,7 +204,7 @@ struct PreferencesView: View {
         NavigationLink("Legal information") {
             LegalInformationView()
         }
-        .customPreferencesListRowStyle(
+        .customListRowStyle(
             iconName: "long.text.page.and.pencil",
             iconWidth: iconWidth
         )
@@ -180,7 +218,7 @@ struct PreferencesView: View {
                 body: ""
             )
         }
-        .customPreferencesListRowStyle(
+        .customListRowStyle(
             iconName: "envelope",
             iconWidth: iconWidth
         )
@@ -191,13 +229,13 @@ struct PreferencesView: View {
 //// MARK: - Wrapping all child views for lazy loading (for testing)
 //
 //struct LazyView<Content: View>: View {
-//    
+//
 //    let build: () -> Content
-//    
+//
 //    init(_ build: @escaping () -> Content) {
 //        self.build = build
 //    }
-//    
+//
 //    var body: Content {
 //        build()
 //    }
@@ -207,6 +245,8 @@ struct PreferencesView: View {
 #Preview {
     NavigationStack {
         PreferencesView ()
-            .environmentObject(PostsViewModel())
     }
+    .environmentObject(PostsViewModel())
+    .environmentObject(NoticeViewModel())
+    
 }

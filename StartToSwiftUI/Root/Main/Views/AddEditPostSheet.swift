@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AddEditPostSheet: View {
     
-    @Environment(\.colorScheme) private var colorScheme
+//    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     
@@ -28,9 +28,6 @@ struct AddEditPostSheet: View {
     
     @State private var isPostDraftSaved: Bool = false
     @State private var isShowingMenuConfirmation: Bool = false
-//    @State private var isMenuConfirmationBlocked: Bool = false
-    
-//    @State private var deleteItem = false
     
     private let sectionBackground: Color = Color.mycolor.mySectionBackground
     private let sectionCornerRadius: CGFloat = 8
@@ -39,7 +36,9 @@ struct AddEditPostSheet: View {
     private let fontTextInput: Font = .callout
     private let colorSubheader: Color = Color.mycolor.myAccent.opacity(0.5)
     
-    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date() // set beginning year for choice
+    // set beginning year for choice
+    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date.distantPast
+    
     private let endingDate: Date = .now
     private var bindingPostDate: Binding<Date> {
         Binding<Date>(
@@ -313,7 +312,7 @@ struct AddEditPostSheet: View {
                 )
             ZStack {
                 HStack {
-                    Button(editedPost.postDate == nil ? "Set date" : "Unknown date") {
+                    Button(editedPost.postDate == nil ? "Set date" : "Reset date") {
                         if editedPost.postDate == nil {
                             editedPost.postDate = Date()
                         } else {
@@ -642,7 +641,7 @@ struct AddEditPostSheet: View {
 #Preview {
     
     NavigationStack {
-        AddEditPostSheet(post: DevPreview.samplePost1)
+        AddEditPostSheet(post: DevData.samplePost1)
             .environmentObject(PostsViewModel())
     }
 }

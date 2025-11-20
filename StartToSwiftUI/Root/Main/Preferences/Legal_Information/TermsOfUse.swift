@@ -198,7 +198,7 @@ struct TermsOfUse: View {
                         isAccepted = true
                         DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
                             vm.isTermsOfUseAccepted = true
-                            action()
+                            dismiss()
                         }
                     }
                     .padding(.horizontal, 30)
@@ -207,6 +207,15 @@ struct TermsOfUse: View {
             }
         }
         .navigationTitle("Terms of Use")
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                    dismiss()
+                }
+            }
+        }
     }
 }
 

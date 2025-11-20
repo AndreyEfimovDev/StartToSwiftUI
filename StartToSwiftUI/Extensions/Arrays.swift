@@ -11,16 +11,16 @@ import Foundation
 
 // MARK: CUSTOM FUNC MEGRING 2 ARRAYS WITH UNIQUE KEY - TITLE
 
-extension Array {
-    mutating func merge<U: Equatable>(
-        with newElements: [Element],
-        uniqueBy keyPath: KeyPath<Element, U>
-    ) {
-        for element in newElements {
-            let value = element[keyPath: keyPath]
-            if !self.contains(where: { $0[keyPath: keyPath] == value }) {
-                self.append(element)
-            }
-        }
-    }
-}
+//extension Array {
+//    mutating func merge<U: Equatable>(
+//        with newElements: [Element],
+//        uniqueBy keyPath: KeyPath<Element, U>
+//    ) {
+//        for element in newElements {
+//            let value = element[keyPath: keyPath]
+//            if !self.contains(where: { $0[keyPath: keyPath] == value }) {
+//                self.append(element)
+//            }
+//        }
+//    }
+//}

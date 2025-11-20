@@ -8,36 +8,42 @@
 import Foundation
 import SwiftUI
 
-class FileStorageService: ObservableObject {
+class JSONFileManager: ObservableObject {
     
-    static let shared = FileStorageService()
+    static let shared = JSONFileManager()
+    
+    private init() {}
 
     // MARK: FILE MANAGER FUNCIONS
     
-    // Getting a full path of the JSON data file stored by File Manager
+    // Getting a full path of the JSON file
+
     func getFileURL(fileName: String) -> Result<URL, FileStorageError> {
+        
         guard
             let documentsDirectory = FileManager
                 .default
                 .urls(for: .documentDirectory, in: .userDomainMask)
                 .first else {
-            print("❌ FM(getFileURL): Error in getting path: \(fileName).")
+            print("🍎❌ FM(getFileURL): Error in getting path for \(fileName).")
             return .failure(.invalidURL)
         }
-        
+
         let fileURL = documentsDirectory.appendingPathComponent(fileName)
-        return .success(fileURL)
-    }
+                print("🍎 FM(getFileURL): Successfully in getting path: \(fileURL).")
+                return .success(fileURL)
+        }
     
     // Saving posts with encoding into JSON data
 
-    func savePosts<T: Codable>(
+    func saveData<T: Codable>(
         _ data: T,
         fileName: String,
         encoder: JSONEncoder = .appEncoder, // we use the date encoding strategy - ISO8601 (string)
         completion: @escaping (Result<Void, FileStorageError>) -> Void
     ) {
-        
+        print("🍎 FM(saveData): Getting URL")
+
         let urlResult = getFileURL(fileName: fileName)
         
         switch urlResult {
@@ -45,10 +51,10 @@ class FileStorageService: ObservableObject {
             do {
                 let jsonData = try encoder.encode(data)
                 try jsonData.write(to: url)
-                print("✅ FM(savePosts): Successfully saved в \(url)")
+                print("🍎 FM(saveData): Data successfully saved in: \(url)")
                 completion(.success(()))
             } catch {
-                print("❌ FM(savePosts): Error in saving posts: \(error)")
+                print("🍎❌ FM(saveData): Error in saving data: \(error)")
                 completion(.failure(.encodingFailed(error)))
             }
             
@@ -58,46 +64,50 @@ class FileStorageService: ObservableObject {
     }
     
     // Loading and decoding JSON data into posts
-    func loadPosts<T: Codable>(
+    func loadData<T: Codable>(
         fileName: String,
         decoder: JSONDecoder = .appDecoder, // we use the date decoding strategy - ISO8601 (string)
         completion: @escaping (Result<T, FileStorageError>) -> Void
     ) {
-        
+        print("🍎 FM(loadData): Getting URL")
+
         let urlResult = getFileURL(fileName: fileName)
         
         switch urlResult {
         case .success(let url):
             // Check the file for existance
             guard FileManager.default.fileExists(atPath: url.path) else {
-                print("☑️ FM(loadPosts): No saved posts found")
+                print("🍎☑️ FM(loadData): No JSON file found")
                 completion(.failure(.fileNotFound))
                 return
             }
             
-            
             do {
                 let jsonData = try Data(contentsOf: url)
                 let decodedData = try decoder.decode(T.self, from: jsonData)
-                print("✅ FM(loadPosts): Successfully uploaded")
+                print("🍎 FM(loadData): Successfully uploaded \(T.self)")
                 completion(.success(decodedData))
             } catch {
-                print("☑️ FM(loadPosts): Decoding error: \(error)")
+                print("🍎☑️ FM(loadData): Decoding error: \(error)")
                 completion(.failure(.decodingFailed(error)))
             }
             
         case .failure(let error):
-                    completion(.failure(error))
-                }
-
+            completion(.failure(error))
+        }
+        
     }
     
     func checkIfFileExists(fileName: String) -> Bool {
+        
+        print("🍎 FM(checkIfFileExists): Getting URL")
+
             guard case .success(let url) = getFileURL(fileName: fileName) else {
                 return false
             }
             return FileManager.default.fileExists(atPath: url.path)
         }
+    
 
 }
 

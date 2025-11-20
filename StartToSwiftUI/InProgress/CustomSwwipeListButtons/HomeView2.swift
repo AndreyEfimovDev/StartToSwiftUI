@@ -1,184 +1,184 @@
+////
+////  HomeView2.swift
+////  StartToSwiftUI
+////
+////  Created by Andrey Efimov on 26.10.2025.
+////
 //
-//  HomeView2.swift
-//  StartToSwiftUI
+//import SwiftUI
 //
-//  Created by Andrey Efimov on 26.10.2025.
-//
-
-import SwiftUI
-
-struct HomeView2: View {
-    
-    // MARK: PROPERTIES
-    
-    @Environment(\.colorScheme) var colorScheme
-    @EnvironmentObject private var vm: PostsViewModel
-    
-    @State private var selectedPostId: String?
-    @State private var selectedPost: Post?
-    
-    @State private var showDetailView: Bool = false
-    @State private var showPreferancesView: Bool = false
-    @State private var showAddPostView: Bool = false
-    
-    @State private var showOnTopButton: Bool = false
-    @State private var isFilterButtonPressed: Bool = false
-    
-    let hiderText: String = "SwiftUI posts"
-    
-    private var searchedPosts: [Post] {
-        if vm.searchText.isEmpty {
-            return vm.filteredPosts
-        } else {
-            let searchedPosts = vm.filteredPosts.filter( {
-                $0.title.lowercased().contains(vm.searchText.lowercased()) ||
-                $0.intro.lowercased().contains(vm.searchText.lowercased())  ||
-                $0.author.lowercased().contains(vm.searchText.lowercased()) ||
-                $0.notes.lowercased().contains(vm.searchText.lowercased())
-            } )
-            return searchedPosts
-        }
-    }
-    
-    // MARK: VIEW BODY
-    
-    var body: some View {
-        NavigationStack {
-            viewBody
-                .navigationTitle(hiderText)
-                .navigationBarBackButtonHidden(true)
-            //                .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
-            //                .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-            //                    .toolbarBackground(.visible, for: .navigationBar)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        CircleStrokeButtonView(
-                            iconName: "gearshape",
-                            isShownCircle: false)
-                        {
-                            showPreferancesView.toggle()
-                        }
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        CircleStrokeButtonView(
-                            iconName: "plus",
-                            isShownCircle: false)
-                        {
-                            showAddPostView.toggle()
-                        }
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        CircleStrokeButtonView(
-                            iconName: "line.3.horizontal.decrease",
-                            isIconColorToChange: !vm.isFiltersEmpty,
-                            isShownCircle: false)
-                        {
-                            isFilterButtonPressed.toggle()}
-                    }
-                }
-                .safeAreaInset(edge: .top) {
-                    SearchBarView()
-                }
-                .navigationDestination(isPresented: $showDetailView) {
-                    if let id = selectedPostId {
-                        PostDetailsView(postId: id)
-                    }
-                }
-            // toolbar button "preferances"
-                .fullScreenCover(isPresented: $showPreferancesView) {
-                    PreferencesView()
-                }
-            // toolbar button "+"
-                .fullScreenCover(isPresented: $showAddPostView, content: {
-                    AddEditPostSheet(post: nil)
-                })
-            // swipe action Edit post
-                .fullScreenCover(item: $selectedPost, content: { post in
-                    AddEditPostSheet(post: post)
-                })
-            // toolbar button "filters"
-                .sheet(isPresented: $isFilterButtonPressed) {
-                    FiltersSheetView(
-                        isFilterButtonPressed: $isFilterButtonPressed
-                    )
-                    .presentationBackground(.clear)
-                    .presentationDetents([.height(600)])
-                    .presentationDragIndicator(.automatic)
-                    .presentationCornerRadius(30)
-                }
-        } // NavigationStack
-        .onAppear {
-            vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-        }
-    }
-    
-    // MARK: VAR VIEWS
-    
-    private var viewBody: some View {
-        ScrollViewReader { proxy in
-            ZStack (alignment: .bottomTrailing) {
-                if searchedPosts.isEmpty {
-                    ContentUnavailableView(
-                        "No Posts Stored",
-                        systemImage: "tray.and.arrow.down",
-                        description: Text("You should go to Preferences to upload posts")
-                    )
-                } else {
-                    ScrollView {
-                        
-                        LazyVStack {
-                            ForEach(searchedPosts) { post in
-                                
-                                PostRowView2(post: post)
-                                    .id(post.id)
-                                    .background(
-                                        GeometryReader { geo in
-                                            Color.clear
-                                                .onChange(of: geo.frame(in: .global).minY) { oldY, newY in
-                                                    // Track first element position
-                                                    if post.id == vm.filteredPosts.first?.id {
-                                                        showOnTopButton = newY < 0
-                                                    }
-                                                }
-                                        }
-                                    )
-                                    .padding(.bottom, 4)
-                            } // ForEach
-                            //                            .buttonStyle(.plain)  it makes the buttons accessable
-                        } // List
-                    }
-//                    .simultaneousGesture(
-//                        DragGesture()
-//                            .onChanged { _ in
-//                            }
+//struct HomeView2: View {
+//    
+//    // MARK: PROPERTIES
+//    
+////    @Environment(\.colorScheme) var colorScheme
+//    @EnvironmentObject private var vm: PostsViewModel
+//    
+//    @State private var selectedPostId: String?
+//    @State private var selectedPost: Post?
+//    
+//    @State private var showDetailView: Bool = false
+//    @State private var showPreferancesView: Bool = false
+//    @State private var showAddPostView: Bool = false
+//    
+//    @State private var showOnTopButton: Bool = false
+//    @State private var isFilterButtonPressed: Bool = false
+//    
+//    let hiderText: String = "SwiftUI posts"
+//    
+//    private var searchedPosts: [Post] {
+//        if vm.searchText.isEmpty {
+//            return vm.filteredPosts
+//        } else {
+//            let searchedPosts = vm.filteredPosts.filter( {
+//                $0.title.lowercased().contains(vm.searchText.lowercased()) ||
+//                $0.intro.lowercased().contains(vm.searchText.lowercased())  ||
+//                $0.author.lowercased().contains(vm.searchText.lowercased()) ||
+//                $0.notes.lowercased().contains(vm.searchText.lowercased())
+//            } )
+//            return searchedPosts
+//        }
+//    }
+//    
+//    // MARK: VIEW BODY
+//    
+//    var body: some View {
+//        NavigationStack {
+//            viewBody
+//                .navigationTitle(hiderText)
+//                .navigationBarBackButtonHidden(true)
+//            //                .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+//            //                .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+//            //                    .toolbarBackground(.visible, for: .navigationBar)
+//                .toolbar {
+//                    ToolbarItem(placement: .navigationBarLeading) {
+//                        CircleStrokeButtonView(
+//                            iconName: "gearshape",
+//                            isShownCircle: false)
+//                        {
+//                            showPreferancesView.toggle()
+//                        }
+//                    }
+//                    ToolbarItem(placement: .navigationBarTrailing) {
+//                        CircleStrokeButtonView(
+//                            iconName: "plus",
+//                            isShownCircle: false)
+//                        {
+//                            showAddPostView.toggle()
+//                        }
+//                    }
+//                    ToolbarItem(placement: .navigationBarTrailing) {
+//                        CircleStrokeButtonView(
+//                            iconName: "line.3.horizontal.decrease",
+//                            isIconColorToChange: !vm.isFiltersEmpty,
+//                            isShownCircle: false)
+//                        {
+//                            isFilterButtonPressed.toggle()}
+//                    }
+//                }
+//                .safeAreaInset(edge: .top) {
+//                    SearchBarView()
+//                }
+//                .navigationDestination(isPresented: $showDetailView) {
+//                    if let id = selectedPostId {
+//                        PostDetailsView(postId: id)
+//                    }
+//                }
+//            // toolbar button "preferances"
+//                .fullScreenCover(isPresented: $showPreferancesView) {
+//                    PreferencesView()
+//                }
+//            // toolbar button "+"
+//                .fullScreenCover(isPresented: $showAddPostView, content: {
+//                    AddEditPostSheet(post: nil)
+//                })
+//            // swipe action Edit post
+//                .fullScreenCover(item: $selectedPost, content: { post in
+//                    AddEditPostSheet(post: post)
+//                })
+//            // toolbar button "filters"
+//                .sheet(isPresented: $isFilterButtonPressed) {
+//                    FiltersSheetView(
+//                        isFilterButtonPressed: $isFilterButtonPressed
 //                    )
-                    //                    .scrollIndicators(.hidden)
-                    .background(Color.mycolor.myBackground)
-                    if showOnTopButton {
-                        CircleStrokeButtonView(
-                            iconName: "control", // control arrow.up
-                            iconFont: .title,
-                            imageColorPrimary: Color.mycolor.myBlue,
-                            widthIn: 55,
-                            heightIn: 55) {
-                                withAnimation {
-                                    if let firstID = vm.filteredPosts.first?.id {
-                                        proxy.scrollTo(firstID, anchor: .top)
-                                    }
-                                }
-                            }
-                            .padding(.trailing, 35)
-                    } // if showButtonOnTop
-                }
-                
-                
-            } // ZStack
-        } // ScrollViewReader
-    }
-}
-
-
-#Preview {
-    HomeView2()
-        .environmentObject(PostsViewModel())
-}
+//                    .presentationBackground(.clear)
+//                    .presentationDetents([.height(600)])
+//                    .presentationDragIndicator(.automatic)
+//                    .presentationCornerRadius(30)
+//                }
+//        } // NavigationStack
+//        .onAppear {
+//            vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
+//        }
+//    }
+//    
+//    // MARK: VAR VIEWS
+//    
+//    private var viewBody: some View {
+//        ScrollViewReader { proxy in
+//            ZStack (alignment: .bottomTrailing) {
+//                if searchedPosts.isEmpty {
+//                    ContentUnavailableView(
+//                        "No Posts Stored",
+//                        systemImage: "tray.and.arrow.down",
+//                        description: Text("You should go to Preferences to upload posts")
+//                    )
+//                } else {
+//                    ScrollView {
+//                        
+//                        LazyVStack {
+//                            ForEach(searchedPosts) { post in
+//                                
+//                                PostRowView2(post: post)
+//                                    .id(post.id)
+//                                    .background(
+//                                        GeometryReader { geo in
+//                                            Color.clear
+//                                                .onChange(of: geo.frame(in: .global).minY) { oldY, newY in
+//                                                    // Track first element position
+//                                                    if post.id == vm.filteredPosts.first?.id {
+//                                                        showOnTopButton = newY < 0
+//                                                    }
+//                                                }
+//                                        }
+//                                    )
+//                                    .padding(.bottom, 4)
+//                            } // ForEach
+//                            //                            .buttonStyle(.plain)  it makes the buttons accessable
+//                        } // List
+//                    }
+////                    .simultaneousGesture(
+////                        DragGesture()
+////                            .onChanged { _ in
+////                            }
+////                    )
+//                    //                    .scrollIndicators(.hidden)
+//                    .background(Color.mycolor.myBackground)
+//                    if showOnTopButton {
+//                        CircleStrokeButtonView(
+//                            iconName: "control", // control arrow.up
+//                            iconFont: .title,
+//                            imageColorPrimary: Color.mycolor.myBlue,
+//                            widthIn: 55,
+//                            heightIn: 55) {
+//                                withAnimation {
+//                                    if let firstID = vm.filteredPosts.first?.id {
+//                                        proxy.scrollTo(firstID, anchor: .top)
+//                                    }
+//                                }
+//                            }
+//                            .padding(.trailing, 35)
+//                    } // if showButtonOnTop
+//                }
+//                
+//                
+//            } // ZStack
+//        } // ScrollViewReader
+//    }
+//}
+//
+//
+//#Preview {
+//    HomeView2()
+//        .environmentObject(PostsViewModel())
+//}
