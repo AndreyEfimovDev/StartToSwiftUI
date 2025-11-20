@@ -20,8 +20,10 @@ class NoticeViewModel: ObservableObject {
     
     @Published var selectedNoticeIDs: Set<String> = []
     @Published var isSelectionMode: Bool = false
+    @Published var isNewNotices: Bool = false
 
-    @AppStorage("isNotification") var isNotification: Bool = true
+
+    @AppStorage("isNotificationOn") var isNotificationOn: Bool = true
     @AppStorage("dateOfLatestNoticesUpdate") var dateOfLatestNoticesUpdate: Date = Date.distantPast
 
     init(
@@ -39,8 +41,12 @@ class NoticeViewModel: ObservableObject {
         } else {
             self.importNoticesFromCloud()
         }
-    }
+        
+    } // init()
 
+    
+    // MARK: PRIVATE FUNCTIONS
+    
     private func loadLocalNotices(from urlOnLocalNotices: String, completion: @escaping ([Notice]) -> Void) {
         
             fileManager.loadData(fileName: urlOnLocalNotices) { [weak self] (result: Result<[Notice], FileStorageError>) in
@@ -89,28 +95,36 @@ class NoticeViewModel: ObservableObject {
                             $0.noticeDate > (self?.dateOfLatestNoticesUpdate ?? .distantPast)
                         }
                         print("🍉 NVN(importNoticesFromCloud): Cloud notices with newer dates  \(cloudNoticesWithNewerDates.count)")
+                        
+                        if !cloudNoticesWithNewerDates.isEmpty {
+                            
+                            // Make User informed of new notifications
+                            if let isNotificationOnChecked = self?.isNotificationOn {
+                                if isNotificationOnChecked {
+                                    self?.isNewNotices = true
+                                }
+                            }
+                            
+                            // Set a new date of latest notices update
+                            if let latestNoticeDate = cloudNoticesWithNewerDates.map({ $0.noticeDate }).max() {
+                                self?.dateOfLatestNoticesUpdate = latestNoticeDate
+                            }
+                            print("🍉 NVN(importNoticesFromCloud): New date of latest notices update  \(self?.dateOfLatestNoticesUpdate.formatted(date: .abbreviated, time: .shortened) ?? "")")
 
-                        // Set a new date of latest notices update
-                        if let latestNoticeDate = cloudNoticesWithNewerDates.map({ $0.noticeDate }).max() {
-                            self?.dateOfLatestNoticesUpdate = latestNoticeDate
+                            // Selecting Cloud notices with unique ID
+                            let newLoadedNotices = cloudNoticesWithNewerDates.filter { notice in
+                                !(self?.notices.contains(where: { $0.id == notice.id }) ?? false)
+                            }
+                            print("🍉 NVN(importNoticesFromCloud): Cloud notices with unique ID  \(newLoadedNotices.count)")
+                                                        
+                            if !newLoadedNotices.isEmpty {
+                                self?.notices.append(contentsOf: newLoadedNotices)
+                                self?.saveNotices()
+                                print("🍉 NVN(importNoticesFromCloud): Successfully appended \(newLoadedNotices.count) notifications from the cloud")
+                            } else {
+                                print("🍉 NVN(importNoticesFromCloud): No new notices from the cloud")
+                            }
                         }
-                        print("🍉 NVN(importNoticesFromCloud): New date of latest notices update  \(self?.dateOfLatestNoticesUpdate.formatted(date: .abbreviated, time: .shortened) ?? "")")
-
-                        // Selecting Cloud notices with unique ID
-                        let newLoadedNotices = cloudNoticesWithNewerDates.filter { notice in
-                            !(self?.notices.contains(where: { $0.id == notice.id }) ?? false)
-                        }
-                        
-                        print("🍉 NVN(importNoticesFromCloud): Cloud notices with unique ID  \(newLoadedNotices.count)")
-                        
-                        if !newLoadedNotices.isEmpty {
-                            self?.notices.append(contentsOf: newLoadedNotices)
-                            self?.saveNotices()
-                            print("🍉 NVN(importNoticesFromCloud): Successfully appended \(newLoadedNotices.count) notifications from the cloud")
-                        } else {
-                            print("🍉 NVN(importNoticesFromCloud): No new notices from the cloud")
-                        }
-                        
                         
                     } else {
                         print("🍉☑️ NVN(importNoticesFromCloud): Array of notifications from the cloud is empty.")
@@ -148,17 +162,20 @@ class NoticeViewModel: ObservableObject {
         }
     }
 
+//    
+//    private func getLatestDateFromNotices(notices: [Notice]) -> Date? {
+//        guard !notices.isEmpty else {
+//            print("🍉 ☑️ NVN(getLatestDateFromNotices): notices is empty")
+//
+//            return nil
+//        }
+//        
+//        return notices.max(by: { $0.noticeDate < $1.noticeDate })?.noticeDate
+//    }
+//    
     
-    private func getLatestDateFromNotices(notices: [Notice]) -> Date? {
-        guard !notices.isEmpty else {
-            print("🍉 ☑️ NVN(getLatestDateFromNotices): notices is empty")
+    // MARK: FUNCTIONS
 
-            return nil
-        }
-        
-        return notices.max(by: { $0.noticeDate < $1.noticeDate })?.noticeDate
-    }
-    
     func isReadSetTrue(notice: Notice) {
         if let index = notices.firstIndex(of: notice) {
             notices[index].isRead = true
@@ -188,26 +205,5 @@ class NoticeViewModel: ObservableObject {
             print("🍉 ❌ NVN(deletePost): passed notice is nil")
         }
     }
-    
-//    private func saveNotices() {
-//        
-//        fileManager.saveData(notices, fileName: Constants.localNoticesFileName) { [weak self] result in
-//            
-//            self?.errorMessage = nil
-//            self?.showErrorMessageAlert = false
-//            
-//            DispatchQueue.main.async {
-//                switch result {
-//                case .success:
-//                    print("🍉 NVM(saveNotices): Notices saved successfully.")
-//                case .failure(let error):
-//                    self?.errorMessage = error.localizedDescription
-//                    self?.showErrorMessageAlert = true
-//                    self?.hapticManager.notification(type: .error)
-//                    print("🍉❌ NVM(saveNotices): Failed to save notices: \(error)")
-//                }
-//            }
-//        }
-//    }
 
 }

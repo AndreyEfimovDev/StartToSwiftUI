@@ -71,18 +71,6 @@ struct PostDraftsView: View {
         )
     }
     
-//    private func deleteDraftPost(at offsets: IndexSet) {
-//        withAnimation {
-//            for index in offsets {
-//                let post = vm.allPosts.filter { $0.draft == true }[index]
-//                vm.deletePost(post: post)
-//            }
-//            hapticManager.notification(type: .success)
-//        }
-//    }
-    
-    
-    
 }
 
 #Preview {

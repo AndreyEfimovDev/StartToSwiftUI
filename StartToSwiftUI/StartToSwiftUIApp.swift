@@ -26,7 +26,7 @@ struct StartToSwiftUIApp: App {
         UINavigationBar.appearance().tintColor = UIColor(Color.mycolor.myAccent)
         UITableView.appearance().backgroundColor = UIColor.clear
         
-        // Warm a keyboard at first start
+        // Warm a keyboard at app launch
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                   let window = scene.windows.first else { return }

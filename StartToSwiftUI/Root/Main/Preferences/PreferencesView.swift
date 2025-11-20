@@ -100,10 +100,10 @@ struct PreferencesView: View {
     
     private var notificationToggle: some View {
         HStack {
-            Image(systemName: noticevm.isNotification ? "bell" : "bell.slash")
+            Image(systemName: noticevm.isNotificationOn ? "bell" : "bell.slash")
                 .frame(width: iconWidth)
                 .foregroundStyle(Color.mycolor.myBlue)
-            Toggle(noticevm.isNotification ? "On" : "Off", isOn: $noticevm.isNotification)
+            Toggle(noticevm.isNotificationOn ? "On" : "Off", isOn: $noticevm.isNotificationOn)
                 .tint(Color.mycolor.myBlue)
         }
     }
@@ -248,5 +248,4 @@ struct PreferencesView: View {
     }
     .environmentObject(PostsViewModel())
     .environmentObject(NoticeViewModel())
-    
 }

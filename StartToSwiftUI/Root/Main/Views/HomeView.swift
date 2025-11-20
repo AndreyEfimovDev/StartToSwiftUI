@@ -25,15 +25,14 @@ struct HomeView: View {
     @State private var showPreferancesView: Bool = false
     @State private var showAddPostView: Bool = false
     @State private var showTermsOfUse: Bool = false
-    
+    @State private var showNoticesView: Bool = false
+
     
     @State private var showOnTopButton: Bool = false
     @State private var isFilterButtonPressed: Bool = false
     
     @State private var isShowingDeleteConfirmation: Bool = false
-    
-    @State private var dummyText = ""
-    
+        
     // MARK: VIEW BODY
     
     var body: some View {
@@ -86,6 +85,10 @@ struct HomeView: View {
                 .navigationDestination(isPresented: $showPreferancesView) {
                     PreferencesView()
                 }
+                .navigationDestination(isPresented: $showNoticesView) {
+                    NoticesView()
+                }
+
                 .fullScreenCover(isPresented: $showAddPostView) {
                     AddEditPostSheet(post: nil)
                 }
@@ -110,10 +113,10 @@ struct HomeView: View {
                 welcomeAtFirstLauch
             }
             // Updates available notification
-//            if vm.isPostsUpdateAvailable && noticevm.isNotification {
+//            if vm.isPostsUpdateAvailable && noticevm.isNotificationOn {
 //                updateAvailableDialog
 //            }
-            // Зщые вeletion confirmation dialog
+            // Post deletion confirmation dialog
             if isShowingDeleteConfirmation {
                 deletionConfirmationDialog
             }
@@ -203,6 +206,28 @@ struct HomeView: View {
                 showPreferancesView.toggle()
             }
         }
+        if noticevm.isNewNotices && noticevm.isNotificationOn {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(
+                    iconName: "bell",
+                    isShownCircle: false)
+                {
+                    showNoticesView = true
+                }
+            }
+        }
+        
+        ToolbarItem(placement: .navigationBarTrailing) {
+            CircleStrokeButtonView(
+                iconName: "plus",
+                isShownCircle: false)
+            {
+                if noticevm.isNotificationOn {
+                    noticevm.isNewNotices.toggle()
+                }
+            }
+        }
+        
         ToolbarItem(placement: .navigationBarTrailing) {
             CircleStrokeButtonView(
                 iconName: "plus",
@@ -273,35 +298,6 @@ struct HomeView: View {
         } // ZStack
     }
     
-//    private var updateAvailableDialog: some View {
-//        ZStack {
-//            Color.mycolor.myAccent.opacity(0.4)
-//                .ignoresSafeArea()
-//            
-//            VStack(spacing: 20) {
-//                Text("Posts update is available")
-//                    .textCase(.uppercase)
-//                    .font(.headline)
-//                    .bold()
-//                    .foregroundColor(Color.mycolor.myAccent)
-//                
-//                Text("You can go to Preferences for updates.")
-//                    .font(.subheadline)
-//                    .multilineTextAlignment(.center)
-//                    .foregroundColor(Color.mycolor.mySecondaryText)
-//                ClearCupsuleButton(
-//                    primaryTitle: "OK, got it",
-//                    primaryTitleColor: Color.mycolor.myBlue) {
-//                        vm.isPostsUpdateAvailable = false
-//                    }
-//            }
-//            .padding()
-//            .background(.regularMaterial)
-//            .cornerRadius(30)
-//            .padding(.horizontal, 40)
-//        }
-//    }
-    
     private var deletionConfirmationDialog: some View {
         ZStack {
             Color.mycolor.myAccent.opacity(0.4)
@@ -344,10 +340,9 @@ struct HomeView: View {
 }
 
 #Preview {
-    //    NavigationStack {
-    HomeView()
-        .environmentObject(PostsViewModel())
-        .environmentObject(NoticeViewModel())
-
-    //    }
+    NavigationStack {
+        HomeView()
+    }
+    .environmentObject(PostsViewModel())
+    .environmentObject(NoticeViewModel())
 }

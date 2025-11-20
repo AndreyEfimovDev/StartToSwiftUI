@@ -65,7 +65,8 @@ struct SearchBarView: View {
         Color.pink.opacity(0.1)
             .ignoresSafeArea()
             SearchBarView()
+            .environmentObject(PostsViewModel())
+
     }
-    .environmentObject(PostsViewModel())
 
 }

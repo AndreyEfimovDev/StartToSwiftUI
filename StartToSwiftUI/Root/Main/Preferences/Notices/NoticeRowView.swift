@@ -9,6 +9,8 @@ import SwiftUI
 
 struct NoticeRowView: View {
     
+    @EnvironmentObject private var noticevm: NoticeViewModel
+
     let notice: Notice
     
     var body: some View {
@@ -26,9 +28,6 @@ struct NoticeRowView: View {
             .foregroundStyle(Color.mycolor.myAccent)
             .fontWeight(notice.isRead ? .regular : .bold)
             .opacity(notice.isRead ? 0.8 : 1)
-
-//            .padding(.leading, 8)
-//            .frame(height: 80)
             .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(Color.mycolor.mySectionBackground)
@@ -38,6 +37,8 @@ struct NoticeRowView: View {
 
 fileprivate struct NoticeRowPreView: View {
         
+    @EnvironmentObject private var noticevm: NoticeViewModel
+
     var body: some View {
             ZStack {
                 Color.pink.opacity(0.1)
@@ -55,6 +56,8 @@ fileprivate struct NoticeRowPreView: View {
 
 
 #Preview {
-    NoticeRowPreView()
-    
+    NavigationStack {
+        NoticeRowPreView()
+            .environmentObject(NoticeViewModel())
+    }
 }

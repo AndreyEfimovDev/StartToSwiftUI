@@ -117,6 +117,7 @@ fileprivate struct PostRowPreView: View {
 
 
 #Preview {
-    PostRowPreView()
-    
+    NavigationStack {
+        PostRowPreView()
+    }
 }

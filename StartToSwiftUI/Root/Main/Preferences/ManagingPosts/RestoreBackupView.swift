@@ -103,7 +103,6 @@ struct RestoreBackupView: View {
 
 #Preview {
     NavigationStack{
-        
         RestoreBackupView()
             .environmentObject(PostsViewModel())
     }

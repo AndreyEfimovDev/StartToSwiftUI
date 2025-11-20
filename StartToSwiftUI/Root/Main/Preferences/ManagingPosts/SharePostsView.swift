@@ -123,7 +123,6 @@ struct SharePostsView: View {
 
 #Preview {
     NavigationStack{
-        
         SharePostsView()
             .environmentObject(PostsViewModel())
     }

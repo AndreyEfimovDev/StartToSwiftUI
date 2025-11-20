@@ -23,18 +23,7 @@ struct PostDetailsView: View {
         vm.allPosts.first(where: { $0.id == postId })
 //        DevData.samplePost1
     }
-    
-//    private var buttonTitle: String {
-//        switch post?.postPlatform {
-//        case .youtube:
-//            "Watch the Video"
-//        case .website:
-//            "Read the Article"
-//        case nil:
-//            "Go to the Source"
-//        }
-//    }
-    
+        
     @State private var lineCountIntro: Int = 0
     private let introFont: Font = .subheadline
     private let introLineSpacing: CGFloat = 0
@@ -85,11 +74,6 @@ struct PostDetailsView: View {
             .fullScreenCover(isPresented: $showEditPostView, content: {
                 AddEditPostSheet(post: post)
             })
-//            .fullScreenCover(isPresented: $showSafariView) {
-//                if let url = URL(string: validPost.urlString) {
-//                    SafariWebService(url: url)
-//                }
-//            }
         } else {
             Text("Post is not found")
         }
@@ -235,11 +219,6 @@ struct PostDetailsView: View {
             buttonTitle: "Go to the Source",
             urlString: post.urlString
         )
-//        Button {
-//            showSafariView = true
-//        } label: {
-//            RedCupsuleButton(title: buttonTitle)
-//        }
     }
     
     private func notesToPost(for post: Post) -> some View {
@@ -294,5 +273,8 @@ fileprivate struct PostDetailsPreView: View {
 }
 
 #Preview {
-    PostDetailsPreView()
+    NavigationStack {
+        PostDetailsPreView()
+            .environmentObject(PostsViewModel())
+    }
 }

@@ -113,7 +113,6 @@ struct EraseAllPostsView: View {
 
 #Preview {
     NavigationStack{
-        
         EraseAllPostsView()
             .environmentObject(PostsViewModel())
     }
