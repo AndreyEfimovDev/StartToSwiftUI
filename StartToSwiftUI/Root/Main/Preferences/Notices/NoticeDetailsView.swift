@@ -24,8 +24,8 @@ struct NoticeDetailsView: View {
     }
     
     private var notice: Notice? {
-        noticevm.notices.first(where: { $0.id == noticeId })
-        //        DevData.sampleNotice2
+//        noticevm.notices.first(where: { $0.id == noticeId })
+                DevData.sampleNotice2
     }
     
     
@@ -33,10 +33,6 @@ struct NoticeDetailsView: View {
     
     var body: some View {
         ZStack {
-            //            Color.clear
-            //                .ignoresSafeArea()
-            //            Rectangle()
-            //                .fill(Color.mycolor.myBackground)
             
             if let validNotice = notice {
                 ScrollView(showsIndicators: false) {
@@ -44,7 +40,6 @@ struct NoticeDetailsView: View {
                     VStack (alignment: .leading){
                         Text(validNotice.noticeDate.formatted(date: .numeric, time: .omitted))
                             .font(.caption)
-//                            .padding()
                         
                         Text(validNotice.title)
                             .font(.headline)
@@ -57,6 +52,7 @@ struct NoticeDetailsView: View {
                         Text(validNotice.noticeMessage)
                             .font(.body)
                             .padding()
+                            .frame(minHeight: 300, alignment: .topLeading)
                             .frame(maxWidth: .infinity,  alignment: .leading)
                             .background(
                                 .thinMaterial,
