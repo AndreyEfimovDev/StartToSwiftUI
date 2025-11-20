@@ -101,10 +101,6 @@ class NoticeViewModel: ObservableObject {
                             !(self?.notices.contains(where: { $0.id == notice.id }) ?? false)
                         }
                         
-                        // Selecting Cloud notices with unique ID by Set
-//                        let localIDs = Set(localNotices.map(\.id))
-//                        let newNotices = cloudNoticesWithNewerDates.filter { !localIDs.contains($0.id) }
-
                         print("🍉 NVN(importNoticesFromCloud): Cloud notices with unique ID  \(newLoadedNotices.count)")
                         
                         if !newLoadedNotices.isEmpty {

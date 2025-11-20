@@ -56,7 +56,7 @@ struct SearchBarView: View {
         .padding(.horizontal, 8)
         .padding(.bottom, 8)
         .background(.ultraThinMaterial)
-        .animation(.easeInOut(duration: 0.3), value: isFocusedOnSearchBar)
+        .animation(.easeInOut, value: isFocusedOnSearchBar)
     }
 }
 

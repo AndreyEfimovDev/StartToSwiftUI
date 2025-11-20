@@ -15,7 +15,6 @@ struct HomeView: View {
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
 
-    
     private let hapticManager = HapticService.shared
 
     @State private var selectedPostId: String?
@@ -48,19 +47,6 @@ struct HomeView: View {
                             
                             mainViewBody
                             
-//                            TextField("", text: $dummyText)
-//                                .frame(width: 0, height: 0)
-//                                .opacity(0)
-//                                .onAppear {
-//                                    // Активируем и сразу деактивируем
-//                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-//                                        UIApplication.shared.sendAction(#selector(UIResponder.becomeFirstResponder), to: nil, from: nil, for: nil)
-//                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-//                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-//                                        }
-//                                    }
-//                                }
-                            
                             if showOnTopButton {
                                 CircleStrokeButtonView(
                                     iconName: "control", // control arrow.up
@@ -79,7 +65,6 @@ struct HomeView: View {
                     } // ZStack
                 } // ScrollViewReader
                 .navigationTitle(vm.homeTitleName)
-//                .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
                 .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
                 .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
@@ -125,10 +110,10 @@ struct HomeView: View {
                 welcomeAtFirstLauch
             }
             // Updates available notification
-            if vm.isPostsUpdateAvailable && noticevm.isNotification {
-                updateAvailableDialog
-            }
-            // Deletion confirmation dialog
+//            if vm.isPostsUpdateAvailable && noticevm.isNotification {
+//                updateAvailableDialog
+//            }
+            // Зщые вeletion confirmation dialog
             if isShowingDeleteConfirmation {
                 deletionConfirmationDialog
             }
@@ -288,34 +273,34 @@ struct HomeView: View {
         } // ZStack
     }
     
-    private var updateAvailableDialog: some View {
-        ZStack {
-            Color.mycolor.myAccent.opacity(0.4)
-                .ignoresSafeArea()
-            
-            VStack(spacing: 20) {
-                Text("Posts update is available")
-                    .textCase(.uppercase)
-                    .font(.headline)
-                    .bold()
-                    .foregroundColor(Color.mycolor.myAccent)
-                
-                Text("You can go to Preferences for updates.")
-                    .font(.subheadline)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(Color.mycolor.mySecondaryText)
-                ClearCupsuleButton(
-                    primaryTitle: "OK, got it",
-                    primaryTitleColor: Color.mycolor.myBlue) {
-                        vm.isPostsUpdateAvailable = false
-                    }
-            }
-            .padding()
-            .background(.regularMaterial)
-            .cornerRadius(30)
-            .padding(.horizontal, 40)
-        }
-    }
+//    private var updateAvailableDialog: some View {
+//        ZStack {
+//            Color.mycolor.myAccent.opacity(0.4)
+//                .ignoresSafeArea()
+//            
+//            VStack(spacing: 20) {
+//                Text("Posts update is available")
+//                    .textCase(.uppercase)
+//                    .font(.headline)
+//                    .bold()
+//                    .foregroundColor(Color.mycolor.myAccent)
+//                
+//                Text("You can go to Preferences for updates.")
+//                    .font(.subheadline)
+//                    .multilineTextAlignment(.center)
+//                    .foregroundColor(Color.mycolor.mySecondaryText)
+//                ClearCupsuleButton(
+//                    primaryTitle: "OK, got it",
+//                    primaryTitleColor: Color.mycolor.myBlue) {
+//                        vm.isPostsUpdateAvailable = false
+//                    }
+//            }
+//            .padding()
+//            .background(.regularMaterial)
+//            .cornerRadius(30)
+//            .padding(.horizontal, 40)
+//        }
+//    }
     
     private var deletionConfirmationDialog: some View {
         ZStack {
