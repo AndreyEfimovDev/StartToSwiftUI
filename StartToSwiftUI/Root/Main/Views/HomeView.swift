@@ -33,6 +33,8 @@ struct HomeView: View {
     
     @State private var isShowingDeleteConfirmation: Bool = false
     
+    @State private var dummyText = ""
+    
     // MARK: VIEW BODY
     
     var body: some View {
@@ -45,6 +47,19 @@ struct HomeView: View {
                         } else {
                             
                             mainViewBody
+                            
+//                            TextField("", text: $dummyText)
+//                                .frame(width: 0, height: 0)
+//                                .opacity(0)
+//                                .onAppear {
+//                                    // Активируем и сразу деактивируем
+//                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//                                        UIApplication.shared.sendAction(#selector(UIResponder.becomeFirstResponder), to: nil, from: nil, for: nil)
+//                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+//                                        }
+//                                    }
+//                                }
                             
                             if showOnTopButton {
                                 CircleStrokeButtonView(

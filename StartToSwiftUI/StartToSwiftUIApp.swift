@@ -11,18 +11,32 @@ import SwiftUI
 @main
 struct StartToSwiftUIApp: App {
     
-
+    
     @StateObject private var vm = PostsViewModel()
     @StateObject private var noticevm = NoticeViewModel()
     private let hapticManager = HapticService.shared
-
+    
     @State private var showLaunchView: Bool = true
     
-    init() { // to set a custom colour for the magnifying class in the search bar
+    init() {
+        
+        // Set a custom colour for the magnifying class in the search bar
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor : UIColor(Color.mycolor.myAccent)]
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor(Color.mycolor.myAccent)]
         UINavigationBar.appearance().tintColor = UIColor(Color.mycolor.myAccent)
         UITableView.appearance().backgroundColor = UIColor.clear
+        
+        // Warm a keyboard at first start
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let window = scene.windows.first else { return }
+            let textField = UITextField()
+            window.addSubview(textField)
+            textField.becomeFirstResponder()
+            textField.resignFirstResponder()
+            textField.removeFromSuperview()
+        }
+        
     }
     
     var body: some Scene {
@@ -45,7 +59,7 @@ struct StartToSwiftUIApp: App {
             .environmentObject(vm)
             .environmentObject(noticevm)
             .preferredColorScheme(vm.selectedTheme.colorScheme)
-
+            
         }
     }
 }
