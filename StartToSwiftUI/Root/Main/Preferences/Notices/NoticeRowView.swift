@@ -21,20 +21,20 @@ struct NoticeRowView: View {
 //                        
             VStack (alignment: .leading) {
                 Text("\(notice.noticeDate.formatted(date: .numeric, time: .omitted))")
-                    .font(.caption)
+                    .font(.caption2)
                 
                 Text(notice.title)
                     .font(.body)
-                    .lineLimit(2)
-                    .padding(.top, 8)
+                    .lineLimit(2, reservesSpace: true)
+                    .padding(.vertical)
             }
             .foregroundStyle(Color.mycolor.myAccent)
             .fontWeight(notice.isRead ? .regular : .bold)
             .padding(.leading, 8)
-            .frame(height: 80)
+//            .frame(height: 80)
             .frame(maxWidth: .infinity, alignment: .leading)
             .opacity(notice.isRead ? 0.5 : 1)
-//            .padding(.vertical, 8)
+            .padding(.vertical, 8)
         }
         .background(Color.mycolor.mySectionBackground)
     }

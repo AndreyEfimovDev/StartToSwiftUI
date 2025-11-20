@@ -44,12 +44,11 @@ struct NoticeDetailsView: View {
                     VStack (alignment: .leading){
                         Text(validNotice.noticeDate.formatted(date: .numeric, time: .omitted))
                             .font(.caption)
-                            .padding()
+//                            .padding()
                         
                         Text(validNotice.title)
                             .font(.headline)
                             .padding()
-                        
                             .frame(maxWidth: .infinity,  alignment: .leading)
                             .background(
                                 .thinMaterial,
@@ -78,8 +77,9 @@ struct NoticeDetailsView: View {
                 }
             }
         }
-        .navigationTitle("Notification")
+        .navigationTitle("Notice message")
         .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             toolbarForNoticeDetails()

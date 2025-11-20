@@ -110,7 +110,7 @@ struct DevData {
     
     static let sampleNotice1 = Notice(
         id: "001",
-        title: "Update for the curated posts in available",
+        title: "Update is available",
         noticeDate: .now,
         noticeMessage: "New Update includes the following:",
         isRead: true
