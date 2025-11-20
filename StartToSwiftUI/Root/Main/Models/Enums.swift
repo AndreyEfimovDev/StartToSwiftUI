@@ -99,7 +99,7 @@ enum PostOrigin: String, CaseIterable, Codable {
         switch self {
         case .local: return Image(systemName: "")
         case .cloud: return Image(systemName: "cloud")
-        case .statical: return Image(systemName: "square.grid.2x2") // line.3.horizontal square.grid.2x2 s.circle arrow.2.squarepath
+        case .statical: return Image(systemName: "arrow.2.squarepath") // line.3.horizontal square.grid.2x2 s.circle arrow.2.squarepath
         }
     }
 }
