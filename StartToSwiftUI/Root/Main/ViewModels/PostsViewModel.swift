@@ -110,7 +110,7 @@ class PostsViewModel: ObservableObject {
                                 self?.isPostsUpdateAvailable = true
                                 print(self?.isPostsUpdateAvailable.description ?? "")
                             }
-                            print("🍓 ☑️  VM(init): Afer check for posts update - NO UPDATES")
+                            print("🍓☑️ VM(init): Afer check for posts update - NO UPDATES")
                         }
                     case .failure(let error):
                         self?.errorMessage = error.localizedDescription

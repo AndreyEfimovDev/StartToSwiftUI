@@ -102,7 +102,9 @@ struct AddEditPostSheet: View {
             .background(Color.mycolor.myBackground)
             .scrollIndicators(.hidden)
             .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-            .toolbar { toolbarForAddEditView() }
+            .toolbar {
+                toolbarForAddEditView()
+            }
             .overlay(
                 hideKeybordButton
             )

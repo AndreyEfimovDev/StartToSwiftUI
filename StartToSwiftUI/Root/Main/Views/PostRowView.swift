@@ -74,12 +74,20 @@ struct PostRowView: View {
                     .font(.caption2)
                     .foregroundStyle(Color.mycolor.mySecondaryText)
             }
-            if post.origin == .cloud {
-                Image(systemName: "cloud")
-                    .font(.caption2)
-                    .foregroundStyle(Color.mycolor.mySecondaryText)
-            }
             
+            Group {
+                switch post.origin {
+                case .cloud:
+                    post.origin.icon
+                case .statical:
+                    post.origin.icon
+                case .local:
+                    EmptyView()
+                }
+            }
+            .font(.caption2)
+            .foregroundStyle(Color.mycolor.mySecondaryText)
+                        
             Image(systemName: post.favoriteChoice == .yes ? "heart.fill" : "heart")
                 .font(.caption2)
                 .foregroundStyle(post.favoriteChoice == .yes ? Color.mycolor.myYellow : Color.mycolor.mySecondaryText)
