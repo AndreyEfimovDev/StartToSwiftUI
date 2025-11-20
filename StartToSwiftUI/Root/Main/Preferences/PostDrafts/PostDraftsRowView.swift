@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PostDraftsRowView: View {
-    
+        
     let post: Post
     
     // MARK: MAIN BODY
@@ -53,9 +53,7 @@ struct PostDraftsRowView: View {
 }
 
 fileprivate struct PostDraftsRowPreView: View {
-    
-//    @Environment(\.colorScheme) var colorScheme
-    
+        
     var body: some View {
         ZStack {
             Color.pink.opacity(0.1)
@@ -73,5 +71,4 @@ fileprivate struct PostDraftsRowPreView: View {
 
 #Preview {
     PostDraftsRowPreView()
-        .environmentObject(PostsViewModel())
 }

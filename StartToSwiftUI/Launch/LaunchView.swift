@@ -13,7 +13,6 @@ struct LaunchView: View {
     
     @State private var showLoadingProgress: Bool = false
     @State private var counter: Int = 0
-//    @State private var loops: Int = 0
     @State private var loadingString: [String] = "............. loading .............".map { String($0) }
     
     private let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()

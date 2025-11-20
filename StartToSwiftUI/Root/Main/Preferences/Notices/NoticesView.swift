@@ -10,9 +10,9 @@ import SwiftUI
 struct NoticesView: View {
     
     @Environment(\.dismiss) private var dismiss
-    
-    private let hapticManager = HapticService.shared
     @EnvironmentObject private var noticevm: NoticeViewModel
+
+    private let hapticManager = HapticService.shared
     
     @State private var selectedNoticeID: String?
     @State private var showNoticeDetails: Bool = false
@@ -79,6 +79,10 @@ struct NoticesView: View {
                 }
             }
         }
+        .onAppear {
+            // User is informed of new notices
+            noticevm.isNewNotices = false
+        }
         
     }
     
@@ -96,8 +100,7 @@ struct NoticesView: View {
 #Preview {
     NavigationStack {
         NoticesView()
+            .environmentObject(NoticeViewModel())
     }
-    .environmentObject(NoticeViewModel())
-    
 }
 

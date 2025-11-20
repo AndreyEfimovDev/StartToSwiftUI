@@ -576,19 +576,14 @@ struct AddEditPostSheet: View {
             } else {
                 switch isNewPost {
                 case true:
-    //                print("Added a new post: \(editedPost.title)")
-    //                print("\(isNewPost.description)")
                     vm.addPost(editedPost)
                 case false:
-    //                print("Updated edited post : \(editedPost.title)")
-    //                print("\(isNewPost.description)")
                     vm.updatePost(editedPost)
                 }
                 alertType = .success
                 showAlert.toggle()
             }
         }
-    
     
     private func isTexLengthAppropriate(text: String, limit: Int) -> Bool {
         return text.count >= limit
@@ -637,11 +632,9 @@ struct AddEditPostSheet: View {
         }
     }
     
-
 }
 
 #Preview {
-    
     NavigationStack {
         AddEditPostSheet(post: DevData.samplePost1)
             .environmentObject(PostsViewModel())
@@ -650,7 +643,6 @@ struct AddEditPostSheet: View {
 
 #Preview {
     NavigationStack {
-        
         AddEditPostSheet(post: nil)
             .environmentObject(PostsViewModel())
     }

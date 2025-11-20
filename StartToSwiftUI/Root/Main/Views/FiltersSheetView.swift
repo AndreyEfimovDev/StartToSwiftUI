@@ -248,7 +248,6 @@ fileprivate struct FiltersSheetPreview: View {
         FiltersSheetView(
             isFilterButtonPressed: .constant(true)
         )
-//        .myBackground(colorScheme: .dark)
         .environmentObject(PostsViewModel())
     }
 }

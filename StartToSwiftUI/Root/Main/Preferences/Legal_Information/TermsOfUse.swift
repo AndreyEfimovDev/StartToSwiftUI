@@ -222,6 +222,6 @@ struct TermsOfUse: View {
 #Preview {
     NavigationStack {
         TermsOfUse() {}
-            .environmentObject(PostsViewModel())
     }
+    .environmentObject(PostsViewModel())
 }

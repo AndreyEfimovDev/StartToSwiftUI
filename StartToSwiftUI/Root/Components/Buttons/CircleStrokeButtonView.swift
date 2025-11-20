@@ -55,8 +55,6 @@ struct CircleStrokeButtonView: View {
                 .font(iconFont)
                 .foregroundStyle(isIconColorToChange ? imageColorSecondary : imageColorPrimary)
                 .frame(width: widthIn, height: widthIn)
-//                .border(.yellow)
-//                .padding(8)
                 .background(.black.opacity(0.001))
                 .overlay(
                     Circle()
@@ -64,9 +62,6 @@ struct CircleStrokeButtonView: View {
                         .stroke(imageColorPrimary, lineWidth: 1)
                         .opacity(isShownCircle ? 1 : 0)
                 )
-//                .border(.blue)
-//                .border(.green)
-
         }
     }
 }
@@ -102,7 +97,6 @@ struct CircleStrokeButtonView: View {
         .navigationTitle("Header")
         .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-//                    .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 CircleStrokeButtonView(

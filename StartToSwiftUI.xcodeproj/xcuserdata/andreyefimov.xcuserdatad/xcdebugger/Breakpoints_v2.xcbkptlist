@@ -18,36 +18,6 @@
             endingLineNumber = "13"
             landmarkName = "DevData"
             landmarkType = "14">
-            <Locations>
-               <Location
-                  uuid = "A3D25D1E-04C4-4652-A2ED-C5FD6FE9F636 - 19b510499cd5af46"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "one-time initialization function for staticPosts"
-                  moduleName = "StartToSwiftUI.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/andreyefimov/Library/CloudStorage/Dropbox/_EF108/_SwiftUI/__EF_APPs/StartToSwiftUI/StartToSwiftUI/Root/Main/Models/Support/DevData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "14"
-                  endingLineNumber = "14">
-               </Location>
-               <Location
-                  uuid = "A3D25D1E-04C4-4652-A2ED-C5FD6FE9F636 - d6b8810d18ae3ac7"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "StartToSwiftUI.StaticPost.staticPosts.unsafeMutableAddressor : Swift.Array&lt;StartToSwiftUI.Post&gt;"
-                  moduleName = "StartToSwiftUI.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/andreyefimov/Library/CloudStorage/Dropbox/_EF108/_SwiftUI/__EF_APPs/StartToSwiftUI/StartToSwiftUI/Root/Main/Models/Support/DevData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "14"
-                  endingLineNumber = "14">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

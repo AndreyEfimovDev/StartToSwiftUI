@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CheckForPostsUpdateView: View {
+    
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     

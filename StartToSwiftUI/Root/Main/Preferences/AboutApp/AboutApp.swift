@@ -62,7 +62,7 @@ struct AboutApp: View {
                         iconWidth: iconWidth
                     )
                     NavigationLink("What's New") { //  list.bullet list.bullet.circle square.fill.text.grid.1x2
-                        WhatsNew()
+                        WhatsNewView()
                     }
                     .customListRowStyle(
                         iconName: "newspaper",
@@ -94,5 +94,4 @@ struct AboutApp: View {
     NavigationStack{
         AboutApp()
     }
-    .environmentObject(PostsViewModel())
 }

@@ -23,12 +23,10 @@ struct LinkButtonURL: View {
                     .frame(height: 55)
                     .frame(maxWidth: .infinity)
                     .background(Color.mycolor.myRed)
-//                    .clipShape(Capsule())
                     .background(
                         Color.mycolor.myRed,
                         in: .capsule
                     )
-//                    .padding(.horizontal, 40)
             }
         }
     }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct WhatsNew: View {
+struct WhatsNewView: View {
     
     @Environment(\.dismiss) private var dismiss
 
@@ -59,6 +59,6 @@ struct WhatsNew: View {
 
 #Preview {
     NavigationStack {
-        WhatsNew()
+        WhatsNewView()
     }
 }
