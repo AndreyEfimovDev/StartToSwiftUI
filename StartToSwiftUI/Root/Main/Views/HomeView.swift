@@ -148,7 +148,7 @@ struct HomeView: View {
                                 selectedPost = post
                             }
                             .tint(Color.mycolor.myButtonBGBlue)
-                            .disabled(post.origin == .cloud)
+                            .disabled(post.origin == .cloud || post.origin == .statical)
                         } // right side swipe action buttonss
                         .swipeActions(edge: .leading, allowsFullSwipe: false) {
                             Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: post.favoriteChoice == .yes ?  "heart.slash.fill" : "heart.fill") {
