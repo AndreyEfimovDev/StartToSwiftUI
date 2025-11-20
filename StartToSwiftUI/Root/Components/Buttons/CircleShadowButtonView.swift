@@ -57,7 +57,7 @@ struct CircleShadowButtonView: View {
                 .foregroundStyle(isIconColorToChange ? imageColorSecondary : imageColorPrimary)
                 .imageScale(.large) // .small .medium .large
                 .frame(width: widthIn, height: heightIn)
-                .background(.ultraThickMaterial)
+                .background(.ultraThinMaterial)
                 .clipShape(Circle())
                 .shadow(
                     color: shadowColor.opacity(0.15),

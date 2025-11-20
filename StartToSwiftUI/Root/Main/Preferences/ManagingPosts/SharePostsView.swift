@@ -12,7 +12,6 @@ struct SharePostsView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
 
-    private let fileManager = FileStorageService.shared
     private let hapticManager = HapticService.shared
     
     @State private var showActivityView = false
@@ -27,8 +26,8 @@ struct SharePostsView: View {
                 .managingPostsTextFormater()
             
             CapsuleButtonView(
-                primaryTitle: "Share/Store posts",
-                secondaryTitle: "Posts Shared/Stored",
+                primaryTitle: "Perform",
+                secondaryTitle: "Completed",
                 isToChange: isShareCompleted
             ) {
                 isInProgress = true
@@ -37,7 +36,8 @@ struct SharePostsView: View {
             }
             .disabled(isShareCompleted)
             .padding(.top, 30)
-                        
+            .padding(.horizontal, 50)
+
             Spacer()
             
             if isInProgress {
@@ -46,7 +46,6 @@ struct SharePostsView: View {
         }
         .padding(.horizontal, 30)
         .padding(.top, 30)
-        .padding(30)
         .sheet(isPresented: $showActivityView) {
             if let url = shareURL {
                 handleDocumentSharing(fileURL: url)
@@ -57,13 +56,25 @@ struct SharePostsView: View {
         } message: {
             Text(vm.errorMessage ?? "Unknown error")
         }
+        .navigationTitle("Share/Store posts")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                    dismiss()
+                }
+            }
+        }
     }
     
     private func prepareDocumentSharing() {
-        let fileURL = fileManager.getFileURL(fileName: Constants.localFileName)
-        switch fileURL {
-        case .success(let url):
-            shareURL = url
+        
+        let pathResult = vm.getFilePath(fileName: Constants.localPostsFileName)
+        switch pathResult {
+        case .success(let path):
+            shareURL = path
             showActivityView = true
         case .failure(let error):
             vm.errorMessage = error.localizedDescription
@@ -111,7 +122,10 @@ struct SharePostsView: View {
 }
 
 #Preview {
-    SharePostsView()
-        .environmentObject(PostsViewModel())
+    NavigationStack{
+        
+        SharePostsView()
+            .environmentObject(PostsViewModel())
+    }
 }
 

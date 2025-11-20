@@ -22,8 +22,6 @@ struct PostDraftsRowView: View {
             .foregroundStyle(Color.mycolor.myAccent)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-//        .padding(8)
-//        .padding(.horizontal, 8)
         .background(Color.mycolor.mySectionBackground)
     }
         
@@ -35,7 +33,6 @@ struct PostDraftsRowView: View {
             .fontWeight(.bold)
             .minimumScaleFactor(0.75)
             .lineLimit(1)
-//            .padding(.top, 8)
     }
     
     private var author: some View {
@@ -57,17 +54,17 @@ struct PostDraftsRowView: View {
 
 fileprivate struct PostDraftsRowPreView: View {
     
-    @Environment(\.colorScheme) var colorScheme
+//    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         ZStack {
             Color.pink.opacity(0.1)
                 .ignoresSafeArea()
 
-            VStack {
-                PostDraftsRowView(post: DevPreview.samplePost1)
-                PostDraftsRowView(post: DevPreview.samplePost2)
-                PostDraftsRowView(post: DevPreview.samplePost3)
+            List {
+                PostDraftsRowView(post: DevData.samplePost1)
+                PostDraftsRowView(post: DevData.samplePost2)
+                PostDraftsRowView(post: DevData.samplePost3)
             }
             .padding()
         }
@@ -76,4 +73,5 @@ fileprivate struct PostDraftsRowPreView: View {
 
 #Preview {
     PostDraftsRowPreView()
+        .environmentObject(PostsViewModel())
 }

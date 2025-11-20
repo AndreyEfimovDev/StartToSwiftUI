@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct CopyrightPolicy: View {
+    
+    @Environment(\.dismiss) private var dismiss
+
     var body: some View {
         ScrollView {
             //                     COPYRIGHT/DMCA POLICY
@@ -44,6 +47,15 @@ struct CopyrightPolicy: View {
             .padding(.horizontal)
         }
         .navigationTitle("Copyright/DMCA Policy")
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                    dismiss()
+                }
+            }
+        }
     }
 }
 

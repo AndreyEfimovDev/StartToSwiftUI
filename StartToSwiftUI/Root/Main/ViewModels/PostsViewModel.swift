@@ -13,36 +13,17 @@ class PostsViewModel: ObservableObject {
     
     // MARK: PROPERTIES
     
-    private let fileManager = FileStorageService.shared
+    private let fileManager = JSONFileManager.shared
     private let hapticManager = HapticService.shared
-    private let networkService = NetworkService()
+    private let networkService: NetworkService
     
     @Published var allPosts: [Post] = [] {
         didSet {
-            fileManager.savePosts(
-                allPosts,
-                fileName: Constants.localFileName
-            ) { [weak self] result in
-                
-                self?.errorMessage = nil
-                self?.showErrorMessageAlert = false
-
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success:
-                        print("✅ VM(allPosts - didSet): Posts saved successfully")
-                    case .failure(let error):
-                        self?.errorMessage = error.localizedDescription
-                        self?.showErrorMessageAlert = true
-                        self?.hapticManager.notification(type: .error)
-                        print("❌ Failed to save posts: \(error)")
-                    }
-                }
-            }
             allYears = getAllYears()
             allCategories = getAllCategories()
         }
     }
+    
     @Published var filteredPosts: [Post] = []
     @Published var searchText: String = ""
     @Published var isFiltersEmpty: Bool = true
@@ -51,12 +32,20 @@ class PostsViewModel: ObservableObject {
     // MARK: Stored preferances
     
     @AppStorage("homeTitleName") var homeTitleName: String = "SwiftUI materials"
-    //    @AppStorage("isFirstAppLaunch") var isFirstAppLaunch: Bool = true
-    @AppStorage("isFirstPostsLoad") var isFirstImportPostsCompleted: Bool = false {
-        didSet { localLastUpdated = getLatestDateFromPosts(posts: allPosts) ?? .now }
-    }
+    @AppStorage("selectedTheme") var selectedTheme: Theme = .system
     @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
-    @AppStorage("isNotification") var isNotification: Bool = false
+
+    
+//    @AppStorage("isFirstTimeAppLaunch") var isFirstTimeAppLaunch: Bool = true
+    @AppStorage("isFirstImportPostsCompleted") var isFirstImportPostsCompleted: Bool = false {
+        didSet {
+            localLastUpdated = getLatestDateFromPosts(posts: allPosts) ?? .now
+        }
+    }
+    
+    // stored the date of the Cloud posts last imported (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date.distantPast)
+    @AppStorage("localLastUpdated") var localLastUpdated: Date = Date.distantPast
+
     
     // stored filters
     @AppStorage("storedCategory") var storedCategory: String?
@@ -65,10 +54,6 @@ class PostsViewModel: ObservableObject {
     @AppStorage("storedType") var storedType: PostType?
     @AppStorage("storedPlatform") var storedPlatform: Platform?
     @AppStorage("storedYear") var storedYear: String?
-
-    // stored the date of the Cloud posts last imported
-    let beginningDate: Date = (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date())
-    @AppStorage("localLastUpdated") var localLastUpdated: Date = (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date())
     
     // setting filters
     @Published var selectedLevel: StudyLevel? = nil {
@@ -94,56 +79,53 @@ class PostsViewModel: ObservableObject {
     private var utcCalendar = Calendar.current
     var allYears: [String]? = nil
     var allCategories: [String]? = nil
-    var dispatchTime: DispatchTime { .now() + 2 }
+    var dispatchTime: DispatchTime { .now() + 0.5 }
     
     // MARK: INIT() SECTION
     
-    init() {
+    init(
+        networkService: NetworkService = NetworkService(baseURL: Constants.cloudPostsURL)
+    ) {
+        self.networkService = networkService
         
-        print("VM(init): Last update date: \(localLastUpdated.formatted(date: .abbreviated, time: .shortened))")
+        //        print("🍓VM(init): Last update date: \(localLastUpdated.formatted(date: .abbreviated, time: .shortened))")
         
-        // checking if the local JSON file with posts exists
-        if fileManager.checkIfFileExists(fileName: Constants.localFileName) {
-            fileManager.loadPosts(
-                fileName: Constants.localFileName
-            ) { [weak self] (result: Result<[Post], FileStorageError>) in
+        // Load local JSON file with notices and then 
+        if fileManager.checkIfFileExists(fileName: Constants.localPostsFileName) {
+            fileManager.loadData(fileName: Constants.localPostsFileName) { [weak self] (result: Result<[Post], FileStorageError>) in
                 
                 self?.errorMessage = nil
                 self?.showErrorMessageAlert = false
-
+                
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let posts):
                         self?.allPosts = posts
+                        print("🍓 VM(init): Successfully loaded \(posts.count) posts")
+                        
+                        print("🍓🍓🍓 VM(init): Check for posts update")
+
+                        self?.checkCloudForUpdates { hasUpdates in
+                            if hasUpdates {
+                                self?.isPostsUpdateAvailable = true
+                                print(self?.isPostsUpdateAvailable.description ?? "")
+                            }
+                            print("🍓 ☑️  VM(init): Afer check for posts update - NO UPDATES")
+                        }
                     case .failure(let error):
                         self?.errorMessage = error.localizedDescription
                         self?.showErrorMessageAlert = true
-                        print("VM(init): Failed to load posts: \(error)")
+                        print("🍓 ☑️ VM(init): Failed to load posts: \(error)")
                     }
                 }
+                
             }
-                    
-            if !self.allPosts.isEmpty {
-                checkCloudForUpdates { hasUpdates in
-                    if hasUpdates {
-                        self.isPostsUpdateAvailable = true
-                        print(self.isPostsUpdateAvailable.description)
-                    }
-                }
-            }
-            
-            self.filteredPosts = self.allPosts
+        } else {
+            print("🍓 ☑️ VM(init): File \(Constants.localPostsFileName) does not exist")
+            allPosts = StaticPost.staticPosts
+            savePosts()
+            print("🍓 VM(init): Loaded static posts")
         }
-        
-        
-        //        print("VM(init): начало теста testDetailedDecoding()")
-        //        testDetailedDecoding()
-        //        print("VM(init): конец теста testDetailedDecoding()")
-        //
-        //        print("VM(init): начало теста validateJSONFile()")
-        //        validateJSONFile()
-        //        print("VM(init): конец теста validateJSONFile()")
-        
         
         // filters initilazation
         self.selectedCategory = self.storedCategory
@@ -155,105 +137,13 @@ class PostsViewModel: ObservableObject {
         
         if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
             utcCalendar.timeZone = utcTimeZone
-            print("✅ VM(init): TimeZone is set successfully")
         } else {
-            print("❌ VM(init): TimeZone is not set")
+            print("🍓❌ VM(init): TimeZone is not set")
         }
         
         // initiating subscriptions
         addSubscribers()
         
-    }
-    
-    
-    func testDetailedDecoding() {
-        let testJSON = """
-        [
-          {
-            "postType" : "post",
-            "notes" : "",
-            "title" : "Styling SwiftUI Text Views",
-            "urlString" : "https://www.youtube.com/watch?v=rbtIcKKxQ38",
-            "category" : "SwiftUI",
-            "postPlatform" : "youtube",
-            "favoriteChoice" : "no",
-            "origin" : "cloud",
-            "postDate" : "2021-05-07T00:00:00Z",
-            "intro" : "Test intro",
-            "author" : "Stewart Lynch",
-            "studyLevel" : "middle",
-            "date" : "2025-11-08T13:45:07Z",
-            "id" : "F9E12A88-0E62-402D-B6AD-1A1F895F5421"
-          }
-        ]
-        """
-        
-        do {
-            let data = testJSON.data(using: .utf8)!
-            print("📦 JSON data length: \(data.count) bytes")
-            
-            // Try decode as generil type
-            let anyObject = try JSONSerialization.jsonObject(with: data, options: [])
-            print("✅ JSONSerialization success: \(anyObject)")
-            
-            // Try decode as generil type [Post]
-            let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
-            print("✅ Post decoding SUCCESS: \(posts.count) posts")
-            
-        } catch {
-            print("❌ FAILED: \(error)")
-            
-            // Detailed information about the decoding error
-            if let decodingError = error as? DecodingError {
-                switch decodingError {
-                case .typeMismatch(let type, let context):
-                    print("🔍 Type mismatch:")
-                    print("   - Expected type: \(type)")
-                    print("   - Coding path: \(context.codingPath)")
-                    print("   - Debug: \(context.debugDescription)")
-                case .valueNotFound(let type, let context):
-                    print("🔍 Value not found:")
-                    print("   - Type: \(type)")
-                    print("   - Coding path: \(context.codingPath)")
-                case .keyNotFound(let key, let context):
-                    print("🔍 Key not found:")
-                    print("   - Missing key: \(key)")
-                    print("   - Coding path: \(context.codingPath)")
-                    print("   - Available keys in container")
-                case .dataCorrupted(let context):
-                    print("🔍 Data corrupted:")
-                    print("   - Context: \(context)")
-                    if let underlyingError = context.underlyingError {
-                        print("   - Underlying error: \(underlyingError)")
-                    }
-                @unknown default:
-                    print("🔍 Unknown decoding error")
-                }
-            }
-        }
-    }
-    
-    
-    func validateJSONFile() {
-        
-        if let url = Bundle.main.url(forResource: "cloudPosts", withExtension: "json"),
-           let data = try? Data(contentsOf: url) {
-            
-            print("📁 File exists, size: \(data.count) bytes")
-            
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("📄 File content: \(jsonString.prefix(200))...")
-            }
-            
-            do {
-                let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
-                print("✅ Local file decoding SUCCESS: \(posts.count) posts")
-            } catch {
-                print("❌ Local file decoding FAILED: \(error)")
-            }
-        } else {
-            print("❌ JSON file not found")
-        }
     }
     
     // MARK: PRIVATE FUNCTIONS
@@ -300,7 +190,6 @@ class PostsViewModel: ObservableObject {
                     type: type,
                     year: year
                 )
-                
                 // Applying search text
                 return self.searchPosts(posts: filtered)
             }
@@ -335,7 +224,7 @@ class PostsViewModel: ObservableObject {
                 let matchesLevel = level == nil || post.studyLevel == level
                 let matchesFavorite = favorite == nil || post.favoriteChoice == favorite
                 let matchesType = type == nil || post.postType == type
-                let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date()))
+                let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date.distantPast))
                 let matchesYear = year == nil || postYear == year
                 
                 return matchesLevel && matchesFavorite && matchesType && matchesYear
@@ -365,16 +254,18 @@ class PostsViewModel: ObservableObject {
     // MARK: PUBLIC FUNCTIONS
     
     func addPost(_ newPost: Post) {
-        print("✅ VM(addPost): Adding a new post")
+        print("🍓 VM(addPost): Adding a new post")
         allPosts.append(newPost)
+        savePosts()
     }
     
     func updatePost(_ updatedPost: Post) {
         if let index = allPosts.firstIndex(where: { $0.id == updatedPost.id }) {
-            print("✅ VM(updatePost): Updating a current edited post")
+            print("🍓 VM(updatePost): Updating a current edited post")
             allPosts[index] = updatedPost
+            savePosts()
         } else {
-            print("❌ VM(updatePost): Can't find the index")
+            print("🍓❌ VM(updatePost): Can't find the index")
         }
     }
     
@@ -382,15 +273,16 @@ class PostsViewModel: ObservableObject {
         if let validPost = post {
             if let index = allPosts.firstIndex(of: validPost) {
                 allPosts.remove(at: index)
+                savePosts()
             }
         } else {
-            print("VM.deletePost: passed post is nil")
+            print("🍓VM.deletePost: passed post is nil")
         }
     }
     
     func eraseAllPosts(_ completion: @escaping () -> ()) {
-        //        filteredPosts = []
         allPosts = []
+        savePosts()
         completion()
     }
     
@@ -403,7 +295,28 @@ class PostsViewModel: ObservableObject {
             case .yes:
                 allPosts[index].favoriteChoice = .no
             }
-            //            fileManager.savePosts(allPosts)
+            savePosts()
+        }
+    }
+    
+    private func savePosts() {
+        
+        fileManager.saveData(allPosts, fileName: Constants.localPostsFileName) { [weak self] result in
+            
+            self?.errorMessage = nil
+            self?.showErrorMessageAlert = false
+            
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    print("🍓 VM(savePosts): Posts saved successfully")
+                case .failure(let error):
+                    self?.errorMessage = error.localizedDescription
+                    self?.showErrorMessageAlert = true
+                    self?.hapticManager.notification(type: .error)
+                    print("🍓❌ VM(savePosts): Failed to save posts: \(error)")
+                }
+            }
         }
     }
     
@@ -420,7 +333,7 @@ class PostsViewModel: ObservableObject {
     
     func loadPersistentPosts(_ completion: @escaping () -> ()) {
         
-        let receivedPosts: [Post] = DevPreview.postsForCloud
+        let receivedPosts: [Post] = DevData.postsForCloud
         
         // Skipping posts with the same title - make posts unique by title
         let newPosts = receivedPosts.filter { newPost in
@@ -432,6 +345,22 @@ class PostsViewModel: ObservableObject {
         }
         completion()
     }
+    
+    func getFilePath(fileName: String) -> Result<URL, FileStorageError> {
+        
+        print("🍓FM(getFilePath): Getting url.")
+        
+        let urlResult = fileManager.getFileURL(fileName: fileName)
+        
+        switch urlResult {
+        case .success(let url):
+            print("🍓FM(getFilePath): Successfully got file url: \(url).")
+            return .success(url)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
     
     /// Import posts from the Cloud using the specified URL string.
     ///
@@ -449,18 +378,17 @@ class PostsViewModel: ObservableObject {
     /// - Warning: This app is made for self study purpose only.
     /// - Returns: Returns a boolean result or error within completion handler.
     
-    func importPostsFromCloud(
-        urlString: String = Constants.cloudPostsURL,
-        completion: @escaping () -> Void
-    ) {
+    func importPostsFromCloud(urlString: String = Constants.cloudPostsURL, completion: @escaping () -> Void) {
+        
         self.errorMessage = nil
         self.showErrorMessageAlert = false
         
-        networkService.fetchPostsFromURL(from: urlString) { [weak self] (result: Result<[Post], Error>) in
+        networkService.fetchDataFromURL() { [weak self] (result: Result<[Post], Error>) in
             
             DispatchQueue.main.async {
                 switch result {
                 case .success(let cloudResponse):
+                    print("🍓 Successfully imported \(cloudResponse.count) posts from the cloud")
                     // Selecting Cloud posts with unique Titles only -  - do not append such posts from Cloud
                     let cloudPostsAfterCheckForUniqueTitle = cloudResponse.filter { postFromCloud in
                         !(self?.allPosts.contains(where: { $0.title == postFromCloud.title }) ?? false)
@@ -472,37 +400,32 @@ class PostsViewModel: ObservableObject {
                     if !cloudPostsAfterCheckForUniqueID.isEmpty {
                         // Updating App posts
                         self?.allPosts.append(contentsOf: cloudPostsAfterCheckForUniqueID)
+                        self?.savePosts()
                         self?.hapticManager.notification(type: .success)
                         self?.localLastUpdated = self?.getLatestDateFromPosts(posts: cloudPostsAfterCheckForUniqueID) ?? .now
-
-                        print("✅ Successfully imported \(cloudPostsAfterCheckForUniqueID.count) posts from the cloud")
+                        
+                        print("🍓 Successfully appended \(cloudPostsAfterCheckForUniqueID.count) posts from the cloud")
                     } else {
                         self?.hapticManager.impact(style: .light)
-                        print("☑️ No new posts from the cloud.")
-                        
+                        print("🍓☑️ No new posts from the cloud.")
                     }
-                    
                 case .failure(let error):
                     self?.errorMessage = error.localizedDescription
                     self?.showErrorMessageAlert = true
                     self?.hapticManager.notification(type: .error)
-                    print("❌ Cloud import error: \(error.localizedDescription)")
+                    print("🍓❌ Cloud import error: \(error.localizedDescription)")
                 }
                 completion()
             }
         }
     }
     
-//    @State private var errorMessage = ""
-    
-    func getPostsFromBackup(
-        url: URL,
-        completion: @escaping (Int) -> Void
-    ) {
+    func getPostsFromBackup(url: URL, completion: @escaping (Int) -> Void) {
+        
         self.errorMessage = nil
         self.showErrorMessageAlert = false
         var postsCount: Int = 0
-
+        
         do {
             let jsonData = try Data(contentsOf: url)
             let posts = try JSONDecoder.appDecoder.decode([Post].self, from: jsonData)
@@ -511,13 +434,13 @@ class PostsViewModel: ObservableObject {
             postsCount = postsCheckedForUnique.count
             self.allPosts.append(contentsOf: postsCheckedForUnique)
             self.hapticManager.notification(type: .success)
-            print("✅ Restore: Restored \(postsCount) posts from \(url.lastPathComponent)")
+            print("🍓 Restore: Restored \(postsCount) posts from \(url.lastPathComponent)")
             
         } catch {
             self.errorMessage = error.localizedDescription
             self.showErrorMessageAlert = true
             self.hapticManager.notification(type: .error)
-            print("Failed to load posts: \(error)")
+            print("🍓❌ Restore:Failed to load posts: \(error)")
         }
         
         completion(postsCount)
@@ -533,24 +456,9 @@ class PostsViewModel: ObservableObject {
         // Checking posts with the same ID to local posts - do not append such posts from BackUp
         let existingIdInLocalPosts = Set(allPosts.map { $0.id })
         let postsAfterCheckForUniqueID = postsAfterCheckForUniqueTitle.filter { !existingIdInLocalPosts.contains($0.id) }
-
-//            let postsAfterCheckForUniqueTitle = posts.filter { post in
-//                !vm.allPosts.contains(where: { $0.title == post.title })
-//            }
-//
-//            let postsAfterCheckForUniqueID = postsAfterCheckForUniqueTitle.filter { post in
-//                !vm.allPosts.contains(where: { $0.id == post.id })
-//            }
+        
         return postsAfterCheckForUniqueID
     }
-    
-//    private func showError(_ message: String) {
-//        errorMessage = message
-//        showErrorMessageAlert = true
-//        hapticManager.notification(type: .error)
-//    }
-    
-    
     
     /// Checking for available posts update in the Cloud.
     ///
@@ -564,9 +472,7 @@ class PostsViewModel: ObservableObject {
     /// - Returns: Returns a boolean result or error within completion handler.
     
     func checkCloudForUpdates(completion: @escaping (Bool) -> Void) {
-        networkService.fetchPostsFromURL(
-            from: Constants.cloudPostsURL
-        ) { (result: Result<[Post], Error>) in
+        networkService.fetchDataFromURL() { (result: Result<[Post], Error>) in
             self.errorMessage = nil
             self.showErrorMessageAlert = false
             
@@ -582,10 +488,10 @@ class PostsViewModel: ObservableObject {
                     hasUpdates = theLatestDateInLocalPosts < theLatestDateInCloudPosts
                 }
                 if hasUpdates {
-                    print("✅ checkCloudForUpdates: Posts update is available")
-
+                    print("🍓 checkCloudForUpdates: Posts update is available")
+                    
                 } else {
-                    print("☑️ checkCloudForUpdates: No Updates available")
+                    print("🍓☑️ checkCloudForUpdates: No Updates available")
                 }
                 DispatchQueue.main.async {
                     completion(hasUpdates)
@@ -596,7 +502,7 @@ class PostsViewModel: ObservableObject {
                 self.hapticManager.notification(type: .error)
                 
                 DispatchQueue.main.async {
-                    print("❌ checkCloudForUpdates: Error \(error.localizedDescription)")
+                    print("🍓❌ checkCloudForUpdates: Error \(error.localizedDescription)")
                     completion(false)
                 }
             }
@@ -608,7 +514,7 @@ class PostsViewModel: ObservableObject {
         guard !posts.isEmpty else { return nil }
         
         return posts.max(by: { $0.date < $1.date })?.date
-
+        
     }
     
     /// Checking if a title of a new/editing post is not in the array of existing posts.
@@ -682,7 +588,7 @@ class PostsViewModel: ObservableObject {
         })
         
         let result = Array(Set(list)).sorted(by: {$0 < $1})
-        print("✅ VM: Final years list: \(result)")
+        print("🍓 VM(getAllYears): Final years list: \(result)")
         return result
     }
     
@@ -694,3 +600,107 @@ class PostsViewModel: ObservableObject {
     }
     
 }
+
+
+
+//        print("VM(init): start the TEST testDetailedDecoding()")
+//        testDetailedDecoding()
+//        print("VM(init): end the TEST testDetailedDecoding()")
+//
+//        print("VM(init): start the TEST validateJSONFile()")
+//        validateJSONFile()
+//        print("VM(init): end the TEST validateJSONFile()")
+
+
+
+
+//    func testDetailedDecoding() {
+//        let testJSON = """
+//        [
+//          {
+//            "postType" : "post",
+//            "notes" : "",
+//            "title" : "Styling SwiftUI Text Views",
+//            "urlString" : "https://www.youtube.com/watch?v=rbtIcKKxQ38",
+//            "category" : "SwiftUI",
+//            "postPlatform" : "youtube",
+//            "favoriteChoice" : "no",
+//            "origin" : "cloud",
+//            "postDate" : "2021-05-07T00:00:00Z",
+//            "intro" : "Test intro",
+//            "author" : "Stewart Lynch",
+//            "studyLevel" : "middle",
+//            "date" : "2025-11-08T13:45:07Z",
+//            "id" : "F9E12A88-0E62-402D-B6AD-1A1F895F5421"
+//          }
+//        ]
+//        """
+//
+//        do {
+//            let data = testJSON.data(using: .utf8)!
+//            print("🍓 JSON data length: \(data.count) bytes")
+//
+//            // Try decode as generil type
+//            let anyObject = try JSONSerialization.jsonObject(with: data, options: [])
+//            print("✅ JSONSerialization success: \(anyObject)")
+//
+//            // Try decode as generil type [Post]
+//            let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
+//            print("✅ Post decoding SUCCESS: \(posts.count) posts")
+//
+//        } catch {
+//            print("❌ FAILED: \(error)")
+//
+//            // Detailed information about the decoding error
+//            if let decodingError = error as? DecodingError {
+//                switch decodingError {
+//                case .typeMismatch(let type, let context):
+//                    print("🔍 Type mismatch:")
+//                    print("   - Expected type: \(type)")
+//                    print("   - Coding path: \(context.codingPath)")
+//                    print("   - Debug: \(context.debugDescription)")
+//                case .valueNotFound(let type, let context):
+//                    print("🔍 Value not found:")
+//                    print("   - Type: \(type)")
+//                    print("   - Coding path: \(context.codingPath)")
+//                case .keyNotFound(let key, let context):
+//                    print("🔍 Key not found:")
+//                    print("   - Missing key: \(key)")
+//                    print("   - Coding path: \(context.codingPath)")
+//                    print("   - Available keys in container")
+//                case .dataCorrupted(let context):
+//                    print("🔍 Data corrupted:")
+//                    print("   - Context: \(context)")
+//                    if let underlyingError = context.underlyingError {
+//                        print("   - Underlying error: \(underlyingError)")
+//                    }
+//                @unknown default:
+//                    print("🔍 Unknown decoding error")
+//                }
+//            }
+//        }
+//    }
+//
+//
+//    func validateJSONFile() {
+//
+//        if let url = Bundle.main.url(forResource: "cloudPosts", withExtension: "json"),
+//           let data = try? Data(contentsOf: url) {
+//
+//            print("📁 File exists, size: \(data.count) bytes")
+//
+//            if let jsonString = String(data: data, encoding: .utf8) {
+//                print("📄 File content: \(jsonString.prefix(200))...")
+//            }
+//
+//            do {
+//                let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
+//                print("✅ Local file decoding SUCCESS: \(posts.count) posts")
+//            } catch {
+//                print("❌ Local file decoding FAILED: \(error)")
+//            }
+//        } else {
+//            print("❌ JSON file not found")
+//        }
+//    }
+

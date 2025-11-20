@@ -17,14 +17,13 @@ struct CheckForPostsUpdateView: View {
     @State private var followingText: String = "Checking for updates..."
     @State private var followingTextColor: Color = Color.mycolor.myAccent
     
-    @State private var isInProgress: Bool = false
+    @State private var isInProgress: Bool = true
     @State private var isPostsUpdateAvailable: Bool = false
     @State private var isPostsUpdated: Bool = false
     @State private var isImported: Bool = false
     @State private var postCount: Int = 0
     
     var body: some View {
-        NavigationStack {
             VStack {
                 Form {
                     section_1
@@ -32,7 +31,9 @@ struct CheckForPostsUpdateView: View {
                 }
             }
             .onAppear {
-                checkForUpdates()
+                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime + 1) {
+                    checkForUpdates()
+                }
             }
             .alert("Import Error", isPresented: $vm.showErrorMessageAlert) {
                 Button("OK", role: .cancel) {
@@ -41,7 +42,16 @@ struct CheckForPostsUpdateView: View {
             } message: {
                 Text(vm.errorMessage ?? "Unknown error")
             }
-        }
+            .navigationTitle("Check for posts update")
+            .navigationBarBackButtonHidden(true)
+            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                        dismiss()
+                    }
+                }
+            }
     }
     
     // MARK: Subviews
@@ -53,7 +63,8 @@ struct CheckForPostsUpdateView: View {
                     .foregroundStyle(followingTextColor)
                 Spacer()
                 if isInProgress {
-                    CustomProgressView()                }
+                    CustomProgressView(scale: 1)
+                }
             }
             HStack {
                 Text("Last update from:")
@@ -71,7 +82,7 @@ struct CheckForPostsUpdateView: View {
                 .managingPostsTextFormater()
                 .padding(.horizontal, 30)
             
-            if !isPostsUpdated {
+            if !isPostsUpdated && !isInProgress {
                 CapsuleButtonView(
                     primaryTitle: "Update now",
                     secondaryTitle: "Imported \(postCount) posts",
@@ -103,7 +114,7 @@ struct CheckForPostsUpdateView: View {
         Text("""
             The curated collection of links to SwiftUI tutorials and articles has been compiled from open sources by the developer for the purpose of learning the SwiftUI functionality.
                        
-            The collection will be appended to all current posts in the App, excluding duplicates based on the post title.
+            The collection **will be appended** to all current posts in the App, excluding duplicates based on the post title.
             """)
         .multilineTextAlignment(.leading)
 
@@ -134,6 +145,8 @@ struct CheckForPostsUpdateView: View {
 }
 
 #Preview {
-    CheckForPostsUpdateView()
-        .environmentObject(PostsViewModel())
+    NavigationStack{
+        CheckForPostsUpdateView()
+            .environmentObject(PostsViewModel())
+    }
 }

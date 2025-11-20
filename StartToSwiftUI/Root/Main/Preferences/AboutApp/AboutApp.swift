@@ -9,70 +9,83 @@ import SwiftUI
 
 struct AboutApp: View {
     
+    @Environment(\.dismiss) private var dismiss
+
+    let iconWidth: CGFloat = 18
     let frameHeight: CGFloat = 30
     
     var body: some View {
-        VStack(spacing: 0) {
-            Divider()
-                .frame(height: 1)
-                .padding(.horizontal, 0)
-            
-            HStack {
-                Text("Name")
-                Spacer()
-                Text("StartToSwiftUI")
-            }
-            .padding(.horizontal)
-            .frame(height: frameHeight)
-            .frame(maxWidth: .infinity)
-            
-            Divider()
-                .frame(height: 1)
-                .padding(.horizontal, 0)
-            
-            HStack {
-                Text("Version")
-                Spacer()
-                Text("01.01.01")
-            }
-            .padding(.horizontal)
-            .frame(height: frameHeight)
-            .frame(maxWidth: .infinity)
-            Divider()
-                .frame(height: 1)
-                .padding(.horizontal, 0)
-            
-            HStack {
-                Text("Developed by")
-                Spacer()
-                Text("Andrey Efimov")
-            }
-            .padding(.horizontal)
-            .frame(height: frameHeight)
-            .frame(maxWidth: .infinity)
-            
-            Divider()
-                .frame(height: 1)
-                .padding(.horizontal, 0)
-                .padding(.bottom, 0)
-            
-        }
-        .foregroundStyle(Color.mycolor.myAccent)
-        .padding(.horizontal)
         
-        Form {
-            NavigationLink("Welcome") {
-                WelcomeMessage()
-            }
-            NavigationLink("Introduction") {
-                Intro()
-            }
-            NavigationLink("Functionality") {
-                Functionality()
-            }
-        } // Form
+        ZStack {
+            Form {
+                Section {
+                    HStack (spacing: 0) {
+                        Image(systemName: "pencil.and.outline")
+                            .resizable()
+                            .bold()
+                            .frame(width: 80, height: 80)
+                            .foregroundStyle(Color.mycolor.myBlue)
+                            .padding(.bottom)
+                        VStack (alignment: .leading) {
+                            Text("StartToSwiftUI")
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                            Text("SwiftUI Study Hub")
+                                .font(.subheadline)
+                            Group {
+                                HStack {
+                                    Text("Version")
+                                    Text("01.01.01")
+                                }
+                                Text("Developed by Andrey Efimov")
+                            }
+                            .font(.caption)
+                        }
+                    }
+                }
+                .listRowBackground(Color.clear)
+                .frame(maxWidth: .infinity)
+                
+                Section {
+                    NavigationLink("Welcome") {
+                        WelcomeMessage()
+                    }
+                    .customListRowStyle(
+                        iconName: "suit.heart",
+                        iconWidth: iconWidth
+                    )
+                    NavigationLink("Introduction") {
+                        Introduction()
+                    }
+                    .customListRowStyle(
+                        iconName: "textformat.size.larger",
+                        iconWidth: iconWidth
+                    )
+                    NavigationLink("What's New") { //  list.bullet list.bullet.circle square.fill.text.grid.1x2
+                        WhatsNew()
+                    }
+                    .customListRowStyle(
+                        iconName: "newspaper",
+                        iconWidth: iconWidth
+                    )
+                }
+            } // Form
+            .scrollContentBackground(.hidden)
+            .listSectionSpacing(8)
+            .background(.clear)
+        } // ZStack
         .foregroundStyle(Color.mycolor.myAccent)
+        .background(.thickMaterial)
         .navigationTitle("About App")
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
+                    dismiss()
+                }
+            }
+        }
     }
 }
 

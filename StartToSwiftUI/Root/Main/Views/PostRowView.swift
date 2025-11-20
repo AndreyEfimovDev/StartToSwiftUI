@@ -31,7 +31,7 @@ struct PostRowView: View {
         }
         .padding(8)
         .padding(.horizontal, 8)
-        .background(Color.mycolor.mySectionBackground)
+        .background(.ultraThinMaterial)
     }
         
     // MARK: Subviews
@@ -48,9 +48,14 @@ struct PostRowView: View {
     
     private var author: some View {
         HStack {
-            Text("@" + post.author + ", ") +
-            Text("\(post.postDate?.formatted(date: .numeric, time: .omitted) ?? "post date missed")") +
-            Text(post.postType == .other ? "" : ", " + post.postType.displayName)
+            if let postDate = post.postDate {
+                Text("@" + post.author + ", ") +
+                Text(postDate.formatted(date: .numeric, time: .omitted)) +
+                Text(post.postType == .other ? "" : ", " + post.postType.displayName)
+            } else  {
+                Text("@" + post.author) +
+                Text(post.postType == .other ? "" : ", " + post.postType.displayName)
+            }
         }
         .font(.footnote)
     }
@@ -85,7 +90,7 @@ struct PostRowView: View {
 
 fileprivate struct PostRowPreView: View {
     
-    @Environment(\.colorScheme) var colorScheme
+//    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         ZStack {
@@ -93,9 +98,9 @@ fileprivate struct PostRowPreView: View {
                 .ignoresSafeArea()
 
             VStack {
-                PostRowView(post: DevPreview.samplePost1)
-                PostRowView(post: DevPreview.samplePost2)
-                PostRowView(post: DevPreview.samplePost3)
+                PostRowView(post: DevData.samplePost1)
+                PostRowView(post: DevData.samplePost2)
+                PostRowView(post: DevData.samplePost3)
             }
             .padding()
         }

@@ -57,7 +57,7 @@ struct SearchBarView: View {
         )
         .padding(.horizontal, 8)
         .padding(.bottom, 8)
-        .background(.ultraThickMaterial)
+        .background(.ultraThinMaterial)
     }
 }
 
