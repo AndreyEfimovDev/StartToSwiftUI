@@ -24,7 +24,7 @@ struct NoticeMessagesView: View {
             } else {
                 ZStack {
                     List {
-                        ForEach(noticevm.notices) { notice in
+                        ForEach(noticevm.notices.sorted {$0.noticeDate > $1.noticeDate}) { notice in
                             NoticeRowView(notice: notice)
                                 .listRowBackground(Color.clear)
                                 .listRowSeparatorTint(Color.mycolor.myAccent.opacity(0.35))
