@@ -150,38 +150,23 @@ class PostsViewModel: ObservableObject {
     
     private func addSubscribers() {
         
+        
         let filters = $selectedLevel
             .combineLatest($selectedFavorite, $selectedType, $selectedYear)
-        
-        // Subscribe on change of seach text and filters
-        $searchText
-            .combineLatest(filters, $selectedCategory)
+
+        let filtersWithCategory = filters.combineLatest($selectedCategory)
+
+        // Debounced search text
+        let debouncedSearchText = $searchText
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
-            .map { searchText, filters, category -> [Post] in
-                let (level, favorite, type, year) = filters
-                // Getting posts filtered
-                let filtered = self.filterPosts(
-                    allPosts: self.allPosts,
-                    category: category,
-                    level: level,
-                    favorite: favorite,
-                    type: type,
-                    year: year,
-                )
-                // Applying search text
-                return self.searchPosts(posts: filtered)
-            }
-            .sink { [weak self] searchedPosts in
-                self?.filteredPosts = searchedPosts
-            }
-            .store(in: &cancellables)
-        
-        // Subscribe on change of posts
+
+        // ЕДИНСТВЕННЫЙ pipeline для всего
         $allPosts
-            .combineLatest($searchText, filters, $selectedCategory)
-            .map { posts, searchText, filters, category -> [Post] in
+            .combineLatest(debouncedSearchText, filtersWithCategory)
+            .map { posts, searchText, data -> [Post] in
+                let (filters, category) = data
                 let (level, favorite, type, year) = filters
-                // Getting posts filtered
+                
                 let filtered = self.filterPosts(
                     allPosts: posts,
                     category: category,
@@ -190,21 +175,129 @@ class PostsViewModel: ObservableObject {
                     type: type,
                     year: year
                 )
-                // Applying search text
                 return self.searchPosts(posts: filtered)
             }
-            .sink { [weak self] posts in
-                self?.filteredPosts = posts
-                
-                //                guard let self = self else { return }
-                //                if !posts.isEmpty {
-                //                    self.filteredPosts.removeAll()
-                //                    self.filteredPosts = posts
-                //
-                //                }
+            .sink { [weak self] filteredPosts in
+                self?.filteredPosts = filteredPosts
             }
             .store(in: &cancellables)
+
+        
+        
+        
+        
+        
+//        let filters = $selectedLevel
+//            .combineLatest($selectedFavorite, $selectedType, $selectedYear)
+//            .combineLatest($selectedCategory)
+        
+//        let filters = $selectedLevel
+//            .combineLatest($selectedFavorite, $selectedType, $selectedYear)
+//
+//        let filtersWithCategory = filters.combineLatest($selectedCategory)
+//
+//
+//
+//        // Pipeline для фильтров - без debounce, срабатывает мгновенно
+//        filtersWithCategory
+//            .sink { [weak self] filters, category in
+//                guard let self = self else { return }
+//                let (level, favorite, type, year) = filters
+//                let filtered = self.filterPosts(
+//                    allPosts: self.allPosts,
+//                    category: category,
+//                    level: level,
+//                    favorite: favorite,
+//                    type: type,
+//                    year: year
+//                )
+//                self.filteredPosts = self.searchPosts(posts: filtered)
+//            }
+//            .store(in: &cancellables)
+//
+//        // Pipeline для поиска - с debounce
+//        $searchText
+//            .debounce(for: .seconds(1.5), scheduler: DispatchQueue.main)
+//            .combineLatest(filtersWithCategory)
+//            .sink { [weak self] searchText, filtersData in
+//                guard let self = self else { return }
+//                let (filters, category) = filtersData
+//                let (level, favorite, type, year) = filters
+//                let filtered = self.filterPosts(
+//                    allPosts: self.allPosts,
+//                    category: category,
+//                    level: level,
+//                    favorite: favorite,
+//                    type: type,
+//                    year: year
+//                )
+//                self.filteredPosts = self.searchPosts(posts: filtered)
+//            }
+//            .store(in: &cancellables)
+//
+////        
+////        let filters = $selectedLevel
+////            .combineLatest($selectedFavorite, $selectedType, $selectedYear)
+////        
+////        // Subscribe on change of seach text and filters
+////        $searchText
+////            .combineLatest(filters, $selectedCategory)
+////            .debounce(for: .seconds(1.5), scheduler: DispatchQueue.main)
+////            .map { searchText, filters, category -> [Post] in
+////                let (level, favorite, type, year) = filters
+////                // Getting posts filtered
+////                let filtered = self.filterPosts(
+////                    allPosts: self.allPosts,
+////                    category: category,
+////                    level: level,
+////                    favorite: favorite,
+////                    type: type,
+////                    year: year,
+////                )
+////                // Applying search text
+////                return self.searchPosts(posts: filtered)
+////            }
+////            .sink { [weak self] searchedPosts in
+////                self?.filteredPosts = searchedPosts
+////            }
+////            .store(in: &cancellables)
+//        
+//        // Subscribe on change of posts
+//        
+////        let filters = $selectedLevel
+////            .combineLatest($selectedFavorite, $selectedType, $selectedYear)
+////
+////        let filtersWithCategory = filters.combineLatest($selectedCategory)
+////
+//        
+//        $allPosts
+//            .combineLatest($searchText, filtersWithCategory)
+//            .sink { [weak self] posts, searchText, data in
+//                guard let self = self else { return }
+//                let (filters, category) = data
+//                let (level, favorite, type, year) = filters
+//                
+//                let filtered = self.filterPosts(
+//                    allPosts: posts,
+//                    category: category,
+//                    level: level,
+//                    favorite: favorite,
+//                    type: type,
+//                    year: year
+//                )
+//                self.filteredPosts = self.searchPosts(posts: filtered)
+//            }
+//            .store(in: &cancellables)
     }
+    
+    //                guard let self = self else { return }
+    //                if !posts.isEmpty {
+    //                    self.filteredPosts.removeAll()
+    //                    self.filteredPosts = posts
+    //
+    //                }
+
+    
     
     private func filterPosts(
         allPosts: [Post],
