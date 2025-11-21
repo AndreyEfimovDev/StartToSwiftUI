@@ -603,6 +603,7 @@ struct AddEditPostSheet: View {
             Color.mycolor.myAccent.opacity(0.001)
                 .ignoresSafeArea()
                 .contentShape(Rectangle())
+//                .allowsHitTesting(true)
                 .onTapGesture {
                     isShowingExitMenuConfirmation = false
                 }
@@ -623,9 +624,7 @@ struct AddEditPostSheet: View {
                 ClearCupsuleButton(
                     primaryTitle: "Don't save",
                     primaryTitleColor: Color.mycolor.myRed) {
-                        withAnimation {
                             dismiss()
-                        }
                     }
                 
                 ClearCupsuleButton(

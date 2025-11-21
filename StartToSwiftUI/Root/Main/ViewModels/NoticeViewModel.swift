@@ -4,9 +4,24 @@
 //
 //  Created by Andrey Efimov on 14.11.2025.
 //
+//
+
+//
+//   AudioServicesPlaySystemSound(1002) // New mail
+//   AudioServicesPlaySystemSound(1007) // Mail sent
+//   AudioServicesPlaySystemSound(1012) // Time passing
+//   AudioServicesPlaySystemSound(1013) // Low power
+//   AudioServicesPlaySystemSound(1020) // Suspense
+//   AudioServicesPlaySystemSound(1022) // Anticipate
+//   AudioServicesPlaySystemSound(1025) // Bloom
+//   AudioServicesPlaySystemSound(1030) // Sherwood Forest
+//   AudioServicesPlaySystemSound(1032) // Spell
+//   AudioServicesPlaySystemSound(1033) // Calypso
+//   AudioServicesPlaySystemSound(1034) // News flash
 
 import Foundation
 import SwiftUI
+import AudioToolbox
 
 class NoticeViewModel: ObservableObject {
     
@@ -24,7 +39,9 @@ class NoticeViewModel: ObservableObject {
 
 
     @AppStorage("isNotificationOn") var isNotificationOn: Bool = true
+    @AppStorage("isSoundNotificationOn") var isSoundNotificationOn: Bool = true
     @AppStorage("dateOfLatestNoticesUpdate") var dateOfLatestNoticesUpdate: Date = Date.distantPast
+    @AppStorage("isUserNotified") var isUserNotified: Bool = false
 
     init(
         networkService: NetworkService = NetworkService(baseURL: Constants.cloudNoticesURL)
