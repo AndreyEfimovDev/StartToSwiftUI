@@ -6,6 +6,7 @@
 //  *** Combine
 
 import SwiftUI
+import AudioToolbox
 
 struct HomeView: View {
     
@@ -27,6 +28,7 @@ struct HomeView: View {
     @State private var showTermsOfUse: Bool = false
     @State private var showNoticesView: Bool = false
     
+    @State private var bellRinging = false
     
     @State private var showOnTopButton: Bool = false
     @State private var isFilterButtonPressed: Bool = false
@@ -103,8 +105,31 @@ struct HomeView: View {
             .presentationDragIndicator(.visible)
             .presentationCornerRadius(30)
         }
-        .onAppear {
+        .task {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
+            
+            if noticevm.isNotificationOn {
+                if  !noticevm.isUserNotified {
+                    try? await Task.sleep(nanoseconds: 5_000_000_000)
+                    if noticevm.isSoundNotificationOn {
+                        AudioServicesPlaySystemSound(1013) // 1005
+                    }
+                    
+                    withAnimation(
+                        .spring(
+                            response: 0.3,
+                            dampingFraction: 0.3
+                        )
+                        .repeatCount(5, autoreverses: false)
+                    ) {
+                        bellRinging = true
+                    }
+                    
+                    try? await Task.sleep(nanoseconds: 2_500_000_000)
+                    bellRinging = false
+                    noticevm.isUserNotified = true
+                }
+            }
         }
         .overlay {
             // Accept Terms of Use at the first launch
@@ -217,22 +242,22 @@ struct HomeView: View {
         }
         if noticevm.isNewNotices && noticevm.isNotificationOn {
             ToolbarItem(placement: .navigationBarLeading) {
-                CircleStrokeButtonView(
-                    iconName: "bell",
-                    isShownCircle: false)
-                {
-                    showNoticesView = true
-                }
-            }
-        }
-        
-        ToolbarItem(placement: .navigationBarTrailing) {
-            CircleStrokeButtonView(
-                iconName: "plus",
-                isShownCircle: false)
-            {
-                if noticevm.isNotificationOn {
-                    noticevm.isNewNotices.toggle()
+                
+                ZStack {
+                    CircleStrokeButtonView(
+                        iconName: "bell",
+                        isShownCircle: false)
+                    {
+                        showNoticesView = true
+                    }
+                    .rotationEffect(.degrees(bellRinging ? 15 : -15))
+                    
+                    Text("\(noticevm.notices.filter { $0.isRead == false }.count)")
+                        .font(.system(size: 8, weight: .bold, design: .default))
+                        .foregroundStyle(Color.mycolor.myButtonTextPrimary)
+                        .frame(maxWidth: 15)
+                        .background(Color.mycolor.myRed, in: .capsule)
+                        .offset(x: 7, y: -7)
                 }
             }
         }

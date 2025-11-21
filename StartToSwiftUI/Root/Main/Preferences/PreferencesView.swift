@@ -52,6 +52,7 @@ struct PreferencesView: View {
             
             Section(header: sectionHeader("Notifications")) {
                 notificationToggle
+                soundNotificationToggle
                 noticeMessages
             }
             Section(header: sectionHeader("Managing posts (\(postsCount))")) {
@@ -104,6 +105,16 @@ struct PreferencesView: View {
                 .frame(width: iconWidth)
                 .foregroundStyle(Color.mycolor.myBlue)
             Toggle(noticevm.isNotificationOn ? "On" : "Off", isOn: $noticevm.isNotificationOn)
+                .tint(Color.mycolor.myBlue)
+        }
+    }
+    
+    private var soundNotificationToggle: some View {
+        HStack {
+            Image(systemName: noticevm.isSoundNotificationOn ? "speaker.wave.2" : "speaker.slash")
+                .frame(width: iconWidth)
+                .foregroundStyle(Color.mycolor.myBlue)
+            Toggle(noticevm.isSoundNotificationOn ? "On" : "Off", isOn: $noticevm.isSoundNotificationOn)
                 .tint(Color.mycolor.myBlue)
         }
     }
