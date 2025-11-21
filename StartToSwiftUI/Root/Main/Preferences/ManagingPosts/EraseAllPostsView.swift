@@ -23,7 +23,7 @@ struct EraseAllPostsView: View {
     var body: some View {
         VStack {
             textSection
-                .managingPostsTextFormater()
+                .textFormater()
             
             CapsuleButtonView(
                 primaryTitle: "Delete All Posts",

@@ -28,20 +28,42 @@ extension View {
     }
 }
 
+extension View {
+    func menuFormater(
+        cornerRadius: CGFloat = 30,
+        borderColor: Color = Color.mycolor.myAccent,
+        lineWidth: CGFloat = 1
+    ) -> some View {
+        self
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            .overlay(
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .stroke(borderColor.opacity(0.3), lineWidth: lineWidth)
+            )
+
+    }
+}
+
+
+    
 
 extension View {
-    func managingPostsTextFormater() -> some View {
+    func textFormater(
+        cornerRadius: CGFloat = 30,
+        borderColor: Color = Color.mycolor.myAccent,
+        lineWidth: CGFloat = 1
+    ) -> some View {
         self
             .font(.callout)
-            .foregroundStyle(Color.mycolor.myAccent)
+            .foregroundStyle(borderColor)
             .multilineTextAlignment(.center)
             .padding(20)
             .frame(maxWidth: .infinity)
             .background(.ultraThinMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: 15))
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
             .overlay(
-                RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color.mycolor.myAccent.opacity(0.3), lineWidth: 1)
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .stroke(borderColor.opacity(0.3), lineWidth: lineWidth)
             )
     }
 }

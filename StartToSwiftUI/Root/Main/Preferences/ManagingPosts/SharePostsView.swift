@@ -23,7 +23,7 @@ struct SharePostsView: View {
     var body: some View {
         VStack {
             textSection
-                .managingPostsTextFormater()
+                .textFormater()
             
             CapsuleButtonView(
                 primaryTitle: "Perform",

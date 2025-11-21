@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AddEditPostSheet: View {
     
-//    @Environment(\.colorScheme) private var colorScheme
+    //    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     
@@ -27,11 +27,11 @@ struct AddEditPostSheet: View {
     @State private var isNewPost: Bool
     
     @State private var isPostDraftSaved: Bool = false
-    @State private var isShowingMenuConfirmation: Bool = false
+    @State private var isShowingExitMenuConfirmation: Bool = false
     
     private let sectionBackground: Color = Color.mycolor.mySectionBackground
     private let sectionCornerRadius: CGFloat = 8
-
+    
     private let fontSubheader: Font = .caption
     private let fontTextInput: Font = .callout
     private let colorSubheader: Color = Color.mycolor.myAccent.opacity(0.5)
@@ -80,41 +80,47 @@ struct AddEditPostSheet: View {
     
     var body: some View {
         
-        NavigationStack {
-            VStack {
-                ScrollView {
-                    titleSection
-                    introSection
-                    authorSection
-                    urlSection
-                    postDateSection
-                    typeSection
-                    platformSection
-                    studyLevelSection
-                    favoviteChoiceSection
-                    notesSection
-                } // ScrollView
-                .foregroundStyle(Color.mycolor.myAccent)
-                .padding(.horizontal, 8)
-            }
-            .navigationTitle(viewTitle)
-            .navigationBarTitleDisplayMode(.inline)
-            .background(Color.mycolor.myBackground)
-            .scrollIndicators(.hidden)
-            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-            .toolbar {
-                toolbarForAddEditView()
-            }
-            .overlay(
-                hideKeybordButton
-            )
-        } //NavigationStack
+        VStack {
+            ScrollView {
+                titleSection
+                introSection
+                authorSection
+                urlSection
+                postDateSection
+                typeSection
+                platformSection
+                studyLevelSection
+                favoviteChoiceSection
+                notesSection
+            } // ScrollView
+            .foregroundStyle(Color.mycolor.myAccent)
+            .padding(.horizontal, 8)
+        }
+        .navigationTitle(viewTitle)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        .background(Color.mycolor.myBackground)
+        .toolbar {
+            toolbarForAddEditView()
+        }
+        .overlay(
+            hideKeybordButton
+        )
+        .opacity(isShowingExitMenuConfirmation ? 0.5 : 1.0)
+        .alert(isPresented: $showAlert) {
+            getAlert(
+                alertTitle: alertTitle,
+                alertMessage: alertMessage)
+        }
         .onAppear {
             focusedField = .postTitle
         }
         .overlay {
-            if isShowingMenuConfirmation {
+            if isShowingExitMenuConfirmation {
                 exitMenuConfirmation
+                    .opacity(isShowingExitMenuConfirmation ? 1 : 0)
+                    .transition(.move(edge: .bottom))
             }
         }
     }
@@ -123,6 +129,7 @@ struct AddEditPostSheet: View {
     
     @ToolbarContentBuilder
     private func toolbarForAddEditView() -> some ToolbarContent {
+        
         ToolbarItem(placement: .topBarLeading) {
             // SAVE button
             CircleStrokeButtonView(
@@ -136,11 +143,7 @@ struct AddEditPostSheet: View {
                     checkPostAndSave()
                 }
             }
-            .alert(isPresented: $showAlert) {
-                getAlert(
-                    alertTitle: alertTitle,
-                    alertMessage: alertMessage)
-            }
+            .disabled(isShowingExitMenuConfirmation)
         }
         ToolbarItem(placement: .topBarTrailing) {
             // Exit button
@@ -150,14 +153,20 @@ struct AddEditPostSheet: View {
                 isShownCircle: false)
             {
                 if editedPost == draftPost {  // if no changes
+                    print(" editedPost == draftPost - dismiss()")
+                    
                     dismiss()
                 } else {
-                    hapticManager.notification(type: .warning)
-                    focusedFieldSaved = focusedField ?? nil
-                    focusedField = nil
-                    isShowingMenuConfirmation = true
+                    print(" editedPost != draftPost - dismiss()")
+                    withAnimation(.easeInOut) {
+                        isShowingExitMenuConfirmation = true
+                        hapticManager.notification(type: .warning)
+                        focusedFieldSaved = focusedField ?? nil
+                        focusedField = nil
+                    }
                 }
             }
+            .disabled(isShowingExitMenuConfirmation)
         }
     }
     
@@ -205,7 +214,7 @@ struct AddEditPostSheet: View {
             }
             .background(
                 sectionBackground,
-                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                in: RoundedRectangle(cornerRadius: sectionCornerRadius)
             )
         }
     }
@@ -242,7 +251,7 @@ struct AddEditPostSheet: View {
             }
             .background(
                 sectionBackground,
-                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                in: RoundedRectangle(cornerRadius: sectionCornerRadius)
             )
         }
     }
@@ -270,11 +279,11 @@ struct AddEditPostSheet: View {
             }
             .background(
                 sectionBackground,
-                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                in: RoundedRectangle(cornerRadius: sectionCornerRadius)
             )
         }
     }
-        
+    
     private var urlSection: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("URL")
@@ -299,7 +308,7 @@ struct AddEditPostSheet: View {
             }
             .background(
                 sectionBackground,
-                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                in: RoundedRectangle(cornerRadius: sectionCornerRadius)
             )
         }
     }
@@ -314,7 +323,7 @@ struct AddEditPostSheet: View {
                 )
             ZStack {
                 HStack {
-                    Button(editedPost.postDate == nil ? "Set date" : "Reset date") {
+                    Button(editedPost.postDate == nil ? "Set date" : "Set no date") {
                         if editedPost.postDate == nil {
                             editedPost.postDate = Date()
                         } else {
@@ -333,9 +342,9 @@ struct AddEditPostSheet: View {
                 .zIndex(1)
                 
                 DatePicker("",
-                    selection: bindingPostDate,
-                    in: startingDate...endingDate,
-                    displayedComponents: .date
+                           selection: bindingPostDate,
+                           in: startingDate...endingDate,
+                           displayedComponents: .date
                 )
                 .tint(Color.mycolor.myBlue)
                 .padding(.trailing, 8)
@@ -369,7 +378,7 @@ struct AddEditPostSheet: View {
             .frame(height: 50)
             .background(
                 sectionBackground,
-                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                in: RoundedRectangle(cornerRadius: sectionCornerRadius)
             )
         }
     }
@@ -391,7 +400,7 @@ struct AddEditPostSheet: View {
             .frame(height: 50)
             .background(
                 sectionBackground,
-                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                in: RoundedRectangle(cornerRadius: sectionCornerRadius)
             )
         }
     }
@@ -413,7 +422,7 @@ struct AddEditPostSheet: View {
             .frame(height: 50)
             .background(
                 sectionBackground,
-                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                in: RoundedRectangle(cornerRadius: sectionCornerRadius)
             )
         }
     }
@@ -435,7 +444,7 @@ struct AddEditPostSheet: View {
             .frame(height: 50)
             .background(
                 sectionBackground,
-                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                in: RoundedRectangle(cornerRadius: sectionCornerRadius)
             )
         }
         .onChange(of: editedPost.favoriteChoice) {
@@ -474,7 +483,7 @@ struct AddEditPostSheet: View {
             }
             .background(
                 sectionBackground,
-                        in: RoundedRectangle(cornerRadius: sectionCornerRadius)
+                in: RoundedRectangle(cornerRadius: sectionCornerRadius)
             )
         }
     }
@@ -491,99 +500,53 @@ struct AddEditPostSheet: View {
                             imageColorPrimary: Color.mycolor.myBlue,
                             widthIn: 55,
                             heightIn: 55) {
-                                withAnimation {
-                                    focusedField = nil
-                                }
+                                //                                withAnimation {
+                                focusedField = nil
+                                //                                }
                             }
                             .padding(.bottom, 16)
                     }
                 }
-                .transition(.opacity)
+                //                .transition(.opacity)
             }
         }
-        .animation(.easeInOut(duration: 0.3), value: focusedField != nil)
-    }
-    
-    private var exitMenuConfirmation: some View {
-        ZStack {
-            Color.mycolor.myAccent.opacity(0.4)
-                .ignoresSafeArea()
-            
-            VStack(spacing: 8) {
-                Text("DATA IS NOT SAVED!")
-                    .font(.headline)
-                    .bold()
-                    .foregroundColor(Color.mycolor.myRed)
-                
-                Text("Are you sure to exit without saving your data?")
-                    .font(.subheadline)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
-                
-                
-                ClearCupsuleButton(
-                    primaryTitle: "Yes",
-                    primaryTitleColor: Color.mycolor.myRed) {
-                        dismiss()
-                    }
-                
-                ClearCupsuleButton(
-                    primaryTitle: "Save draft",
-                    primaryTitleColor: Color.mycolor.myBlue) {
-                        editedPost.draft = true
-                        isPostDraftSaved = true
-                        hapticManager.notification(type: .success)
-                        checkPostAndSave()
-                    }
-                
-                ClearCupsuleButton(
-                    primaryTitle: "Cancel",
-                    primaryTitleColor: Color.mycolor.myAccent) {
-                        focusedField = focusedFieldSaved
-                        isShowingMenuConfirmation = false
-                    }
-            }
-            .padding()
-            .background(.regularMaterial)
-            .cornerRadius(30)
-            .padding(.horizontal, 40)
-            .opacity(isPostDraftSaved ? 0 : 1)
-        }
+        //        .animation(.easeInOut(duration: 0.1), value: focusedField /*!= nil*/)
     }
     
     // MARK: Functions
     
+    
     private func checkPostAndSave() {
         
         if !isTexLengthAppropriate(text: editedPost.title, limit: 3) {
-                alertType = .error
-                alertTitle = "The Title must contain at least 3 characters."
-                alertMessage = "Please correct the Title."
-                focusedField = .postTitle
-                showAlert.toggle()
+            alertType = .error
+            alertTitle = "The Title must contain at least 3 characters."
+            alertMessage = "Please correct the Title."
+            focusedField = .postTitle
+            showAlert.toggle()
         } else if !isTexLengthAppropriate(text: editedPost.author, limit: 2) {
-                alertType = .error
-                alertTitle = "The Author must contain at least 2 characters."
-                alertMessage = "Please correct the Author."
-                focusedField = .author
-                showAlert.toggle()
-            } else if vm.checkNewPostForUniqueTitle(editedPost.title, editingPostId: isNewPost ? nil : editedPost.id) {
-                alertType = .error
-                alertTitle = "The Title must be unique."
-                alertMessage = "Please correct the Title."
-                focusedField = .postTitle
-                showAlert.toggle()
-            } else {
-                switch isNewPost {
-                case true:
-                    vm.addPost(editedPost)
-                case false:
-                    vm.updatePost(editedPost)
-                }
-                alertType = .success
-                showAlert.toggle()
+            alertType = .error
+            alertTitle = "The Author must contain at least 2 characters."
+            alertMessage = "Please correct the Author."
+            focusedField = .author
+            showAlert.toggle()
+        } else if vm.checkNewPostForUniqueTitle(editedPost.title, editingPostId: isNewPost ? nil : editedPost.id) {
+            alertType = .error
+            alertTitle = "The Title must be unique."
+            alertMessage = "Please correct the Title."
+            focusedField = .postTitle
+            showAlert.toggle()
+        } else {
+            switch isNewPost {
+            case true:
+                vm.addPost(editedPost)
+            case false:
+                vm.updatePost(editedPost)
             }
+            alertType = .success
+            showAlert.toggle()
         }
+    }
     
     private func isTexLengthAppropriate(text: String, limit: Int) -> Bool {
         return text.count >= limit
@@ -598,13 +561,16 @@ struct AddEditPostSheet: View {
             return Alert(
                 title: Text(alertTitle),
                 message: Text(alertMessage),
-                dismissButton: .default(Text("OK")))
+                dismissButton: .default(Text("OK")) {}
+            )
         case .success:
             if isPostDraftSaved {
                 return Alert(
                     title: Text("Draft saved successfully"),
                     message: Text("Tap OK to continue"),
                     dismissButton: .default(Text("OK")) {
+                        editedPost.draft = true
+                        isPostDraftSaved = true
                         dismiss()
                     }
                 )
@@ -630,6 +596,58 @@ struct AddEditPostSheet: View {
         default:
             return Alert(title: Text("ERROR"))
         }
+    }
+    
+    private var exitMenuConfirmation: some View {
+        ZStack {
+            Color.mycolor.myAccent.opacity(0.001)
+                .ignoresSafeArea()
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    isShowingExitMenuConfirmation = false
+                }
+            
+            VStack(spacing: 8) {
+                
+                Text("Data is not saved!")
+                    .font(.headline)
+                    .bold()
+                    .foregroundColor(Color.mycolor.myRed)
+                
+                Text("Are you sure to exit without saving your data?")
+                    .font(.subheadline)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
+                
+                
+                ClearCupsuleButton(
+                    primaryTitle: "Don't save",
+                    primaryTitleColor: Color.mycolor.myRed) {
+                        withAnimation {
+                            dismiss()
+                        }
+                    }
+                
+                ClearCupsuleButton(
+                    primaryTitle: "Save draft",
+                    primaryTitleColor: Color.mycolor.myBlue) {
+                        isShowingExitMenuConfirmation = false
+                        checkPostAndSave()
+                    }
+                
+                ClearCupsuleButton(
+                    primaryTitle: "Cancel",
+                    primaryTitleColor: Color.mycolor.myAccent) {
+                        focusedField = focusedFieldSaved
+                        isShowingExitMenuConfirmation = false
+                    }
+            } // VStack
+            .padding()
+            .background(.ultraThinMaterial)
+            .menuFormater()
+            .padding(.horizontal, 40)
+        } // ZStack
+        .opacity(isPostDraftSaved ? 0 : 1)
     }
     
 }

@@ -80,7 +80,7 @@ struct CheckForPostsUpdateView: View {
     private var section_2: some View {
         Group {
             textSection
-                .managingPostsTextFormater()
+                .textFormater()
                 .padding(.horizontal, 30)
             
             if !isPostsUpdated && !isInProgress {

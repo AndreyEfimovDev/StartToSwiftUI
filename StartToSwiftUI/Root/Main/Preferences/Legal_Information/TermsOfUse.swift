@@ -188,7 +188,7 @@ struct TermsOfUse: View {
                         """)
                 
                 .multilineTextAlignment(.leading)
-                .managingPostsTextFormater()
+                .textFormater()
                 .padding(.horizontal)
                 
                 CapsuleButtonView(

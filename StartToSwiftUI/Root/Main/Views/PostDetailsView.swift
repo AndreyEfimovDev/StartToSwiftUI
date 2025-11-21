@@ -71,9 +71,14 @@ struct PostDetailsView: View {
             .toolbar {
                 toolbarForPostDetails(validPost: validPost)
             }
-            .fullScreenCover(isPresented: $showEditPostView, content: {
+            
+            .navigationDestination(isPresented: $showEditPostView) {
                 AddEditPostSheet(post: post)
-            })
+            }
+
+//            .fullScreenCover(isPresented: $showEditPostView, content: {
+//                AddEditPostSheet(post: post)
+//            })
         } else {
             Text("Post is not found")
         }
@@ -118,7 +123,7 @@ struct PostDetailsView: View {
             {
                 showEditPostView.toggle()
             }
-            .disabled(post?.origin == .cloud)
+            .disabled(post?.origin == .cloud || post?.origin == .statical)
         }
     }
 

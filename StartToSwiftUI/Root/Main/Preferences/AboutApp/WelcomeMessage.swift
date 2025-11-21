@@ -35,7 +35,7 @@ struct WelcomeMessage: View {
             """)
  
             .multilineTextAlignment(.leading)
-            .managingPostsTextFormater()
+            .textFormater()
             .padding(.horizontal)
         }
         .navigationTitle("Welcome")

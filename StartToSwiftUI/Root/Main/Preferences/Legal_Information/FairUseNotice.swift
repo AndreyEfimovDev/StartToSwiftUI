@@ -29,7 +29,7 @@ struct FairUseNotice: View {
                     The application acts as an organisational tool that respects intellectual property rights while supporting the educational community. We encourage users to always access materials through the original sources and respect creators' rights.
                     """)
             .multilineTextAlignment(.leading)
-            .managingPostsTextFormater()
+            .textFormater()
             .padding(.horizontal)
         }
         .navigationTitle("Fair Use Notice")
