@@ -25,7 +25,7 @@ struct ImportPostsFromCloudView: View {
         ZStack(alignment: .bottom) {
             VStack {
                 textSection
-                    .managingPostsTextFormater()
+                    .textFormater()
                 
                 Group {
                     CapsuleButtonView(

@@ -13,14 +13,11 @@ struct NoticeDetailsView: View {
     @EnvironmentObject private var noticevm: NoticeViewModel
     
     let noticeId: String
-    //    let completion: () -> ()
     
     init(
         noticeId: String,
-        //        action: @escaping () -> Void
     ) {
         self.noticeId = noticeId
-        //        self.completion = action
     }
     
     private var notice: Notice? {
@@ -40,6 +37,7 @@ struct NoticeDetailsView: View {
                     VStack (alignment: .leading){
                         Text(validNotice.noticeDate.formatted(date: .numeric, time: .omitted))
                             .font(.caption)
+                            .padding()
                         
                         Text(validNotice.title)
                             .font(.headline)

@@ -113,7 +113,7 @@ struct PrivacyPolicy: View {
                     """)
             
             .multilineTextAlignment(.leading)
-            .managingPostsTextFormater()
+            .textFormater()
             .padding(.horizontal)
         }
         .navigationTitle("Privacy Policy")

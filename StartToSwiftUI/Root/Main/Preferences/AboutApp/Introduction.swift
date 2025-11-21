@@ -41,7 +41,7 @@ struct Introduction: View {
                """)
       
             .multilineTextAlignment(.leading)
-            .managingPostsTextFormater()
+            .textFormater()
             .padding(.horizontal)
         }
         .navigationTitle("Introduction")
