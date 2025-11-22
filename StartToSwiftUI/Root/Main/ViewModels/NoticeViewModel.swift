@@ -37,11 +37,10 @@ class NoticeViewModel: ObservableObject {
     @Published var isSelectionMode: Bool = false
     @Published var isNewNotices: Bool = false
 
-
+    @AppStorage("isUserNotified") var isUserNotified: Bool = false
     @AppStorage("isNotificationOn") var isNotificationOn: Bool = true
     @AppStorage("isSoundNotificationOn") var isSoundNotificationOn: Bool = true
     @AppStorage("dateOfLatestNoticesUpdate") var dateOfLatestNoticesUpdate: Date = Date.distantPast
-    @AppStorage("isUserNotified") var isUserNotified: Bool = false
 
     init(
         networkService: NetworkService = NetworkService(baseURL: Constants.cloudNoticesURL)
@@ -49,7 +48,6 @@ class NoticeViewModel: ObservableObject {
         self.networkService = networkService
         
         // Loading notices from a local JSON file and after notices imported from Cloud
-        
         if fileManager.checkIfFileExists(fileName: Constants.localNoticesFileName) {
             
             self.loadLocalNotices(from: Constants.localNoticesFileName) {[weak self] localNotices in
@@ -59,14 +57,15 @@ class NoticeViewModel: ObservableObject {
             self.importNoticesFromCloud()
         }
         
-    } // init()
-
+    }
     
     // MARK: PRIVATE FUNCTIONS
     
     private func loadLocalNotices(from urlOnLocalNotices: String, completion: @escaping ([Notice]) -> Void) {
         
-            fileManager.loadData(fileName: urlOnLocalNotices) { [weak self] (result: Result<[Notice], FileStorageError>) in
+        fileManager.loadData(
+            fileName: urlOnLocalNotices
+        ) { [weak self] (result: Result<[Notice], FileStorageError>) in
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let loadedNotices):
@@ -98,7 +97,6 @@ class NoticeViewModel: ObservableObject {
         showErrorMessageAlert = false
         
         networkService.fetchDataFromURL() { [weak self] (result: Result<[Notice], Error>) in
-            
             DispatchQueue.main.async {
                 switch result {
                 case .success(let cloudResponse):
@@ -128,7 +126,7 @@ class NoticeViewModel: ObservableObject {
                             }
                             print("🍉 NVN(importNoticesFromCloud): New date of latest notices update  \(self?.dateOfLatestNoticesUpdate.formatted(date: .abbreviated, time: .shortened) ?? "")")
 
-                            // Selecting Cloud notices with unique ID
+                            // Select Cloud notices with unique ID
                             let newLoadedNotices = cloudNoticesWithNewerDates.filter { notice in
                                 !(self?.notices.contains(where: { $0.id == notice.id }) ?? false)
                             }

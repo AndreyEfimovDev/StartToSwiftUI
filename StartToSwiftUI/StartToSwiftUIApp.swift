@@ -20,10 +20,34 @@ struct StartToSwiftUIApp: App {
     
     init() {
         
-        // Set a custom colour for the magnifying class in the search bar
-        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor : UIColor(Color.mycolor.myAccent)]
-        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor(Color.mycolor.myAccent)]
-        UINavigationBar.appearance().tintColor = UIColor(Color.mycolor.myAccent)
+        // Set a custom colour titles for NavigationStack and the magnifying class in the search bar
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground() // it also removes a dividing line
+                
+        // Explicitly setting the background colour
+        appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+        
+        // Setting colour for titles using NSAttributedString
+        let accentColor = UIColor(Color.mycolor.myAccent)
+        appearance.largeTitleTextAttributes = [
+            .foregroundColor: accentColor,
+            .font: UIFont.systemFont(ofSize: 34, weight: .bold)
+        ]
+        appearance.titleTextAttributes = [
+            .foregroundColor: accentColor,
+            .font: UIFont.systemFont(ofSize: 17, weight: .semibold)
+        ]
+        
+        // Apply to all possible states
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().compactScrollEdgeAppearance = appearance
+        
+        // Buttons colour
+        UINavigationBar.appearance().tintColor = accentColor
+        
+        // For UITableView
         UITableView.appearance().backgroundColor = UIColor.clear
         
         // Warm a keyboard at app launch
