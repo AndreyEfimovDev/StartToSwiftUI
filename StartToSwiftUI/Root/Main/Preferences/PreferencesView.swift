@@ -81,7 +81,7 @@ struct PreferencesView: View {
         .listSectionSpacing(0)
         .navigationTitle("Preferences")
         .navigationBarBackButtonHidden(true)
-        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
@@ -114,7 +114,7 @@ struct PreferencesView: View {
             Image(systemName: noticevm.isSoundNotificationOn ? "speaker.wave.2" : "speaker.slash")
                 .frame(width: iconWidth)
                 .foregroundStyle(Color.mycolor.myBlue)
-            Toggle(noticevm.isSoundNotificationOn ? "On" : "Off", isOn: $noticevm.isSoundNotificationOn)
+            Toggle(noticevm.isSoundNotificationOn ? "Sound On" : "Sound Off", isOn: $noticevm.isSoundNotificationOn)
                 .tint(Color.mycolor.myBlue)
         }
     }

@@ -67,18 +67,13 @@ struct PostDetailsView: View {
             } // ScrollView
             .padding(.horizontal)
             .navigationBarBackButtonHidden(true)
-            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+//            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbar {
                 toolbarForPostDetails(validPost: validPost)
             }
-            
             .navigationDestination(isPresented: $showEditPostView) {
                 AddEditPostSheet(post: post)
             }
-
-//            .fullScreenCover(isPresented: $showEditPostView, content: {
-//                AddEditPostSheet(post: post)
-//            })
         } else {
             Text("Post is not found")
         }

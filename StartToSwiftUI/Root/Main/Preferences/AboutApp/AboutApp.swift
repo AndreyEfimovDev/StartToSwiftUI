@@ -78,7 +78,7 @@ struct AboutApp: View {
         .background(.thickMaterial)
         .navigationTitle("About App")
         .navigationBarBackButtonHidden(true)
-        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {

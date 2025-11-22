@@ -70,7 +70,7 @@ struct ImportPostsFromCloudView: View {
         .navigationTitle("Import posts from cloud")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {

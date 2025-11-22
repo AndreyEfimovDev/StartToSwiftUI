@@ -44,7 +44,7 @@ struct PostDraftsView: View {
                     } // List
                     .navigationTitle("Post drafts")
                     .navigationBarBackButtonHidden(true)
-                    .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+//                    .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading) {
                             CircleStrokeButtonView(

@@ -27,13 +27,12 @@ struct HomeView: View {
     @State private var showAddPostView: Bool = false
     @State private var showTermsOfUse: Bool = false
     @State private var showNoticesView: Bool = false
-    
-    @State private var bellRinging = false
-    
     @State private var showOnTopButton: Bool = false
+
     @State private var isFilterButtonPressed: Bool = false
-    
     @State private var isShowingDeleteConfirmation: Bool = false
+    
+    @State private var bellButtonAnimation = false
     
     // MARK: VIEW BODY
     
@@ -67,8 +66,8 @@ struct HomeView: View {
         } // ScrollViewReader
         .navigationTitle(vm.homeTitleName)
         .navigationBarBackButtonHidden(true)
-        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
-        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+//        .toolbarBackgroundVisibility(.visible, for: .navigationBar)
+//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             if vm.isTermsOfUseAccepted {
                 toolbarForMainViewBody()
@@ -108,28 +107,31 @@ struct HomeView: View {
         .task {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
             
-            if noticevm.isNotificationOn {
-                if  !noticevm.isUserNotified {
-                    try? await Task.sleep(nanoseconds: 5_000_000_000)
-                    if noticevm.isSoundNotificationOn {
-                        AudioServicesPlaySystemSound(1013) // 1005
+            if vm.isTermsOfUseAccepted {
+                if noticevm.isNotificationOn {
+                    if  !noticevm.isUserNotified {
+                        try? await Task.sleep(nanoseconds: 5_000_000_000)
+                        if noticevm.isSoundNotificationOn {
+                            AudioServicesPlaySystemSound(1013) // 1005
+                        }
+                        
+                        withAnimation(
+                            .spring(
+                                response: 0.3,
+                                dampingFraction: 0.3
+                            )
+                            .repeatCount(5, autoreverses: false)
+                        ) {
+                            bellButtonAnimation = true
+                        }
+                        
+                        try? await Task.sleep(nanoseconds: 2_500_000_000)
+                        bellButtonAnimation = false
+                        noticevm.isUserNotified = true
                     }
-                    
-                    withAnimation(
-                        .spring(
-                            response: 0.3,
-                            dampingFraction: 0.3
-                        )
-                        .repeatCount(5, autoreverses: false)
-                    ) {
-                        bellRinging = true
-                    }
-                    
-                    try? await Task.sleep(nanoseconds: 2_500_000_000)
-                    bellRinging = false
-                    noticevm.isUserNotified = true
                 }
             }
+            
         }
         .overlay {
             // Accept Terms of Use at the first launch
@@ -240,20 +242,31 @@ struct HomeView: View {
                 showPreferancesView.toggle()
             }
         }
-        if noticevm.isNewNotices && noticevm.isNotificationOn {
+        if /*noticevm.isNewNotices && */noticevm.isNotificationOn {
             ToolbarItem(placement: .navigationBarLeading) {
                 
                 ZStack {
                     CircleStrokeButtonView(
-                        iconName: "bell",
+                        iconName: "message",
                         isShownCircle: false)
                     {
                         showNoticesView = true
                     }
-                    .rotationEffect(.degrees(bellRinging ? 15 : -15))
+//                    .background(
+//                        Circle()
+//                            .stroke(lineWidth: 5)
+//                            .scale(bellButtonAnimation ? 1.0 : 0.0)
+//                            .opacity(bellButtonAnimation ? 0.0 : 1.0)
+//                            .animation(bellButtonAnimation ? Animation.easeOut(duration: 1.0) : .none, value: bellButtonAnimation)
+//                        
+//                    )
+                    .rotationEffect(.degrees(bellButtonAnimation ? 15 : 0))
+//                    .resizable()
+//                    .scaleEffect(x: 0.9, y: 1.3, anchor: .center)
+//                    .font(bellButtonAnimation ? .largeTitle : .body)
                     
                     Text("\(noticevm.notices.filter { $0.isRead == false }.count)")
-                        .font(.system(size: 8, weight: .bold, design: .default))
+                        .font(.system(size: 10, weight: .bold, design: .default))
                         .foregroundStyle(Color.mycolor.myButtonTextPrimary)
                         .frame(maxWidth: 15)
                         .background(Color.mycolor.myRed, in: .capsule)

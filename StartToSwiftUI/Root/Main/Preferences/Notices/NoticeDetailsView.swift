@@ -74,7 +74,7 @@ struct NoticeDetailsView: View {
         .navigationTitle("Notice message")
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             toolbarForNoticeDetails()
         }

@@ -51,7 +51,7 @@ struct LegalInformationView: View {
         .foregroundStyle(Color.mycolor.myAccent)
         .navigationTitle("Legal Information")
         .navigationBarBackButtonHidden(true)
-        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 CircleStrokeButtonView(iconName: "chevron.left", isShownCircle: false) {
