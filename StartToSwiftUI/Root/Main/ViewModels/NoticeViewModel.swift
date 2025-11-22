@@ -33,11 +33,9 @@ class NoticeViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var showErrorMessageAlert = false
     
-    @Published var selectedNoticeIDs: Set<String> = []
-    @Published var isSelectionMode: Bool = false
     @Published var isNewNotices: Bool = false
 
-    @AppStorage("isUserNotified") var isUserNotified: Bool = false
+    @AppStorage("isUserNotified") var isUserNotified: Bool = true
     @AppStorage("isNotificationOn") var isNotificationOn: Bool = true
     @AppStorage("isSoundNotificationOn") var isSoundNotificationOn: Bool = true
     @AppStorage("dateOfLatestNoticesUpdate") var dateOfLatestNoticesUpdate: Date = Date.distantPast
@@ -114,11 +112,8 @@ class NoticeViewModel: ObservableObject {
                         if !cloudNoticesWithNewerDates.isEmpty {
                             
                             // Make User informed of new notifications
-                            if let isNotificationOnChecked = self?.isNotificationOn {
-                                if isNotificationOnChecked {
-                                    self?.isNewNotices = true
-                                }
-                            }
+                            self?.isNewNotices = true
+                            self?.isUserNotified = false
                             
                             // Set a new date of latest notices update
                             if let latestNoticeDate = cloudNoticesWithNewerDates.map({ $0.noticeDate }).max() {

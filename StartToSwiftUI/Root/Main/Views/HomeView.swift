@@ -32,7 +32,7 @@ struct HomeView: View {
     @State private var isFilterButtonPressed: Bool = false
     @State private var isShowingDeleteConfirmation: Bool = false
     
-    @State private var bellButtonAnimation = false
+    @State private var noticeButtonAnimation = false
     
     // MARK: VIEW BODY
     
@@ -122,11 +122,11 @@ struct HomeView: View {
                             )
                             .repeatCount(5, autoreverses: false)
                         ) {
-                            bellButtonAnimation = true
+                            noticeButtonAnimation = true
                         }
                         
                         try? await Task.sleep(nanoseconds: 2_500_000_000)
-                        bellButtonAnimation = false
+                        noticeButtonAnimation = false
                         noticevm.isUserNotified = true
                     }
                 }
@@ -242,7 +242,7 @@ struct HomeView: View {
                 showPreferancesView.toggle()
             }
         }
-        if /*noticevm.isNewNotices && */noticevm.isNotificationOn {
+        if noticevm.isNewNotices && noticevm.isNotificationOn {
             ToolbarItem(placement: .navigationBarLeading) {
                 
                 ZStack {
@@ -252,18 +252,6 @@ struct HomeView: View {
                     {
                         showNoticesView = true
                     }
-//                    .background(
-//                        Circle()
-//                            .stroke(lineWidth: 5)
-//                            .scale(bellButtonAnimation ? 1.0 : 0.0)
-//                            .opacity(bellButtonAnimation ? 0.0 : 1.0)
-//                            .animation(bellButtonAnimation ? Animation.easeOut(duration: 1.0) : .none, value: bellButtonAnimation)
-//                        
-//                    )
-                    .rotationEffect(.degrees(bellButtonAnimation ? 15 : 0))
-//                    .resizable()
-//                    .scaleEffect(x: 0.9, y: 1.3, anchor: .center)
-//                    .font(bellButtonAnimation ? .largeTitle : .body)
                     
                     Text("\(noticevm.notices.filter { $0.isRead == false }.count)")
                         .font(.system(size: 10, weight: .bold, design: .default))
@@ -272,6 +260,13 @@ struct HomeView: View {
                         .background(Color.mycolor.myRed, in: .capsule)
                         .offset(x: 7, y: -7)
                 }
+                .background(
+                    Circle()
+                        .stroke(lineWidth: noticevm.isUserNotified ? 0 : 5)
+                        .scale(noticeButtonAnimation ? 1.0 : 0.0)
+                        .opacity(noticeButtonAnimation ? 0.0 : 1.0)
+                        .animation(noticeButtonAnimation ? Animation.easeOut(duration: 1.0) : .none, value: noticeButtonAnimation)
+                )
             }
         }
         
