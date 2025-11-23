@@ -7,10 +7,10 @@
 // v01.14 StartToSwiftUI_Github_GitKraken
 
 import SwiftUI
+import Speech
 
 @main
 struct StartToSwiftUIApp: App {
-    
     
     @StateObject private var vm = PostsViewModel()
     @StateObject private var noticevm = NoticeViewModel()
@@ -52,7 +52,7 @@ struct StartToSwiftUIApp: App {
         // For UITableView
         UITableView.appearance().backgroundColor = UIColor.clear
         
-        // Warm a keyboard at app launch
+        // Warm Keyboard
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                   let window = scene.windows.first else { return }
@@ -61,9 +61,17 @@ struct StartToSwiftUIApp: App {
             textField.becomeFirstResponder()
             textField.resignFirstResponder()
             textField.removeFromSuperview()
+            print("Keyboard warmed up")
+            
+            // Warm Speech Recognition
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                SFSpeechRecognizer.requestAuthorization { _ in
+                    print("Speech recognizer warmed up")
+                }
+            }
+
         }
-        
-    }
+    } // init()
     
     var body: some Scene {
         WindowGroup {
@@ -78,15 +86,16 @@ struct StartToSwiftUIApp: App {
                     }
                 }
                 .zIndex(1)
+                
                 NavigationStack{
                     HomeView()
+//                    VoiceSearchView()
                 }
             }
             .environmentObject(vm)
             .environmentObject(noticevm)
             .environmentObject(speechRecogniser)
             .preferredColorScheme(vm.selectedTheme.colorScheme)
-            
         }
     }
 }

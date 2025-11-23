@@ -246,7 +246,7 @@
 			isa = PBXGroup;
 			children = (
 				4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */,
-				475997622E5CF0C3008E20F0 /* Support */,
+				475997622E5CF0C3008E20F0 /* SupportFrom3rdParties */,
 				4765A76E2EAE669200EACDF4 /* InProgress */,
 				475997722E5DA436008E20F0 /* Extensions */,
 				4759976C2E5D931F008E20F0 /* Services */,
@@ -300,7 +300,7 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
-		475997622E5CF0C3008E20F0 /* Support */ = {
+		475997622E5CF0C3008E20F0 /* SupportFrom3rdParties */ = {
 			isa = PBXGroup;
 			children = (
 				4759976D2E5D933C008E20F0 /* SafariWebService.swift */,
@@ -311,7 +311,7 @@
 				47A7339C2ED1C355006BB8A6 /* SpeechRecogniser.swift */,
 				47A7339E2ED1C55A006BB8A6 /* VoiceSearchView.swift */,
 			);
-			path = Support;
+			path = SupportFrom3rdParties;
 			sourceTree = "<group>";
 		};
 		4759976C2E5D931F008E20F0 /* Services */ = {

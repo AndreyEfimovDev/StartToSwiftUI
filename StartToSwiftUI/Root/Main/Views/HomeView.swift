@@ -114,18 +114,16 @@ struct HomeView: View {
                         if noticevm.isSoundNotificationOn {
                             AudioServicesPlaySystemSound(1013) // 1005
                         }
-                        
-                        withAnimation(
-                            .spring(
-                                response: 0.3,
-                                dampingFraction: 0.3
-                            )
-                            .repeatCount(5, autoreverses: false)
-                        ) {
+//                        withAnimation(
+//                            .spring(
+//                                response: 0.3,
+//                                dampingFraction: 0.3
+//                            )
+//                            .repeatCount(5, autoreverses: false)
+//                        ) {
                             noticeButtonAnimation = true
-                        }
-                        
-                        try? await Task.sleep(nanoseconds: 2_500_000_000)
+//                        }
+                        try? await Task.sleep(nanoseconds: 3_000_000_000)
                         noticeButtonAnimation = false
                         noticevm.isUserNotified = true
                     }
@@ -149,12 +147,6 @@ struct HomeView: View {
                 PostRowView(post: post)
                     .id(post.id)
                     .background(trackingFistPostInList(post: post))
-                    .padding(.bottom, 4)
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(
-                        EdgeInsets(top: 0, leading: 1, bottom: 1, trailing: 1)
-                    )
                     .onTapGesture {
                         selectedPostId = post.id
                         showDetailView.toggle()
@@ -195,41 +187,14 @@ struct HomeView: View {
             } message: {
                 Text("It will be impossible to undo the deletion.")
             }
-            // .buttonStyle(.plain) // it makes the buttons accessable through the List elements
+            .listRowBackground(Color.clear)
+            .listRowSeparatorTint(Color.mycolor.myAccent.opacity(0.35))
+            .listRowSeparator(.hidden, edges: [.top])
+            .listRowInsets(
+                EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+            )
         } // List
         .listStyle(.plain)
-        .background(Color.mycolor.myBackground)
-        
-    }
-    
-    private var allPostsIsEmpty: some View {
-        ContentUnavailableView(
-            "No Posts",
-            systemImage: "tray.and.arrow.down",
-            description: Text("Posts will appear here when you create your own or download a curated collection.")
-        )
-    }
-    
-    private var filteredPostsIsEmpty: some View {
-        ContentUnavailableView(
-            "No Results matching your search criteria",
-            systemImage: "magnifyingglass",
-            description: Text("Check the spelling or try a new search.")
-        )
-    }
-    
-    
-    @ViewBuilder
-    private func trackingFistPostInList(post: Post) -> some View {
-        GeometryReader { geo in
-            Color.clear
-                .onChange(of: geo.frame(in: .global).minY) { oldY, newY in
-                    // Track first element position in the List
-                    if post.id == vm.filteredPosts.first?.id {
-                        showOnTopButton = newY < 0
-                    }
-                }
-        }
     }
     
     @ToolbarContentBuilder
@@ -262,10 +227,14 @@ struct HomeView: View {
                 }
                 .background(
                     Circle()
-                        .stroke(lineWidth: noticevm.isUserNotified ? 0 : 5)
-                        .scale(noticeButtonAnimation ? 1.0 : 0.0)
+                        .stroke(lineWidth: noticeButtonAnimation ? 2 : 0)
+                        .scale(noticeButtonAnimation ? 1.2 : 0.8)
                         .opacity(noticeButtonAnimation ? 0.0 : 1.0)
-                        .animation(noticeButtonAnimation ? Animation.easeOut(duration: 1.0) : .none, value: noticeButtonAnimation)
+                        .animation(
+                            noticeButtonAnimation
+                            ? .easeOut(duration: 1.0)
+                            : .none,
+                            value: noticeButtonAnimation)
                 )
             }
         }
@@ -287,7 +256,37 @@ struct HomeView: View {
                 isFilterButtonPressed.toggle()}
         }
     }
+        
+    @ViewBuilder
+    private func trackingFistPostInList(post: Post) -> some View {
+        GeometryReader { geo in
+            Color.clear
+                .onChange(of: geo.frame(in: .global).minY) { oldY, newY in
+                    // Track first element position in the List
+                    if post.id == vm.filteredPosts.first?.id {
+                        showOnTopButton = newY < 0
+                    }
+                }
+        }
+    }
+
+    private var allPostsIsEmpty: some View {
+        ContentUnavailableView(
+            "No Posts",
+            systemImage: "tray.and.arrow.down",
+            description: Text("Posts will appear here when you create your own or download a curated collection.")
+        )
+    }
     
+    private var filteredPostsIsEmpty: some View {
+        ContentUnavailableView(
+            "No Results matching your search criteria",
+            systemImage: "magnifyingglass",
+            description: Text("Check the spelling or try a new search.")
+        )
+    }
+    
+        
     private var welcomeAtFirstLauch: some View {
         ZStack {
             Color.mycolor.myBackground
@@ -388,3 +387,6 @@ struct HomeView: View {
     .environmentObject(PostsViewModel())
     .environmentObject(NoticeViewModel())
 }
+
+
+//     .buttonStyle(.plain) // it makes the buttons accessable through the List elements

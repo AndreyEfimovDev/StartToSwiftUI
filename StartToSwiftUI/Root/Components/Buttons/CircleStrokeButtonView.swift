@@ -4,9 +4,7 @@
 //
 //  Created by Andrey Efimov on 08.09.2025.
 //
-// Customizing the appearance of symbol images in SwiftUI: https://nilcoalescing.com/blog/CustomizingTheAppearanceOfSymbolImagesInSwiftUI/
-// 22 July 2024
-// Natalia Panferova
+
 
 import SwiftUI
 

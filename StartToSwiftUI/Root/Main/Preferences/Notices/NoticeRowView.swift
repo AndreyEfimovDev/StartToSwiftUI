@@ -14,10 +14,10 @@ struct NoticeRowView: View {
     let notice: Notice
     
     var body: some View {
-        HStack {
             VStack (alignment: .leading) {
                 Text("\(notice.noticeDate.formatted(date: .numeric, time: .omitted))")
                     .font(.caption2)
+                    .padding(.top, 4)
                 
                 Text(notice.title)
                     .font(.body)
@@ -28,10 +28,11 @@ struct NoticeRowView: View {
             .foregroundStyle(Color.mycolor.myAccent)
             .fontWeight(notice.isRead ? .regular : .bold)
             .opacity(notice.isRead ? 0.8 : 1)
-//            .padding()
+            .padding(.horizontal)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(.ultraThinMaterial)
-        }
+//            .padding()
+//            .background(.ultraThinMaterial)
+        
     }
 }
 
