@@ -6,19 +6,6 @@
 //
 //
 
-//
-//   AudioServicesPlaySystemSound(1002) // New mail
-//   AudioServicesPlaySystemSound(1007) // Mail sent
-//   AudioServicesPlaySystemSound(1012) // Time passing
-//   AudioServicesPlaySystemSound(1013) // Low power
-//   AudioServicesPlaySystemSound(1020) // Suspense
-//   AudioServicesPlaySystemSound(1022) // Anticipate
-//   AudioServicesPlaySystemSound(1025) // Bloom
-//   AudioServicesPlaySystemSound(1030) // Sherwood Forest
-//   AudioServicesPlaySystemSound(1032) // Spell
-//   AudioServicesPlaySystemSound(1033) // Calypso
-//   AudioServicesPlaySystemSound(1034) // News flash
-
 import Foundation
 import SwiftUI
 import AudioToolbox
