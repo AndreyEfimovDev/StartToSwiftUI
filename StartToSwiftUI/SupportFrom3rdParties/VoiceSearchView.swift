@@ -10,7 +10,9 @@ import SwiftUI
 struct VoiceSearchView: View {
     
     @EnvironmentObject private var speechRecogniser: SpeechRecogniser
+    
     @State private var searchText = ""
+    @State private var isPulsing: Bool = false
     
     var body: some View {
         VStack(spacing: 16) {
@@ -40,9 +42,11 @@ struct VoiceSearchView: View {
                 // Voice recording button
                 Button {
                     if speechRecogniser.isRecording {
+//                        isPulsing = false
                         speechRecogniser.stopRecording()
                     } else {
                         searchText = ""
+//                        isPulsing = true
                         speechRecogniser.startRecording()
                     }
                 } label: {
@@ -63,6 +67,7 @@ struct VoiceSearchView: View {
                         Image(systemName: speechRecogniser.isRecording ? "stop.circle.fill" : "mic.circle.fill")
                             .font(.title)
                             .foregroundColor(speechRecogniser.isRecording ? .red : .blue)
+                            .symbolEffect(.pulse, isActive: speechRecogniser.isRecording)
                     }
                 }
                 .buttonStyle(.plain)

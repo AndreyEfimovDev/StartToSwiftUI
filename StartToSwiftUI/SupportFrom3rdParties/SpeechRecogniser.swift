@@ -9,24 +9,6 @@ import SwiftUI
 import Speech
 import AVFoundation
 
-//
-//private enum SpeechError: Int {
-//    case noSpeech = 301
-//    case serviceBusy = 1110
-//    case cancelled = 216
-//    case retry = 1107
-//    
-//    var shouldIgnore: Bool {
-//        switch self {
-//        case .serviceBusy, .cancelled:
-//            return true
-//        default:
-//            return false
-//        }
-//    }
-//}
-//
-
 class SpeechRecogniser: NSObject, ObservableObject {
     
     @Published var recognisedText = ""
@@ -41,20 +23,17 @@ class SpeechRecogniser: NSObject, ObservableObject {
     
     // Flag to track successful completion
     private var hasRecognisedText = false
-
     
     override init() {
         super.init()
         self.speechRecogniser = SFSpeechRecognizer(locale: Locale(identifier: "en-GB"))
         requestAuthorization()
-        warmUp()
     }
-    
     
     deinit {
         stopRecording()
     }
-
+    
     
     func requestAuthorization() {
         SFSpeechRecognizer.requestAuthorization { authStatus in
@@ -79,20 +58,18 @@ class SpeechRecogniser: NSObject, ObservableObject {
         // Stop the previous recording
         stopRecording()
         
-        
         // Reset the flag and clear the error
         hasRecognisedText = false
         errorMessage = nil
         recognisedText = ""
-
         
-        // Checking microphone permissions
+        // Check microphone availability
         guard AVAudioSession.sharedInstance().availableInputs != nil else {
             self.errorMessage = "Microphone unavailable"
             return
         }
         
-        // Проверяем разрешение на микрофон
+        // Check microphone permissions
         AVAudioApplication.requestRecordPermission { [weak self] allowed in
             guard let self = self else { return }
             DispatchQueue.main.async {
@@ -100,7 +77,6 @@ class SpeechRecogniser: NSObject, ObservableObject {
                     self.errorMessage = "Microphone access denied"
                     return
                 }
-                
                 self.setupRecording()
             }
         }
@@ -116,7 +92,6 @@ class SpeechRecogniser: NSObject, ObservableObject {
             self.errorMessage = "Audio session error: \(error.localizedDescription)"
             return
         }
-        
         // Create a recognition request
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         guard let recognitionRequest = recognitionRequest else {
@@ -157,9 +132,12 @@ class SpeechRecogniser: NSObject, ObservableObject {
             isRecording = true
             errorMessage = nil
             
-            // ✅ Auto-stop timer after 15 seconds
-            silenceTimer = Timer.scheduledTimer(withTimeInterval: 15.0, repeats: false) { [weak self] _ in
-                self?.stopRecording()
+            // Set timer stopped after 15 seconds of silence
+            DispatchQueue.main.async { [weak self] in
+                self?.silenceTimer = Timer.scheduledTimer(withTimeInterval: 15.0, repeats: false) { [weak self] _ in
+                    self?.stopRecording()
+                    print("🛑 15-second timeout reached")
+                }
             }
             
         } catch {
@@ -167,7 +145,7 @@ class SpeechRecogniser: NSObject, ObservableObject {
             return
         }
         
-        // Launching the recognition task
+        // Launch the recognition task
         recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { [weak self] result, error in
             guard let self = self else { return }
             
@@ -179,19 +157,19 @@ class SpeechRecogniser: NSObject, ObservableObject {
                     }
                     self.errorMessage = nil
                     
-                    // ✅ Set a flag upon successful recognition
+                    // Set a flag upon successful recognition
                     if !newText.isEmpty {
                         self.hasRecognisedText = true
                     }
-
+                    
                     print("Recognized: \(newText)")
                 }
                 
-                // ✅ Auto-stop after a pause in speech
+                // Auto-stop after a pause in speech
                 if result.isFinal {
                     self.stopRecording()
                 } else {
-                    // Перезапускаем таймер при каждом новом слове
+                    // Restart the timer with each new word
                     self.silenceTimer?.invalidate()
                     self.silenceTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { [weak self] _ in
                         self?.stopRecording()
@@ -201,7 +179,6 @@ class SpeechRecogniser: NSObject, ObservableObject {
             
             if let error = error {
                 let nsError = error as NSError
-                
                 // Error 301 - Check the flag
                 if nsError.code == 301 {
                     if self.hasRecognisedText {
@@ -215,7 +192,6 @@ class SpeechRecogniser: NSObject, ObservableObject {
                     }
                     return
                 }
-
                 // Ignore 1110 and 216
                 if [1110, 216].contains(nsError.code) {
                     self.stopRecording()
@@ -232,9 +208,13 @@ class SpeechRecogniser: NSObject, ObservableObject {
     }
     
     func stopRecording() {
-        silenceTimer?.invalidate()
-        silenceTimer = nil
         
+        // Stopp the timer silenceTimer in the main thread
+        DispatchQueue.main.async { [weak self] in
+               self?.silenceTimer?.invalidate()
+               self?.silenceTimer = nil
+           }
+                
         recognitionTask?.cancel()
         recognitionTask = nil
         recognitionRequest?.endAudio()
@@ -255,45 +235,5 @@ class SpeechRecogniser: NSObject, ObservableObject {
             self.isRecording = false
         }
     }
-    
-    
-    // ✅ Метод для полного прогрева
-        func warmUp() {
-            // 1. Запрашиваем авторизацию
-            SFSpeechRecognizer.requestAuthorization { _ in }
-            AVAudioApplication.requestRecordPermission { _ in }
-            
-            // 2. Инициализируем Audio Session
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                do {
-                    let audioSession = AVAudioSession.sharedInstance()
-                    try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
-                    try audioSession.setActive(true)
-                    
-                    // 3. Прогреваем Audio Engine
-                    let audioEngine = AVAudioEngine()
-                    let inputNode = audioEngine.inputNode
-                    let recordingFormat = inputNode.outputFormat(forBus: 0)
-                    
-                    // Устанавливаем и сразу убираем tap
-                    inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { _, _ in }
-                    
-                    audioEngine.prepare()
-                    try audioEngine.start()
-                    
-                    // Останавливаем через 0.1 сек
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        audioEngine.stop()
-                        inputNode.removeTap(onBus: 0)
-                        try? audioSession.setActive(false)
-                        print("✅ Speech recognizer fully warmed up")
-                    }
-                    
-                } catch {
-                    print("⚠️ Warm up error: \(error)")
-                }
-            }
-        }
-    
     
 }
