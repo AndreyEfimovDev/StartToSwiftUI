@@ -47,7 +47,14 @@ class SpeechRecogniser: NSObject, ObservableObject {
         super.init()
         self.speechRecogniser = SFSpeechRecognizer(locale: Locale(identifier: "en-GB"))
         requestAuthorization()
+        warmUp()
     }
+    
+    
+    deinit {
+        stopRecording()
+    }
+
     
     func requestAuthorization() {
         SFSpeechRecognizer.requestAuthorization { authStatus in
@@ -150,8 +157,8 @@ class SpeechRecogniser: NSObject, ObservableObject {
             isRecording = true
             errorMessage = nil
             
-            // ✅ Auto-stop timer after 30 seconds
-            silenceTimer = Timer.scheduledTimer(withTimeInterval: 30.0, repeats: false) { [weak self] _ in
+            // ✅ Auto-stop timer after 15 seconds
+            silenceTimer = Timer.scheduledTimer(withTimeInterval: 15.0, repeats: false) { [weak self] _ in
                 self?.stopRecording()
             }
             
@@ -249,7 +256,44 @@ class SpeechRecogniser: NSObject, ObservableObject {
         }
     }
     
-    deinit {
-        stopRecording()
-    }
+    
+    // ✅ Метод для полного прогрева
+        func warmUp() {
+            // 1. Запрашиваем авторизацию
+            SFSpeechRecognizer.requestAuthorization { _ in }
+            AVAudioApplication.requestRecordPermission { _ in }
+            
+            // 2. Инициализируем Audio Session
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                do {
+                    let audioSession = AVAudioSession.sharedInstance()
+                    try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
+                    try audioSession.setActive(true)
+                    
+                    // 3. Прогреваем Audio Engine
+                    let audioEngine = AVAudioEngine()
+                    let inputNode = audioEngine.inputNode
+                    let recordingFormat = inputNode.outputFormat(forBus: 0)
+                    
+                    // Устанавливаем и сразу убираем tap
+                    inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { _, _ in }
+                    
+                    audioEngine.prepare()
+                    try audioEngine.start()
+                    
+                    // Останавливаем через 0.1 сек
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        audioEngine.stop()
+                        inputNode.removeTap(onBus: 0)
+                        try? audioSession.setActive(false)
+                        print("✅ Speech recognizer fully warmed up")
+                    }
+                    
+                } catch {
+                    print("⚠️ Warm up error: \(error)")
+                }
+            }
+        }
+    
+    
 }
