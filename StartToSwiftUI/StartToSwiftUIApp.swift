@@ -14,6 +14,8 @@ struct StartToSwiftUIApp: App {
     
     @StateObject private var vm = PostsViewModel()
     @StateObject private var noticevm = NoticeViewModel()
+    @StateObject private var speechRecogniser = SpeechRecogniser()
+
     private let hapticManager = HapticService.shared
     
     @State private var showLaunchView: Bool = true
@@ -82,6 +84,7 @@ struct StartToSwiftUIApp: App {
             }
             .environmentObject(vm)
             .environmentObject(noticevm)
+            .environmentObject(speechRecogniser)
             .preferredColorScheme(vm.selectedTheme.colorScheme)
             
         }

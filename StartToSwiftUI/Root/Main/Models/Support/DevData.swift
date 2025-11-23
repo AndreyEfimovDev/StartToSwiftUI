@@ -67,7 +67,7 @@ struct DevData {
         intro: """
             Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
             """,
-        author: "Swiftful Thinking/Nick Sarno",
+        author: "Nick Sarno/Swiftful Thinking",
         postType: .course,
         urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
         postDate: Date.from(year: 2021, month: 8, day: 30),
@@ -117,7 +117,7 @@ struct DevData {
             intro: """
             In this video we will add local push notifications to our app! We will learn how to request permissions from the user and then schedule the notifications with 3 different triggers. The 1st will be based on time, the 2nd based on date, and the 3rd based on location. Apple has made adding these notifications extremely easy and they will give your app a very professional feel!
             """,
-            author: "Swiftful Thinking/Nick Sarno", // Nick Sarno
+            author: "Nick Sarno/Swiftful Thinking", // Nick Sarno
             urlString: "https://www.youtube.com/watch?v=mG9BVAs8AIo",
             postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 4, day: 9),
@@ -142,7 +142,7 @@ struct DevData {
             intro: """
             CloudKit makes it extremely easy to send real, live push notifications to your users! In this video we will set up a ""subscription"" which will then allow users to receive push notification in real-time! This is one of the EASIEST ways to add push notification capability to an iOS project.
             """,
-            author: "Swiftful Thinking/Nick Sarno",
+            author: "Nick Sarno/Swiftful Thinking",
             urlString: "https://www.youtube.com/watch?v=vr5CBfaK14A",
             postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 11, day: 18),
@@ -870,7 +870,7 @@ struct DevData {
             intro: """
                 Get started with the Swift programming language. Write your first line of code and learn the fundamentals.
                 """,
-            author: "Swiftful Thinking/Nick Sarno",
+            author: "Nick Sarno/Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiLvzZFJI6rVIBtdolrJBVB",
             postPlatform: .youtube,
@@ -881,7 +881,7 @@ struct DevData {
             intro: """
                 The fastest way to learn SwiftUI. Learn how to build beautiful screens and other UI components.
                 """,
-            author: "Swiftful Thinking/Nick Sarno",
+            author: "Nick Sarno/Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO",
             postPlatform: .youtube,
@@ -892,7 +892,7 @@ struct DevData {
             intro: """
                 Build your first app in SwiftUI! Learn how to build a real application with MVVM app architecture.
                 """,
-            author: "Swiftful Thinking/Nick Sarno",
+            author: "Nick Sarno/Swiftful Thinking",
             postType: .solution,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpheGqemblOIA7v3oq0MS30i",
             postPlatform: .youtube,
@@ -904,7 +904,7 @@ struct DevData {
             intro: """
                 A complete guide for learning how to use git. Practice using Source Control within Xcode, GitKraken, and Github. Get familiar with Git Flow.
                 """,
-            author: "Swiftful Thinking/Nick Sarno",
+            author: "Nick Sarno/Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiALKk34l9mUS2f4mdJPvXq",
             postPlatform: .youtube,
@@ -915,7 +915,7 @@ struct DevData {
             intro: """
                 Build a map app to showcase real destinations around the world. Get familiar with data management and transitions.
                 """,
-            author: "Swiftful Thinking/Nick Sarno",
+            author: "Nick Sarno/Swiftful Thinking",
             postType: .solution,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdpha5eVTjLM0eRlJ7-yDDwBk",
             postPlatform: .youtube,
@@ -927,7 +927,7 @@ struct DevData {
             intro: """
                 Building professional apps requires knowledge of data persistence and networking. This bootcamp builds on your existing knowledge of SwiftUI.
                 """,
-            author: "Swiftful Thinking/Nick Sarno",
+            author: "Nick Sarno/Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar",
             studyLevel: .middle,
@@ -938,7 +938,7 @@ struct DevData {
             intro: """
                 Build a cryptocurrency app that downloads live price data from an API and saves the current user's portfolio. Get comfortable with Combine, Core Data, and MVVM.
                 """,
-            author: "Swiftful Thinking/Nick Sarno",
+            author: "Nick Sarno/Swiftful Thinking",
             postType: .solution,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
             postDate: Date.from(year: 2021, month: 5, day: 24),
@@ -950,7 +950,7 @@ struct DevData {
             intro: """
                 Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
                 """,
-            author: "Swiftful Thinking/Nick Sarno",
+            author: "Nick Sarno/Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
             studyLevel: .advanced,
@@ -1009,7 +1009,7 @@ struct DevData {
             intro: """
                 This video introduces AnyLayout, which allows us to customize the layout of our Views. This is similar to using an HStack or VStack, except gives us additional capabilities to customize the View for different environments or settings.
                 """,
-            author: "Swiftful Thinking/Nick Sarno",
+            author: "Nick Sarno/Swiftful Thinking",
             postType: .post,
             urlString: "https://www.youtube.com/watch?v=7BAW70amSCA&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=73",
             postPlatform: .youtube,
@@ -1022,7 +1022,7 @@ struct DevData {
             intro: """
                 In this video, we'll learn how to use ViewThatFits to add custom View rendering into our application! This allows us to dynamically change the "View" to the best "fit" for the current frame. This is especially helpful when displaying on devices with different screen sizes.
                 """,
-            author: "Swiftful Thinking/Nick Sarno",
+            author: "Nick Sarno/Swiftful Thinking",
             postType: .post,
             urlString: "https://www.youtube.com/watch?v=oN3Rqo6V6Uc&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=74",
             postPlatform: .youtube,
@@ -1035,7 +1035,7 @@ struct DevData {
             intro: """
                 Explore ControlGroup in SwiftUI to efficiently organize UI controls in your iOS and macOS apps. This video covers how to use ControlGroup for grouping related user interface elements, improving both the design and functionality of your applications. Essential for developers looking to enhance their SwiftUI projects.
                 """,
-            author: "Swiftful Thinking/Nick Sarno",
+            author: "Nick Sarno/Swiftful Thinking",
             postType: .post,
             urlString: "https://www.youtube.com/watch?v=oN3Rqo6V6Uc&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=74",
             postPlatform: .youtube,
@@ -1049,7 +1049,7 @@ struct DevData {
             intro: """
                 The Action Sheet is a super convenient component in SwiftUI that presents a message and buttons to our users. Implementing an .actionSheet() is very similar to the .alert() which we learned the last video of the SwiftUI Bootcamp, however, the action sheet pops up from the bottom and can support more than 2 buttons! In this video we will learn how to implement and customize the .actionSheet to make it adaptable and dynamic.
                 """,
-            author: "Swiftful Thinking/Nick Sarno",
+            author: "Nick Sarno/Swiftful Thinking",
             postType: .post,
             urlString: "https://www.youtube.com/watch?v=tNwnihqJf2I&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=36",
             postPlatform: .youtube,
@@ -1062,7 +1062,7 @@ struct DevData {
             intro: """
                 In almost every application there are cases where you will declare variables as optional. In Swift we declare a value as optional be using the ?. When we do this, we are telling Xcode that this variable has the potential to be nil (or without a value). Therefore, when we go to use that variable in our code, we need to safely check whether or not it really has a value at that time. Two of the smartest and safest ways to safely "unwrap" these optionals is be using 'if let' and 'guard' statements. In this video we will learn both! It should be noted that both of these methods are MUCH safer than explicitly unwrapping optionals by using the ! symbol (avoid this!).
                 """,
-            author: "Swiftful Thinking/Nick Sarno",
+            author: "Nick Sarno/Swiftful Thinking",
             postType: .post,
             urlString: "https://www.youtube.com/watch?v=wmQIl0O9HBY&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=50",
             postPlatform: .youtube,
@@ -1075,7 +1075,7 @@ struct DevData {
             intro: """
                 One of the most underrated features released in iOS 15 is the ability to let users select and copy text in SwiftUI. In this quick video, we will learn how to use the .textSelection modifier! This feature probably did not need it's own video, but I think it's a pretty important feature to know about. This is great for chat apps or any content-based app where users might want to share some text with a friend. Sharing is not only a great feature for your users, but will help drive organic growth as users share with others.
                 """,
-            author: "Swiftful Thinking/Nick Sarno",
+            author: "Nick Sarno/Swiftful Thinking",
             postType: .post,
             urlString: "https://www.youtube.com/watch?v=AiSLtya25ac&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=59",
             postPlatform: .youtube,
@@ -1089,7 +1089,7 @@ struct DevData {
             intro: """
                 Build a cryptocurrency app that downloads live price data from an API and saves the current user's portfolio. Get comfortable with Combine, Core Data, and MVVM.
                 """,
-            author: "Swiftful Thinking/Nick Sarno",
+            author: "Nick Sarno/Swiftful Thinking",
             postType: .solution,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
             postPlatform: .youtube,

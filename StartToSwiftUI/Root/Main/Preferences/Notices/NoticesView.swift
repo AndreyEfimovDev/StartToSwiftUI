@@ -26,9 +26,10 @@ struct NoticesView: View {
                     List {
                         ForEach(noticevm.notices.sorted {$0.noticeDate > $1.noticeDate}) { notice in
                             NoticeRowView(notice: notice)
+                                .listStyle(.plain)
                                 .listRowBackground(Color.clear)
                                 .listRowSeparatorTint(Color.mycolor.myAccent.opacity(0.35))
-                                .listRowSeparator(.hidden, edges: [.top])
+//                                .listRowSeparator(.hidden, edges: [.top])
                                 .listRowInsets(
                                     EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
                                 )

@@ -28,9 +28,9 @@ struct NoticeRowView: View {
             .foregroundStyle(Color.mycolor.myAccent)
             .fontWeight(notice.isRead ? .regular : .bold)
             .opacity(notice.isRead ? 0.8 : 1)
-            .padding()
+//            .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.mycolor.mySectionBackground)
+            .background(.ultraThinMaterial)
         }
     }
 }
