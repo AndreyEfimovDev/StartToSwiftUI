@@ -20,8 +20,6 @@ class NoticeViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var showErrorMessageAlert = false
     
-    @Published var isNewNotices: Bool = false
-
     @AppStorage("isUserNotified") var isUserNotified: Bool = true
     @AppStorage("isNotificationOn") var isNotificationOn: Bool = true
     @AppStorage("isSoundNotificationOn") var isSoundNotificationOn: Bool = true
@@ -99,7 +97,7 @@ class NoticeViewModel: ObservableObject {
                         if !cloudNoticesWithNewerDates.isEmpty {
                             
                             // Make User informed of new notifications
-                            self?.isNewNotices = true
+//                            self?.isNewNotices = true
                             self?.isUserNotified = false
                             
                             // Set a new date of latest notices update
@@ -121,6 +119,8 @@ class NoticeViewModel: ObservableObject {
                             } else {
                                 print("🍉 NVN(importNoticesFromCloud): No new notices from the cloud")
                             }
+                        } else {
+                            print("🍉☑️ NVN(importNoticesFromCloud): Array of new notifications from the cloud is empty.")
                         }
                         
                     } else {

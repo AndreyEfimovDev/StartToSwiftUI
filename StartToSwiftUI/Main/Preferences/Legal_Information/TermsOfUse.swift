@@ -202,7 +202,7 @@ struct TermsOfUse: View {
                         }
                     }
                     .padding(.horizontal, 30)
-                    .padding(30)
+                    .padding(15)
                     .disabled(vm.isTermsOfUseAccepted)
             }
         }

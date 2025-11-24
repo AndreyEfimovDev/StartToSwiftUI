@@ -22,35 +22,34 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J3r-5b-2fa">
-                                <rect key="frame" x="0.0" y="118" width="393" height="666"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wIQ-Y4-9tF">
+                                <rect key="frame" x="0.0" y="118" width="393" height="714"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="StartToSwiftUI_icon_dark_1024" translatesAutoresizingMaskIntoConstraints="NO" id="MeM-Vz-803">
-                                        <rect key="frame" x="96.666666666666686" y="233" width="200" height="200"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchIcon_blue" translatesAutoresizingMaskIntoConstraints="NO" id="DMB-yz-5GM">
+                                        <rect key="frame" x="96.666666666666686" y="257" width="200" height="200"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="200" id="NON-SW-zwk"/>
-                                            <constraint firstAttribute="width" constant="200" id="Zdr-2N-kb0"/>
+                                            <constraint firstAttribute="width" constant="200" id="6Zm-gw-G5d"/>
+                                            <constraint firstAttribute="height" constant="200" id="c2Q-rW-ydt"/>
                                         </constraints>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="MeM-Vz-803" firstAttribute="centerX" secondItem="J3r-5b-2fa" secondAttribute="centerX" id="m4e-Li-9ni"/>
-                                    <constraint firstItem="MeM-Vz-803" firstAttribute="centerY" secondItem="J3r-5b-2fa" secondAttribute="centerY" id="xk1-Fj-CZ9"/>
+                                    <constraint firstItem="DMB-yz-5GM" firstAttribute="centerY" secondItem="wIQ-Y4-9tF" secondAttribute="centerY" id="Cks-dC-4Ni"/>
+                                    <constraint firstItem="DMB-yz-5GM" firstAttribute="centerX" secondItem="wIQ-Y4-9tF" secondAttribute="centerX" id="yzK-bQ-IJm"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <color key="backgroundColor" name="LaunchBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="J3r-5b-2fa" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" id="4pf-1n-5gz"/>
                             <constraint firstItem="Bcu-3y-fUS" firstAttribute="centerX" secondItem="obG-Y5-kRd" secondAttribute="centerX" id="5cz-MP-9tL"/>
-                            <constraint firstItem="J3r-5b-2fa" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" id="Fcr-Er-OWD"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="wIQ-Y4-9tF" secondAttribute="trailing" id="KCd-Ne-aBS"/>
+                            <constraint firstItem="wIQ-Y4-9tF" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" id="Mrd-wH-TpZ"/>
                             <constraint firstItem="obG-Y5-kRd" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" symbolic="YES" id="SfN-ll-jLj"/>
+                            <constraint firstItem="obG-Y5-kRd" firstAttribute="top" secondItem="wIQ-Y4-9tF" secondAttribute="bottom" id="TnV-YO-KkR"/>
                             <constraint firstAttribute="bottom" secondItem="obG-Y5-kRd" secondAttribute="bottom" constant="20" id="Y44-ml-fuU"/>
-                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="bottom" secondItem="J3r-5b-2fa" secondAttribute="bottom" id="nFl-xp-1cL"/>
-                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="J3r-5b-2fa" secondAttribute="trailing" id="r1f-Up-gfg"/>
+                            <constraint firstItem="wIQ-Y4-9tF" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="topMargin" id="h2Z-PQ-C0Q"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -60,9 +59,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="StartToSwiftUI_icon_dark_1024" width="1024" height="1024"/>
+        <image name="LaunchIcon_blue" width="1024" height="1024"/>
         <namedColor name="LaunchBackgroundColor">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.28099998831748962" green="0.39800000190734863" blue="0.8190000057220459" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
     </resources>
 </document>

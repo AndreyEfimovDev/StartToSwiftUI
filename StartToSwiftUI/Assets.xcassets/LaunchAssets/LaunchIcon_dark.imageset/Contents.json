@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "StartToSwiftUI_icon_dark_1024.png",
+      "filename" : "StartToSwiftUI_dark_1024_4.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -17,5 +17,8 @@
   "info" : {
     "author" : "xcode",
     "version" : 1
+  },
+  "properties" : {
+    "compression-type" : "lossless"
   }
 }
