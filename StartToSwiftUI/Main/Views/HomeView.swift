@@ -125,7 +125,7 @@ struct HomeView: View {
 //                        }
                         try? await Task.sleep(nanoseconds: 3_000_000_000)
                         noticeButtonAnimation = false
-                        noticevm.isUserNotified = true
+//                        noticevm.isUserNotified = true
                     }
                 }
             }
