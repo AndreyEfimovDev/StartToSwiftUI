@@ -64,9 +64,9 @@ fileprivate struct PostDraftsRowPreView: View {
                 .ignoresSafeArea()
 
             List {
-                PostDraftsRowView(post: DevData.samplePost1)
-                PostDraftsRowView(post: DevData.samplePost2)
-                PostDraftsRowView(post: DevData.samplePost3)
+                PostDraftsRowView(post: PreviewData.samplePost1)
+                PostDraftsRowView(post: PreviewData.samplePost2)
+                PostDraftsRowView(post: PreviewData.samplePost3)
             }
             .padding()
         }

@@ -43,9 +43,9 @@ fileprivate struct NoticeRowPreView: View {
                     .ignoresSafeArea()
                 
                 List {
-                    NoticeRowView(notice: DevData.sampleNotice1)
-                    NoticeRowView(notice: DevData.sampleNotice2)
-                    NoticeRowView(notice: DevData.sampleNotice3)
+                    NoticeRowView(notice: PreviewData.sampleNotice1)
+                    NoticeRowView(notice: PreviewData.sampleNotice2)
+                    NoticeRowView(notice: PreviewData.sampleNotice3)
                 }
                 .padding()
             }
