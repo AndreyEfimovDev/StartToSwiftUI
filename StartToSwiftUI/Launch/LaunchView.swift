@@ -22,7 +22,7 @@ struct LaunchView: View {
             Color.launch.background
                 .ignoresSafeArea()
             
-            Image("StartToSwiftUI_icon_any_1024blue")
+            Image("StartToSwiftUI_icon_dark_1024")
                 .resizable()
                 .font(.headline)
                 .fontWeight(.heavy)
@@ -34,7 +34,7 @@ struct LaunchView: View {
                         ForEach(loadingString.indices, id: \.self) { index in
                             Text(loadingString[index])
                                 .offset(y: counter == index ? -11 : 0)
-                        }
+                        } 
                     }
                     .font(.subheadline)
                     .transition(AnyTransition.scale.animation(.easeIn))
