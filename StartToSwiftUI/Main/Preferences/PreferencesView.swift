@@ -71,7 +71,7 @@ struct PreferencesView: View {
                 erasePosts
             }
             Section(header: sectionHeader("Сommunication")){
-                thankfullness
+                acknowledgements
                 aboutApplication
                 legalInformation
                 contactDeveloperButton
@@ -189,10 +189,10 @@ struct PreferencesView: View {
         )
     }
     
-    private var thankfullness: some View {
+    private var acknowledgements: some View {
         
-        NavigationLink("Thankfullness") {
-            ThankfullnessView()
+        NavigationLink("Acknowledgements") {
+            Acknowledgements()
         }
         .customListRowStyle(
             iconName: "hand.thumbsup",

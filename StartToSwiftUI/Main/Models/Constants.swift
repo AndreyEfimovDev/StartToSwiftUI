@@ -14,9 +14,9 @@ struct Constants {
     static let cloudPostsURL = "https://raw.githubusercontent.com/AndreyEfimovDev/Archive/refs/heads/main/cloudPosts.json"
     
     // GitHub cloud url on JSON file with notifications
-//    static let cloudNoticesURL = "https://raw.githubusercontent.com/AndreyEfimovDev/Archive/refs/heads/main/notificaions_app.json"
-    
-    static let cloudNoticesURL = "https://raw.githubusercontent.com/AndreyEfimovDev/Archive/refs/heads/main/notificaions_app_test.json"
+    static let cloudNoticesURL = "https://raw.githubusercontent.com/AndreyEfimovDev/Archive/refs/heads/main/notificaions_app.json"
+    // GitHub cloud url on JSON file with TEST notifications
+//    static let cloudNoticesURL = "https://raw.githubusercontent.com/AndreyEfimovDev/Archive/refs/heads/main/notificaions_app_test.json"
 
     
     // Filename for File Manager to keep all posts locally saved
