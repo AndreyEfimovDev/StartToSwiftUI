@@ -251,7 +251,8 @@
 				475997722E5DA436008E20F0 /* Extensions */,
 				4759976C2E5D931F008E20F0 /* Services */,
 				47069EFC2EAFF2E30082AE12 /* Launch */,
-				475997582E5C86B7008E20F0 /* Root */,
+				475997592E5C86C5008E20F0 /* Components */,
+				47BAF0ED2E645AFE00287F10 /* Main */,
 				475997492E5C690B008E20F0 /* Assets.xcassets */,
 				471BEF4F2EA793880093F962 /* Info.plist */,
 			);
@@ -277,15 +278,6 @@
 				471BBFA02EC7251D0004AC45 /* NoticeViewModel.swift */,
 			);
 			path = ViewModels;
-			sourceTree = "<group>";
-		};
-		475997582E5C86B7008E20F0 /* Root */ = {
-			isa = PBXGroup;
-			children = (
-				475997592E5C86C5008E20F0 /* Components */,
-				47BAF0ED2E645AFE00287F10 /* Main */,
-			);
-			path = Root;
 			sourceTree = "<group>";
 		};
 		475997592E5C86C5008E20F0 /* Components */ = {
