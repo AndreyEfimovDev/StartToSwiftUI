@@ -81,12 +81,12 @@ struct NoticesView: View {
                 }
             }
         }
-        .onAppear {
-            // Set User to be informed of new notices
-            if !noticevm.isUserNotified {
-                noticevm.isUserNotified = true
-            }
-        }
+//        .onAppear {
+//            // Set User to be informed of new notices
+//            if !noticevm.isUserNotified {
+//                noticevm.isUserNotified = true
+//            }
+//        }
     }
     
     private var noticesIsEmpty: some View {

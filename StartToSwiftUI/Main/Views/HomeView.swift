@@ -110,22 +110,14 @@ struct HomeView: View {
             if vm.isTermsOfUseAccepted {
                 if noticevm.isNotificationOn {
                     if  !noticevm.isUserNotified {
-                        try? await Task.sleep(nanoseconds: 5_000_000_000)
+                        try? await Task.sleep(nanoseconds: 1_000_000_000)
                         if noticevm.isSoundNotificationOn {
                             AudioServicesPlaySystemSound(1013) // 1005
                         }
-//                        withAnimation(
-//                            .spring(
-//                                response: 0.3,
-//                                dampingFraction: 0.3
-//                            )
-//                            .repeatCount(5, autoreverses: false)
-//                        ) {
-                            noticeButtonAnimation = true
-//                        }
-                        try? await Task.sleep(nanoseconds: 3_000_000_000)
+                        noticeButtonAnimation = true
+                        try? await Task.sleep(nanoseconds: 1_000_000_000)
                         noticeButtonAnimation = false
-//                        noticevm.isUserNotified = true
+                        noticevm.isUserNotified = true
                     }
                 }
             }
@@ -208,7 +200,7 @@ struct HomeView: View {
                 showPreferancesView.toggle()
             }
         }
-        if noticevm.isNewNotices && noticevm.isNotificationOn {
+        if !noticevm.notices.filter({ $0.isRead == false }).isEmpty && noticevm.isNotificationOn {
             ToolbarItem(placement: .navigationBarLeading) {
                 
                 ZStack {
@@ -219,7 +211,7 @@ struct HomeView: View {
                         showNoticesView = true
                     }
                     
-                    Text("\(noticevm.notices.filter { $0.isRead == false }.count)")
+                    Text("\(noticevm.notices.filter({ $0.isRead == false }).count)")
                         .font(.system(size: 10, weight: .bold, design: .default))
                         .foregroundStyle(Color.mycolor.myButtonTextPrimary)
                         .frame(maxWidth: 15)

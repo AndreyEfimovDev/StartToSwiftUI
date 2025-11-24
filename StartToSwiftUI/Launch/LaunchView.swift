@@ -22,11 +22,12 @@ struct LaunchView: View {
             Color.launch.background
                 .ignoresSafeArea()
             
-            Image("StartToSwiftUI_icon_dark_1024")
+            Image("LaunchIcon_blue")
                 .resizable()
                 .font(.headline)
                 .fontWeight(.heavy)
                 .frame(width: 200, height: 200)
+                .offset(y: 8)
 
             ZStack {
                 if showLoadingProgress {
