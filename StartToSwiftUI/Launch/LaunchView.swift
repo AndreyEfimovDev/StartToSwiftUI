@@ -3,7 +3,7 @@
 //  StartToSwiftUI
 //
 //  Created by Andrey Efimov on 27.10.2025.
-//
+// #2A5FB4 #3765AF
 
 import SwiftUI
 
@@ -29,7 +29,8 @@ struct LaunchView: View {
                 .frame(width: 200, height: 200)
                 .offset(y: 8)
 
-            ZStack {
+            VStack {
+                Spacer()
                 if showLoadingProgress {
                     HStack(spacing: 0) {
                         ForEach(loadingString.indices, id: \.self) { index in
@@ -41,7 +42,7 @@ struct LaunchView: View {
                     .transition(AnyTransition.scale.animation(.easeIn))
                 }
             }
-            .offset(y: 108)
+//            .offset(y: 180)
         }
         .foregroundColor(Color.launch.accent)
         .onAppear {
