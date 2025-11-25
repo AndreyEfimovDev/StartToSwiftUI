@@ -21,15 +21,15 @@ struct Introduction: View {
                         
                **Personal Library**: Create and manage your own collection of links to learning materials.
 
-               **Curated Collection**: Access a curated collection of SwiftUI tutorials and articles compiled from open sources. You'll receive a notification when a new version of the collection is available for download. I strive to keep this collection up to date, though this cannot be guaranteed at all times.
+               **Curated Collection**: Jumpstart your learning with a curated collection of SwiftUI tutorials and articles compiled from open sources. You'll receive a notification when a new version of the collection is available for download. I strive to keep this collection up to date, though this cannot be guaranteed at all times.
                                        
-               **Posts Management**: Organise learning resources by category such as level of study, year of posts, type of source/media, etc, create a collection of favourite posts.
+               **Smart Organisation**: Organise learning resources by category such as level of study, year of materials, type of source/media, etc, create a collection of favourite materials.
                
-               **Full Control**: Edit and delete your posts as needed, save drafts for further processing.
+               **Full Control**: Edit and delete your materials as needed, save drafts for further processing.
                
-               **Smart Search & Filter**: Quickly find what you need using search and filtering tools.
+               **Efficient Search & Filter**: Quickly find what you need using search and filtering tools.
 
-               **Data Management**: Backup, restore, share, or delete posts as needed.
+               **Data Management**: Backup, restore, share, or delete materials as needed.
                
                **IMPORTANT — COPYRIGHT NOTES**:
                
