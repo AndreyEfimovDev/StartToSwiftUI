@@ -140,7 +140,7 @@ struct PreferencesView: View {
     }
     
     private var checkForPostsUpdate: some View {
-        NavigationLink("Check posts updates") {
+        NavigationLink("Check posts update") {
             CheckForPostsUpdateView()
         }
         .customListRowStyle(

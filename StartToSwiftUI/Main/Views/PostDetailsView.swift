@@ -21,7 +21,7 @@ struct PostDetailsView: View {
     
     private var post: Post? {
         vm.allPosts.first(where: { $0.id == postId })
-//        DevData.samplePost1
+//        PreviewData.samplePost3
     }
         
     @State private var lineCountIntro: Int = 0
@@ -232,7 +232,7 @@ struct PostDetailsView: View {
                     .padding(.top, 0)
                 
                 Spacer()
-                if !post.notes.isEmpty {
+                if !post.notes.isEmpty && !showFullFreeTextField {
                     MoreLessTextButton(showText: $showFullFreeTextField)
                 }
             }

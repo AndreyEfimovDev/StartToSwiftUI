@@ -15,7 +15,7 @@ struct CheckForPostsUpdateView: View {
     private let hapticManager = HapticService.shared
 //    private let selectedURL = Constants.cloudPostsURL
     
-    @State private var followingText: String = "Checking for updates..."
+    @State private var followingText: String = "Checking for update..."
     @State private var followingTextColor: Color = Color.mycolor.myAccent
     
     @State private var isInProgress: Bool = true
