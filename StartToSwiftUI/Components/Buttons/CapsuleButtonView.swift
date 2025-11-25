@@ -16,7 +16,7 @@ struct CapsuleButtonView: View {
     let buttonColorPrimary: Color
     let buttonColorSecondary: Color
     let isToChange: Bool
-    let action: () -> ()
+    let completion: () -> ()
     
     init(
         primaryTitle: String,
@@ -26,7 +26,7 @@ struct CapsuleButtonView: View {
         buttonColorPrimary: Color = Color.mycolor.myButtonBGBlue,
         buttonColorSecondary: Color = Color.mycolor.myButtonBGGreen,
         isToChange: Bool = false,
-        action: @escaping () -> Void
+        completion: @escaping () -> Void
     ) {
         self.primaryTitle = primaryTitle
         self.secondaryTitle = secondaryTitle
@@ -35,13 +35,13 @@ struct CapsuleButtonView: View {
         self.buttonColorPrimary = buttonColorPrimary
         self.buttonColorSecondary = buttonColorSecondary
         self.isToChange = isToChange
-        self.action = action
+        self.completion = completion
     }
         
     var body: some View {
         
         Button {
-            action()
+            completion()
         } label: {
             Text(isToChange ? secondaryTitle : primaryTitle)
                 .font(.body)

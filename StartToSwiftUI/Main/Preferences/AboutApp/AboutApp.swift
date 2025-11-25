@@ -20,26 +20,22 @@ struct AboutApp: View {
             Form {
                 Section {
                     HStack (spacing: 0) {
-                        Image(systemName: "pencil.and.outline")
+                        Image("swift_logo_blue_3477F5_icon")
                             .resizable()
-                            .bold()
                             .frame(width: 80, height: 80)
-                            .foregroundStyle(Color.mycolor.myBlue)
-                            .padding(.bottom)
-                        VStack (alignment: .leading) {
+                            .clipShape(RoundedRectangle(cornerRadius: 15))
+                            .padding()
+                        VStack (alignment: .leading, spacing: 0) {
                             Text("StartToSwiftUI")
-                                .font(.title3)
+                                .font(.title2)
                                 .fontWeight(.semibold)
-                            Text("SwiftUI Study Hub")
-                                .font(.subheadline)
-                            Group {
-                                HStack {
-                                    Text("Version")
-                                    Text("01.01.01")
-                                }
-                                Text("Developed by Andrey Efimov")
+                                Text("SwiftUI Study Hub")
+                                    .font(.body)
+                            Group{
+                                Text("Version 01.01.01")
+                                Text("iOS 18.7.2")
                             }
-                            .font(.caption)
+                            .font(.caption2)
                         }
                     }
                 }
@@ -64,7 +60,7 @@ struct AboutApp: View {
                     NavigationLink("What's New") { //  list.bullet list.bullet.circle square.fill.text.grid.1x2
                         WhatsNewView()
                     }
-                    .customListRowStyle(
+                    .customListRowStyle( 
                         iconName: "newspaper",
                         iconWidth: iconWidth
                     )

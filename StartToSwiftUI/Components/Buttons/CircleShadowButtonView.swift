@@ -19,7 +19,7 @@ struct CircleShadowButtonView: View {
     let heightIn: CGFloat
     let widthInOut: CGFloat
     let alignmentInOut: Alignment
-    let action: () -> Void
+    let completion: () -> Void
     
     init(
         iconName: String,
@@ -32,7 +32,7 @@ struct CircleShadowButtonView: View {
         heightIn: CGFloat = 35,
         widthInOut: CGFloat = 35,
         alignmentInOut: Alignment = .center,
-        action: @escaping () -> Void
+        completion: @escaping () -> Void
     ) {
         self.iconName = iconName
         self.iconFont = iconFont
@@ -44,13 +44,13 @@ struct CircleShadowButtonView: View {
         self.heightIn = heightIn
         self.widthInOut = widthInOut
         self.alignmentInOut = alignmentInOut
-        self.action = action
+        self.completion = completion
     }
     
     var body: some View {
         
         Button {
-            action()
+            completion()
         } label: {
             Image(systemName: iconName)
                 .font(iconFont)

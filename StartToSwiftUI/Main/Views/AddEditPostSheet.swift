@@ -229,12 +229,12 @@ struct AddEditPostSheet: View {
         text: String,
         iconName: String = "xmark",
         iconColor: Color = Color.mycolor.myRed,
-        action: @escaping () -> ()
+        completion: @escaping () -> ()
     ) -> some View {
         
         if !text.isEmpty {
             Button {
-                action()
+                completion()
             } label: {
                 Image(systemName: iconName)
                     .foregroundStyle(iconColor)

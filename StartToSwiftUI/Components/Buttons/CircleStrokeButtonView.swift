@@ -19,7 +19,7 @@ struct CircleStrokeButtonView: View {
     let widthIn: CGFloat
     let heightIn: CGFloat
     let isShownCircle: Bool
-    let action: () -> Void
+    let completion: () -> Void
     
     init(
         iconName: String,
@@ -31,7 +31,7 @@ struct CircleStrokeButtonView: View {
         widthIn: CGFloat = 30,
         heightIn: CGFloat = 30,
         isShownCircle: Bool = true,
-        action: @escaping () -> Void
+        completion: @escaping () -> Void
     ) {
         self.iconName = iconName
         self.iconFont = iconFont
@@ -42,12 +42,12 @@ struct CircleStrokeButtonView: View {
         self.widthIn = widthIn
         self.heightIn = heightIn
         self.isShownCircle = isShownCircle
-        self.action = action
+        self.completion = completion
     }
     
     var body: some View {
         Button {
-            action()
+            completion()
         } label: {
             Image(systemName: iconName)
                 .font(iconFont)

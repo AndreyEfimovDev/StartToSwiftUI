@@ -17,8 +17,11 @@ struct WhatsNewView: View {
                 ForEach(WhatsNews.releases) { release in
                     
                     Text(release.release)
+                        .font(.footnote)
                         .bold()
-                    VStack (spacing: 20) {
+                        .padding(.top)
+                        .padding(.leading)
+                    VStack (spacing: 10) {
                         ForEach(release.news) { news in
                             VStack (alignment: .leading) {
                                 Text(news.title)
@@ -41,7 +44,7 @@ struct WhatsNewView: View {
                             .stroke(Color.mycolor.myAccent.opacity(0.3), lineWidth: 1)
                     )
                 } // ForEach 1st
-                .padding()
+                .padding(.horizontal)
             }
             .navigationTitle("What's New")
             .navigationBarBackButtonHidden(true)

@@ -10,17 +10,16 @@ import SwiftUI
 struct FavoriteButton: View {
     
     let isFavorite: FavoriteChoice
-    let action: () -> Void
+    let completion: () -> Void
     
     var body: some View {
         
         Button {
-            action()
+            completion()
         } label: {
             Image(systemName: isFavorite == .yes ? "star.fill" : "star")
                 .font(.body)
                 .foregroundStyle(isFavorite == .yes ? Color.mycolor.myYellow : Color.mycolor.mySecondaryText)
-//                .frame(width: 30, height: 30)
         }
         .padding(8)
     }
