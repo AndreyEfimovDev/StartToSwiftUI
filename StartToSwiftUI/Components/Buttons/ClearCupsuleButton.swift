@@ -14,7 +14,7 @@ struct ClearCupsuleButton: View {
     let primaryTitleColor: Color
     let secondaryTitleColor: Color
     let isToChange: Bool // shift top secondary title and color
-    let action: () -> ()
+    let completion: () -> ()
     
     init(
         primaryTitle: String,
@@ -22,19 +22,19 @@ struct ClearCupsuleButton: View {
         primaryTitleColor: Color = Color.mycolor.myAccent,
         secondaryTitleColor: Color = Color.mycolor.myGreen,
         isToChange: Bool = false,
-        action: @escaping () -> Void
+        completion: @escaping () -> Void
     ) {
         self.primaryTitle = primaryTitle
         self.secondaryTitle = secondaryTitle
         self.primaryTitleColor = primaryTitleColor
         self.secondaryTitleColor = secondaryTitleColor
         self.isToChange = isToChange
-        self.action = action
+        self.completion = completion
     }
 
     var body: some View {
         Button {
-            action()
+            completion()
         } label: {
             Text(isToChange ? secondaryTitle : primaryTitle)
                 .font(.headline)

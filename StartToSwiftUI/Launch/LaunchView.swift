@@ -9,11 +9,11 @@ import SwiftUI
 
 struct LaunchView: View {
     
-    let action: () -> ()
+    let completion: () -> ()
     
     @State private var showLoadingProgress: Bool = false
     @State private var counter: Int = 0
-    @State private var loadingString: [String] = "............. loading .............".map { String($0) }
+    @State private var loadingString: [String] = "................ loading ................".map { String($0) }
     
     private let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
     
@@ -29,8 +29,7 @@ struct LaunchView: View {
                 .frame(width: 200, height: 200)
                 .offset(y: 8)
 
-            VStack {
-                Spacer()
+            ZStack {
                 if showLoadingProgress {
                     HStack(spacing: 0) {
                         ForEach(loadingString.indices, id: \.self) { index in
@@ -42,7 +41,7 @@ struct LaunchView: View {
                     .transition(AnyTransition.scale.animation(.easeIn))
                 }
             }
-//            .offset(y: 180)
+            .offset(y: 135)
         }
         .foregroundColor(Color.launch.accent)
         .onAppear {
@@ -52,7 +51,7 @@ struct LaunchView: View {
             withAnimation() {
                 let lastIndex = loadingString.count - 1
                 if counter == lastIndex {
-                        action()
+                        completion()
                 } else {
                     counter += 1
                 }

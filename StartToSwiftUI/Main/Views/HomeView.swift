@@ -219,15 +219,18 @@ struct HomeView: View {
                         .offset(x: 7, y: -7)
                 }
                 .background(
-                    Circle()
-                        .stroke(lineWidth: noticeButtonAnimation ? 2 : 0)
-                        .scale(noticeButtonAnimation ? 1.2 : 0.8)
-                        .opacity(noticeButtonAnimation ? 0.0 : 1.0)
-                        .animation(
-                            noticeButtonAnimation
-                            ? .easeOut(duration: 1.0)
-                            : .none,
-                            value: noticeButtonAnimation)
+                    AnyView(
+                        Circle()
+                            .stroke(Color.mycolor.myRed, lineWidth: noticeButtonAnimation ? 2 : 0)
+                            .scaleEffect(noticeButtonAnimation ? 1.2 : 0.8)
+                            .opacity(noticeButtonAnimation ? 0.0 : 1.0)
+                    )
+                    .animation(
+                        noticeButtonAnimation
+                        ? .easeOut(duration: 1.0)
+                        : .none,
+                        value: noticeButtonAnimation
+                    )
                 )
             }
         }
