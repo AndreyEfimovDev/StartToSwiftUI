@@ -75,7 +75,8 @@ struct DevData {
 //        ),
 //
 //
-// Nick Sarno
+        
+// Sean Allen
         Post(
             title: "SwiftUI Search Bar - Searchable",
             intro: """
