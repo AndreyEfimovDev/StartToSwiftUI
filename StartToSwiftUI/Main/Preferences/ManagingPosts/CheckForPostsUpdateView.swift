@@ -65,7 +65,7 @@ struct CheckForPostsUpdateView: View {
                     .foregroundStyle(followingTextColor)
                 Spacer()
                 if isInProgress {
-                    CustomProgressView(scale: 1)
+                    CustomProgressView(scale: 1, isNoText: true)
                 }
             }
             HStack {
