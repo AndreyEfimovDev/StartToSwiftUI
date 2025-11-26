@@ -37,7 +37,6 @@
 		475997552E5C7F81008E20F0 /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997542E5C7F81008E20F0 /* PreviewData.swift */; };
 		4759975F2E5CA789008E20F0 /* CountingLinesInTextBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4759975E2E5CA789008E20F0 /* CountingLinesInTextBlock.swift */; };
 		475997612E5CC0F8008E20F0 /* PostDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997602E5CC0F8008E20F0 /* PostDetailsView.swift */; };
-		4759976E2E5D933C008E20F0 /* SafariWebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4759976D2E5D933C008E20F0 /* SafariWebService.swift */; };
 		4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997792E5F1A32008E20F0 /* Colors.swift */; };
 		4764A1F82EAD1DAA00D76C3A /* ClearCupsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4764A1F72EAD1DAA00D76C3A /* ClearCupsuleButton.swift */; };
 		4765A7672EAE277A00EACDF4 /* SwipeListButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4765A7662EAE277A00EACDF4 /* SwipeListButton.swift */; };
@@ -118,7 +117,6 @@
 		475997542E5C7F81008E20F0 /* PreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewData.swift; sourceTree = "<group>"; };
 		4759975E2E5CA789008E20F0 /* CountingLinesInTextBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountingLinesInTextBlock.swift; sourceTree = "<group>"; };
 		475997602E5CC0F8008E20F0 /* PostDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailsView.swift; sourceTree = "<group>"; };
-		4759976D2E5D933C008E20F0 /* SafariWebService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebService.swift; sourceTree = "<group>"; };
 		475997792E5F1A32008E20F0 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		4764A1F72EAD1DAA00D76C3A /* ClearCupsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearCupsuleButton.swift; sourceTree = "<group>"; };
 		4765A7662EAE277A00EACDF4 /* SwipeListButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeListButton.swift; sourceTree = "<group>"; };
@@ -300,7 +298,6 @@
 		475997622E5CF0C3008E20F0 /* SupportFrom3rdParties */ = {
 			isa = PBXGroup;
 			children = (
-				4759976D2E5D933C008E20F0 /* SafariWebService.swift */,
 				4791CDC02E708E1000687126 /* DocumentPicker.swift */,
 				4732FB322EAA5A9E0062269D /* ActivityView.swift */,
 				4759975E2E5CA789008E20F0 /* CountingLinesInTextBlock.swift */,
@@ -530,7 +527,6 @@
 				47BAF0F82E64A77A00287F10 /* Enums.swift in Sources */,
 				475997552E5C7F81008E20F0 /* PreviewData.swift in Sources */,
 				4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */,
-				4759976E2E5D933C008E20F0 /* SafariWebService.swift in Sources */,
 				471DCBDC2EBBC67500AFA5F4 /* Introduction.swift in Sources */,
 				4791CE002E747B2E00687126 /* HapticService.swift in Sources */,
 				475997532E5C7680008E20F0 /* PostsViewModel.swift in Sources */,
