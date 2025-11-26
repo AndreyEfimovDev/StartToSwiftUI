@@ -9,7 +9,6 @@ import SwiftUI
 
 struct AddEditPostSheet: View {
     
-    //    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     
@@ -19,7 +18,7 @@ struct AddEditPostSheet: View {
     @State private var focusedFieldSaved: PostFields?
     
     private var viewTitle: String {
-        isNewPost ? "Add Post" : "Edit Post"
+        isNewPost ? "Add" : "Edit"
     }
     
     @State private var editedPost: Post
@@ -65,7 +64,7 @@ struct AddEditPostSheet: View {
     
     init(post: Post?) {
         
-        if let post = post { // if post is passed - post for editing initialising
+        if let post = post { // if post is passed to edit - post for editing initialising
             _editedPost = State(initialValue: post)
             _draftPost = State(initialValue: post)
             self.isNewPost = false
@@ -132,7 +131,6 @@ struct AddEditPostSheet: View {
             Color.mycolor.myAccent.opacity(0.001)
                 .ignoresSafeArea()
                 .contentShape(Rectangle())
-//                .allowsHitTesting(true)
                 .onTapGesture {
                     isShowingExitMenuConfirmation = false
                 }
@@ -178,8 +176,6 @@ struct AddEditPostSheet: View {
         } // ZStack
         .opacity(isPostDraftSaved ? 0 : 1)
     }
-    
-
     
     @ToolbarContentBuilder
     private func toolbarForAddEditView() -> some ToolbarContent {
@@ -554,17 +550,13 @@ struct AddEditPostSheet: View {
                             imageColorPrimary: Color.mycolor.myBlue,
                             widthIn: 55,
                             heightIn: 55) {
-                                //                                withAnimation {
                                 focusedField = nil
-                                //                                }
                             }
                             .padding(.bottom, 16)
                     }
                 }
-                //                .transition(.opacity)
             }
         }
-        //        .animation(.easeInOut(duration: 0.1), value: focusedField /*!= nil*/)
     }
     
     // MARK: Functions
@@ -626,7 +618,6 @@ struct AddEditPostSheet: View {
                     title: Text("Draft saved successfully"),
                     message: Text("Tap OK to continue"),
                     dismissButton: .default(Text("OK")) {
-//                        editedPost.draft = true
                         isPostDraftSaved = true
                         dismiss()
                     }

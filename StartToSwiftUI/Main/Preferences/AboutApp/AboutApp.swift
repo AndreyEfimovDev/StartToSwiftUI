@@ -61,7 +61,7 @@ struct AboutApp: View {
                         iconName: "textformat.size.larger",
                         iconWidth: iconWidth
                     )
-                    NavigationLink("What's New") { //  list.bullet list.bullet.circle square.fill.text.grid.1x2
+                    NavigationLink("What's New") {
                         WhatsNewView()
                     }
                     .customListRowStyle( 
