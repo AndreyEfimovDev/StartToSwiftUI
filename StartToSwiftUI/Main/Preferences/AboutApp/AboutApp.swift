@@ -32,8 +32,8 @@ struct AboutApp: View {
                                 Text("SwiftUI Study Hub")
                                     .font(.body)
                             Group{
-                                Text("Version 01.01.01")
-                                Text("iOS 18.7.2")
+                                Text("Version \(Bundle.main.versionBuild)")
+                                Text("Minimum iOS: \(Bundle.main.minimumiOSVersion)")
                             }
                             .font(.caption2)
                         }
