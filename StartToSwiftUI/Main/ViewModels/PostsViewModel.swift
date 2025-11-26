@@ -369,12 +369,10 @@ class PostsViewModel: ObservableObject {
     /// - Warning: This app is made for self study purpose only.
     /// - Returns: Returns a boolean result or error within completion handler.
     
-    func loadPersistentPosts(_ completion: @escaping () -> ()) {
-        
-        let receivedPosts: [Post] = DevData.postsForCloud
+    func loadPersistentPosts(posts: [Post], _ completion: @escaping () -> ()) {
         
         // Skipping posts with the same title - make posts unique by title
-        let newPosts = receivedPosts.filter { newPost in
+        let newPosts = posts.filter { newPost in
             !allPosts.contains(where: { $0.title == newPost.title })
         }
         
