@@ -33,7 +33,11 @@ struct AboutApp: View {
                                     .font(.body)
                             Group{
                                 Text("Version \(Bundle.main.versionBuild)")
-                                Text("Minimum iOS: \(Bundle.main.minimumiOSVersion)")
+                                HStack (spacing: 3) {
+                                    Text("Support:")
+                                    Image(systemName: "iphone")
+                                    Text("iOS from: \(Bundle.main.minimumiOSVersion)")
+                                }
                             }
                             .font(.caption2)
                         }
