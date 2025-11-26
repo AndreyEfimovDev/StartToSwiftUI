@@ -380,6 +380,7 @@ class PostsViewModel: ObservableObject {
         
         if !newPosts.isEmpty {
             allPosts.append(contentsOf: newPosts)
+            savePosts()
         }
         completion()
     }
