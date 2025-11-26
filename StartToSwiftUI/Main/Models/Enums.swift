@@ -82,7 +82,7 @@ enum PostType: String, CaseIterable, Codable {
     var displayName: String {
         switch self {
         case .post: return "Single"
-        case .course: return "Collection"
+        case .course: return "Course"
         case .solution: return "Solution"
         case .bug: return "Bug"
         case .other: return "Other"

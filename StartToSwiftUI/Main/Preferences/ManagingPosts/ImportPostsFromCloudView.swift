@@ -121,13 +121,12 @@ struct ImportPostsFromCloudView: View {
 //                vm.loadPersistentPosts() {
 //                    isInProgress = false
 //                    isLoaded = true
-//        //            vm.isFirstImportPostsCompleted = true
 //                    hapticManager.notification(type: .success)
 //                    DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
 //                        dismiss()
 //                    }
 //                }
-        
+//        
         
         vm.importPostsFromCloud() {
             isInProgress = false
