@@ -11,6 +11,394 @@ import Foundation
 struct DevData {
     
     static let postsForCloud = [
+        
+        
+// Nick Sarno - some posts from SwiftUI Bootcamp (Beginner Level)
+        Post(
+            title: "How to use @Observable Macro in SwiftUI",
+            intro: """
+            Learn about the Observable Macro in SwiftUI for efficient state management and data observation in your apps. This video explains how to utilize the Observable Macro to track and react to changes, enhancing app responsiveness and performance. Essential viewing for developers focused on advanced SwiftUI techniques.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=hLkTMJ_SFzY&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=78&t=13s",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2024, month: 2, day: 28),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use ControlGroup in SwiftUI",
+            intro: """
+            Explore ControlGroup in SwiftUI to efficiently organize UI controls in your iOS and macOS apps. This video covers how to use ControlGroup for grouping related user interface elements, improving both the design and functionality of your applications. Essential for developers looking to enhance their SwiftUI projects.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=tyu-RGVFbd8&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=77",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2024, month: 2, day: 26),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use Grid in SwiftUI",
+            intro: """
+            Dive into SwiftUI's Grid to construct complex UI layouts with precision. This tutorial focuses on the implementation and customization of Grid structures, demonstrating how to utilize rows, columns, and spacing to optimize user interfaces for both iOS and macOS. Essential for developers aiming to master advanced layout techniques in SwiftUI.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=LnPMsG0sV50&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=75",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2024, month: 2, day: 21),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use NavigationSplitView in SwiftUI",
+            intro: """
+            Learn how to master the NavigationSplitView in SwiftUI for creating responsive and adaptive user interfaces in iOS and macOS apps. This tutorial covers the basics of NavigationSplitView, demonstrating how to seamlessly integrate it into your SwiftUI projects for enhanced navigation and layout. Perfect for developers looking to leverage SwiftUI's capabilities for modern app development.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=Ua37Oof6H1Q&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=74",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2024, month: 2, day: 20),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use ViewThatFits in SwiftUI",
+            intro: """
+            In this video, we'll learn how to use ViewThatFits to add custom View rendering into our application! This allows us to dynamically change the "View" to the best "fit" for the current frame. This is especially helpful when displaying on devices with different screen sizes.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=oN3Rqo6V6Uc&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=73",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 11, day: 14),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use AnyLayout in SwiftUI",
+            intro: """
+            This video introduces AnyLayout, which allows us to customize the layout of our Views. This is similar to using an HStack or VStack, except gives us additional capabilities to customize the View for different environments or settings.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=7BAW70amSCA&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=72&t=7s",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 11, day: 9),
+            studyLevel: .beginner,
+            notes: #"""
+            https://useyourloaf.com/blog/size-classes/
+            
+            Environment(\.horizontalSizeClass) private var horizontalSizeClass
+            Environment(\.verticalSizeClass) private var verticalSizeClass
+            """#,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use Popover modifier in SwiftUI",
+            intro: """
+            The popover modifier let's us show a View popping over an existing View on the screen. This intuitive UI can bring better user experiences to you application!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=bW7N8ACCc6A&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=71",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 11, day: 7),
+            studyLevel: .beginner,
+            notes: #"""
+                .popover(isPresented: $showPopover, attachmentAnchor: .point(.top)) {
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 12, content: {
+                            ForEach(feedbackOptions, id: \.self) { option in
+                                Button(option) {
+                                    
+                                }
+                                
+                                if option != feedbackOptions.last {
+                                    Divider()
+                                }
+                            }
+                        })
+                        .padding(20)
+                    }
+                    .presentationCompactAdaptation(.popover)                
+                """#,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use Menu in SwiftUI",
+            intro: """
+            Master the art of creating menus in SwiftUI and elevate your app's user interface to new heights! In this tutorial, learn how to implement menus with SwiftUI, allowing users to access additional options and actions with ease. Enhance your iOS app development skills and deliver a seamless and intuitive user experience with SwiftUI's powerful menu capabilities.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=1rVDrwdYYbs&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=70",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 6, day: 12),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use animation with value in SwiftUI (iOS 16+) ",
+            intro: """
+            Unleash the full potential of animation with value in SwiftUI and bring your iOS app to life! In this tutorial, learn how to leverage animation with value to create engaging and interactive user experiences. Dive into the world of SwiftUI animation and master the art of adding motion and dynamism to your app's UI.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=t95HGRLPwj0&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=69",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 6, day: 12),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+
+        Post(
+            title: "How to use SafeAreaInsets in SwiftUI",
+            intro: """
+            Discover how to utilize SafeAreaInsets in SwiftUI and create visually appealing and user-friendly iOS apps! In this tutorial, learn how to handle safe area insets to ensure your app's content adapts perfectly to different screen sizes and orientations. Enhance your SwiftUI skills and deliver a polished user experience with SafeAreaInsets.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=pN5ZMV_3npE&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=67",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 6, day: 9),
+            studyLevel: .beginner,
+            notes: ".safeAreaInset(edge: .bottom, alignment: .center, spacing: nil)",
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to create resizable sheets in SwiftUI",
+            intro: """
+            Master SwiftUI's Toolbar in this tutorial and take your app's navigation to the next level! Learn how to create custom toolbars, add buttons, and customize appearance with ease. Enhance your iOS app development skills and deliver a seamless user experience with SwiftUI's powerful Toolbar.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=YISIACDKLZY&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=66",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 6, day: 8),
+            studyLevel: .beginner,
+            notes: """
+            .presentationDetents([.fraction(0.2), .medium, .height(600), .large], selection: $detents)
+            .presentationDragIndicator(.hidden)
+            """,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Customizing Keyboard submit button in SwiftUI",
+            intro: """
+            As of iOS 15, we can use the new .submitLabel modifier to change the color and text of the submit button on the keyboard. Even more importantly, we can also use .onSubmit to run custom functions when users click on the submit button! These features were not available before iOS 15 in SwiftUI.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=iRxjKu5kqSY&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=63&t=71s",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 12, day: 15),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use @FocusState in SwiftUI",
+            intro: """
+            The @FocusState property wrapper is an extremely powerful new feature that allows us to programmatically manage whether or not a view is in focus. In practice, this will most often be associated with users clicking on TextFields. In this video, we will first learn what Focus State is and then review a few real-world implementations! As a bonus, we will also check out Apple's documentation on this new feature.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=9OC8e0OULBg&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=62",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 12, day: 14),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to add Badges to SwiftUI TabView and List in iOS 15",
+            intro: """
+            Another quick video here. Today, we are looking at the new .badge modifier in SwiftUI as of iOS 15. Again, this feature probably didn't need a full video, but the feature was not available in iOS 14 (when I first made this playlist). Badges can be a crucial part of your application, especially if you are using the native SwiftUI TabView. By adding a badge to a tab, you can notify user's that they have a new alert/notification on that screen!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=Nt1loGvkQkM&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=61",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 12, day: 13),
+            studyLevel: .beginner,
+            notes: """
+            Text("Hello, world!")
+                .badge(5)
+            """,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to select text with TextSelection in SwiftUI",
+            intro: """
+            One of the most underrated features released in iOS 15 is the ability to let users select and copy text in SwiftUI. In this quick video, we will learn how to use the .textSelection modifier! This feature probably did not need it's own video, but I think it's a pretty important feature to know about. This is great for chat apps or any content-based app where users might want to share some text with a friend. Sharing is not only a great feature for your users, but will help drive organic growth as users share with others.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=AiSLtya25ac&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=57",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 12, day: 7),
+            studyLevel: .beginner,
+            notes: ".textSelection(.enabled)",
+            origin: .cloud,
+        ),
+        Post(
+            title: "System Materials and Backgrounds in iOS 15 for SwiftUI",
+            intro: """
+            In this video we will quickly look at the new Materials that Apple has added to SwiftUI in iOS 15. These System Materials are very commonly used as backgrounds for a subtle, yet professional look to your apps. As you'll see, the colors are not totally opaque and allow some natural color to bleed through.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=_PJstGf5XcE&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=57",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 11, day: 30),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Async Image in iOS 15 for SwiftUI",
+            intro: """
+            Apple introduced a whole bunch of really powerful SwiftUI features in iOS 15, with one of the most important being the new AsyncImage component. With Async Image, we can asynchonrously download images from a URL with only a few lines of code. This is a HUGE time saver for SwiftUI applications and simplifies one of the most complicated of making any app. In this video we will learn a few different implementations and how to you can easily customize the downloaded image to fit your app's UI design.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=Qk5s-6ldNfA&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=55",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 11, day: 29),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use @EnvironmentObject in SwiftUI",
+            intro: """
+            The @EnvironmentObject is a super-useful property wrapper that lets us put an observable object into the environment of our SwiftUI application. By doing this, all of these views in the view hierarchy will then have access to this object. This is the perfect solution for any case where you have a class that needs to be accessed by multiple views, but you don't want to manually bind it from view to view to view with initializers.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=VWZ-h_N1wDk&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=53",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 3, day: 11),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use @ObservableObject and @StateObject in SwiftUI",
+            intro: """
+            As a SwiftUI developer, you are probably well aware of the @State property wrapper. We use this to tell the View that it will need to update if a @State variable changes. This is create for basic data types, but unfortunately, does not work for other classes in our application. Thankfully, the SwiftUI framework includes the @ObservableObject and @StateObject property wrappers for this purpose. In this video we will create "view model" which is a custom class that will manage the data for our View and then implement both of these new property wrappers into our iOS application.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=-yjKAb0Pj60&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=51",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 3, day: 10),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to add a Tap Gesture in SwiftUI",
+            intro: """
+            There are many different gestures that we can incorporate into our SwiftUI applications. In this video we will learn the most basic gesture, which is called when a use taps on the view. The .onTapGesture modifier functions much like a button and can even be customized to recognize multiple taps instead of just one (double-tap, triple-tap, etc.).
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=joUjsvWn2Eg&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=50",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 3, day: 8),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to safely unwrap optionals in Swift with if-let and guard statements",
+            intro: """
+            In almost every application there are cases where you will declare variables as optional. In Swift we declare a value as optional be using the ?. When we do this, we are telling Xcode that this variable has the potential to be nil (or without a value). Therefore, when we go to use that variable in our code, we need to safely check whether or not it really has a value at that time. Two of the smartest and safest ways to safely "unwrap" these optionals is be using 'if let' and 'guard' statements. In this video we will learn both! It should be noted that both of these methods are MUCH safer than explicitly unwrapping optionals by using the ! symbol (avoid this!).
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=wmQIl0O9HBY&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=49",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 3, day: 7),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Adding markups and documentation to Swift in Xcode",
+            intro: """
+            In this video we will look at a few different ways that we can add markups and documentation to our code. These are essentially just comments that we can write in our project to keep the code clean and understandable to other developers. Many employers will consider this to be a requirement because it is so crucially important for developers to be able to write clear and efficient documentation.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=O8_meC7hIwI&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=46",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 3, day: 5),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use ContextMenu in SwifUI",
+            intro: """
+            In this video we will learn how to use and implement a .contextMenu into our SwiftUI application. The Context Menu is a relatively new features in iOS that presents a menu of buttons to our user on top of an object.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=3jjQ6WASGIw&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=36&t=320s",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 2, day: 22),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to show Alerts in SwiftUI app",
+            intro: """
+            In this installment of the SwiftUI Bootcamp, we learn how to correctly implement Alerts into our iOS application. Alerts are the fastest and easiest way to immediately present a popup to your users. After reviewing the basics, we will look at a few techniques to make the .alert() content dynamic so that we can present multiple alerts (with different content) from within the same view!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=dEmySJwCreo&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=33",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 2, day: 20),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Display pop-up Sheets and FullScreenCovers in SwiftUI",
+            intro: """
+            We will learn how to segue in SwiftUI using the .sheet() and .fullScreenCover() modifiers. As you will see, both methods have a really professional look (UI) and will pop a new View on top of our current view. We will review how to implement sheets the correct way and cover some common mistakes that developers make while using sheets, such as including conditional logic within the closure or adding multiple .sheet modifiers to the same hierarchy.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=ddr3E0l4gIQ&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=29",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 2, day: 17),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use Transition in SwiftUI",
+            intro: """
+            Transitions can be used to animation an object on-to or off-of the screen. Since the transition only occurs when the object is being added or removed from the view hierarchy, it can be a little tricky to implement correctly. In this video we will learn how to implement transitions and then explore several of the most popular animations for them.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=X6FAIa0nJoA&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=28",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 2, day: 16),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Animation Curves and Animation Timing in SwiftUI",
+            intro: """
+            Animation curves (also known as animation timing) can help take your animations to the next level. In this video we will compare the different animation curves that come within the SwiftUI framework by default. These animations include:
+            default (.default)
+            ease in (.easeIn)
+            ease out (.easeOut)
+            ease In Out (.easeInOut)
+            spring (.spring)
+
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=0H4G3lGnJE0&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=27",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 2, day: 16),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Adding Animations in SwiftUI",
+            intro: """
+            Animations are a great way to bring your iOS application to life and give it a more professional feel. In this video we will learn how to efficiently add animations to our SwiftUI applications by using ternary operators. SwiftUI makes it extremely easy to add awesome animations to our iOS applications!
+
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=0WY-wrW2_bs&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=26",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 2, day: 15),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        
+
+
+
+        
+        
+// OLD ONES
         Post(
             title: "How to schedule local Push Notifications in SwiftUI",
             intro: """
@@ -765,7 +1153,7 @@ struct DevData {
         ),
 // 2025-10-25 DONE
         Post(
-            title: "Swift Basics",
+            title: "Swift Basics (Beginner Level)",
             intro: """
                 Get started with the Swift programming language. Write your first line of code and learn the fundamentals.
                 """,
@@ -776,7 +1164,7 @@ struct DevData {
             origin: .cloud
         ),
         Post(
-            title: "SwiftUI Bootcamp",
+            title: "SwiftUI Bootcamp (Beginner Level)",
             intro: """
                 The fastest way to learn SwiftUI. Learn how to build beautiful screens and other UI components.
                 """,
@@ -787,7 +1175,7 @@ struct DevData {
             origin: .cloud
         ),
         Post(
-            title: "SwiftUI Todo List",
+            title: "SwiftUI Todo List (Beginner Level)",
             intro: """
                 Build your first app in SwiftUI! Learn how to build a real application with MVVM app architecture.
                 """,
@@ -799,7 +1187,7 @@ struct DevData {
             origin: .cloud
         ),
         Post(
-            title: "Git & Source Control",
+            title: "Git & Source Control (Beginner Level)",
             intro: """
                 A complete guide for learning how to use git. Practice using Source Control within Xcode, GitKraken, and Github. Get familiar with Git Flow.
                 """,
@@ -810,7 +1198,7 @@ struct DevData {
             origin: .cloud
         ),
         Post(
-            title: "SwiftUI Map App",
+            title: "SwiftUI Map App (Beginner Level)",
             intro: """
                 Build a map app to showcase real destinations around the world. Get familiar with data management and transitions.
                 """,
@@ -822,7 +1210,7 @@ struct DevData {
             origin: .cloud
         ),
         Post(
-            title: "SwiftUI Continued Learning",
+            title: "SwiftUI Continued Learning (Intermediate Level)",
             intro: """
                 Building professional apps requires knowledge of data persistence and networking. This bootcamp builds on your existing knowledge of SwiftUI.
                 """,
@@ -833,19 +1221,32 @@ struct DevData {
             origin: .cloud
         ),
         Post(
-            title: "SwiftUI Crypto App",
+            title: "SwiftUI Crypto App (Intermediate Level)",
             intro: """
                 Build a cryptocurrency app that downloads live price data from an API and saves the current user's portfolio. Get comfortable with Combine, Core Data, and MVVM.
                 """,
             author: "Nick Sarno/Swiftful Thinking",
-            postType: .solution,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
             postDate: Date.from(year: 2021, month: 5, day: 24),
             studyLevel: .middle,
             origin: .cloud
         ),
         Post(
-            title: "SwiftUI Advanced Learning",
+            title: "Swift Concurrency (Intermediate Level)",
+            intro: """
+                Swift Concurrency is a major upgrade to the Swift language that completely changes how to write asynchronous code in Swift. Learn everything that you need to know.
+                """,
+            author: "Nick Sarno/Swiftful Thinking",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphr2Dl4sY4rS9PLzPdyi8PM",
+            postDate: Date.from(year: 2024, month: 8, day: 8),
+            studyLevel: .middle,
+            origin: .cloud
+        ),
+
+        Post(
+            title: "SwiftUI Advanced Learning (Advanced Level)",
             intro: """
                 Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
                 """,

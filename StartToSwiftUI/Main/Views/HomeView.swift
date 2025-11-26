@@ -202,26 +202,26 @@ struct HomeView: View {
         }
         if !noticevm.notices.filter({ $0.isRead == false }).isEmpty && noticevm.isNotificationOn {
             ToolbarItem(placement: .navigationBarLeading) {
-                
-                ZStack {
                     CircleStrokeButtonView(
                         iconName: "message",
                         isShownCircle: false)
                     {
                         showNoticesView = true
                     }
-                    
-                    Text("\(noticevm.notices.filter({ $0.isRead == false }).count)")
-                        .font(.system(size: 10, weight: .bold, design: .default))
-                        .foregroundStyle(Color.mycolor.myButtonTextPrimary)
-                        .frame(maxWidth: 15)
-                        .background(Color.mycolor.myRed, in: .capsule)
-                        .offset(x: 7, y: -7)
-                }
+                    .overlay(alignment: .topTrailing) {
+                        Capsule()
+                            .fill(Color.mycolor.myRed)
+                            .frame(maxWidth: 20, maxHeight: 15)
+                            .overlay {
+                                Text("\(noticevm.notices.filter({ $0.isRead == false }).count)")
+                                    .font(.system(size: 8, weight: .bold, design: .default))
+                                    .foregroundStyle(Color.mycolor.myButtonTextPrimary)
+                            }
+                    }
                 .background(
                     AnyView(
                         Circle()
-                            .stroke(Color.mycolor.myRed, lineWidth: noticeButtonAnimation ? 2 : 0)
+                            .stroke(Color.mycolor.myRed, lineWidth: noticeButtonAnimation ? 3 : 0)
                             .scaleEffect(noticeButtonAnimation ? 1.2 : 0.8)
                             .opacity(noticeButtonAnimation ? 0.0 : 1.0)
                     )

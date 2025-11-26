@@ -49,6 +49,7 @@
 		477C745E2ECF6FB300F77F5B /* StaticPosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477C745D2ECF6FB300F77F5B /* StaticPosts.swift */; };
 		477C74602ECFB0F300F77F5B /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477C745F2ECFB0E800F77F5B /* News.swift */; };
 		478116462EBFF9DD00EF25F8 /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */; };
+		4781D72E2ED716AE00B74F85 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4781D72D2ED716AE00B74F85 /* Bundle.swift */; };
 		47870FBA2ECC8628004175E4 /* Acknowledgements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47870FB92ECC8628004175E4 /* Acknowledgements.swift */; };
 		47870FBF2ECCD743004175E4 /* LinkButtonURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47870FBE2ECCD743004175E4 /* LinkButtonURL.swift */; };
 		4791CD862E6ED58B00687126 /* ShrinkIconButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CD852E6ED58B00687126 /* ShrinkIconButtonStyle.swift */; };
@@ -129,6 +130,7 @@
 		477C745D2ECF6FB300F77F5B /* StaticPosts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticPosts.swift; sourceTree = "<group>"; };
 		477C745F2ECFB0E800F77F5B /* News.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
 		478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
+		4781D72D2ED716AE00B74F85 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
 		47870FB92ECC8628004175E4 /* Acknowledgements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Acknowledgements.swift; sourceTree = "<group>"; };
 		47870FBE2ECCD743004175E4 /* LinkButtonURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkButtonURL.swift; sourceTree = "<group>"; };
 		4791CD852E6ED58B00687126 /* ShrinkIconButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShrinkIconButtonStyle.swift; sourceTree = "<group>"; };
@@ -199,8 +201,8 @@
 			isa = PBXGroup;
 			children = (
 				477C745F2ECFB0E800F77F5B /* News.swift */,
-				47F38B1E2ED480B0006DEDBE /* DevData.swift */,
 				477C745D2ECF6FB300F77F5B /* StaticPosts.swift */,
+				47F38B1E2ED480B0006DEDBE /* DevData.swift */,
 				475997542E5C7F81008E20F0 /* PreviewData.swift */,
 			);
 			path = Support;
@@ -328,6 +330,7 @@
 				47AE6C802E7D7FD0006230DA /* Modifiers.swift */,
 				47453E032EAB73A9000D2C16 /* Date.swift */,
 				471DCBD82EBBBF2200AFA5F4 /* JSON.swift */,
+				4781D72D2ED716AE00B74F85 /* Bundle.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -570,6 +573,7 @@
 				471DCBD62EBBAD9700AFA5F4 /* AboutApp.swift in Sources */,
 				4759975F2E5CA789008E20F0 /* CountingLinesInTextBlock.swift in Sources */,
 				4791CE042E748DA200687126 /* AddEditPostSheet.swift in Sources */,
+				4781D72E2ED716AE00B74F85 /* Bundle.swift in Sources */,
 				47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */,
 				4791CDC12E708E1300687126 /* DocumentPicker.swift in Sources */,
 				47E439B72EA9290E007001AD /* NetworkService.swift in Sources */,
@@ -719,7 +723,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 01;
+				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -741,7 +745,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 01.00;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = PELSH.StartToSwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -764,7 +768,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 01;
+				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readwrite;
 				ENABLE_FILE_ACCESS_PICTURE_FOLDER = readwrite;
@@ -798,7 +802,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 01.00;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = PELSH.StartToSwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
