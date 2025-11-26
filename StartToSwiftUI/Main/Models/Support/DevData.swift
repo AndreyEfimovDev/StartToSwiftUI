@@ -12,6 +12,759 @@ struct DevData {
     
     static let postsForCloud = [
         
+//        Post(
+//            title: "",
+//            intro: """
+//            
+//            """,
+//            author: "",
+//            urlString: "",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2021, month: 10, day: 10),
+//            studyLevel: .advanced,
+//            origin: .cloud,
+//        ),
+
+//        // Stewart Lynch
+//        Post(
+//            title: "Mastering iOS 26 Toolbars & Modal Sheets in SwiftUI – New Glass Buttons, Transitions & More",
+//            intro: """
+//                        iOS 26 brings a fresh take on SwiftUI toolbars and modal presentations, and in this tutorial, I’ll guide you through everything you need to know. We’ll explore semantic and positional toolbar item placements, new glass button styles, toolbar spacers, and subtitle options—including some quirks to be aware of. You’ll also learn how to use the new matchGeometry transition with modal sheets for a polished, modern experience.
+//
+//                        By the end of the video, you’ll be equipped to take full advantage of toolbars and sheet presentation enhancements in iOS 26.
+//                        """,
+//            author: "Stewart Lynch",
+//            urlString: "https://www.youtube.com/watch?v=IiLDbrtBsn0",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2025, month: 9, day: 14),
+//            origin: .cloud
+//        ),
+//
+//        Post(
+//            title: "Mastering Liquid Glass in SwiftUI – Buttons, Containers & Transitions",
+//            intro: """
+//                        SwiftUI’s Liquid Glass effect in OS 26 is more than just eye candy—it’s a whole new design system. In this tutorial, I’ll guide you through the new button styles, applying glass effects to various views, and using GlassEffectContainer to create seamless, fluid layouts.
+//
+//                        We’ll also explore namespace-powered unions, matched geometry transitions, and clever control interactions that elevate your app’s UI. This is hands-on, practical, and comprehensive.
+//
+//                        Whether you’re building for iOS, macOS, or visionOS, Liquid Glass is a game-changer—and I’ll help you get the most out of it.
+//                        """,
+//            author: "Stewart Lynch",
+//            urlString: "https://www.youtube.com/watch?v=E2nQsw0El8M",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2025, month: 8, day: 31),
+//            origin: .cloud
+//        ),
+//        Post(
+//            title: "Styling SwiftUI Text Views",
+//            intro: """
+//                    In this video we are going to explore how we can stylize text for our Text views in SwiftUI.
+//
+//                    We will start by looking at how we can create a `Text` view with the Markdown-formatted base postLanguage version of the string as the localization key.
+//
+//                    We will also see how we can utilize string interpolation to combine and stylize our strings and present them in a text view.
+//
+//                    And finally, we will take a quick look at the power of Attributed strings in SwiftUI.
+//                    """,
+//            author: "Stewart Lynch",
+//            urlString: "https://www.youtube.com/watch?v=rbtIcKKxQ38/",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2021, month: 5, day: 7),
+//            studyLevel: .middle,
+//            origin: .cloud,
+//        ),
+//
+//
+// Nick Sarno
+        Post(
+            title: "SwiftUI Search Bar - Searchable",
+            intro: """
+            A search bar in SwiftUI can be created in a few simple steps. This search bar allows you to filter an existing list of data based on your search term using SwiftUI's searchable modifier. The search bar is placed in the NavigationStack (or NavigationView for older versions of iOS) and a user types in a search term. The search term is compared with the list of data and a filtered list is shown displaying the search results.    
+            """,
+            author: "Sean Allen",
+            urlString: "https://www.youtube.com/watch?v=iTqwa0DCIMA",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 5, day: 30),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "NavigationStack - SwiftUI Programmatic Navigation - iOS 16",
+            intro: """
+            I explain how to use the new NavigationStack to navigate between views in SwiftUI. You will learn the fundamentals of NavigationStack and how to navigate programmatically in SwiftUI using values (data) and not views.        
+            """,
+            author: "Sean Allen",
+            urlString: "https://www.youtube.com/watch?v=oxp8Qqwr4AY&t=431s",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2022, month: 11, day: 25),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "SwiftUI Drag and Drop with Transferable Custom Object",
+            intro: """
+            Drag an drop in SwiftUI was revamped in iOS 16. It now uses the .draggable and .dropDestination modifiers which require conformance to the new Transferable protocol in Swift. In this video we create a kanban board to teach you how to use Drag and Drop. In the second half of the video I show you how to conform your custom objects to Transferable so you can use them with Drag and Drop.       
+            """,
+            author: "Sean Allen",
+            urlString: "https://www.youtube.com/watch?v=lsXqJKm4l-U",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 7, day: 20),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+        
+// Nick Sarno - some posts from SwiftUI Continued Learning (Intermediate Level)
+        Post(
+            title: "How to use Subscripts in Swift",
+            intro: """
+            In Swift, a subscript is a special method that allows you to access elements of a collection, sequence, or list by using square brackets []. Subscripts provide a convenient way to get or set values within an instance of a custom data type, such as a class, struct, or enum.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=hiOjTJgl6GU&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=34",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 10, day: 31),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to create custom Property Wrappers in SwiftUI (PART 2/2)",
+            intro: """
+            In SwiftUI, a property wrapper is a Swift language feature that allows you to add a layer of custom behavior to properties. Property wrappers are used to augment the behavior of properties in a concise and reusable way. They are commonly used in SwiftUI for managing state, data binding, and more. We will create several new Property Wrappers with custom logic!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=TERHgCD_tGA&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=33",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 10, day: 26),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to create custom Property Wrappers in SwiftUI (PART 1/2)",
+            intro: """
+            In SwiftUI, a property wrapper is a Swift language feature that allows you to add a layer of custom behavior to properties. Property wrappers are used to augment the behavior of properties in a concise and reusable way. They are commonly used in SwiftUI for managing state, data binding, and more. We will learn how they work, why they work, and how to make your own!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=2wzq6SQkSJE&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=32",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 10, day: 24),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use KeyPaths in Swift",
+            intro: """
+            In Swift, a KeyPath is a way to reference a property, or a nested set of properties, of a particular type in a type-safe manner. It provides a convenient and type-checked way to access properties and their values without needing to use string-based key-value coding (KVC) or dynamic member lookup. KeyPaths are often used in Swift for tasks like sorting, filtering, or key-value observation, and they contribute to safer, more predictable code.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=FmjG6mG-GIA&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=31",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 10, day: 19),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Custom Errors and Alerts in SwiftUI",
+            intro: """
+            Learn how to create custom Errors and display custom Alerts in SwiftUI. We will review simple and complex examples, ranging from displaying default alerts to creating totally custom View extensions that work with custom Bindings!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=lncOFL3Qsns&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=30",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 10, day: 17),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Create custom Bindings in SwiftUI",
+            intro: """
+            Bindings are an essential part of building SwiftUI applications. As you write better SwiftUI code, the need for custom Bindings becomes more and more relevant. This video will teach you step-by-step how Binding works and how to make your own versions!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=K91rKH_O8BY&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=29&t=3s",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 10, day: 12),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use TimelineView in SwiftUI",
+            intro: """
+            The TimelineView in SwiftUI is perfect for making complex, multi-step animations. In this video we will learn how to use it and review a few different implementations.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=ZmXp6Pd5Elg&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=28",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 10, day: 10),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Creating a reusable utility class for CloudKit code",
+            intro: """
+            Here, we will take all of our CloudKit code (that we created in the last 4 videos) and move it into it's own reusable utility class! After this is done, we can then use this new class in any project or file without having to change our code. To do this, we will use Protocols, Generics, and Futures!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=OD_FDJOv-Ek&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=27",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 11, day: 19),
+            studyLevel: .advanced,
+            notes: "CloudKit",
+            origin: .cloud,
+        ),
+        Post(
+            title: "Send Push Notifications using CloudKit in SwiftUI",
+            intro: """
+            CloudKit makes it extremely easy to send real, live push notifications to your users! In this video we will set up a ""subscription"" which will then allow users to receive push notification in real-time! This is one of the EASIEST ways to add push notification capability to an iOS project.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=vr5CBfaK14A&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=26&t=228s",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 11, day: 18),
+            studyLevel: .advanced,
+            notes: "CloudKit",
+            origin: .cloud,
+        ),
+        Post(
+            title: "Upload images and CKAssets to CloudKit",
+            intro: """
+            Complex data types, such as Images, Videos, or Audio files cannot be uploaded directly to CloudKit in the same way that basic data types can. Instead, we first need to save this data to a local URL and then upload it to CloudKit as a CKAsset. This video will show you how to upload and download images from CloudKit containers!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=AtFMqG-zziA&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=25",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 11, day: 17),
+            studyLevel: .advanced,
+            notes: "CloudKit",
+            origin: .cloud,
+        ),
+        Post(
+            title: "CloudKit CRUD Functions in SwiftUI project",
+            intro: """
+            Now that our project is connected to CloudKit, we can start uploading and downloading data to and from the database. We will start with some simple functions and work out way through more difficult ones, covering all of the basic CRUD methods. That is: Creating, Reading, Updating, and Deleting CKRecords in our CloudKit container.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=A-1U_iXiCyI&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=24",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 11, day: 16),
+            studyLevel: .advanced,
+            notes: "CloudKit",
+            origin: .cloud,
+        ),
+        Post(
+            title: "Setup CloudKit in SwiftUI project and get user info",
+            intro: """
+            Let's jump into the wild world of CloudKit! CloudKit is a super powerful framework that allows us to connect our app to Apple's iCloud database. We can then use that database as a backend for our app. In this video we will connect our SwiftUI project to CloudKit, set up a CloudKi container (basically a database) and then fetch the current user's info.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=tww2vbJjXpA&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=23",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 11, day: 15),
+            studyLevel: .advanced,
+            notes: "CloudKit",
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use Futures and Promises in Combine with SwiftUI",
+            intro: """
+            Futures are a lesser-known feature of the Combine framework that enable us to conver @escaping closures into Publishers. In this video we will learn how to implement them so that we can then use these Publishers in tandem with the other Publishers/Subscribers in our application.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=yCGbhbFK8sY&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=22",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 11, day: 10),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Advanced Combine Publishers and Subscribers in SwiftUI",
+            intro: """
+            In this video we will create some advanced Combine pipelines and look at some of the different wants that we can manipulate published data with our custom subscribers. By the end of this video you will have the skills to start implementing your own pipelines into your app using custom publishers and subscribers.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=RUZcs0SWqnI&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=21",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 11, day: 9),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use Dependency Injection in SwiftUI",
+            intro: """
+            In the last video, we learned how to use Protocols. In this video, we will now take what we learned and implement Dependency Injection into our project using Protocols. By the end of this video you will now only understand what DI is, but also know how to do it. 
+
+            Once you begin using Dependency Injection in your apps, there is no going back! It becomes extremely important when creating scalable and testable apps. 
+
+            We will also talk about the downfalls of Singleton's and how Dependency Injection can solve them!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=E3x07blYvdE&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=18",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 10, day: 22),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use Protocols in Swift",
+            intro: """
+            In this video we jump into the wild world of Protocols in Swift. We will learn how to create custom protocols and then walk through a few real-world implementations.
+
+            Apple's definition of a Protocol:
+
+            A protocol defines a blueprint of methods, properties, and other requirements that suit a particular task or piece of functionality. The protocol can then be adopted by a class, structure, or enumeration to provide an actual implementation of those requirements. Any type that satisfies the requirements of a protocol is said to conform to that protocol.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=0gM1wmW1Xvc&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=17",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 10, day: 20),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Use UIViewControllerRepresentable to convert UIKit controllers to SwiftUI",
+            intro: """
+            In the last video, we learned how to use UIViewRepresentable to convert UIViews from UIKit to SwiftUI. In this video, we will do the same thing, except we will now convert entire UIViewControllers (not just sub-views) using UIViewControllerRepresentable.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=wqa1hCu8yCI&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=16",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 10, day: 12),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Use UIViewRepresentable to convert UIKit views to SwiftUI",
+            intro: """
+            In this video, we will learn how to convert views from UIKit into SwiftUI. As I've mentioned before, I definitely recommend using native SwiftUI components whenever possible because they are stable and much easier to work with. However, not all SwiftUI components are highly customizable and there are occasional situations where we might want to convert something from UIKit and use it in our SwiftUI application. As you'll see, putting UIKit elements onto the screen in SwiftUI is actually pretty easy. The hard part, which we will also cover, is learning how to communicate the data flow from SwiftUI to UIKit and vice versa, from UIKit back to SwiftUI.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=1GYKyQHVDWw&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=15",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 10, day: 7),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Create a custom navigation bar and link in SwiftUI",
+            intro: """
+            Almost all mobile applications use some sort of Navigation View to manage navigation through the application. Currently, the default NavigationView that  comes with the SwiftUI framework is very limited in terms of customization. However, it is very powerful and efficient. In this video, we will learn how to build a custom Navigation View by building custom ViewBuilder wrappers around Apple's default implementation and then adding our custom views on top. This will make a highly performant and reusable example.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=aIDT4uuMLHc&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=14",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 10, day: 5),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Create a custom tab bar in SwiftUI",
+            intro: """
+            As you probably know, the default TabView in SwiftUI is not very customizable. In this video, we will learn how to build a totally custom TabBar (and TabView) in SwiftUI. We will look at the documentation and try to mimic Apple's API of the TabView as much as possible, so that ours is just as easy to use!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=FxW9Dxt896U&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=13",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 9, day: 30),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Use PreferenceKey to extract values from child views in SwiftUI",
+            intro: """
+            In this video we will learn the basics of how to use Preference Keys and then jump into some realistic examples of when this would come in handy in a real-world iOS application.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=OnbBc00lqWU&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=12",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 9, day: 29),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+
+        Post(
+            title: "How to use @ViewBuilder in SwiftUI",
+            intro: """
+            We will use @ViewBuilder to create closures where we can pass in generic types to our views. This is especially handy in SwiftUI when we want to build sub-views within parent closures (or containers).
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=pXmBRK1BjLw&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=11",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 9, day: 23),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use Generics in Swift",
+            intro: """
+            This video will introduce you to Generics in Swift. Generics are an extremely powerful part of the Swift language. They allow us to abstract parts of our code, which will help make our code more reusable and efficient. In this video, we'll learn how to use Generics, why we use them, and then review a few simple examples. We will then use Generics in the next few videos in this series to create custom SwiftUI components!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=rx3uRICZr5I&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=10",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 9, day: 21),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Animate Custom shapes with AnimateableData in SwiftUI",
+            intro: """
+            In the last two videos, we learned how to create custom shapes with straight lines and with curved lines. However, we can simply animate these shapes the same way we animate other objects in SwiftUI. Instead, we need to learn how to implement AnimateableData into the custom shape!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=kzrtiPbR3LQ&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=9",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 9, day: 15),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Custom shapes with Arcs and Quad Curves in SwiftUI",
+            intro: """
+            In this video, we will take our skills to the next level and dive into custom shapes with curves. We will first create basic arcs and then quad curves!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=UvQcNSjgydY&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=8",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 9, day: 13),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Custom Shapes in SwiftUI",
+            intro: """
+            Although SwiftUI gives us a bunch of shapes out-of-the-box, such as Rectangles and Circles, there are still a lot of shapes that are missing. Thankfully, it's pretty easy to create custom shapes in SwiftUI by drawing a path.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=EHhgjOt_KFA&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=7",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 9, day: 10),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "ow to use MatchedGeometryEffect in SwiftUI",
+            intro: """
+            In this video we will learn how to successfully implement MatchedGeometryEffect. This modifier is super powerful and there are many use cases when this will come in handy. We will cover a few real-world scenarios where MatchedGeometryEffect can take your app to the next level. 
+
+            Note: when using MatchedGeometryEffect, it's very important to understand the "namespace" and "id" for each object you want to animate. You also need to ensure that you are drawing objects on/off the screen simultaneously.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=Jyh65AMRqzQ&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=6",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 9, day: 8),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to create custom Transitions in SwiftUI",
+            intro: """
+            Transitions are one of the most powerful aspects in SwiftUI. We can use transitions to animate objects (and views) on and off of the screen. Although SwiftUI gives us a bunch of awesome transitions by default, sometimes you'll want to create your own. In this video we will create our own custom transitions using AnyTransition and then we will iterate on it to learn the different options we have for customizing and implementing these transitions.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=lF6g07FDsM0&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=5",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 9, day: 6),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+
+        Post(
+            title: "How to create custom ButtonStyles in SwiftUI",
+            intro: """
+            You probably use Buttons in ever SwiftUI application that you make, so it's crucially important that your buttons are customized perfectly for your app. Often times, that will mean creating a custom ButtonStyle. In this video, we will learn how to create custom ButtonStyles so that we can adjust the feel when we click on a Button. We will dive into making buttons scale as well as highlight on press.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=uK1wKIY49z0&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=4",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 9, day: 3),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to create custom ViewModifiers in SwiftUI",
+            intro: """
+            In this video we learn how to create custom ViewModifiers! These are extremely useful in production apps because they make it extremely easy to create and reuse modifiers for specific views. If you want to be able to reusable a specific look or feel for any object, creating a custom ViewModifer is a great solution.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=MQl4DlDf_5k&list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y&index=2",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 9, day: 1),
+            studyLevel: .advanced,
+            origin: .cloud,
+        ),
+                
+// Nick Sarno - some posts from SwiftUI Continued Learning (Intermediate Level)
+        Post(
+            title: "Paging ScrollView in SwiftUI for iOS 17",
+            intro: """
+            Explore the latest ScrollView modifiers introduced in iOS 17 for SwiftUI, enhancing scroll functionality and user experience in your apps. This tutorial provides a detailed overview of new modifiers, demonstrating their application and benefits in SwiftUI development. Ideal for developers seeking to leverage new features in iOS 17 for improved app design
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2024, month: 3, day: 6),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use VisualEffect ViewModifier SwiftUI",
+            intro: """
+            Learn to use the VisualEffect ViewModifier in SwiftUI for adding blur and vibrancy effects to your app interfaces. This video covers the straightforward implementation of visual effects in SwiftUI, showing you how to enhance your iOS and macOS applications' look and feel. Essential for developers aiming to improve UI design with SwiftUI
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=wme3LSg4uuQ&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=35",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2024, month: 3, day: 4),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use Alignment Guides in SwiftUI",
+            intro: """
+            Alignment Guides allow us to customize the alignment of Views within out SwiftUI code. While there are default alignments provided in the framework, using the Alignment Guide, we can tweak them to our personal preference.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=7AaAVuWmlqQ&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=34",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 11, day: 16),
+            studyLevel: .middle,
+            notes: """
+                .alignmentGuide
+                """,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Download and save images using FileManager and NSCache",
+            intro: """
+            Woohoo! I'm so excited to share this video because we get to use many of the concepts that I've covered in the past 5-10 videos and put them to use. In this video, we will create a "mini app" within our project. We will use MVVM (Model-View-ViewModel) architecture to set up our app and then add some extra "Utility" classes to incorporate additional classes.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=fmVuOu8XOvQ&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=30",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 5, day: 1),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Save and cache images in a SwiftUI app",
+            intro: """
+            In this video we will implement a simple NSCache to temporarily save an image. Caching is a very common technique used in all software development (not just iOS Development) where we can take objects that we've downloaded from the internet and temporarily store them somewhere for reuse. This is help us avoid having to re-download the objects if they appear on the screen a second time. This is quite similar to the last video in this series, except the FileManager is for more permanent objects that will save to the device forever, while NSCache is for temporary objects that will only save for the current session.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=yXSC6jTkLP4&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=29",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 4, day: 30),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Save data and images to FileManager in Xcode",
+            intro: """
+            In this video we switch gears and look at saving documents to the FileManager. This is a handy resource for any iOS developer where we can save documents (files, data, images, videos, etc.) directly to a user's device. As the developer, it becomes your responsibility to manage the data that you save to someone's device and therefore we need to know how to save data, fetch data, and also delete data!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=Yiq-hdhLzVM&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=28&t=1s",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 4, day: 29),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+
+        Post(
+            title: "Publishers and Subscribers in Combine with a SwiftUI project",
+            intro: """
+            It's no secret that Publishers and Subscribers are the future of iOS development! Thanks to the Combine framework, we can implement custom solutions in our application to ensure that the data is always in sync across our application. This is a HUGE step forward for iOS development and mastering these tools can take your app to the next level.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=Q-1EDHXUunI&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=27",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 4, day: 28),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use Timer and onReceive in SwiftUI",
+            intro: """
+            Implementing a Timer in SwiftUI is as simple as one line of code! In this video we will add a Timer to our View and then explore several different methods to create custom animations and features. We will use the .onReceive function to listen to the Timer (also known as "subscribing"). This video will also serve as an introduction to Publishers and Subscribers, which we will expand on in the next video!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=ymXRX6ZB-J0&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=26&t=2s",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 4, day: 27),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Download JSON from API in Swift with Combine",
+            intro: """
+            In this video we jump in to the excited world of Combine! Combine is a new framework from Apple that is made specifically for handling asynchronous events. By using Publishers and Subscribers, we are able to constantly keep out data in sync across our application. At the end of this video, we will compare the code to the last video (doing the same with but without Combine) to highlight the benefits of using this method. In the next few videos we will continue exploring this new framework!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=fdxFp5vU6MQ&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=25",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 4, day: 26),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Download JSON from API in Swift w/ URLSession and escaping closures",
+            intro: """
+            In the last few videos we learned about background threads, weak self, and Codable - all of which we will use to efficiently download data from an API. In this video we will use a URLSession to connect to a public API to download posts in the form of JSON data. We will then convert the data into our local model, and display them on the screen.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=h42OHc5CRBQ&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=24",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 4, day: 22),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+
+        Post(
+            title: "How to use escaping closures in Swift",
+            intro: """
+            In this video we will learn why we need @escaping closures and how to implement them! While many courses use these closures, very few explain why they are required and it often becomes a confusing topic for new developers. We use @escaping closures to deal with returning from functions when using asynchronous code. This is code that does NOT execute immediately, but rather at a future point in time. This becomes extremely important when we need to download data from the internet!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=7gg8iBH2fg4&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=22",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 4, day: 20),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use Typealias in Swift",
+            intro: """
+            In this quick video, we will learn a simple implementation of Typealias. This lesser known declaration is used to create an alias (another name) for an existing type! This is used much more frequently in large projects / codebases when it becomes more efficient to create a new name for a type rather than (1) a totally new type or (2) refactoring your code.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=wBd3s4ZW8Ps&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=21",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 4, day: 19),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use weak self in Swift",
+            intro: """
+            Swift uses Automatic Reference Counting (ARC) to manage your app’s memory usage. As a developer, you want to try to keep the ARC count as low as possible, which will keep your app running fast and efficiently. In this video we will learn how to use "weak references" instead of "strong references" to keep our count low!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=TPHp9kR0Go8&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=20",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 4, day: 18),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Multi-threading with background threads and queues in Xcode",
+            intro: """
+            In this video we will learn how to properly use background threads, also known as background queues. By default, all of the code that we write in our apps is executed on the "main thread", however, if the main thread ever gets overwhelmed with tasks, it can slow down, freeze, or even crash our app. Luckily, Apple provides us with easy access to many other threads that we can use to offload some of the work!
+
+            We will review how to add different threads, how to perform tasks on a background thread, and how to return back to the main thread afterward. As we get into the second half of this course, we will begin to use background threads more often as we begin to do data intensive tasks, such as downloading data from the internet.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=jEpg2SYvVV8&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=19",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 4, day: 17),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Core Data relationships, predicates, and delete rules in Xcode",
+            intro: """
+            In this video, we take a deep dive into Core Data and learn how to create and manage multiple Core Data entities that have relationships between them. We will develop a mock application that contains three types of entities: Businesses, Departments, and Employees. These entities will have many relationships between them, including one-to-one and one-to-many relationships!
+
+            In addition to implement the CRUD (Create, Read, Update, Delete) functions, we will learn how to sort and filter (predicate) Core Data fetch requests. We will also learn how to properly delete Core Data relationships by using Deny, Cascade, and Nullify delete rules.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=huRKU-TAD3g&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=18",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 4, day: 16),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+
+        Post(
+            title: "How to use Core Data with MVVM Architecture in SwiftUI",
+            intro: """
+            In this video we will learn an alternative approach and connect Core Data to our app using a ViewModel in MVVM (Model-View-ViewModel architecture). As you'll see, the main benefit to this method is that we can separate our code so that the code relating to updating Core Data is totally separate from the code relating to the View (the UI).
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=BPQkpxtgalY&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=17",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 4, day: 15),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use Core Data with @FetchRequest in SwiftUI",
+            intro: """
+            In this video we jump into the world of Core Data! We will first create a new Xcode project, review some of the template Core Data code that Apple provide us, and then we will customize the code for our iOS application. In this video we will implement CRUD functions by learning how to Create, Read, Update, and Delete data within Core Data. As noted in the title, this video explores how to use the @FetchRequest, which enables us to easily connect Core Data to our SwiftUI View. In the next video, however, we will learn another implementation of Core Data using MVVM architecture - that no longer uses the @FetchRequest. Both implementations are useful and good to know!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=nalfX8yP0wc&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=16",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 4, day: 14),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+
+        Post(
+            title: "Sort, Filter, and Map data arrays in Swift",
+            intro: """
+            Being able to effectively manipulate data in your application is extremely important. Before displaying content on the screen, you will (almost always) want to organize the data to show specific pieces of content. In order to do this, we will learn how to use 3 super-efficient modifiers that Apple provides us with:
+
+            1. Sort - organize data by criteria
+            2. Filter - create a subset of your data
+            3. Map - transform data from one type to another
+
+            As you can imagine, being able to sort, filter, or map data is used ALL the time in production applications. We will learn how to implement these methods and also learn some fancy ways to shorten the code to look like professional developers ;)
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=F-gUZztPTgI&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=15&t=1534s",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 4, day: 13),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+
+        Post(
+            title: "What is Hashable protocol in SwiftUI?",
+            intro: """
+            The Hashable protocol is very similar to the Identifiable protocol that I've been using throughout my courses - it's another way to give a unique identifier to an object. In reality, hashing is actually MUCH more complex than this, but this is all you really need to understand for our purposes. When we use hash values in SwiftUI applications it's usually to let the system identify which object is which.
+
+            Hashing is not unique to Swift/SwiftUI. It is often used in web development and cryptography (yes, in Blockchains and Bitcoin too). If you're interested, there are many articles and YouTube videos that go into detail on how hashing really works. Thankfully, we don't have to get into those details when we implement Apple's Hashable protocol.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=Oxc4dCtHPkk&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=14",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 4, day: 12),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to add sound effects to Xcode project",
+            intro: """
+            We learn how to add simple sound effects to our SwiftUI applications. Although the code for adding sounds isn't technically "SwiftUI", it is a very relevant feature in creating professional quality iOS applications. To add sounds, we will dip into the AVKit framework and learn how to use an AVAudioPlayer! We will also learn how to implement a Singleton class so that it can be easily reused and accessed across an application.
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=iBLZ1C4L5Mw&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=11",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 4, day: 7),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+        Post(
+            title: "How to use Mask in SwiftUI to create a 5-star rating button",
+            intro: """
+            The mask modifier is a lesser known tool in SwiftUI where we can make objects take the shape of others. As you'll see, it becomes extremely handle when creating complex animations. In this video we will first create a basic star rating component, and then we take it to the next level by applying a mask and custom animations. During the process, we will also learn how to use .allowsHitTesting() to disable touches on certain layers of the View. The end product looks very professional and is something you can use in production applications!
+            """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=pxx1ueCbnls&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=10",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 4, day: 6),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
         
 // Nick Sarno - some posts from SwiftUI Bootcamp (Beginner Level)
         Post(
@@ -393,10 +1146,6 @@ struct DevData {
             origin: .cloud,
         ),
         
-
-
-
-        
         
 // OLD ONES
         Post(
@@ -434,24 +1183,6 @@ struct DevData {
             postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 11, day: 18),
             studyLevel: .advanced,
-            origin: .cloud,
-        ),
-        Post(
-            title: "Styling SwiftUI Text Views",
-            intro: """
-            In this video we are going to explore how we can stylize text for our Text views in SwiftUI.
-            
-            We will start by looking at how we can create a `Text` view with the Markdown-formatted base postLanguage version of the string as the localization key.
-            
-            We will also see how we can utilize string interpolation to combine and stylize our strings and present them in a text view.
-            
-            And finally, we will take a quick look at the power of Attributed strings in SwiftUI.
-            """,
-            author: "Stewart Lynch",
-            urlString: "https://www.youtube.com/watch?v=rbtIcKKxQ38/",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 5, day: 7),
-            studyLevel: .middle,
             origin: .cloud,
         ),
         Post(
@@ -1121,39 +1852,9 @@ struct DevData {
             origin: .cloud
         ),
         
-// Stewart Lynch
-        Post(
-            title: "Mastering iOS 26 Toolbars & Modal Sheets in SwiftUI – New Glass Buttons, Transitions & More",
-            intro: """
-                iOS 26 brings a fresh take on SwiftUI toolbars and modal presentations, and in this tutorial, I’ll guide you through everything you need to know. We’ll explore semantic and positional toolbar item placements, new glass button styles, toolbar spacers, and subtitle options—including some quirks to be aware of. You’ll also learn how to use the new matchGeometry transition with modal sheets for a polished, modern experience.
-
-                By the end of the video, you’ll be equipped to take full advantage of toolbars and sheet presentation enhancements in iOS 26.
-                """,
-            author: "Stewart Lynch",
-            urlString: "https://www.youtube.com/watch?v=IiLDbrtBsn0",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2025, month: 9, day: 14),
-            origin: .cloud
-        ),
-        
-        Post(
-            title: "Mastering Liquid Glass in SwiftUI – Buttons, Containers & Transitions",
-            intro: """
-                SwiftUI’s Liquid Glass effect in OS 26 is more than just eye candy—it’s a whole new design system. In this tutorial, I’ll guide you through the new button styles, applying glass effects to various views, and using GlassEffectContainer to create seamless, fluid layouts.
-
-                We’ll also explore namespace-powered unions, matched geometry transitions, and clever control interactions that elevate your app’s UI. This is hands-on, practical, and comprehensive.
-
-                Whether you’re building for iOS, macOS, or visionOS, Liquid Glass is a game-changer—and I’ll help you get the most out of it.
-                """,
-            author: "Stewart Lynch",
-            urlString: "https://www.youtube.com/watch?v=E2nQsw0El8M",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2025, month: 8, day: 31),
-            origin: .cloud
-        ),
 // 2025-10-25 DONE
         Post(
-            title: "Swift Basics (Beginner Level)",
+            title: "Swift Basics",
             intro: """
                 Get started with the Swift programming language. Write your first line of code and learn the fundamentals.
                 """,
@@ -1164,7 +1865,7 @@ struct DevData {
             origin: .cloud
         ),
         Post(
-            title: "SwiftUI Bootcamp (Beginner Level)",
+            title: "SwiftUI Bootcamp",
             intro: """
                 The fastest way to learn SwiftUI. Learn how to build beautiful screens and other UI components.
                 """,
@@ -1175,7 +1876,7 @@ struct DevData {
             origin: .cloud
         ),
         Post(
-            title: "SwiftUI Todo List (Beginner Level)",
+            title: "SwiftUI Todo List",
             intro: """
                 Build your first app in SwiftUI! Learn how to build a real application with MVVM app architecture.
                 """,
@@ -1187,7 +1888,7 @@ struct DevData {
             origin: .cloud
         ),
         Post(
-            title: "Git & Source Control (Beginner Level)",
+            title: "Git & Source Control",
             intro: """
                 A complete guide for learning how to use git. Practice using Source Control within Xcode, GitKraken, and Github. Get familiar with Git Flow.
                 """,
@@ -1198,7 +1899,7 @@ struct DevData {
             origin: .cloud
         ),
         Post(
-            title: "SwiftUI Map App (Beginner Level)",
+            title: "SwiftUI Map App",
             intro: """
                 Build a map app to showcase real destinations around the world. Get familiar with data management and transitions.
                 """,
@@ -1210,30 +1911,34 @@ struct DevData {
             origin: .cloud
         ),
         Post(
-            title: "SwiftUI Continued Learning (Intermediate Level)",
+            title: "SwiftUI Continued Learning",
             intro: """
                 Building professional apps requires knowledge of data persistence and networking. This bootcamp builds on your existing knowledge of SwiftUI.
                 """,
             author: "Nick Sarno/Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar",
+            postDate: Date.from(year: 2024, month: 8, day: 8),
             studyLevel: .middle,
             origin: .cloud
         ),
         Post(
-            title: "SwiftUI Crypto App (Intermediate Level)",
+            title: "SwiftUI + Firebase",
             intro: """
-                Build a cryptocurrency app that downloads live price data from an API and saves the current user's portfolio. Get comfortable with Combine, Core Data, and MVVM.
-                """,
+            Become an expert at using Google Firebase. Set up user authentication, connect to a remote database, and track your app's performance in real-time.
+            
+            Learn how to integrate Firebase into your iOS app with Swift code in our comprehensive tutorial series. Our step-by-step guide will teach you everything you need to know about using Firebase in your mobile app development, perfect for developers of all levels.
+            """,
             author: "Nick Sarno/Swiftful Thinking",
             postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
-            postDate: Date.from(year: 2021, month: 5, day: 24),
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphl8ly0oi0aHx0v2B7UvDK0",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 4, day: 28),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloud,
         ),
         Post(
-            title: "Swift Concurrency (Intermediate Level)",
+            title: "Swift Concurrency",
             intro: """
                 Swift Concurrency is a major upgrade to the Swift language that completely changes how to write asynchronous code in Swift. Learn everything that you need to know.
                 """,
@@ -1246,7 +1951,7 @@ struct DevData {
         ),
 
         Post(
-            title: "SwiftUI Advanced Learning (Advanced Level)",
+            title: "SwiftUI Advanced Learning",
             intro: """
                 Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
                 """,
@@ -1394,6 +2099,7 @@ struct DevData {
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
             postPlatform: .youtube,
             postDate: Date.from(year: 2024, month: 8, day: 8),
+            studyLevel: .middle,
             origin: .cloud
         ),
 
@@ -1449,7 +2155,7 @@ struct DevData {
         Post(
             title: "SwiftUI",
             intro: """
-                A collection of SwiftUI posts.
+                A collection of SwiftUI materials.
             """,
             author: "Create With Swift",
             postType: .course,
