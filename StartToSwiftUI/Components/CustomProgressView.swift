@@ -17,12 +17,9 @@ struct CustomProgressView: View {
     
     var body: some View {
         
-        ProgressView()
+        ProgressView("... loading ...")
             .scaleEffect(scale)
-//            .frame(minWidth: 80, idealWidth: 100, maxWidth: 120,
-//                       minHeight: 80, idealHeight: 100, maxHeight: 120)
-//            .progressViewStyle(.circular)
-//            .padding()
+            .padding()
     }
 }
 
