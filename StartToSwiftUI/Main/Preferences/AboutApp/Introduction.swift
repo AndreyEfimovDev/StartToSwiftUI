@@ -13,7 +13,6 @@ struct Introduction: View {
     
     var body: some View {
         ScrollView {
-// • Organise learning resources by category
             Text("""
                **StartToSwiftUI** is a free educational link aggregator designed to help you organise learning materials for SwiftUI.
 
