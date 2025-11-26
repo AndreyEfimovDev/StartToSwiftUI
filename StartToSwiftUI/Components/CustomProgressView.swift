@@ -10,16 +10,27 @@ import SwiftUI
 struct CustomProgressView: View {
     
     private let scale: CGFloat
+    private let isNoText: Bool
     
-    init(scale: CGFloat = 1.5) {
+    init(
+        scale: CGFloat = 1.5,
+        isNoText: Bool = true
+    ) {
         self.scale = scale
+        self.isNoText = isNoText
     }
     
     var body: some View {
         
-        ProgressView("... loading ...")
-            .scaleEffect(scale)
-            .padding()
+        Group {
+            if isNoText {
+                ProgressView()
+            } else {
+                ProgressView("... loading ...")
+            }
+        }
+        .scaleEffect(scale)
+        .padding()
     }
 }
 
