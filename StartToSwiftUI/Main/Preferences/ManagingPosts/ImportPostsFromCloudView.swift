@@ -118,7 +118,7 @@ struct ImportPostsFromCloudView: View {
     
     private func importFromCloud() {
         
-//        vm.loadPersistentPosts(posts: PreviewData.samplePosts) {
+//        vm.loadPersistentPosts(posts: DevData.postsForCloud) {
 //            isInProgress = false
 //            isLoaded = true
 //            hapticManager.notification(type: .success)
@@ -126,7 +126,7 @@ struct ImportPostsFromCloudView: View {
 //                dismiss()
 //            }
 //        }
-//        
+        
         
         vm.importPostsFromCloud() {
             isInProgress = false
