@@ -3,18 +3,17 @@
 //  StartToSwiftUI
 //
 //  Created by Andrey Efimov on 27.10.2025.
-//
+// #2A5FB4 #3765AF
 
 import SwiftUI
 
 struct LaunchView: View {
     
-    let action: () -> ()
+    let completion: () -> ()
     
     @State private var showLoadingProgress: Bool = false
     @State private var counter: Int = 0
-//    @State private var loops: Int = 0
-    @State private var loadingString: [String] = "............. loading .............".map { String($0) }
+    @State private var loadingString: [String] = "................ loading ................".map { String($0) }
     
     private let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
     
@@ -23,11 +22,12 @@ struct LaunchView: View {
             Color.launch.background
                 .ignoresSafeArea()
             
-            Image("StartToSwiftUI_icon_any_1024blue")
+            Image("LaunchIcon_blue")
                 .resizable()
                 .font(.headline)
                 .fontWeight(.heavy)
                 .frame(width: 200, height: 200)
+                .offset(y: 8)
 
             ZStack {
                 if showLoadingProgress {
@@ -35,13 +35,13 @@ struct LaunchView: View {
                         ForEach(loadingString.indices, id: \.self) { index in
                             Text(loadingString[index])
                                 .offset(y: counter == index ? -11 : 0)
-                        }
+                        } 
                     }
                     .font(.subheadline)
                     .transition(AnyTransition.scale.animation(.easeIn))
                 }
             }
-            .offset(y: 108)
+            .offset(y: 135)
         }
         .foregroundColor(Color.launch.accent)
         .onAppear {
@@ -51,7 +51,7 @@ struct LaunchView: View {
             withAnimation() {
                 let lastIndex = loadingString.count - 1
                 if counter == lastIndex {
-                        action()
+                        completion()
                 } else {
                     counter += 1
                 }

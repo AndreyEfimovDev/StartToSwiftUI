@@ -16,7 +16,7 @@ struct SwipeListButton: View {
     let ratio: CGFloat
     let buttonColor: Color
     let isToChangeImage: Bool
-    let action: () -> ()
+    let completion: () -> ()
     
     init(
         systemImageName: String,
@@ -25,7 +25,7 @@ struct SwipeListButton: View {
         ratio: CGFloat,
         buttonColor: Color,
         isToChangeImage: Bool = false,
-        action: @escaping () -> Void
+        completion: @escaping () -> Void
     ) {
         self.mainImageName = systemImageName
         self.minorImageName = minorImageName
@@ -33,14 +33,14 @@ struct SwipeListButton: View {
         self.ratio = ratio
         self.buttonColor = buttonColor
         self.isToChangeImage = isToChangeImage
-        self.action = action
+        self.completion = completion
     }
     
     var body: some View {
         
         Button(action: {
             withAnimation {
-                action()
+                completion()
             }
             print(mainImageName + " tapped")
             
