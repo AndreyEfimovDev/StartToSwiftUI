@@ -230,6 +230,7 @@ struct FiltersSheetView: View {
                 vm.selectedFavorite = nil
                 vm.selectedType = nil
                 vm.selectedYear = nil
+                vm.selectedSortOption = nil
                 updateFiltersSheetView.toggle()
             }
             .padding(.horizontal, 55)
@@ -244,6 +245,7 @@ struct FiltersSheetView: View {
                 vm.selectedFavorite = nil
                 vm.selectedType = nil
                 vm.selectedYear = nil
+                vm.selectedSortOption = nil
                 isFilterButtonPressed.toggle()
             }
             .padding(.horizontal, 55)
