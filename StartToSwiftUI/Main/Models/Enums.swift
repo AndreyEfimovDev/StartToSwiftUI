@@ -12,7 +12,9 @@ import SwiftUI
 // MARK: Colour scheme
 
 enum Theme: String, CaseIterable, Codable {
-    case light, dark, system
+    case light
+    case dark
+    case system
 
     var displayName: String {
         switch self {
@@ -30,31 +32,35 @@ enum Theme: String, CaseIterable, Codable {
         }
     }
     
-    var color: Color {
-        switch self {
-        case .light: return .yellow
-        case .dark: return .green
-        case .system: return .blue
-        }
-    }
+//    var color: Color {
+//        switch self {
+//        case .light: return .yellow
+//        case .dark: return .green
+//        case .system: return .blue
+//        }
+//    }
     
-    var iconName: String {
-            switch self {
-            case .light: return "sun.max"
-            case .dark: return "moon"
-            case .system: return "iphone"
-            }
-        }
-//    
-//    func colorScheme(for systemScheme: ColorScheme) -> ColorScheme? {
+//    var iconName: String {
 //            switch self {
-//            case .light: return .light
-//            case .dark: return .dark
-//            case .system: return systemScheme // Возвращаем системную схему
+//            case .light: return "sun.max"
+//            case .dark: return "moon"
+//            case .system: return "iphone"
 //            }
 //        }
-//
+}
 
+enum SortOption: String, CaseIterable {
+    case random
+    case newestFirst
+    case oldestFirst
+    
+    var displayName: String {
+        switch self {
+        case .random: return "Random"
+        case .newestFirst: return "Newest"
+        case .oldestFirst: return "Oldest"
+        }
+    }
 }
 
 
