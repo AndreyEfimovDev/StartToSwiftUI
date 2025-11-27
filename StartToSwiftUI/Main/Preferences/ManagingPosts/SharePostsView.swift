@@ -56,7 +56,7 @@ struct SharePostsView: View {
         } message: {
             Text(vm.errorMessage ?? "Unknown error")
         }
-        .navigationTitle("Share/Store posts")
+        .navigationTitle("Share/Store")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
 //        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
@@ -109,15 +109,14 @@ struct SharePostsView: View {
     
     private var textSection: some View {
         Text("""
-            You are about to store posts
-            in JSON format
-            on your local device or
-            share them directly via
-            AirDop / Mail / Messenger / etc.
+            You are about to store the materials on your local device in JSON format 
+            or
+            share them directly via AirDop / Mail / Messenger / etc.
+            
+            While storing on local device please use a name different from 'app_posts' for your convenience, i.e. 'app_posts_backup'.
             
             """)
-        .multilineTextAlignment(.leading)
-
+        .multilineTextAlignment(.center)
     }
 }
 

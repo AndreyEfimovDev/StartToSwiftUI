@@ -13,6 +13,7 @@ class PostsViewModel: ObservableObject {
     
     // MARK: PROPERTIES
     
+    // Services
     private let fileManager = JSONFileManager.shared
     private let hapticManager = HapticService.shared
     private let networkService: NetworkService
@@ -27,7 +28,6 @@ class PostsViewModel: ObservableObject {
     @Published var filteredPosts: [Post] = []
     @Published var searchText: String = ""
     @Published var isFiltersEmpty: Bool = true
-//    @Published var isPostsUpdateAvailable: Bool = false
     
     // MARK: Stored preferances
     
@@ -43,19 +43,21 @@ class PostsViewModel: ObservableObject {
         }
     }
     
-    // stored the date of the Cloud posts last imported (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date.distantPast)
+    // Stored the date of the Cloud posts last imported (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date.distantPast)
     @AppStorage("localLastUpdated") var localLastUpdated: Date = Date.distantPast
 
     
-    // stored filters
+    // Stored filters
     @AppStorage("storedCategory") var storedCategory: String?
     @AppStorage("storedLevel") var storedLevel: StudyLevel?
     @AppStorage("storedFavorite") var storedFavorite: FavoriteChoice?
     @AppStorage("storedType") var storedType: PostType?
     @AppStorage("storedPlatform") var storedPlatform: Platform?
     @AppStorage("storedYear") var storedYear: String?
+    @AppStorage("storedSortOption") var storedSortOption: SortOption?
+
     
-    // setting filters
+    // Setting filters
     @Published var selectedLevel: StudyLevel? = nil {
         didSet { storedLevel = selectedLevel }}
     @Published var selectedFavorite: FavoriteChoice? = nil {
@@ -65,11 +67,13 @@ class PostsViewModel: ObservableObject {
     @Published var selectedYear: String? = nil {
         didSet { storedYear = selectedYear }}
     @Published var selectedCategory: String? = nil {
-        didSet {
-            storedCategory = selectedCategory
+        didSet { storedCategory = selectedCategory
             //            homeTitleName = selectedCategory ?? "Study materials"
         }
     }
+    @Published var selectedSortOption: SortOption? = nil {
+        didSet { storedSortOption = selectedSortOption }}
+
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -87,9 +91,7 @@ class PostsViewModel: ObservableObject {
         networkService: NetworkService = NetworkService(baseURL: Constants.cloudPostsURL)
     ) {
         self.networkService = networkService
-        
-        //        print("🍓VM(init): Last update date: \(localLastUpdated.formatted(date: .abbreviated, time: .shortened))")
-        
+                
         // Load local JSON file with notices and then 
         if fileManager.checkIfFileExists(fileName: Constants.localPostsFileName) {
             fileManager.loadData(fileName: Constants.localPostsFileName) { [weak self] (result: Result<[Post], FileStorageError>) in
@@ -102,9 +104,7 @@ class PostsViewModel: ObservableObject {
                     case .success(let posts):
                         self?.allPosts = posts
                         print("🍓 VM(init): Successfully loaded \(posts.count) posts")
-                        
                         print("🍓🍓🍓 VM(init): Check for posts update")
-
 //                        self?.checkCloudForUpdates { hasUpdates in
 //                            if hasUpdates {
 //                                self?.isPostsUpdateAvailable = true
@@ -127,21 +127,24 @@ class PostsViewModel: ObservableObject {
             print("🍓 VM(init): Loaded static posts")
         }
         
-        // filters initilazation
+        // Filters initilazation
         self.selectedCategory = self.storedCategory
         self.selectedLevel = self.storedLevel
         self.selectedFavorite = self.storedFavorite
         self.selectedType = self.storedType
         self.selectedYear = self.storedYear
+        self.selectedSortOption = self.storedSortOption
+        
         self.isFiltersEmpty = checkIfAllFiltersAreEmpty()
         
+        // Set time zone
         if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
             utcCalendar.timeZone = utcTimeZone
         } else {
             print("🍓❌ VM(init): TimeZone is not set")
         }
         
-        // initiating subscriptions
+        // Initiating subscriptions
         addSubscribers()
         
     }
@@ -154,15 +157,19 @@ class PostsViewModel: ObservableObject {
         let filters = $selectedLevel
             .combineLatest($selectedFavorite, $selectedType, $selectedYear)
 
-        let filtersWithCategory = filters.combineLatest($selectedCategory)
+        let filtersWithCategoryAndSort = filters
+            .combineLatest($selectedCategory, $selectedSortOption)
+            .map { filters, category, sortOption -> (filters: (StudyLevel?, FavoriteChoice?, PostType?, String?), category: String?, sortOption: SortOption?) in
+                return (filters, category, sortOption)
+            }
 
         let debouncedSearchText = $searchText
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
 
         $allPosts
-            .combineLatest(debouncedSearchText, filtersWithCategory)
+            .combineLatest(debouncedSearchText, filtersWithCategoryAndSort)
             .map { posts, searchText, data -> [Post] in
-                let (filters, category) = data
+                let (filters, category, sortOption) = data
                 let (level, favorite, type, year) = filters
                 
                 let filtered = self.filterPosts(
@@ -173,66 +180,15 @@ class PostsViewModel: ObservableObject {
                     type: type,
                     year: year
                 )
-                return self.searchPosts(posts: filtered)
+                
+                let serachedPosts = self.searchPosts(posts: filtered)
+                
+                return self.applySorting(posts: serachedPosts, option: sortOption)
             }
-            .sink { [weak self] filteredPosts in
-                self?.filteredPosts = filteredPosts
+            .sink { [weak self] selectedPosts in
+                self?.filteredPosts = selectedPosts
             }
             .store(in: &cancellables)
-
-//
-//        let filters = $selectedLevel
-//            .combineLatest($selectedFavorite, $selectedType, $selectedYear)
-//        
-//        // Subscribe on change of seach text and filters
-//        $searchText
-//            .combineLatest(filters, $selectedCategory)
-//            .debounce(for: .seconds(1.5), scheduler: DispatchQueue.main)
-//            .map { searchText, filters, category -> [Post] in
-//                let (level, favorite, type, year) = filters
-//                // Getting posts filtered
-//                let filtered = self.filterPosts(
-//                    allPosts: self.allPosts,
-//                    category: category,
-//                    level: level,
-//                    favorite: favorite,
-//                    type: type,
-//                    year: year,
-//                )
-//                // Applying search text
-//                return self.searchPosts(posts: filtered)
-//            }
-//            .sink { [weak self] searchedPosts in
-//                self?.filteredPosts = searchedPosts
-//            }
-//            .store(in: &cancellables)
-//        
-//        // Subscribe on change of posts
-//        
-//        let filters = $selectedLevel
-//            .combineLatest($selectedFavorite, $selectedType, $selectedYear)
-//
-//        let filtersWithCategory = filters.combineLatest($selectedCategory)
-//
-//        
-//        $allPosts
-//            .combineLatest($searchText, filtersWithCategory)
-//            .sink { [weak self] posts, searchText, data in
-//                guard let self = self else { return }
-//                let (filters, category) = data
-//                let (level, favorite, type, year) = filters
-//                
-//                let filtered = self.filterPosts(
-//                    allPosts: posts,
-//                    category: category,
-//                    level: level,
-//                    favorite: favorite,
-//                    type: type,
-//                    year: year
-//                )
-//                self.filteredPosts = self.searchPosts(posts: filtered)
-//            }
-//            .store(in: &cancellables)
     }
     
     //                guard let self = self else { return }
@@ -288,7 +244,35 @@ class PostsViewModel: ObservableObject {
         })
     }
     
-    
+    private func applySorting(posts: [Post], option: SortOption?) -> [Post] {
+        guard let option = option else {
+            // If nil - return unsorded (original order in array)
+            return posts
+        }
+        
+        // posts with postDate = nil are always at the end
+        switch option {
+        case .random:
+            return posts.shuffled() // random shuffle
+        case .newestFirst:
+            return posts.sorted {
+                switch ($0.postDate, $1.postDate) {
+                case (let date1?, let date2?): return date1 > date2 // Newest first
+                case (nil, _): return false // postDate = nil are always at the end
+                case (_, nil): return true // postDate ≠ nil are always before nil
+                }
+            }
+        case .oldestFirst:
+            return posts.sorted {
+                switch ($0.postDate, $1.postDate) {
+                case (let date1?, let date2?): return date1 < date2 // Oldest first
+                case (nil, _): return false // postDate = nil are always at the end
+                case (_, nil): return true // postDate ≠ nil are always before nil
+                }
+            }
+        }
+    }
+
     // MARK: PUBLIC FUNCTIONS
     
     func addPost(_ newPost: Post) {

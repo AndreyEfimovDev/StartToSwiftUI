@@ -40,14 +40,7 @@ struct PreferencesView: View {
     var body: some View {
         Form {
             Section(header: sectionHeader("Appearance")) {
-                UnderlineSermentedPickerNotOptional(
-                    selection: $vm.selectedTheme,
-                    allItems: Theme.allCases,
-                    titleForCase: { $0.displayName },
-                    selectedFont: .footnote,
-                    selectedTextColor: Color.mycolor.myBlue,
-                    unselectedTextColor: Color.mycolor.myAccent
-                )
+                themeAppearence
             }
             
             Section(header: sectionHeader("Notifications")) {
@@ -55,13 +48,14 @@ struct PreferencesView: View {
                 soundNotificationToggle
                 noticeMessages
             }
-            Section(header: sectionHeader("Managing posts (\(postsCount))")) {
+
+            Section(header: sectionHeader("Managing materials (\(postsCount))")) {
                 
                 if !vm.allPosts.filter({ $0.draft == true }).isEmpty {
                     postDrafts
                 }
                 
-                if (!vm.allPosts.isEmpty /*|| vm.isPostsUpdateAvailable*/) && vm.isFirstImportPostsCompleted {
+                if (!vm.allPosts.isEmpty) && vm.isFirstImportPostsCompleted {
                     checkForPostsUpdate
                 }
                 
@@ -93,12 +87,23 @@ struct PreferencesView: View {
     
     // MARK: - Subviews
     
-    
     private func sectionHeader(_ text: String) -> some View {
         Text(text)
             .foregroundStyle(Color.mycolor.myAccent)
     }
+
     
+    private var themeAppearence: some View {
+        UnderlineSermentedPickerNotOptional(
+            selection: $vm.selectedTheme,
+            allItems: Theme.allCases,
+            titleForCase: { $0.displayName },
+            selectedFont: .footnote,
+            selectedTextColor: Color.mycolor.myBlue,
+            unselectedTextColor: Color.mycolor.myAccent
+        )
+    }
+        
     private var notificationToggle: some View {
         HStack {
             Image(systemName: noticevm.isNotificationOn ? "bell" : "bell.slash")
@@ -140,7 +145,7 @@ struct PreferencesView: View {
     }
     
     private var checkForPostsUpdate: some View {
-        NavigationLink("Check posts update") {
+        NavigationLink("Check for materials update") {
             CheckForPostsUpdateView()
         }
         .customListRowStyle(
@@ -160,7 +165,7 @@ struct PreferencesView: View {
     }
     
     private var shareBackup: some View {
-        NavigationLink("Share/Backup posts") {
+        NavigationLink("Share/Backup") {
             SharePostsView()
         }
         .customListRowStyle(
@@ -180,7 +185,7 @@ struct PreferencesView: View {
     }
     
     private var erasePosts: some View {
-        NavigationLink("Delete all posts") {
+        NavigationLink("Delete all materials") {
             EraseAllPostsView()
         }
         .customListRowStyle(
