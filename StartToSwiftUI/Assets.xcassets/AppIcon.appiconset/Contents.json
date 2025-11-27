@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "swift_logo_blue_3477F5_icon.png",
+      "filename" : "swift_logo_blue_3477F5_icon_woAlfa.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "swift_logo_blue_3477F5_icon 1.png",
+      "filename" : "swift_logo_blue_3477F5_icon_woAlfa 1.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
