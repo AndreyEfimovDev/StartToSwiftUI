@@ -38,6 +38,7 @@ struct FiltersSheetView: View {
                 typeFilter
                 yearFilter
                     .opacity(vm.allYears == nil ? 0 : 1)
+                sortOptions
                 
                 Spacer()
                 
@@ -49,22 +50,38 @@ struct FiltersSheetView: View {
             .foregroundStyle(Color.mycolor.myAccent)
             .padding(.top, -40)
             .padding(.horizontal)
-            
-//            Spacer()
-//        }
             .background(Color.mycolor.myBackground)
         .onDisappear {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
             isFilterButtonPressed = false
         }
-//        .overlay(
-//            RoundedRectangle(cornerRadius: 30)
-//                .stroke(Color.mycolor.myAccent.opacity(0.3), lineWidth: 1)
-//        )
-
     }
     
     // MARK: Subviews
+    
+    private var sortOptions: some View {
+        
+        VStack {
+            Text("Sort:")
+                .font(.footnote)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            SegmentedOneLinePicker(
+                selection: $vm.selectedSortOption,
+                allItems: SortOption.allCases,
+                titleForCase: { $0.displayName },
+                selectedFont: selectedFont,
+                selectedTextColor: Color.mycolor.myBackground,
+                unselectedTextColor: Color.mycolor.myAccent,
+                selectedBackground: Color.mycolor.myBlue,
+                unselectedBackground: .clear,
+                showNilOption: true,
+                nilTitle: "Unsorted"
+            )
+        }
+    }
+
     
 //    private var drugHundler: some View {
 //        Capsule()
@@ -78,6 +95,7 @@ struct FiltersSheetView: View {
 //            .padding(.top, 10)
 //            .padding(.bottom, 15)
 //    }
+    
     
     private var studyLevelFilter: some View {
         VStack {
@@ -212,6 +230,7 @@ struct FiltersSheetView: View {
                 vm.selectedFavorite = nil
                 vm.selectedType = nil
                 vm.selectedYear = nil
+                vm.selectedSortOption = nil
                 updateFiltersSheetView.toggle()
             }
             .padding(.horizontal, 55)
@@ -226,6 +245,7 @@ struct FiltersSheetView: View {
                 vm.selectedFavorite = nil
                 vm.selectedType = nil
                 vm.selectedYear = nil
+                vm.selectedSortOption = nil
                 isFilterButtonPressed.toggle()
             }
             .padding(.horizontal, 55)

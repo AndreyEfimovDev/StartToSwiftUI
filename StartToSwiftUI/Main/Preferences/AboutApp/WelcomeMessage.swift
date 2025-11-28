@@ -22,7 +22,7 @@ struct WelcomeMessage: View {
 
             When I first began learning SwiftUI, I was overwhelmed by the sheer variety of self-study options available. I gradually started collecting tutorials and articles from open sources that explained SwiftUI's functionality in a way that matched how I think.
             
-            Later, I realised I needed to revisit these posts several times to gain a deeper understanding of particular topics. I found it helpful to store and organise them so I could quickly find and use the relevant information.
+            Later, I realised I needed to revisit these materials several times to gain a deeper understanding of particular topics. I found it helpful to store and organise them so I could quickly find and use the relevant information.
             
             As a result, I decided to create an app for this purpose. Creating my own app also helped me to put my theoretical knowledge into practice, moving it from my head to my heart.
 

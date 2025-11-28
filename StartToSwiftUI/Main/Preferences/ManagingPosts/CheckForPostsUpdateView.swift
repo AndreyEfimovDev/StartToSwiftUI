@@ -13,7 +13,6 @@ struct CheckForPostsUpdateView: View {
     @EnvironmentObject private var vm: PostsViewModel
     
     private let hapticManager = HapticService.shared
-//    private let selectedURL = Constants.cloudPostsURL
     
     @State private var followingText: String = "Checking for update..."
     @State private var followingTextColor: Color = Color.mycolor.myAccent
@@ -75,7 +74,6 @@ struct CheckForPostsUpdateView: View {
             }
         }
         .foregroundStyle(Color.mycolor.myAccent)
-
     }
     
     private var section_2: some View {
@@ -106,7 +104,6 @@ struct CheckForPostsUpdateView: View {
                     .padding(.horizontal, 30)
                     .padding(30)
                     .disabled(isImported)
-                
             }
         }
         .listRowBackground(Color.clear)
@@ -118,7 +115,7 @@ struct CheckForPostsUpdateView: View {
                        
             The collection **will be appended** to all current posts in the App, excluding duplicates based on the post title.
             """)
-        .multilineTextAlignment(.leading)
+        .multilineTextAlignment(.center)
 
     }
     
