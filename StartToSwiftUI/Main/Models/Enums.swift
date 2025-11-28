@@ -50,15 +50,15 @@ enum Theme: String, CaseIterable, Codable {
 }
 
 enum SortOption: String, CaseIterable {
-    case random
     case newestFirst
     case oldestFirst
+    case random
     
     var displayName: String {
         switch self {
-        case .random: return "Random"
         case .newestFirst: return "Newest"
         case .oldestFirst: return "Oldest"
+        case .random: return "Random"
         }
     }
 }
