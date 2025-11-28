@@ -28,7 +28,7 @@
 
 ### 🔍 Smart Organisation
 - Categorise resources by topic, difficulty level, post dates
-- Powerful search and filtering capabilities
+- Advanced search and filtering capabilities
 - Quick access to your frequently used favourite materials
 
 ### ☁️ Sync & Backup
