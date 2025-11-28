@@ -88,20 +88,18 @@ struct ImportPostsFromCloudView: View {
         VStack {
             Group {
                 Text("""
-                    The curated collection of links to SwiftUI tutorials and articles are compiled by the developer from open sources for the purpose of learning the SwiftUI functionality.
+                    The curated collection of links
+                    to SwiftUI tutorials and articles are compiled by the developer from open sources for the purpose of learning the SwiftUI functionality.
 
                     """)
-                .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Text("**IMPORTANT NOTICE:**")
                     .foregroundStyle(Color.mycolor.myRed)
-                    .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Text("""
                 Clicking **Confirm and Download** constitutes your agreement to the following terms:
                 
                 """)
-                .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Text("""
                 1. The materials will be used solely for non-commercial educational purposes.
@@ -110,10 +108,9 @@ struct ImportPostsFromCloudView: View {
                 """
                 )
                 .font(.subheadline)
+                .multilineTextAlignment(.leading)
             }
-            .multilineTextAlignment(.leading)
         }
-
     }
     
     private func importFromCloud() {

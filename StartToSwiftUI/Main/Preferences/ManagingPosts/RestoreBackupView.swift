@@ -91,11 +91,11 @@ struct RestoreBackupView: View {
 
     private var textSection: some View {
         Text("""
-              You are about to restore posts from backup on the device.
+              You are about to restore materials from backup on the device.
               
-              The posts from backup will replace all current posts in App.
+              The materials from the backup will be added to all current materials in the App.
             """)
-        .multilineTextAlignment(.leading)
+//        .multilineTextAlignment(.leading)
 
     }
 }

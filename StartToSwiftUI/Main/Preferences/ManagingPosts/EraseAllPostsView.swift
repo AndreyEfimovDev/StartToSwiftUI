@@ -26,8 +26,8 @@ struct EraseAllPostsView: View {
                 .textFormater()
             
             CapsuleButtonView(
-                primaryTitle: "Delete All Posts",
-                secondaryTitle: "\(postCount) Posts Deleted!",
+                primaryTitle: "Delete",
+                secondaryTitle: "\(postCount) Materials Deleted!",
                 textColorPrimary: Color.mycolor.myButtonTextRed,
                 buttonColorPrimary: Color.mycolor.myButtonBGRed,
                 buttonColorSecondary: Color.mycolor.myButtonBGGreen,
@@ -60,7 +60,7 @@ struct EraseAllPostsView: View {
         .onAppear {
             hapticManager.notification(type: .warning)
         }
-        .navigationTitle("Delete all posts")
+        .navigationTitle("Delete all materials")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
 //        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
@@ -71,15 +71,18 @@ struct EraseAllPostsView: View {
                 }
             }
         }
-
     }
     
     // MARK: Subviews
 
     private var textSection: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 0) {
             Text("""
-            **You are about to delete all the posts.**
+            **You are about
+            to delete all the materials.**
+            
+            What you can do after:
+            
             """
             )
             .font(.subheadline)
@@ -87,10 +90,10 @@ struct EraseAllPostsView: View {
             .multilineTextAlignment(.center)
 
             Text("""
-            What you can do after:
             - download the curated collection, 
-            - create own posts, or
+            - create own materials, or
             - restore backup.
+            
             """
             )
             .font(.subheadline)
@@ -98,9 +101,9 @@ struct EraseAllPostsView: View {
             .multilineTextAlignment(.leading)
             
             Text("""
-            
             It is recommended
-            to backup posts before deleting them.
+            to backup мaterials before
+            deleting them.
             """)
             .foregroundStyle(Color.mycolor.myRed)
             .bold()
