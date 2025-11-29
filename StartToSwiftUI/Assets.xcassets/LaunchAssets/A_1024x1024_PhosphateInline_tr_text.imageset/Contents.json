@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "StartToSwiftUI_dark_1024_4.png",
+      "filename" : "A_1024x1024_PhosphateInline_tr_text.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -17,8 +17,5 @@
   "info" : {
     "author" : "xcode",
     "version" : 1
-  },
-  "properties" : {
-    "compression-type" : "lossless"
   }
 }

@@ -25,7 +25,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wIQ-Y4-9tF">
                                 <rect key="frame" x="0.0" y="118" width="393" height="714"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchIcon_blue" translatesAutoresizingMaskIntoConstraints="NO" id="DMB-yz-5GM">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="A_1024x1024_PhosphateInline_tr_text" translatesAutoresizingMaskIntoConstraints="NO" id="DMB-yz-5GM">
                                         <rect key="frame" x="96.666666666666686" y="257" width="200" height="200"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="200" id="6Zm-gw-G5d"/>
@@ -59,9 +59,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchIcon_blue" width="1024" height="1024"/>
+        <image name="A_1024x1024_PhosphateInline_tr_text" width="1024" height="1024"/>
         <namedColor name="LaunchBackgroundColor">
-            <color red="0.28099998831748962" green="0.39800000190734863" blue="0.8190000057220459" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <color red="0.20392156862745098" green="0.46666666666666667" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
     </resources>
 </document>
