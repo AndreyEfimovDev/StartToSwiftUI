@@ -107,7 +107,6 @@ class JSONFileManager: ObservableObject {
             }
             return FileManager.default.fileExists(atPath: url.path)
         }
-    
 
 }
 
