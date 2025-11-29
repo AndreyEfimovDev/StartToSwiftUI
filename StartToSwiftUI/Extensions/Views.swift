@@ -11,15 +11,6 @@ import SwiftUI
 
 // MARK: CUSTOM BACKGROUND
 
-//extension View {
-//    func myBackground(colorScheme: ColorScheme) -> some View {
-//        self
-//            .background(.thinMaterial)
-////            .ignoresSafeArea()
-//    }
-//}
-
-
 extension View {
     func mySsectionBackground() -> some View {
         self
@@ -45,7 +36,6 @@ extension View {
 }
 
 
-    
 
 extension View {
     func textFormater(
@@ -75,9 +65,6 @@ extension View {
             .bold()
             .foregroundStyle(colorSubheader)
             .padding(5)
-//            .padding(.leading, 5)
-//            .padding(.bottom, 5)
-
     }
 }
 

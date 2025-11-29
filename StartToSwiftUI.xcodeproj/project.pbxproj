@@ -66,7 +66,6 @@
 		47A7339D2ED1C355006BB8A6 /* SpeechRecogniser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A7339C2ED1C355006BB8A6 /* SpeechRecogniser.swift */; };
 		47A7339F2ED1C55A006BB8A6 /* VoiceSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A7339E2ED1C55A006BB8A6 /* VoiceSearchView.swift */; };
 		47AA558A2EA9741D000AF4E9 /* RestoreBackupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */; };
-		47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AE6C802E7D7FD0006230DA /* Modifiers.swift */; };
 		47B465802E6867930059CCB7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B4657F2E6867930059CCB7 /* HomeView.swift */; };
 		47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */; };
 		47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF09F2E5F9E9800287F10 /* MoreLessTextButton.swift */; };
@@ -145,7 +144,6 @@
 		47A7339C2ED1C355006BB8A6 /* SpeechRecogniser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecogniser.swift; sourceTree = "<group>"; };
 		47A7339E2ED1C55A006BB8A6 /* VoiceSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceSearchView.swift; sourceTree = "<group>"; };
 		47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreBackupView.swift; sourceTree = "<group>"; };
-		47AE6C802E7D7FD0006230DA /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
 		47B4657F2E6867930059CCB7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedCupsuleButton.swift; sourceTree = "<group>"; };
 		47BAF09F2E5F9E9800287F10 /* MoreLessTextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreLessTextButton.swift; sourceTree = "<group>"; };
@@ -321,7 +319,6 @@
 				4791CDE92E72E8CC00687126 /* Arrays.swift */,
 				475997792E5F1A32008E20F0 /* Colors.swift */,
 				47BAF0C92E635E2800287F10 /* Views.swift */,
-				47AE6C802E7D7FD0006230DA /* Modifiers.swift */,
 				47453E032EAB73A9000D2C16 /* Date.swift */,
 				471DCBD82EBBBF2200AFA5F4 /* JSON.swift */,
 				4781D72D2ED716AE00B74F85 /* Bundle.swift */,
@@ -509,7 +506,6 @@
 				4765A76D2EAE5F7B00EACDF4 /* PostRowView.swift in Sources */,
 				4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */,
 				47B465802E6867930059CCB7 /* HomeView.swift in Sources */,
-				47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */,
 				471BBF9C2EC620D70004AC45 /* PostDraftsRowView.swift in Sources */,
 				471DCBDE2EBBC68500AFA5F4 /* WhatsNew.swift in Sources */,
 				47BAF0A42E60613200287F10 /* SearchBarView.swift in Sources */,
