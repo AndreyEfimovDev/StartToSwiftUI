@@ -46,7 +46,7 @@ struct Release: Identifiable {
 struct WhatsNews {
     static let releases: [Release] = [
         Release(
-            release: "Release 1.0.1 (2)",
+            release: "Release 1.1.0 (5)",
             news: [
                 News(
                     title: "Added",
@@ -63,10 +63,11 @@ struct WhatsNews {
             ]
         ),
         Release(
-            release: "Release 1.0.0 (1)",
+            release: "Release 1.0.1 (4)",
             news: [
                 News(
-                    title: "Initial deployment"
+                    title: "Initial deployment",
+                    newsText: ""
                 ),
             ]
         )
