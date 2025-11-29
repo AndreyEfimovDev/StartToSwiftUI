@@ -16,7 +16,7 @@ struct News: Identifiable {
     init(
         id: String = UUID().uuidString,
         title: String,
-        newsText: String
+        newsText: String = ""
     ) {
         self.id = id
         self.title = title
@@ -49,16 +49,24 @@ struct WhatsNews {
             release: "Release 1.0.1 (2)",
             news: [
                 News(
-                    title: "Initial deployment",
+                    title: "Added",
                     newsText: """
-                            StartToSwiftUI app features:
-                            - Personal Library: Create and manage your own collection of links to learning materials.
-                            - Curated Collection: Jumpstart your learning with a curated collection of SwiftUI tutorials and articles compiled from open sources. You will be notified when a new version of the collection is available for download. The developer strives to keep this collection up to date, though this cannot be guaranteed at all times.
-                            - Smart Organisation: Organise learning resources by category such as level of study, year of materials, type of source/media, etc, create a collection of favourite materials.
-                            - Full Control: Edit and delete your materials as needed, save drafts for further processing.
-                            - Efficient Search & Filter: Quickly find what you need using search and filtering tools.
-                            - Data Management: Backup, restore, share, or delete materials as needed.
+                            A sorting materials feature has been implemented with the following options:
+                            - Unordered (in order as materails added)
+                            - Newest
+                            - Oldest
+                            - Random
+                            
+                            The feature can be find in the Filters.
                             """
+                ),
+            ]
+        ),
+        Release(
+            release: "Release 1.0.0 (1)",
+            news: [
+                News(
+                    title: "Initial deployment"
                 ),
             ]
         )
