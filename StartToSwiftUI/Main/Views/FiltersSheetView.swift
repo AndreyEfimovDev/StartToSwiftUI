@@ -38,7 +38,7 @@ struct FiltersSheetView: View {
                 typeFilter
                 yearFilter
                     .opacity(vm.allYears == nil ? 0 : 1)
-                sortOptions
+//                sortOptions
                 
                 Spacer()
                 
