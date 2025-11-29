@@ -38,7 +38,7 @@ struct LaunchView: View {
                         } 
                     }
                     .font(.subheadline)
-                    .fontWeight(.heavy)
+                    .fontWeight(.bold)
                     .transition(AnyTransition.scale.animation(.easeIn))
                 }
             }
