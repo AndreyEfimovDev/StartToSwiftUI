@@ -22,7 +22,7 @@ struct LaunchView: View {
             Color.launch.background
                 .ignoresSafeArea()
             
-            Image("LaunchIcon_blue")
+            Image("A_1024x1024_PhosphateInline_tr_text")
                 .resizable()
                 .font(.headline)
                 .fontWeight(.heavy)
@@ -38,6 +38,7 @@ struct LaunchView: View {
                         } 
                     }
                     .font(.subheadline)
+                    .fontWeight(.heavy)
                     .transition(AnyTransition.scale.animation(.easeIn))
                 }
             }

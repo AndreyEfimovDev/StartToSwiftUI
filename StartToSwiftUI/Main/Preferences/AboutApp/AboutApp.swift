@@ -20,7 +20,7 @@ struct AboutApp: View {
             Form {
                 Section {
                     HStack (spacing: 0) {
-                        Image("swift_logo_blue_3477F5_icon")
+                        Image("AppIcon_blue_3477F5")
                             .resizable()
                             .frame(width: 80, height: 80)
                             .clipShape(RoundedRectangle(cornerRadius: 15))
