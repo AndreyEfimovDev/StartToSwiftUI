@@ -49,6 +49,24 @@ struct WhatsNews {
             release: "Release 1.0.1 (2)",
             news: [
                 News(
+                    title: "Added",
+                    newsText: """
+                            A sorting materials feature has been implemented with the following options:
+                            - Unordered (in order as materails added)
+                            - Newest
+                            - Oldest
+                            - Random
+                            
+                            The feature can be find in the Filters.
+                            """
+                ),
+            ]
+        ),
+        
+        Release(
+            release: "Release 1.0.0 (1)",
+            news: [
+                News(
                     title: "Initial deployment",
                     newsText: """
                             StartToSwiftUI app features:
