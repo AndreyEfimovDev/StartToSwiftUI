@@ -151,9 +151,19 @@ struct HomeView: View {
                             isShowingDeleteConfirmation = true
                         }.tint(Color.mycolor.myRed)
                         
-                        Button("Edit", systemImage: post.origin == .cloud  || post.origin == .statical ? "pencil.slash" : "pencil") {
+                        Button {
                             selectedPost = post
+                        } label: {
+                            VStack {
+                                Text("Edit")
+                                    .foregroundStyle(Color.mycolor.myAccent)
+                                Image(systemImage: post.origin == .cloud  || post.origin == .statical ? "pencil.slash" : "pencil")
+                            }
                         }
+                        
+//                        Button("Edit", systemImage: post.origin == .cloud  || post.origin == .statical ? "pencil.slash" : "pencil") {
+//                            selectedPost = post
+//                        }
                         .tint(Color.mycolor.myButtonBGBlue)
                         .disabled(post.origin == .cloud || post.origin == .statical)
                     } // right side swipe action buttonss

@@ -58,6 +58,7 @@ struct PostDraftsView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 CircleStrokeButtonView(
                     iconName: "chevron.left",
+                    imageColorPrimary: Color.mycolor.myAccent,
                     isShownCircle: false
                 ) {
                     dismiss()

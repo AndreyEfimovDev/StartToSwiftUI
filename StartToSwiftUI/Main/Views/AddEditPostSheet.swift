@@ -561,7 +561,6 @@ struct AddEditPostSheet: View {
     
     // MARK: Functions
     
-    
     private func checkPostAndSave() {
         
         if !isTexLengthAppropriate(text: editedPost.title, limit: 3) {
@@ -608,16 +607,16 @@ struct AddEditPostSheet: View {
                 editedPost.draft = false
             }
             return Alert(
-                title: Text(alertTitle),
-                message: Text(alertMessage),
-                dismissButton: .default(Text("OK")) {}
+                title: Text(alertTitle).foregroundStyle(Color.mycolor.myAccent),
+                message: Text(alertMessage).foregroundStyle(Color.mycolor.myAccent),
+                dismissButton: .default(Text("OK").foregroundStyle(Color.mycolor.myAccent)) {}
             )
         case .success:
             if editedPost.draft {
                 return Alert(
-                    title: Text("Draft saved successfully"),
-                    message: Text("Tap OK to continue"),
-                    dismissButton: .default(Text("OK")) {
+                    title: Text("Draft saved successfully").foregroundStyle(Color.mycolor.myAccent),
+                    message: Text("Tap OK to continue").foregroundStyle(Color.mycolor.myAccent),
+                    dismissButton: .default(Text("OK").foregroundStyle(Color.mycolor.myAccent)) {
                         isPostDraftSaved = true
                         dismiss()
                     }

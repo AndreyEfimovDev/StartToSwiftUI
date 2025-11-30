@@ -25,7 +25,7 @@ struct CircleStrokeButtonView: View {
         iconName: String,
         iconFont: Font = .headline,
         isIconColorToChange: Bool = false,
-        imageColorPrimary: Color = Color.mycolor.mySecondaryText,
+        imageColorPrimary: Color = Color.mycolor.myAccent,
         imageColorSecondary: Color = Color.mycolor.myBlue,
         buttonBackground: Color = .clear,
         widthIn: CGFloat = 30,
