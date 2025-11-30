@@ -79,21 +79,6 @@ struct FiltersSheetView: View {
         }
     }
     
-    
-    //    private var drugHundler: some View {
-    //        Capsule()
-    //            .fill(Color.mycolor.myBackground)
-    //            .overlay(
-    //                Capsule()
-    //                    .stroke(Color.mycolor.myAccent.opacity(0.5), lineWidth: 1)
-    //            )
-    //            .frame(width: 100, height: 3)
-    //            .frame(height: 30, alignment: .top)
-    //            .padding(.top, 10)
-    //            .padding(.bottom, 15)
-    //    }
-    
-    
     private var studyLevelFilter: some View {
         VStack {
             Text("Study level:")
@@ -247,6 +232,20 @@ struct FiltersSheetView: View {
             }
             .padding(.horizontal, 55)
     }
+    
+    //    private var drugHundler: some View {
+    //        Capsule()
+    //            .fill(Color.mycolor.myBackground)
+    //            .overlay(
+    //                Capsule()
+    //                    .stroke(Color.mycolor.myAccent.opacity(0.5), lineWidth: 1)
+    //            )
+    //            .frame(width: 100, height: 3)
+    //            .frame(height: 30, alignment: .top)
+    //            .padding(.top, 10)
+    //            .padding(.bottom, 15)
+    //    }
+
 }
 
 fileprivate struct FiltersSheetPreview: View {
