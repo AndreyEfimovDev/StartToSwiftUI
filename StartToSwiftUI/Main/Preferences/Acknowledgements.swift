@@ -87,7 +87,6 @@ struct Acknowledgements: View {
 
             Lastly, thank you to anyone I may have inadvertently missed, and to everyone who has accompanied me on this year-long journey.
             """)
- 
             .multilineTextAlignment(.leading)
             .textFormater()
             .padding()
