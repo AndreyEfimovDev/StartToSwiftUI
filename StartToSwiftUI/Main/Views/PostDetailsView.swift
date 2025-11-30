@@ -84,17 +84,12 @@ struct PostDetailsView: View {
     @ToolbarContentBuilder
     private func toolbarForPostDetails(validPost: Post) -> some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
-            CircleStrokeButtonView(
-                iconName: "chevron.left",
-                isShownCircle: false)
-            {
-                dismiss()
-            }
+            BackButtonView() { dismiss() }
             
             ShareLink(item: validPost.urlString) {
                 Image(systemName: "square.and.arrow.up")
                     .font(.headline)
-                    .foregroundStyle(Color.mycolor.mySecondaryText)
+                    .foregroundStyle(Color.mycolor.myAccent)
                     .offset(y: -2)
                     .frame(width: 30, height: 30)
                     .background(.black.opacity(0.001))

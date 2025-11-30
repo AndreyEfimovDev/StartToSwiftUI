@@ -150,7 +150,7 @@ struct HomeView: View {
                             hapticManager.notification(type: .warning)
                             isShowingDeleteConfirmation = true
                         }.tint(Color.mycolor.myRed)
-                        
+                                                
                         Button("Edit", systemImage: post.origin == .cloud  || post.origin == .statical ? "pencil.slash" : "pencil") {
                             selectedPost = post
                         }
@@ -161,7 +161,8 @@ struct HomeView: View {
                         Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: post.favoriteChoice == .yes ?  "heart.slash.fill" : "heart.fill") {
                             vm.favoriteToggle(post: post)
                         }
-                        .tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondaryText : Color.mycolor.myYellow)
+                        .foregroundStyle(Color.mycolor.myAccent)
+                        .tint(post.favoriteChoice == .yes ? Color.mycolor.myButtonTextPrimary : Color.mycolor.myYellow)
                     } // left side swipe action buttons
             } // ForEach
             .confirmationDialog(

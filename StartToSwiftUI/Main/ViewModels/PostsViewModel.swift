@@ -579,7 +579,9 @@ class PostsViewModel: ObservableObject {
         if selectedLevel == nil &&
             selectedFavorite == nil &&
             selectedType == nil &&
-            selectedYear == nil {
+            selectedYear == nil &&
+            selectedSortOption == nil
+        {
             return true
         } else {
             return false

@@ -24,39 +24,36 @@ struct FiltersSheetView: View {
     
     var body: some View {
         
-//        VStack {
-//            drugHundler
-            VStack (alignment: .leading) {
-                Text("Filters")
-                    .font(.largeTitle)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.top, 55)
+        VStack (alignment: .leading) {
+            Text("Filters")
+                .font(.largeTitle)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.top, 55)
 //                categoryFilter
 //                    .opacity(vm.allCategories == nil ? 0 : 1)
-                studyLevelFilter
-                favoriteFilter
-                typeFilter
-                yearFilter
-                    .opacity(vm.allYears == nil ? 0 : 1)
-                sortOptions
-                
-                Spacer()
-                
-                applyFiltersButton
-                resetAllFiltersButton
-                resetAllFiltersAndExitButton
-                    .padding(.bottom, 30)
-            }
-            .foregroundStyle(Color.mycolor.myAccent)
-            .padding(.top, -40)
-            .padding(.horizontal)
-            .background(Color.mycolor.myBackground)
+            studyLevelFilter
+            favoriteFilter
+            typeFilter
+            yearFilter
+                .opacity(vm.allYears == nil ? 0 : 1)
+            sortOptions
+            
+            Spacer()
+            
+            applyFiltersButton
+            resetAllFiltersButton
+            resetAllFiltersAndExitButton
+                .padding(.bottom, 30)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+        .padding(.top, -40)
+        .padding(.horizontal)
+        .background(Color.mycolor.myBackground)
         .onDisappear {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
             isFilterButtonPressed = false
         }
     }
-    
     // MARK: Subviews
     
     private var sortOptions: some View {
@@ -81,21 +78,6 @@ struct FiltersSheetView: View {
             )
         }
     }
-
-    
-//    private var drugHundler: some View {
-//        Capsule()
-//            .fill(Color.mycolor.myBackground)
-//            .overlay(
-//                Capsule()
-//                    .stroke(Color.mycolor.myAccent.opacity(0.5), lineWidth: 1)
-//            )
-//            .frame(width: 100, height: 3)
-//            .frame(height: 30, alignment: .top)
-//            .padding(.top, 10)
-//            .padding(.bottom, 15)
-//    }
-    
     
     private var studyLevelFilter: some View {
         VStack {
@@ -208,7 +190,7 @@ struct FiltersSheetView: View {
             }
         }
     }
-
+    
     
     private var applyFiltersButton: some View {
         
@@ -218,9 +200,9 @@ struct FiltersSheetView: View {
                 isFilterButtonPressed.toggle()
             }
             .padding(.horizontal, 55)
-
+        
     }
-
+    
     private var resetAllFiltersButton: some View {
         
         ClearCupsuleButton(
@@ -250,6 +232,20 @@ struct FiltersSheetView: View {
             }
             .padding(.horizontal, 55)
     }
+    
+    //    private var drugHundler: some View {
+    //        Capsule()
+    //            .fill(Color.mycolor.myBackground)
+    //            .overlay(
+    //                Capsule()
+    //                    .stroke(Color.mycolor.myAccent.opacity(0.5), lineWidth: 1)
+    //            )
+    //            .frame(width: 100, height: 3)
+    //            .frame(height: 30, alignment: .top)
+    //            .padding(.top, 10)
+    //            .padding(.bottom, 15)
+    //    }
+
 }
 
 fileprivate struct FiltersSheetPreview: View {
