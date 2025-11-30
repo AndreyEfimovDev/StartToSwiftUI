@@ -607,22 +607,21 @@ struct AddEditPostSheet: View {
                 editedPost.draft = false
             }
             return Alert(
-                title: Text(alertTitle).foregroundStyle(Color.mycolor.myAccent),
-                message: Text(alertMessage).foregroundStyle(Color.mycolor.myAccent),
-                dismissButton: .default(Text("OK").foregroundStyle(Color.mycolor.myAccent)) {}
+                title: Text(alertTitle),
+                message: Text(alertMessage),
+                dismissButton: .default(Text("OK")) {}
             )
         case .success:
             if editedPost.draft {
                 return Alert(
-                    title: Text("Draft saved successfully").foregroundStyle(Color.mycolor.myAccent),
-                    message: Text("Tap OK to continue").foregroundStyle(Color.mycolor.myAccent),
-                    dismissButton: .default(Text("OK").foregroundStyle(Color.mycolor.myAccent)) {
+                    title: Text("Draft saved successfully"),
+                    message: Text("Tap OK to continue"),
+                    dismissButton: .default(Text("OK")) {
                         isPostDraftSaved = true
                         dismiss()
                     }
                 )
             }
-            
             if isNewPost {
                 return Alert(
                     title: Text("New Post added successfully"),
