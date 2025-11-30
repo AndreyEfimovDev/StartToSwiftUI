@@ -28,7 +28,7 @@ struct HomeView: View {
     @State private var showTermsOfUse: Bool = false
     @State private var showNoticesView: Bool = false
     @State private var showOnTopButton: Bool = false
-
+    
     @State private var isFilterButtonPressed: Bool = false
     @State private var isShowingDeleteConfirmation: Bool = false
     
@@ -37,96 +37,98 @@ struct HomeView: View {
     // MARK: VIEW BODY
     
     var body: some View {
-        ScrollViewReader { proxy in
-            ZStack (alignment: .bottom) {
-                if vm.allPosts.isEmpty {
-                    allPostsIsEmpty
-                } else if vm.filteredPosts.isEmpty {
-                    filteredPostsIsEmpty
-                } else {
-                    
-                    mainViewBody
-                    
-                    if showOnTopButton {
-                        CircleStrokeButtonView(
-                            iconName: "control", // control arrow.up
-                            iconFont: .title,
-                            imageColorPrimary: Color.mycolor.myBlue,
-                            widthIn: 55,
-                            heightIn: 55) {
-                                withAnimation {
-                                    if let firstID = vm.filteredPosts.first?.id {
-                                        proxy.scrollTo(firstID, anchor: .top)
+        NavigationStack{
+            ScrollViewReader { proxy in
+                ZStack (alignment: .bottom) {
+                    if vm.allPosts.isEmpty {
+                        allPostsIsEmpty
+                    } else if vm.filteredPosts.isEmpty {
+                        filteredPostsIsEmpty
+                    } else {
+                        
+                        mainViewBody
+                        
+                        if showOnTopButton {
+                            CircleStrokeButtonView(
+                                iconName: "control", // control arrow.up
+                                iconFont: .title,
+                                imageColorPrimary: Color.mycolor.myBlue,
+                                widthIn: 55,
+                                heightIn: 55) {
+                                    withAnimation {
+                                        if let firstID = vm.filteredPosts.first?.id {
+                                            proxy.scrollTo(firstID, anchor: .top)
+                                        }
                                     }
                                 }
-                            }
-                    } // if showButtonOnTop
-                } // else-if
-            } // ZStack
-        } // ScrollViewReader
-        .navigationTitle(vm.homeTitleName)
-        .navigationBarBackButtonHidden(true)
-//        .toolbarBackgroundVisibility(.visible, for: .navigationBar)
-//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-        .toolbar {
-            if vm.isTermsOfUseAccepted {
-                toolbarForMainViewBody()
-            }
-        }
-        .safeAreaInset(edge: .top) {
-            SearchBarView()
-        }
-        .navigationDestination(isPresented: $showDetailView) {
-            if let id = selectedPostId {
-                withAnimation {
-                    PostDetailsView(postId: id)
+                        } // if showButtonOnTop
+                    } // else-if
+                } // ZStack
+            } // ScrollViewReader
+            .navigationTitle(vm.homeTitleName)
+            .navigationBarBackButtonHidden(true)
+            //        .toolbarBackgroundVisibility(.visible, for: .navigationBar)
+            //        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+            .toolbar {
+                if vm.isTermsOfUseAccepted {
+                    toolbarForMainViewBody()
                 }
             }
-        }
-        .navigationDestination(isPresented: $showPreferancesView) {
-            PreferencesView()
-        }
-        .navigationDestination(isPresented: $showNoticesView) {
-            NoticesView()
-        }
-        .navigationDestination(isPresented: $showAddPostView) {
-            AddEditPostSheet(post: nil)
-        }
-        .navigationDestination(item: $selectedPost) {selectedPostToEdit in
-            AddEditPostSheet(post: selectedPostToEdit)
-        }
-        .sheet(isPresented: $isFilterButtonPressed) {
-            FiltersSheetView(
-                isFilterButtonPressed: $isFilterButtonPressed
-            )
-            .presentationBackground(.clear)
-            .presentationDetents([.height(600)])
-            .presentationDragIndicator(.visible)
-            .presentationCornerRadius(30)
-        }
-        .task {
-            vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-            
-            if vm.isTermsOfUseAccepted {
-                if noticevm.isNotificationOn {
-                    if  !noticevm.isUserNotified {
-                        try? await Task.sleep(nanoseconds: 1_000_000_000)
-                        if noticevm.isSoundNotificationOn {
-                            AudioServicesPlaySystemSound(1013) // 1005
-                        }
-                        noticeButtonAnimation = true
-                        try? await Task.sleep(nanoseconds: 1_000_000_000)
-                        noticeButtonAnimation = false
-                        noticevm.isUserNotified = true
+            .safeAreaInset(edge: .top) {
+                SearchBarView()
+            }
+            .navigationDestination(isPresented: $showDetailView) {
+                if let id = selectedPostId {
+                    withAnimation {
+                        PostDetailsView(postId: id)
                     }
                 }
             }
-            
-        }
-        .overlay {
-            // Accept Terms of Use at the first launch
-            if !vm.isTermsOfUseAccepted {
-                welcomeAtFirstLauch
+            .navigationDestination(isPresented: $showPreferancesView) {
+                PreferencesView()
+            }
+            .navigationDestination(isPresented: $showNoticesView) {
+                NoticesView()
+            }
+            .navigationDestination(isPresented: $showAddPostView) {
+                AddEditPostSheet(post: nil)
+            }
+            .navigationDestination(item: $selectedPost) {selectedPostToEdit in
+                AddEditPostSheet(post: selectedPostToEdit)
+            }
+            .sheet(isPresented: $isFilterButtonPressed) {
+                FiltersSheetView(
+                    isFilterButtonPressed: $isFilterButtonPressed
+                )
+                .presentationBackground(.clear)
+                .presentationDetents([.height(600)])
+                .presentationDragIndicator(.visible)
+                .presentationCornerRadius(30)
+            }
+            .task {
+                vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
+                
+                if vm.isTermsOfUseAccepted {
+                    if noticevm.isNotificationOn {
+                        if  !noticevm.isUserNotified {
+                            try? await Task.sleep(nanoseconds: 1_000_000_000)
+                            if noticevm.isSoundNotificationOn {
+                                AudioServicesPlaySystemSound(1013) // 1005
+                            }
+                            noticeButtonAnimation = true
+                            try? await Task.sleep(nanoseconds: 1_000_000_000)
+                            noticeButtonAnimation = false
+                            noticevm.isUserNotified = true
+                        }
+                    }
+                }
+                
+            }
+            .overlay {
+                // Accept Terms of Use at the first launch
+                if !vm.isTermsOfUseAccepted {
+                    welcomeAtFirstLauch
+                }
             }
         }
     }
@@ -150,7 +152,7 @@ struct HomeView: View {
                             hapticManager.notification(type: .warning)
                             isShowingDeleteConfirmation = true
                         }.tint(Color.mycolor.myRed)
-                                                
+                        
                         Button("Edit", systemImage: post.origin == .cloud  || post.origin == .statical ? "pencil.slash" : "pencil") {
                             selectedPost = post
                         }
@@ -203,22 +205,22 @@ struct HomeView: View {
         }
         if !noticevm.notices.filter({ $0.isRead == false }).isEmpty && noticevm.isNotificationOn {
             ToolbarItem(placement: .navigationBarLeading) {
-                    CircleStrokeButtonView(
-                        iconName: "message",
-                        isShownCircle: false)
-                    {
-                        showNoticesView = true
-                    }
-                    .overlay(alignment: .topTrailing) {
-                        Capsule()
-                            .fill(Color.mycolor.myRed)
-                            .frame(maxWidth: 20, maxHeight: 15)
-                            .overlay {
-                                Text("\(noticevm.notices.filter({ $0.isRead == false }).count)")
-                                    .font(.system(size: 8, weight: .bold, design: .default))
-                                    .foregroundStyle(Color.mycolor.myButtonTextPrimary)
-                            }
-                    }
+                CircleStrokeButtonView(
+                    iconName: "message",
+                    isShownCircle: false)
+                {
+                    showNoticesView = true
+                }
+                .overlay(alignment: .topTrailing) {
+                    Capsule()
+                        .fill(Color.mycolor.myRed)
+                        .frame(maxWidth: 20, maxHeight: 15)
+                        .overlay {
+                            Text("\(noticevm.notices.filter({ $0.isRead == false }).count)")
+                                .font(.system(size: 8, weight: .bold, design: .default))
+                                .foregroundStyle(Color.mycolor.myButtonTextPrimary)
+                        }
+                }
                 .background(
                     AnyView(
                         Circle()
@@ -253,7 +255,7 @@ struct HomeView: View {
                 isFilterButtonPressed.toggle()}
         }
     }
-        
+    
     @ViewBuilder
     private func trackingFistPostInList(post: Post) -> some View {
         GeometryReader { geo in
@@ -266,7 +268,7 @@ struct HomeView: View {
                 }
         }
     }
-
+    
     private var allPostsIsEmpty: some View {
         ContentUnavailableView(
             "No Posts",
@@ -283,7 +285,7 @@ struct HomeView: View {
         )
     }
     
-        
+    
     private var welcomeAtFirstLauch: some View {
         ZStack {
             Color.mycolor.myBackground

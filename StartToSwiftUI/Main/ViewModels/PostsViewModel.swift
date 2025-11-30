@@ -622,6 +622,16 @@ class PostsViewModel: ObservableObject {
         return Array(Set(allPosts.map { $0.category })).sorted()
     }
     
+    
+    func post(id: String) -> Post? {
+        allPosts.first(where: {$0.id == id})
+    }
+    
+//    func company(id: String) -> Company? {
+//        companies.first(where: {$0.id == id})
+//    }
+
+    
 }
 
 

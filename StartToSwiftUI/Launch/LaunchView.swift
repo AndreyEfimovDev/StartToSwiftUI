@@ -38,8 +38,8 @@ struct LaunchView: View {
                         } 
                     }
                     .font(.subheadline)
-                    .fontWeight(.bold)
-                    .transition(AnyTransition.scale.animation(.easeIn))
+//                    .fontWeight(.bold)
+                    .transition(.scale.animation(.easeIn))
                 }
             }
             .offset(y: 135)
