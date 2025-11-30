@@ -87,10 +87,8 @@ struct StartToSwiftUIApp: App {
                 }
                 .zIndex(1)
                 
-                NavigationStack{
-                    HomeView()
-//                    HomeViewCustomNavBar()
-                }
+                RootView()
+                
             }
             .environmentObject(vm)
             .environmentObject(noticevm)
