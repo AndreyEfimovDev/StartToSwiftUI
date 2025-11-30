@@ -14,7 +14,7 @@ struct CustomProgressView: View {
     
     init(
         scale: CGFloat = 1.5,
-        isNoText: Bool = true
+        isNoText: Bool = false
     ) {
         self.scale = scale
         self.isNoText = isNoText
@@ -27,10 +27,14 @@ struct CustomProgressView: View {
                 ProgressView()
             } else {
                 ProgressView("... loading ...")
+                    .font(.caption2)
+                    .padding()
             }
         }
-        .scaleEffect(scale)
+        .scaleEffect(scale < 1.5 ? scale : 1.5)
         .padding()
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 15))
     }
 }
 
