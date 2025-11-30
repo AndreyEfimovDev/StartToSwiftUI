@@ -561,7 +561,6 @@ struct AddEditPostSheet: View {
     
     // MARK: Functions
     
-    
     private func checkPostAndSave() {
         
         if !isTexLengthAppropriate(text: editedPost.title, limit: 3) {
@@ -623,7 +622,6 @@ struct AddEditPostSheet: View {
                     }
                 )
             }
-            
             if isNewPost {
                 return Alert(
                     title: Text("New Post added successfully"),

@@ -86,6 +86,7 @@ struct NoticeDetailsView: View {
         ToolbarItem(placement: .topBarLeading) {
             CircleStrokeButtonView(
                 iconName: "chevron.left",
+                imageColorPrimary: Color.mycolor.myAccent,
                 isShownCircle: false)
             {
                 withAnimation {
@@ -94,7 +95,11 @@ struct NoticeDetailsView: View {
             }
         }
         ToolbarItem(placement: .topBarTrailing) {
-            CircleStrokeButtonView(iconName: "trash", isShownCircle: false) {
+            CircleStrokeButtonView(
+                iconName: "trash",
+                imageColorPrimary: Color.mycolor.myAccent,
+                isShownCircle: false
+            ) {
                 withAnimation {
                     noticevm.deleteNotice(notice: notice)
                     dismiss()
