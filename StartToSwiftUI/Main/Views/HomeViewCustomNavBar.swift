@@ -8,7 +8,7 @@
 import SwiftUI
 import AudioToolbox
 
-struct HomeViewCustomNavBar: View {
+struct HomeViewCustomNavBar: View { // in progress
     
     // MARK: PROPERTIES
     
@@ -106,6 +106,7 @@ struct HomeViewCustomNavBar: View {
             .presentationCornerRadius(30)
         }
         .task {
+            
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
             
             if vm.isTermsOfUseAccepted {
