@@ -30,6 +30,8 @@ struct SearchBarView: View {
                     .foregroundStyle(Color.mycolor.myAccent)
                     .autocorrectionDisabled(true)
                     .keyboardType(.asciiCapable)
+//                    .padding(.vertical, isFocusedOnSearchBar ? 12.5 : 7.5)
+//                    .scaleEffect(isFocusedOnSearchBar ? 1.1 : 1.0, anchor: .center)
                     .frame(height: isFocusedOnSearchBar ? 50 : 35)
                     .focused($isFocusedOnSearchBar)
                     .submitLabel(.search)

@@ -52,9 +52,18 @@ struct AddEditPostSheet: View {
     @State var alertMessage: String = ""
     
     let templateForNewPost: Post = Post(
-        category: "", title: "", intro: "", author: "", urlString: "https://",
-        postPlatform: .youtube, postDate: nil, studyLevel: .beginner,
-        favoriteChoice: .no, notes: "", origin: .local, draft: true
+//        category: "",
+//        title: "",
+//        intro: "",
+//        author: "",
+//        urlString: "https://",
+//        postPlatform: .youtube,
+//        postDate: nil,
+//        studyLevel: .beginner,
+//        favoriteChoice: .no,
+//        notes: "",
+        origin: .local,
+        draft: true
     )
     
     enum PostAlerts {

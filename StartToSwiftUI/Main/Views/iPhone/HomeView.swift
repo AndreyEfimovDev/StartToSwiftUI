@@ -18,6 +18,8 @@ struct HomeView: View {
     
     private let hapticManager = HapticService.shared
     
+    let selectedCategory: String
+    
     @State private var selectedPostId: String?
     @State private var selectedPost: Post?
     @State private var selectedPostToDelete: Post?
@@ -37,98 +39,97 @@ struct HomeView: View {
     // MARK: VIEW BODY
     
     var body: some View {
-        NavigationStack{
-            ScrollViewReader { proxy in
-                ZStack (alignment: .bottom) {
-                    if vm.allPosts.isEmpty {
-                        allPostsIsEmpty
-                    } else if vm.filteredPosts.isEmpty {
-                        filteredPostsIsEmpty
-                    } else {
-                        
-                        mainViewBody
-                        
-                        if showOnTopButton {
-                            CircleStrokeButtonView(
-                                iconName: "control", // control arrow.up
-                                iconFont: .title,
-                                imageColorPrimary: Color.mycolor.myBlue,
-                                widthIn: 55,
-                                heightIn: 55) {
-                                    withAnimation {
-                                        if let firstID = vm.filteredPosts.first?.id {
-                                            proxy.scrollTo(firstID, anchor: .top)
-                                        }
+        ScrollViewReader { proxy in
+            ZStack (alignment: .bottom) {
+                if vm.allPosts.isEmpty {
+                    allPostsIsEmpty
+                } else if vm.filteredPosts.isEmpty {
+                    filteredPostsIsEmpty
+                } else {
+                    
+                    mainViewBody
+                    
+                    if showOnTopButton {
+                        CircleStrokeButtonView(
+                            iconName: "control", // control arrow.up
+                            iconFont: .title,
+                            imageColorPrimary: Color.mycolor.myBlue,
+                            widthIn: 55,
+                            heightIn: 55) {
+                                withAnimation {
+                                    if let firstID = vm.filteredPosts.first?.id {
+                                        proxy.scrollTo(firstID, anchor: .top)
                                     }
                                 }
-                        } // if showButtonOnTop
-                    } // else-if
-                } // ZStack
-            } // ScrollViewReader
-            .navigationTitle(vm.homeTitleName)
-            .navigationBarBackButtonHidden(true)
-            //        .toolbarBackgroundVisibility(.visible, for: .navigationBar)
-            //        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-            .toolbar {
-                if vm.isTermsOfUseAccepted {
-                    toolbarForMainViewBody()
-                }
-            }
-            .safeAreaInset(edge: .top) {
-                SearchBarView()
-            }
-            .navigationDestination(isPresented: $showDetailView) {
-                if let id = selectedPostId {
-                    withAnimation {
-                        PostDetailsView(postId: id)
-                    }
-                }
-            }
-            .navigationDestination(isPresented: $showPreferancesView) {
-                PreferencesView()
-            }
-            .navigationDestination(isPresented: $showNoticesView) {
-                NoticesView()
-            }
-            .navigationDestination(isPresented: $showAddPostView) {
-                AddEditPostSheet(post: nil)
-            }
-            .navigationDestination(item: $selectedPost) {selectedPostToEdit in
-                AddEditPostSheet(post: selectedPostToEdit)
-            }
-            .sheet(isPresented: $isFilterButtonPressed) {
-                FiltersSheetView(
-                    isFilterButtonPressed: $isFilterButtonPressed
-                )
-                .presentationBackground(.clear)
-                .presentationDetents([.height(600)])
-                .presentationDragIndicator(.visible)
-                .presentationCornerRadius(30)
-            }
-            .task {
-                vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                
-                if vm.isTermsOfUseAccepted {
-                    if noticevm.isNotificationOn {
-                        if  !noticevm.isUserNotified {
-                            try? await Task.sleep(nanoseconds: 1_000_000_000)
-                            if noticevm.isSoundNotificationOn {
-                                AudioServicesPlaySystemSound(1013) // 1005
                             }
-                            noticeButtonAnimation = true
-                            try? await Task.sleep(nanoseconds: 1_000_000_000)
-                            noticeButtonAnimation = false
-                            noticevm.isUserNotified = true
+                    } // if showButtonOnTop
+                } // else-if
+            } // ZStack
+        } // ScrollViewReader
+        .navigationTitle(vm.homeTitleName)
+        .navigationBarBackButtonHidden(true)
+//        .toolbarBackgroundVisibility(.visible, for: .navigationBar)
+        //        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+//        .toolbarRole(.navigationStack)
+        .toolbar {
+            if vm.isTermsOfUseAccepted {
+                toolbarForMainViewBody()
+            }
+        }
+        .safeAreaInset(edge: .top) {
+            SearchBarView()
+        }
+        .navigationDestination(isPresented: $showDetailView) {
+            if let id = selectedPostId {
+                withAnimation {
+                    PostDetailsView(postId: id)
+                }
+            }
+        }
+        .navigationDestination(isPresented: $showPreferancesView) {
+            PreferencesView()
+        }
+        .navigationDestination(isPresented: $showNoticesView) {
+            NoticesView()
+        }
+        .navigationDestination(isPresented: $showAddPostView) {
+            AddEditPostSheet(post: nil)
+        }
+        .navigationDestination(item: $selectedPost) {selectedPostToEdit in
+            AddEditPostSheet(post: selectedPostToEdit)
+        }
+        .sheet(isPresented: $isFilterButtonPressed) {
+            FiltersSheetView(
+                isFilterButtonPressed: $isFilterButtonPressed
+            )
+            .presentationBackground(.clear)
+            .presentationDetents([.height(600)])
+            .presentationDragIndicator(.visible)
+            .presentationCornerRadius(30)
+        }
+        .task {
+            vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
+            
+            if vm.isTermsOfUseAccepted {
+                if noticevm.isNotificationOn {
+                    if  !noticevm.isUserNotified {
+                        try? await Task.sleep(nanoseconds: 1_000_000_000)
+                        if noticevm.isSoundNotificationOn {
+                            AudioServicesPlaySystemSound(1013) // 1005
                         }
+                        noticeButtonAnimation = true
+                        try? await Task.sleep(nanoseconds: 1_000_000_000)
+                        noticeButtonAnimation = false
+                        noticevm.isUserNotified = true
                     }
                 }
-                
             }
-            .overlay {
-                // Accept Terms of Use at the first launch
-                if !vm.isTermsOfUseAccepted {
-                    welcomeAtFirstLauch
-                }
+            
+        }
+        .overlay {
+            // Accept Terms of Use at the first launch
+            if !vm.isTermsOfUseAccepted {
+                welcomeAtFirstLauch
             }
         }
     }
@@ -137,7 +138,7 @@ struct HomeView: View {
     
     private var mainViewBody: some View {
         List {
-            ForEach(vm.filteredPosts) { post in
+            ForEach(vm.filteredPosts.filter({ $0.category == selectedCategory})) { post in
                 PostRowView(post: post)
                     .id(post.id)
                     .background(trackingFistPostInList(post: post))
@@ -195,6 +196,7 @@ struct HomeView: View {
     
     @ToolbarContentBuilder
     private func toolbarForMainViewBody() -> some ToolbarContent {
+        
         ToolbarItem(placement: .navigationBarLeading) {
             CircleStrokeButtonView(
                 iconName: "gearshape",
@@ -238,21 +240,24 @@ struct HomeView: View {
             }
         }
         
-        ToolbarItem(placement: .navigationBarTrailing) {
-            CircleStrokeButtonView(
-                iconName: "plus",
-                isShownCircle: false)
+        ToolbarItemGroup(placement: .navigationBarTrailing) {
+//            ToolbarItem(placement: .navigationBarTrailing) {
+                CircleStrokeButtonView(
+                    iconName: "plus",
+                    isShownCircle: false)
+                {
+                    showAddPostView.toggle()
+                }
+//            }
+//            ToolbarItem(placement: .navigationBarTrailing) {
+                CircleStrokeButtonView(
+                    iconName: "line.3.horizontal.decrease",
+                    isIconColorToChange: !vm.isFiltersEmpty,
+                    isShownCircle: false)
             {
-                showAddPostView.toggle()
+                isFilterButtonPressed.toggle()
             }
-        }
-        ToolbarItem(placement: .navigationBarTrailing) {
-            CircleStrokeButtonView(
-                iconName: "line.3.horizontal.decrease",
-                isIconColorToChange: !vm.isFiltersEmpty,
-                isShownCircle: false)
-            {
-                isFilterButtonPressed.toggle()}
+//            }
         }
     }
     
@@ -381,7 +386,7 @@ struct HomeView: View {
 
 #Preview {
     NavigationStack {
-        HomeView()
+        HomeView(selectedCategory: "SwiftUI")
     }
     .environmentObject(PostsViewModel())
     .environmentObject(NoticeViewModel())

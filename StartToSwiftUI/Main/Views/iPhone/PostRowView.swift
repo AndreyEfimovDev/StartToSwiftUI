@@ -56,6 +56,7 @@ struct PostRowView: View {
                 Text("@" + post.author) +
                 Text(post.postType == .other ? "" : ", " + post.postType.displayName)
             }
+            Text("\(post.category)")
         }
         .font(.footnote)
     }

@@ -25,18 +25,30 @@ class PostsViewModel: ObservableObject {
         }
     }
     
+    
     @Published var filteredPosts: [Post] = []
     @Published var searchText: String = ""
     @Published var isFiltersEmpty: Bool = true
+    
+    private var cancellables = Set<AnyCancellable>()
+    
+    @Published var errorMessage: String?
+    @Published var showErrorMessageAlert = false
+    
+    private var utcCalendar = Calendar.current
+    var allYears: [String]? = nil
+    var allCategories: [String]? = nil
+    let mainCategory: String = "SwiftUI"
+    var dispatchTime: DispatchTime { .now() + 1.5 }
+    
+
     
     // MARK: Stored preferances
     
     @AppStorage("homeTitleName") var homeTitleName: String = "SwiftUI materials"
     @AppStorage("selectedTheme") var selectedTheme: Theme = .system
     @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
-
     
-//    @AppStorage("isFirstTimeAppLaunch") var isFirstTimeAppLaunch: Bool = true
     @AppStorage("isFirstImportPostsCompleted") var isFirstImportPostsCompleted: Bool = false {
         didSet {
             localLastUpdated = getLatestDateFromPosts(posts: allPosts) ?? .now
@@ -74,16 +86,6 @@ class PostsViewModel: ObservableObject {
     @Published var selectedSortOption: SortOption? = nil {
         didSet { storedSortOption = selectedSortOption }}
 
-    
-    private var cancellables = Set<AnyCancellable>()
-    
-    @Published var errorMessage: String?
-    @Published var showErrorMessageAlert = false
-    
-    private var utcCalendar = Calendar.current
-    var allYears: [String]? = nil
-    var allCategories: [String]? = nil
-    var dispatchTime: DispatchTime { .now() + 1.5 }
     
     // MARK: INIT() SECTION
     
@@ -128,7 +130,16 @@ class PostsViewModel: ObservableObject {
         }
         
         // Filters initilazation
-        self.selectedCategory = self.storedCategory
+        print("🍓 storedCategory is: \(String(describing: storedCategory?.description))")
+
+        if let category = self.storedCategory {
+            self.selectedCategory = category
+            print("🍓 storedCategory is NOT NIL, selectedCategory: \(String(describing: selectedCategory?.description))")
+        } else {
+            self.selectedCategory = self.mainCategory
+            print("🍓 storedCategory is NIL, selectedCategory: \(String(describing: selectedCategory?.description))")
+
+        }
         self.selectedLevel = self.storedLevel
         self.selectedFavorite = self.storedFavorite
         self.selectedType = self.storedType
@@ -619,18 +630,15 @@ class PostsViewModel: ObservableObject {
     
     private func getAllCategories() -> [String]? {
         
-        return Array(Set(allPosts.map { $0.category })).sorted()
+        let result = Array(Set(allPosts.map { $0.category })).sorted()
+        print("🍓 VM(getAllCategories): Categories' list: \(result)")
+        return result
     }
     
     
-    func post(id: String) -> Post? {
+    func getPost(id: String) -> Post? {
         allPosts.first(where: {$0.id == id})
     }
-    
-//    func company(id: String) -> Company? {
-//        companies.first(where: {$0.id == id})
-//    }
-
     
 }
 

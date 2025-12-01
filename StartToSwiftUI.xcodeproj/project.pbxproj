@@ -27,6 +27,7 @@
 		471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBDF2EBBC6B900AFA5F4 /* WelcomeMessage.swift */; };
 		4725A5272EDC818600235C40 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4725A5262EDC818600235C40 /* SidebarView.swift */; };
 		4725A5292EDC81B300235C40 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4725A5282EDC81B300235C40 /* RootView.swift */; };
+		4725A52B2EDD757F00235C40 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4725A52A2EDD757F00235C40 /* UIDevice.swift */; };
 		472A9B592EDB6D6E00ED3344 /* HomeViewCustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472A9B582EDB6D6E00ED3344 /* HomeViewCustomNavBar.swift */; };
 		472A9B5B2EDC3B6F00ED3344 /* BackButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472A9B5A2EDC3B6F00ED3344 /* BackButtonView.swift */; };
 		4732FB2D2EAA2BFC0062269D /* ImportPostsFromCloudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4732FB2C2EAA2BFC0062269D /* ImportPostsFromCloudView.swift */; };
@@ -107,6 +108,7 @@
 		471DCBDF2EBBC6B900AFA5F4 /* WelcomeMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeMessage.swift; sourceTree = "<group>"; };
 		4725A5262EDC818600235C40 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		4725A5282EDC81B300235C40 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RootView.swift; path = iPad/RootView.swift; sourceTree = "<group>"; };
+		4725A52A2EDD757F00235C40 /* UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		472A9B582EDB6D6E00ED3344 /* HomeViewCustomNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewCustomNavBar.swift; sourceTree = "<group>"; };
 		472A9B5A2EDC3B6F00ED3344 /* BackButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButtonView.swift; sourceTree = "<group>"; };
 		4732FB2C2EAA2BFC0062269D /* ImportPostsFromCloudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportPostsFromCloudView.swift; sourceTree = "<group>"; };
@@ -350,6 +352,7 @@
 				47453E032EAB73A9000D2C16 /* Date.swift */,
 				471DCBD82EBBBF2200AFA5F4 /* JSON.swift */,
 				4781D72D2ED716AE00B74F85 /* Bundle.swift */,
+				4725A52A2EDD757F00235C40 /* UIDevice.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -535,6 +538,7 @@
 				4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */,
 				477C745E2ECF6FB300F77F5B /* StaticPosts.swift in Sources */,
 				47BAF0CA2E635E2800287F10 /* Views.swift in Sources */,
+				4725A52B2EDD757F00235C40 /* UIDevice.swift in Sources */,
 				471DCBCE2EBB83D200AFA5F4 /* LegalInformationView.swift in Sources */,
 				471DCBD42EBB8A6400AFA5F4 /* TermsOfUse.swift in Sources */,
 				47A7339D2ED1C355006BB8A6 /* SpeechRecogniser.swift in Sources */,
@@ -733,13 +737,15 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "SwiftUI Study";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We need microphone access for voice search";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "We need speech recognition for voice search";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIRequiresFullScreen = NO;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -756,7 +762,7 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -790,13 +796,15 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "SwiftUI Study";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We need microphone access for voice search";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "We need speech recognition for voice search";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIRequiresFullScreen = NO;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -813,7 +821,7 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
