@@ -1,25 +1,24 @@
 //
-//  HomwViewCopy.swift
+//  HomeViewNavBarTest.swift
 //  StartToSwiftUI
 //
-//  Created by Andrey Efimov on 25.08.2025.
-//  *** Combine
+//  Created by Andrey Efimov on 29.11.2025.
+//
 
 import SwiftUI
 import AudioToolbox
 
-struct HomeView: View {
+struct HomeViewCustomNavBar: View { // in progress
     
     // MARK: PROPERTIES
     
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
-
+    
     private let hapticManager = HapticService.shared
     
-    let selectedCategory: String
-    
+    @State private var selectedPostId: String?
     @State private var selectedPost: Post?
     @State private var selectedPostToDelete: Post?
     
@@ -29,11 +28,13 @@ struct HomeView: View {
     @State private var showTermsOfUse: Bool = false
     @State private var showNoticesView: Bool = false
     @State private var showOnTopButton: Bool = false
-    
+
     @State private var isFilterButtonPressed: Bool = false
     @State private var isShowingDeleteConfirmation: Bool = false
     
     @State private var noticeButtonAnimation = false
+    
+    @State private var navigationBarOpacity: Double = 0
     
     // MARK: VIEW BODY
     
@@ -62,15 +63,12 @@ struct HomeView: View {
                                 }
                             }
                     } // if showButtonOnTop
-                } // else-if ScrollViewReader
-            } // ZStack ScrollViewReader
+                } // else-if
+            } // ZStack
         } // ScrollViewReader
         .navigationTitle(vm.selectedCategory ?? "No Categoty")
-        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-//        .toolbarBackgroundVisibility(.visible, for: .navigationBar)
-        //        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-//        .toolbarRole(.navigationStack)
+        .toolbarBackground(.hidden, for: .navigationBar)
         .toolbar {
             if vm.isTermsOfUseAccepted {
                 toolbarForMainViewBody()
@@ -80,18 +78,15 @@ struct HomeView: View {
             SearchBarView()
         }
         .navigationDestination(isPresented: $showDetailView) {
-            if let id = vm.selectedPostId {
+            if let id = selectedPostId {
                 withAnimation {
                     PostDetailsView(postId: id)
                 }
             }
         }
-        .sheet(isPresented: $showPreferancesView) {
+        .navigationDestination(isPresented: $showPreferancesView) {
             PreferencesView()
         }
-//        .navigationDestination(isPresented: $showPreferancesView) {
-//            PreferencesView()
-//        }
         .navigationDestination(isPresented: $showNoticesView) {
             NoticesView()
         }
@@ -111,6 +106,7 @@ struct HomeView: View {
             .presentationCornerRadius(30)
         }
         .task {
+            
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
             
             if vm.isTermsOfUseAccepted {
@@ -127,11 +123,21 @@ struct HomeView: View {
                     }
                 }
             }
-            
         }
         .overlay {
-            // Accept Terms of Use at the first launch
-            if !vm.isTermsOfUseAccepted {
+            switch vm.isTermsOfUseAccepted {
+            case true: // fill NavigationBar with Material while scrolling
+                VStack{
+                    Rectangle()
+                        .fill(.ultraThinMaterial)
+                        .frame(height: 95)
+                        .ignoresSafeArea(edges: .top)
+                        .opacity(navigationBarOpacity)
+                        .animation(.easeInOut(duration: 0.5), value: navigationBarOpacity)
+                    Spacer()
+                }
+
+            case false: // Accept Terms of Use at the first launch
                 welcomeAtFirstLauch
             }
         }
@@ -141,13 +147,13 @@ struct HomeView: View {
     
     private var mainViewBody: some View {
         List {
-            ForEach(vm.filteredPosts.filter({ $0.category == selectedCategory})) { post in
+            ForEach(vm.filteredPosts) { post in
                 PostRowView(post: post)
                     .id(post.id)
                     .background(trackingFistPostInList(post: post))
                     .background(.black.opacity(0.001))
                     .onTapGesture {
-                        vm.selectedPostId = post.id
+                        selectedPostId = post.id
                         showDetailView.toggle()
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
@@ -167,8 +173,7 @@ struct HomeView: View {
                         Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: post.favoriteChoice == .yes ?  "heart.slash.fill" : "heart.fill") {
                             vm.favoriteToggle(post: post)
                         }
-                        .foregroundStyle(Color.mycolor.myAccent)
-                        .tint(post.favoriteChoice == .yes ? Color.mycolor.myButtonTextPrimary : Color.mycolor.myYellow)
+                        .tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondaryText : Color.mycolor.myYellow)
                     } // left side swipe action buttons
             } // ForEach
             .confirmationDialog(
@@ -199,7 +204,6 @@ struct HomeView: View {
     
     @ToolbarContentBuilder
     private func toolbarForMainViewBody() -> some ToolbarContent {
-        
         ToolbarItem(placement: .navigationBarLeading) {
             CircleStrokeButtonView(
                 iconName: "gearshape",
@@ -210,22 +214,22 @@ struct HomeView: View {
         }
         if !noticevm.notices.filter({ $0.isRead == false }).isEmpty && noticevm.isNotificationOn {
             ToolbarItem(placement: .navigationBarLeading) {
-                CircleStrokeButtonView(
-                    iconName: "message",
-                    isShownCircle: false)
-                {
-                    showNoticesView = true
-                }
-                .overlay(alignment: .topTrailing) {
-                    Capsule()
-                        .fill(Color.mycolor.myRed)
-                        .frame(maxWidth: 20, maxHeight: 15)
-                        .overlay {
-                            Text("\(noticevm.notices.filter({ $0.isRead == false }).count)")
-                                .font(.system(size: 8, weight: .bold, design: .default))
-                                .foregroundStyle(Color.mycolor.myButtonTextPrimary)
-                        }
-                }
+                    CircleStrokeButtonView(
+                        iconName: "message",
+                        isShownCircle: false)
+                    {
+                        showNoticesView = true
+                    }
+                    .overlay(alignment: .topTrailing) {
+                        Capsule()
+                            .fill(Color.mycolor.myRed)
+                            .frame(maxWidth: 20, maxHeight: 15)
+                            .overlay {
+                                Text("\(noticevm.notices.filter({ $0.isRead == false }).count)")
+                                    .font(.system(size: 8, weight: .bold, design: .default))
+                                    .foregroundStyle(Color.mycolor.myButtonTextPrimary)
+                            }
+                    }
                 .background(
                     AnyView(
                         Circle()
@@ -243,27 +247,24 @@ struct HomeView: View {
             }
         }
         
-        ToolbarItemGroup(placement: .navigationBarTrailing) {
-//            ToolbarItem(placement: .navigationBarTrailing) {
-                CircleStrokeButtonView(
-                    iconName: "plus",
-                    isShownCircle: false)
-                {
-                    showAddPostView.toggle()
-                }
-//            }
-//            ToolbarItem(placement: .navigationBarTrailing) {
-                CircleStrokeButtonView(
-                    iconName: "line.3.horizontal.decrease",
-                    isIconColorToChange: !vm.isFiltersEmpty,
-                    isShownCircle: false)
+        ToolbarItem(placement: .navigationBarTrailing) {
+            CircleStrokeButtonView(
+                iconName: "plus",
+                isShownCircle: false)
             {
-                isFilterButtonPressed.toggle()
+                showAddPostView.toggle()
             }
-//            }
+        }
+        ToolbarItem(placement: .navigationBarTrailing) {
+            CircleStrokeButtonView(
+                iconName: "line.3.horizontal.decrease",
+                isIconColorToChange: !vm.isFiltersEmpty,
+                isShownCircle: false)
+            {
+                isFilterButtonPressed.toggle()}
         }
     }
-    
+        
     @ViewBuilder
     private func trackingFistPostInList(post: Post) -> some View {
         GeometryReader { geo in
@@ -271,12 +272,19 @@ struct HomeView: View {
                 .onChange(of: geo.frame(in: .global).minY) { oldY, newY in
                     // Track first element position in the List
                     if post.id == vm.filteredPosts.first?.id {
+                        
+                        // set trigger to show onTopButton
                         showOnTopButton = newY < 0
+                        
+                        // change opacity for HomeView navigation bar
+                        let opacity = min(max(-newY / 100, 0), 1)
+                        navigationBarOpacity = opacity
+                        
                     }
                 }
         }
     }
-    
+
     private var allPostsIsEmpty: some View {
         ContentUnavailableView(
             "No Posts",
@@ -293,7 +301,7 @@ struct HomeView: View {
         )
     }
     
-    
+        
     private var welcomeAtFirstLauch: some View {
         ZStack {
             Color.mycolor.myBackground
@@ -388,14 +396,9 @@ struct HomeView: View {
 }
 
 #Preview {
-    
     NavigationStack {
-        HomeView(selectedCategory: "SwiftUI")
+        HomeViewCustomNavBar()
     }
     .environmentObject(PostsViewModel())
     .environmentObject(NoticeViewModel())
-    .environmentObject(SpeechRecogniser())
 }
-
-
-//     .buttonStyle(.plain) // it makes the buttons accessable through the List elements

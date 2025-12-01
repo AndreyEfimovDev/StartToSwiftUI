@@ -11,7 +11,7 @@ struct SidebarView: View {
      
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
-    @StateObject private var speechRecogniser = SpeechRecogniser()
+//    @StateObject private var speechRecogniser = SpeechRecogniser()
 
     @State private var visibility: NavigationSplitViewVisibility = .doubleColumn
 
@@ -75,31 +75,4 @@ struct SidebarView: View {
     SidebarView()
         .environmentObject(PostsViewModel())
         .environmentObject(NoticeViewModel())
-        .environmentObject(SpeechRecogniser())
 }
-
-
-//        .toolbar {
-//            Button {
-//                visibility = .automatic
-//            } label: {
-//                Text("Automatic")
-//            }
-//            Button {
-//                visibility = .all
-//            } label: {
-//                Text("All Columns")
-//            }
-//            Button {
-//                visibility = .doubleColumn
-//            } label: {
-//                Text("Double Column")
-//            }
-//            Button {
-//                visibility = .detailOnly
-//            } label: {
-//                Text("Detail Only")
-//            }
-//
-//        }
-

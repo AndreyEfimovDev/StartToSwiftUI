@@ -14,7 +14,7 @@ struct StartToSwiftUIApp: App {
     
     @StateObject private var vm = PostsViewModel()
     @StateObject private var noticevm = NoticeViewModel()
-    @StateObject private var speechRecogniser = SpeechRecogniser()
+//    @StateObject private var speechRecogniser = SpeechRecogniser()
 
     private let hapticManager = HapticService.shared
     
@@ -91,20 +91,17 @@ struct StartToSwiftUIApp: App {
                     // iPad - NavigationSplitView
                     SidebarView()
                 } else {
-                    //    iPhone - NavigationStack (portrait only)
+                    // iPhone - NavigationStack (portrait only)
                     NavigationStack{
                         if let selectedCategory = vm.selectedCategory {
                             HomeView(selectedCategory: selectedCategory)
                         }
-                        
                     }
                 }
-
-                
             }
             .environmentObject(vm)
             .environmentObject(noticevm)
-            .environmentObject(speechRecogniser)
+//            .environmentObject(speechRecogniser)
             .preferredColorScheme(vm.selectedTheme.colorScheme)
         }
     }
