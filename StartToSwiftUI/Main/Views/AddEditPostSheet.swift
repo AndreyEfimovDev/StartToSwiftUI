@@ -12,6 +12,8 @@ struct AddEditPostSheet: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     
+    @StateObject private var keyboardManager = KeyboardManager()
+    
     private let hapticManager = HapticService.shared
     
     @FocusState private var focusedField: PostFields?
@@ -52,16 +54,6 @@ struct AddEditPostSheet: View {
     @State var alertMessage: String = ""
     
     let templateForNewPost: Post = Post(
-//        category: "",
-//        title: "",
-//        intro: "",
-//        author: "",
-//        urlString: "https://",
-//        postPlatform: .youtube,
-//        postDate: nil,
-//        studyLevel: .beginner,
-//        favoriteChoice: .no,
-//        notes: "",
         origin: .local,
         draft: true
     )
@@ -73,7 +65,7 @@ struct AddEditPostSheet: View {
     
     init(post: Post?) {
         
-        if let post = post { // if post is passed to edit - post for editing initialising
+        if let post = post { // post for editing initialising
             _editedPost = State(initialValue: post)
             _draftPost = State(initialValue: post)
             self.isNewPost = false
@@ -212,11 +204,11 @@ struct AddEditPostSheet: View {
                 isShownCircle: false)
             {
                 if editedPost == draftPost {  // if no changes
-                    print(" editedPost == draftPost - dismiss()")
+                    print("🧁 no changes: editedPost == draftPost - dismiss()")
                     
                     dismiss()
                 } else {
-                    print(" editedPost != draftPost - dismiss()")
+                    print("🧁 are changes: editedPost != draftPost - dismiss()")
                     withAnimation(.easeInOut) {
                         isShowingExitMenuConfirmation = true
                         hapticManager.notification(type: .warning)
@@ -549,7 +541,7 @@ struct AddEditPostSheet: View {
     
     private var hideKeybordButton: some View {
         Group {
-            if focusedField != nil {
+            if focusedField != nil && keyboardManager.shouldShowHideButton {
                 VStack {
                     Spacer()
                     HStack {
