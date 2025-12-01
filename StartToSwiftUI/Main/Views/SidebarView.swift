@@ -11,13 +11,7 @@ struct SidebarView: View {
      
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
-    @StateObject private var speechRecogniser = SpeechRecogniser()
-
     @State private var visibility: NavigationSplitViewVisibility = .doubleColumn
-
-//    @State private var selectedCategory: String?
-    @State private var selectedPostId: String? = nil
-
     @State private var showPreferencesView = false
     
     var body: some View {
@@ -33,49 +27,28 @@ struct SidebarView: View {
 //            } else {
 //                Text("No categories")
 //            }
-//        } content: {
+            //        } content: {
             if let selectedCategory = vm.selectedCategory {
-                
                 HomeView(selectedCategory: selectedCategory)
-//                List(vm.filteredPosts.filter({ $0.category == selectedCategory}), selection: $selectedPostId) { post in
-//                    //                    NavigationLink(post.title, value: post)
-//                    Text("\(post.title)")
-//                }
-//                .navigationTitle("Topics")
-//                .toolbarVisibility(.hidden, for: .navigationBar)
-                    .navigationSplitViewColumnWidth(400)
-                
-
-
+                    .navigationSplitViewColumnWidth(430)
             } else {
                 notSelectedEmptyView(text: "Select Category")
             }
         }
         detail: {
-//            Group {
-                if let selectedPostId {
+                if let selectedPostId = vm.selectedPostId {
                     PostDetailsView(postId: selectedPostId)
                     .navigationTitle("Details")
                     .navigationBarTitleDisplayMode(.inline)
                 } else {
                     notSelectedEmptyView(text: "Select Topic")
                 }
-//            }
-//            .toolbarVisibility(.hidden, for: .navigationBar)
         }
-//        .navigationSplitViewStyle(.balanced)
         .sheet(isPresented: $showPreferencesView) {
             PreferencesView()
         }
 
     }
-    
-//    private func toggleSidebar() {
-//        withAnimation {
-//            visibility = visibility == .detailOnly ? .all : .detailOnly
-//        }
-//    }
-//
     
     private func notSelectedEmptyView(text: String) -> some View {
         VStack {
@@ -89,7 +62,6 @@ struct SidebarView: View {
                 .bold()
                 .padding()
         }
-
     }
     
 }
@@ -98,31 +70,4 @@ struct SidebarView: View {
     SidebarView()
         .environmentObject(PostsViewModel())
         .environmentObject(NoticeViewModel())
-        .environmentObject(SpeechRecogniser())
 }
-
-
-//        .toolbar {
-//            Button {
-//                visibility = .automatic
-//            } label: {
-//                Text("Automatic")
-//            }
-//            Button {
-//                visibility = .all
-//            } label: {
-//                Text("All Columns")
-//            }
-//            Button {
-//                visibility = .doubleColumn
-//            } label: {
-//                Text("Double Column")
-//            }
-//            Button {
-//                visibility = .detailOnly
-//            } label: {
-//                Text("Detail Only")
-//            }
-//
-//        }
-

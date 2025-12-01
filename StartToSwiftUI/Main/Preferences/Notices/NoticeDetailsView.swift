@@ -84,10 +84,7 @@ struct NoticeDetailsView: View {
     @ToolbarContentBuilder
     private func toolbarForNoticeDetails() -> some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
-            
-            if UIDevice.isiPhone {
-                BackButtonView() { dismiss() }
-            }
+            BackButtonView() { dismiss() }
         }
         ToolbarItem(placement: .topBarTrailing) {
             CircleStrokeButtonView(

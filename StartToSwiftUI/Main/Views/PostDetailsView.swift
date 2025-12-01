@@ -67,12 +67,15 @@ struct PostDetailsView: View {
             } // ScrollView
             .padding(.horizontal)
             .navigationBarBackButtonHidden(true)
+            .navigationBarTitleDisplayMode(.inline)
 //            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbar {
                 toolbarForPostDetails(validPost: validPost)
             }
-            .navigationDestination(isPresented: $showEditPostView) {
-                AddEditPostSheet(post: post)
+            .sheet(isPresented: $showEditPostView) {
+                NavigationStack {
+                    AddEditPostSheet(post: post)
+                }
             }
         } else {
             Text("Post is not found")

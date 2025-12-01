@@ -11,7 +11,7 @@ import Speech
 struct SearchBarView: View {
     
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var speechRecogniser: SpeechRecogniser
+    @StateObject private var speechRecogniser = SpeechRecogniser()
     
     @FocusState private var isFocusedOnSearchBar: Bool
     
@@ -144,7 +144,6 @@ struct SearchBarView: View {
             .ignoresSafeArea()
         SearchBarView()
             .environmentObject(PostsViewModel())
-            .environmentObject(SpeechRecogniser())
     }
     
 }
