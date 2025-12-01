@@ -11,12 +11,7 @@ struct SidebarView: View {
      
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
-//    @StateObject private var speechRecogniser = SpeechRecogniser()
-
     @State private var visibility: NavigationSplitViewVisibility = .doubleColumn
-
-//    @State private var selectedPostId: String? = nil
-
     @State private var showPreferencesView = false
     
     var body: some View {
@@ -35,7 +30,7 @@ struct SidebarView: View {
             //        } content: {
             if let selectedCategory = vm.selectedCategory {
                 HomeView(selectedCategory: selectedCategory)
-                    .navigationSplitViewColumnWidth(400)
+                    .navigationSplitViewColumnWidth(430)
             } else {
                 notSelectedEmptyView(text: "Select Category")
             }

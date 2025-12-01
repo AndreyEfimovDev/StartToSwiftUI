@@ -70,9 +70,9 @@ struct HomeViewCustomNavBar: View { // in progress
         .navigationBarBackButtonHidden(true)
         .toolbarBackground(.hidden, for: .navigationBar)
         .toolbar {
-            if vm.isTermsOfUseAccepted {
+//            if vm.isTermsOfUseIsNotAccepted {
                 toolbarForMainViewBody()
-            }
+//            }
         }
         .safeAreaInset(edge: .top) {
             SearchBarView()
@@ -109,7 +109,7 @@ struct HomeViewCustomNavBar: View { // in progress
             
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
             
-            if vm.isTermsOfUseAccepted {
+            if vm.isTermsOfUseIsAccepted {
                 if noticevm.isNotificationOn {
                     if  !noticevm.isUserNotified {
                         try? await Task.sleep(nanoseconds: 1_000_000_000)
@@ -125,7 +125,7 @@ struct HomeViewCustomNavBar: View { // in progress
             }
         }
         .overlay {
-            switch vm.isTermsOfUseAccepted {
+            switch vm.isTermsOfUseIsAccepted {
             case true: // fill NavigationBar with Material while scrolling
                 VStack{
                     Rectangle()
