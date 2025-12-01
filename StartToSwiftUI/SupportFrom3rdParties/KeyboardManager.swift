@@ -12,6 +12,7 @@ class KeyboardManager: ObservableObject {
     
     @Published var shouldShowHideButton = false
     @Published var isKeyboardVisible = false
+    
     private var cancellables = Set<AnyCancellable>()
     
     init() {
