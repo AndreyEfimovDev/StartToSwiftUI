@@ -13,12 +13,12 @@ struct RootView: View {
     @EnvironmentObject private var noticevm: NoticeViewModel
     @StateObject private var speechRecogniser = SpeechRecogniser()
     
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(\.verticalSizeClass) private var verticalSizeClass
+//    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+//    @Environment(\.verticalSizeClass) private var verticalSizeClass
 
 
-    @State private var windowSize: CGSize = .zero
-    @State private var isFullScreen: Bool = false
+//    @State private var windowSize: CGSize = .zero
+//    @State private var isFullScreen: Bool = false
     
     var body: some View {
         

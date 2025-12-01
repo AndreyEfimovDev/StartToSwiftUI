@@ -87,7 +87,19 @@ struct StartToSwiftUIApp: App {
                 }
                 .zIndex(1)
                 
-                RootView()
+                if UIDevice.isiPad {
+                    // iPad - NavigationSplitView
+                    SidebarView()
+                } else {
+                    //    iPhone - NavigationStack (portrait only)
+                    NavigationStack{
+                        if let selectedCategory = vm.selectedCategory {
+                            HomeView(selectedCategory: selectedCategory)
+                        }
+                        
+                    }
+                }
+
                 
             }
             .environmentObject(vm)
