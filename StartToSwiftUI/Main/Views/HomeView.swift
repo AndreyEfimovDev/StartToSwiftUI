@@ -68,9 +68,6 @@ struct HomeView: View {
         .navigationTitle(vm.selectedCategory ?? "No Categoty")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-//        .toolbarBackgroundVisibility(.visible, for: .navigationBar)
-        //        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-//        .toolbarRole(.navigationStack)
         .toolbar {
             if vm.isTermsOfUseAccepted {
                 toolbarForMainViewBody()
@@ -94,26 +91,16 @@ struct HomeView: View {
                 NoticesView()
             }
         }
-//        .navigationDestination(isPresented: $showNoticesView) {
-//            NoticesView()
-//        }
-        
         .sheet(isPresented: $showAddPostView) {
             NavigationStack {
                 AddEditPostSheet(post: nil)
             }
         }
-//        .navigationDestination(isPresented: $showAddPostView) {
-//            AddEditPostSheet(post: nil)
-//        }
         .sheet(item: $selectedPost) { selectedPostToEdit in
             NavigationStack {
                 AddEditPostSheet(post: selectedPostToEdit)
             }
         }
-//        .navigationDestination(item: $selectedPost) {selectedPostToEdit in
-//            AddEditPostSheet(post: selectedPostToEdit)
-//        }
         .sheet(isPresented: $isFilterButtonPressed) {
             FiltersSheetView(
                 isFilterButtonPressed: $isFilterButtonPressed

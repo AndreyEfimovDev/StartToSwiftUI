@@ -64,7 +64,7 @@ struct NoticesView: View {
                 } // ZStack
             } // if empty
         } // ZStack
-        .navigationTitle("Notifications")
+        .navigationTitle("Notices")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         //        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
