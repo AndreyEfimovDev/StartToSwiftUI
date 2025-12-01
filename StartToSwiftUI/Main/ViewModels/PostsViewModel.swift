@@ -41,12 +41,10 @@ class PostsViewModel: ObservableObject {
     let mainCategory: String = "SwiftUI"
     var dispatchTime: DispatchTime { .now() + 1.5 }
     
-
-    
     // MARK: Stored preferances
     
     @AppStorage("selectedTheme") var selectedTheme: Theme = .system
-    @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
+    @AppStorage("isTermsOfUseAccepted") var isTermsOfUseIsAccepted: Bool = false
     @AppStorage("isFirstImportPostsCompleted") var isFirstImportPostsCompleted: Bool = false {
         didSet {
             localLastUpdated = getLatestDateFromPosts(posts: allPosts) ?? .now
