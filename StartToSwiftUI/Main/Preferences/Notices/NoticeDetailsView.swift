@@ -84,14 +84,9 @@ struct NoticeDetailsView: View {
     @ToolbarContentBuilder
     private func toolbarForNoticeDetails() -> some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
-            CircleStrokeButtonView(
-                iconName: "chevron.left",
-                imageColorPrimary: Color.mycolor.myAccent,
-                isShownCircle: false)
-            {
-                withAnimation {
-                    dismiss()
-                }
+            
+            if UIDevice.isiPhone {
+                BackButtonView() { dismiss() }
             }
         }
         ToolbarItem(placement: .topBarTrailing) {

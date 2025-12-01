@@ -84,7 +84,10 @@ struct PostDetailsView: View {
     @ToolbarContentBuilder
     private func toolbarForPostDetails(validPost: Post) -> some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
-            BackButtonView() { dismiss() }
+            
+            if UIDevice.isiPhone {
+                BackButtonView() { dismiss() }
+            }
             
             ShareLink(item: validPost.urlString) {
                 Image(systemName: "square.and.arrow.up")
@@ -150,6 +153,10 @@ struct PostDetailsView: View {
                     Text("@" + post.author)
                         .font(.body)
                         .font(.caption)
+                    
+                    Text("\(post.category)")
+                        .font(.caption)
+
                 }
                 .frame(maxWidth: .infinity)
                 
