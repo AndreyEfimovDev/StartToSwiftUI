@@ -158,12 +158,14 @@ struct StartToSwiftUIApp: App {
                         }
                         .tint(Color.mycolor.myBlue)
                         .padding()
-                        .navigationDestination(isPresented: $showTermsOfUse) {
-                            TermsOfUse() {
-                                dismiss()
+                        .sheet(isPresented: $showTermsOfUse) {
+                            NavigationStack {
+                                TermsOfUse() {dismiss()}
                             }
                         }
                     } // VStack
+                    .frame(maxWidth: 600)
+                    .padding()
                 } // ScrollView
                 .navigationTitle("Affirmation")
                 .navigationBarTitleDisplayMode(.inline)
