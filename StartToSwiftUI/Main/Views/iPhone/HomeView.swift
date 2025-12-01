@@ -86,9 +86,12 @@ struct HomeView: View {
                 }
             }
         }
-        .navigationDestination(isPresented: $showPreferancesView) {
+        .sheet(isPresented: $showPreferancesView) {
             PreferencesView()
         }
+//        .navigationDestination(isPresented: $showPreferancesView) {
+//            PreferencesView()
+//        }
         .navigationDestination(isPresented: $showNoticesView) {
             NoticesView()
         }
