@@ -45,10 +45,8 @@ class PostsViewModel: ObservableObject {
     
     // MARK: Stored preferances
     
-    @AppStorage("homeTitleName") var homeTitleName: String = "SwiftUI materials"
     @AppStorage("selectedTheme") var selectedTheme: Theme = .system
     @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
-    
     @AppStorage("isFirstImportPostsCompleted") var isFirstImportPostsCompleted: Bool = false {
         didSet {
             localLastUpdated = getLatestDateFromPosts(posts: allPosts) ?? .now
@@ -79,13 +77,13 @@ class PostsViewModel: ObservableObject {
     @Published var selectedYear: String? = nil {
         didSet { storedYear = selectedYear }}
     @Published var selectedCategory: String? = nil {
-        didSet { storedCategory = selectedCategory
-            //            homeTitleName = selectedCategory ?? "Study materials"
+        didSet {
+            storedCategory = selectedCategory
         }
     }
     @Published var selectedSortOption: SortOption? = nil {
         didSet { storedSortOption = selectedSortOption }}
-
+    @Published var selectedPostId: String? = nil
     
     // MARK: INIT() SECTION
     

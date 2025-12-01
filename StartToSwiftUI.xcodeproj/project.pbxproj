@@ -30,6 +30,7 @@
 		4725A52B2EDD757F00235C40 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4725A52A2EDD757F00235C40 /* UIDevice.swift */; };
 		472A9B592EDB6D6E00ED3344 /* HomeViewCustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472A9B582EDB6D6E00ED3344 /* HomeViewCustomNavBar.swift */; };
 		472A9B5B2EDC3B6F00ED3344 /* BackButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472A9B5A2EDC3B6F00ED3344 /* BackButtonView.swift */; };
+		472E05CC2EDDC9BA005D774E /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472E05CB2EDDC9BA005D774E /* KeyboardManager.swift */; };
 		4732FB2D2EAA2BFC0062269D /* ImportPostsFromCloudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4732FB2C2EAA2BFC0062269D /* ImportPostsFromCloudView.swift */; };
 		4732FB312EAA59B00062269D /* SharePostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4732FB302EAA59B00062269D /* SharePostsView.swift */; };
 		4732FB332EAA5A9E0062269D /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4732FB322EAA5A9E0062269D /* ActivityView.swift */; };
@@ -111,6 +112,7 @@
 		4725A52A2EDD757F00235C40 /* UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		472A9B582EDB6D6E00ED3344 /* HomeViewCustomNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewCustomNavBar.swift; sourceTree = "<group>"; };
 		472A9B5A2EDC3B6F00ED3344 /* BackButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButtonView.swift; sourceTree = "<group>"; };
+		472E05CB2EDDC9BA005D774E /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
 		4732FB2C2EAA2BFC0062269D /* ImportPostsFromCloudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportPostsFromCloudView.swift; sourceTree = "<group>"; };
 		4732FB302EAA59B00062269D /* SharePostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePostsView.swift; sourceTree = "<group>"; };
 		4732FB322EAA5A9E0062269D /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
@@ -328,6 +330,7 @@
 				4791CDFB2E746FF100687126 /* EmailService.swift */,
 				47A7339C2ED1C355006BB8A6 /* SpeechRecogniser.swift */,
 				47A7339E2ED1C55A006BB8A6 /* VoiceSearchView.swift */,
+				472E05CB2EDDC9BA005D774E /* KeyboardManager.swift */,
 			);
 			path = SupportFrom3rdParties;
 			sourceTree = "<group>";
@@ -528,6 +531,7 @@
 				47C56FEC2EC9C66700F0796C /* NoticeDetailsView.swift in Sources */,
 				4773545D2E65D03A001DEDEE /* FiltersSheetView.swift in Sources */,
 				47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */,
+				472E05CC2EDDC9BA005D774E /* KeyboardManager.swift in Sources */,
 				471DCBD02EBB88A400AFA5F4 /* CopyrightPolicy.swift in Sources */,
 				47BAF0F82E64A77A00287F10 /* Enums.swift in Sources */,
 				475997552E5C7F81008E20F0 /* PreviewData.swift in Sources */,
