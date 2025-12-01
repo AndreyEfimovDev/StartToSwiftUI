@@ -19,14 +19,14 @@ class KeyboardManager: ObservableObject {
     }
     
     private func setupKeyboardObservers() {
-        // Клавиатура появляется
+        // The keyboard appears
         NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)
             .sink { [weak self] notification in
                 self?.handleKeyboardShow(notification)
             }
             .store(in: &cancellables)
         
-        // Клавиатура скрывается
+        // The keyboard is hidden
         NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)
             .sink { [weak self] _ in
                 self?.handleKeyboardHide()

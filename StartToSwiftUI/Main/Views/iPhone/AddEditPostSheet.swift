@@ -204,11 +204,11 @@ struct AddEditPostSheet: View {
                 isShownCircle: false)
             {
                 if editedPost == draftPost {  // if no changes
-                    print(" editedPost == draftPost - dismiss()")
+                    print("🧁 no changes: editedPost == draftPost - dismiss()")
                     
                     dismiss()
                 } else {
-                    print(" editedPost != draftPost - dismiss()")
+                    print("🧁 are changes: editedPost != draftPost - dismiss()")
                     withAnimation(.easeInOut) {
                         isShowingExitMenuConfirmation = true
                         hapticManager.notification(type: .warning)
