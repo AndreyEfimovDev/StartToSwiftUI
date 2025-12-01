@@ -89,18 +89,31 @@ struct HomeView: View {
         .sheet(isPresented: $showPreferancesView) {
             PreferencesView()
         }
-//        .navigationDestination(isPresented: $showPreferancesView) {
-//            PreferencesView()
+        .sheet(isPresented: $showNoticesView) {
+            NavigationStack {
+                NoticesView()
+            }
+        }
+//        .navigationDestination(isPresented: $showNoticesView) {
+//            NoticesView()
 //        }
-        .navigationDestination(isPresented: $showNoticesView) {
-            NoticesView()
+        
+        .sheet(isPresented: $showAddPostView) {
+            NavigationStack {
+                AddEditPostSheet(post: nil)
+            }
         }
-        .navigationDestination(isPresented: $showAddPostView) {
-            AddEditPostSheet(post: nil)
+//        .navigationDestination(isPresented: $showAddPostView) {
+//            AddEditPostSheet(post: nil)
+//        }
+        .sheet(item: $selectedPost) { selectedPostToEdit in
+            NavigationStack {
+                AddEditPostSheet(post: selectedPostToEdit)
+            }
         }
-        .navigationDestination(item: $selectedPost) {selectedPostToEdit in
-            AddEditPostSheet(post: selectedPostToEdit)
-        }
+//        .navigationDestination(item: $selectedPost) {selectedPostToEdit in
+//            AddEditPostSheet(post: selectedPostToEdit)
+//        }
         .sheet(isPresented: $isFilterButtonPressed) {
             FiltersSheetView(
                 isFilterButtonPressed: $isFilterButtonPressed

@@ -11,7 +11,7 @@ struct NoticesView: View {
     
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var noticevm: NoticeViewModel
-
+    
     private let hapticManager = HapticService.shared
     
     @State private var selectedNoticeID: String?
@@ -65,8 +65,9 @@ struct NoticesView: View {
             } // if empty
         } // ZStack
         .navigationTitle("Notifications")
+        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+        //        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 BackButtonView() { dismiss() }
