@@ -76,6 +76,8 @@ struct PreferencesView: View {
             .listSectionSpacing(0)
             .navigationTitle("Preferences")
             .navigationBarBackButtonHidden(true)
+            .navigationBarTitleDisplayMode(.inline)
+
             //        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

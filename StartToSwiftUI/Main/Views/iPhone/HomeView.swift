@@ -15,12 +15,11 @@ struct HomeView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
-    
+
     private let hapticManager = HapticService.shared
     
     let selectedCategory: String
     
-    @State private var selectedPostId: String?
     @State private var selectedPost: Post?
     @State private var selectedPostToDelete: Post?
     
@@ -63,10 +62,11 @@ struct HomeView: View {
                                 }
                             }
                     } // if showButtonOnTop
-                } // else-if
-            } // ZStack
+                } // else-if ScrollViewReader
+            } // ZStack ScrollViewReader
         } // ScrollViewReader
-        .navigationTitle(vm.homeTitleName)
+        .navigationTitle(vm.selectedCategory ?? "No Categoty")
+        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
 //        .toolbarBackgroundVisibility(.visible, for: .navigationBar)
         //        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
@@ -80,7 +80,7 @@ struct HomeView: View {
             SearchBarView()
         }
         .navigationDestination(isPresented: $showDetailView) {
-            if let id = selectedPostId {
+            if let id = vm.selectedPostId {
                 withAnimation {
                     PostDetailsView(postId: id)
                 }
@@ -147,7 +147,7 @@ struct HomeView: View {
                     .background(trackingFistPostInList(post: post))
                     .background(.black.opacity(0.001))
                     .onTapGesture {
-                        selectedPostId = post.id
+                        vm.selectedPostId = post.id
                         showDetailView.toggle()
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
@@ -388,6 +388,7 @@ struct HomeView: View {
 }
 
 #Preview {
+    
     NavigationStack {
         HomeView(selectedCategory: "SwiftUI")
     }

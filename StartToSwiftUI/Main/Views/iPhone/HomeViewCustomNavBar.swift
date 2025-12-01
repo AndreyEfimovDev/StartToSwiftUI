@@ -66,7 +66,7 @@ struct HomeViewCustomNavBar: View { // in progress
                 } // else-if
             } // ZStack
         } // ScrollViewReader
-        .navigationTitle(vm.homeTitleName)
+        .navigationTitle(vm.selectedCategory ?? "No Categoty")
         .navigationBarBackButtonHidden(true)
         .toolbarBackground(.hidden, for: .navigationBar)
         .toolbar {
