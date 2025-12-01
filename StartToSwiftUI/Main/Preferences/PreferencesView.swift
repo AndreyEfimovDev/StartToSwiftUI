@@ -83,6 +83,7 @@ struct PreferencesView: View {
                 }
             }
         }
+        .preferredColorScheme(vm.selectedTheme.colorScheme)
     }
     
     // MARK: - Subviews
