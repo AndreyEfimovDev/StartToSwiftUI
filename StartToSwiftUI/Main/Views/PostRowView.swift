@@ -31,7 +31,6 @@ struct PostRowView: View {
         }
         .padding(8)
         .padding(.horizontal, 8)
-//        .background(.ultraThinMaterial)
     }
         
     // MARK: Subviews
@@ -49,14 +48,13 @@ struct PostRowView: View {
     private var author: some View {
         HStack {
             if let postDate = post.postDate {
-                Text("@" + post.author + ", ") +
+                Text("@" + post.author + ", " + post.category + ", " ) +
                 Text(postDate.formatted(date: .numeric, time: .omitted)) +
                 Text(post.postType == .other ? "" : ", " + post.postType.displayName)
             } else  {
-                Text("@" + post.author) +
+                Text("@" + post.author + ", " + post.category) +
                 Text(post.postType == .other ? "" : ", " + post.postType.displayName)
             }
-            Text("\(post.category)")
         }
         .font(.footnote)
     }

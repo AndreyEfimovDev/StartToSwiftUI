@@ -70,7 +70,7 @@ struct PreviewData {
         author: "Nick Sarno/Swiftful Thinking",
         postType: .course,
         urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
-        postDate: Date.from(year: 2021, month: 8, day: 30),
+        postDate: nil,
         studyLevel: .advanced,
         origin: .statical
     )
@@ -84,6 +84,7 @@ struct PreviewData {
         And finally, we will take a quick look at the power of Attributed strings in SwiftUI.
         """,
         author: "Stewart Lynch",
+        postType: .other,
         urlString: "https://www.youtube.com/watch?v=rbtIcKKxQ38/",
         postPlatform: .website,
         postDate: Date.from(year: 2022, month: 8, day: 11),
