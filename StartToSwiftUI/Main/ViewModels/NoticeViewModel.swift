@@ -73,7 +73,6 @@ class NoticeViewModel: ObservableObject {
             }
     }
     
-    
     private func importNoticesFromCloud() {
         
         errorMessage = nil
@@ -97,7 +96,6 @@ class NoticeViewModel: ObservableObject {
                         if !cloudNoticesWithNewerDates.isEmpty {
                             
                             // Make User informed of new notifications
-//                            self?.isNewNotices = true
                             self?.isUserNotified = false
                             
                             // Set a new date of latest notices update

@@ -3,7 +3,7 @@
 //  StartToSwiftUI
 //
 //  Created by Andrey Efimov on 25.08.2025.
-//  *** Combine
+//  
 
 import SwiftUI
 import AudioToolbox
@@ -234,23 +234,16 @@ struct HomeView: View {
         }
         
         ToolbarItemGroup(placement: .navigationBarTrailing) {
-//            ToolbarItem(placement: .navigationBarTrailing) {
-                CircleStrokeButtonView(
-                    iconName: "plus",
-                    isShownCircle: false)
-                {
-                    showAddPostView.toggle()
-                }
-//            }
-//            ToolbarItem(placement: .navigationBarTrailing) {
-                CircleStrokeButtonView(
-                    iconName: "line.3.horizontal.decrease",
-                    isIconColorToChange: !vm.isFiltersEmpty,
-                    isShownCircle: false)
-            {
-                isFilterButtonPressed.toggle()
-            }
-//            }
+            CircleStrokeButtonView(
+                iconName: "plus",
+                isShownCircle: false)
+            { showAddPostView.toggle() }
+            
+            CircleStrokeButtonView(
+                iconName: "line.3.horizontal.decrease",
+                isIconColorToChange: !vm.isFiltersEmpty,
+                isShownCircle: false)
+            { isFilterButtonPressed.toggle() }
         }
     }
     
@@ -282,8 +275,6 @@ struct HomeView: View {
             description: Text("Check the spelling or try a new search.")
         )
     }
-    
-    
         
     private var deletionConfirmationDialog: some View {
         ZStack {

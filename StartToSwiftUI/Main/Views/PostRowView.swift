@@ -97,8 +97,6 @@ struct PostRowView: View {
 
 fileprivate struct PostRowPreView: View {
     
-//    @Environment(\.colorScheme) var colorScheme
-    
     var body: some View {
         ZStack {
             Color.pink.opacity(0.1)
