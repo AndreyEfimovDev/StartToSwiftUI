@@ -197,16 +197,7 @@ class PostsViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-    
-    //                guard let self = self else { return }
-    //                if !posts.isEmpty {
-    //                    self.filteredPosts.removeAll()
-    //                    self.filteredPosts = posts
-    //
-    //                }
-
-    
-    
+        
     private func filterPosts(
         allPosts: [Post],
         category: String?,

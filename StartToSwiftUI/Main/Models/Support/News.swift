@@ -45,23 +45,23 @@ struct Release: Identifiable {
 
 struct WhatsNews {
     static let releases: [Release] = [
-        Release(
-            release: "Release 1.1.0 (5)",
-            news: [
-                News(
-                    title: "Added",
-                    newsText: """
-                            A sorting materials feature has been implemented with the following options:
-                            - Unordered (in order as materails added)
-                            - Newest
-                            - Oldest
-                            - Random
-                            
-                            The feature can be find in the Filters.
-                            """
-                ),
-            ]
-        ),
+//        Release(
+//            release: "Release 1.1.0 (5)",
+//            news: [
+//                News(
+//                    title: "Added",
+//                    newsText: """
+//                            A sorting materials feature has been implemented with the following options:
+//                            - Unordered (in order as materails added)
+//                            - Newest
+//                            - Oldest
+//                            - Random
+//                            
+//                            The feature can be find in the Filters.
+//                            """
+//                ),
+//            ]
+//        ),
         Release(
             release: "Release 1.0.1 (4)",
             news: [

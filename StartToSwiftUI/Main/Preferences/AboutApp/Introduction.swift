@@ -14,14 +14,14 @@ struct Introduction: View {
     var body: some View {
         ScrollView {
             Text("""
-               **StartToSwiftUI** is a free educational link aggregator designed to help you organise learning materials for SwiftUI.
+               **StartToSwiftUI** is a specialised learning environment for iOS developers designed to help you organise learning materials for SwiftUI.
 
                The app offers the following features:
                         
+               **Curated Collection**: Jumpstart your learning with a curated collection of SwiftUI tutorials and articles compiled from open sources. You'll receive a notification when a new version of the collection is available for download. The developer strives to keep this collection up to date, though this cannot be guaranteed at all times.
+
                **Personal Library**: Create and manage your own collection of links to learning materials.
 
-               **Curated Collection**: Jumpstart your learning with a curated collection of SwiftUI tutorials and articles compiled from open sources. You'll receive a notification when a new version of the collection is available for download. I strive to keep this collection up to date, though this cannot be guaranteed at all times.
-                                       
                **Smart Organisation**: Organise learning resources by category such as level of study, year of materials, type of source/media, etc, create a collection of favourite materials.
                
                **Full Control**: Edit and delete your materials as needed, save drafts for further processing.
@@ -29,14 +29,6 @@ struct Introduction: View {
                **Efficient Search & Filter**: Quickly find what you need using search and filtering tools.
 
                **Data Management**: Backup, restore, share, or delete materials as needed.
-               
-               **IMPORTANT — COPYRIGHT NOTES**:
-               
-               The app only stores links to materials from public sources, it does not copy or distribute the content itself. All rights to the materials remain with their respective authors. For each resource, the following is provided: the author, the source, a direct link, and the publication date where available.
-               
-               This application is intended solely for non-commercial, educational use. The developer makes no claim of authorship over the featured resources and fully respects the intellectual property rights of content creators.
-               
-               Authors who wish to have a link to their content removed are requested to contact us via email.
                """)
       
             .multilineTextAlignment(.leading)
