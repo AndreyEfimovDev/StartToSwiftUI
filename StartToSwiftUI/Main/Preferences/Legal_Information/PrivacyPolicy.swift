@@ -118,7 +118,6 @@ struct PrivacyPolicy: View {
         }
         .navigationTitle("Privacy Policy")
         .navigationBarBackButtonHidden(true)
-//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 BackButtonView() { dismiss() }

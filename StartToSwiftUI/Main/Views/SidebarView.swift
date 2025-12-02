@@ -38,8 +38,6 @@ struct SidebarView: View {
         detail: {
                 if let selectedPostId = vm.selectedPostId {
                     PostDetailsView(postId: selectedPostId)
-//                    .navigationTitle("Details")
-//                    .navigationBarTitleDisplayMode(.inline)
                     .id(selectedPostId)
                 } else {
                     notSelectedEmptyView(text: "Select Topic")
@@ -48,7 +46,6 @@ struct SidebarView: View {
         .sheet(isPresented: $showPreferencesView) {
             PreferencesView()
         }
-
     }
     
     private func notSelectedEmptyView(text: String) -> some View {
