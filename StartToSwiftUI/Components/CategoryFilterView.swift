@@ -20,16 +20,17 @@ struct CategoryFilterView: View {
                 }
                 .buttonStyle(CategoryButtonStyle(isSelected: vm.selectedCategory == nil))
                 
-                let categories = [vm.mainCategory, "Other"]
-                ForEach(categories, id: \.self) { category in
-                    Button(category) {
-                        vm.selectedCategory = category
+                if let categories = vm.allCategories {
+                    ForEach(categories, id: \.self) { category in
+                            Button(category) {
+                                vm.selectedCategory = category
+                            }
+                            .buttonStyle(
+                                CategoryButtonStyle(
+                                    isSelected: vm.selectedCategory == category
+                                )
+                            )
                     }
-                    .buttonStyle(
-                        CategoryButtonStyle(
-                            isSelected: vm.selectedCategory == category
-                        )
-                    )
                 }
             }
             .padding(.horizontal)

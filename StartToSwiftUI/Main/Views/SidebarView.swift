@@ -38,8 +38,9 @@ struct SidebarView: View {
         detail: {
                 if let selectedPostId = vm.selectedPostId {
                     PostDetailsView(postId: selectedPostId)
-                    .navigationTitle("Details")
-                    .navigationBarTitleDisplayMode(.inline)
+//                    .navigationTitle("Details")
+//                    .navigationBarTitleDisplayMode(.inline)
+                    .id(selectedPostId)
                 } else {
                     notSelectedEmptyView(text: "Select Topic")
                 }
