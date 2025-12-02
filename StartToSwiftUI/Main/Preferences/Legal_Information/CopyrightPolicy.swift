@@ -19,7 +19,7 @@ struct CopyrightPolicy: View {
                     
                     **WHAT THE APPLICATION STORES**
                     
-                    The application allows users to download a curated collection of SwiftUI learning links. It stores only metadata—such as titles, author names, and direct URLs—and does not copy, host, or distribute the actual content.
+                    The application allows users to download a curated collection of SwiftUI learning links. It stores only metadata such as titles, author names, direct URLs, etc. and does not copy, host, or distribute the actual content.
                     
                     **FOR CONTENT AUTHORS**
                     
@@ -35,7 +35,7 @@ struct CopyrightPolicy: View {
                     Please include the following in your email:
                     - The link to the material on the original source
                     - Proof of authorship (e.g., a link to your author profile or website)
-                    - v
+                    - Reason for the removal request
                     
                     **FAIR USE:**
                     
@@ -48,7 +48,6 @@ struct CopyrightPolicy: View {
         }
         .navigationTitle("Copyright/DMCA Policy")
         .navigationBarBackButtonHidden(true)
-//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 BackButtonView() { dismiss() }

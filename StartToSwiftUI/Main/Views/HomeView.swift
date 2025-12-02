@@ -3,7 +3,7 @@
 //  StartToSwiftUI
 //
 //  Created by Andrey Efimov on 25.08.2025.
-//  *** Combine
+//  
 
 import SwiftUI
 import AudioToolbox
@@ -15,20 +15,20 @@ struct HomeView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
-    
+
     private let hapticManager = HapticService.shared
     
-    @State private var selectedPostId: String?
+    let selectedCategory: String
+    
     @State private var selectedPost: Post?
     @State private var selectedPostToDelete: Post?
     
     @State private var showDetailView: Bool = false
     @State private var showPreferancesView: Bool = false
     @State private var showAddPostView: Bool = false
-    @State private var showTermsOfUse: Bool = false
     @State private var showNoticesView: Bool = false
     @State private var showOnTopButton: Bool = false
-
+    
     @State private var isFilterButtonPressed: Bool = false
     @State private var isShowingDeleteConfirmation: Bool = false
     
@@ -61,39 +61,42 @@ struct HomeView: View {
                                 }
                             }
                     } // if showButtonOnTop
-                } // else-if
-            } // ZStack
+                } // else-if ScrollViewReader
+            } // ZStack ScrollViewReader
         } // ScrollViewReader
-        .navigationTitle(vm.homeTitleName)
+        .navigationTitle(vm.selectedCategory ?? "No Categoty")
+        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-//        .toolbarBackgroundVisibility(.visible, for: .navigationBar)
-//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
-            if vm.isTermsOfUseAccepted {
                 toolbarForMainViewBody()
-            }
         }
         .safeAreaInset(edge: .top) {
             SearchBarView()
         }
         .navigationDestination(isPresented: $showDetailView) {
-            if let id = selectedPostId {
+            if let id = vm.selectedPostId {
                 withAnimation {
                     PostDetailsView(postId: id)
                 }
             }
         }
-        .navigationDestination(isPresented: $showPreferancesView) {
+        .sheet(isPresented: $showPreferancesView) {
             PreferencesView()
         }
-        .navigationDestination(isPresented: $showNoticesView) {
-            NoticesView()
+        .sheet(isPresented: $showNoticesView) {
+            NavigationStack {
+                NoticesView()
+            }
         }
-        .navigationDestination(isPresented: $showAddPostView) {
-            AddEditPostSheet(post: nil)
+        .sheet(isPresented: $showAddPostView) {
+            NavigationStack {
+                AddEditPostSheet(post: nil)
+            }
         }
-        .navigationDestination(item: $selectedPost) {selectedPostToEdit in
-            AddEditPostSheet(post: selectedPostToEdit)
+        .sheet(item: $selectedPost) { selectedPostToEdit in
+            NavigationStack {
+                AddEditPostSheet(post: selectedPostToEdit)
+            }
         }
         .sheet(isPresented: $isFilterButtonPressed) {
             FiltersSheetView(
@@ -107,7 +110,7 @@ struct HomeView: View {
         .task {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
             
-            if vm.isTermsOfUseAccepted {
+            if vm.isTermsOfUseIsAccepted {
                 if noticevm.isNotificationOn {
                     if  !noticevm.isUserNotified {
                         try? await Task.sleep(nanoseconds: 1_000_000_000)
@@ -121,13 +124,6 @@ struct HomeView: View {
                     }
                 }
             }
-            
-        }
-        .overlay {
-            // Accept Terms of Use at the first launch
-            if !vm.isTermsOfUseAccepted {
-                welcomeAtFirstLauch
-            }
         }
     }
     
@@ -135,13 +131,13 @@ struct HomeView: View {
     
     private var mainViewBody: some View {
         List {
-            ForEach(vm.filteredPosts) { post in
+            ForEach(vm.filteredPosts.filter({ $0.category == selectedCategory})) { post in
                 PostRowView(post: post)
                     .id(post.id)
                     .background(trackingFistPostInList(post: post))
                     .background(.black.opacity(0.001))
                     .onTapGesture {
-                        selectedPostId = post.id
+                        vm.selectedPostId = post.id
                         showDetailView.toggle()
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
@@ -150,7 +146,7 @@ struct HomeView: View {
                             hapticManager.notification(type: .warning)
                             isShowingDeleteConfirmation = true
                         }.tint(Color.mycolor.myRed)
-                                                
+                        
                         Button("Edit", systemImage: post.origin == .cloud  || post.origin == .statical ? "pencil.slash" : "pencil") {
                             selectedPost = post
                         }
@@ -193,6 +189,7 @@ struct HomeView: View {
     
     @ToolbarContentBuilder
     private func toolbarForMainViewBody() -> some ToolbarContent {
+        
         ToolbarItem(placement: .navigationBarLeading) {
             CircleStrokeButtonView(
                 iconName: "gearshape",
@@ -203,22 +200,22 @@ struct HomeView: View {
         }
         if !noticevm.notices.filter({ $0.isRead == false }).isEmpty && noticevm.isNotificationOn {
             ToolbarItem(placement: .navigationBarLeading) {
-                    CircleStrokeButtonView(
-                        iconName: "message",
-                        isShownCircle: false)
-                    {
-                        showNoticesView = true
-                    }
-                    .overlay(alignment: .topTrailing) {
-                        Capsule()
-                            .fill(Color.mycolor.myRed)
-                            .frame(maxWidth: 20, maxHeight: 15)
-                            .overlay {
-                                Text("\(noticevm.notices.filter({ $0.isRead == false }).count)")
-                                    .font(.system(size: 8, weight: .bold, design: .default))
-                                    .foregroundStyle(Color.mycolor.myButtonTextPrimary)
-                            }
-                    }
+                CircleStrokeButtonView(
+                    iconName: "message",
+                    isShownCircle: false)
+                {
+                    showNoticesView = true
+                }
+                .overlay(alignment: .topTrailing) {
+                    Capsule()
+                        .fill(Color.mycolor.myRed)
+                        .frame(maxWidth: 20, maxHeight: 15)
+                        .overlay {
+                            Text("\(noticevm.notices.filter({ $0.isRead == false }).count)")
+                                .font(.system(size: 8, weight: .bold, design: .default))
+                                .foregroundStyle(Color.mycolor.myButtonTextPrimary)
+                        }
+                }
                 .background(
                     AnyView(
                         Circle()
@@ -236,24 +233,20 @@ struct HomeView: View {
             }
         }
         
-        ToolbarItem(placement: .navigationBarTrailing) {
+        ToolbarItemGroup(placement: .navigationBarTrailing) {
             CircleStrokeButtonView(
                 iconName: "plus",
                 isShownCircle: false)
-            {
-                showAddPostView.toggle()
-            }
-        }
-        ToolbarItem(placement: .navigationBarTrailing) {
+            { showAddPostView.toggle() }
+            
             CircleStrokeButtonView(
                 iconName: "line.3.horizontal.decrease",
                 isIconColorToChange: !vm.isFiltersEmpty,
                 isShownCircle: false)
-            {
-                isFilterButtonPressed.toggle()}
+            { isFilterButtonPressed.toggle() }
         }
     }
-        
+    
     @ViewBuilder
     private func trackingFistPostInList(post: Post) -> some View {
         GeometryReader { geo in
@@ -266,7 +259,7 @@ struct HomeView: View {
                 }
         }
     }
-
+    
     private var allPostsIsEmpty: some View {
         ContentUnavailableView(
             "No Posts",
@@ -282,60 +275,7 @@ struct HomeView: View {
             description: Text("Check the spelling or try a new search.")
         )
     }
-    
         
-    private var welcomeAtFirstLauch: some View {
-        ZStack {
-            Color.mycolor.myBackground
-                .ignoresSafeArea()
-            NavigationStack {
-                ScrollView {
-                    VStack {
-                        
-                        Text("""
-                    This application is created for educational purposes and helps organise links to learning SwiftUI materials.
-                     
-                    **It is importand to understand:**
-                     
-                    - The app stores only links to materials available from public sources.
-                    - All content belongs to its respective authors.
-                    - The app is free and intended for non-commercial use.
-                    - Users are responsible for respecting copyright when using materials.
-                     
-                    **For each material, you have ability to save:**
-                    
-                    - Direct link to the original source.
-                    - Author's name.
-                    - Source (website, YouTube, etc.).
-                    - Publication date (if known).
-                                         
-                    To use this application, you need to agree to **Terms of Use**.
-                    """
-                        )
-                        .multilineTextAlignment(.leading)
-                        .textFormater()
-                        .padding(.horizontal)
-                        
-                        Button {
-                            showTermsOfUse = true
-                        } label: {
-                            Text("Terms of Use")
-                                .font(.title)
-                        }
-                        .tint(Color.mycolor.myBlue)
-                        .padding()
-                        .navigationDestination(isPresented: $showTermsOfUse) {
-                            TermsOfUse() {
-                                dismiss()
-                            }
-                        }
-                    } // VStack
-                } // ScrollView
-                .navigationTitle("Affirmation")
-            } // NavigationStack
-        } // ZStack
-    }
-    
     private var deletionConfirmationDialog: some View {
         ZStack {
             Color.mycolor.myAccent.opacity(0.4)
@@ -378,12 +318,12 @@ struct HomeView: View {
 }
 
 #Preview {
+    
     NavigationStack {
-        HomeView()
+        HomeView(selectedCategory: "SwiftUI")
     }
     .environmentObject(PostsViewModel())
     .environmentObject(NoticeViewModel())
-    .environmentObject(SpeechRecogniser())
 }
 
 

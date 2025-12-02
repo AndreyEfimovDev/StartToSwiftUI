@@ -93,7 +93,6 @@ struct Acknowledgements: View {
         }
         .navigationTitle("Acknowledgements")
         .navigationBarBackButtonHidden(true)
-//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 BackButtonView() { dismiss() }

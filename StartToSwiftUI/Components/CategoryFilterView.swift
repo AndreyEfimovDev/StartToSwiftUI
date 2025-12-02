@@ -15,23 +15,22 @@ struct CategoryFilterView: View {
         
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
-                // Кнопка "Все"
                 Button("All") {
                     vm.selectedCategory = nil
                 }
                 .buttonStyle(CategoryButtonStyle(isSelected: vm.selectedCategory == nil))
                 
-                // Кнопки категорий
-                let cat = ["SwiftUI", "Other"]
-                ForEach(cat, id: \.self) { category in
-                    Button(category) {
-                        vm.selectedCategory = category
+                if let categories = vm.allCategories {
+                    ForEach(categories, id: \.self) { category in
+                            Button(category) {
+                                vm.selectedCategory = category
+                            }
+                            .buttonStyle(
+                                CategoryButtonStyle(
+                                    isSelected: vm.selectedCategory == category
+                                )
+                            )
                     }
-                    .buttonStyle(
-                        CategoryButtonStyle(
-                            isSelected: vm.selectedCategory == category
-                        )
-                    )
                 }
             }
             .padding(.horizontal)

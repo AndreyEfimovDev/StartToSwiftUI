@@ -24,35 +24,38 @@ struct FiltersSheetView: View {
     
     var body: some View {
         
-        VStack (alignment: .leading) {
-            Text("Filters")
-                .font(.largeTitle)
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding(.top, 55)
-//                categoryFilter
-//                    .opacity(vm.allCategories == nil ? 0 : 1)
-            studyLevelFilter
-            favoriteFilter
-            typeFilter
-            yearFilter
-                .opacity(vm.allYears == nil ? 0 : 1)
-            sortOptions
-            
-            Spacer()
-            
-            applyFiltersButton
-            resetAllFiltersButton
-            resetAllFiltersAndExitButton
-                .padding(.bottom, 30)
-        }
-        .foregroundStyle(Color.mycolor.myAccent)
-        .padding(.top, -40)
-        .padding(.horizontal)
-        .background(Color.mycolor.myBackground)
-        .onDisappear {
-            vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-            isFilterButtonPressed = false
-        }
+        ScrollView {
+            VStack (alignment: .leading) {
+                Text("Filters")
+                    .font(.largeTitle)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.top, 55)
+                categoryFilter
+                    .opacity(vm.allCategories == nil ? 0 : 1)
+                studyLevelFilter
+                favoriteFilter
+                typeFilter
+                yearFilter
+                    .opacity(vm.allYears == nil ? 0 : 1)
+                sortOptions
+                
+                Spacer()
+                
+                applyFiltersButton
+                resetAllFiltersButton
+                resetAllFiltersAndExitButton
+                    .padding(.bottom, 30)
+            }
+            .foregroundStyle(Color.mycolor.myAccent)
+            .padding(.top, -40)
+            .padding(.horizontal)
+            .background(Color.mycolor.myBackground)
+            .onDisappear {
+                vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
+                isFilterButtonPressed = false
+            } // VStack
+        } // ScrollView
+        .scrollIndicators(.hidden)
     }
     // MARK: Subviews
     

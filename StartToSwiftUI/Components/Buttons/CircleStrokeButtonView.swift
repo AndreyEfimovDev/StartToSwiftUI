@@ -68,7 +68,6 @@ struct CircleStrokeButtonView: View {
     NavigationStack {
         ZStack {
             Color.yellow
-            //            .ignoresSafeArea()
             VStack {
                 CircleStrokeButtonView(iconName: "lines.measurement.horizontal") {
                     
