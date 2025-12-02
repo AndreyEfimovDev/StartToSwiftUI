@@ -12,14 +12,16 @@ import Speech
 @main
 struct StartToSwiftUIApp: App {
     
+    @Environment(\.dismiss) private var dismiss
+
     @StateObject private var vm = PostsViewModel()
     @StateObject private var noticevm = NoticeViewModel()
-    @StateObject private var speechRecogniser = SpeechRecogniser()
 
     private let hapticManager = HapticService.shared
     
     @State private var showLaunchView: Bool = true
-    
+    @State private var showTermsOfUse: Bool = false
+
     init() {
         
         // Set a custom colour titles for NavigationStack and the magnifying class in the search bar
@@ -85,18 +87,91 @@ struct StartToSwiftUIApp: App {
                         .transition(.move(edge: .leading))
                     }
                 }
+                .zIndex(2)
+                
+                
+                // Accept Terms of Use at the first launch
+                ZStack {
+                    if !vm.isTermsOfUseIsAccepted {
+                        welcomeAtFirstLauch
+                    }
+                }
+                .opacity(showLaunchView ? 0 : 1)
                 .zIndex(1)
                 
-                NavigationStack{
-                    HomeView()
-//                    HomeViewCustomNavBar()
+                
+                if UIDevice.isiPad {
+                    // iPad - NavigationSplitView
+                    SidebarView()
+                } else {
+                    // iPhone - NavigationStack (portrait only)
+                    NavigationStack{
+                        if let selectedCategory = vm.selectedCategory {
+                            HomeView(selectedCategory: selectedCategory)
+                        }
+                    }
                 }
             }
             .environmentObject(vm)
             .environmentObject(noticevm)
-            .environmentObject(speechRecogniser)
             .preferredColorScheme(vm.selectedTheme.colorScheme)
         }
     }
+    
+    private var welcomeAtFirstLauch: some View {
+        ZStack {
+            Color.mycolor.myBackground
+                .ignoresSafeArea()
+            NavigationStack {
+                ScrollView {
+                    VStack {
+                        
+                        Text("""
+                    This application is created for educational purposes and helps organise links to learning SwiftUI materials.
+                     
+                    **It is importand to understand:**
+                     
+                    - The app stores only links to materials available from public sources.
+                    - All content belongs to its respective authors.
+                    - The app is free and intended for non-commercial use.
+                    - Users are responsible for respecting copyright when using materials.
+                     
+                    **For each material, you have ability to save:**
+                    
+                    - Direct link to the original source.
+                    - Author's name.
+                    - Source (website, YouTube, etc.).
+                    - Publication date (if known).
+                                         
+                    To use this application, you need to agree to **Terms of Use**.
+                    """
+                        )
+                        .multilineTextAlignment(.leading)
+                        .textFormater()
+                        .padding(.horizontal)
+                        
+                        Button {
+                            showTermsOfUse = true
+                        } label: {
+                            Text("Terms of Use")
+                                .font(.title)
+                        }
+                        .tint(Color.mycolor.myBlue)
+                        .padding()
+                        .sheet(isPresented: $showTermsOfUse) {
+                            NavigationStack {
+                                TermsOfUse() {dismiss()}
+                            }
+                        }
+                    } // VStack
+                    .frame(maxWidth: 600)
+                    .padding()
+                } // ScrollView
+                .navigationTitle("Affirmation")
+                .navigationBarTitleDisplayMode(.inline)
+            } // NavigationStack
+        } // ZStack
+    }
+
 }
 

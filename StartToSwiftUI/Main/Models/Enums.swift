@@ -31,22 +31,6 @@ enum Theme: String, CaseIterable, Codable {
         case .system: return nil
         }
     }
-    
-//    var color: Color {
-//        switch self {
-//        case .light: return .yellow
-//        case .dark: return .green
-//        case .system: return .blue
-//        }
-//    }
-    
-//    var iconName: String {
-//            switch self {
-//            case .light: return "sun.max"
-//            case .dark: return "moon"
-//            case .system: return "iphone"
-//            }
-//        }
 }
 
 enum SortOption: String, CaseIterable {

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct VoiceSearchView: View {
     
-    @EnvironmentObject private var speechRecogniser: SpeechRecogniser
+    @StateObject private var speechRecogniser = SpeechRecogniser()
     
     @State private var searchText = ""
     @State private var isPulsing: Bool = false
@@ -88,6 +88,4 @@ struct VoiceSearchView: View {
 
 #Preview {
     VoiceSearchView()
-        .environmentObject(SpeechRecogniser())
-    
 }

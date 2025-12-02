@@ -38,49 +38,52 @@ struct PreferencesView: View {
     }
     
     var body: some View {
-        Form {
-            Section(header: sectionHeader("Appearance")) {
-                themeAppearence
-            }
-            
-            Section(header: sectionHeader("Notifications")) {
-                notificationToggle
-                soundNotificationToggle
-                noticeMessages
-            }
-
-            Section(header: sectionHeader("Managing materials (\(postsCount))")) {
-                
-                if !vm.allPosts.filter({ $0.draft == true }).isEmpty {
-                    postDrafts
+        NavigationStack {
+            Form {
+                Section(header: sectionHeader("Appearance")) {
+                    themeAppearence
                 }
                 
-                if (!vm.allPosts.isEmpty) && vm.isFirstImportPostsCompleted {
-                    checkForPostsUpdate
+                Section(header: sectionHeader("Notifications")) {
+                    notificationToggle
+                    soundNotificationToggle
+                    noticeMessages
                 }
                 
-                importFromCloud
-                shareBackup
-                restoreBackup
-                erasePosts
-            }
-            Section(header: sectionHeader("Сommunication")){
-                acknowledgements
-                aboutApplication
-                legalInformation
-                contactDeveloperButton
-            }
-        } // Form
-        .foregroundStyle(Color.mycolor.myAccent)
-        .listSectionSpacing(0)
-        .navigationTitle("Preferences")
-        .navigationBarBackButtonHidden(true)
-//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                BackButtonView() { dismiss() }
+                Section(header: sectionHeader("Managing materials (\(postsCount))")) {
+                    
+                    if !vm.allPosts.filter({ $0.draft == true }).isEmpty {
+                        postDrafts
+                    }
+                    
+                    if (!vm.allPosts.isEmpty) && vm.isFirstImportPostsCompleted {
+                        checkForPostsUpdate
+                    }
+                    
+                    importFromCloud
+                    shareBackup
+                    restoreBackup
+                    erasePosts
+                }
+                Section(header: sectionHeader("Сommunication")){
+                    acknowledgements
+                    aboutApplication
+                    legalInformation
+                    contactDeveloperButton
+                }
+            } // Form
+            .foregroundStyle(Color.mycolor.myAccent)
+            .listSectionSpacing(0)
+            .navigationTitle("Preferences")
+            .navigationBarBackButtonHidden(true)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    BackButtonView() { dismiss() }
+                }
             }
         }
+        .preferredColorScheme(vm.selectedTheme.colorScheme)
     }
     
     // MARK: - Subviews
@@ -89,7 +92,7 @@ struct PreferencesView: View {
         Text(text)
             .foregroundStyle(Color.mycolor.myAccent)
     }
-
+    
     
     private var themeAppearence: some View {
         UnderlineSermentedPickerNotOptional(
@@ -101,7 +104,7 @@ struct PreferencesView: View {
             unselectedTextColor: Color.mycolor.myAccent
         )
     }
-        
+    
     private var notificationToggle: some View {
         HStack {
             Image(systemName: noticevm.isNotificationOn ? "bell" : "bell.slash")

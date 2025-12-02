@@ -74,7 +74,6 @@ struct NoticeDetailsView: View {
         .navigationTitle("Notice message")
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
-//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             toolbarForNoticeDetails()
         }
@@ -84,15 +83,7 @@ struct NoticeDetailsView: View {
     @ToolbarContentBuilder
     private func toolbarForNoticeDetails() -> some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
-            CircleStrokeButtonView(
-                iconName: "chevron.left",
-                imageColorPrimary: Color.mycolor.myAccent,
-                isShownCircle: false)
-            {
-                withAnimation {
-                    dismiss()
-                }
-            }
+            BackButtonView() { dismiss() }
         }
         ToolbarItem(placement: .topBarTrailing) {
             CircleStrokeButtonView(
