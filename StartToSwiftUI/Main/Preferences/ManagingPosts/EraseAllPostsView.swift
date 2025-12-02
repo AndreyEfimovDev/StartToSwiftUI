@@ -63,7 +63,6 @@ struct EraseAllPostsView: View {
         .navigationTitle("Delete all materials")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 BackButtonView() { dismiss() }

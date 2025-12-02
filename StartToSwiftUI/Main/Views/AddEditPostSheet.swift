@@ -99,7 +99,6 @@ struct AddEditPostSheet: View {
         .navigationTitle(viewTitle)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .background(Color.mycolor.myBackground)
         .toolbar {
             toolbarForAddEditView()
