@@ -25,56 +25,210 @@ struct DevData {
 //            origin: .cloud,
 //        ),
 
-//        // Stewart Lynch
-//        Post(
-//            title: "Mastering iOS 26 Toolbars & Modal Sheets in SwiftUI – New Glass Buttons, Transitions & More",
-//            intro: """
-//                        iOS 26 brings a fresh take on SwiftUI toolbars and modal presentations, and in this tutorial, I’ll guide you through everything you need to know. We’ll explore semantic and positional toolbar item placements, new glass button styles, toolbar spacers, and subtitle options—including some quirks to be aware of. You’ll also learn how to use the new matchGeometry transition with modal sheets for a polished, modern experience.
-//
-//                        By the end of the video, you’ll be equipped to take full advantage of toolbars and sheet presentation enhancements in iOS 26.
-//                        """,
-//            author: "Stewart Lynch",
-//            urlString: "https://www.youtube.com/watch?v=IiLDbrtBsn0",
-//            postPlatform: .youtube,
-//            postDate: Date.from(year: 2025, month: 9, day: 14),
-//            origin: .cloud
-//        ),
-//
-//        Post(
-//            title: "Mastering Liquid Glass in SwiftUI – Buttons, Containers & Transitions",
-//            intro: """
-//                        SwiftUI’s Liquid Glass effect in OS 26 is more than just eye candy—it’s a whole new design system. In this tutorial, I’ll guide you through the new button styles, applying glass effects to various views, and using GlassEffectContainer to create seamless, fluid layouts.
-//
-//                        We’ll also explore namespace-powered unions, matched geometry transitions, and clever control interactions that elevate your app’s UI. This is hands-on, practical, and comprehensive.
-//
-//                        Whether you’re building for iOS, macOS, or visionOS, Liquid Glass is a game-changer—and I’ll help you get the most out of it.
-//                        """,
-//            author: "Stewart Lynch",
-//            urlString: "https://www.youtube.com/watch?v=E2nQsw0El8M",
-//            postPlatform: .youtube,
-//            postDate: Date.from(year: 2025, month: 8, day: 31),
-//            origin: .cloud
-//        ),
-//        Post(
-//            title: "Styling SwiftUI Text Views",
-//            intro: """
-//                    In this video we are going to explore how we can stylize text for our Text views in SwiftUI.
-//
-//                    We will start by looking at how we can create a `Text` view with the Markdown-formatted base postLanguage version of the string as the localization key.
-//
-//                    We will also see how we can utilize string interpolation to combine and stylize our strings and present them in a text view.
-//
-//                    And finally, we will take a quick look at the power of Attributed strings in SwiftUI.
-//                    """,
-//            author: "Stewart Lynch",
-//            urlString: "https://www.youtube.com/watch?v=rbtIcKKxQ38/",
-//            postPlatform: .youtube,
-//            postDate: Date.from(year: 2021, month: 5, day: 7),
-//            studyLevel: .middle,
-//            origin: .cloud,
-//        ),
-//
-//
+// Karin Prater
+        Post(
+            title: "How to use Slider in SwiftUI",
+            intro: """
+                For iOS 16 and macOS 13 you can use a new Navigation API. I will show you example for Navigation Split View which implements a multicolumn navigation style in this SwiftUI tutorial. This works also on the iPhone when you set it up with List selections, but really shines for the mac and the iPad. 
+                NavigationSplitView allows for further custom styling with navigationSplitViewStyle for prominentDetail and balanced. You can also set the column width and show/hide columns programmatically. 
+                NavigationSplitView came with SwiftUI 4 during WWDC 2022.
+                """,
+            author: "Karin Prater",
+            urlString: "https://www.youtube.com/watch?v=KRu0s01H3I4",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2022, month: 11, day: 16),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+        Post(
+            title: "A Full Tour of NavigationStack, NavigationLink and navigationDestination - SwiftUI tutorial",
+            intro: """
+                DC 2022 gave us a new Navigation API. In this SwiftUI tutorial I will show extended examples for NavigationStack. This works with the new value-based NavigationLink and navigationDestination. NavigationStack allows access to the NavigationPath, which you can use to implement programmatic navigation. It is much easier and cleaner to use than the deprecated NavigationView.
+                """,
+            author: "Karin Prater",
+            urlString: "https://www.youtube.com/watch?v=piAiy5vlC9k",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2022, month: 11, day: 15),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+
+// Nick Sarno/Swiftful Thinking
+        Post(
+            title: "How to use Slider in SwiftUI",
+            intro: """
+                In SwiftUI, we can add a Slider to the screen to allow users to easily "slide" or choose between multiple values. The slider is often used in applications when users need to select a specific number, such as their age, without requiring a keyboard to actually type it in. In this video, we will learn how to implement a Slider() and how to customize it with different colors, formats, and steps.
+                """,
+            author: "Nick Sarno/Swiftful Thinking",
+            urlString: "https://www.youtube.com/watch?v=HwqxgiKQ_E4",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 3, day: 2),
+            studyLevel: .beginner,
+            origin: .cloud,
+        ),
+
+// Stewart Lynch
+        Post(
+            title: "Gauge View iOS 16",
+            intro: """
+                iIn this video I am going to introduce you to the new Gauge view that is now available for all apple platforms in iOS 16
+                
+                We will be exploring the different options for Linear gauges as well as circular gauges and will compete the video by creating a fun view with a countdown timer to launch a rocket.
+                """,
+            author: "Stewart Lynch",
+            urlString: "https://www.youtube.com/watch?v=k38t-tjCM7g&list=PLBn01m5Vbs4DJyxwFZEM4-AIs7jzHrb60&index=14",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2022, month: 10, day: 30),
+            origin: .cloud
+        ),
+        Post(
+            title: "iOS 16",
+            intro: """
+                A series if videos going through a lot of the new features presented in iOS 16.
+                """,
+            author: "Stewart Lynch",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4DJyxwFZEM4-AIs7jzHrb60",
+            postPlatform: .youtube,
+            postDate: nil,
+            origin: .cloud
+        ),
+        Post(
+            title: "Mastering iOS 26 Toolbars & Modal Sheets in SwiftUI – New Glass Buttons, Transitions & More",
+            intro: """
+                iOS 26 brings a fresh take on SwiftUI toolbars and modal presentations, and in this tutorial, I’ll guide you through everything you need to know. We’ll explore semantic and positional toolbar item placements, new glass button styles, toolbar spacers, and subtitle options—including some quirks to be aware of. You’ll also learn how to use the new matchGeometry transition with modal sheets for a polished, modern experience.
+
+                By the end of the video, you’ll be equipped to take full advantage of toolbars and sheet presentation enhancements in iOS 26.
+                """,
+            author: "Stewart Lynch",
+            urlString: "https://www.youtube.com/watch?v=IiLDbrtBsn0",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2025, month: 9, day: 14),
+            origin: .cloud
+        ),
+        Post(
+            title: "JSON and Codable Protocol - Swift",
+            intro: """
+                7 part series on learning how to use Xcode to manage Git version control.
+                """,
+            author: "Stewart Lynch",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4DADQtPjCfXrBHuPHLO80oU",
+            postPlatform: .youtube,
+            postDate: nil,
+            origin: .cloud,
+        ),
+        Post(
+            title: "Xcode and Git",
+            intro: """
+                9 part series on learning how to decode and encode JSON using the Swift Codable protocol.
+                """,
+            author: "Stewart Lynch",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4DKrm1gwIr_a-0B7yvlTZP6",
+            postPlatform: .youtube,
+            postDate: nil,
+            origin: .cloud,
+        ),
+        Post(
+            title: "NavigationSplitView in iOS 16",
+            intro: """
+                    In this video, we will be looking at NavigationSplitView.
+
+                    We will see how we can implement 2 column and 3 column split view that  will compress down to a NavigationStack type navigation when the view width is compressed like on all iPhones in Portrait mode or on some split views on an iPad.
+
+                    We will see how we can control the visibility of the different views and layouts.
+                    """,
+            author: "Stewart Lynch",
+            urlString: "https://www.youtube.com/watch?v=RsmMLLL8FB0",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2022, month: 9, day: 25),
+            origin: .cloud,
+        ),
+        Post(
+            title: "NavigationStack 2: Programmable NavigationPath and DeepLinks",
+            intro: """
+                In the first video we learned about the NavigationStack and all of it's components and in this video we will be extending that knowledge.
+
+                We will extending the Navigation stack another level and see how we can use the NavigationPath to implement a Back to Root button.
+
+                Following that, we will see how easy it is to use the NavigationPath to enable programmable navigation through Deep links using a Custom URL Scheme.
+                """,
+            author: "Stewart Lynch",
+            urlString: "https://www.youtube.com/watch?v=6-OeaFfDXXw&list=PLBn01m5Vbs4DJyxwFZEM4-AIs7jzHrb60&index=8",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2022, month: 9, day: 18),
+            origin: .cloud,
+        ),
+        Post(
+            title: "Introduction to NavigationStack in iOS 16",
+            intro: """
+                In this video I will introduce yu to the Navigation Stack.
+
+                We will take a look at this new container view along with its components. Namely the new NavigationLink, the navigationdestination method and the navigationPath.
+                """,
+            author: "Stewart Lynch",
+            urlString: "https://www.youtube.com/watch?v=6-OeaFfDXXw&list=PLBn01m5Vbs4DJyxwFZEM4-AIs7jzHrb60&index=8",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2022, month: 9, day: 11),
+            origin: .cloud,
+        ),
+        Post(
+            title: "SwiftUI Grids in iOS 16",
+            intro: """
+                In this video I am going to introduce you to the Grid View for SwiftUI that was introduced in iOS 16.
+                
+                We will take a look at three different examples, exploring all of the grid building blocks.
+                
+                We will learn about: 
+                - The Grid container itself
+                - The Grid Row
+                - Grid  layouts using grid alignments
+                - Cell positioning with cell alignments and anchors.
+                - Full column alignments
+                - Merging cells using column spans
+                """,
+            author: "Stewart Lynch",
+            urlString: "https://www.youtube.com/watch?v=ZU_6RejjIKU&list=PLBn01m5Vbs4DJyxwFZEM4-AIs7jzHrb60&index=7",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2022, month: 9, day: 4),
+            origin: .cloud,
+        ),
+        Post(
+            title: "Mastering Liquid Glass in SwiftUI – Buttons, Containers & Transitions",
+            intro: """
+                        SwiftUI’s Liquid Glass effect in OS 26 is more than just eye candy—it’s a whole new design system. In this tutorial, I’ll guide you through the new button styles, applying glass effects to various views, and using GlassEffectContainer to create seamless, fluid layouts.
+
+                        We’ll also explore namespace-powered unions, matched geometry transitions, and clever control interactions that elevate your app’s UI. This is hands-on, practical, and comprehensive.
+
+                        Whether you’re building for iOS, macOS, or visionOS, Liquid Glass is a game-changer—and I’ll help you get the most out of it.
+                        """,
+            author: "Stewart Lynch",
+            urlString: "https://www.youtube.com/watch?v=E2nQsw0El8M",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2025, month: 8, day: 31),
+            origin: .cloud
+        ),
+        Post(
+            title: "Styling SwiftUI Text Views",
+            intro: """
+                    In this video we are going to explore how we can stylize text for our Text views in SwiftUI.
+
+                    We will start by looking at how we can create a `Text` view with the Markdown-formatted base postLanguage version of the string as the localization key.
+
+                    We will also see how we can utilize string interpolation to combine and stylize our strings and present them in a text view.
+
+                    And finally, we will take a quick look at the power of Attributed strings in SwiftUI.
+                    """,
+            author: "Stewart Lynch",
+            urlString: "https://www.youtube.com/watch?v=rbtIcKKxQ38/",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 5, day: 7),
+            studyLevel: .middle,
+            origin: .cloud,
+        ),
+
+
         
 // Sean Allen
         Post(

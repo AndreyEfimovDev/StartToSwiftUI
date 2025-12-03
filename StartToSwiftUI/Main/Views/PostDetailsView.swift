@@ -67,12 +67,14 @@ struct PostDetailsView: View {
             } // ScrollView
             .padding(.horizontal)
             .navigationBarBackButtonHidden(true)
-//            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 toolbarForPostDetails(validPost: validPost)
             }
-            .navigationDestination(isPresented: $showEditPostView) {
-                AddEditPostSheet(post: post)
+            .sheet(isPresented: $showEditPostView) {
+                NavigationStack {
+                    AddEditPostSheet(post: post)
+                }
             }
         } else {
             Text("Post is not found")
@@ -84,7 +86,10 @@ struct PostDetailsView: View {
     @ToolbarContentBuilder
     private func toolbarForPostDetails(validPost: Post) -> some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
-            BackButtonView() { dismiss() }
+            
+            if UIDevice.isiPhone {
+                BackButtonView() { dismiss() }
+            }
             
             ShareLink(item: validPost.urlString) {
                 Image(systemName: "square.and.arrow.up")
@@ -150,6 +155,10 @@ struct PostDetailsView: View {
                     Text("@" + post.author)
                         .font(.body)
                         .font(.caption)
+                    
+                    Text("\(post.category)")
+                        .font(.caption)
+
                 }
                 .frame(maxWidth: .infinity)
                 

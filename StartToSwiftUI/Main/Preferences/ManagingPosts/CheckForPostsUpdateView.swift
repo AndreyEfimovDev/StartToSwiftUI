@@ -45,7 +45,6 @@ struct CheckForPostsUpdateView: View {
             .navigationTitle("Check for posts update")
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
-//            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     BackButtonView() { dismiss() }
