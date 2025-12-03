@@ -34,7 +34,6 @@ struct FairUseNotice: View {
         }
         .navigationTitle("Fair Use Notice")
         .navigationBarBackButtonHidden(true)
-//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 BackButtonView() { dismiss() }

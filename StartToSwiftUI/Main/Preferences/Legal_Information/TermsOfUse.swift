@@ -194,21 +194,20 @@ struct TermsOfUse: View {
                 CapsuleButtonView(
                     primaryTitle: "I have read and accept",
                     secondaryTitle: "Accepted",
-                    isToChange: isAccepted || vm.isTermsOfUseAccepted) {
+                    isToChange: isAccepted || vm.isTermsOfUseIsAccepted) {
                         isAccepted = true
                         DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                            vm.isTermsOfUseAccepted = true
+                            vm.isTermsOfUseIsAccepted = true
                             dismiss()
                         }
                     }
                     .padding(.horizontal, 30)
                     .padding(15)
-                    .disabled(vm.isTermsOfUseAccepted)
+                    .disabled(vm.isTermsOfUseIsAccepted)
             }
         }
         .navigationTitle("Terms of Use")
         .navigationBarBackButtonHidden(true)
-//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 BackButtonView() { dismiss() }

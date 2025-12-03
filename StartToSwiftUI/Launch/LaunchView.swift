@@ -12,8 +12,9 @@ struct LaunchView: View {
     let completion: () -> ()
     
     @State private var showLoadingProgress: Bool = false
+//    @State private var showLaunchView: Bool = false
     @State private var counter: Int = 0
-    @State private var loadingString: [String] = "................ loading ................".map { String($0) }
+    @State private var loadingString: [String] = "............. loading ............".map { String($0) }
     
     private let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
     
@@ -22,13 +23,26 @@ struct LaunchView: View {
             Color.launch.background
                 .ignoresSafeArea()
             
-            Image("A_1024x1024_PhosphateInline_tr_text")
-                .resizable()
-                .font(.headline)
-                .fontWeight(.heavy)
-                .frame(width: 200, height: 200)
-                .offset(y: 8)
+//            if showLaunchView {
+                Image("A_1024x1024_PhosphateInline_tr_text")
+                    .resizable()
+                    .font(.headline)
+                    .fontWeight(.heavy)
+                    .frame(width: 200, height: 200)
+                    .offset(y: UIDevice.isiPad ? 0 : 8)
+//                    .opacity(showLaunchView ? 1 : 0)
+//                    .transition(.asymmetric(
+//                        insertion: .move(edge: .leading),
+//                        removal: .move(edge: .bottom)
+//
+////                        insertion: .opacity.animation(.easeInOut),
+////                        removal: .opacity.animation(.easeInOut)
+//                    ))
+//                    .animation(.easeIn, value: showLaunchView)
 
+//            }
+            
+            
             ZStack {
                 if showLoadingProgress {
                     HStack(spacing: 0) {
@@ -38,14 +52,16 @@ struct LaunchView: View {
                         } 
                     }
                     .font(.subheadline)
-                    .fontWeight(.bold)
-                    .transition(AnyTransition.scale.animation(.easeIn))
+                    .transition(.scale.animation(.easeIn))
                 }
             }
             .offset(y: 135)
         }
         .foregroundColor(Color.launch.accent)
         .onAppear {
+//            withAnimation(.easeIn(duration: 3)) {
+//                showLaunchView.toggle()
+//            }
             showLoadingProgress.toggle()
         }
         .onReceive(timer) { _ in
