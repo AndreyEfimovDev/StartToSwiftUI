@@ -9,7 +9,7 @@
 
 ## 📖 Overview
 
-**StartToSwiftUI** is a free educational link aggregator designed to help you organise and manage learning materials for SwiftUI and related technologies. Created from personal learning experience, it provides a structured approach to collecting and accessing programming resources.
+**StartToSwiftUI** is a specialised learning environment for iOS developers designed to help you organise and manage learning materials for SwiftUI and related technologies. Created from personal learning experience, it provides a structured approach to collecting and accessing programming resources.
 
 > **The Story Behind the App**  
 > When I first began learning SwiftUI, I was overwhelmed by the sheer variety of learning resources. I created StartToSwiftUI to solve this—offering both a curated collection of quality materials and a personal space to build your own learning library.
@@ -19,7 +19,7 @@
 ### 🗂️ Personal Library
 - Create and manage your own collection of educational links
 - Add custom notes and categorise resources
-- Edit and organise materials to match your learning style
+- Edit and organise materials matching your learning style
 
 ### 🎯 Curated Collection
 - Access a pre-prepared collection of quality SwiftUI resources
@@ -27,7 +27,7 @@
 - Resources carefully selected for clarity and educational value
 
 ### 🔍 Smart Organisation
-- Categorise resources by topic, difficulty level, post dates
+- Categorise resources by topic, level of study, post dates, etc.
 - Advanced search and filtering capabilities
 - Quick access to your frequently used favourite materials
 
