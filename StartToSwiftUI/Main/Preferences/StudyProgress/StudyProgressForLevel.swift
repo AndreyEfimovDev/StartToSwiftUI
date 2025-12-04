@@ -15,7 +15,8 @@ struct StudyProgressForLevel: View {
     let studyLevel: StudyLevel?
     
     private var postsForStudyLevel: [Post] {
-        vm.allPosts.filter { $0.studyLevel == studyLevel }
+        guard let level = studyLevel else { return vm.allPosts }
+            return vm.allPosts.filter { $0.studyLevel == level }
     }
     
     var body: some View {
@@ -88,7 +89,7 @@ struct StudyProgressForLevel: View {
 #Preview {
         
     NavigationStack {
-        StudyProgressForLevel(studyLevel: .beginner)
+        StudyProgressForLevel(studyLevel: nil)
     }
     .environmentObject(PostsViewModel())
     
