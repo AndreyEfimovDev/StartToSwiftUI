@@ -50,15 +50,18 @@ struct PreferencesView: View {
                     noticeMessages
                 }
                 
-                NavigationLink("Study progress)") {
-                    StudyProgressView()
+                Section(header: sectionHeader("Achievements")) {
+                    
+                    NavigationLink("Study progress") {
+                        StudyProgressView()
+                    }
+                    .customListRowStyle(
+                        iconName: "gauge.open.with.lines.needle.67percent.and.arrowtriangle",
+                        iconWidth: iconWidth
+                    )
                 }
-                .customListRowStyle(
-                    iconName: "hand.thumbsup",
-                    iconWidth: iconWidth
-                )
 
-                Section(header: sectionHeader("Managing materials (\(postsCount))")) {
+                Section(header: sectionHeader("Manage materials (\(postsCount))")) {
                     
                     if !vm.allPosts.filter({ $0.draft == true }).isEmpty {
                         postDrafts
