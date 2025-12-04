@@ -46,21 +46,22 @@ struct HomeView: View {
                 } else {
                     
                     mainViewBody
-                    
-                    if showOnTopButton {
-                        CircleStrokeButtonView(
-                            iconName: "control", // control arrow.up
-                            iconFont: .title,
-                            imageColorPrimary: Color.mycolor.myBlue,
-                            widthIn: 55,
-                            heightIn: 55) {
-                                withAnimation {
-                                    if let firstID = vm.filteredPosts.first?.id {
-                                        proxy.scrollTo(firstID, anchor: .top)
-                                    }
-                                }
-                            }
-                    } // if showButtonOnTop
+                    onTopButton(proxy: proxy)
+                    //
+                    //                    if showOnTopButton {
+                    //                        CircleStrokeButtonView(
+                    //                            iconName: "control", // control arrow.up
+                    //                            iconFont: .title,
+                    //                            imageColorPrimary: Color.mycolor.myBlue,
+                    //                            widthIn: 55,
+                    //                            heightIn: 55) {
+                    //                                withAnimation {
+                    //                                    if let firstID = vm.filteredPosts.first?.id {
+                    //                                        proxy.scrollTo(firstID, anchor: .top)
+                    //                                    }
+                    //                                }
+                    //                            }
+                    //                    } // if showButtonOnTop
                 } // else-if ScrollViewReader
             } // ZStack ScrollViewReader
         } // ScrollViewReader
@@ -260,6 +261,25 @@ struct HomeView: View {
         }
     }
     
+    @ViewBuilder
+    private func onTopButton(proxy: ScrollViewProxy) -> some View {
+        if showOnTopButton {
+            CircleStrokeButtonView(
+                iconName: "control", // control arrow.up
+                iconFont: .title,
+                imageColorPrimary: Color.mycolor.myBlue,
+                widthIn: 55,
+                heightIn: 55) {
+                    withAnimation {
+                        if let firstID = vm.filteredPosts.first?.id {
+                            proxy.scrollTo(firstID, anchor: .top)
+                        }
+                    }
+                }
+        }
+    }
+    
+
     private var allPostsIsEmpty: some View {
         ContentUnavailableView(
             "No Posts",
