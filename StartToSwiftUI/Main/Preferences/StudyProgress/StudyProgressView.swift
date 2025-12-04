@@ -21,31 +21,25 @@ struct StudyProgressView: View {
                 .tabItem {
                     Label("Total", systemImage: "1.circle")
                         .labelStyle(.titleOnly)
-                }
-                .tag(0)
-//                .id("total_\(vm.allPosts.count)")
+                }.tag(0)
             
             StudyProgressForLevel(studyLevel: .beginner)
                 .tabItem {
                     Label("Beginner", systemImage: "2.circle")
                         .labelStyle(.titleOnly)
-                }
-                .tag(1)
-//                .id("beginner_\(vm.allPosts.count)")
+                }.tag(1)
             
             StudyProgressForLevel(studyLevel: .middle)
                 .tabItem {
                     Label("Middle", systemImage: "3.circle")
-                }
-                .tag(2)
-//                .id("middle_\(vm.allPosts.count)")
+                        .labelStyle(.titleOnly)
+                }.tag(2)
             
             StudyProgressForLevel(studyLevel: .advanced)
                 .tabItem {
                     Label("Advanced", systemImage: "4.circle")
-                }
-                .tag(3)
-//                .id("advanced_\(vm.allPosts.count)")
+                        .labelStyle(.titleOnly)
+                }.tag(3)
         }
         .tabViewStyle(.page(indexDisplayMode: .always))
         .indexViewStyle(.page(backgroundDisplayMode: .always))
