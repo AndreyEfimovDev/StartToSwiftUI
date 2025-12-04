@@ -44,27 +44,11 @@ struct HomeView: View {
                 } else if vm.filteredPosts.isEmpty {
                     filteredPostsIsEmpty
                 } else {
-                    
                     mainViewBody
                     onTopButton(proxy: proxy)
-                    //
-                    //                    if showOnTopButton {
-                    //                        CircleStrokeButtonView(
-                    //                            iconName: "control", // control arrow.up
-                    //                            iconFont: .title,
-                    //                            imageColorPrimary: Color.mycolor.myBlue,
-                    //                            widthIn: 55,
-                    //                            heightIn: 55) {
-                    //                                withAnimation {
-                    //                                    if let firstID = vm.filteredPosts.first?.id {
-                    //                                        proxy.scrollTo(firstID, anchor: .top)
-                    //                                    }
-                    //                                }
-                    //                            }
-                    //                    } // if showButtonOnTop
-                } // else-if ScrollViewReader
-            } // ZStack ScrollViewReader
-        } // ScrollViewReader
+                }
+            }
+        }
         .navigationTitle(vm.selectedCategory ?? "No Categoty")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
@@ -115,9 +99,9 @@ struct HomeView: View {
                 if noticevm.isNotificationOn {
                     if  !noticevm.isUserNotified {
                         try? await Task.sleep(nanoseconds: 1_000_000_000)
-                        if noticevm.isSoundNotificationOn {
-                            AudioServicesPlaySystemSound(1013) // 1005
-                        }
+//                        if noticevm.isSoundNotificationOn {
+//                            AudioServicesPlaySystemSound(1013) // 1005
+//                        }
                         noticeButtonAnimation = true
                         try? await Task.sleep(nanoseconds: 1_000_000_000)
                         noticeButtonAnimation = false
