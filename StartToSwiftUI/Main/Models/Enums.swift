@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 
-
 // MARK: Colour scheme
 
 enum Theme: String, CaseIterable, Codable {
@@ -33,6 +32,8 @@ enum Theme: String, CaseIterable, Codable {
     }
 }
 
+// MARK: Sorting option
+
 enum SortOption: String, CaseIterable {
     case newestFirst
     case oldestFirst
@@ -46,7 +47,6 @@ enum SortOption: String, CaseIterable {
         }
     }
 }
-
 
 // MARK: Focusing post fields in AddEditPostView
 
@@ -114,6 +114,22 @@ enum FavoriteChoice: String, CaseIterable, Codable {
 
 }
 
+
+enum PostRating: String, CaseIterable, Codable {
+    case alright
+    case good
+    case excellent
+    
+    var displayName: String {
+        switch self {
+        case .alright: return "Alright"
+        case .good: return "Good"
+        case .excellent: return "Excellent"
+        }
+    }
+
+}
+
 enum StudyLevel: String, CaseIterable, Codable {
     case beginner
     case middle
@@ -132,6 +148,26 @@ enum StudyLevel: String, CaseIterable, Codable {
         case .beginner: return Color.mycolor.myGreen
         case .middle: return Color.mycolor.myBlue
         case .advanced: return Color.mycolor.myRed
+        }
+    }
+}
+
+enum StudyProgress: String, CaseIterable, Codable {
+    case untapped
+    case learning
+    case studied
+    case practiced
+    
+    var displayName: String {
+        switch self {
+        case .untapped:
+            return "New"
+        case .learning:
+            return "Learning"
+        case .studied:
+            return "Studied"
+        case .practiced:
+            return "Practiced"
         }
     }
 }
