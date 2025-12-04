@@ -19,7 +19,9 @@ struct Post: Identifiable, Hashable, Codable {
     var postPlatform: Platform // platform location - website, youtube/video, etc
     var postDate: Date? // date of the post
     var studyLevel: StudyLevel // study level of the post
+    var progress: StudyProgress // progress in learning
     var favoriteChoice: FavoriteChoice // to mark favourite posts
+    var postRating: PostRating? // for rating post
     var notes: String // free text field/notes to enter everything you wish
     let origin: PostOrigin // origin source of the post: local created or downloaded from cloud curated by the developer
     var draft: Bool // draft sign: true - draft, false - not draft
@@ -36,7 +38,9 @@ struct Post: Identifiable, Hashable, Codable {
         postPlatform: Platform = .youtube,
         postDate: Date? = nil,
         studyLevel: StudyLevel = .beginner,
+        progress: StudyProgress = .untapped,
         favoriteChoice: FavoriteChoice = .no,
+        postRating: PostRating? = nil,
         notes: String = "",
         origin: PostOrigin = .cloud,
         draft: Bool = false,
@@ -52,7 +56,9 @@ struct Post: Identifiable, Hashable, Codable {
         self.postPlatform = postPlatform
         self.postDate = postDate
         self.studyLevel = studyLevel
+        self.progress = progress
         self.favoriteChoice = favoriteChoice
+        self.postRating = postRating
         self.notes = notes
         self.origin = origin
         self.draft = draft

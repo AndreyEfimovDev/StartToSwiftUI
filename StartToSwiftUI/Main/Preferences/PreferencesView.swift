@@ -43,13 +43,21 @@ struct PreferencesView: View {
                 Section(header: sectionHeader("Appearance")) {
                     themeAppearence
                 }
-                
+                                
                 Section(header: sectionHeader("Notifications")) {
                     notificationToggle
                     soundNotificationToggle
                     noticeMessages
                 }
                 
+                NavigationLink("Study progress)") {
+                    StudyProgressView()
+                }
+                .customListRowStyle(
+                    iconName: "hand.thumbsup",
+                    iconWidth: iconWidth
+                )
+
                 Section(header: sectionHeader("Managing materials (\(postsCount))")) {
                     
                     if !vm.allPosts.filter({ $0.draft == true }).isEmpty {
