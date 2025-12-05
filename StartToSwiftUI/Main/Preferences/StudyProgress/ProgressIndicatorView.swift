@@ -1,0 +1,134 @@
+//
+//  ProgressIndicatorView.swift
+//  StartToSwiftUI
+//
+//  Created by Andrey Efimov on 04.12.2025.
+//
+
+import SwiftUI
+
+struct ProgressIndicator: View {
+    
+    @State private var trim: Double = 0
+    @State private var isAppear: Bool = false
+
+    var progress: Double = 0
+    var lineWidth: Double = 10.0
+    var opacity: Double = 0.3
+
+    var body: some View {
+        ZStack(alignment: .center) {
+            
+            Circle()
+                .stroke(lineWidth: lineWidth)
+                .foregroundStyle(Color.secondary)
+                .opacity(opacity)
+            
+            Circle()
+                .trim(from: 0, to: trim)
+                .stroke(style: StrokeStyle(
+                    lineWidth: lineWidth,
+                    lineCap: .round,
+                    lineJoin: .round))
+                .foregroundColor(Color.blue)
+                .rotationEffect(.degrees(-90))
+                .animation(.linear(duration: 1), value: trim)
+
+            HStack(alignment: .lastTextBaseline, spacing: 0) {
+                Text("\(Int(trim * 100))")
+                    .font(.title)
+                
+                Text("%")
+                    .font(.caption2)
+            }
+            .bold()
+            .foregroundStyle(trim == 100 ? Color.orange : Color.blue)
+            .opacity(isAppear ? 1 : 0)
+            .animation(.bouncy(duration: 1), value: isAppear)
+
+        }
+        .onAppear {
+                isAppear.toggle()
+                trim = progress
+        }
+    }
+}
+
+fileprivate
+struct ProgressViewCircleTrimPreview: View {
+    
+    @State var proportion: Double = 0.9
+    @State var titles: [String] = ["Untapped", "Learning", "Studied", "Practiced"] // virgin untapped untouched
+    @State var posts: [PostForTest] = [
+        .init(title: "Title 1", progress: .untapped),
+        .init(title: "Title 2", progress: .untapped),
+        .init(title: "Title 3", progress: .learning),
+        .init(title: "Title 4", progress: .learning),
+        .init(title: "Title 5", progress: .learning),
+        .init(title: "Title 6", progress: .studied),
+        .init(title: "Title 7", progress: .studied),
+        .init(title: "Title 8", progress: .practiced),
+        .init(title: "Title 9", progress: .untapped),
+    ]
+    
+    var body: some View {
+        
+        VStack (spacing: 0) {
+            
+            Text("Progress")
+                .font(.largeTitle)
+
+            Text("Study level")
+                .font(.body)
+//                .foregroundStyle(.foregroundStyle(post.studyLevel.color))
+                .foregroundStyle(.green)
+
+            ForEach(StudyProgress.allCases, id: \.self) { level in
+                HStack {
+                    let postCountForLevel = Double(posts.filter( {$0.progress == level}).count)
+                    let progress = postCountForLevel/Double(posts.count)
+                    
+                    Text(level.displayName + ":")
+                        .font(.title)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .padding(.trailing)
+                    Spacer()
+                    ProgressIndicator(progress: progress)
+                }
+                .padding(.vertical)
+                .padding(.trailing, 30)
+                .background(.ultraThinMaterial)
+                .clipShape(
+                    RoundedRectangle(cornerRadius: 30)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 30)
+                        .stroke(.blue, lineWidth: 1)
+                )
+                .padding(8)
+            }
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+        .bold()
+    }
+}
+
+
+struct PostForTest: Identifiable {
+    let id = UUID().uuidString
+    let title: String
+    let progress: StudyProgress
+
+    init(
+        title: String,
+        progress: StudyProgress
+    ) {
+        self.title = title
+        self.progress = progress
+    }
+}
+
+
+#Preview {
+    ProgressViewCircleTrimPreview()
+}
