@@ -106,9 +106,9 @@ struct StartToSwiftUIApp: App {
                 } else {
                     // iPhone - NavigationStack (portrait only)
                     NavigationStack{
-                        if let selectedCategory = vm.selectedCategory {
-                            HomeView(selectedCategory: selectedCategory)
-                        }
+//                        if let selectedCategory = vm.selectedCategory {
+                        HomeView(selectedCategory: vm.selectedCategory)
+//                        }
                     }
                 }
             }

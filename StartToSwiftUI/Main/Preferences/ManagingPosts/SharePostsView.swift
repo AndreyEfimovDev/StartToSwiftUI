@@ -26,7 +26,7 @@ struct SharePostsView: View {
                 .textFormater()
             
             CapsuleButtonView(
-                primaryTitle: "Perform",
+                primaryTitle: "Share/Store",
                 secondaryTitle: "Completed",
                 isToChange: isShareCompleted
             ) {

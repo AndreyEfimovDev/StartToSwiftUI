@@ -66,6 +66,8 @@ class PostsViewModel: ObservableObject {
 
     
     // Setting filters
+    @Published var selectedCategory: String? = nil {
+        didSet { storedCategory = selectedCategory }}
     @Published var selectedLevel: StudyLevel? = nil {
         didSet { storedLevel = selectedLevel }}
     @Published var selectedFavorite: FavoriteChoice? = nil {
@@ -74,11 +76,6 @@ class PostsViewModel: ObservableObject {
         didSet { storedType = selectedType }}
     @Published var selectedYear: String? = nil {
         didSet { storedYear = selectedYear }}
-    @Published var selectedCategory: String? = nil {
-        didSet {
-            storedCategory = selectedCategory
-        }
-    }
     @Published var selectedSortOption: SortOption? = nil {
         didSet { storedSortOption = selectedSortOption }}
     @Published var selectedPostId: String? = nil
@@ -102,14 +99,6 @@ class PostsViewModel: ObservableObject {
                     case .success(let posts):
                         self?.allPosts = posts
                         print("🍓 VM(init): Successfully loaded \(posts.count) posts")
-                        print("🍓🍓🍓 VM(init): Check for posts update")
-//                        self?.checkCloudForUpdates { hasUpdates in
-//                            if hasUpdates {
-//                                self?.isPostsUpdateAvailable = true
-//                                print(self?.isPostsUpdateAvailable.description ?? "")
-//                            }
-//                            print("🍓☑️ VM(init): Afer check for posts update - NO UPDATES")
-//                        }
                     case .failure(let error):
                         self?.errorMessage = error.localizedDescription
                         self?.showErrorMessageAlert = true
@@ -128,14 +117,15 @@ class PostsViewModel: ObservableObject {
         // Filters initilazation
         print("🍓 storedCategory is: \(String(describing: storedCategory?.description))")
 
-        if let category = self.storedCategory {
-            self.selectedCategory = category
-            print("🍓 storedCategory is NOT NIL, selectedCategory: \(String(describing: selectedCategory?.description))")
-        } else {
-            self.selectedCategory = self.mainCategory
-            print("🍓 storedCategory is NIL, selectedCategory: \(String(describing: selectedCategory?.description))")
-
-        }
+//        if let category = self.storedCategory {
+//            self.selectedCategory = category
+//            print("🍓 storedCategory is NOT NIL, selectedCategory: \(String(describing: selectedCategory?.description))")
+//        } else {
+//            self.selectedCategory = self.mainCategory
+//            print("🍓 storedCategory is NIL, selectedCategory: \(String(describing: selectedCategory?.description))")
+//
+//        }
+        self.selectedCategory = self.storedCategory
         self.selectedLevel = self.storedLevel
         self.selectedFavorite = self.storedFavorite
         self.selectedType = self.storedType
@@ -165,9 +155,9 @@ class PostsViewModel: ObservableObject {
             .combineLatest($selectedFavorite, $selectedType, $selectedYear)
 
         let filtersWithCategoryAndSort = filters
-            .combineLatest($selectedCategory, $selectedSortOption)
-            .map { filters, category, sortOption -> (filters: (StudyLevel?, FavoriteChoice?, PostType?, String?), category: String?, sortOption: SortOption?) in
-                return (filters, category, sortOption)
+            .combineLatest(/*$selectedCategory, */$selectedSortOption)
+            .map { filters, /*category, */sortOption -> (filters: (StudyLevel?, FavoriteChoice?, PostType?, String?), /*category: String?,*/ sortOption: SortOption?) in
+                return (filters, /*category,*/ sortOption)
             }
 
         let debouncedSearchText = $searchText
@@ -176,12 +166,12 @@ class PostsViewModel: ObservableObject {
         $allPosts
             .combineLatest(debouncedSearchText, filtersWithCategoryAndSort)
             .map { posts, searchText, data -> [Post] in
-                let (filters, category, sortOption) = data
+                let (filters, /*category, */sortOption) = data
                 let (level, favorite, type, year) = filters
                 
                 let filtered = self.filterPosts(
                     allPosts: posts,
-                    category: category,
+//                    category: category,
                     level: level,
                     favorite: favorite,
                     type: type,
@@ -200,7 +190,7 @@ class PostsViewModel: ObservableObject {
         
     private func filterPosts(
         allPosts: [Post],
-        category: String?,
+//        category: String?,
         level: StudyLevel?,
         favorite: FavoriteChoice?,
         type: PostType?,
@@ -222,11 +212,11 @@ class PostsViewModel: ObservableObject {
                 return matchesLevel && matchesFavorite && matchesType && matchesYear
             }
             
-            if let category = category {
-                return filteredPosts.filter { $0.category == category }
-            } else {
+//            if let category = category {
+//                return filteredPosts.filter { $0.category == category }
+//            } else {
                 return filteredPosts
-            }
+//            }
             
         }
     
@@ -574,7 +564,8 @@ class PostsViewModel: ObservableObject {
     ///
     func checkIfAllFiltersAreEmpty() -> Bool {
         // check if all filters are empty
-        if selectedLevel == nil &&
+        if /*selectedCategory == nil &&*/
+            selectedLevel == nil &&
             selectedFavorite == nil &&
             selectedType == nil &&
             selectedYear == nil &&
@@ -619,7 +610,7 @@ class PostsViewModel: ObservableObject {
         
         let result = Array(Set(allPosts.map { $0.category })).sorted()
         print("🍓 VM(getAllCategories): Categories' list: \(result)")
-        return result
+        return result.isEmpty ? nil : result
     }
     
     
@@ -628,107 +619,3 @@ class PostsViewModel: ObservableObject {
     }
     
 }
-
-
-
-//        print("VM(init): start the TEST testDetailedDecoding()")
-//        testDetailedDecoding()
-//        print("VM(init): end the TEST testDetailedDecoding()")
-//
-//        print("VM(init): start the TEST validateJSONFile()")
-//        validateJSONFile()
-//        print("VM(init): end the TEST validateJSONFile()")
-
-
-
-
-//    func testDetailedDecoding() {
-//        let testJSON = """
-//        [
-//          {
-//            "postType" : "post",
-//            "notes" : "",
-//            "title" : "Styling SwiftUI Text Views",
-//            "urlString" : "https://www.youtube.com/watch?v=rbtIcKKxQ38",
-//            "category" : "SwiftUI",
-//            "postPlatform" : "youtube",
-//            "favoriteChoice" : "no",
-//            "origin" : "cloud",
-//            "postDate" : "2021-05-07T00:00:00Z",
-//            "intro" : "Test intro",
-//            "author" : "Stewart Lynch",
-//            "studyLevel" : "middle",
-//            "date" : "2025-11-08T13:45:07Z",
-//            "id" : "F9E12A88-0E62-402D-B6AD-1A1F895F5421"
-//          }
-//        ]
-//        """
-//
-//        do {
-//            let data = testJSON.data(using: .utf8)!
-//            print("🍓 JSON data length: \(data.count) bytes")
-//
-//            // Try decode as generil type
-//            let anyObject = try JSONSerialization.jsonObject(with: data, options: [])
-//            print("✅ JSONSerialization success: \(anyObject)")
-//
-//            // Try decode as generil type [Post]
-//            let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
-//            print("✅ Post decoding SUCCESS: \(posts.count) posts")
-//
-//        } catch {
-//            print("❌ FAILED: \(error)")
-//
-//            // Detailed information about the decoding error
-//            if let decodingError = error as? DecodingError {
-//                switch decodingError {
-//                case .typeMismatch(let type, let context):
-//                    print("🔍 Type mismatch:")
-//                    print("   - Expected type: \(type)")
-//                    print("   - Coding path: \(context.codingPath)")
-//                    print("   - Debug: \(context.debugDescription)")
-//                case .valueNotFound(let type, let context):
-//                    print("🔍 Value not found:")
-//                    print("   - Type: \(type)")
-//                    print("   - Coding path: \(context.codingPath)")
-//                case .keyNotFound(let key, let context):
-//                    print("🔍 Key not found:")
-//                    print("   - Missing key: \(key)")
-//                    print("   - Coding path: \(context.codingPath)")
-//                    print("   - Available keys in container")
-//                case .dataCorrupted(let context):
-//                    print("🔍 Data corrupted:")
-//                    print("   - Context: \(context)")
-//                    if let underlyingError = context.underlyingError {
-//                        print("   - Underlying error: \(underlyingError)")
-//                    }
-//                @unknown default:
-//                    print("🔍 Unknown decoding error")
-//                }
-//            }
-//        }
-//    }
-//
-//
-//    func validateJSONFile() {
-//
-//        if let url = Bundle.main.url(forResource: "cloudPosts", withExtension: "json"),
-//           let data = try? Data(contentsOf: url) {
-//
-//            print("📁 File exists, size: \(data.count) bytes")
-//
-//            if let jsonString = String(data: data, encoding: .utf8) {
-//                print("📄 File content: \(jsonString.prefix(200))...")
-//            }
-//
-//            do {
-//                let posts = try JSONDecoder.appDecoder.decode([Post].self, from: data)
-//                print("✅ Local file decoding SUCCESS: \(posts.count) posts")
-//            } catch {
-//                print("❌ Local file decoding FAILED: \(error)")
-//            }
-//        } else {
-//            print("❌ JSON file not found")
-//        }
-//    }
-
