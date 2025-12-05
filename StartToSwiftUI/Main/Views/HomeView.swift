@@ -18,7 +18,7 @@ struct HomeView: View {
 
     private let hapticManager = HapticService.shared
     
-    let selectedCategory: String
+    let selectedCategory: String?
     
     @State private var selectedPost: Post?
     @State private var selectedPostToDelete: Post?
@@ -33,6 +33,13 @@ struct HomeView: View {
     @State private var isShowingDeleteConfirmation: Bool = false
     
     @State private var noticeButtonAnimation = false
+    
+    private func postsForCategory(_ category: String?) -> [Post] {
+        guard let category = category else {
+            return vm.filteredPosts
+        }
+        return vm.filteredPosts.filter { $0.category == category }
+    }
     
     // MARK: VIEW BODY
     
@@ -49,7 +56,7 @@ struct HomeView: View {
                 }
             }
         }
-        .navigationTitle(vm.selectedCategory ?? "No Categoty")
+        .navigationTitle(vm.selectedCategory ?? "All Categories")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -116,7 +123,7 @@ struct HomeView: View {
     
     private var mainViewBody: some View {
         List {
-            ForEach(vm.filteredPosts.filter({ $0.category == selectedCategory})) { post in
+            ForEach(postsForCategory(selectedCategory)) { post in
                 PostRowView(post: post)
                     .id(post.id)
                     .background(trackingFistPostInList(post: post))

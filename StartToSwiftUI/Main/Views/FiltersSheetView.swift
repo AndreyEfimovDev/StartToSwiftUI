@@ -177,20 +177,22 @@ struct FiltersSheetView: View {
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            if let list = vm.allCategories {
-                CustomOneCapsulesLineSegmentedPicker(
-                    selection: $vm.selectedCategory,
-                    allItems: list,
-                    titleForCase: { $0 },
-                    selectedFont: selectedFont,
-                    selectedTextColor: Color.mycolor.myBackground,
-                    unselectedTextColor: Color.mycolor.myAccent,
-                    selectedBackground: Color.mycolor.myButtonBGBlue,
-                    unselectedBackground: .clear,
-                    showNilOption: true,
-                    nilTitle: "All"
-                )
-            }
+            CategoryFilterView()
+            
+//            if let list = vm.allCategories {
+//                CustomOneCapsulesLineSegmentedPicker(
+//                    selection: $vm.selectedCategory,
+//                    allItems: list,
+//                    titleForCase: { $0 },
+//                    selectedFont: selectedFont,
+//                    selectedTextColor: Color.mycolor.myBackground,
+//                    unselectedTextColor: Color.mycolor.myAccent,
+//                    selectedBackground: Color.mycolor.myButtonBGBlue,
+//                    unselectedBackground: .clear,
+//                    showNilOption: true,
+//                    nilTitle: "All"
+//                )
+//            }
         }
     }
     

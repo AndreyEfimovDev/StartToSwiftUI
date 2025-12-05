@@ -31,7 +31,17 @@ class SpeechRecogniser: NSObject, ObservableObject {
     }
     
     deinit {
-        stopRecording()
+        
+        silenceTimer?.invalidate()
+        recognitionTask?.cancel()
+        
+        if audioEngine.isRunning {
+            audioEngine.stop()
+            audioEngine.inputNode.removeTap(onBus: 0)
+        }
+        
+        print("SpeechRecogniser deinitialized")
+
     }
     
     
@@ -211,9 +221,10 @@ class SpeechRecogniser: NSObject, ObservableObject {
         
         // Stopp the timer silenceTimer in the main thread
         DispatchQueue.main.async { [weak self] in
-               self?.silenceTimer?.invalidate()
-               self?.silenceTimer = nil
-           }
+            self?.silenceTimer?.invalidate()
+            self?.silenceTimer = nil
+            self?.isRecording = false
+        }
                 
         recognitionTask?.cancel()
         recognitionTask = nil
@@ -231,9 +242,9 @@ class SpeechRecogniser: NSObject, ObservableObject {
             print("Error deactivating audio session: \(error)")
         }
         
-        DispatchQueue.main.async {
-            self.isRecording = false
-        }
+//        DispatchQueue.main.async {
+//            self.isRecording = false
+//        }
     }
     
 }
