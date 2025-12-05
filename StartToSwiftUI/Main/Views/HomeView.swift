@@ -18,7 +18,7 @@ struct HomeView: View {
 
     private let hapticManager = HapticService.shared
     
-    let selectedCategory: String
+    let selectedCategory: String?
     
     @State private var selectedPost: Post?
     @State private var selectedPostToDelete: Post?
@@ -34,6 +34,13 @@ struct HomeView: View {
     
     @State private var noticeButtonAnimation = false
     
+    private func postsForCategory(_ category: String?) -> [Post] {
+        guard let category = category else {
+            return vm.filteredPosts
+        }
+        return vm.filteredPosts.filter { $0.category == category }
+    }
+    
     // MARK: VIEW BODY
     
     var body: some View {
@@ -44,27 +51,12 @@ struct HomeView: View {
                 } else if vm.filteredPosts.isEmpty {
                     filteredPostsIsEmpty
                 } else {
-                    
                     mainViewBody
-                    
-                    if showOnTopButton {
-                        CircleStrokeButtonView(
-                            iconName: "control", // control arrow.up
-                            iconFont: .title,
-                            imageColorPrimary: Color.mycolor.myBlue,
-                            widthIn: 55,
-                            heightIn: 55) {
-                                withAnimation {
-                                    if let firstID = vm.filteredPosts.first?.id {
-                                        proxy.scrollTo(firstID, anchor: .top)
-                                    }
-                                }
-                            }
-                    } // if showButtonOnTop
-                } // else-if ScrollViewReader
-            } // ZStack ScrollViewReader
-        } // ScrollViewReader
-        .navigationTitle(vm.selectedCategory ?? "No Categoty")
+                    onTopButton(proxy: proxy)
+                }
+            }
+        }
+        .navigationTitle(vm.selectedCategory ?? "SwiftUI") // All Categories
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -102,10 +94,15 @@ struct HomeView: View {
             FiltersSheetView(
                 isFilterButtonPressed: $isFilterButtonPressed
             )
-            .presentationBackground(.clear)
+            .presentationBackground(.ultraThinMaterial)
             .presentationDetents([.height(600)])
             .presentationDragIndicator(.visible)
             .presentationCornerRadius(30)
+//            .presentationBackground(
+//                .ultraThinMaterial  // Ваш цвет фона
+////                        .ignoresSafeArea()
+//                )
+//            .interactiveDismissDisabled()
         }
         .task {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
@@ -114,9 +111,9 @@ struct HomeView: View {
                 if noticevm.isNotificationOn {
                     if  !noticevm.isUserNotified {
                         try? await Task.sleep(nanoseconds: 1_000_000_000)
-                        if noticevm.isSoundNotificationOn {
-                            AudioServicesPlaySystemSound(1013) // 1005
-                        }
+//                        if noticevm.isSoundNotificationOn {
+//                            AudioServicesPlaySystemSound(1013) // 1005
+//                        }
                         noticeButtonAnimation = true
                         try? await Task.sleep(nanoseconds: 1_000_000_000)
                         noticeButtonAnimation = false
@@ -131,7 +128,7 @@ struct HomeView: View {
     
     private var mainViewBody: some View {
         List {
-            ForEach(vm.filteredPosts.filter({ $0.category == selectedCategory})) { post in
+            ForEach(postsForCategory(selectedCategory)) { post in
                 PostRowView(post: post)
                     .id(post.id)
                     .background(trackingFistPostInList(post: post))
@@ -260,6 +257,25 @@ struct HomeView: View {
         }
     }
     
+    @ViewBuilder
+    private func onTopButton(proxy: ScrollViewProxy) -> some View {
+        if showOnTopButton {
+            CircleStrokeButtonView(
+                iconName: "control", // control arrow.up
+                iconFont: .title,
+                imageColorPrimary: Color.mycolor.myBlue,
+                widthIn: 55,
+                heightIn: 55) {
+                    withAnimation {
+                        if let firstID = vm.filteredPosts.first?.id {
+                            proxy.scrollTo(firstID, anchor: .top)
+                        }
+                    }
+                }
+        }
+    }
+    
+
     private var allPostsIsEmpty: some View {
         ContentUnavailableView(
             "No Posts",

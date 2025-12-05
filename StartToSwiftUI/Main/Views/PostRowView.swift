@@ -62,19 +62,21 @@ struct PostRowView: View {
     private var level: some View {
         
         HStack {
-            Text(post.studyLevel.rawValue.capitalized + " level")
+            Text(post.studyLevel.displayName.capitalized + " level")
                 .font(.body)
-                .fontWeight(.medium)
                 .foregroundStyle(post.studyLevel.color)
             Spacer()
             
-            if post.draft == true {
-                Image(systemName: "square.stack.3d.up")
-                    .font(.caption2)
-                    .foregroundStyle(Color.mycolor.mySecondaryText)
-            }
-            
             Group {
+                if post.favoriteChoice == .yes {
+                    Image(systemName: "heart.fill")
+                        .foregroundStyle(Color.mycolor.myYellow)
+                }
+                
+                if post.draft {
+                    Image(systemName: "square.stack.3d.up")
+                }
+                
                 switch post.origin {
                 case .cloud:
                     post.origin.icon
@@ -84,13 +86,10 @@ struct PostRowView: View {
                     EmptyView()
                 }
             }
-            .font(.caption2)
+            .font(.caption)
             .foregroundStyle(Color.mycolor.mySecondaryText)
-                        
-            Image(systemName: post.favoriteChoice == .yes ? "heart.fill" : "heart")
-                .font(.caption2)
-                .foregroundStyle(post.favoriteChoice == .yes ? Color.mycolor.myYellow : Color.mycolor.mySecondaryText)
         }
+        .fontWeight(.medium)
     }
     
 }
