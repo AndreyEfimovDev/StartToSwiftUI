@@ -54,7 +54,6 @@ struct PostDetailsView: View {
                         )
                     goToTheSourceButton(for: validPost)
                         .padding(.top, 30)
-
                         .padding(.horizontal, 50)
 
                     notesToPost(for: validPost)
@@ -134,12 +133,11 @@ struct PostDetailsView: View {
                 
                 HStack {
                     
-                    if post.draft == true {
-                        Image(systemName: "square.stack.3d.up")
-                            .font(.caption2)
-                            .foregroundStyle(Color.mycolor.mySecondaryText)
-                    }
                     Group {
+                        if post.draft == true {
+                            Image(systemName: "square.stack.3d.up")
+                        }
+                        
                         switch post.origin {
                         case .cloud:
                             post.origin.icon
@@ -149,16 +147,14 @@ struct PostDetailsView: View {
                             EmptyView()
                         }
                     }
-                    .font(.caption2)
+                    .font(.caption)
                     .foregroundStyle(Color.mycolor.mySecondaryText)
 
                     Text("@" + post.author)
                         .font(.body)
-                        .font(.caption)
                     
-                    Text("\(post.category)")
-                        .font(.caption)
-
+//                    Text("\(post.category)")
+//                        .font(.caption)
                 }
                 .frame(maxWidth: .infinity)
                 
@@ -170,7 +166,7 @@ struct PostDetailsView: View {
 //                        .frame(maxWidth: .infinity)
 //                }
 //                
-                Text(post.studyLevel.rawValue.capitalized + " level")
+                Text(post.studyLevel.displayName.capitalized + " level")
                     .font(.body)
                     .fontWeight(.medium)
                     .foregroundStyle(post.studyLevel.color)
