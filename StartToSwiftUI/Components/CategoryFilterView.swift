@@ -18,7 +18,11 @@ struct CategoryFilterView: View {
                 Button("All") {
                     vm.selectedCategory = nil
                 }
-                .buttonStyle(CategoryButtonStyle(isSelected: vm.selectedCategory == nil))
+                .buttonStyle(
+                    CategoryButtonStyle(
+                        isSelected: vm.selectedCategory == nil
+                    )
+                )
                 
                 if let categories = vm.allCategories {
                     ForEach(categories, id: \.self) { category in
