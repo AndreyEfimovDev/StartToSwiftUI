@@ -23,43 +23,34 @@ struct FiltersSheetView: View {
     // MARK: MAIN VIEW
     
     var body: some View {
-        
-        ZStack {
-//            Color.clear
-//            .ignoresSafeArea()
+        VStack (alignment: .leading) {
+            Text("Filters")
+                .font(.largeTitle)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.top, 55)
+            //                categoryFilter
+            studyLevelFilter
+            favoriteFilter
+            typeFilter
+            yearFilter
+            //                sortOptions
             
-            ScrollView {
-                VStack (alignment: .leading) {
-                    Text("Filters")
-                        .font(.largeTitle)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.top, 55)
-                    //                categoryFilter
-                    studyLevelFilter
-                    favoriteFilter
-                    typeFilter
-                    yearFilter
-                    //                sortOptions
-                    
-                    Spacer()
-                    
-                    applyFiltersButton
-                    resetAllFiltersButton
-                    resetAllFiltersAndExitButton
-                        .padding(.bottom, 30)
-                }
-                .foregroundStyle(Color.mycolor.myAccent)
-                .padding(.top, -40)
-                .padding(.horizontal)
-//                .background(.ultraThinMaterial)
-                .onDisappear {
-                    vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                    isFilterButtonPressed = false
-                } // VStack
-            } // ScrollView
-            .scrollIndicators(.hidden)
+            Spacer()
+            
+            applyFiltersButton
+            resetAllFiltersButton
+            resetAllFiltersAndExitButton
+                .padding(.bottom, 30)
         }
-    }
+        .foregroundStyle(Color.mycolor.myAccent)
+        .padding(.top, -40)
+        .padding(.horizontal)
+        .onDisappear {
+            vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
+            isFilterButtonPressed = false
+        }
+    } // VStack
+    
     // MARK: Subviews
     
     private var sortOptions: some View {
@@ -241,7 +232,7 @@ struct FiltersSheetView: View {
             }
             .padding(.horizontal, 55)
     }
-
+    
 }
 
 fileprivate struct FiltersSheetPreview: View {
