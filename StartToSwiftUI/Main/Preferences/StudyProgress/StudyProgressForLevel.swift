@@ -15,8 +15,10 @@ struct StudyProgressForLevel: View {
     let studyLevel: StudyLevel?
     
     private var postsForStudyLevel: [Post] {
-        guard let level = studyLevel else { return vm.allPosts }
+        if let level = studyLevel {
             return vm.allPosts.filter { $0.studyLevel == level }
+        }
+        return vm.allPosts
     }
     
     var body: some View {
