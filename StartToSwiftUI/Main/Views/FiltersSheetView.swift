@@ -24,38 +24,41 @@ struct FiltersSheetView: View {
     
     var body: some View {
         
-        ScrollView {
-            VStack (alignment: .leading) {
-                Text("Filters")
-                    .font(.largeTitle)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.top, 55)
-                categoryFilter
-                    .opacity(vm.allCategories == nil ? 0 : 1)
-                studyLevelFilter
-                favoriteFilter
-                typeFilter
-                yearFilter
-                    .opacity(vm.allYears == nil ? 0 : 1)
-                sortOptions
-                
-                Spacer()
-                
-                applyFiltersButton
-                resetAllFiltersButton
-                resetAllFiltersAndExitButton
-                    .padding(.bottom, 30)
-            }
-            .foregroundStyle(Color.mycolor.myAccent)
-            .padding(.top, -40)
-            .padding(.horizontal)
-            .background(Color.mycolor.myBackground)
-            .onDisappear {
-                vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                isFilterButtonPressed = false
-            } // VStack
-        } // ScrollView
-        .scrollIndicators(.hidden)
+        ZStack {
+//            Color.clear
+//            .ignoresSafeArea()
+            
+            ScrollView {
+                VStack (alignment: .leading) {
+                    Text("Filters")
+                        .font(.largeTitle)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.top, 55)
+                    //                categoryFilter
+                    studyLevelFilter
+                    favoriteFilter
+                    typeFilter
+                    yearFilter
+                    //                sortOptions
+                    
+                    Spacer()
+                    
+                    applyFiltersButton
+                    resetAllFiltersButton
+                    resetAllFiltersAndExitButton
+                        .padding(.bottom, 30)
+                }
+                .foregroundStyle(Color.mycolor.myAccent)
+                .padding(.top, -40)
+                .padding(.horizontal)
+//                .background(.ultraThinMaterial)
+                .onDisappear {
+                    vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
+                    isFilterButtonPressed = false
+                } // VStack
+            } // ScrollView
+            .scrollIndicators(.hidden)
+        }
     }
     // MARK: Subviews
     
@@ -147,55 +150,56 @@ struct FiltersSheetView: View {
     }
     
     private var yearFilter: some View {
-        VStack(alignment: .leading) {
-            Text("Year:")
-                .font(.footnote)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
+        Group {
             if let list = vm.allYears {
-                CustomOneCapsulesLineSegmentedPicker(
-                    selection: $vm.selectedYear,
-                    allItems: list,
-                    titleForCase: { $0 },
-                    selectedFont: selectedFont,
-                    selectedTextColor: Color.mycolor.myBackground,
-                    unselectedTextColor: Color.mycolor.myAccent,
-                    selectedBackground: Color.mycolor.myBlue,
-                    unselectedBackground: .clear,
-                    showNilOption: true,
-                    nilTitle: "All"
-                )
+                VStack(alignment: .leading) {
+                    Text("Year:")
+                        .font(.footnote)
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    CustomOneCapsulesLineSegmentedPicker(
+                        selection: $vm.selectedYear,
+                        allItems: list,
+                        titleForCase: { $0 },
+                        selectedFont: selectedFont,
+                        selectedTextColor: Color.mycolor.myBackground,
+                        unselectedTextColor: Color.mycolor.myAccent,
+                        selectedBackground: Color.mycolor.myBlue,
+                        unselectedBackground: .clear,
+                        showNilOption: true,
+                        nilTitle: "All"
+                    )
+                }
             }
         }
     }
     
     private var categoryFilter: some View {
-        VStack(alignment: .leading) {
-            Text("Category:")
-                .font(.footnote)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
-            CategoryFilterView()
-            
-//            if let list = vm.allCategories {
-//                CustomOneCapsulesLineSegmentedPicker(
-//                    selection: $vm.selectedCategory,
-//                    allItems: list,
-//                    titleForCase: { $0 },
-//                    selectedFont: selectedFont,
-//                    selectedTextColor: Color.mycolor.myBackground,
-//                    unselectedTextColor: Color.mycolor.myAccent,
-//                    selectedBackground: Color.mycolor.myButtonBGBlue,
-//                    unselectedBackground: .clear,
-//                    showNilOption: true,
-//                    nilTitle: "All"
-//                )
-//            }
+        Group {
+            if let list = vm.allCategories {
+                VStack(alignment: .leading) {
+                    Text("Category:")
+                        .font(.footnote)
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    CustomOneCapsulesLineSegmentedPicker(
+                        selection: $vm.selectedCategory,
+                        allItems: list,
+                        titleForCase: { $0 },
+                        selectedFont: selectedFont,
+                        selectedTextColor: Color.mycolor.myBackground,
+                        unselectedTextColor: Color.mycolor.myAccent,
+                        selectedBackground: Color.mycolor.myButtonBGBlue,
+                        unselectedBackground: .clear,
+                        showNilOption: true,
+                        nilTitle: "All"
+                    )
+                }
+            }
         }
     }
-    
     
     private var applyFiltersButton: some View {
         
@@ -237,19 +241,6 @@ struct FiltersSheetView: View {
             }
             .padding(.horizontal, 55)
     }
-    
-    //    private var drugHundler: some View {
-    //        Capsule()
-    //            .fill(Color.mycolor.myBackground)
-    //            .overlay(
-    //                Capsule()
-    //                    .stroke(Color.mycolor.myAccent.opacity(0.5), lineWidth: 1)
-    //            )
-    //            .frame(width: 100, height: 3)
-    //            .frame(height: 30, alignment: .top)
-    //            .padding(.top, 10)
-    //            .padding(.bottom, 15)
-    //    }
 
 }
 

@@ -40,16 +40,6 @@ struct PreferencesView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section(header: sectionHeader("Appearance")) {
-                    themeAppearence
-                }
-                                
-                Section(header: sectionHeader("Notifications")) {
-                    notificationToggle
-                    soundNotificationToggle
-                    noticeMessages
-                }
-                
                 Section(header: sectionHeader("Achievements")) {
                     
                     NavigationLink("Study progress") {
@@ -57,25 +47,34 @@ struct PreferencesView: View {
                     }
                     .customListRowStyle(
                         iconName: "gauge.open.with.lines.needle.67percent.and.arrowtriangle",
-                        iconWidth: iconWidth
-                    )
+                        iconWidth: iconWidth)
                 }
-
+                
+//                if UIDevice.isiPhone {
+//                    Section(header: sectionHeader("Selected category")) {
+//                        selectedCategory
+//                    }
+//                }
+                
                 Section(header: sectionHeader("Manage materials (\(postsCount))")) {
-                    
-                    if !vm.allPosts.filter({ $0.draft == true }).isEmpty {
-                        postDrafts
-                    }
-                    
-                    if (!vm.allPosts.isEmpty) && vm.isFirstImportPostsCompleted {
-                        checkForPostsUpdate
-                    }
-                    
+                    postDrafts
+                    checkForPostsUpdate
                     importFromCloud
                     shareBackup
                     restoreBackup
                     erasePosts
                 }
+                                                
+                Section(header: sectionHeader("Notifications")) {
+                    notificationToggle
+                    soundNotificationToggle
+                    noticeMessages
+                }
+                
+                Section(header: sectionHeader("Appearance")) {
+                    themeAppearence
+                }
+                
                 Section(header: sectionHeader("Сommunication")){
                     acknowledgements
                     aboutApplication
@@ -104,6 +103,24 @@ struct PreferencesView: View {
             .foregroundStyle(Color.mycolor.myAccent)
     }
     
+    private var selectedCategory: some View {
+        Group {
+            if let list = vm.allCategories {
+                CustomOneCapsulesLineSegmentedPicker(
+                    selection: $vm.selectedCategory,
+                    allItems: list,
+                    titleForCase: { $0 },
+                    selectedTextColor: Color.mycolor.myBackground,
+                    unselectedTextColor: Color.mycolor.myAccent,
+                    selectedBackground: Color.mycolor.myButtonBGBlue,
+                    unselectedBackground: .clear,
+                    showNilOption: true,
+                    nilTitle: "All"
+                )
+                .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+            }
+        }
+    }
     
     private var themeAppearence: some View {
         UnderlineSermentedPickerNotOptional(
@@ -147,23 +164,31 @@ struct PreferencesView: View {
     }
     
     private var postDrafts: some View {
-        NavigationLink("Post drafts (\(draftsCount))") {
-            PostDraftsView()
+        Group {
+            if !vm.allPosts.filter({ $0.draft == true }).isEmpty {
+                NavigationLink("Post drafts (\(draftsCount))") {
+                    PostDraftsView()
+                }
+                .customListRowStyle(
+                    iconName: "square.stack.3d.up",
+                    iconWidth: iconWidth
+                )
+            }
         }
-        .customListRowStyle(
-            iconName: "square.stack.3d.up",
-            iconWidth: iconWidth
-        )
     }
     
     private var checkForPostsUpdate: some View {
-        NavigationLink("Check for materials update") {
-            CheckForPostsUpdateView()
+        Group {
+            if (!vm.allPosts.isEmpty) && vm.isFirstImportPostsCompleted {
+                NavigationLink("Check for materials update") {
+                    CheckForPostsUpdateView()
+                }
+                .customListRowStyle(
+                    iconName: "arrow.trianglehead.counterclockwise",
+                    iconWidth: iconWidth
+                )
+            }
         }
-        .customListRowStyle(
-            iconName: "arrow.trianglehead.counterclockwise",
-            iconWidth: iconWidth
-        )
     }
     
     private var importFromCloud: some View {

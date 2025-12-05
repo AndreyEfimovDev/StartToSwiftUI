@@ -43,7 +43,7 @@ struct StudyProgressView: View {
         }
         .tabViewStyle(.page(indexDisplayMode: .always))
         .indexViewStyle(.page(backgroundDisplayMode: .always))
-        .navigationTitle("Progress")
+        .navigationTitle("Study progress")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
