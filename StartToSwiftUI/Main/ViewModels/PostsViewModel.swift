@@ -125,9 +125,7 @@ class PostsViewModel: ObservableObject {
 //            print("🍓 storedCategory is NIL, selectedCategory: \(String(describing: selectedCategory?.description))")
 //
 //        }
-        self.selectedCategory = self.storedCategory ?? self.mainCategory
-        
-        
+        self.selectedCategory = self.storedCategory
         self.selectedLevel = self.storedLevel
         self.selectedFavorite = self.storedFavorite
         self.selectedType = self.storedType

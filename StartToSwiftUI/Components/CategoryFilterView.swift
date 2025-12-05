@@ -37,9 +37,7 @@ struct CategoryFilterView: View {
                     }
                 }
             }
-            .padding(.horizontal)
         }
-        .padding(.vertical, 8)
     }
 }
 

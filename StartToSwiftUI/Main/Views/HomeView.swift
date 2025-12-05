@@ -56,7 +56,7 @@ struct HomeView: View {
                 }
             }
         }
-        .navigationTitle(vm.selectedCategory ?? "All Categories")
+        .navigationTitle(vm.selectedCategory ?? "SwiftUI") // All Categories
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -94,10 +94,15 @@ struct HomeView: View {
             FiltersSheetView(
                 isFilterButtonPressed: $isFilterButtonPressed
             )
-            .presentationBackground(.clear)
+            .presentationBackground(.ultraThinMaterial)
             .presentationDetents([.height(600)])
             .presentationDragIndicator(.visible)
             .presentationCornerRadius(30)
+//            .presentationBackground(
+//                .ultraThinMaterial  // Ваш цвет фона
+////                        .ignoresSafeArea()
+//                )
+//            .interactiveDismissDisabled()
         }
         .task {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
