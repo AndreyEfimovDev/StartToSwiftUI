@@ -21,8 +21,8 @@ struct PostDetailsView: View {
     let postId: String
     
     private var post: Post? {
-        vm.allPosts.first(where: { $0.id == postId })
-//        PreviewData.samplePost3
+//        vm.allPosts.first(where: { $0.id == postId })
+        PreviewData.samplePost3
     }
         
     @State private var lineCountIntro: Int = 0
@@ -111,6 +111,7 @@ struct PostDetailsView: View {
                 iconFont: .headline,
                 isShownCircle: false)
             {
+                vm.selectedRating = validPost.postRating
                 showRatingSelectionView = true
             }
             
@@ -169,12 +170,11 @@ struct PostDetailsView: View {
                     post.progress.icon
                         .foregroundStyle(post.progress.color)
                     
-                    if post.origin != .local {
-                        post.origin.icon
-                    } else { EmptyView() }
+                    post.origin.icon
+
                 }
                 .font(.caption)
-                .foregroundStyle(Color.mycolor.myButtonTextPrimary)
+                .foregroundStyle(Color.mycolor.myAccent)
                 
                 //                    Text("\(post.category)")
                 //                        .font(.caption)
