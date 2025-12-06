@@ -142,6 +142,7 @@ struct HomeView: View {
                         maximumDistance: 50,
                         perform: {
                             isLongPressSuccess = true
+                            vm.selectedRating = post.postRating
                             vm.selectedPostId = post.id
                         },
                         onPressingChanged: { isPressing in
