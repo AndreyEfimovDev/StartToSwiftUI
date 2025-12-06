@@ -40,6 +40,7 @@ class PostsViewModel: ObservableObject {
     var allCategories: [String]? = nil
     let mainCategory: String = "SwiftUI"
     var dispatchTime: DispatchTime { .now() + 1.5 }
+    @Published var selectedRating: PostRating? = nil
     
     // MARK: Stored preferances
     
@@ -305,6 +306,19 @@ class PostsViewModel: ObservableObject {
             case .yes:
                 allPosts[index].favoriteChoice = .no
             }
+            savePosts()
+        }
+    }
+    
+    
+    func ratePost(post: Post) {
+        
+        if let index = allPosts.firstIndex(of: post) {
+//            if let rating = rating {
+                allPosts[index].postRating = selectedRating
+//            } else {
+//                allPosts[index].postRating = nil
+//            }
             savePosts()
         }
     }

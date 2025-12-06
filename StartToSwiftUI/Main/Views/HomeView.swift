@@ -22,7 +22,7 @@ struct HomeView: View {
     
     @State private var selectedPost: Post?
     @State private var selectedPostToDelete: Post?
-    
+
     @State private var showDetailView: Bool = false
     @State private var showPreferancesView: Bool = false
     @State private var showAddPostView: Bool = false
@@ -33,6 +33,11 @@ struct HomeView: View {
     @State private var isShowingDeleteConfirmation: Bool = false
     
     @State private var noticeButtonAnimation = false
+    
+    @State private var isDetectingLongPress: Bool = false
+    @State private var isLongPressSuccess: Bool = false
+    private let longPressDuration: Double = 0.5
+   
         
     private func postsForCategory(_ category: String?) -> [Post] {
         guard let category = category else {
@@ -56,7 +61,8 @@ struct HomeView: View {
                 }
             }
         }
-        .navigationTitle(vm.selectedCategory ?? "SwiftUI") // All Categories
+        .disabled(isLongPressSuccess)
+        .navigationTitle(vm.selectedCategory ?? "SwiftUI") // -> All Categories!!!
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -99,19 +105,22 @@ struct HomeView: View {
             .presentationDragIndicator(.visible)
             .presentationCornerRadius(30)
         }
+        .overlay {
+            RatingSelectionView(showRatingView: $isLongPressSuccess)
+        }
         .task {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
             
             if vm.isTermsOfUseIsAccepted {
                 if noticevm.isNotificationOn {
                     if  !noticevm.isUserNotified {
-                        try? await Task.sleep(nanoseconds: 1_000_000_000)
+//                        try? await Task.sleep(nanoseconds: 1_000_000_000)
 //                        if noticevm.isSoundNotificationOn {
 //                            AudioServicesPlaySystemSound(1013) // 1005
 //                        }
-                        noticeButtonAnimation = true
-                        try? await Task.sleep(nanoseconds: 1_000_000_000)
-                        noticeButtonAnimation = false
+//                        noticeButtonAnimation = true
+//                        try? await Task.sleep(nanoseconds: 1_000_000_000)
+//                        noticeButtonAnimation = false
                         noticevm.isUserNotified = true
                     }
                 }
@@ -128,6 +137,24 @@ struct HomeView: View {
                     .id(post.id)
                     .background(trackingFistPostInList(post: post))
                     .background(.black.opacity(0.001))
+                    .onLongPressGesture(
+                        minimumDuration: longPressDuration,
+                        maximumDistance: 50,
+                        perform: {
+                            isLongPressSuccess = true
+                            vm.selectedPostId = post.id
+                        },
+                        onPressingChanged: { isPressing in
+                            if isPressing {
+                                isDetectingLongPress = true
+                            } else {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    if !isLongPressSuccess {
+                                        isDetectingLongPress = false
+                                    }
+                                }
+                            }
+                        })
                     .onTapGesture {
                         vm.selectedPostId = post.id
                         showDetailView.toggle()
@@ -150,12 +177,7 @@ struct HomeView: View {
                         Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: post.favoriteChoice == .yes ?  "heart.slash.fill" : "heart.fill") {
                             vm.favoriteToggle(post: post)
                         }
-                        .tint(post.favoriteChoice == .yes ? Color.mycolor.myButtonTextPrimary : Color.mycolor.myYellow)
-                        
-                        Button("Rate", systemImage: "gauge.open.with.lines.needle.67percent.and.arrowtriangle") {
-                           
-                        }
-                        .tint(Color.mycolor.myGreen)
+                        .tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondary : Color.mycolor.myYellow)
                         
                         Button("Progress", systemImage: "gauge.open.with.lines.needle.67percent.and.arrowtriangle") {
                             vm.favoriteToggle(post: post)

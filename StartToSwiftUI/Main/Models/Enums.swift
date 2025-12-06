@@ -142,9 +142,9 @@ enum PostRating: String, CaseIterable, Codable {
     
     var color: Color {
         switch self {
-        case .good: return .blue
-        case .great: return .orange
-        case .excellent: return .purple
+        case .good: return Color.mycolor.myBlue
+        case .great: return Color.mycolor.myRed
+        case .excellent: return Color.mycolor.myPurple
         }
     }
 }

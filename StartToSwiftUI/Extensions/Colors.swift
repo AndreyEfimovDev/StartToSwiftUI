@@ -24,6 +24,7 @@ struct MyColors {
     let myBlue = Color("_Blue")
     let myGreen = Color("_Green")
     let myOrange = Color("_Orange")
+    let myPurple = Color("_Purple")
     let myRed = Color("_Red")
     let mySecondary = Color("_Secondary")
     let myYellow = Color("_Yellow")
