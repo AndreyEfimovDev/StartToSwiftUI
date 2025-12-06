@@ -87,6 +87,8 @@
 		47E2AF4F2EBCD86000B0214F /* CategoryFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */; };
 		47E439B72EA9290E007001AD /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E439B62EA9290E007001AD /* NetworkService.swift */; };
 		47F38B1F2ED480B0006DEDBE /* DevData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F38B1E2ED480B0006DEDBE /* DevData.swift */; };
+		47FF42472EE454440069D232 /* TestSFSymbolsForRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF42462EE454440069D232 /* TestSFSymbolsForRating.swift */; };
+		47FF42492EE4572E0069D232 /* TestSFSymbolsForProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF42482EE4572E0069D232 /* TestSFSymbolsForProgress.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -172,6 +174,8 @@
 		47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilterView.swift; sourceTree = "<group>"; };
 		47E439B62EA9290E007001AD /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		47F38B1E2ED480B0006DEDBE /* DevData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevData.swift; sourceTree = "<group>"; };
+		47FF42462EE454440069D232 /* TestSFSymbolsForRating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSFSymbolsForRating.swift; sourceTree = "<group>"; };
+		47FF42482EE4572E0069D232 /* TestSFSymbolsForProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSFSymbolsForProgress.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -277,6 +281,8 @@
 				475997502E5C6C9D008E20F0 /* Post.swift */,
 				471BBF9E2EC721480004AC45 /* Notice.swift */,
 				47BAF0F72E64A77A00287F10 /* Enums.swift */,
+				47FF42462EE454440069D232 /* TestSFSymbolsForRating.swift */,
+				47FF42482EE4572E0069D232 /* TestSFSymbolsForProgress.swift */,
 				4732FB362EAA63810062269D /* Constants.swift */,
 				471BBFA42EC77C3D0004AC45 /* Support */,
 			);
@@ -537,6 +543,7 @@
 				4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */,
 				471DCBDC2EBBC67500AFA5F4 /* Introduction.swift in Sources */,
 				4791CE002E747B2E00687126 /* HapticService.swift in Sources */,
+				47FF42492EE4572E0069D232 /* TestSFSymbolsForProgress.swift in Sources */,
 				475997532E5C7680008E20F0 /* PostsViewModel.swift in Sources */,
 				4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */,
 				477C745E2ECF6FB300F77F5B /* StaticPosts.swift in Sources */,
@@ -587,6 +594,7 @@
 				47E439B72EA9290E007001AD /* NetworkService.swift in Sources */,
 				471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */,
 				47AA558A2EA9741D000AF4E9 /* RestoreBackupView.swift in Sources */,
+				47FF42472EE454440069D232 /* TestSFSymbolsForRating.swift in Sources */,
 				4791CDBB2E702E9700687126 /* EraseAllPostsView.swift in Sources */,
 				4732FB372EAA63810062269D /* Constants.swift in Sources */,
 				4791CDFC2E746FF100687126 /* EmailService.swift in Sources */,

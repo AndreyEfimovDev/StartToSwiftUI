@@ -123,41 +123,47 @@ struct PostDetailsView: View {
 
     private func header(for post: Post) -> some View {
         
-        ZStack(alignment: .topTrailing) {
-            VStack(spacing: 8) {
+        VStack(spacing: 8) {
                 Text(post.title)
                     .font(.title2)
                     .fontWeight(.semibold)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity)
-                
-                HStack {
-                    
-                    Group {
-                        if post.draft == true {
-                            Image(systemName: "square.stack.3d.up")
-                        }
-                        
-                        switch post.origin {
-                        case .cloud:
-                            post.origin.icon
-                        case .statical:
-                            post.origin.icon
-                        case .local:
-                            EmptyView()
-                        }
-                    }
-                    .font(.caption)
-                    .foregroundStyle(Color.mycolor.mySecondaryText)
+                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Text("@" + post.author)
+                .font(.body)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            HStack {
+                Text(post.studyLevel.displayName.capitalized + " level")
+                    .font(.body)
+                    .fontWeight(.medium)
+                    .foregroundStyle(post.studyLevel.color)
+                Spacer()
 
-                    Text("@" + post.author)
-                        .font(.body)
+                Group {
+                    if let rating = post.postRating {
+                        rating.icon
+                            .foregroundStyle(rating.color)
+                    }
                     
-//                    Text("\(post.category)")
-//                        .font(.caption)
+                    if post.draft {
+                        Image(systemName: "square.stack.3d.up")
+                    }
+                    
+                    if post.origin != .local {
+                        post.origin.icon
+                    } else { EmptyView() }
                 }
-                .frame(maxWidth: .infinity)
+                .font(.caption)
+                .foregroundStyle(Color.mycolor.myButtonTextPrimary)
                 
+                //                    Text("\(post.category)")
+                //                        .font(.caption)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            //                .border(.yellow)
+
 //                if vm.selectedCategory == nil {
 //                    Text(post.category)
 //                        .font(.body)
@@ -166,14 +172,8 @@ struct PostDetailsView: View {
 //                        .frame(maxWidth: .infinity)
 //                }
 //                
-                Text(post.studyLevel.displayName.capitalized + " level")
-                    .font(.body)
-                    .fontWeight(.medium)
-                    .foregroundStyle(post.studyLevel.color)
-                    .frame(maxWidth: .infinity)
             }
-            .padding(.vertical, 8)
-        }
+            .padding()
     }
     
     private func intro(for post: Post) -> some View {
@@ -189,7 +189,6 @@ struct PostDetailsView: View {
                     .font(.caption)
                     .multilineTextAlignment(.trailing)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 8)
                     .padding(.top, 8)
                 
                 Text (post.intro)
@@ -198,7 +197,6 @@ struct PostDetailsView: View {
                     .lineSpacing(introLineSpacing)
                     .frame(minHeight: 55, alignment: .topLeading)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 8)
                     .onLineCountChanged(font: introFont, lineSpacing: introLineSpacing) { count in
                         lineCountIntro = count - 1
                     }
@@ -211,6 +209,7 @@ struct PostDetailsView: View {
                 .offset(y: -15)
             }
         }
+        .padding()
     }
     
     private func goToTheSourceButton(for post: Post) -> some View {
@@ -253,7 +252,6 @@ struct PostDetailsView: View {
             } // if isShowingFullFreeTextField
         } // VStack
     }
-    
 }
 
 

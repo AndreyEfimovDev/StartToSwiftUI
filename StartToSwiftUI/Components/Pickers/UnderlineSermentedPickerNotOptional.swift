@@ -67,7 +67,7 @@ fileprivate struct UnderlineSermentedPickerNotOptionalPreview: View {
                 allItems: Theme.allCases,
                 titleForCase: { $0.displayName },
                 selectedTextColor: Color.mycolor.myBlue,
-                unselectedTextColor: Color.mycolor.mySecondaryText
+                unselectedTextColor: Color.mycolor.mySecondary
             )
             .frame(height: 40)
             .padding()

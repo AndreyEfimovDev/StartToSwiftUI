@@ -42,7 +42,7 @@ struct PreferencesView: View {
             Form {
                 Section(header: sectionHeader("Achievements")) {
                     
-                    NavigationLink("Study progress") {
+                    NavigationLink("Check the progress") {
                         StudyProgressView()
                     }
                     .customListRowStyle(

@@ -60,15 +60,15 @@ struct ProgressViewCircleTrimPreview: View {
     @State var proportion: Double = 0.9
     @State var titles: [String] = ["Untapped", "Learning", "Studied", "Practiced"] // virgin untapped untouched
     @State var posts: [PostForTest] = [
-        .init(title: "Title 1", progress: .untapped),
-        .init(title: "Title 2", progress: .untapped),
+        .init(title: "Title 1", progress: .fresh),
+        .init(title: "Title 2", progress: .fresh),
         .init(title: "Title 3", progress: .learning),
         .init(title: "Title 4", progress: .learning),
         .init(title: "Title 5", progress: .learning),
         .init(title: "Title 6", progress: .studied),
         .init(title: "Title 7", progress: .studied),
         .init(title: "Title 8", progress: .practiced),
-        .init(title: "Title 9", progress: .untapped),
+        .init(title: "Title 9", progress: .fresh),
     ]
     
     var body: some View {

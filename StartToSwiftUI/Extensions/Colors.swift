@@ -19,23 +19,25 @@ extension Color {
 
 struct MyColors {
     
-    let myAccent = Color("AppAccentColor")
-    let myBackground = Color("AppBackgroundColor")
-    let mySectionBackground = Color("AppSectionBackgroundColor")
-    let myBlue = Color("AppBlueColor")
-    let myGreen = Color("AppGreenColor")
-    let myYellow = Color("AppYellowColor")
-    let myOrange = Color("AppOrangeColor")
-    let myRed = Color("AppRedColor")
-    let mySecondaryText = Color("AppSecondaryTextColor")
-    let myButtonBGBlue = Color("AppButtonBGBlue")
-    let myButtonBGGray = Color("AppButtonBGGray")
-    let myButtonBGGreen = Color("AppButtonBGGreen")
-    let myButtonBGRed = Color("AppButtonBGRed")
+    let myAccent = Color("_Accent")
+    let myBackground = Color("_Background")
+    let myBlue = Color("_Blue")
+    let myGreen = Color("_Green")
+    let myOrange = Color("_Orange")
+    let myRed = Color("_Red")
+    let mySecondary = Color("_Secondary")
+    let myYellow = Color("_Yellow")
     
-    let myButtonTextPrimary = Color("AppButtonTextPrimary")
-    let myButtonTextRed = Color("AppButtonTextRed")
-    let myButtonTextSecondary = Color("AppButtonTextSecondary")
+    let myButtonBGBlue = Color("ButtonBG_Blue")
+    let myButtonBGGray = Color("ButtonBG_Gray")
+    let myButtonBGGreen = Color("ButtonBG_Green")
+    let myButtonBGRed = Color("ButtonBG_Red")
+    
+    let myButtonTextPrimary = Color("ButtonTextPrimary")
+    let myButtonTextRed = Color("ButtonTextRed")
+    let myButtonTextSecondary = Color("ButtonTextSecondary")
+
+    let mySectionBackground = Color("SectionBackground")
 
 }
 

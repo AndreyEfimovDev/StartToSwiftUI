@@ -13,11 +13,20 @@ struct PostRowView: View {
     
     let post: Post
     
+    @State private var isDetectingLongPress: Bool = false
+    @State private var isLongPressSuccess: Bool = false
+    @State private var isShowPopover: Bool = false
+
     @State private var introLineCount: Int = 0
+    
     private let introFont: Font = .footnote
     private let introLineSpacing: CGFloat = 0
     private let introLinesCountLimit: Int = 2
+    private let longPressDuration: Double = 0.5
     
+    
+    @State var selectedRating: PostRating? = nil
+   
     // MARK: MAIN BODY
     
     var body: some View {
@@ -31,9 +40,94 @@ struct PostRowView: View {
         }
         .padding(8)
         .padding(.horizontal, 8)
+        .background(.black.opacity(0.001))
+        .overlay {
+            ratingMenuSelection
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .scaleEffect(isLongPressSuccess ? 1.0 : 0.5)
+                .opacity(isLongPressSuccess ? 1.0 : 0)
+                .animation(.bouncy(duration: 0.5), value: isLongPressSuccess)
+        }
+        .onLongPressGesture(
+            minimumDuration: longPressDuration,
+            maximumDistance: 50,
+            perform: {
+                    isLongPressSuccess = true
+            },
+            onPressingChanged: { isPressing in
+                if isPressing {
+                        isDetectingLongPress = true
+                } else {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        if !isLongPressSuccess {
+                                isDetectingLongPress = false
+                        }
+                    }
+                }
+            })
+
     }
         
     // MARK: Subviews
+    
+    private var ratingMenuSelection: some View {
+        Group {
+            if isLongPressSuccess {
+                VStack {
+                    ratingIconsView
+                        .overlay(overlayView.mask(ratingIconsView))
+                        .padding()
+                        .padding(.bottom, 30)
+                    
+                    HStack (spacing: 20) {
+                        
+                        ClearCupsuleButton(
+                            primaryTitle: "Place",
+                            primaryTitleColor: Color.mycolor.myBlue) {
+                                isLongPressSuccess = false
+                            }
+                        
+                        ClearCupsuleButton(
+                            primaryTitle: "Reset",
+                            primaryTitleColor: Color.mycolor.myRed) {
+                                selectedRating = nil
+                                isLongPressSuccess = false
+                            }
+                    }
+                }
+                .padding(20)
+                .background(
+                    .ultraThinMaterial,
+                    in: RoundedRectangle(cornerRadius: 30))
+            }
+        }
+    }
+    
+    private var ratingIconsView: some View {
+        HStack(spacing: 20) {
+            ForEach(PostRating.allCases, id: \.self) { rating in
+                rating.icon
+                    .font(.largeTitle)
+                    .foregroundColor(Color.gray)
+                    .onTapGesture {
+                        withAnimation(.easeInOut) {
+                            selectedRating = rating
+                        }
+                    }
+            }
+        }
+    }
+
+    private var overlayView: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Rectangle()
+                    .foregroundColor(selectedRating?.color ?? .secondary)
+                    .frame(width: CGFloat(selectedRating?.value ?? 0) / 3 * geometry.size.width)
+            }
+        }
+        .allowsHitTesting(false)
+    }
     
     private var title: some View {
         Text(post.title)
@@ -42,7 +136,6 @@ struct PostRowView: View {
             .minimumScaleFactor(0.75)
             .lineLimit(1)
             .padding(.top, 8)
-        
     }
     
     private var author: some View {
@@ -57,6 +150,8 @@ struct PostRowView: View {
             }
         }
         .font(.footnote)
+        .minimumScaleFactor(0.75)
+        .lineLimit(1)
     }
     
     private var level: some View {
@@ -69,25 +164,29 @@ struct PostRowView: View {
             
             Group {
                 if post.favoriteChoice == .yes {
-                    Image(systemName: "heart.fill")
+                    Image(systemName: "heart")
                         .foregroundStyle(Color.mycolor.myYellow)
                 }
                 
+                post.progress.icon
+                    .foregroundStyle(post.progress.color)
+                
+                if let rating = post.postRating {
+                    rating.icon
+                        .foregroundStyle(rating.color)
+                }
+
                 if post.draft {
                     Image(systemName: "square.stack.3d.up")
                 }
                 
-                switch post.origin {
-                case .cloud:
+                if post.origin != .local {
                     post.origin.icon
-                case .statical:
-                    post.origin.icon
-                case .local:
-                    EmptyView()
-                }
+                } else { EmptyView() }
+                
             }
             .font(.caption)
-            .foregroundStyle(Color.mycolor.mySecondaryText)
+            .foregroundStyle(Color.mycolor.mySecondary)
         }
         .fontWeight(.medium)
     }
@@ -105,6 +204,7 @@ fileprivate struct PostRowPreView: View {
                 PostRowView(post: PreviewData.samplePost1)
                 PostRowView(post: PreviewData.samplePost2)
                 PostRowView(post: PreviewData.samplePost3)
+                PostRowView(post: PreviewData.samplePost4)
             }
             .padding()
         }
