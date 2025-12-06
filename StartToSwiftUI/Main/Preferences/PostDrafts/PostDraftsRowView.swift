@@ -43,7 +43,7 @@ struct PostDraftsRowView: View {
             if post.draft == true {
                 Image(systemName: "square.stack.3d.up")
                     .font(.caption2)
-                    .foregroundStyle(Color.mycolor.mySecondaryText)
+                    .foregroundStyle(Color.mycolor.mySecondary)
             }
             
             Text("@" + post.author + ", ") +

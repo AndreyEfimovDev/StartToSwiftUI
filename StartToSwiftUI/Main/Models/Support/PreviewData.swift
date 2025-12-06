@@ -57,7 +57,9 @@ struct PreviewData {
         postPlatform: .youtube,
         postDate: Date.from(year: 2021, month: 3, day: 26),
         studyLevel: .beginner,
+        progress: .fresh , // fresh, learning, studied, practiced
         favoriteChoice: .yes,
+        postRating: .good, // good, great, excellent
         notes: "",
         origin: .cloud,
     )
@@ -72,10 +74,27 @@ struct PreviewData {
         urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
         postDate: nil,
         studyLevel: .advanced,
+        progress: .learning, // fresh, learning, studied, practiced
+        postRating: .great, // good, great, excellent
         origin: .statical
     )
     
     static let samplePost3 = Post(
+        title: "SwiftUI Advanced Learning",
+        intro: """
+            Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
+            """,
+        author: "Nick Sarno/Swiftful Thinking",
+        postType: .course,
+        urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
+        postDate: nil,
+        studyLevel: .advanced,
+        progress: .studied, // fresh, learning, studied, practiced
+        postRating: .excellent, // good, great, excellent
+        origin: .statical
+    )
+    
+    static let samplePost4 = Post(
         title: "How we can stylize text for our Text views in SwiftUI",
         intro: """
         In this video we are going to explore how we can stylize text for our Text views in SwiftUI.
@@ -89,6 +108,7 @@ struct PreviewData {
         postPlatform: .website,
         postDate: Date.from(year: 2022, month: 8, day: 11),
         studyLevel: .middle,
+        progress: .practiced, // fresh, learning, studied, practiced
         favoriteChoice: .no,
         notes: """
         In this video we are going to explore how we can stylize text for our Text views in SwiftUI.

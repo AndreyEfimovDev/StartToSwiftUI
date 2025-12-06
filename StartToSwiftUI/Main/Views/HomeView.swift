@@ -33,7 +33,7 @@ struct HomeView: View {
     @State private var isShowingDeleteConfirmation: Bool = false
     
     @State private var noticeButtonAnimation = false
-    
+        
     private func postsForCategory(_ category: String?) -> [Post] {
         guard let category = category else {
             return vm.filteredPosts
@@ -98,11 +98,6 @@ struct HomeView: View {
             .presentationDetents([.height(600)])
             .presentationDragIndicator(.visible)
             .presentationCornerRadius(30)
-//            .presentationBackground(
-//                .ultraThinMaterial  // Ваш цвет фона
-////                        .ignoresSafeArea()
-//                )
-//            .interactiveDismissDisabled()
         }
         .task {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
@@ -142,21 +137,32 @@ struct HomeView: View {
                             selectedPostToDelete = post
                             hapticManager.notification(type: .warning)
                             isShowingDeleteConfirmation = true
-                        }.tint(Color.mycolor.myRed)
+                        }
+                        .tint(Color.mycolor.myRed)
                         
                         Button("Edit", systemImage: post.origin == .cloud  || post.origin == .statical ? "pencil.slash" : "pencil") {
                             selectedPost = post
                         }
                         .tint(Color.mycolor.myButtonBGBlue)
                         .disabled(post.origin == .cloud || post.origin == .statical)
-                    } // right side swipe action buttonss
+                    }
                     .swipeActions(edge: .leading, allowsFullSwipe: false) {
                         Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: post.favoriteChoice == .yes ?  "heart.slash.fill" : "heart.fill") {
                             vm.favoriteToggle(post: post)
                         }
-                        .foregroundStyle(Color.mycolor.myAccent)
                         .tint(post.favoriteChoice == .yes ? Color.mycolor.myButtonTextPrimary : Color.mycolor.myYellow)
-                    } // left side swipe action buttons
+                        
+                        Button("Rate", systemImage: "gauge.open.with.lines.needle.67percent.and.arrowtriangle") {
+                           
+                        }
+                        .tint(Color.mycolor.myGreen)
+                        
+                        Button("Progress", systemImage: "gauge.open.with.lines.needle.67percent.and.arrowtriangle") {
+                            vm.favoriteToggle(post: post)
+                        }
+                        .tint(Color.mycolor.myGreen)
+
+                    }
             } // ForEach
             .confirmationDialog(
                 "Are you sure you want to delete this post?",

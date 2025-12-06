@@ -422,7 +422,7 @@ struct AddEditPostSheet: View {
                 allItems: PostType.allCases,
                 titleForCase: { $0.displayName },
                 selectedTextColor: Color.mycolor.myBlue,
-                unselectedTextColor: Color.mycolor.mySecondaryText
+                unselectedTextColor: Color.mycolor.mySecondary
             )
             .padding(.horizontal, 8)
             .frame(height: 50)
@@ -444,7 +444,7 @@ struct AddEditPostSheet: View {
                 allItems: Platform.allCases,
                 titleForCase: { $0.displayName },
                 selectedTextColor: Color.mycolor.myBlue,
-                unselectedTextColor: Color.mycolor.mySecondaryText
+                unselectedTextColor: Color.mycolor.mySecondary
             )
             .padding(.horizontal, 8)
             .frame(height: 50)
@@ -466,7 +466,7 @@ struct AddEditPostSheet: View {
                 allItems: StudyLevel.allCases,
                 titleForCase: { $0.displayName },
                 selectedTextColor: Color.mycolor.myBlue,
-                unselectedTextColor: Color.mycolor.mySecondaryText
+                unselectedTextColor: Color.mycolor.mySecondary
             )
             .padding(.horizontal, 8)
             .frame(height: 50)
@@ -488,7 +488,7 @@ struct AddEditPostSheet: View {
                 allItems: FavoriteChoice.allCases,
                 titleForCase: { $0.displayName },
                 selectedTextColor: Color.mycolor.myBlue,
-                unselectedTextColor: Color.mycolor.mySecondaryText
+                unselectedTextColor: Color.mycolor.mySecondary
             )
             .padding(.horizontal, 8)
             .frame(height: 50)

@@ -111,23 +111,42 @@ enum FavoriteChoice: String, CaseIterable, Codable {
         case .no: return Image(systemName: "star.fill")
         }
     }
-
 }
 
-
 enum PostRating: String, CaseIterable, Codable {
-    case alright
-    case good
-    case excellent
+    case good, great, excellent
     
     var displayName: String {
         switch self {
-        case .alright: return "Alright"
         case .good: return "Good"
+        case .great: return "Great"
         case .excellent: return "Excellent"
         }
     }
-
+    
+    var icon: Image { // for other options look at TestSFSymbolsForRating
+        switch self {
+        case .good: return Image(systemName: "face.smiling")
+        case .great: return Image(systemName: "star.fill")
+        case .excellent: return Image(systemName: "crown.fill")
+        }
+    }
+    
+    var value: Int {
+        switch self {
+        case .good: return 1
+        case .great: return 2
+        case .excellent: return 3
+        }
+    }
+    
+    var color: Color {
+        switch self {
+        case .good: return .blue
+        case .great: return .orange
+        case .excellent: return .purple
+        }
+    }
 }
 
 enum StudyLevel: String, CaseIterable, Codable {
@@ -152,24 +171,36 @@ enum StudyLevel: String, CaseIterable, Codable {
     }
 }
 
-enum StudyProgress: String, CaseIterable, Codable {
-    case untapped
-    case learning
-    case studied
-    case practiced
+enum StudyProgress: String, CaseIterable, Codable { // progress in mastering educational materials
+    case fresh, learning, studied, practiced
     
     var displayName: String {
         switch self {
-        case .untapped:
-            return "New"
-        case .learning:
-            return "Learning"
-        case .studied:
-            return "Studied"
-        case .practiced:
-            return "Practiced"
+        case .fresh: return "New"
+        case .learning: return "Learning"
+        case .studied: return "Studied"
+        case .practiced: return "Practiced"
         }
     }
+    
+    var icon: Image { // for other options look at TestSFSymbolsForProgress
+        switch self {
+        case .fresh: return Image(systemName: "signpost.right") // lightbulb signpost.right
+        case .learning: return Image(systemName: "figure.walk") //  graduationcap figure.walk
+        case .studied: return Image(systemName: "flag.checkered") // brain.head.profile flag.checkered
+        case .practiced: return Image(systemName: "mountain.2.fill") // hand.raised.fingers.spread mountain.2.fill
+        }
+    }
+    
+    var color: Color {
+        switch self {
+        case .fresh: return .gray
+        case .learning: return .blue
+        case .studied: return .green
+        case .practiced: return .purple
+        }
+    }
+
 }
 
 enum Platform: String, CaseIterable, Codable {
