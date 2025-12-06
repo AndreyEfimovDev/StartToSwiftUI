@@ -51,15 +51,15 @@ struct RatingSelectionView: View {
                                 
                                 HStack (spacing: 20) {
                                     ClearCupsuleButton(
-                                        primaryTitle: "Place",
-                                        primaryTitleColor: Color.mycolor.myBlue) {
-                                            showRatingView = false
-                                            vm.ratePost(post: post)
-                                        }
-                                    ClearCupsuleButton(
                                         primaryTitle: "Reset",
                                         primaryTitleColor: Color.mycolor.myRed) {
                                             vm.selectedRating = nil
+                                            vm.ratePost(post: post)
+                                        }
+                                    ClearCupsuleButton(
+                                        primaryTitle: "Place",
+                                        primaryTitleColor: Color.mycolor.myBlue) {
+                                            showRatingView = false
                                             vm.ratePost(post: post)
                                         }
                                 }

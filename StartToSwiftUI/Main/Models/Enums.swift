@@ -87,7 +87,7 @@ enum PostOrigin: String, CaseIterable, Codable {
     
     var icon: Image {
         switch self {
-        case .local: return Image(systemName: "")
+        case .local: return Image(systemName: "archivebox") // tray cube  archivebox folder arrow.up.folder text.document
         case .cloud: return Image(systemName: "cloud")
         case .statical: return Image(systemName: "arrow.2.squarepath") // line.3.horizontal square.grid.2x2 s.circle arrow.2.squarepath
         }
@@ -143,7 +143,7 @@ enum PostRating: String, CaseIterable, Codable {
     var color: Color {
         switch self {
         case .good: return Color.mycolor.myBlue
-        case .great: return Color.mycolor.myRed
+        case .great: return Color.mycolor.myGreen
         case .excellent: return Color.mycolor.myPurple
         }
     }
