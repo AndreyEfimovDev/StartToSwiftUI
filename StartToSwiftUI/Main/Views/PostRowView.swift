@@ -80,7 +80,7 @@ struct PostRowView: View {
                 }
                 
                 if post.favoriteChoice == .yes {
-                    Image(systemName: "heart")
+                    Image(systemName: "heart.fill")
                         .foregroundStyle(Color.mycolor.myYellow)
                 }
                 
@@ -97,7 +97,7 @@ struct PostRowView: View {
                 }
             }
             .font(.caption)
-            .foregroundStyle(Color.mycolor.mySecondary)
+            .foregroundStyle(Color.mycolor.myAccent)
         }
         .fontWeight(.medium)
     }

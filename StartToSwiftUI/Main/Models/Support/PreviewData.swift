@@ -80,8 +80,9 @@ struct PreviewData {
     )
     
     static let samplePost3 = Post(
-        title: "SwiftUI Advanced Learning",
+        title: "TEST SwiftUI Advanced Learning",
         intro: """
+            TEST TEST TEST
             Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
             """,
         author: "Nick Sarno/Swiftful Thinking",
