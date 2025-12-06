@@ -78,7 +78,7 @@ struct HomeView: View {
                 }
             }
         }
-        .sheet(isPresented: $showPreferancesView) {
+        .fullScreenCover(isPresented: $showPreferancesView) {
             PreferencesView()
         }
         .sheet(isPresented: $showNoticesView) {

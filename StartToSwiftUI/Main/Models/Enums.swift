@@ -194,10 +194,10 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
     
     var color: Color {
         switch self {
-        case .fresh: return .gray
-        case .learning: return .blue
-        case .studied: return .green
-        case .practiced: return .purple
+        case .fresh: return Color.mycolor.myAccent
+        case .learning: return Color.mycolor.myBlue
+        case .studied: return Color.mycolor.myGreen
+        case .practiced: return Color.mycolor.myPurple
         }
     }
 

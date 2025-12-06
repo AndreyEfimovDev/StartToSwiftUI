@@ -40,21 +40,33 @@ struct PreferencesView: View {
     var body: some View {
         NavigationStack {
             Form {
+                
+                Section(header: sectionHeader("Appearance")) {
+                    themeAppearence
+                }
+
+                Section(header: sectionHeader("Notifications")) {
+                    noticeMessages
+                    notificationToggle
+                    soundNotificationToggle
+                }
+                
+                //                if UIDevice.isiPhone {
+                //                    Section(header: sectionHeader("Selected category")) {
+                //                        selectedCategory
+                //                    }
+                //                }
+
+                
                 Section(header: sectionHeader("Achievements")) {
                     
-                    NavigationLink("Check the progress") {
+                    NavigationLink("Check progress") {
                         StudyProgressView()
                     }
                     .customListRowStyle(
                         iconName: "gauge.open.with.lines.needle.67percent.and.arrowtriangle",
                         iconWidth: iconWidth)
                 }
-                
-//                if UIDevice.isiPhone {
-//                    Section(header: sectionHeader("Selected category")) {
-//                        selectedCategory
-//                    }
-//                }
                 
                 Section(header: sectionHeader("Manage materials (\(postsCount))")) {
                     postDrafts
@@ -65,15 +77,6 @@ struct PreferencesView: View {
                     erasePosts
                 }
                                                 
-                Section(header: sectionHeader("Notifications")) {
-                    notificationToggle
-                    soundNotificationToggle
-                    noticeMessages
-                }
-                
-                Section(header: sectionHeader("Appearance")) {
-                    themeAppearence
-                }
                 
                 Section(header: sectionHeader("Сommunication")){
                     acknowledgements

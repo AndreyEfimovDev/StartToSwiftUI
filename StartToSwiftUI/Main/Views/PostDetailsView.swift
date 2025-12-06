@@ -21,8 +21,8 @@ struct PostDetailsView: View {
     let postId: String
     
     private var post: Post? {
-//        vm.allPosts.first(where: { $0.id == postId })
-        PreviewData.samplePost3
+        vm.allPosts.first(where: { $0.id == postId })
+//        PreviewData.samplePost3
     }
         
     @State private var lineCountIntro: Int = 0
@@ -116,15 +116,14 @@ struct PostDetailsView: View {
             }
             
             CircleStrokeButtonView(
-                iconName: validPost.favoriteChoice == .yes ? "heart.fill" : "heart",
+                iconName: validPost.favoriteChoice == .yes ? "heart.slash" : "heart",
                 iconFont: .headline,
-                isIconColorToChange: validPost.favoriteChoice == .yes ? true : false,
-                imageColorSecondary: Color.mycolor.myYellow,
+//                isIconColorToChange: validPost.favoriteChoice == .yes ? true : false,
+//                imageColorSecondary: Color.mycolor.myYellow,
                 isShownCircle: false)
             {
                 vm.favoriteToggle(post: validPost)
             }
-            
             
             CircleStrokeButtonView(
                 iconName: post?.origin == .cloud || post?.origin == .statical ? "pencil.slash" : "pencil",
@@ -161,6 +160,12 @@ struct PostDetailsView: View {
                     if post.draft {
                         Image(systemName: "square.stack.3d.up")
                     }
+                    
+                    if post.favoriteChoice == .yes {
+                        Image(systemName: "heart.fill")
+                            .foregroundStyle(Color.mycolor.myYellow)
+                    }
+
 
                     if let rating = post.postRating {
                         rating.icon
