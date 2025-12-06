@@ -90,9 +90,9 @@ struct AddEditPostSheet: View {
                 typeSection
                 platformSection
                 studyLevelSection
-                favoviteChoiceSection
+//                favoviteChoiceSection
                 notesSection
-            } // ScrollView
+            }
             .foregroundStyle(Color.mycolor.myAccent)
             .padding(.horizontal, 8)
         }

@@ -16,6 +16,7 @@ struct PostDetailsView: View {
     @State private var showFullIntro: Bool = false
     @State private var showFullFreeTextField: Bool = false
     @State private var showEditPostView: Bool = false
+    @State private var showRatingSelectionView: Bool = false
     
     let postId: String
     
@@ -36,47 +37,51 @@ struct PostDetailsView: View {
     
     
     var body: some View {
-        
-        if let validPost = post {
-            ScrollView(showsIndicators: false) {
-                VStack {
-                    header(for: validPost)
-                        .background(
-                            .thinMaterial,
-                            in: RoundedRectangle(cornerRadius: 15)
-                        )
-                        .padding(.top, 30)
-                    
-                    intro(for: validPost)
-                        .background(
-                            .thinMaterial,
-                            in: RoundedRectangle(cornerRadius: 15)
-                        )
-                    goToTheSourceButton(for: validPost)
-                        .padding(.top, 30)
-                        .padding(.horizontal, 50)
-
-                    notesToPost(for: validPost)
-                        .background(
-                            .thinMaterial,
-                            in: RoundedRectangle(cornerRadius: 15)
-                        ).opacity(validPost.notes.isEmpty ? 0 : 1)
+        Group {
+            if let validPost = post {
+                ScrollView(showsIndicators: false) {
+                    VStack {
+                        header(for: validPost)
+                            .background(
+                                .thinMaterial,
+                                in: RoundedRectangle(cornerRadius: 15)
+                            )
+                            .padding(.top, 30)
+                        
+                        intro(for: validPost)
+                            .background(
+                                .thinMaterial,
+                                in: RoundedRectangle(cornerRadius: 15)
+                            )
+                        goToTheSourceButton(for: validPost)
+                            .padding(.top, 30)
+                            .padding(.horizontal, 50)
+                        
+                        notesToPost(for: validPost)
+                            .background(
+                                .thinMaterial,
+                                in: RoundedRectangle(cornerRadius: 15)
+                            ).opacity(validPost.notes.isEmpty ? 0 : 1)
+                    }
+                    .foregroundStyle(Color.mycolor.myAccent)
+                } // ScrollView
+                .padding(.horizontal)
+                .navigationBarBackButtonHidden(true)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    toolbarForPostDetails(validPost: validPost)
                 }
-                .foregroundStyle(Color.mycolor.myAccent)
-            } // ScrollView
-            .padding(.horizontal)
-            .navigationBarBackButtonHidden(true)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                toolbarForPostDetails(validPost: validPost)
-            }
-            .sheet(isPresented: $showEditPostView) {
-                NavigationStack {
-                    AddEditPostSheet(post: post)
+                .sheet(isPresented: $showEditPostView) {
+                    NavigationStack {
+                        AddEditPostSheet(post: post)
+                    }
                 }
+            } else {
+                Text("Post is not found")
             }
-        } else {
-            Text("Post is not found")
+        }
+        .overlay {
+            RatingSelectionView(showRatingView: $showRatingSelectionView)
         }
     }
     
@@ -100,6 +105,15 @@ struct PostDetailsView: View {
             }
         }
         ToolbarItemGroup(placement: .topBarTrailing) {
+            
+            CircleStrokeButtonView(
+                iconName: "star",
+                iconFont: .headline,
+                isShownCircle: false)
+            {
+                showRatingSelectionView = true
+            }
+            
             CircleStrokeButtonView(
                 iconName: validPost.favoriteChoice == .yes ? "heart.fill" : "heart",
                 iconFont: .headline,
@@ -142,14 +156,18 @@ struct PostDetailsView: View {
                 Spacer()
 
                 Group {
-                    if let rating = post.postRating {
-                        rating.icon
-                            .foregroundStyle(rating.color)
-                    }
                     
                     if post.draft {
                         Image(systemName: "square.stack.3d.up")
                     }
+
+                    if let rating = post.postRating {
+                        rating.icon
+                            .foregroundStyle(rating.color)
+                    }
+
+                    post.progress.icon
+                        .foregroundStyle(post.progress.color)
                     
                     if post.origin != .local {
                         post.origin.icon
