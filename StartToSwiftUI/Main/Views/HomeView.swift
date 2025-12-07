@@ -37,15 +37,16 @@ struct HomeView: View {
     @State private var isDetectingLongPress: Bool = false
     @State private var isLongPressSuccess: Bool = false
     private let longPressDuration: Double = 0.5
-   
-        
-    private func postsForCategory(_ category: String?) -> [Post] {
-        guard let category = category else {
-            return vm.filteredPosts
-        }
-        return vm.filteredPosts.filter { $0.category == category }
+    private var isShowingNoticeMessageButton: Bool {
+        !noticevm.notices.filter({ $0.isRead == false }).isEmpty &&
+        noticevm.isNotificationOn
     }
-    
+//    private var isPerformingNoticeTask: Bool {
+//        vm.isTermsOfUseIsAccepted &&
+//        noticevm.isNotificationOn &&
+//        !noticevm.isUserNotified
+//    }
+   
     // MARK: VIEW BODY
     
     var body: some View {
@@ -108,23 +109,25 @@ struct HomeView: View {
         .overlay {
             RatingSelectionView(showRatingView: $isLongPressSuccess)
         }
-        .task {
+        .onAppear { // task
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
             
-            if vm.isTermsOfUseIsAccepted {
-                if noticevm.isNotificationOn {
-                    if  !noticevm.isUserNotified {
-//                        try? await Task.sleep(nanoseconds: 1_000_000_000)
-//                        if noticevm.isSoundNotificationOn {
-//                            AudioServicesPlaySystemSound(1013) // 1005
-//                        }
-//                        noticeButtonAnimation = true
-//                        try? await Task.sleep(nanoseconds: 1_000_000_000)
-//                        noticeButtonAnimation = false
-                        noticevm.isUserNotified = true
-                    }
-                }
-            }
+//            if isPerformingNoticeTask {
+//                print("🍒🍒🍒 Notification animation ready to start")
+//                
+//                try? await Task.sleep(nanoseconds: 1_000_000_000)
+//                print("🍒🍒 Notification animation started")
+//                
+//                if noticevm.isSoundNotificationOn {
+//                    AudioServicesPlaySystemSound(1013) // 1005
+//                }
+//                noticeButtonAnimation = true
+//                try? await Task.sleep(nanoseconds: 1_000_000_000)
+//                print("🍒 Notification animation finished")
+//                
+//                noticeButtonAnimation = false
+//                noticevm.isUserNotified = true
+//            }
         }
     }
     
@@ -156,10 +159,20 @@ struct HomeView: View {
                                 }
                             }
                         })
-                    .onTapGesture {
-                        vm.selectedPostId = post.id
-                        showDetailView.toggle()
-                    }
+//                    .onTapGesture {
+//                        vm.selectedPostId = post.id
+//                        showDetailView.toggle()
+//                    }
+                    .onTapAndDoubleTap(
+                        singleTap: {
+                            print("Single tap")
+                            vm.selectedPostId = post.id
+                            showDetailView.toggle()
+                        },
+                        doubleTap: {
+                            print("Double tap")
+                        }
+                    )
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         Button("Delete", systemImage: "trash") {
                             selectedPostToDelete = post
@@ -177,14 +190,12 @@ struct HomeView: View {
                     .swipeActions(edge: .leading, allowsFullSwipe: false) {
                         Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: post.favoriteChoice == .yes ?  "heart.slash.fill" : "heart.fill") {
                             vm.favoriteToggle(post: post)
-                        }
-                        .tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondary : Color.mycolor.myYellow)
+                        }.tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondary : Color.mycolor.myYellow)
                         
                         Button("Progress", systemImage: "gauge.open.with.lines.needle.67percent.and.arrowtriangle") {
                             vm.favoriteToggle(post: post)
                         }
                         .tint(Color.mycolor.myGreen)
-
                     }
             } // ForEach
             .confirmationDialog(
@@ -224,7 +235,7 @@ struct HomeView: View {
                 showPreferancesView.toggle()
             }
         }
-        if !noticevm.notices.filter({ $0.isRead == false }).isEmpty && noticevm.isNotificationOn {
+        if isShowingNoticeMessageButton {
             ToolbarItem(placement: .navigationBarLeading) {
                 CircleStrokeButtonView(
                     iconName: "message",
@@ -232,30 +243,34 @@ struct HomeView: View {
                 {
                     showNoticesView = true
                 }
-                .overlay(alignment: .topTrailing) {
+                .overlay {
                     Capsule()
                         .fill(Color.mycolor.myRed)
-                        .frame(maxWidth: 20, maxHeight: 15)
+                        .frame(maxWidth: 15, maxHeight: 10)
                         .overlay {
                             Text("\(noticevm.notices.filter({ $0.isRead == false }).count)")
                                 .font(.system(size: 8, weight: .bold, design: .default))
                                 .foregroundStyle(Color.mycolor.myButtonTextPrimary)
                         }
+                        .offset(x: 6, y: -9)
                 }
-                .background(
-                    AnyView(
-                        Circle()
-                            .stroke(Color.mycolor.myRed, lineWidth: noticeButtonAnimation ? 3 : 0)
-                            .scaleEffect(noticeButtonAnimation ? 1.2 : 0.8)
-                            .opacity(noticeButtonAnimation ? 0.0 : 1.0)
-                    )
-                    .animation(
-                        noticeButtonAnimation
-                        ? .easeOut(duration: 1.0)
-                        : .none,
-                        value: noticeButtonAnimation
-                    )
-                )
+//                .background(
+//                    AnyView(
+//                        Circle()
+//                            .stroke(
+//                                Color.mycolor.myRed,
+//                                lineWidth: noticeButtonAnimation ? 3 : 0
+//                            )
+//                            .scaleEffect(noticeButtonAnimation ? 1.2 : 0.8)
+//                            .opacity(noticeButtonAnimation ? 0.0 : 1.0)
+//                    )
+//                    .animation(
+//                        noticeButtonAnimation
+//                        ? .easeOut(duration: 1.0)
+//                        : .none,
+//                        value: noticeButtonAnimation
+//                    )
+//                )
             }
         }
         
@@ -304,7 +319,6 @@ struct HomeView: View {
         }
     }
     
-
     private var allPostsIsEmpty: some View {
         ContentUnavailableView(
             "No Posts",
@@ -360,6 +374,17 @@ struct HomeView: View {
             .padding(.horizontal, 40)
         }
     }
+    
+    // MARK: Private functions
+    
+    private func postsForCategory(_ category: String?) -> [Post] {
+        guard let category = category else {
+            return vm.filteredPosts
+        }
+        return vm.filteredPosts.filter { $0.category == category }
+    }
+        
+
 }
 
 #Preview {
