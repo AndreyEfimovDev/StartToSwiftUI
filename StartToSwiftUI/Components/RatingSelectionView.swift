@@ -28,16 +28,11 @@ struct RatingSelectionView: View {
                             .padding(12)
                             .zIndex(1)
                             
-                            
                             VStack {
-                                
                                 Text("Rate Material")
                                     .font(.headline)
                                     .foregroundStyle(Color.mycolor.myBlue)
-//                                    .padding()
                                     .frame(maxWidth: .infinity, alignment: .center)
-//                                    .padding()
-
                                 VStack (spacing: 8) {
                                     Text(post.title)
                                         .font(.headline)
@@ -57,13 +52,11 @@ struct RatingSelectionView: View {
                                     .overlay(raringOverlayView.mask(ratingIconsView))
                                     .padding()
                                     .padding(.bottom, 30)
-                                
                                 HStack (spacing: 20) {
                                     ClearCupsuleButton(
                                         primaryTitle: "Reset",
                                         primaryTitleColor: Color.mycolor.myRed) {
                                             vm.selectedRating = nil
-                                            vm.ratePost(post: post)
                                         }
                                     ClearCupsuleButton(
                                         primaryTitle: "Place",
@@ -85,6 +78,7 @@ struct RatingSelectionView: View {
             }
         } // Group
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+//        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.horizontal, 30)
         .scaleEffect(showRatingView ? 1.0 : 0.5)
         .opacity(showRatingView ? 1.0 : 0)
@@ -96,7 +90,7 @@ struct RatingSelectionView: View {
             ForEach(PostRating.allCases, id: \.self) { rating in
                 rating.icon
                     .font(.largeTitle)
-                    .foregroundColor(Color.gray)
+                    .foregroundColor(Color.mycolor.mySecondary)
                     .onTapGesture {
                         withAnimation(.easeInOut) {
                             vm.selectedRating = rating
@@ -110,7 +104,8 @@ struct RatingSelectionView: View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 Rectangle()
-                    .foregroundColor(vm.selectedRating?.color ?? .secondary)
+//                    .foregroundColor(vm.selectedRating?.color ?? .secondary)
+                    .foregroundColor(Color.mycolor.myBlue)
                     .frame(width: CGFloat(vm.selectedRating?.value ?? 0) / 3 * geometry.size.width)
             }
         }

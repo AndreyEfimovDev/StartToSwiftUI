@@ -78,19 +78,16 @@ struct PostRowView: View {
                 if post.draft {
                     Image(systemName: "square.stack.3d.up")
                 }
-                
                 if post.favoriteChoice == .yes {
                     Image(systemName: "heart.fill")
                         .foregroundStyle(Color.mycolor.myYellow)
                 }
-                
                 if let rating = post.postRating {
                     rating.icon
-                        .foregroundStyle(rating.color)
+                        .foregroundStyle(Color.mycolor.myBlue)
                 }
-
                 post.progress.icon
-                    .foregroundStyle(post.progress.color)
+                    .foregroundStyle(Color.mycolor.myGreen)
                 
                 if post.origin != .local {
                     post.origin.icon

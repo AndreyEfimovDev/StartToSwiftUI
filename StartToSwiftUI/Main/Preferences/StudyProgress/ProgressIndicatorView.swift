@@ -13,6 +13,7 @@ struct ProgressIndicator: View {
     @State private var isAppear: Bool = false
 
     var progress: Double = 0
+    var colour: Color = Color.mycolor.myBlue
     var lineWidth: Double = 10.0
     var opacity: Double = 0.3
 
@@ -21,7 +22,7 @@ struct ProgressIndicator: View {
             
             Circle()
                 .stroke(lineWidth: lineWidth)
-                .foregroundStyle(Color.secondary)
+                .foregroundStyle(Color.mycolor.mySecondary)
                 .opacity(opacity)
             
             Circle()
@@ -30,7 +31,7 @@ struct ProgressIndicator: View {
                     lineWidth: lineWidth,
                     lineCap: .round,
                     lineJoin: .round))
-                .foregroundColor(Color.blue)
+                .foregroundStyle(colour)
                 .rotationEffect(.degrees(-90))
                 .animation(.linear(duration: 1), value: trim)
 
@@ -42,10 +43,9 @@ struct ProgressIndicator: View {
                     .font(.caption2)
             }
             .bold()
-            .foregroundStyle(trim == 100 ? Color.orange : Color.blue)
+            .foregroundStyle(colour)
             .opacity(isAppear ? 1 : 0)
             .animation(.bouncy(duration: 1), value: isAppear)
-
         }
         .onAppear {
                 isAppear.toggle()
@@ -93,7 +93,7 @@ struct ProgressViewCircleTrimPreview: View {
                         .frame(maxWidth: .infinity, alignment: .trailing)
                         .padding(.trailing)
                     Spacer()
-                    ProgressIndicator(progress: progress)
+                    ProgressIndicator(progress: progress, colour: level.color)
                 }
                 .padding(.vertical)
                 .padding(.trailing, 30)

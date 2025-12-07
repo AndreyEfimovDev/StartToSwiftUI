@@ -174,6 +174,8 @@ enum StudyLevel: String, CaseIterable, Codable {
 enum StudyProgress: String, CaseIterable, Codable { // progress in mastering educational materials
     case fresh, learning, studied, practiced
     
+    // 􀐾 chart.bar, 􀓎 hare, 􁗟 bird, 􁝯 tree, 􀑁 chart.line.uptrend.xyaxis
+    
     var displayName: String {
         switch self {
         case .fresh: return "New"
@@ -194,10 +196,10 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
     
     var color: Color {
         switch self {
-        case .fresh: return Color.mycolor.myAccent
-        case .learning: return Color.mycolor.myBlue
+        case .fresh: return Color.mycolor.myPurple
+        case .learning: return Color.mycolor.myRed
         case .studied: return Color.mycolor.myGreen
-        case .practiced: return Color.mycolor.myPurple
+        case .practiced: return Color.mycolor.myBlue
         }
     }
 
