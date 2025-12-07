@@ -28,6 +28,7 @@ struct HomeView: View {
     @State private var showAddPostView: Bool = false
     @State private var showNoticesView: Bool = false
     @State private var showOnTopButton: Bool = false
+    @State private var showStudyProgressSelectionView: Bool = false
     
     @State private var isFilterButtonPressed: Bool = false
     @State private var isShowingDeleteConfirmation: Bool = false
@@ -37,6 +38,7 @@ struct HomeView: View {
     @State private var isDetectingLongPress: Bool = false
     @State private var isLongPressSuccess: Bool = false
     private let longPressDuration: Double = 0.5
+    
     private var isShowingNoticeMessageButton: Bool {
         !noticevm.notices.filter({ $0.isRead == false }).isEmpty &&
         noticevm.isNotificationOn
@@ -107,24 +109,26 @@ struct HomeView: View {
             .presentationCornerRadius(30)
         }
         .overlay {
-            RatingSelectionView(showRatingView: $isLongPressSuccess)
+            RatingSelectionView(
+                showRatingView: $isLongPressSuccess
+            )
         }
+        .overlay {
+            StudyProgressSelectionView(
+                showStudyProgressSelectionView: $showStudyProgressSelectionView
+            )
+        }
+
         .onAppear { // task
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
             
 //            if isPerformingNoticeTask {
-//                print("🍒🍒🍒 Notification animation ready to start")
-//                
 //                try? await Task.sleep(nanoseconds: 1_000_000_000)
-//                print("🍒🍒 Notification animation started")
-//                
 //                if noticevm.isSoundNotificationOn {
 //                    AudioServicesPlaySystemSound(1013) // 1005
 //                }
 //                noticeButtonAnimation = true
 //                try? await Task.sleep(nanoseconds: 1_000_000_000)
-//                print("🍒 Notification animation finished")
-//                
 //                noticeButtonAnimation = false
 //                noticevm.isUserNotified = true
 //            }
@@ -144,9 +148,9 @@ struct HomeView: View {
                         minimumDuration: longPressDuration,
                         maximumDistance: 50,
                         perform: {
-                            isLongPressSuccess = true
                             vm.selectedRating = post.postRating
                             vm.selectedPostId = post.id
+                            isLongPressSuccess = true
                         },
                         onPressingChanged: { isPressing in
                             if isPressing {
@@ -159,21 +163,19 @@ struct HomeView: View {
                                 }
                             }
                         })
-//                    .onTapGesture {
-//                        vm.selectedPostId = post.id
-//                        showDetailView.toggle()
-//                    }
                     .onTapAndDoubleTap(
                         singleTap: {
-                            print("Single tap")
                             vm.selectedPostId = post.id
                             showDetailView.toggle()
                         },
                         doubleTap: {
-                            print("Double tap")
+                            vm.selectedStudyProgress = post.progress
+                            vm.selectedPostId = post.id
+                            showStudyProgressSelectionView = true
                         }
                     )
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        
                         Button("Delete", systemImage: "trash") {
                             selectedPostToDelete = post
                             hapticManager.notification(type: .warning)
@@ -184,16 +186,26 @@ struct HomeView: View {
                         Button("Edit", systemImage: post.origin == .cloud  || post.origin == .statical ? "pencil.slash" : "pencil") {
                             selectedPost = post
                         }
-                        .tint(Color.mycolor.myButtonBGBlue)
+                        .tint(Color.mycolor.myPurple)
                         .disabled(post.origin == .cloud || post.origin == .statical)
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                        
                         Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: post.favoriteChoice == .yes ?  "heart.slash.fill" : "heart.fill") {
                             vm.favoriteToggle(post: post)
                         }.tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondary : Color.mycolor.myYellow)
                         
+                        Button("Rate", systemImage: "star") {
+                            vm.selectedRating = post.postRating
+                            vm.selectedPostId = post.id
+                            isLongPressSuccess = true
+                        }
+                        .tint(Color.mycolor.myBlue)
+                        
                         Button("Progress", systemImage: "gauge.open.with.lines.needle.67percent.and.arrowtriangle") {
-                            vm.favoriteToggle(post: post)
+                            vm.selectedStudyProgress = post.progress
+                            vm.selectedPostId = post.id
+                            showStudyProgressSelectionView = true
                         }
                         .tint(Color.mycolor.myGreen)
                     }

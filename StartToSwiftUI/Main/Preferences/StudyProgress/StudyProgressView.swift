@@ -12,7 +12,7 @@ struct StudyProgressView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     
-//    @State var studyLevel: StudyLevel = .beginner
+    var studyLevel: StudyLevel = .beginner
     
     var body: some View {
         

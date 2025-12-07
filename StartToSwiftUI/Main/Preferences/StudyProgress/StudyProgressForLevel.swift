@@ -25,12 +25,12 @@ struct StudyProgressForLevel: View {
         
         VStack (spacing: 0) {
             if let level = studyLevel {
-                Text(level.displayName  + " (\(totalPostsCount))")
-                    .font(.title)
+                Text(level.displayName + " level" + " (\(totalPostsCount))")
+                    .font(.title3)
                     .foregroundStyle(level.color)
             } else {
-                Text("All" + " (\(totalPostsCount))")
-                    .font(.title)
+                Text("All levels" + " (\(totalPostsCount))")
+                    .font(.title3)
                     .foregroundStyle(Color.mycolor.myAccent)
             }
                         
@@ -39,14 +39,15 @@ struct StudyProgressForLevel: View {
                     
                     let count = levelPostsCount(for: progressLevel)
                     
-                    Text(progressLevel.displayName + "(\(count))" + ":")
+                    Text(progressLevel.displayName + " (\(count))" + ":")
                         .font(.title3)
+                        .foregroundStyle(progressLevel.color)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.leading, 30)
                     
                     Spacer()
                     
-                    ProgressIndicator(progress: progressCount(for: progressLevel))
+                    ProgressIndicator(progress: progressCount(for: progressLevel), colour: progressLevel.color)
                 }
                 .padding(.vertical)
                 .padding(.trailing, 30)
@@ -68,7 +69,6 @@ struct StudyProgressForLevel: View {
         .onAppear {
             refreshID = UUID()
         }
-
     }
     
     private func progressCount(for progressLevel: StudyProgress) -> Double {
