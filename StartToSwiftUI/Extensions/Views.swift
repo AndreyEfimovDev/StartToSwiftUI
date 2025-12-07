@@ -44,9 +44,6 @@ extension View {
     }
 }
 
-
-    
-
 extension View {
     func textFormater(
         cornerRadius: CGFloat = 30,
@@ -75,9 +72,6 @@ extension View {
             .bold()
             .foregroundStyle(colorSubheader)
             .padding(5)
-//            .padding(.leading, 5)
-//            .padding(.bottom, 5)
-
     }
 }
 
@@ -90,9 +84,22 @@ extension View {
             Image(systemName: iconName)
                 .frame(width: iconWidth)
                 .foregroundStyle(Color.mycolor.myBlue)
-            
             self
         }
+    }
+}
+
+// MARK: - View Modifier for processing Single and Double tap on PostRow
+
+extension View {
+    func onTapAndDoubleTap(
+        singleTap: @escaping () -> Void,
+        doubleTap: @escaping () -> Void
+    ) -> some View {
+        modifier(TapAndDoubleTapModifier(
+            singleTap: singleTap,
+            doubleTap: doubleTap
+        ))
     }
 }
 

@@ -18,9 +18,9 @@ class NoticeViewModel: ObservableObject {
 
     @Published var notices: [Notice] = []
     @Published var errorMessage: String?
-    @Published var showErrorMessageAlert = false
+    @Published var showErrorMessageAlert: Bool = false
     
-    @AppStorage("isUserNotified") var isUserNotified: Bool = true
+    @AppStorage("isUserNotified") var isUserNotified: Bool = false
     @AppStorage("isNotificationOn") var isNotificationOn: Bool = true
     @AppStorage("isSoundNotificationOn") var isSoundNotificationOn: Bool = true
     @AppStorage("dateOfLatestNoticesUpdate") var dateOfLatestNoticesUpdate: Date = Date.distantPast
@@ -120,7 +120,6 @@ class NoticeViewModel: ObservableObject {
                         } else {
                             print("🍉☑️ NVN(importNoticesFromCloud): Array of new notifications from the cloud is empty.")
                         }
-                        
                     } else {
                         print("🍉☑️ NVN(importNoticesFromCloud): Array of notifications from the cloud is empty.")
                     }

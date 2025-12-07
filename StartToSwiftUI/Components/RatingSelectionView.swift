@@ -28,7 +28,16 @@ struct RatingSelectionView: View {
                             .padding(12)
                             .zIndex(1)
                             
+                            
                             VStack {
+                                
+                                Text("Rate Material")
+                                    .font(.headline)
+                                    .foregroundStyle(Color.mycolor.myBlue)
+//                                    .padding()
+                                    .frame(maxWidth: .infinity, alignment: .center)
+//                                    .padding()
+
                                 VStack (spacing: 8) {
                                     Text(post.title)
                                         .font(.headline)
