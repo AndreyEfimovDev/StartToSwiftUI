@@ -172,14 +172,13 @@ enum StudyLevel: String, CaseIterable, Codable {
 }
 
 enum StudyProgress: String, CaseIterable, Codable { // progress in mastering educational materials
-    case fresh, learning, studied, practiced
+    case fresh, studied, practiced
     
     // 􀐾 chart.bar, 􀓎 hare, 􁗟 bird, 􁝯 tree, 􀑁 chart.line.uptrend.xyaxis
     
     var displayName: String {
         switch self {
         case .fresh: return "New"
-        case .learning: return "Learning"
         case .studied: return "Studied"
         case .practiced: return "Practiced"
         }
@@ -188,7 +187,6 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
     var icon: Image { // for other options look at TestSFSymbolsForProgress
         switch self {
         case .fresh: return Image(systemName: "signpost.right") // lightbulb signpost.right
-        case .learning: return Image(systemName: "figure.walk") //  graduationcap figure.walk
         case .studied: return Image(systemName: "flag.checkered") // brain.head.profile flag.checkered
         case .practiced: return Image(systemName: "mountain.2.fill") // hand.raised.fingers.spread mountain.2.fill
         }
@@ -196,10 +194,9 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
     
     var color: Color {
         switch self {
-        case .fresh: return Color.mycolor.myPurple
-        case .learning: return Color.mycolor.myRed
-        case .studied: return Color.mycolor.myGreen
-        case .practiced: return Color.mycolor.myBlue
+        case .fresh: return Color.mycolor.myGreen
+        case .studied: return Color.mycolor.myBlue
+        case .practiced: return Color.mycolor.myRed
         }
     }
 

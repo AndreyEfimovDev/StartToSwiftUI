@@ -7,15 +7,19 @@
 
 import SwiftUI
 
-struct StudyProgressSelectionView: View {
+struct ProgressSelectionView: View {
     
     @EnvironmentObject private var vm: PostsViewModel
-    
-    @Binding var showStudyProgressSelectionView: Bool
-    
+    @State private var isShowingView: Bool = false
+
+    let completion: () -> Void
+
+    init(completion: @escaping () -> Void) {
+        self.completion = completion
+    }
+
     var body: some View {
         Group {
-            if showStudyProgressSelectionView {
                 if let post = vm.allPosts.first(where: { $0.id == vm.selectedPostId}) {
                     VStack {
                         ZStack(alignment: .topTrailing) {
@@ -23,15 +27,15 @@ struct StudyProgressSelectionView: View {
                                 iconName: "xmark",
                                 isShownCircle: false)
                             {
-                                showStudyProgressSelectionView = false
+                                completion()
                             }
                             .padding(12)
                             .zIndex(1)
                             
                             VStack {
                                 Text("Set Study Progress")
-                                    .font(.headline)
-                                    .foregroundStyle(Color.mycolor.myBlue)
+                                    .font(.title3).bold()
+                                    .foregroundStyle(Color.mycolor.myGreen)
                                     .frame(maxWidth: .infinity, alignment: .center)
                                 
                                 VStack (spacing: 8) {
@@ -53,19 +57,20 @@ struct StudyProgressSelectionView: View {
                                     selection: $vm.selectedStudyProgress,
                                     allItems: StudyProgress.allCases,
                                     titleForCase: { $0.displayName },
-                                    selectedFont: .caption2,
+                                    selectedFont: .callout,
                                     selectedTextColor: Color.mycolor.myGreen,
                                     unselectedTextColor: Color.mycolor.mySecondary
                                 )
-                                .padding(.vertical)
+                                .padding(.bottom, 30)
 
                                 ClearCupsuleButton(
                                     primaryTitle: "Place",
                                     primaryTitleColor: Color.mycolor.myBlue) {
-                                        showStudyProgressSelectionView = false
                                         vm.updatePostStudyProgress(post: post)
+                                        completion()
                                     }
                                     .padding(.horizontal)
+                                    .frame(maxWidth: 200)
                             } // VStack
                             .padding(20)
                         } // ZStack
@@ -76,18 +81,19 @@ struct StudyProgressSelectionView: View {
                 } else {
                     Text("No post found")
                 }
-            }
         } // Group
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-//        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.horizontal, 30)
-        .scaleEffect(showStudyProgressSelectionView ? 1.0 : 0.5)
-        .opacity(showStudyProgressSelectionView ? 1.0 : 0)
-        .animation(.bouncy(duration: 0.5), value: showStudyProgressSelectionView)
+        .scaleEffect(isShowingView ? 1.0 : 0.5)
+        .opacity(isShowingView ? 1.0 : 0)
+        .animation(.bouncy(duration: 0.5), value: isShowingView)
+        .onAppear {
+            isShowingView = true
+        }
     }
 }
 
 #Preview {
-    StudyProgressSelectionView(showStudyProgressSelectionView: .constant(true))
+    ProgressSelectionView() {}
         .environmentObject(PostsViewModel())
 }

@@ -24,26 +24,38 @@ struct StudyProgressForLevel: View {
     var body: some View {
         
         VStack (spacing: 0) {
-            if let level = studyLevel {
-                Text(level.displayName + " level" + " (\(totalPostsCount))")
-                    .font(.title3)
+            
+                if let level = studyLevel {
+                    HStack {
+                        Image(systemName: "hare")
+                        Text(level.displayName + " level" + " (\(totalPostsCount))")
+                            .font(.title3)
+                    }
                     .foregroundStyle(level.color)
-            } else {
-                Text("All levels" + " (\(totalPostsCount))")
-                    .font(.title3)
+                } else {
+                    HStack {
+                        Image(systemName: "hare")
+                        Text("All levels" + " (\(totalPostsCount))")
+                            .font(.title3)
+                    }
                     .foregroundStyle(Color.mycolor.myAccent)
-            }
+                }
+           
                         
             ForEach(StudyProgress.allCases, id: \.self) { progressLevel in
                 HStack {
                     
                     let count = levelPostsCount(for: progressLevel)
+                    let name = progressLevel.displayName
                     
-                    Text(progressLevel.displayName + " (\(count))" + ":")
-                        .font(.title3)
-                        .foregroundStyle(progressLevel.color)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.leading, 30)
+                    Group {
+                        progressLevel.icon
+                            .padding(.leading, 15)
+                        Text(name + " (\(count))" + ":")
+                            .font(.title3)
+                            .foregroundStyle(progressLevel.color)
+                    }
+                    .foregroundStyle(progressLevel.color)
                     
                     Spacer()
                     

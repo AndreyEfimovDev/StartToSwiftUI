@@ -10,12 +10,16 @@ import SwiftUI
 struct RatingSelectionView: View {
     
     @EnvironmentObject private var vm: PostsViewModel
-    
-    @Binding var showRatingView: Bool
-    
+    @State private var isShowingView: Bool = false
+
+    let completion: () -> Void
+        
+    init(completion: @escaping () -> Void) {
+        self.completion = completion
+    }
+
     var body: some View {
         Group {
-            if showRatingView {
                 if let post = vm.allPosts.first(where: { $0.id == vm.selectedPostId}) {
                     VStack {
                         ZStack(alignment: .topTrailing) {
@@ -23,14 +27,14 @@ struct RatingSelectionView: View {
                                 iconName: "xmark",
                                 isShownCircle: false)
                             {
-                                showRatingView = false
+                                completion()
                             }
                             .padding(12)
                             .zIndex(1)
                             
                             VStack {
                                 Text("Rate Material")
-                                    .font(.headline)
+                                    .font(.title3).bold()
                                     .foregroundStyle(Color.mycolor.myBlue)
                                     .frame(maxWidth: .infinity, alignment: .center)
                                 VStack (spacing: 8) {
@@ -52,17 +56,19 @@ struct RatingSelectionView: View {
                                     .overlay(raringOverlayView.mask(ratingIconsView))
                                     .padding()
                                     .padding(.bottom, 30)
+                                
                                 HStack (spacing: 20) {
                                     ClearCupsuleButton(
                                         primaryTitle: "Reset",
                                         primaryTitleColor: Color.mycolor.myRed) {
                                             vm.selectedRating = nil
                                         }
+                                    
                                     ClearCupsuleButton(
                                         primaryTitle: "Place",
                                         primaryTitleColor: Color.mycolor.myBlue) {
-                                            showRatingView = false
                                             vm.ratePost(post: post)
+                                            completion()
                                         }
                                 }
                             } // VStack
@@ -70,32 +76,39 @@ struct RatingSelectionView: View {
                         } // ZStack
                     } //VStack
                     .background(
-                        .ultraThinMaterial,
+                        .thinMaterial,
                         in: RoundedRectangle(cornerRadius: 30))
                 } else {
                     Text("No post found")
                 }
-            }
         } // Group
         .frame(maxWidth: .infinity, maxHeight: .infinity)
 //        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.horizontal, 30)
-        .scaleEffect(showRatingView ? 1.0 : 0.5)
-        .opacity(showRatingView ? 1.0 : 0)
-        .animation(.bouncy(duration: 0.5), value: showRatingView)
+        .scaleEffect(isShowingView ? 1.0 : 0.5)
+        .opacity(isShowingView ? 1.0 : 0)
+        .animation(.bouncy(duration: 0.5), value: isShowingView)
+        .onAppear {
+            isShowingView = true
+        }
+
     }
     
     private var ratingIconsView: some View {
         HStack(spacing: 20) {
             ForEach(PostRating.allCases, id: \.self) { rating in
-                rating.icon
-                    .font(.largeTitle)
-                    .foregroundColor(Color.mycolor.mySecondary)
-                    .onTapGesture {
-                        withAnimation(.easeInOut) {
-                            vm.selectedRating = rating
+                VStack(spacing: 8) {
+                    rating.icon
+                        .font(.largeTitle)
+                        .foregroundColor(Color.mycolor.mySecondary)
+                        .onTapGesture {
+                            withAnimation(.easeInOut) {
+                                vm.selectedRating = rating
+                            }
                         }
-                    }
+                    Text(rating.displayName)
+                        .font(.caption)
+                }
             }
         }
     }
@@ -106,6 +119,7 @@ struct RatingSelectionView: View {
                 Rectangle()
 //                    .foregroundColor(vm.selectedRating?.color ?? .secondary)
                     .foregroundColor(Color.mycolor.myBlue)
+//                    .fill(LinearGradient(gradient: Gradient(colors: [Color.mycolor.myBlue.opacity(0.5), Color.mycolor.myBlue]), startPoint: .leading, endPoint: .trailing))
                     .frame(width: CGFloat(vm.selectedRating?.value ?? 0) / 3 * geometry.size.width)
             }
         }
@@ -114,6 +128,6 @@ struct RatingSelectionView: View {
 }
 
 #Preview {
-    RatingSelectionView(showRatingView: .constant(true))
+    RatingSelectionView() {}
         .environmentObject(PostsViewModel())
 }
