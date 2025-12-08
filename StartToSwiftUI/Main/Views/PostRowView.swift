@@ -47,7 +47,7 @@ struct PostRowView: View {
             .fontWeight(.bold)
             .minimumScaleFactor(0.75)
             .lineLimit(1)
-            .padding(.top, 8)
+            .padding(.top, 12)
     }
     
     private var author: some View {

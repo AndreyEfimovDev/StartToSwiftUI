@@ -28,7 +28,7 @@ struct HomeView: View {
     @State private var showAddPostView: Bool = false
     @State private var showNoticesView: Bool = false
     @State private var showOnTopButton: Bool = false
-    @State private var showStudyProgressSelectionView: Bool = false
+    @State private var showProgressSelectionView: Bool = false
     
     @State private var isFilterButtonPressed: Bool = false
     @State private var isShowingDeleteConfirmation: Bool = false
@@ -109,14 +109,18 @@ struct HomeView: View {
             .presentationCornerRadius(30)
         }
         .overlay {
-            RatingSelectionView(
-                showRatingView: $isLongPressSuccess
-            )
+            if isLongPressSuccess {
+                RatingSelectionView() {
+                    isLongPressSuccess = false
+                }
+            }
         }
         .overlay {
-            StudyProgressSelectionView(
-                showStudyProgressSelectionView: $showStudyProgressSelectionView
-            )
+            if showProgressSelectionView {
+                ProgressSelectionView() {
+                    showProgressSelectionView = false
+                }
+            }
         }
 
         .onAppear { // task
@@ -171,7 +175,7 @@ struct HomeView: View {
                         doubleTap: {
                             vm.selectedStudyProgress = post.progress
                             vm.selectedPostId = post.id
-                            showStudyProgressSelectionView = true
+                            showProgressSelectionView = true
                         }
                     )
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
@@ -195,19 +199,19 @@ struct HomeView: View {
                             vm.favoriteToggle(post: post)
                         }.tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondary : Color.mycolor.myYellow)
                         
-                        Button("Rate", systemImage: "star") {
-                            vm.selectedRating = post.postRating
-                            vm.selectedPostId = post.id
-                            isLongPressSuccess = true
-                        }
-                        .tint(Color.mycolor.myBlue)
-                        
-                        Button("Progress", systemImage: "gauge.open.with.lines.needle.67percent.and.arrowtriangle") {
-                            vm.selectedStudyProgress = post.progress
-                            vm.selectedPostId = post.id
-                            showStudyProgressSelectionView = true
-                        }
-                        .tint(Color.mycolor.myGreen)
+//                        Button("Rate", systemImage: "star") {
+//                            vm.selectedRating = post.postRating
+//                            vm.selectedPostId = post.id
+//                            isLongPressSuccess = true
+//                        }
+//                        .tint(Color.mycolor.myBlue)
+//                        
+//                        Button("Progress", systemImage: "gauge.open.with.lines.needle.67percent.and.arrowtriangle") {
+//                            vm.selectedStudyProgress = post.progress
+//                            vm.selectedPostId = post.id
+//                            showProgressSelectionView = true
+//                        }
+//                        .tint(Color.mycolor.myGreen)
                     }
             } // ForEach
             .confirmationDialog(

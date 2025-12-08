@@ -64,9 +64,9 @@ struct PreferencesView: View {
                         StudyProgressView()
                     }
                     .customListRowStyle(
-                        iconName: "gauge.open.with.lines.needle.67percent.and.arrowtriangle",
+                        iconName: "hare",
                         iconWidth: iconWidth)
-                }
+                } // gauge.open.with.lines.needle.67percent.and.arrowtriangle
                 
                 Section(header: sectionHeader("Manage materials (\(postsCount))")) {
                     postDrafts

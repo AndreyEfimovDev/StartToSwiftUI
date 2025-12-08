@@ -74,7 +74,7 @@ struct PreviewData {
         urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
         postDate: nil,
         studyLevel: .advanced,
-        progress: .learning, // fresh, learning, studied, practiced
+        progress: .fresh, // fresh, learning, studied, practiced
         postRating: .great, // good, great, excellent
         origin: .statical
     )

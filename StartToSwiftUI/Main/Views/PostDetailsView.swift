@@ -35,54 +35,154 @@ struct PostDetailsView: View {
     private let fullFreeTextFieldLineSpacing: CGFloat = 0
     private let FreeTextFieldLinesCountLimit: Int = 2
     
+    @State private var showRatingTab: Bool = false
+    @State private var showProgressTab: Bool = false
+    @State private var zIndexBarRating: Double = 0
+    @State private var zIndexBarProgress: Double = 0
+    private let minHeigt: CGFloat = 75
+    private let maxHeigt: CGFloat = 300
+    private let tabWidth: CGFloat = UIScreen.main.bounds.width * 0.60
+
     
     var body: some View {
-        Group {
-            if let validPost = post {
-                ScrollView(showsIndicators: false) {
-                    VStack {
-                        header(for: validPost)
-                            .background(
-                                .thinMaterial,
-                                in: RoundedRectangle(cornerRadius: 15)
-                            )
-                            .padding(.top, 30)
-                        
-                        intro(for: validPost)
-                            .background(
-                                .thinMaterial,
-                                in: RoundedRectangle(cornerRadius: 15)
-                            )
-                        goToTheSourceButton(for: validPost)
-                            .padding(.top, 30)
-                            .padding(.horizontal, 50)
-                        
-                        notesToPost(for: validPost)
-                            .background(
-                                .thinMaterial,
-                                in: RoundedRectangle(cornerRadius: 15)
-                            ).opacity(validPost.notes.isEmpty ? 0 : 1)
+        ZStack (alignment: .bottom) {
+            VStack {
+                if let validPost = post {
+                    ScrollView(showsIndicators: false) {
+                        VStack {
+                            header(for: validPost)
+                                .background(
+                                    .thinMaterial,
+                                    in: RoundedRectangle(cornerRadius: 15)
+                                )
+                                .padding(.top, 30)
+                            
+                            intro(for: validPost)
+                                .background(
+                                    .thinMaterial,
+                                    in: RoundedRectangle(cornerRadius: 15)
+                                )
+                            goToTheSourceButton(for: validPost)
+                                .padding(.top, 30)
+                                .padding(.horizontal, 50)
+                            
+                            notesToPost(for: validPost)
+                                .background(
+                                    .thinMaterial,
+                                    in: RoundedRectangle(cornerRadius: 15)
+                                ).opacity(validPost.notes.isEmpty ? 0 : 1)
+                        }
+                        .foregroundStyle(Color.mycolor.myAccent)
+                    } // ScrollView
+                    .padding(.horizontal)
+                    .navigationBarBackButtonHidden(true)
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        toolbarForPostDetails(validPost: validPost)
                     }
-                    .foregroundStyle(Color.mycolor.myAccent)
-                } // ScrollView
-                .padding(.horizontal)
-                .navigationBarBackButtonHidden(true)
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    toolbarForPostDetails(validPost: validPost)
-                }
-                .sheet(isPresented: $showEditPostView) {
-                    NavigationStack {
-                        AddEditPostSheet(post: post)
+                    .sheet(isPresented: $showEditPostView) {
+                        NavigationStack {
+                            AddEditPostSheet(post: post)
+                        }
                     }
+                } else {
+                    Text("Post is not found")
                 }
-            } else {
-                Text("Post is not found")
             }
         }
-        .overlay {
-            RatingSelectionView(showRatingView: $showRatingSelectionView)
+        .safeAreaInset(edge: .bottom) {
+//            if let validPost = post {
+                bottomTabsContainer
+//            }
         }
+        .ignoresSafeArea(edges: .bottom)
+
+    }
+    
+    private var bottomTabsContainer: some View {
+        ZStack {
+            // Rating Selection Bar
+            selectionTabView (
+                icon: "star", color: .yellow, alignment: .leading,
+                isExpanded: showRatingTab,
+                otherIsExpanded: showProgressTab,
+                zIndexTab: zIndexBarRating)
+            {
+                zIndexBarRating = 1
+                zIndexBarProgress = 0
+                withAnimation(.easeInOut(duration: 0.25)) {
+                    showRatingTab.toggle()
+                }
+            }
+            // Study Progress Selection Bar
+            selectionTabView (
+                icon: "hare", color: .green, alignment: .trailing,
+                isExpanded: showProgressTab,
+                otherIsExpanded: showRatingTab,
+                zIndexTab: zIndexBarProgress)
+            {
+                zIndexBarProgress = 1
+                zIndexBarRating = 0
+                withAnimation(.easeInOut(duration: 0.25)) {
+                    showProgressTab.toggle()
+                }
+            }
+        }
+
+    }
+    
+    @ViewBuilder
+    private func selectionTabView(
+        icon: String,
+        color: Color,
+        alignment: Alignment,
+        isExpanded: Bool,
+        otherIsExpanded: Bool,
+        zIndexTab: Double,
+        completion: @escaping () -> Void
+    ) -> some View {
+
+        ZStack (alignment: .top) {
+            UnevenRoundedRectangle(
+                topLeadingRadius: 30,
+                bottomLeadingRadius: 0,
+                bottomTrailingRadius: 0,
+                topTrailingRadius: 30,
+                style: .continuous
+            )
+            .fill(isExpanded ? .thinMaterial : .ultraThinMaterial)
+                .strokeBorder(
+                    (isExpanded ? Color.mycolor.myBlue : Color.mycolor.mySecondary).opacity(0.2),
+                    lineWidth: 1,
+                        antialiased: true
+                    )
+                .frame(height: isExpanded ? maxHeigt : minHeigt)
+            Button {
+                completion()
+            } label: {
+                VStack(spacing: 0) {
+                    if !isExpanded {
+                        Image(systemName: "control")
+                            .font(.headline)
+                    }
+//                        .rotationEffect(.degrees(isExpanded ? 180 : 0))
+                    Image(systemName: icon)
+                        .imageScale(.small)
+                        .padding(8)
+                }
+                .foregroundColor(Color.mycolor.myBlue)
+                .background(.black.opacity(0.001))
+            }
+            .buttonStyle(.plain)
+            .padding(.top, 4)
+            .padding(.horizontal)
+            .padding(.bottom, 8)
+        }
+        .frame(maxWidth: isExpanded ? .infinity : tabWidth)
+        .frame(maxWidth: .infinity, alignment: alignment)
+        .zIndex(zIndexTab)
+        .offset(y: otherIsExpanded && !isExpanded ? maxHeigt : 0)
+        .animation(.easeInOut(duration: 0.3), value: isExpanded)
     }
     
     // MARK: Subviews
@@ -106,20 +206,18 @@ struct PostDetailsView: View {
         }
         ToolbarItemGroup(placement: .topBarTrailing) {
             
-            CircleStrokeButtonView(
-                iconName: "star",
-                iconFont: .headline,
-                isShownCircle: false)
-            {
-                vm.selectedRating = validPost.postRating
-                showRatingSelectionView = true
-            }
+//            CircleStrokeButtonView(
+//                iconName: "star",
+//                iconFont: .headline,
+//                isShownCircle: false)
+//            {
+//                vm.selectedRating = validPost.postRating
+//                showRatingSelectionView = true
+//            }
             
             CircleStrokeButtonView(
                 iconName: validPost.favoriteChoice == .yes ? "heart.slash" : "heart",
                 iconFont: .headline,
-//                isIconColorToChange: validPost.favoriteChoice == .yes ? true : false,
-//                imageColorSecondary: Color.mycolor.myYellow,
                 isShownCircle: false)
             {
                 vm.favoriteToggle(post: validPost)
@@ -173,12 +271,11 @@ struct PostDetailsView: View {
                 }
                 .font(.caption)
                 .foregroundStyle(Color.mycolor.myAccent)
-                
+ 
                 //                    Text("\(post.category)")
                 //                        .font(.caption)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            //                .border(.yellow)
 
 //                if vm.selectedCategory == nil {
 //                    Text(post.category)

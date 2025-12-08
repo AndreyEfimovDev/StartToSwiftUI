@@ -92,7 +92,7 @@
 		47FF424B2EE4B5960069D232 /* RatingSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */; };
 		47FF424F2EE4C69F0069D232 /* TestSFSymbolsForOrigin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF424E2EE4C69F0069D232 /* TestSFSymbolsForOrigin.swift */; };
 		47FF42592EE556DB0069D232 /* TapHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF42582EE556DA0069D232 /* TapHandler.swift */; };
-		47FF425B2EE578DD0069D232 /* StudyProgressSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF425A2EE578DD0069D232 /* StudyProgressSelectionView.swift */; };
+		47FF425B2EE578DD0069D232 /* ProgressSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -183,7 +183,7 @@
 		47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingSelectionView.swift; sourceTree = "<group>"; };
 		47FF424E2EE4C69F0069D232 /* TestSFSymbolsForOrigin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSFSymbolsForOrigin.swift; sourceTree = "<group>"; };
 		47FF42582EE556DA0069D232 /* TapHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapHandler.swift; sourceTree = "<group>"; };
-		47FF425A2EE578DD0069D232 /* StudyProgressSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressSelectionView.swift; sourceTree = "<group>"; };
+		47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressSelectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -314,7 +314,7 @@
 				4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */,
 				47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */,
 				47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */,
-				47FF425A2EE578DD0069D232 /* StudyProgressSelectionView.swift */,
+				47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */,
 				478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */,
 				47BAF09E2E5F9C4500287F10 /* Buttons */,
 				470A21C42E6E389D006D2D66 /* Pickers */,
@@ -584,7 +584,7 @@
 				4732FB312EAA59B00062269D /* SharePostsView.swift in Sources */,
 				471BBFA12EC7251D0004AC45 /* NoticeViewModel.swift in Sources */,
 				4791CE082E75AAB000687126 /* UnderlineSermentedPickerNotOptional.swift in Sources */,
-				47FF425B2EE578DD0069D232 /* StudyProgressSelectionView.swift in Sources */,
+				47FF425B2EE578DD0069D232 /* ProgressSelectionView.swift in Sources */,
 				47A7339F2ED1C55A006BB8A6 /* VoiceSearchView.swift in Sources */,
 				471DCBD22EBB89E000AFA5F4 /* FairUseNotice.swift in Sources */,
 				4791CDEA2E72E8CC00687126 /* Arrays.swift in Sources */,
