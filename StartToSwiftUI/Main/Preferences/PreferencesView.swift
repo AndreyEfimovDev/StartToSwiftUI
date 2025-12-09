@@ -92,7 +92,11 @@ struct PreferencesView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    BackButtonView() { dismiss() }
+                    if UIDevice.isiPad {
+                        BackButtonView(iconName: "xmark") { dismiss() }
+                    } else {
+                        BackButtonView() { dismiss() }
+                    }
                 }
             }
         }

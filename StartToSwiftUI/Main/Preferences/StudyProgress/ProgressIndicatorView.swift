@@ -11,45 +11,48 @@ struct ProgressIndicator: View {
     
     @State private var trim: Double = 0
     @State private var isAppear: Bool = false
-
+    
     var progress: Double = 0
     var colour: Color = Color.mycolor.myBlue
+    var fontForTitle: Font = .title2
     var lineWidth: Double = 10.0
     var opacity: Double = 0.3
 
+//    private let circleSize: CGFloat = 100
+    
     var body: some View {
-        ZStack(alignment: .center) {
-            
-            Circle()
-                .stroke(lineWidth: lineWidth)
-                .foregroundStyle(Color.mycolor.mySecondary)
-                .opacity(opacity)
-            
-            Circle()
-                .trim(from: 0, to: trim)
-                .stroke(style: StrokeStyle(
-                    lineWidth: lineWidth,
-                    lineCap: .round,
-                    lineJoin: .round))
-                .foregroundStyle(colour)
-                .rotationEffect(.degrees(-90))
-                .animation(.linear(duration: 1), value: trim)
-
+        ZStack {
+            ZStack {
+                Circle()
+                    .stroke(lineWidth: lineWidth)
+                    .foregroundStyle(Color.mycolor.mySecondary)
+                    .opacity(opacity)
+                Circle()
+                    .trim(from: 0, to: trim)
+                    .stroke(style: StrokeStyle(
+                        lineWidth: lineWidth,
+                        lineCap: .round,
+                        lineJoin: .round))
+                    .foregroundStyle(colour)
+                    .rotationEffect(.degrees(-90))
+                    .animation(.linear(duration: 1), value: trim)
+            }
+//            .frame(width: circleSize, height: circleSize)
             HStack(alignment: .lastTextBaseline, spacing: 0) {
                 Text("\(Int(trim * 100))")
-                    .font(.title)
-                
+                    .font(fontForTitle)
                 Text("%")
                     .font(.caption2)
             }
             .bold()
-            .foregroundStyle(colour)
+            .foregroundStyle(Color.mycolor.myAccent)
             .opacity(isAppear ? 1 : 0)
             .animation(.bouncy(duration: 1), value: isAppear)
         }
+//        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear {
-                isAppear.toggle()
-                trim = progress
+            isAppear.toggle()
+            trim = progress
         }
     }
 }
@@ -80,20 +83,27 @@ struct ProgressViewCircleTrimPreview: View {
 
             Text("Study level")
                 .font(.body)
-//                .foregroundStyle(.foregroundStyle(post.studyLevel.color))
                 .foregroundStyle(.green)
 
             ForEach(StudyProgress.allCases, id: \.self) { level in
+                
                 HStack {
-                    let postCountForLevel = Double(posts.filter( {$0.progress == level}).count)
-                    let progress = postCountForLevel/Double(posts.count)
                     
-                    Text(level.displayName + ":")
-                        .font(.title)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .padding(.trailing)
+                    let count = levelPostsCount(for: level)
+                    
+                    VStack(spacing: 8) {
+                        level.icon
+                        Text(level.displayName)
+                        Text("(\(count))")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .font(.title2)
+                    .foregroundStyle(level.color)
+
                     Spacer()
-                    ProgressIndicator(progress: progress, colour: level.color)
+                    
+                    ProgressIndicator(progress: progressCount(for: level), colour: level.color)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 .padding(.vertical)
                 .padding(.trailing, 30)
@@ -111,6 +121,19 @@ struct ProgressViewCircleTrimPreview: View {
         .foregroundStyle(Color.mycolor.myAccent)
         .bold()
     }
+    
+    private func progressCount(for progressLevel: StudyProgress) -> Double {
+        
+        guard !posts.isEmpty else { return 0 }
+        
+        let filteredPosts = posts.filter { $0.progress == progressLevel }
+        return Double(filteredPosts.count) / Double(posts.count)
+    }
+    
+    private func levelPostsCount(for progressLevel: StudyProgress) -> Int {
+        posts.filter { $0.progress == progressLevel }.count
+    }
+
 }
 
 

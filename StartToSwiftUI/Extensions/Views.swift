@@ -9,16 +9,44 @@ import Foundation
 import SwiftUI
 
 
+// MARK: Adaptaion for iPad
+
+extension View {
+    func sheetForDevice<Content: View>(
+        isPresented: Binding<Bool>,
+        @ViewBuilder content: @escaping () -> Content
+    ) -> some View {
+        Group {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                self.sheet(isPresented: isPresented) {
+                    // iPad sheet
+                    content()
+                }
+            } else {
+                self.fullScreenCover(isPresented: isPresented) {
+                    // iPhone full screen
+                    content()
+                }
+            }
+        }
+    }
+}
+
+extension View {
+    func applyTabViewStyle() -> some View {
+        Group {
+            if UIDevice.isiPad {
+                self.tabViewStyle(.automatic)
+            } else {
+                self
+                    .tabViewStyle(.page(indexDisplayMode: .always))
+                    .indexViewStyle(.page(backgroundDisplayMode: .always))
+            }
+        }
+    }
+}
+
 // MARK: CUSTOM BACKGROUND
-
-//extension View {
-//    func myBackground(colorScheme: ColorScheme) -> some View {
-//        self
-//            .background(.thinMaterial)
-////            .ignoresSafeArea()
-//    }
-//}
-
 
 extension View {
     func mySsectionBackground() -> some View {

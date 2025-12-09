@@ -13,14 +13,11 @@ struct PostRowView: View {
     
     let post: Post
     
-//    @State private var isShowPopover: Bool = false
-
     @State private var introLineCount: Int = 0
     
     private let introFont: Font = .footnote
     private let introLineSpacing: CGFloat = 0
     private let introLinesCountLimit: Int = 2
-    
     
     // MARK: MAIN BODY
     
@@ -79,8 +76,8 @@ struct PostRowView: View {
                     Image(systemName: "square.stack.3d.up")
                 }
                 if post.favoriteChoice == .yes {
-                    Image(systemName: "heart.fill")
-                        .foregroundStyle(Color.mycolor.myYellow)
+                    Image(systemName: "heart")
+                        .foregroundStyle(Color.mycolor.myRed)
                 }
                 if let rating = post.postRating {
                     rating.icon
@@ -89,9 +86,9 @@ struct PostRowView: View {
                 post.progress.icon
                     .foregroundStyle(Color.mycolor.myGreen)
                 
-                if post.origin != .local {
+//                if post.origin != .local {
                     post.origin.icon
-                }
+//                }
             }
             .font(.caption)
             .foregroundStyle(Color.mycolor.myAccent)

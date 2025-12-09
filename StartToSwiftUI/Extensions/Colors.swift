@@ -19,15 +19,15 @@ extension Color {
 
 struct MyColors {
     
-    let myAccent = Color("_Accent")
-    let myBackground = Color("_Background")
-    let myBlue = Color("_Blue")
-    let myGreen = Color("_Green")
-    let myOrange = Color("_Orange")
-    let myPurple = Color("_Purple")
-    let myRed = Color("_Red")
-    let mySecondary = Color("_Secondary")
-    let myYellow = Color("_Yellow")
+    let myAccent = Color("_myAccent")
+    let myBackground = Color("_myBackground")
+    let myBlue = Color("_myBlue")
+    let myGreen = Color("_myGreen")
+    let myOrange = Color("_myOrange")
+    let myPurple = Color("_myPurple")
+    let myRed = Color("_myRed")
+    let mySecondary = Color("_mySecondary")
+    let myYellow = Color("_myYellow")
     
     let myButtonBGBlue = Color("ButtonBG_Blue")
     let myButtonBGGray = Color("ButtonBG_Gray")

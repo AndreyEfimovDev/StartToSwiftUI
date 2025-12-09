@@ -81,7 +81,7 @@ struct HomeView: View {
                 }
             }
         }
-        .fullScreenCover(isPresented: $showPreferancesView) {
+        .sheetForDevice(isPresented: $showPreferancesView) {
             PreferencesView()
         }
         .sheet(isPresented: $showNoticesView) {
@@ -190,28 +190,14 @@ struct HomeView: View {
                         Button("Edit", systemImage: post.origin == .cloud  || post.origin == .statical ? "pencil.slash" : "pencil") {
                             selectedPost = post
                         }
-                        .tint(Color.mycolor.myPurple)
+                        .tint(Color.mycolor.myBlue)
                         .disabled(post.origin == .cloud || post.origin == .statical)
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: false) {
                         
-                        Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: post.favoriteChoice == .yes ?  "heart.slash.fill" : "heart.fill") {
+                        Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: post.favoriteChoice == .yes ?  "heart.slash" : "heart") {
                             vm.favoriteToggle(post: post)
-                        }.tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondary : Color.mycolor.myYellow)
-                        
-//                        Button("Rate", systemImage: "star") {
-//                            vm.selectedRating = post.postRating
-//                            vm.selectedPostId = post.id
-//                            isLongPressSuccess = true
-//                        }
-//                        .tint(Color.mycolor.myBlue)
-//                        
-//                        Button("Progress", systemImage: "gauge.open.with.lines.needle.67percent.and.arrowtriangle") {
-//                            vm.selectedStudyProgress = post.progress
-//                            vm.selectedPostId = post.id
-//                            showProgressSelectionView = true
-//                        }
-//                        .tint(Color.mycolor.myGreen)
+                        }.tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondary : Color.mycolor.myRed.opacity(0.5))
                     }
             } // ForEach
             .confirmationDialog(

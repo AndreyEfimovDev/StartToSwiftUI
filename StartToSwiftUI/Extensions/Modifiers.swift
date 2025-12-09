@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: Custom One/Two Taps for RoawPost in HomeView
 
 struct TapAndDoubleTapModifier: ViewModifier {
     let singleTap: () -> Void
@@ -29,6 +30,27 @@ struct TapAndDoubleTapModifier: ViewModifier {
             }
     }
 }
+
+// MARK: Adaptaion StudyProgressView for iPad
+
+struct AdaptiveTabViewStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        if UIDevice.isiPad {
+            // for iPad
+            content
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                .disabled(true)
+        } else {
+            // for iPhone
+            content
+                .tabViewStyle(.page)
+                .indexViewStyle(.page(backgroundDisplayMode: .always))
+        }
+    }
+}
+
+//            .tabViewStyle(.page(indexDisplayMode: .never))
+
 
 
 //struct Modifiers: View {

@@ -12,37 +12,58 @@ struct StudyProgressView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     
-    var studyLevel: StudyLevel = .beginner
-    
+    @State private var selectedTab: StudyProgressTabs = .total
+        
+    private var tabs: [StudyProgressTabs] {
+            [.total, .beginner, .middle, .advanced]
+        }
+
     var body: some View {
         
-        TabView {
-            StudyProgressForLevel(studyLevel: nil)
-                .tabItem {
-                    Label("Total", systemImage: "1.circle")
-                        .labelStyle(.titleOnly)
-                }.tag(0)
+        VStack {
             
-            StudyProgressForLevel(studyLevel: .beginner)
-                .tabItem {
-                    Label("Beginner", systemImage: "2.circle")
-                        .labelStyle(.titleOnly)
-                }.tag(1)
-            
-            StudyProgressForLevel(studyLevel: .middle)
-                .tabItem {
-                    Label("Middle", systemImage: "3.circle")
-                        .labelStyle(.titleOnly)
-                }.tag(2)
-            
-            StudyProgressForLevel(studyLevel: .advanced)
-                .tabItem {
-                    Label("Advanced", systemImage: "4.circle")
-                        .labelStyle(.titleOnly)
-                }.tag(3)
+            if UIDevice.isiPad {
+                Group {
+                    Group {
+                        switch selectedTab {
+                        case .total:
+                            StudyProgressForLevel(studyLevel: nil)
+                        case .beginner:
+                            StudyProgressForLevel(studyLevel: .beginner)
+                        case .middle:
+                            StudyProgressForLevel(studyLevel: .middle)
+                        case .advanced:
+                            StudyProgressForLevel(studyLevel: .advanced)
+                        }
+                    }
+                    .transition(.opacity)
+                    .animation(.bouncy(duration: 0.3), value: selectedTab)
+                    .padding(.horizontal, 50)
+                    
+                    UnderlineSermentedPickerNotOptional(
+                        selection: $selectedTab,
+                        allItems: StudyProgressTabs.allCases,
+                        titleForCase: { $0.displayName },
+                        selectedFont: .headline,
+                        selectedTextColor: Color.mycolor.myBlue,
+                        unselectedTextColor: Color.mycolor.mySecondary
+                    )
+                    .padding(.horizontal, 30)
+                    .padding(.bottom, 30)
+                }
+
+            } else {
+                TabView (selection: $selectedTab) {
+                    ForEach(tabs, id: \.self) { tab in
+                        StudyProgressForLevel(studyLevel: tab.studyLevel)
+                            .tag(tab)
+                    }
+                }
+                .padding(.bottom, 30)
+                .tabViewStyle(.page)
+                .indexViewStyle(.page(backgroundDisplayMode: .always))
+            }
         }
-        .tabViewStyle(.page(indexDisplayMode: .always))
-        .indexViewStyle(.page(backgroundDisplayMode: .always))
         .navigationTitle("Achievements")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
