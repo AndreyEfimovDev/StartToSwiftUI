@@ -32,6 +32,32 @@ enum Theme: String, CaseIterable, Codable {
     }
 }
 
+enum StudyProgressTabs: String, CaseIterable, Codable, Hashable {
+    case total
+    case beginner
+    case middle
+    case advanced
+    
+    var displayName: String {
+        switch self {
+        case .total: return "Total"
+        case .beginner: return "Beginner"
+        case .middle: return "Middle"
+        case .advanced: return "Advanced"
+        }
+    }
+    
+    var studyLevel: StudyLevel? {
+        switch self {
+        case .total: return nil
+        case .beginner: return .beginner
+        case .middle: return .middle
+        case .advanced: return .advanced
+        }
+    }
+
+}
+
 // MARK: Sorting option
 
 enum SortOption: String, CaseIterable {
@@ -186,7 +212,7 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
     
     var icon: Image { // for other options look at TestSFSymbolsForProgress
         switch self {
-        case .fresh: return Image(systemName: "signpost.right") // lightbulb signpost.right
+        case .fresh: return Image(systemName: "sparkles") // lightbulb signpost.right
         case .studied: return Image(systemName: "flag.checkered") // brain.head.profile flag.checkered
         case .practiced: return Image(systemName: "mountain.2.fill") // hand.raised.fingers.spread mountain.2.fill
         }
@@ -201,6 +227,8 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
     }
 
 }
+
+
 
 enum Platform: String, CaseIterable, Codable {
     case youtube

@@ -63,6 +63,7 @@ struct SidebarView: View {
                 .bold()
                 .padding()
         }
+        .foregroundStyle(Color.mycolor.myAccent)
     }
     
 }

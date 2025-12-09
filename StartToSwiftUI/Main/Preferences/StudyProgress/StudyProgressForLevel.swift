@@ -14,6 +14,10 @@ struct StudyProgressForLevel: View {
 
     let studyLevel: StudyLevel?
     
+    private var fontForTitle: Font {
+        UIDevice.isiPad ? .body : .title3
+    }
+    
     private var postsForStudyLevel: [Post] {
         if let level = studyLevel {
             return vm.allPosts.filter { $0.studyLevel == level }
@@ -24,45 +28,47 @@ struct StudyProgressForLevel: View {
     var body: some View {
         
         VStack (spacing: 0) {
+            // TITLE
+            var titleForStudyLevel: String {
+                if let studyLevel = studyLevel {
+                    studyLevel.displayName + " materials"
+                } else { "All materials" }
+            }
+            HStack {
+                Image(systemName: "hare")
+                Text(titleForStudyLevel + " (\(totalPostsCount))")
+                    .font(.title3)
+            }
+            .foregroundStyle(studyLevel?.color ?? Color.mycolor.myAccent)
+            .padding()
             
-                if let level = studyLevel {
-                    HStack {
-                        Image(systemName: "hare")
-                        Text(level.displayName + " level" + " (\(totalPostsCount))")
-                            .font(.title3)
-                    }
-                    .foregroundStyle(level.color)
-                } else {
-                    HStack {
-                        Image(systemName: "hare")
-                        Text("All levels" + " (\(totalPostsCount))")
-                            .font(.title3)
-                    }
-                    .foregroundStyle(Color.mycolor.myAccent)
-                }
-           
-                        
+            // PROGRESS VIEWS
             ForEach(StudyProgress.allCases, id: \.self) { progressLevel in
                 HStack {
-                    
-                    let count = levelPostsCount(for: progressLevel)
-                    let name = progressLevel.displayName
-                    
-                    Group {
+                    VStack(spacing: 0) {
                         progressLevel.icon
-                            .padding(.leading, 15)
-                        Text(name + " (\(count))" + ":")
-                            .font(.title3)
                             .foregroundStyle(progressLevel.color)
+                            .padding(.bottom, 8)
+                        Text(progressLevel.displayName)
+                        Text("(\(levelPostsCount(for: progressLevel)))")
+                            .font(.caption2)
                     }
-                    .foregroundStyle(progressLevel.color)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .font(fontForTitle)
+                    .foregroundStyle(Color.mycolor.myAccent)
+                    .padding()
+                    .padding(.leading, 30)
                     
                     Spacer()
                     
-                    ProgressIndicator(progress: progressCount(for: progressLevel), colour: progressLevel.color)
+                    ProgressIndicator(
+                        progress: progressCount(for: progressLevel),
+                        colour: progressLevel.color,
+                        fontForTitle: fontForTitle
+                    )
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
                 }
-                .padding(.vertical)
-                .padding(.trailing, 30)
+                .padding()
                 .background(.ultraThinMaterial)
                 .clipShape(
                     RoundedRectangle(cornerRadius: 30)
@@ -74,9 +80,8 @@ struct StudyProgressForLevel: View {
                 .padding(8)
             }
         }
-        .foregroundStyle(.blue)
         .bold()
-        .padding(.bottom, 45)
+        .padding()
         .id(refreshID)
         .onAppear {
             refreshID = UUID()

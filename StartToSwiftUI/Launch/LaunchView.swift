@@ -29,7 +29,7 @@ struct LaunchView: View {
                     .font(.headline)
                     .fontWeight(.heavy)
                     .frame(width: 200, height: 200)
-                    .offset(y: UIDevice.isiPad ? 0 : 8)
+                    .offset(y: UIDevice.isiPad ? -0 : 8)
 //                    .opacity(showLaunchView ? 1 : 0)
 //                    .transition(.asymmetric(
 //                        insertion: .move(edge: .leading),
