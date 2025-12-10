@@ -110,21 +110,25 @@ struct HomeView: View {
                 .presentationCornerRadius(30)
             }
             .overlay {
-                if isLongPressSuccess {
-                    RatingSelectionView() {
-                        isLongPressSuccess = false
+                if UIDevice.isiPhone {
+                    if isLongPressSuccess {
+                        RatingSelectionView() {
+                            isLongPressSuccess = false
+                        }
+                        .frame(maxHeight: max(proxy.size.height / 3, 300))
+                        .padding(.horizontal, 30)
                     }
-                    .frame(maxHeight: max(proxy.size.height / 3, 300))
-                    .padding(.horizontal, 30)
                 }
             }
             .overlay {
-                if showProgressSelectionView {
-                    ProgressSelectionView() {
-                        showProgressSelectionView = false
+                if UIDevice.isiPhone {
+                    if showProgressSelectionView {
+                        ProgressSelectionView() {
+                            showProgressSelectionView = false
+                        }
+                        .frame(maxHeight: max(proxy.size.height / 3, 300))
+                        .padding(.horizontal, 30)
                     }
-                    .frame(maxHeight: max(proxy.size.height / 3, 300))
-                    .padding(.horizontal, 30)
                 }
             }
             .onAppear {
@@ -283,10 +287,13 @@ struct HomeView: View {
         }
         
         ToolbarItemGroup(placement: .navigationBarTrailing) {
-            CircleStrokeButtonView(
-                iconName: "plus",
-                isShownCircle: false)
-            { showAddPostView.toggle() }
+            
+            if UIDevice.isiPhone {
+                CircleStrokeButtonView(
+                    iconName: "plus",
+                    isShownCircle: false)
+                { showAddPostView.toggle() }
+            }
             
             CircleStrokeButtonView(
                 iconName: "line.3.horizontal.decrease",

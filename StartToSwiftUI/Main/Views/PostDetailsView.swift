@@ -18,13 +18,14 @@ struct PostDetailsView: View {
     @State private var showFullIntro: Bool = false
     @State private var showFullFreeTextField: Bool = false
     @State private var showEditPostView: Bool = false
+    @State private var showAddPostView: Bool = false
     @State private var showRatingSelectionView: Bool = false
     
     let postId: String
     
     private var post: Post? {
         vm.allPosts.first(where: { $0.id == postId })
-        //                PreviewData.samplePost3
+//                        PreviewData.samplePost3
     }
     
     @State private var lineCountIntro: Int = 0
@@ -70,7 +71,7 @@ struct PostDetailsView: View {
                                 )
                             goToTheSourceButton(for: validPost)
                                 .padding(.top, 30)
-                                .padding(.horizontal, 50)
+                                .frame(maxWidth: 250)
                             
                             notesToPost(for: validPost)
                                 .background(
@@ -89,6 +90,11 @@ struct PostDetailsView: View {
                     .sheet(isPresented: $showEditPostView) {
                         NavigationStack {
                             AddEditPostSheet(post: post)
+                        }
+                    }
+                    .sheet(isPresented: $showAddPostView) {
+                        NavigationStack {
+                            AddEditPostSheet(post: nil)
                         }
                     }
                 } else {
@@ -225,6 +231,14 @@ struct PostDetailsView: View {
             if UIDevice.isiPhone {
                 BackButtonView() { dismiss() }
             }
+            
+            if UIDevice.isiPad {
+                CircleStrokeButtonView(
+                    iconName: "plus",
+                    isShownCircle: false)
+                { showAddPostView.toggle() }
+            }
+
             
             ShareLink(item: validPost.urlString) {
                 Image(systemName: "square.and.arrow.up")

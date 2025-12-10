@@ -19,7 +19,7 @@ struct TapAndDoubleTapModifier: ViewModifier {
         content
             .onTapGesture {
                 tapCount += 1
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.20) {
                     if tapCount == 1 {
                         singleTap()
                     } else if tapCount == 2 {
