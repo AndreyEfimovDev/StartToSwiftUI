@@ -119,7 +119,7 @@ struct ImportPostsFromCloudView: View {
 //                dismiss()
 //            }
 //        }
-        
+//        
         vm.importPostsFromCloud() {
             isInProgress = false
             if !vm.showErrorMessageAlert {

@@ -23,7 +23,7 @@ struct SearchBarView: View {
             HStack(spacing: 0) {
                 Image(systemName: "magnifyingglass")
                     .foregroundStyle(
-                        isFocusedOnSearchBar || speechRecogniser.isRecording ? Color.mycolor.myAccent : Color.mycolor.mySecondaryText
+                        isFocusedOnSearchBar || speechRecogniser.isRecording ? Color.mycolor.myAccent : Color.mycolor.mySecondary
                     )
 
                 TextField("Search here ...", text: $vm.searchText)
@@ -54,7 +54,7 @@ struct SearchBarView: View {
                 ZStack {
                     Capsule()
                         .stroke(
-                            isFocusedOnSearchBar ? Color.mycolor.myBlue : Color.mycolor.mySecondaryText,
+                            isFocusedOnSearchBar ? Color.mycolor.myBlue : Color.mycolor.mySecondary,
                             lineWidth: isFocusedOnSearchBar ? 5 : 1
                         )
                 }
@@ -120,7 +120,7 @@ struct SearchBarView: View {
                 Image(systemName: speechRecogniser.isRecording ? "stop.circle" : "mic")
                     .font(isFocusedOnSearchBar ? .title : .body)
                     .foregroundStyle(
-                        speechRecogniser.isRecording ? Color.mycolor.myRed : Color.mycolor.mySecondaryText
+                        speechRecogniser.isRecording ? Color.mycolor.myRed : Color.mycolor.mySecondary
                     )
                     .padding(8)
             }

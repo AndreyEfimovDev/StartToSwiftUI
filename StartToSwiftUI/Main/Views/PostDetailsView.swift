@@ -11,19 +11,23 @@ struct PostDetailsView: View {
     
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject private var vm: PostsViewModel
-        
+    
+    private let hapticManager = HapticService.shared
+    
     @State private var showSafariView = false
     @State private var showFullIntro: Bool = false
     @State private var showFullFreeTextField: Bool = false
     @State private var showEditPostView: Bool = false
+    @State private var showAddPostView: Bool = false
+    @State private var showRatingSelectionView: Bool = false
     
     let postId: String
     
     private var post: Post? {
         vm.allPosts.first(where: { $0.id == postId })
-//        PreviewData.samplePost3
+//                        PreviewData.samplePost3
     }
-        
+    
     @State private var lineCountIntro: Int = 0
     private let introFont: Font = .subheadline
     private let introLineSpacing: CGFloat = 0
@@ -34,50 +38,188 @@ struct PostDetailsView: View {
     private let fullFreeTextFieldLineSpacing: CGFloat = 0
     private let FreeTextFieldLinesCountLimit: Int = 2
     
+    @State private var showRatingTab: Bool = false
+    @State private var showProgressTab: Bool = false
+    @State private var zIndexBarRating: Double = 0
+    @State private var zIndexBarProgress: Double = 0
+    private var minHeight: CGFloat {
+        if UIDevice.isiPad { 60 }
+        else { 75 }
+    }
+    @State private var maxHeight: CGFloat = 350
+    private let widthRatio: CGFloat = 0.55
+    @State private var tabWidth: CGFloat = 0
+    @State private var expandedWidth: CGFloat = 0
     
     var body: some View {
-        
-        if let validPost = post {
-            ScrollView(showsIndicators: false) {
-                VStack {
-                    header(for: validPost)
-                        .background(
-                            .thinMaterial,
-                            in: RoundedRectangle(cornerRadius: 15)
-                        )
-                        .padding(.top, 30)
-                    
-                    intro(for: validPost)
-                        .background(
-                            .thinMaterial,
-                            in: RoundedRectangle(cornerRadius: 15)
-                        )
-                    goToTheSourceButton(for: validPost)
-                        .padding(.top, 30)
-                        .padding(.horizontal, 50)
-
-                    notesToPost(for: validPost)
-                        .background(
-                            .thinMaterial,
-                            in: RoundedRectangle(cornerRadius: 15)
-                        ).opacity(validPost.notes.isEmpty ? 0 : 1)
+        GeometryReader { proxy in
+            VStack {
+                if let validPost = post {
+                    ScrollView(showsIndicators: false) {
+                        VStack {
+                            header(for: validPost)
+                                .background(
+                                    .thinMaterial,
+                                    in: RoundedRectangle(cornerRadius: 15)
+                                )
+                                .padding(.top, 30)
+                            
+                            intro(for: validPost)
+                                .background(
+                                    .thinMaterial,
+                                    in: RoundedRectangle(cornerRadius: 15)
+                                )
+                            goToTheSourceButton(for: validPost)
+                                .padding(.top, 30)
+                                .frame(maxWidth: 250)
+                            
+                            notesToPost(for: validPost)
+                                .background(
+                                    .thinMaterial,
+                                    in: RoundedRectangle(cornerRadius: 15)
+                                ).opacity(validPost.notes.isEmpty ? 0 : 1)
+                        }
+                        .foregroundStyle(Color.mycolor.myAccent)
+                    } // ScrollView
+                    .padding(.horizontal)
+                    .navigationBarBackButtonHidden(true)
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        toolbarForPostDetails(validPost: validPost)
+                    }
+                    .sheet(isPresented: $showEditPostView) {
+                        NavigationStack {
+                            AddEditPostSheet(post: post)
+                        }
+                    }
+                    .sheet(isPresented: $showAddPostView) {
+                        NavigationStack {
+                            AddEditPostSheet(post: nil)
+                        }
+                    }
+                } else {
+                    Text("Post is not found")
                 }
-                .foregroundStyle(Color.mycolor.myAccent)
-            } // ScrollView
-            .padding(.horizontal)
-            .navigationBarBackButtonHidden(true)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                toolbarForPostDetails(validPost: validPost)
             }
-            .sheet(isPresented: $showEditPostView) {
-                NavigationStack {
-                    AddEditPostSheet(post: post)
-                }
+            .onAppear {
+                tabWidth = proxy.size.width * widthRatio
+                expandedWidth = proxy.size.width
             }
-        } else {
-            Text("Post is not found")
+            .onChange(of: proxy.size.width, { oldValue, newValue in
+                tabWidth = newValue * widthRatio
+                expandedWidth = newValue
+            })
+            .safeAreaInset(edge: .bottom) {
+                bottomTabsContainer
+            }
+            .ignoresSafeArea(edges: .bottom)
         }
+    }
+    
+    private var bottomTabsContainer: some View {
+        ZStack {
+            // Study Progress Selection Bar
+            selectionTabView (
+                icon: "hare", color: .green, alignment: .leading,
+                isExpanded: showProgressTab,
+                otherIsExpanded: showRatingTab,
+                zIndexTab: zIndexBarProgress,
+                content: {
+                    ProgressSelectionView {
+                        print("Progress Height: \(maxHeight)")
+                        showProgressTab = false
+                    }
+                }) {
+                    maxHeight = 310
+                    zIndexBarProgress = 1
+                    zIndexBarRating = 0
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        showProgressTab.toggle()
+                    }
+                }
+            // Rating Selection Bar
+            selectionTabView (
+                icon: "star", color: .yellow, alignment: .trailing,
+                isExpanded: showRatingTab,
+                otherIsExpanded: showProgressTab,
+                zIndexTab: zIndexBarRating,
+                content: {
+                        RatingSelectionView {
+                            print("Rating Height: \(maxHeight)")
+                            showRatingTab = false
+                        }
+                }) {
+                    maxHeight = 350
+                    zIndexBarRating = 1
+                    zIndexBarProgress = 0
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        showRatingTab.toggle()
+                    }
+                }
+        }
+    }
+    
+    @ViewBuilder
+    private func selectionTabView<Content: View>(
+        icon: String,
+        color: Color,
+        alignment: Alignment,
+        isExpanded: Bool,
+        otherIsExpanded: Bool,
+        zIndexTab: Double,
+        @ViewBuilder content: () -> Content,
+        completion: @escaping () -> Void
+    ) -> some View {
+            ZStack (alignment: .top) {
+                Group {
+                    UnevenRoundedRectangle(
+                        topLeadingRadius: 30,
+                        bottomLeadingRadius: 0,
+                        bottomTrailingRadius: 0,
+                        topTrailingRadius: 30,
+                        style: .continuous
+                    )
+                    .fill(.ultraThinMaterial)
+                    .strokeBorder(
+                        (isExpanded ? Color.mycolor.myBlue : Color.mycolor.mySecondary).opacity(0.2),
+                        lineWidth: 1,
+                        antialiased: true
+                    )
+                    
+                    Button {
+                        completion()
+                    } label: {
+                        VStack(spacing: 0) {
+                            if !isExpanded {
+                                Image(systemName: "control")
+                                    .font(.headline)
+                                Image(systemName: icon)
+                                    .imageScale(.small)
+                                    .padding(8)
+                            }
+                        }
+                        .foregroundColor(Color.mycolor.myBlue)
+                        .padding(.top, 4)
+                        .padding(.horizontal, 30)
+                        .background(.black.opacity(0.001))
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(isExpanded)
+                }
+                .opacity(isExpanded ? 0 : 1)
+                
+                if isExpanded {
+                        content()
+                }
+
+            }
+            .frame(height: isExpanded ? maxHeight : minHeight)
+            .frame(maxWidth: isExpanded ? expandedWidth : tabWidth)
+            .frame(maxWidth: .infinity, alignment: alignment)
+            .zIndex(zIndexTab)
+            .offset(y: otherIsExpanded && !isExpanded ? maxHeight : 0)
+            .animation(.bouncy(duration: 0.3), value: isExpanded)
+            
     }
     
     // MARK: Subviews
@@ -90,6 +232,14 @@ struct PostDetailsView: View {
                 BackButtonView() { dismiss() }
             }
             
+            if UIDevice.isiPad {
+                CircleStrokeButtonView(
+                    iconName: "plus",
+                    isShownCircle: false)
+                { showAddPostView.toggle() }
+            }
+
+            
             ShareLink(item: validPost.urlString) {
                 Image(systemName: "square.and.arrow.up")
                     .font(.headline)
@@ -100,16 +250,15 @@ struct PostDetailsView: View {
             }
         }
         ToolbarItemGroup(placement: .topBarTrailing) {
+            
             CircleStrokeButtonView(
-                iconName: validPost.favoriteChoice == .yes ? "heart.fill" : "heart",
+                iconName: validPost.favoriteChoice == .yes ? "heart.slash" : "heart",
                 iconFont: .headline,
-                isIconColorToChange: validPost.favoriteChoice == .yes ? true : false,
-                imageColorSecondary: Color.mycolor.myYellow,
                 isShownCircle: false)
             {
                 vm.favoriteToggle(post: validPost)
+                hapticManager.impact(style: .light)
             }
-            
             
             CircleStrokeButtonView(
                 iconName: post?.origin == .cloud || post?.origin == .statical ? "pencil.slash" : "pencil",
@@ -120,60 +269,62 @@ struct PostDetailsView: View {
             .disabled(post?.origin == .cloud || post?.origin == .statical)
         }
     }
-
+    
     private func header(for post: Post) -> some View {
         
-        ZStack(alignment: .topTrailing) {
-            VStack(spacing: 8) {
-                Text(post.title)
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity)
-                
-                HStack {
-                    
-                    Group {
-                        if post.draft == true {
-                            Image(systemName: "square.stack.3d.up")
-                        }
-                        
-                        switch post.origin {
-                        case .cloud:
-                            post.origin.icon
-                        case .statical:
-                            post.origin.icon
-                        case .local:
-                            EmptyView()
-                        }
-                    }
-                    .font(.caption)
-                    .foregroundStyle(Color.mycolor.mySecondaryText)
-
-                    Text("@" + post.author)
-                        .font(.body)
-                    
-//                    Text("\(post.category)")
-//                        .font(.caption)
-                }
-                .frame(maxWidth: .infinity)
-                
-//                if vm.selectedCategory == nil {
-//                    Text(post.category)
-//                        .font(.body)
-//                        .fontWeight(.medium)
-//                        .foregroundStyle(Color.mycolor.myYellow)
-//                        .frame(maxWidth: .infinity)
-//                }
-//                
+        VStack(spacing: 8) {
+            Text(post.title)
+                .font(.title2)
+                .fontWeight(.semibold)
+                .minimumScaleFactor(0.75)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity, alignment: .center)
+            
+            Text("@" + post.author)
+                .font(.body)
+                .frame(maxWidth: .infinity, alignment: .center)
+            
+            HStack {
                 Text(post.studyLevel.displayName.capitalized + " level")
                     .font(.body)
                     .fontWeight(.medium)
                     .foregroundStyle(post.studyLevel.color)
-                    .frame(maxWidth: .infinity)
+                Spacer()
+                
+                Group {
+                    if post.draft {
+                        Image(systemName: "square.stack.3d.up")
+                    }
+                    if post.favoriteChoice == .yes {
+                        Image(systemName: "heart")
+                            .foregroundStyle(Color.mycolor.myRed)
+                    }
+                    if let rating = post.postRating {
+                        rating.icon
+                            .foregroundStyle(Color.mycolor.myBlue)
+                    }
+                    post.progress.icon
+                        .foregroundStyle(Color.mycolor.myGreen)
+                    post.origin.icon
+                }
+                .font(.caption)
+                .foregroundStyle(Color.mycolor.myAccent)
+                
+                //                    Text("\(post.category)")
+                //                        .font(.caption)
             }
-            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            
+            //                if vm.selectedCategory == nil {
+            //                    Text(post.category)
+            //                        .font(.body)
+            //                        .fontWeight(.medium)
+            //                        .foregroundStyle(Color.mycolor.myYellow)
+            //                        .frame(maxWidth: .infinity)
+            //                }
+            //
         }
+        .padding()
     }
     
     private func intro(for post: Post) -> some View {
@@ -189,7 +340,6 @@ struct PostDetailsView: View {
                     .font(.caption)
                     .multilineTextAlignment(.trailing)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 8)
                     .padding(.top, 8)
                 
                 Text (post.intro)
@@ -198,7 +348,6 @@ struct PostDetailsView: View {
                     .lineSpacing(introLineSpacing)
                     .frame(minHeight: 55, alignment: .topLeading)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 8)
                     .onLineCountChanged(font: introFont, lineSpacing: introLineSpacing) { count in
                         lineCountIntro = count - 1
                     }
@@ -211,10 +360,11 @@ struct PostDetailsView: View {
                 .offset(y: -15)
             }
         }
+        .padding()
     }
     
     private func goToTheSourceButton(for post: Post) -> some View {
-                
+        
         LinkButtonURL(
             buttonTitle: "Go to the Source",
             urlString: post.urlString
@@ -253,7 +403,6 @@ struct PostDetailsView: View {
             } // if isShowingFullFreeTextField
         } // VStack
     }
-    
 }
 
 

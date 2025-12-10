@@ -10,12 +10,12 @@ import SwiftUI
 
 struct Post: Identifiable, Hashable, Codable {
     let id: String
-    var category: String // gategory the post belongs to, e.g. "SwiftUI", "C++", "JavaScript"
-    var title: String // title of the post
-    var intro: String // a short intro/description of the post
+    var category: String // post category, e.g. "SwiftUI", "C++", "JavaScript", etc.
+    var title: String // post title
+    var intro: String // short post intro/description
     var author: String // author of the post
     var postType: PostType // single post, course/collection/playlist, solution, bug or other
-    var urlString: String // url link of the post
+    var urlString: String // url link on the post
     var postPlatform: Platform // platform location - website, youtube/video, etc
     var postDate: Date? // date of the post
     var studyLevel: StudyLevel // study level of the post
@@ -23,8 +23,8 @@ struct Post: Identifiable, Hashable, Codable {
     var favoriteChoice: FavoriteChoice // to mark favourite posts
     var postRating: PostRating? // for rating post
     var notes: String // free text field/notes to enter everything you wish
-    let origin: PostOrigin // origin source of the post: local created or downloaded from cloud curated by the developer
-    var draft: Bool // draft sign: true - draft, false - not draft
+    let origin: PostOrigin // origin source of the post: local created/ downloaded from cloud/ static
+    var draft: Bool // draft -> true
     let date: Date // date of creating the post
     
     init(
@@ -38,7 +38,7 @@ struct Post: Identifiable, Hashable, Codable {
         postPlatform: Platform = .youtube,
         postDate: Date? = nil,
         studyLevel: StudyLevel = .beginner,
-        progress: StudyProgress = .untapped,
+        progress: StudyProgress = .fresh,
         favoriteChoice: FavoriteChoice = .no,
         postRating: PostRating? = nil,
         notes: String = "",

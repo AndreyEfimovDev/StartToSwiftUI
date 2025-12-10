@@ -50,7 +50,7 @@ struct NoticesView: View {
                                     Button(notice.isRead ? "Unread" : "Read", systemImage: notice.isRead ?  "eye.slash.circle" : "eye.circle") {
                                         noticevm.isReadToggle(notice: notice)
                                     }
-                                    .tint(notice.isRead ? Color.mycolor.mySecondaryText : Color.mycolor.myBlue)
+                                    .tint(notice.isRead ? Color.mycolor.mySecondary : Color.mycolor.myBlue)
                                 } // left side swipe action buttons
                         } // ForEach
                         .listRowBackground(Color.clear)
