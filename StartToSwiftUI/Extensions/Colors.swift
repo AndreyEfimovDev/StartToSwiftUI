@@ -14,7 +14,6 @@ import SwiftUI
 extension Color {
     static let mycolor = MyColors()
     static let launch = LaunchColors()
-
 }
 
 struct MyColors {
