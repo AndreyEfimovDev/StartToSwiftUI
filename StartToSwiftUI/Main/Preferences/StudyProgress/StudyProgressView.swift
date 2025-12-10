@@ -44,11 +44,11 @@ struct StudyProgressView: View {
                         selection: $selectedTab,
                         allItems: StudyProgressTabs.allCases,
                         titleForCase: { $0.displayName },
-                        selectedFont: .headline,
+                        selectedFont: .caption,
                         selectedTextColor: Color.mycolor.myBlue,
                         unselectedTextColor: Color.mycolor.mySecondary
                     )
-                    .padding(.horizontal, 30)
+                    .padding(.horizontal, 50)
                     .padding(.bottom, 30)
                 }
 
