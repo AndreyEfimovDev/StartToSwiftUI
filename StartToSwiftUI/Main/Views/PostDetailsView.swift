@@ -25,7 +25,7 @@ struct PostDetailsView: View {
     
     private var post: Post? {
         vm.allPosts.first(where: { $0.id == postId })
-//                        PreviewData.samplePost3
+        //                        PreviewData.samplePost3
     }
     
     @State private var lineCountIntro: Int = 0
@@ -126,16 +126,13 @@ struct PostDetailsView: View {
                 zIndexTab: zIndexBarProgress,
                 content: {
                     ProgressSelectionView {
-                        print("Progress Height: \(maxHeight)")
                         showProgressTab = false
                     }
                 }) {
                     maxHeight = 310
                     zIndexBarProgress = 1
                     zIndexBarRating = 0
-                    withAnimation(.easeInOut(duration: 0.25)) {
-                        showProgressTab.toggle()
-                    }
+                    showProgressTab.toggle()
                 }
             // Rating Selection Bar
             selectionTabView (
@@ -144,17 +141,14 @@ struct PostDetailsView: View {
                 otherIsExpanded: showProgressTab,
                 zIndexTab: zIndexBarRating,
                 content: {
-                        RatingSelectionView {
-                            print("Rating Height: \(maxHeight)")
-                            showRatingTab = false
-                        }
+                    RatingSelectionView {
+                        showRatingTab = false
+                    }
                 }) {
                     maxHeight = 350
                     zIndexBarRating = 1
                     zIndexBarProgress = 0
-                    withAnimation(.easeInOut(duration: 0.25)) {
-                        showRatingTab.toggle()
-                    }
+                    showRatingTab.toggle()
                 }
         }
     }
@@ -170,56 +164,53 @@ struct PostDetailsView: View {
         @ViewBuilder content: () -> Content,
         completion: @escaping () -> Void
     ) -> some View {
-            ZStack (alignment: .top) {
-                Group {
-                    UnevenRoundedRectangle(
-                        topLeadingRadius: 30,
-                        bottomLeadingRadius: 0,
-                        bottomTrailingRadius: 0,
-                        topTrailingRadius: 30,
-                        style: .continuous
-                    )
-                    .fill(.ultraThinMaterial)
-                    .strokeBorder(
-                        (isExpanded ? Color.mycolor.myBlue : Color.mycolor.mySecondary).opacity(0.2),
-                        lineWidth: 1,
-                        antialiased: true
-                    )
-                    
-                    Button {
-                        completion()
-                    } label: {
-                        VStack(spacing: 0) {
-                            if !isExpanded {
-                                Image(systemName: "control")
-                                    .font(.headline)
-                                Image(systemName: icon)
-                                    .imageScale(.small)
-                                    .padding(8)
-                            }
-                        }
-                        .foregroundColor(Color.mycolor.myBlue)
-                        .padding(.top, 4)
-                        .padding(.horizontal, 30)
-                        .background(.black.opacity(0.001))
-                    }
-                    .buttonStyle(.plain)
-                    .disabled(isExpanded)
-                }
-                .opacity(isExpanded ? 0 : 1)
-                
-                if isExpanded {
-                        content()
-                }
-
-            }
-            .frame(height: isExpanded ? maxHeight : minHeight)
-            .frame(maxWidth: isExpanded ? expandedWidth : tabWidth)
-            .frame(maxWidth: .infinity, alignment: alignment)
-            .zIndex(zIndexTab)
-            .offset(y: otherIsExpanded && !isExpanded ? maxHeight : 0)
-            .animation(.bouncy(duration: 0.3), value: isExpanded)
+        ZStack (alignment: .top) {
+            UnevenRoundedRectangle(
+                topLeadingRadius: 30,
+                bottomLeadingRadius: 0,
+                bottomTrailingRadius: 0,
+                topTrailingRadius: 30,
+                style: .continuous
+            )
+            .fill(Color.mycolor.myBackground)
+            .strokeBorder(
+                (isExpanded ? Color.mycolor.myBlue : Color.mycolor.mySecondary).opacity(0.5),
+                lineWidth: 1,
+                antialiased: true
+            )
             
+            Button {
+                completion()
+            } label: {
+                VStack(spacing: 0) {
+                    if !isExpanded {
+                        Image(systemName: "control")
+                            .font(.headline)
+                        Image(systemName: icon)
+                            .imageScale(.small)
+                            .padding(8)
+                    }
+                }
+                .foregroundColor(Color.mycolor.myBlue)
+                .padding(.top, 4)
+                .padding(.horizontal, 30)
+                .background(.black.opacity(0.001))
+            }
+            .buttonStyle(.plain)
+            .opacity(isExpanded ? 0 : 1)
+            .disabled(isExpanded)
+            
+            
+            if isExpanded {
+                content()
+            }
+        }
+        .frame(height: isExpanded ? maxHeight : minHeight)
+        .frame(maxWidth: isExpanded ? expandedWidth : tabWidth)
+        .frame(maxWidth: .infinity, alignment: alignment)
+        .zIndex(zIndexTab)
+        .offset(y: otherIsExpanded && !isExpanded ? maxHeight : 0)
+        .animation(.bouncy(duration: 0.3), value: isExpanded)
     }
     
     // MARK: Subviews
@@ -238,7 +229,6 @@ struct PostDetailsView: View {
                     isShownCircle: false)
                 { showAddPostView.toggle() }
             }
-
             
             ShareLink(item: validPost.urlString) {
                 Image(systemName: "square.and.arrow.up")
