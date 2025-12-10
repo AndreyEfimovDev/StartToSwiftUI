@@ -26,9 +26,7 @@ struct ProgressSelectionView: View {
                         CircleStrokeButtonView(
                             iconName: "xmark",
                             isShownCircle: false)
-                        {
-                            completion()
-                        }
+                        { completion() }
                         .padding()
                         .zIndex(1)
                         
@@ -70,7 +68,6 @@ struct ProgressSelectionView: View {
                                 .padding(.horizontal)
                                 .frame(maxWidth: 200)
                                 .padding(.bottom)
-
                         } // VStack
                         .padding(20)
                     } // ZStack
