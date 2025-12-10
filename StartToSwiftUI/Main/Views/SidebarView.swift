@@ -46,6 +46,9 @@ struct SidebarView: View {
         .sheet(isPresented: $showPreferencesView) {
             PreferencesView()
         }
+        .onAppear {
+            vm.selectedCategory = "SwiftUI"
+        }
     }
     
     private func notSelectedEmptyView(text: String) -> some View {
@@ -60,6 +63,7 @@ struct SidebarView: View {
                 .bold()
                 .padding()
         }
+        .foregroundStyle(Color.mycolor.myAccent)
     }
     
 }

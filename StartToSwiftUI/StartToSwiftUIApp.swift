@@ -81,8 +81,8 @@ struct StartToSwiftUIApp: App {
                 ZStack {
                     if showLaunchView {
                         LaunchView() {
-                            showLaunchView = false
                             hapticManager.impact(style: .light)
+                            showLaunchView = false
                         }
                         .transition(.move(edge: .leading))
                     }

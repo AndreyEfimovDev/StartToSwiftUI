@@ -25,7 +25,6 @@ class PostsViewModel: ObservableObject {
         }
     }
     
-    
     @Published var filteredPosts: [Post] = []
     @Published var searchText: String = ""
     @Published var isFiltersEmpty: Bool = true
@@ -40,6 +39,9 @@ class PostsViewModel: ObservableObject {
     var allCategories: [String]? = nil
     let mainCategory: String = "SwiftUI"
     var dispatchTime: DispatchTime { .now() + 1.5 }
+    @Published var selectedRating: PostRating? = nil
+    @Published var selectedStudyProgress: StudyProgress = .fresh
+
     
     // MARK: Stored preferances
     
@@ -54,7 +56,6 @@ class PostsViewModel: ObservableObject {
     // Stored the date of the Cloud posts last imported (ISO8601DateFormatter().date(from: "2000-01-15T00:00:00Z") ?? Date.distantPast)
     @AppStorage("localLastUpdated") var localLastUpdated: Date = Date.distantPast
 
-    
     // Stored filters
     @AppStorage("storedCategory") var storedCategory: String?
     @AppStorage("storedLevel") var storedLevel: StudyLevel?
@@ -64,7 +65,6 @@ class PostsViewModel: ObservableObject {
     @AppStorage("storedYear") var storedYear: String?
     @AppStorage("storedSortOption") var storedSortOption: SortOption?
 
-    
     // Setting filters
     @Published var selectedCategory: String? = nil {
         didSet { storedCategory = selectedCategory }}
@@ -105,7 +105,6 @@ class PostsViewModel: ObservableObject {
                         print("🍓 ☑️ VM(init): Failed to load posts: \(error)")
                     }
                 }
-                
             }
         } else {
             print("🍓 ☑️ VM(init): File \(Constants.localPostsFileName) does not exist")
@@ -309,6 +308,23 @@ class PostsViewModel: ObservableObject {
         }
     }
     
+    func ratePost(post: Post) {
+        
+        if let index = allPosts.firstIndex(of: post) {
+            allPosts[index].postRating = selectedRating
+            savePosts()
+        }
+    }
+    
+    
+    func updatePostStudyProgress(post: Post) {
+        
+        if let index = allPosts.firstIndex(of: post) {
+                allPosts[index].progress = selectedStudyProgress
+            savePosts()
+        }
+    }
+
     private func savePosts() {
         
         fileManager.saveData(allPosts, fileName: Constants.localPostsFileName) { [weak self] result in

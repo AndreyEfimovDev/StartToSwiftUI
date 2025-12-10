@@ -14,6 +14,7 @@ struct PostRowView: View {
     let post: Post
     
     @State private var introLineCount: Int = 0
+    
     private let introFont: Font = .footnote
     private let introLineSpacing: CGFloat = 0
     private let introLinesCountLimit: Int = 2
@@ -31,6 +32,8 @@ struct PostRowView: View {
         }
         .padding(8)
         .padding(.horizontal, 8)
+        .background(.black.opacity(0.001))
+
     }
         
     // MARK: Subviews
@@ -41,8 +44,7 @@ struct PostRowView: View {
             .fontWeight(.bold)
             .minimumScaleFactor(0.75)
             .lineLimit(1)
-            .padding(.top, 8)
-        
+            .padding(.top, 12)
     }
     
     private var author: some View {
@@ -57,6 +59,8 @@ struct PostRowView: View {
             }
         }
         .font(.footnote)
+        .minimumScaleFactor(0.75)
+        .lineLimit(1)
     }
     
     private var level: some View {
@@ -68,26 +72,26 @@ struct PostRowView: View {
             Spacer()
             
             Group {
-                if post.favoriteChoice == .yes {
-                    Image(systemName: "heart.fill")
-                        .foregroundStyle(Color.mycolor.myYellow)
-                }
-                
                 if post.draft {
                     Image(systemName: "square.stack.3d.up")
                 }
-                
-                switch post.origin {
-                case .cloud:
-                    post.origin.icon
-                case .statical:
-                    post.origin.icon
-                case .local:
-                    EmptyView()
+                if post.favoriteChoice == .yes {
+                    Image(systemName: "heart")
+                        .foregroundStyle(Color.mycolor.myRed)
                 }
+                if let rating = post.postRating {
+                    rating.icon
+                        .foregroundStyle(Color.mycolor.myBlue)
+                }
+                post.progress.icon
+                    .foregroundStyle(Color.mycolor.myGreen)
+                
+//                if post.origin != .local {
+                    post.origin.icon
+//                }
             }
             .font(.caption)
-            .foregroundStyle(Color.mycolor.mySecondaryText)
+            .foregroundStyle(Color.mycolor.myAccent)
         }
         .fontWeight(.medium)
     }
@@ -105,6 +109,7 @@ fileprivate struct PostRowPreView: View {
                 PostRowView(post: PreviewData.samplePost1)
                 PostRowView(post: PreviewData.samplePost2)
                 PostRowView(post: PreviewData.samplePost3)
+                PostRowView(post: PreviewData.samplePost4)
             }
             .padding()
         }

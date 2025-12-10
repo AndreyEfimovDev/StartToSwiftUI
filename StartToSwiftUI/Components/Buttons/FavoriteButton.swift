@@ -19,7 +19,7 @@ struct FavoriteButton: View {
         } label: {
             Image(systemName: isFavorite == .yes ? "star.fill" : "star")
                 .font(.body)
-                .foregroundStyle(isFavorite == .yes ? Color.mycolor.myYellow : Color.mycolor.mySecondaryText)
+                .foregroundStyle(isFavorite == .yes ? Color.mycolor.myYellow : Color.mycolor.mySecondary)
         }
         .padding(8)
     }

@@ -32,6 +32,32 @@ enum Theme: String, CaseIterable, Codable {
     }
 }
 
+enum StudyProgressTabs: String, CaseIterable, Codable, Hashable {
+    case total
+    case beginner
+    case middle
+    case advanced
+    
+    var displayName: String {
+        switch self {
+        case .total: return "Total"
+        case .beginner: return "Beginner"
+        case .middle: return "Middle"
+        case .advanced: return "Advanced"
+        }
+    }
+    
+    var studyLevel: StudyLevel? {
+        switch self {
+        case .total: return nil
+        case .beginner: return .beginner
+        case .middle: return .middle
+        case .advanced: return .advanced
+        }
+    }
+
+}
+
 // MARK: Sorting option
 
 enum SortOption: String, CaseIterable {
@@ -87,7 +113,7 @@ enum PostOrigin: String, CaseIterable, Codable {
     
     var icon: Image {
         switch self {
-        case .local: return Image(systemName: "")
+        case .local: return Image(systemName: "archivebox") // tray cube  archivebox folder arrow.up.folder text.document
         case .cloud: return Image(systemName: "cloud")
         case .statical: return Image(systemName: "arrow.2.squarepath") // line.3.horizontal square.grid.2x2 s.circle arrow.2.squarepath
         }
@@ -111,23 +137,42 @@ enum FavoriteChoice: String, CaseIterable, Codable {
         case .no: return Image(systemName: "star.fill")
         }
     }
-
 }
 
-
 enum PostRating: String, CaseIterable, Codable {
-    case alright
-    case good
-    case excellent
+    case good, great, excellent
     
     var displayName: String {
         switch self {
-        case .alright: return "Alright"
         case .good: return "Good"
+        case .great: return "Great"
         case .excellent: return "Excellent"
         }
     }
-
+    
+    var icon: Image { // for other options look at TestSFSymbolsForRating
+        switch self {
+        case .good: return Image(systemName: "face.smiling")
+        case .great: return Image(systemName: "star.fill")
+        case .excellent: return Image(systemName: "crown.fill")
+        }
+    }
+    
+    var value: Int {
+        switch self {
+        case .good: return 1
+        case .great: return 2
+        case .excellent: return 3
+        }
+    }
+    
+    var color: Color {
+        switch self {
+        case .good: return Color.mycolor.myBlue
+        case .great: return Color.mycolor.myGreen
+        case .excellent: return Color.mycolor.myPurple
+        }
+    }
 }
 
 enum StudyLevel: String, CaseIterable, Codable {
@@ -152,25 +197,38 @@ enum StudyLevel: String, CaseIterable, Codable {
     }
 }
 
-enum StudyProgress: String, CaseIterable, Codable {
-    case untapped
-    case learning
-    case studied
-    case practiced
+enum StudyProgress: String, CaseIterable, Codable { // progress in mastering educational materials
+    case fresh, studied, practiced
+    
+    // 􀐾 chart.bar, 􀓎 hare, 􁗟 bird, 􁝯 tree, 􀑁 chart.line.uptrend.xyaxis
     
     var displayName: String {
         switch self {
-        case .untapped:
-            return "New"
-        case .learning:
-            return "Learning"
-        case .studied:
-            return "Studied"
-        case .practiced:
-            return "Practiced"
+        case .fresh: return "New"
+        case .studied: return "Studied"
+        case .practiced: return "Practiced"
         }
     }
+    
+    var icon: Image { // for other options look at TestSFSymbolsForProgress
+        switch self {
+        case .fresh: return Image(systemName: "sparkles") // lightbulb signpost.right
+        case .studied: return Image(systemName: "flag.checkered") // brain.head.profile flag.checkered
+        case .practiced: return Image(systemName: "mountain.2.fill") // hand.raised.fingers.spread mountain.2.fill
+        }
+    }
+    
+    var color: Color {
+        switch self {
+        case .fresh: return Color.mycolor.myGreen
+        case .studied: return Color.mycolor.myBlue
+        case .practiced: return Color.mycolor.myRed
+        }
+    }
+
 }
+
+
 
 enum Platform: String, CaseIterable, Codable {
     case youtube

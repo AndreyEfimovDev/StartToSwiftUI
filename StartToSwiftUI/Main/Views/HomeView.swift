@@ -22,103 +22,128 @@ struct HomeView: View {
     
     @State private var selectedPost: Post?
     @State private var selectedPostToDelete: Post?
-    
+
     @State private var showDetailView: Bool = false
     @State private var showPreferancesView: Bool = false
     @State private var showAddPostView: Bool = false
     @State private var showNoticesView: Bool = false
     @State private var showOnTopButton: Bool = false
+    @State private var showProgressSelectionView: Bool = false
     
     @State private var isFilterButtonPressed: Bool = false
     @State private var isShowingDeleteConfirmation: Bool = false
     
     @State private var noticeButtonAnimation = false
     
-    private func postsForCategory(_ category: String?) -> [Post] {
-        guard let category = category else {
-            return vm.filteredPosts
-        }
-        return vm.filteredPosts.filter { $0.category == category }
-    }
+    @State private var isDetectingLongPress: Bool = false
+    @State private var isLongPressSuccess: Bool = false
+    private let longPressDuration: Double = 0.5
     
+    private var isShowingNoticeMessageButton: Bool {
+        !noticevm.notices.filter({ $0.isRead == false }).isEmpty &&
+        noticevm.isNotificationOn
+    }
+    private var isPerformingNoticeTask: Bool {
+        vm.isTermsOfUseIsAccepted &&
+        noticevm.isNotificationOn &&
+        !noticevm.isUserNotified
+    }
+   
     // MARK: VIEW BODY
     
     var body: some View {
-        ScrollViewReader { proxy in
-            ZStack (alignment: .bottom) {
-                if vm.allPosts.isEmpty {
-                    allPostsIsEmpty
-                } else if vm.filteredPosts.isEmpty {
-                    filteredPostsIsEmpty
-                } else {
-                    mainViewBody
-                    onTopButton(proxy: proxy)
-                }
-            }
-        }
-        .navigationTitle(vm.selectedCategory ?? "SwiftUI") // All Categories
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-                toolbarForMainViewBody()
-        }
-        .safeAreaInset(edge: .top) {
-            SearchBarView()
-        }
-        .navigationDestination(isPresented: $showDetailView) {
-            if let id = vm.selectedPostId {
-                withAnimation {
-                    PostDetailsView(postId: id)
-                }
-            }
-        }
-        .sheet(isPresented: $showPreferancesView) {
-            PreferencesView()
-        }
-        .sheet(isPresented: $showNoticesView) {
-            NavigationStack {
-                NoticesView()
-            }
-        }
-        .sheet(isPresented: $showAddPostView) {
-            NavigationStack {
-                AddEditPostSheet(post: nil)
-            }
-        }
-        .sheet(item: $selectedPost) { selectedPostToEdit in
-            NavigationStack {
-                AddEditPostSheet(post: selectedPostToEdit)
-            }
-        }
-        .sheet(isPresented: $isFilterButtonPressed) {
-            FiltersSheetView(
-                isFilterButtonPressed: $isFilterButtonPressed
-            )
-            .presentationBackground(.ultraThinMaterial)
-            .presentationDetents([.height(600)])
-            .presentationDragIndicator(.visible)
-            .presentationCornerRadius(30)
-//            .presentationBackground(
-//                .ultraThinMaterial  // Ваш цвет фона
-////                        .ignoresSafeArea()
-//                )
-//            .interactiveDismissDisabled()
-        }
-        .task {
-            vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-            
-            if vm.isTermsOfUseIsAccepted {
-                if noticevm.isNotificationOn {
-                    if  !noticevm.isUserNotified {
-                        try? await Task.sleep(nanoseconds: 1_000_000_000)
-//                        if noticevm.isSoundNotificationOn {
-//                            AudioServicesPlaySystemSound(1013) // 1005
-//                        }
-                        noticeButtonAnimation = true
-                        try? await Task.sleep(nanoseconds: 1_000_000_000)
-                        noticeButtonAnimation = false
-                        noticevm.isUserNotified = true
+        GeometryReader { proxy in
+            ScrollViewReader { scrollProxy in
+                ZStack (alignment: .bottom) {
+                    if vm.allPosts.isEmpty {
+                        allPostsIsEmpty
+                    } else if vm.filteredPosts.isEmpty {
+                        filteredPostsIsEmpty
+                    } else {
+                        mainViewBody
+                        onTopButton(proxy: scrollProxy)
                     }
+                }
+            }
+            .disabled(isLongPressSuccess)
+            .navigationTitle(vm.selectedCategory ?? "SwiftUI") // -> All Categories!!!
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                toolbarForMainViewBody()
+            }
+            .safeAreaInset(edge: .top) {
+                SearchBarView()
+            }
+            .navigationDestination(isPresented: $showDetailView) {
+                if let id = vm.selectedPostId {
+                    withAnimation {
+                        PostDetailsView(postId: id)
+                    }
+                }
+            }
+            .sheetForDevice(isPresented: $showPreferancesView) {
+                PreferencesView()
+            }
+            .sheet(isPresented: $showNoticesView) {
+                NavigationStack {
+                    NoticesView()
+                }
+            }
+            .sheet(isPresented: $showAddPostView) {
+                NavigationStack {
+                    AddEditPostSheet(post: nil)
+                }
+            }
+            .sheet(item: $selectedPost) { selectedPostToEdit in
+                NavigationStack {
+                    AddEditPostSheet(post: selectedPostToEdit)
+                }
+            }
+            .sheet(isPresented: $isFilterButtonPressed) {
+                FiltersSheetView(
+                    isFilterButtonPressed: $isFilterButtonPressed
+                )
+                .presentationBackground(.ultraThinMaterial)
+                .presentationDetents([.height(600)])
+                .presentationDragIndicator(.visible)
+                .presentationCornerRadius(30)
+            }
+            .overlay {
+                if UIDevice.isiPhone {
+                    if isLongPressSuccess {
+                        RatingSelectionView() {
+                            isLongPressSuccess = false
+                        }
+                        .frame(maxHeight: max(proxy.size.height / 3, 300))
+                        .padding(.horizontal, 30)
+                    }
+                }
+            }
+            .overlay {
+                if UIDevice.isiPhone {
+                    if showProgressSelectionView {
+                        ProgressSelectionView() {
+                            showProgressSelectionView = false
+                        }
+                        .frame(maxHeight: max(proxy.size.height / 3, 300))
+                        .padding(.horizontal, 30)
+                    }
+                }
+            }
+            .onAppear {
+                vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
+            }
+            .task { // task
+                if isPerformingNoticeTask {
+                    try? await Task.sleep(nanoseconds: 3_000_000_000)
+                    if noticevm.isSoundNotificationOn {
+                        AudioServicesPlaySystemSound(1013) // 1005
+                    }
+                    noticeButtonAnimation = true
+                    try? await Task.sleep(nanoseconds: 1_000_000_000)
+                    noticeButtonAnimation = false
+                    noticevm.isUserNotified = true
                 }
             }
         }
@@ -133,30 +158,57 @@ struct HomeView: View {
                     .id(post.id)
                     .background(trackingFistPostInList(post: post))
                     .background(.black.opacity(0.001))
-                    .onTapGesture {
-                        vm.selectedPostId = post.id
-                        showDetailView.toggle()
-                    }
+                    .onLongPressGesture(
+                        minimumDuration: longPressDuration,
+                        maximumDistance: 50,
+                        perform: {
+                            vm.selectedRating = post.postRating
+                            vm.selectedPostId = post.id
+                            isLongPressSuccess = true
+                        },
+                        onPressingChanged: { isPressing in
+                            if isPressing {
+                                isDetectingLongPress = true
+                            } else {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    if !isLongPressSuccess {
+                                        isDetectingLongPress = false
+                                    }
+                                }
+                            }
+                        })
+                    .onTapAndDoubleTap(
+                        singleTap: {
+                            vm.selectedPostId = post.id
+                            showDetailView.toggle()
+                        },
+                        doubleTap: {
+                            vm.selectedStudyProgress = post.progress
+                            vm.selectedPostId = post.id
+                            showProgressSelectionView = true
+                        }
+                    )
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        
                         Button("Delete", systemImage: "trash") {
                             selectedPostToDelete = post
                             hapticManager.notification(type: .warning)
                             isShowingDeleteConfirmation = true
-                        }.tint(Color.mycolor.myRed)
+                        }
+                        .tint(Color.mycolor.myRed)
                         
                         Button("Edit", systemImage: post.origin == .cloud  || post.origin == .statical ? "pencil.slash" : "pencil") {
                             selectedPost = post
                         }
-                        .tint(Color.mycolor.myButtonBGBlue)
+                        .tint(Color.mycolor.myBlue)
                         .disabled(post.origin == .cloud || post.origin == .statical)
-                    } // right side swipe action buttonss
+                    }
                     .swipeActions(edge: .leading, allowsFullSwipe: false) {
-                        Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: post.favoriteChoice == .yes ?  "heart.slash.fill" : "heart.fill") {
+                        
+                        Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: post.favoriteChoice == .yes ?  "heart.slash" : "heart") {
                             vm.favoriteToggle(post: post)
-                        }
-                        .foregroundStyle(Color.mycolor.myAccent)
-                        .tint(post.favoriteChoice == .yes ? Color.mycolor.myButtonTextPrimary : Color.mycolor.myYellow)
-                    } // left side swipe action buttons
+                        }.tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondary : Color.mycolor.myRed.opacity(0.5))
+                    }
             } // ForEach
             .confirmationDialog(
                 "Are you sure you want to delete this post?",
@@ -195,7 +247,7 @@ struct HomeView: View {
                 showPreferancesView.toggle()
             }
         }
-        if !noticevm.notices.filter({ $0.isRead == false }).isEmpty && noticevm.isNotificationOn {
+        if isShowingNoticeMessageButton {
             ToolbarItem(placement: .navigationBarLeading) {
                 CircleStrokeButtonView(
                     iconName: "message",
@@ -203,20 +255,24 @@ struct HomeView: View {
                 {
                     showNoticesView = true
                 }
-                .overlay(alignment: .topTrailing) {
+                .overlay {
                     Capsule()
                         .fill(Color.mycolor.myRed)
-                        .frame(maxWidth: 20, maxHeight: 15)
+                        .frame(maxWidth: 15, maxHeight: 10)
                         .overlay {
                             Text("\(noticevm.notices.filter({ $0.isRead == false }).count)")
                                 .font(.system(size: 8, weight: .bold, design: .default))
                                 .foregroundStyle(Color.mycolor.myButtonTextPrimary)
                         }
+                        .offset(x: 6, y: -9)
                 }
                 .background(
                     AnyView(
                         Circle()
-                            .stroke(Color.mycolor.myRed, lineWidth: noticeButtonAnimation ? 3 : 0)
+                            .stroke(
+                                Color.mycolor.myRed,
+                                lineWidth: noticeButtonAnimation ? 3 : 0
+                            )
                             .scaleEffect(noticeButtonAnimation ? 1.2 : 0.8)
                             .opacity(noticeButtonAnimation ? 0.0 : 1.0)
                     )
@@ -231,10 +287,13 @@ struct HomeView: View {
         }
         
         ToolbarItemGroup(placement: .navigationBarTrailing) {
-            CircleStrokeButtonView(
-                iconName: "plus",
-                isShownCircle: false)
-            { showAddPostView.toggle() }
+            
+            if UIDevice.isiPhone {
+                CircleStrokeButtonView(
+                    iconName: "plus",
+                    isShownCircle: false)
+                { showAddPostView.toggle() }
+            }
             
             CircleStrokeButtonView(
                 iconName: "line.3.horizontal.decrease",
@@ -275,7 +334,6 @@ struct HomeView: View {
         }
     }
     
-
     private var allPostsIsEmpty: some View {
         ContentUnavailableView(
             "No Posts",
@@ -331,6 +389,17 @@ struct HomeView: View {
             .padding(.horizontal, 40)
         }
     }
+    
+    // MARK: Private functions
+    
+    private func postsForCategory(_ category: String?) -> [Post] {
+        guard let category = category else {
+            return vm.filteredPosts
+        }
+        return vm.filteredPosts.filter { $0.category == category }
+    }
+        
+
 }
 
 #Preview {
