@@ -163,7 +163,7 @@ struct DevData {
         Post(
             title: "Introduction to NavigationStack in iOS 16",
             intro: """
-                In this video I will introduce yu to the Navigation Stack.
+                In this video I will introduce you to the Navigation Stack.
 
                 We will take a look at this new container view along with its components. Namely the new NavigationLink, the navigationdestination method and the navigationPath.
                 """,
@@ -282,7 +282,7 @@ struct DevData {
             origin: .cloud,
         ),
         Post(
-            title: "How to create custom Property Wrappers in SwiftUI (PART 2/2)",
+            title: "Part 2/2: How to create custom Property Wrappers in SwiftUI",
             intro: """
             In SwiftUI, a property wrapper is a Swift language feature that allows you to add a layer of custom behavior to properties. Property wrappers are used to augment the behavior of properties in a concise and reusable way. They are commonly used in SwiftUI for managing state, data binding, and more. We will create several new Property Wrappers with custom logic!
             """,
@@ -294,7 +294,7 @@ struct DevData {
             origin: .cloud,
         ),
         Post(
-            title: "How to create custom Property Wrappers in SwiftUI (PART 1/2)",
+            title: "Part 1/2: How to create custom Property Wrappers in SwiftUI",
             intro: """
             In SwiftUI, a property wrapper is a Swift language feature that allows you to add a layer of custom behavior to properties. Property wrappers are used to augment the behavior of properties in a concise and reusable way. They are commonly used in SwiftUI for managing state, data binding, and more. We will learn how they work, why they work, and how to make your own!
             """,
