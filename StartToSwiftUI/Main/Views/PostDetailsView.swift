@@ -24,7 +24,7 @@ struct PostDetailsView: View {
     
     private var post: Post? {
         vm.allPosts.first(where: { $0.id == postId })
-        //        PreviewData.samplePost3
+        //                PreviewData.samplePost3
     }
     
     @State private var lineCountIntro: Int = 0
@@ -41,11 +41,11 @@ struct PostDetailsView: View {
     @State private var showProgressTab: Bool = false
     @State private var zIndexBarRating: Double = 0
     @State private var zIndexBarProgress: Double = 0
-    private var minHeigt: CGFloat {
+    private var minHeight: CGFloat {
         if UIDevice.isiPad { 60 }
         else { 75 }
     }
-    private let maxHeigt: CGFloat = 400
+    @State private var maxHeight: CGFloat = 350
     private let widthRatio: CGFloat = 0.55
     @State private var tabWidth: CGFloat = 0
     @State private var expandedWidth: CGFloat = 0
@@ -104,9 +104,7 @@ struct PostDetailsView: View {
                 expandedWidth = newValue
             })
             .safeAreaInset(edge: .bottom) {
-                //            if let validPost = post {
                 bottomTabsContainer
-                //            }
             }
             .ignoresSafeArea(edges: .bottom)
         }
@@ -114,91 +112,108 @@ struct PostDetailsView: View {
     
     private var bottomTabsContainer: some View {
         ZStack {
-            // Rating Selection Bar
-            selectionTabView (
-                icon: "star", color: .yellow, alignment: .leading,
-                isExpanded: showRatingTab,
-                otherIsExpanded: showProgressTab,
-                zIndexTab: zIndexBarRating)
-            {
-                zIndexBarRating = 1
-                zIndexBarProgress = 0
-                withAnimation(.easeInOut(duration: 0.25)) {
-                    showRatingTab.toggle()
-                }
-            }
             // Study Progress Selection Bar
             selectionTabView (
-                icon: "hare", color: .green, alignment: .trailing,
+                icon: "hare", color: .green, alignment: .leading,
                 isExpanded: showProgressTab,
                 otherIsExpanded: showRatingTab,
-                zIndexTab: zIndexBarProgress)
-            {
-                zIndexBarProgress = 1
-                zIndexBarRating = 0
-                withAnimation(.easeInOut(duration: 0.25)) {
-                    showProgressTab.toggle()
+                zIndexTab: zIndexBarProgress,
+                content: {
+                    ProgressSelectionView {
+                        print("Progress Height: \(maxHeight)")
+                        showProgressTab = false
+                    }
+                }) {
+                    maxHeight = 310
+                    zIndexBarProgress = 1
+                    zIndexBarRating = 0
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        showProgressTab.toggle()
+                    }
                 }
-            }
+            // Rating Selection Bar
+            selectionTabView (
+                icon: "star", color: .yellow, alignment: .trailing,
+                isExpanded: showRatingTab,
+                otherIsExpanded: showProgressTab,
+                zIndexTab: zIndexBarRating,
+                content: {
+                        RatingSelectionView {
+                            print("Rating Height: \(maxHeight)")
+                            showRatingTab = false
+                        }
+                }) {
+                    maxHeight = 350
+                    zIndexBarRating = 1
+                    zIndexBarProgress = 0
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        showRatingTab.toggle()
+                    }
+                }
         }
-        
     }
     
     @ViewBuilder
-    private func selectionTabView(
+    private func selectionTabView<Content: View>(
         icon: String,
         color: Color,
         alignment: Alignment,
         isExpanded: Bool,
         otherIsExpanded: Bool,
         zIndexTab: Double,
+        @ViewBuilder content: () -> Content,
         completion: @escaping () -> Void
     ) -> some View {
-        
-        ZStack (alignment: .top) {
-            UnevenRoundedRectangle(
-                topLeadingRadius: 30,
-                bottomLeadingRadius: 0,
-                bottomTrailingRadius: 0,
-                topTrailingRadius: 30,
-                style: .continuous
-            )
-            .fill(isExpanded ? .thinMaterial : .ultraThinMaterial)
-            .strokeBorder(
-                (isExpanded ? Color.mycolor.myBlue : Color.mycolor.mySecondary).opacity(0.2),
-                lineWidth: 1,
-                antialiased: true
-            )
-            .frame(height: isExpanded ? maxHeigt : minHeigt)
-            Button {
-                completion()
-            } label: {
-                VStack(spacing: 0) {
-                    if isExpanded {
-                        Image(systemName: "control")
-                            .font(.headline)
-                            .rotationEffect(.degrees(180))
-                    } else {
-                        Image(systemName: "control")
-                            .font(.headline)
-                    }
+            ZStack (alignment: .top) {
+                Group {
+                    UnevenRoundedRectangle(
+                        topLeadingRadius: 30,
+                        bottomLeadingRadius: 0,
+                        bottomTrailingRadius: 0,
+                        topTrailingRadius: 30,
+                        style: .continuous
+                    )
+                    .fill(.ultraThinMaterial)
+                    .strokeBorder(
+                        (isExpanded ? Color.mycolor.myBlue : Color.mycolor.mySecondary).opacity(0.2),
+                        lineWidth: 1,
+                        antialiased: true
+                    )
                     
-                    Image(systemName: icon)
-                        .imageScale(.small)
-                        .padding(8)
+                    Button {
+                        completion()
+                    } label: {
+                        VStack(spacing: 0) {
+                            if !isExpanded {
+                                Image(systemName: "control")
+                                    .font(.headline)
+                                Image(systemName: icon)
+                                    .imageScale(.small)
+                                    .padding(8)
+                            }
+                        }
+                        .foregroundColor(Color.mycolor.myBlue)
+                        .padding(.top, 4)
+                        .padding(.horizontal, 30)
+                        .background(.black.opacity(0.001))
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(isExpanded)
                 }
-                .foregroundColor(Color.mycolor.myBlue)
-                .padding(.top, 4)
-                .padding(.horizontal, 30)
-                .background(.black.opacity(0.001))
+                .opacity(isExpanded ? 0 : 1)
+                
+                if isExpanded {
+                        content()
+                }
+
             }
-            .buttonStyle(.plain)
-        }
-        .frame(maxWidth: isExpanded ? expandedWidth : tabWidth)
-        .frame(maxWidth: .infinity, alignment: alignment)
-        .zIndex(zIndexTab)
-        .offset(y: otherIsExpanded && !isExpanded ? maxHeigt : 0)
-        .animation(.easeInOut(duration: 0.3), value: isExpanded)
+            .frame(height: isExpanded ? maxHeight : minHeight)
+            .frame(maxWidth: isExpanded ? expandedWidth : tabWidth)
+            .frame(maxWidth: .infinity, alignment: alignment)
+            .zIndex(zIndexTab)
+            .offset(y: otherIsExpanded && !isExpanded ? maxHeight : 0)
+            .animation(.bouncy(duration: 0.3), value: isExpanded)
+            
     }
     
     // MARK: Subviews

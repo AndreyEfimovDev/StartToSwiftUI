@@ -43,99 +43,105 @@ struct HomeView: View {
         !noticevm.notices.filter({ $0.isRead == false }).isEmpty &&
         noticevm.isNotificationOn
     }
-//    private var isPerformingNoticeTask: Bool {
-//        vm.isTermsOfUseIsAccepted &&
-//        noticevm.isNotificationOn &&
-//        !noticevm.isUserNotified
-//    }
+    private var isPerformingNoticeTask: Bool {
+        vm.isTermsOfUseIsAccepted &&
+        noticevm.isNotificationOn &&
+        !noticevm.isUserNotified
+    }
    
     // MARK: VIEW BODY
     
     var body: some View {
-        ScrollViewReader { proxy in
-            ZStack (alignment: .bottom) {
-                if vm.allPosts.isEmpty {
-                    allPostsIsEmpty
-                } else if vm.filteredPosts.isEmpty {
-                    filteredPostsIsEmpty
-                } else {
-                    mainViewBody
-                    onTopButton(proxy: proxy)
+        GeometryReader { proxy in
+            ScrollViewReader { scrollProxy in
+                ZStack (alignment: .bottom) {
+                    if vm.allPosts.isEmpty {
+                        allPostsIsEmpty
+                    } else if vm.filteredPosts.isEmpty {
+                        filteredPostsIsEmpty
+                    } else {
+                        mainViewBody
+                        onTopButton(proxy: scrollProxy)
+                    }
                 }
             }
-        }
-        .disabled(isLongPressSuccess)
-        .navigationTitle(vm.selectedCategory ?? "SwiftUI") // -> All Categories!!!
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
+            .disabled(isLongPressSuccess)
+            .navigationTitle(vm.selectedCategory ?? "SwiftUI") // -> All Categories!!!
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
                 toolbarForMainViewBody()
-        }
-        .safeAreaInset(edge: .top) {
-            SearchBarView()
-        }
-        .navigationDestination(isPresented: $showDetailView) {
-            if let id = vm.selectedPostId {
-                withAnimation {
-                    PostDetailsView(postId: id)
+            }
+            .safeAreaInset(edge: .top) {
+                SearchBarView()
+            }
+            .navigationDestination(isPresented: $showDetailView) {
+                if let id = vm.selectedPostId {
+                    withAnimation {
+                        PostDetailsView(postId: id)
+                    }
                 }
             }
-        }
-        .sheetForDevice(isPresented: $showPreferancesView) {
-            PreferencesView()
-        }
-        .sheet(isPresented: $showNoticesView) {
-            NavigationStack {
-                NoticesView()
+            .sheetForDevice(isPresented: $showPreferancesView) {
+                PreferencesView()
             }
-        }
-        .sheet(isPresented: $showAddPostView) {
-            NavigationStack {
-                AddEditPostSheet(post: nil)
-            }
-        }
-        .sheet(item: $selectedPost) { selectedPostToEdit in
-            NavigationStack {
-                AddEditPostSheet(post: selectedPostToEdit)
-            }
-        }
-        .sheet(isPresented: $isFilterButtonPressed) {
-            FiltersSheetView(
-                isFilterButtonPressed: $isFilterButtonPressed
-            )
-            .presentationBackground(.ultraThinMaterial)
-            .presentationDetents([.height(600)])
-            .presentationDragIndicator(.visible)
-            .presentationCornerRadius(30)
-        }
-        .overlay {
-            if isLongPressSuccess {
-                RatingSelectionView() {
-                    isLongPressSuccess = false
+            .sheet(isPresented: $showNoticesView) {
+                NavigationStack {
+                    NoticesView()
                 }
             }
-        }
-        .overlay {
-            if showProgressSelectionView {
-                ProgressSelectionView() {
-                    showProgressSelectionView = false
+            .sheet(isPresented: $showAddPostView) {
+                NavigationStack {
+                    AddEditPostSheet(post: nil)
                 }
             }
-        }
-
-        .onAppear { // task
-            vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-            
-//            if isPerformingNoticeTask {
-//                try? await Task.sleep(nanoseconds: 1_000_000_000)
-//                if noticevm.isSoundNotificationOn {
-//                    AudioServicesPlaySystemSound(1013) // 1005
-//                }
-//                noticeButtonAnimation = true
-//                try? await Task.sleep(nanoseconds: 1_000_000_000)
-//                noticeButtonAnimation = false
-//                noticevm.isUserNotified = true
-//            }
+            .sheet(item: $selectedPost) { selectedPostToEdit in
+                NavigationStack {
+                    AddEditPostSheet(post: selectedPostToEdit)
+                }
+            }
+            .sheet(isPresented: $isFilterButtonPressed) {
+                FiltersSheetView(
+                    isFilterButtonPressed: $isFilterButtonPressed
+                )
+                .presentationBackground(.ultraThinMaterial)
+                .presentationDetents([.height(600)])
+                .presentationDragIndicator(.visible)
+                .presentationCornerRadius(30)
+            }
+            .overlay {
+                if isLongPressSuccess {
+                    RatingSelectionView() {
+                        isLongPressSuccess = false
+                    }
+                    .frame(maxHeight: max(proxy.size.height / 3, 300))
+                    .padding(.horizontal, 30)
+                }
+            }
+            .overlay {
+                if showProgressSelectionView {
+                    ProgressSelectionView() {
+                        showProgressSelectionView = false
+                    }
+                    .frame(maxHeight: max(proxy.size.height / 3, 300))
+                    .padding(.horizontal, 30)
+                }
+            }
+            .onAppear {
+                vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
+            }
+            .task { // task
+                if isPerformingNoticeTask {
+                    try? await Task.sleep(nanoseconds: 3_000_000_000)
+                    if noticevm.isSoundNotificationOn {
+                        AudioServicesPlaySystemSound(1013) // 1005
+                    }
+                    noticeButtonAnimation = true
+                    try? await Task.sleep(nanoseconds: 1_000_000_000)
+                    noticeButtonAnimation = false
+                    noticevm.isUserNotified = true
+                }
+            }
         }
     }
     
@@ -256,23 +262,23 @@ struct HomeView: View {
                         }
                         .offset(x: 6, y: -9)
                 }
-//                .background(
-//                    AnyView(
-//                        Circle()
-//                            .stroke(
-//                                Color.mycolor.myRed,
-//                                lineWidth: noticeButtonAnimation ? 3 : 0
-//                            )
-//                            .scaleEffect(noticeButtonAnimation ? 1.2 : 0.8)
-//                            .opacity(noticeButtonAnimation ? 0.0 : 1.0)
-//                    )
-//                    .animation(
-//                        noticeButtonAnimation
-//                        ? .easeOut(duration: 1.0)
-//                        : .none,
-//                        value: noticeButtonAnimation
-//                    )
-//                )
+                .background(
+                    AnyView(
+                        Circle()
+                            .stroke(
+                                Color.mycolor.myRed,
+                                lineWidth: noticeButtonAnimation ? 3 : 0
+                            )
+                            .scaleEffect(noticeButtonAnimation ? 1.2 : 0.8)
+                            .opacity(noticeButtonAnimation ? 0.0 : 1.0)
+                    )
+                    .animation(
+                        noticeButtonAnimation
+                        ? .easeOut(duration: 1.0)
+                        : .none,
+                        value: noticeButtonAnimation
+                    )
+                )
             }
         }
         
