@@ -20,78 +20,81 @@ struct RatingSelectionView: View {
 
     var body: some View {
         Group {
-                if let post = vm.allPosts.first(where: { $0.id == vm.selectedPostId}) {
-                    VStack {
-                        ZStack(alignment: .topTrailing) {
-                            CircleStrokeButtonView(
-                                iconName: "xmark",
-                                isShownCircle: false)
-                            {
-                                completion()
+            if let post = vm.allPosts.first(where: { $0.id == vm.selectedPostId}) {
+                VStack {
+                    ZStack(alignment: .topTrailing) {
+                        CircleStrokeButtonView(
+                            iconName: "xmark",
+                            isShownCircle: false)
+                        {
+                            completion()
+                        }
+                        .padding()
+                        .zIndex(1)
+                        
+                        VStack {
+                            Text("Rate Material")
+                                .font(.title3).bold()
+                                .foregroundStyle(Color.mycolor.myBlue)
+                            VStack (spacing: 8) {
+                                Text(post.title)
+                                    .font(.headline)
+                                    .minimumScaleFactor(0.75)
+                                    .lineLimit(2)
+                                    .multilineTextAlignment(.center)
+                                
+                                Text("@" + post.author)
+                                    .font(.footnote)
+                                    .lineLimit(1)
                             }
-                            .padding(12)
-                            .zIndex(1)
+                            .foregroundStyle(Color.mycolor.myAccent)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.top)
                             
-                            VStack {
-                                Text("Rate Material")
-                                    .font(.title3).bold()
-                                    .foregroundStyle(Color.mycolor.myBlue)
-                                    .frame(maxWidth: .infinity, alignment: .center)
-                                VStack (spacing: 8) {
-                                    Text(post.title)
-                                        .font(.headline)
-                                        .minimumScaleFactor(0.75)
-                                        .lineLimit(2)
-                                    
-                                    Text("@" + post.author)
-                                        .font(.subheadline)
-                                        .lineLimit(1)
-                                }
-                                .foregroundStyle(Color.mycolor.myAccent)
-                                .multilineTextAlignment(.center)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .padding(.top)
+                            ratingIconsView
+                                .overlay(raringOverlayView.mask(ratingIconsView))
+                                .padding(.vertical, 30)
+                            
+                            HStack (spacing: 20) {
                                 
-                                ratingIconsView
-                                    .overlay(raringOverlayView.mask(ratingIconsView))
-                                    .padding()
-                                    .padding(.bottom, 30)
-                                
-                                HStack (spacing: 20) {
+                                if vm.selectedRating != nil {
                                     ClearCupsuleButton(
                                         primaryTitle: "Reset",
                                         primaryTitleColor: Color.mycolor.myRed) {
-                                            vm.selectedRating = nil
+                                            withAnimation(.easeInOut(duration: 0.3)) {
+                                                vm.selectedRating = nil
+                                            }
                                         }
-                                    
-                                    ClearCupsuleButton(
-                                        primaryTitle: "Place",
-                                        primaryTitleColor: Color.mycolor.myBlue) {
-                                            vm.ratePost(post: post)
-                                            completion()
-                                        }
+                                        .frame(maxWidth: 200)
                                 }
-                            } // VStack
-                            .padding(20)
-                        } // ZStack
-                    } //VStack
-                    .background(
-                        .thinMaterial,
-                        in: RoundedRectangle(cornerRadius: 30))
-                } else {
-                    Text("No post found")
-                }
+                                
+                                ClearCupsuleButton(
+                                    primaryTitle: "Place",
+                                    primaryTitleColor: Color.mycolor.myBlue) {
+                                        vm.ratePost(post: post)
+                                        completion()
+                                    }
+                                    .frame(maxWidth: 200)
+                            }
+                            .padding(.bottom)
+                        } // VStack
+                        .padding(20)
+                    } // ZStack
+                } //VStack
+            } else {
+                Text("No post found")
+            }
         } // Group
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-//        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(.horizontal, 30)
+        .background(
+            .thinMaterial,
+            in: RoundedRectangle(cornerRadius: 30))
         .scaleEffect(isShowingView ? 1.0 : 0.5)
         .opacity(isShowingView ? 1.0 : 0)
-        .animation(.bouncy(duration: 0.5), value: isShowingView)
+        .animation(.bouncy(duration: 0.3), value: isShowingView)
         .onAppear {
             isShowingView = true
         }
-
     }
     
     private var ratingIconsView: some View {
