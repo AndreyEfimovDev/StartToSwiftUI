@@ -12,50 +12,54 @@ struct StudyProgressView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     
-    @State private var selectedTab: StudyProgressTabs = .total
+    @State private var selectedTab: StudyLevelTabs = .all
         
-    private var tabs: [StudyProgressTabs] {
-            [.total, .beginner, .middle, .advanced]
+    private var tabs: [StudyLevelTabs] {
+            [.all, .beginner, .middle, .advanced]
         }
 
     var body: some View {
-        VStack {
+        Group {
             if UIDevice.isiPad {
-                Group {
+                VStack(spacing: 0)  {
                     Group {
                         switch selectedTab {
-                        case .total:
+                        case .all:
                             StudyProgressForLevel(studyLevel: nil)
+                                .opacity(selectedTab == .all ? 1 : 0)
                         case .beginner:
                             StudyProgressForLevel(studyLevel: .beginner)
+                                .opacity(selectedTab == .beginner ? 1 : 0)
                         case .middle:
                             StudyProgressForLevel(studyLevel: .middle)
+                                .opacity(selectedTab == .middle ? 1 : 0)
                         case .advanced:
                             StudyProgressForLevel(studyLevel: .advanced)
+                                .opacity(selectedTab == .advanced ? 1 : 0)
                         }
                     }
                     .transition(.slide)
                     .animation(.linear(duration: 0.3), value: selectedTab)
-                    .padding(.horizontal, 50)
                     
                     UnderlineSermentedPickerNotOptional(
                         selection: $selectedTab,
-                        allItems: StudyProgressTabs.allCases,
+                        allItems: StudyLevelTabs.allCases,
                         titleForCase: { $0.displayName },
-                        selectedFont: .caption,
+                        selectedFont: .headline,
                         selectedTextColor: Color.mycolor.myBlue,
                         unselectedTextColor: Color.mycolor.mySecondary
                     )
-                    .padding(.horizontal, 50)
-                    .padding(.bottom, 30)
+                    .padding(.horizontal)
+                    .padding(.top)
                 }
-                
+                .padding()
             } else {
                 TabView (selection: $selectedTab) {
                     ForEach(tabs, id: \.self) { tab in
                         StudyProgressForLevel(studyLevel: tab.studyLevel)
                             .tag(tab)
-                            .padding(.bottom, 30)
+                            .padding(.top)
+                            .padding(.bottom, 50)
                     }
                 }
                 .tabViewStyle(.page)

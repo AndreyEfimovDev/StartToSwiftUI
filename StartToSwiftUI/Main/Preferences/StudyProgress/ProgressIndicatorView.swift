@@ -14,8 +14,8 @@ struct ProgressIndicator: View {
     
     var progress: Double = 0
     var colour: Color = Color.mycolor.myBlue
-    var fontForTitle: Font = .title2
-    var lineWidth: Double = 10.0
+    var fontForTitle: Font = .headline
+    var lineWidth: Double = 8.0
     var opacity: Double = 0.3
     
     var body: some View {

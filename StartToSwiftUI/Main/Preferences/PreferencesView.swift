@@ -65,7 +65,8 @@ struct PreferencesView: View {
                     }
                     .customListRowStyle(
                         iconName: "hare",
-                        iconWidth: iconWidth)
+                        iconWidth: iconWidth
+                    )
                 } // gauge.open.with.lines.needle.67percent.and.arrowtriangle
                 
                 Section(header: sectionHeader("Manage materials (\(postsCount))")) {
@@ -90,6 +91,7 @@ struct PreferencesView: View {
             .navigationTitle("Preferences")
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
+            .navigationViewStyle(StackNavigationViewStyle())
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     if UIDevice.isiPad {
