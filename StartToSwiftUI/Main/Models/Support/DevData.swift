@@ -1643,6 +1643,7 @@ struct DevData {
                 SwiftUI TextEditor is a great component that empowers developers to work with large text input and editing in SwiftUI applications. TextEditor is a dynamic, rich, and customisable solution that offers a world of possibilities for crafting engaging user interfaces.
 
                 In this blog post, we’re going to take a deep dive into SwiftUI TextEditor, exploring its features, capabilities, and how you can use it in your application. I hope that whether you’re new to SwiftUI or a seasoned developer, this guide will provide you with insights and practical examples to unlock the full potential of TextEditor in your projects.
+                In this blog post, we’re going to take a deep dive into SwiftUI TextEditor, exploring its features, capabilities, and how you can use it in your application. I hope that whether you’re new to SwiftUI or a seasoned developer, this guide will provide you with insights and practical examples to unlock the full potential of TextEditor in your projects.
                 """,
             author: "softwareanders.com",
             urlString: "",
@@ -2036,7 +2037,7 @@ struct DevData {
                 Build your first app in SwiftUI! Learn how to build a real application with MVVM app architecture.
                 """,
             author: "Nick Sarno/Swiftful Thinking",
-            postType: .solution,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpheGqemblOIA7v3oq0MS30i",
             postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 3, day: 14),
@@ -2059,7 +2060,7 @@ struct DevData {
                 Build a map app to showcase real destinations around the world. Get familiar with data management and transitions.
                 """,
             author: "Nick Sarno/Swiftful Thinking",
-            postType: .solution,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdpha5eVTjLM0eRlJ7-yDDwBk",
             postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 12, day: 20),
@@ -2250,7 +2251,7 @@ struct DevData {
                 Build a cryptocurrency app that downloads live price data from an API and saves the current user's portfolio. Get comfortable with Combine, Core Data, and MVVM.
                 """,
             author: "Nick Sarno/Swiftful Thinking",
-            postType: .solution,
+            postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
             postPlatform: .youtube,
             postDate: Date.from(year: 2024, month: 8, day: 8),
