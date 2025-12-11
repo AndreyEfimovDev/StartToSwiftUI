@@ -25,7 +25,9 @@ struct Post: Identifiable, Hashable, Codable {
     var notes: String // free text field/notes to enter everything you wish
     let origin: PostOrigin // origin source of the post: local created/ downloaded from cloud/ static
     var draft: Bool // draft -> true
-    let date: Date // date of creating the post
+    let date: Date // creation post date
+    var studiedDateStamp: Date? // date when the materila is marked as "Studied"
+    var practicedDateStamp: Date? // date when the materila is marked as "Practiced"
     
     init(
         id: String = UUID().uuidString,
@@ -44,7 +46,9 @@ struct Post: Identifiable, Hashable, Codable {
         notes: String = "",
         origin: PostOrigin = .cloud,
         draft: Bool = false,
-        date: Date = .now
+        date: Date = .now,
+        studiedDateStamp: Date? = nil,
+        practicedDateStamp: Date? = nil
     ) {
         self.id = id
         self.category = category
@@ -63,6 +67,8 @@ struct Post: Identifiable, Hashable, Codable {
         self.origin = origin
         self.draft = draft
         self.date = date
+        self.studiedDateStamp = studiedDateStamp
+        self.practicedDateStamp = practicedDateStamp
     }
 }
 
