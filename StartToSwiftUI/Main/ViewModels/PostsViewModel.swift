@@ -321,6 +321,10 @@ class PostsViewModel: ObservableObject {
         if let index = allPosts.firstIndex(of: post) {
             allPosts[index].progress = selectedStudyProgress
             switch selectedStudyProgress {
+            case .fresh:
+                allPosts[index].startedDateStamp = nil
+                allPosts[index].studiedDateStamp = nil
+                allPosts[index].practicedDateStamp = nil
             case .started:
                 allPosts[index].startedDateStamp = .now
                 allPosts[index].studiedDateStamp = nil
@@ -330,9 +334,6 @@ class PostsViewModel: ObservableObject {
                 allPosts[index].practicedDateStamp = nil
             case .practiced:
                 allPosts[index].practicedDateStamp = .now
-            case .fresh:
-                allPosts[index].studiedDateStamp = nil
-                allPosts[index].practicedDateStamp = nil
             }
             savePosts()
         }

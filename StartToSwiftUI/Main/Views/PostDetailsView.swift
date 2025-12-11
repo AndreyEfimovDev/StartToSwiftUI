@@ -174,7 +174,7 @@ struct PostDetailsView: View {
             )
             .fill(.bar)
             .strokeBorder(
-                (isExpanded ? .clear : Color.mycolor.myBlue.opacity(1)),
+                (isExpanded ? .clear : Color.mycolor.mySecondary.opacity(0.5)),
                 lineWidth: 1,
                 antialiased: true
             )
@@ -191,7 +191,7 @@ struct PostDetailsView: View {
                             .padding(8)
                     }
                 }
-                .foregroundColor(Color.mycolor.myBlue)
+                .foregroundColor(Color.mycolor.mySecondary)
                 .padding(.top, 4)
                 .padding(.horizontal, 30)
                 .background(.black.opacity(0.001))
