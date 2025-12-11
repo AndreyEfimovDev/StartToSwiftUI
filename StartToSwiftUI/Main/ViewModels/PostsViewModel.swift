@@ -316,11 +316,24 @@ class PostsViewModel: ObservableObject {
         }
     }
     
-    
     func updatePostStudyProgress(post: Post) {
         
         if let index = allPosts.firstIndex(of: post) {
-                allPosts[index].progress = selectedStudyProgress
+            allPosts[index].progress = selectedStudyProgress
+            switch selectedStudyProgress {
+            case .started:
+                allPosts[index].startedDateStamp = .now
+                allPosts[index].studiedDateStamp = nil
+                allPosts[index].practicedDateStamp = nil
+            case .studied:
+                allPosts[index].studiedDateStamp = .now
+                allPosts[index].practicedDateStamp = nil
+            case .practiced:
+                allPosts[index].practicedDateStamp = .now
+            case .fresh:
+                allPosts[index].studiedDateStamp = nil
+                allPosts[index].practicedDateStamp = nil
+            }
             savePosts()
         }
     }

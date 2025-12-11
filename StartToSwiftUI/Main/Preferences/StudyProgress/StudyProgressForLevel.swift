@@ -15,7 +15,7 @@ struct StudyProgressForLevel: View {
     let studyLevel: StudyLevel?
     
     private var fontForTitle: Font {
-        UIDevice.isiPad ? .body : .title3
+        UIDevice.isiPad ? .body : .headline
     }
     
     private var postsForStudyLevel: [Post] {
@@ -25,6 +25,12 @@ struct StudyProgressForLevel: View {
         return vm.allPosts
     }
     
+    var titleForStudyLevel: String {
+        if let studyLevel = studyLevel {
+            studyLevel.displayName + " materials"
+        } else { "All materials" }
+    }
+
 //    private var postsCountForStudyLevel: Int {
 //        if let studyLevel = studyLevel {
 //            return vm.allPosts.filter({ $0.studyLevel == studyLevel }).count
@@ -35,42 +41,29 @@ struct StudyProgressForLevel: View {
     
     var body: some View {
         
-//        ScrollView {
-            VStack (spacing: 0) {
+            VStack {
                 // TITLE
-                var titleForStudyLevel: String {
-                    if let studyLevel = studyLevel {
-                        studyLevel.displayName + " materials"
-                    } else { "All materials" }
-                }
                 HStack {
                     Image(systemName: "hare")
                     Text(titleForStudyLevel + " (\(totalPostsCount))")
                         .font(.title3)
                 }
                 .foregroundStyle(studyLevel?.color ?? Color.mycolor.myAccent)
-                .padding()
+                .padding(.bottom)
                 
                 // PROGRESS VIEWS
                 ForEach(StudyProgress.allCases, id: \.self) { progressLevel in
                     HStack (spacing: 0) {
                         VStack(spacing: 8) {
                             progressLevel.icon
-                            //                            .padding(.bottom, 8)
                             HStack (alignment: .lastTextBaseline, spacing: 0){
                                 Text(progressLevel.displayName)
                                 Text("(\(levelPostsCount(for: progressLevel)))")
-                                //                                    .font(.caption2)
-                                //                            Text("/\(postsCountForStudyLevel)")
-                                //                                .font(.caption2)
-                                //                                .foregroundStyle(Color.mycolor.myAccent)
                             }
                         }
                         .foregroundStyle(progressLevel.color)
                         .font(fontForTitle)
                         .frame(maxWidth: .infinity, alignment: .center)
-                        .padding()
-                        //                    .padding(.leading, 30)
                         
                         Spacer()
                         
@@ -79,9 +72,9 @@ struct StudyProgressForLevel: View {
                             colour: progressLevel.color,
                             fontForTitle: fontForTitle
                         )
+                        .padding()
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
                     }
-                    .padding()
                     .background(.ultraThinMaterial)
                     .clipShape(
                         RoundedRectangle(cornerRadius: 30)
@@ -90,17 +83,14 @@ struct StudyProgressForLevel: View {
                         RoundedRectangle(cornerRadius: 30)
                             .stroke(.blue, lineWidth: 1)
                     )
-                    .padding(8)
                 } // ForEach
             }
+            .padding(.horizontal, 30)
             .bold()
-            .padding()
             .id(refreshID)
             .onAppear {
                 refreshID = UUID()
             }
-//        } // ScrollView
-//        .scrollIndicators(.hidden)
     }
     
     private func progressCount(for progressLevel: StudyProgress) -> Double {
