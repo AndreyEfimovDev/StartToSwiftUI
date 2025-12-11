@@ -74,7 +74,6 @@ struct ImportPostsFromCloudView: View {
                 BackButtonView() { dismiss() }
             }
         }
-
     }
     
     
@@ -133,9 +132,7 @@ struct ImportPostsFromCloudView: View {
                 }
             }
         }
-        
-        
-    } // func importFromCloud()
+    }
     
 }
 

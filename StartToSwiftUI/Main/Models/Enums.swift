@@ -32,15 +32,15 @@ enum Theme: String, CaseIterable, Codable {
     }
 }
 
-enum StudyProgressTabs: String, CaseIterable, Codable, Hashable {
-    case total
+enum StudyLevelTabs: String, CaseIterable, Codable, Hashable {
+    case all
     case beginner
     case middle
     case advanced
     
     var displayName: String {
         switch self {
-        case .total: return "All"
+        case .all: return "All"
         case .beginner: return "Beginner"
         case .middle: return "Middle"
         case .advanced: return "Advanced"
@@ -49,13 +49,12 @@ enum StudyProgressTabs: String, CaseIterable, Codable, Hashable {
     
     var studyLevel: StudyLevel? {
         switch self {
-        case .total: return nil
+        case .all: return nil
         case .beginner: return .beginner
         case .middle: return .middle
         case .advanced: return .advanced
         }
     }
-
 }
 
 // MARK: Sorting option
@@ -198,14 +197,15 @@ enum StudyLevel: String, CaseIterable, Codable {
 }
 
 enum StudyProgress: String, CaseIterable, Codable { // progress in mastering educational materials
-    case fresh, studied, practiced
+    case fresh, started, studied, practiced
     
     // 􀐾 chart.bar, 􀓎 hare, 􁗟 bird, 􁝯 tree, 􀑁 chart.line.uptrend.xyaxis
     
     var displayName: String {
         switch self {
         case .fresh: return "New"
-        case .studied: return "Studied"
+        case .started: return "Started"
+        case .studied: return "Learnt"
         case .practiced: return "Practiced"
         }
     }
@@ -213,6 +213,7 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
     var icon: Image { // for other options look at TestSFSymbolsForProgress
         switch self {
         case .fresh: return Image(systemName: "sparkles") // lightbulb signpost.right
+        case .started: return Image(systemName: "signpost.right")
         case .studied: return Image(systemName: "flag.checkered") // brain.head.profile flag.checkered
         case .practiced: return Image(systemName: "mountain.2.fill") // hand.raised.fingers.spread mountain.2.fill
         }
@@ -221,11 +222,11 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
     var color: Color {
         switch self {
         case .fresh: return Color.mycolor.myGreen
+        case .started: return Color.mycolor.myPurple
         case .studied: return Color.mycolor.myBlue
         case .practiced: return Color.mycolor.myRed
         }
     }
-
 }
 
 
