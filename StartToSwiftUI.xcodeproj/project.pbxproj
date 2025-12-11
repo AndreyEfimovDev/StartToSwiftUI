@@ -27,6 +27,7 @@
 		471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBDF2EBBC6B900AFA5F4 /* WelcomeMessage.swift */; };
 		4725A5272EDC818600235C40 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4725A5262EDC818600235C40 /* SidebarView.swift */; };
 		4725A52B2EDD757F00235C40 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4725A52A2EDD757F00235C40 /* UIDevice.swift */; };
+		472778D52EEAC01A00601CED /* AlertMessagePostDeletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472778D42EEAC01A00601CED /* AlertMessagePostDeletionView.swift */; };
 		472A9B592EDB6D6E00ED3344 /* HomeViewCustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472A9B582EDB6D6E00ED3344 /* HomeViewCustomNavBar.swift */; };
 		472A9B5B2EDC3B6F00ED3344 /* BackButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472A9B5A2EDC3B6F00ED3344 /* BackButtonView.swift */; };
 		472E05CC2EDDC9BA005D774E /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472E05CB2EDDC9BA005D774E /* KeyboardManager.swift */; };
@@ -117,6 +118,7 @@
 		471DCBDF2EBBC6B900AFA5F4 /* WelcomeMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeMessage.swift; sourceTree = "<group>"; };
 		4725A5262EDC818600235C40 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		4725A52A2EDD757F00235C40 /* UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
+		472778D42EEAC01A00601CED /* AlertMessagePostDeletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertMessagePostDeletionView.swift; sourceTree = "<group>"; };
 		472A9B582EDB6D6E00ED3344 /* HomeViewCustomNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewCustomNavBar.swift; sourceTree = "<group>"; };
 		472A9B5A2EDC3B6F00ED3344 /* BackButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButtonView.swift; sourceTree = "<group>"; };
 		472E05CB2EDDC9BA005D774E /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
@@ -318,6 +320,7 @@
 				478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */,
 				47BAF09E2E5F9C4500287F10 /* Buttons */,
 				470A21C42E6E389D006D2D66 /* Pickers */,
+				472778D42EEAC01A00601CED /* AlertMessagePostDeletionView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -607,6 +610,7 @@
 				47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */,
 				4791CDC12E708E1300687126 /* DocumentPicker.swift in Sources */,
 				472A9B592EDB6D6E00ED3344 /* HomeViewCustomNavBar.swift in Sources */,
+				472778D52EEAC01A00601CED /* AlertMessagePostDeletionView.swift in Sources */,
 				47E439B72EA9290E007001AD /* NetworkService.swift in Sources */,
 				471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */,
 				47AA558A2EA9741D000AF4E9 /* RestoreBackupView.swift in Sources */,

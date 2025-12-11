@@ -117,7 +117,7 @@ struct AddEditPostSheet: View {
         }
         .overlay {
             if isShowingExitMenuConfirmation {
-                exitMenuConfirmation
+                exitConfirmation
                     .opacity(isShowingExitMenuConfirmation ? 1 : 0)
                     .transition(.move(edge: .bottom))
             }
@@ -126,7 +126,7 @@ struct AddEditPostSheet: View {
     
     // MARK: Subviews
     
-    private var exitMenuConfirmation: some View {
+    private var exitConfirmation: some View {
         ZStack {
             Color.mycolor.myAccent.opacity(0.001)
                 .ignoresSafeArea()
