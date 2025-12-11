@@ -56,7 +56,6 @@ struct RatingSelectionView: View {
                                 .padding(.vertical, 30)
                             
                             HStack (spacing: 20) {
-                                
                                 if vm.selectedRating != nil {
                                     ClearCupsuleButton(
                                         primaryTitle: "Reset",
@@ -67,7 +66,6 @@ struct RatingSelectionView: View {
                                         }
                                         .frame(maxWidth: 200)
                                 }
-                                
                                 ClearCupsuleButton(
                                     primaryTitle: "Place",
                                     primaryTitleColor: Color.mycolor.myBlue) {
@@ -87,7 +85,7 @@ struct RatingSelectionView: View {
         } // Group
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
-            .thinMaterial,
+            .bar,
             in: RoundedRectangle(cornerRadius: 30))
         .scaleEffect(isShowingView ? 1.0 : 0.5)
         .opacity(isShowingView ? 1.0 : 0)

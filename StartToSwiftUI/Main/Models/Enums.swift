@@ -40,7 +40,7 @@ enum StudyProgressTabs: String, CaseIterable, Codable, Hashable {
     
     var displayName: String {
         switch self {
-        case .total: return "Total"
+        case .total: return "All"
         case .beginner: return "Beginner"
         case .middle: return "Middle"
         case .advanced: return "Advanced"

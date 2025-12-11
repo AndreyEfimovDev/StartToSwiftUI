@@ -32,6 +32,7 @@ struct HomeView: View {
     
     @State private var isFilterButtonPressed: Bool = false
     @State private var isShowingDeleteConfirmation: Bool = false
+    private let limitToShortenTitle: Int = 30
     
     @State private var noticeButtonAnimation = false
     
@@ -65,7 +66,7 @@ struct HomeView: View {
                     }
                 }
             }
-            .disabled(isLongPressSuccess)
+            .disabled(isLongPressSuccess || isShowingDeleteConfirmation)
             .navigationTitle(vm.selectedCategory ?? "SwiftUI") // -> All Categories!!!
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -131,6 +132,13 @@ struct HomeView: View {
                     }
                 }
             }
+            .overlay {
+                if isShowingDeleteConfirmation {
+                    postDeletionConfirmation
+                        .opacity(isShowingDeleteConfirmation ? 1 : 0)
+                        .transition(.move(edge: .bottom))
+                }
+            }
             .onAppear {
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
             }
@@ -189,7 +197,6 @@ struct HomeView: View {
                         }
                     )
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        
                         Button("Delete", systemImage: "trash") {
                             selectedPostToDelete = post
                             hapticManager.notification(type: .warning)
@@ -204,28 +211,11 @@ struct HomeView: View {
                         .disabled(post.origin == .cloud || post.origin == .statical)
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: false) {
-                        
                         Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: post.favoriteChoice == .yes ?  "heart.slash" : "heart") {
                             vm.favoriteToggle(post: post)
                         }.tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondary : Color.mycolor.myRed.opacity(0.5))
                     }
             } // ForEach
-            .confirmationDialog(
-                "Are you sure you want to delete this post?",
-                isPresented: $isShowingDeleteConfirmation,
-                titleVisibility: .visible
-            ) {
-                Button("Delete the post", role: .destructive) {
-                    withAnimation {
-                        vm.deletePost(post: selectedPostToDelete ?? nil)
-                        hapticManager.notification(type: .success)
-                        isShowingDeleteConfirmation = false
-                    }
-                }
-                Button("Cancel", role: .cancel) { }
-            } message: {
-                Text("It will be impossible to undo the deletion.")
-            }
             .listRowBackground(Color.clear)
             .listRowSeparatorTint(Color.mycolor.myAccent.opacity(0.35))
             .listRowSeparator(.hidden, edges: [.top])
@@ -236,6 +226,59 @@ struct HomeView: View {
         .listStyle(.plain)
     }
     
+    private var postDeletionConfirmation: some View {
+        ZStack {
+            Color.mycolor.myAccent.opacity(0.001)
+                .ignoresSafeArea()
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    isShowingDeleteConfirmation = false
+                }
+            VStack(spacing: 8) {
+                Text("Are you sure you want to delete the material?")
+                    .font(.headline)
+                    .foregroundColor(Color.mycolor.myRed)
+                    .multilineTextAlignment(.center)
+                    .padding(.vertical)
+                Text(selectedPostToDelete?.title ?? "No material selected")
+                    .font(.subheadline)
+                    .foregroundColor(Color.mycolor.myAccent)
+                    .minimumScaleFactor(0.75)
+                    .lineLimit(3)
+                    .multilineTextAlignment(.center)
+                Text("This cannot be undone.")
+                    .font(.caption2)
+                    .foregroundColor(Color.mycolor.myAccent)
+                    .padding(.vertical)
+                ClearCupsuleButton(
+                    primaryTitle: "Delete",
+                    primaryTitleColor: Color.mycolor.myRed) {
+                        withAnimation {
+                            vm.deletePost(post: selectedPostToDelete ?? nil)
+                            hapticManager.notification(type: .success)
+                            isShowingDeleteConfirmation = false
+                        }
+                    }
+                ClearCupsuleButton(
+                    primaryTitle: "Cancel",
+                    primaryTitleColor: Color.mycolor.myAccent) {
+                        isShowingDeleteConfirmation = false
+                    }
+            } // VStack
+            .padding()
+            .background(.ultraThinMaterial)
+            .menuFormater()
+            .padding(.horizontal, 40)
+        } // ZStack
+    }
+
+    private func shortenPostTitle(title: String) -> String {
+           if title.count > limitToShortenTitle {
+               return String(title.prefix(limitToShortenTitle - 3)) + "..."
+           }
+           return title
+       }
+
     @ToolbarContentBuilder
     private func toolbarForMainViewBody() -> some ToolbarContent {
         
@@ -349,47 +392,7 @@ struct HomeView: View {
             description: Text("Check the spelling or try a new search.")
         )
     }
-        
-    private var deletionConfirmationDialog: some View {
-        ZStack {
-            Color.mycolor.myAccent.opacity(0.4)
-                .ignoresSafeArea()
-            
-            VStack(spacing: 20) {
-                Text("DELETE THE POST?")
-                    .font(.headline)
-                    .bold()
-                    .foregroundColor(Color.mycolor.myRed)
-                
-                Text("Please confirm the action.")
-                    .font(.subheadline)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
-                ClearCupsuleButton(
-                    primaryTitle: "Yes",
-                    primaryTitleColor: Color.mycolor.myRed) {
-                        withAnimation {
-                            vm.deletePost(post: selectedPostToDelete ?? nil)
-                            hapticManager.notification(type: .success)
-                            isShowingDeleteConfirmation = false
-                        }
-                    }
-                
-                ClearCupsuleButton(
-                    primaryTitle: "No",
-                    primaryTitleColor: Color.mycolor.myAccent) {
-                        withAnimation {
-                            isShowingDeleteConfirmation = false
-                        }
-                    }
-            }
-            .padding()
-            .background(.regularMaterial)
-            .cornerRadius(30)
-            .padding(.horizontal, 40)
-        }
-    }
-    
+ 
     // MARK: Private functions
     
     private func postsForCategory(_ category: String?) -> [Post] {
