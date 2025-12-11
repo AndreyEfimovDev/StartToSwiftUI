@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import Speech
 
 class PostsViewModel: ObservableObject {
     
@@ -86,8 +87,8 @@ class PostsViewModel: ObservableObject {
         networkService: NetworkService = NetworkService(baseURL: Constants.cloudPostsURL)
     ) {
         self.networkService = networkService
-                
-        // Load local JSON file with notices and then 
+
+        // Load local JSON file with notices and then
         if fileManager.checkIfFileExists(fileName: Constants.localPostsFileName) {
             fileManager.loadData(fileName: Constants.localPostsFileName) { [weak self] (result: Result<[Post], FileStorageError>) in
                 
@@ -360,15 +361,15 @@ class PostsViewModel: ObservableObject {
         }
     }
     
-    /// Import manually collected posts for the development purpose.
+    /// Import manually collected links to study materials for the educational purpose.
     ///
-    /// Manually collected posts are also used for creating curated posts in the Cloud .
+    /// Manually collected links to educational materials are used to create a curated collection for deployment in the cloud.
     ///
     /// ```
     /// loadPersistentPosts() -> Void
     /// ```
     ///
-    /// - Warning: This app is made for self study purpose only.
+    /// - Warning: This application is intended for self-study.
     /// - Returns: Returns a boolean result or error within completion handler.
     
     func loadPersistentPosts(posts: [Post], _ completion: @escaping () -> ()) {
@@ -405,16 +406,16 @@ class PostsViewModel: ObservableObject {
     ///
     /// Imported posts from the Cloud are processed as follows:
     ///  - Only posts with unique titles are selected.
-    ///  - Only posts with unique ID are selected (just in case).
+    ///  - Only posts with unique ID are selected (check just in case).
     ///  - The selected posts are added to the current posts.
-    ///  - The date of new posts is saved for subsequent checking.
+    ///  - The latest date from posts is saved for subsequent checking.
     ///
     ///
     /// ```
     /// checkCloudForUpdates() -> Void
     /// ```
     ///
-    /// - Warning: This app is made for self study purpose only.
+    /// - Warning: This application is intended for self-study.
     /// - Returns: Returns a boolean result or error within completion handler.
     
     func importPostsFromCloud(urlString: String = Constants.cloudPostsURL, completion: @escaping () -> Void) {
@@ -499,15 +500,15 @@ class PostsViewModel: ObservableObject {
         return postsAfterCheckForUniqueID
     }
     
-    /// Checking for available posts update in the Cloud.
+    /// Check for updates to available posts in the cloud.
     ///
-    /// The result is used to check and then warn an user about an available posts update in the Cloud.
+    /// The resulting result is used to check and subsequently notify the user about the presence of posts updates in the cloud.
     ///
     /// ```
     /// checkCloudForUpdates() -> Void
     /// ```
     ///
-    /// - Warning: This app is made for self study purpose only.
+    /// - Warning: This application is intended for self-study.
     /// - Returns: Returns a boolean result or error within completion handler.
     
     func checkCloudForUpdates(completion: @escaping (Bool) -> Void) {
@@ -556,16 +557,16 @@ class PostsViewModel: ObservableObject {
         
     }
     
-    /// Checking if a title of a new/editing post is not in the array of existing posts.
+    /// Checking if a title of a new/editing post is unique not presenting in the current local posts.
     ///
-    /// The result is used to avoid doublied posts with the same titles.
+    /// The result is used to avoid doublied titles in posts.
     ///
     /// ```
     /// checkNewPostForUniqueTitle() -> Bool
     /// ```
     ///
-    /// - Warning: This app is made for self study purpose only.
-    /// - Returns: Returns a boolean, true if a title of a post is unique and false if not unique.
+    /// - Warning: This application is intended for self-study.
+    /// - Returns: Returns a boolean, true if a title of a post is unique and false if not.
     
     func checkNewPostForUniqueTitle(_ postTitle: String, editingPostId: String?) -> Bool {
         //        If there is a post with the same title and its id is not equal to excludingPostId, then the title is not unique
@@ -583,14 +584,14 @@ class PostsViewModel: ObservableObject {
     
     /// Checks all filters for their values.
     ///
-    /// The result is used in different snip codes: in FilterButton to change its apearance in its parent UI, also when filtering posts, etc.
+    /// The result is used in different snip codes: in FilterButton to change its apearance in its parent UI, when filtering posts, etc.
     ///
     /// ```
     /// checkIfAllFilterAreEmpty() -> Bool
     /// ```
     ///
-    /// - Warning: This app is made for self study purpose only.
-    /// - Returns: Returns a boolean, true if all filters are not set (nil) and false if at least one is set.
+    /// - Warning: This application is intended for self-study.
+    /// - Returns: Returns a boolean, true if all listed filters are set as not nil.
     ///
     func checkIfAllFiltersAreEmpty() -> Bool {
         // check if all filters are empty
@@ -615,8 +616,8 @@ class PostsViewModel: ObservableObject {
     /// getAllYears() -> [String]?
     /// ```
     ///
-    /// - Warning: This app is made for self study purpose only.
-    /// - Returns: Returns an array of strings with the values of years available in the current posts.
+    /// - Warning: This application is intended for self-study.
+    /// - Returns: Returns an array of strings with the values of years available in the current local posts.
     ///
     
     private func getAllYears() -> [String]? {
