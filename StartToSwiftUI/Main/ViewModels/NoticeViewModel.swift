@@ -118,7 +118,7 @@ class NoticeViewModel: ObservableObject {
                                 print("🍉 NVN(importNoticesFromCloud): No new notices from the cloud")
                             }
                         } else {
-                            print("🍉☑️ NVN(importNoticesFromCloud): Array of new notifications from the cloud is empty.")
+                            print("🍉☑️ NVN(importNoticesFromCloud): No new notifications from the cloud.")
                         }
                     } else {
                         print("🍉☑️ NVN(importNoticesFromCloud): Array of notifications from the cloud is empty.")

@@ -19,9 +19,7 @@ struct StudyProgressView: View {
         }
 
     var body: some View {
-        
         VStack {
-            
             if UIDevice.isiPad {
                 Group {
                     Group {
@@ -36,8 +34,8 @@ struct StudyProgressView: View {
                             StudyProgressForLevel(studyLevel: .advanced)
                         }
                     }
-                    .transition(.opacity)
-                    .animation(.bouncy(duration: 0.3), value: selectedTab)
+                    .transition(.slide)
+                    .animation(.linear(duration: 0.3), value: selectedTab)
                     .padding(.horizontal, 50)
                     
                     UnderlineSermentedPickerNotOptional(
@@ -51,15 +49,15 @@ struct StudyProgressView: View {
                     .padding(.horizontal, 50)
                     .padding(.bottom, 30)
                 }
-
+                
             } else {
                 TabView (selection: $selectedTab) {
                     ForEach(tabs, id: \.self) { tab in
                         StudyProgressForLevel(studyLevel: tab.studyLevel)
                             .tag(tab)
+                            .padding(.bottom, 30)
                     }
                 }
-                .padding(.bottom, 30)
                 .tabViewStyle(.page)
                 .indexViewStyle(.page(backgroundDisplayMode: .always))
             }

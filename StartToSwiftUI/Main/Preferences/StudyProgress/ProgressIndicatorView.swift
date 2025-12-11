@@ -17,8 +17,6 @@ struct ProgressIndicator: View {
     var fontForTitle: Font = .title2
     var lineWidth: Double = 10.0
     var opacity: Double = 0.3
-
-//    private let circleSize: CGFloat = 100
     
     var body: some View {
         ZStack {
@@ -35,9 +33,8 @@ struct ProgressIndicator: View {
                         lineJoin: .round))
                     .foregroundStyle(colour)
                     .rotationEffect(.degrees(-90))
-                    .animation(.linear(duration: 1), value: trim)
+                    .animation(.linear(duration: 0.8), value: trim)
             }
-//            .frame(width: circleSize, height: circleSize)
             HStack(alignment: .lastTextBaseline, spacing: 0) {
                 Text("\(Int(trim * 100))")
                     .font(fontForTitle)
@@ -47,9 +44,8 @@ struct ProgressIndicator: View {
             .bold()
             .foregroundStyle(Color.mycolor.myAccent)
             .opacity(isAppear ? 1 : 0)
-            .animation(.bouncy(duration: 1), value: isAppear)
+//            .animation(.bouncy(duration: 1), value: isAppear)
         }
-//        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear {
             isAppear.toggle()
             trim = progress
