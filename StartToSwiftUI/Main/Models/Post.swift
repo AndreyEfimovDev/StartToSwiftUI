@@ -26,6 +26,7 @@ struct Post: Identifiable, Hashable, Codable {
     let origin: PostOrigin // origin source of the post: local created/ downloaded from cloud/ static
     var draft: Bool // draft -> true
     let date: Date // creation post date
+    var startedDateStamp: Date? // date when the materila is marked as "Studied"
     var studiedDateStamp: Date? // date when the materila is marked as "Studied"
     var practicedDateStamp: Date? // date when the materila is marked as "Practiced"
     
@@ -47,6 +48,7 @@ struct Post: Identifiable, Hashable, Codable {
         origin: PostOrigin = .cloud,
         draft: Bool = false,
         date: Date = .now,
+        startedDateStamp: Date? = nil,
         studiedDateStamp: Date? = nil,
         practicedDateStamp: Date? = nil
     ) {
@@ -67,6 +69,7 @@ struct Post: Identifiable, Hashable, Codable {
         self.origin = origin
         self.draft = draft
         self.date = date
+        self.startedDateStamp = startedDateStamp
         self.studiedDateStamp = studiedDateStamp
         self.practicedDateStamp = practicedDateStamp
     }

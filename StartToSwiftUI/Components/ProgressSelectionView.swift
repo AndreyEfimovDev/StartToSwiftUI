@@ -31,7 +31,7 @@ struct ProgressSelectionView: View {
                         .zIndex(1)
                         
                         VStack {
-                            Text("Set Study Progress")
+                            Text("Update Progress")
                                 .font(.title3).bold()
                                 .foregroundStyle(Color.mycolor.myGreen)
                             VStack (spacing: 8) {
