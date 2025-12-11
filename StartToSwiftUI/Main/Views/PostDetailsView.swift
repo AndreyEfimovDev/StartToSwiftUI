@@ -172,9 +172,9 @@ struct PostDetailsView: View {
                 topTrailingRadius: 30,
                 style: .continuous
             )
-            .fill(Color.mycolor.myBackground)
+            .fill(.bar)
             .strokeBorder(
-                (isExpanded ? Color.mycolor.myBlue : Color.mycolor.mySecondary).opacity(0.5),
+                (isExpanded ? .clear : Color.mycolor.myBlue.opacity(1)),
                 lineWidth: 1,
                 antialiased: true
             )

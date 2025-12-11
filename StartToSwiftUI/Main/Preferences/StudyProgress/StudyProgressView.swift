@@ -34,8 +34,8 @@ struct StudyProgressView: View {
                             StudyProgressForLevel(studyLevel: .advanced)
                         }
                     }
-                    .transition(.opacity)
-                    .animation(.bouncy(duration: 0.3), value: selectedTab)
+                    .transition(.slide)
+                    .animation(.linear(duration: 0.3), value: selectedTab)
                     .padding(.horizontal, 50)
                     
                     UnderlineSermentedPickerNotOptional(
