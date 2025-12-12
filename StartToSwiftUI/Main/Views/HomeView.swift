@@ -83,20 +83,20 @@ struct HomeView: View {
                     }
                 }
             }
-            .sheetForDevice(isPresented: $showPreferancesView) {
+            .sheetForUIDeviceBoolean(isPresented: $showPreferancesView) {
                 PreferencesView()
             }
-            .sheet(isPresented: $showNoticesView) {
+            .sheetForUIDeviceBoolean(isPresented: $showNoticesView) {
                 NavigationStack {
                     NoticesView()
                 }
             }
-            .sheet(isPresented: $showAddPostView) {
+            .sheetForUIDeviceBoolean(isPresented: $showAddPostView) {
                 NavigationStack {
                     AddEditPostSheet(post: nil)
                 }
             }
-            .sheet(item: $selectedPost) { selectedPostToEdit in
+            .sheetForUIDeviceItem(item: $selectedPost) { selectedPostToEdit in
                 NavigationStack {
                     AddEditPostSheet(post: selectedPostToEdit)
                 }
