@@ -15,10 +15,10 @@ struct UnderlineSermentedPickerNotOptional<T: Hashable>: View {
     
     // Colors
     var selectedFont: Font = .footnote
-    var selectedTextColor: Color = .white
-    var unselectedTextColor: Color = .red
-    var selectedBackground: Color = .red
-    var unselectedBackground: Color = .clear
+    var selectedTextColor: Color = Color.mycolor.myBlue
+    var unselectedTextColor: Color = Color.mycolor.myAccent
+//    var selectedBackground: Color = Color.mycolor.myRed
+//    var unselectedBackground: Color = .clear
         
     @Namespace private var namespace
 
@@ -26,7 +26,7 @@ struct UnderlineSermentedPickerNotOptional<T: Hashable>: View {
         
         HStack(alignment: .top) {
             ForEach(allItems, id: \.self) { item in
-                let isSelected = selection == item //
+                let isSelected = selection == item
                 
                 VStack(spacing: 5) {
                     Text(titleForCase(item))
