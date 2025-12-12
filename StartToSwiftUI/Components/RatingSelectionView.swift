@@ -79,6 +79,9 @@ struct RatingSelectionView: View {
                         .padding(20)
                     } // ZStack
                 } //VStack
+                .onAppear {
+                    vm.selectedRating = post.postRating
+                }
             } else {
                 Text("No post found")
             }

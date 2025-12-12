@@ -25,8 +25,9 @@ struct ProgressSelectionView: View {
                     ZStack(alignment: .topTrailing) {
                         CircleStrokeButtonView(
                             iconName: "xmark",
-                            isShownCircle: false)
-                        { completion() }
+                            isShownCircle: false) {
+                                completion()
+                            }
                         .padding()
                         .zIndex(1)
                         
@@ -72,6 +73,9 @@ struct ProgressSelectionView: View {
                         .padding(20)
                     } // ZStack
                 } //VStack
+                .onAppear {
+                    vm.selectedStudyProgress = post.progress
+                }
             } else {
                 Text("No post found")
             }
