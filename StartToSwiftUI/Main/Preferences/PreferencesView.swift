@@ -136,9 +136,7 @@ struct PreferencesView: View {
             selection: $vm.selectedTheme,
             allItems: Theme.allCases,
             titleForCase: { $0.displayName },
-            selectedFont: .footnote,
-            selectedTextColor: Color.mycolor.myBlue,
-            unselectedTextColor: Color.mycolor.myAccent
+            selectedFont: .footnote
         )
     }
     
