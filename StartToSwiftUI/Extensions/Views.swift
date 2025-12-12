@@ -12,7 +12,7 @@ import SwiftUI
 // MARK: Adaptaion for iPad
 
 extension View {
-    func sheetForDevice<Content: View>(
+    func sheetForUIDeviceBoolean<Content: View>(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content
     ) -> some View {
@@ -31,6 +31,28 @@ extension View {
         }
     }
 }
+
+extension View {
+    func sheetForUIDeviceItem<T: Identifiable, Content: View>(
+        item: Binding<T?>,
+        @ViewBuilder content: @escaping (T) -> Content
+    ) -> some View {
+        Group {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                self.sheet(item: item) { item in
+                    // iPad sheet
+                    content(item)
+                }
+            } else {
+                self.fullScreenCover(item: item) { item in
+                    // iPhone full screen
+                    content(item)
+                }
+            }
+        }
+    }
+}
+
 
 extension View {
     func applyTabViewStyle() -> some View {

@@ -87,12 +87,12 @@ struct PostDetailsView: View {
                     .toolbar {
                         toolbarForPostDetails(validPost: validPost)
                     }
-                    .sheet(isPresented: $showEditPostView) {
+                    .sheetForUIDeviceBoolean(isPresented: $showEditPostView) {
                         NavigationStack {
                             AddEditPostSheet(post: post)
                         }
                     }
-                    .sheet(isPresented: $showAddPostView) {
+                    .sheetForUIDeviceBoolean(isPresented: $showAddPostView) {
                         NavigationStack {
                             AddEditPostSheet(post: nil)
                         }
