@@ -20,7 +20,7 @@ struct StudyProgressView: View {
 
     var body: some View {
         Group {
-            if UIDevice.isiPad {
+//            if UIDevice.isiPad {
                 VStack(spacing: 0)  {
                     Group {
                         switch selectedTab {
@@ -45,26 +45,24 @@ struct StudyProgressView: View {
                         selection: $selectedTab,
                         allItems: StudyLevelTabs.allCases,
                         titleForCase: { $0.displayName },
-                        selectedFont: .headline,
-                        selectedTextColor: Color.mycolor.myBlue,
-                        unselectedTextColor: Color.mycolor.mySecondary
+                        selectedFont: UIDevice.isiPad ? .headline : .subheadline
                     )
                     .padding(.horizontal)
                     .padding(.top)
                 }
                 .padding()
-            } else {
-                TabView (selection: $selectedTab) {
-                    ForEach(tabs, id: \.self) { tab in
-                        StudyProgressForLevel(studyLevel: tab.studyLevel)
-                            .tag(tab)
-                            .padding(.top)
-                            .padding(.bottom, 50)
-                    }
-                }
-                .tabViewStyle(.page)
-                .indexViewStyle(.page(backgroundDisplayMode: .always))
-            }
+//            } else {
+//                TabView (selection: $selectedTab) {
+//                    ForEach(tabs, id: \.self) { tab in
+//                        StudyProgressForLevel(studyLevel: tab.studyLevel)
+//                            .tag(tab)
+//                            .padding(.top)
+//                            .padding(.bottom, 50)
+//                    }
+//                }
+//                .tabViewStyle(.page)
+//                .indexViewStyle(.page(backgroundDisplayMode: .always))
+//            }
         }
         .navigationTitle("Achievements")
         .navigationBarTitleDisplayMode(.inline)
