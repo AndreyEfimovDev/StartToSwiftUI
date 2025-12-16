@@ -9,16 +9,66 @@ import Foundation
 import SwiftUI
 
 
+// MARK: Adaptaion for iPad
+
+extension View {
+    func sheetForUIDeviceBoolean<Content: View>(
+        isPresented: Binding<Bool>,
+        @ViewBuilder content: @escaping () -> Content
+    ) -> some View {
+        Group {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                self.sheet(isPresented: isPresented) {
+                    // iPad sheet
+                    content()
+                }
+            } else {
+                self.fullScreenCover(isPresented: isPresented) {
+                    // iPhone full screen
+                    content()
+                }
+            }
+        }
+    }
+}
+
+extension View {
+    func sheetForUIDeviceItem<T: Identifiable, Content: View>(
+        item: Binding<T?>,
+        @ViewBuilder content: @escaping (T) -> Content
+    ) -> some View {
+        Group {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                self.sheet(item: item) { item in
+                    // iPad sheet
+                    content(item)
+                }
+            } else {
+                self.fullScreenCover(item: item) { item in
+                    // iPhone full screen
+                    content(item)
+                }
+            }
+        }
+    }
+}
+
+
+extension View {
+    func applyTabViewStyle() -> some View {
+        Group {
+            if UIDevice.isiPad {
+                self.tabViewStyle(.automatic)
+            } else {
+                self
+                    .tabViewStyle(.page(indexDisplayMode: .always))
+                    .indexViewStyle(.page(backgroundDisplayMode: .always))
+            }
+        }
+    }
+}
+
 // MARK: CUSTOM BACKGROUND
-
-//extension View {
-//    func myBackground(colorScheme: ColorScheme) -> some View {
-//        self
-//            .background(.thinMaterial)
-////            .ignoresSafeArea()
-//    }
-//}
-
 
 extension View {
     func mySsectionBackground() -> some View {
@@ -43,9 +93,6 @@ extension View {
 
     }
 }
-
-
-    
 
 extension View {
     func textFormater(
@@ -75,9 +122,6 @@ extension View {
             .bold()
             .foregroundStyle(colorSubheader)
             .padding(5)
-//            .padding(.leading, 5)
-//            .padding(.bottom, 5)
-
     }
 }
 
@@ -90,9 +134,22 @@ extension View {
             Image(systemName: iconName)
                 .frame(width: iconWidth)
                 .foregroundStyle(Color.mycolor.myBlue)
-            
             self
         }
+    }
+}
+
+// MARK: - View Modifier for processing Single and Double tap on PostRow
+
+extension View {
+    func onTapAndDoubleTap(
+        singleTap: @escaping () -> Void,
+        doubleTap: @escaping () -> Void
+    ) -> some View {
+        modifier(TapAndDoubleTapModifier(
+            singleTap: singleTap,
+            doubleTap: doubleTap
+        ))
     }
 }
 

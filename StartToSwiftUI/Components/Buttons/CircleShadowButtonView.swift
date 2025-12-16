@@ -25,7 +25,7 @@ struct CircleShadowButtonView: View {
         iconName: String,
         iconFont: Font = .headline,
         isIconColorToChange: Bool = false,
-        imageColorPrimary: Color = Color.mycolor.mySecondaryText,
+        imageColorPrimary: Color = Color.mycolor.mySecondary,
         imageColorSecondary: Color = Color.mycolor.myRed,
         shadowColor: Color = Color.mycolor.myAccent,
         widthIn: CGFloat = 35,

@@ -87,6 +87,12 @@
 		47E2AF4F2EBCD86000B0214F /* CategoryFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */; };
 		47E439B72EA9290E007001AD /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E439B62EA9290E007001AD /* NetworkService.swift */; };
 		47F38B1F2ED480B0006DEDBE /* DevData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F38B1E2ED480B0006DEDBE /* DevData.swift */; };
+		47FF42472EE454440069D232 /* TestSFSymbolsForRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF42462EE454440069D232 /* TestSFSymbolsForRating.swift */; };
+		47FF42492EE4572E0069D232 /* TestSFSymbolsForProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF42482EE4572E0069D232 /* TestSFSymbolsForProgress.swift */; };
+		47FF424B2EE4B5960069D232 /* RatingSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */; };
+		47FF424F2EE4C69F0069D232 /* TestSFSymbolsForOrigin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF424E2EE4C69F0069D232 /* TestSFSymbolsForOrigin.swift */; };
+		47FF42592EE556DB0069D232 /* TapHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF42582EE556DA0069D232 /* TapHandler.swift */; };
+		47FF425B2EE578DD0069D232 /* ProgressSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -172,6 +178,12 @@
 		47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilterView.swift; sourceTree = "<group>"; };
 		47E439B62EA9290E007001AD /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		47F38B1E2ED480B0006DEDBE /* DevData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevData.swift; sourceTree = "<group>"; };
+		47FF42462EE454440069D232 /* TestSFSymbolsForRating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSFSymbolsForRating.swift; sourceTree = "<group>"; };
+		47FF42482EE4572E0069D232 /* TestSFSymbolsForProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSFSymbolsForProgress.swift; sourceTree = "<group>"; };
+		47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingSelectionView.swift; sourceTree = "<group>"; };
+		47FF424E2EE4C69F0069D232 /* TestSFSymbolsForOrigin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSFSymbolsForOrigin.swift; sourceTree = "<group>"; };
+		47FF42582EE556DA0069D232 /* TapHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapHandler.swift; sourceTree = "<group>"; };
+		47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressSelectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -264,6 +276,9 @@
 				4759976C2E5D931F008E20F0 /* Services */,
 				47069EFC2EAFF2E30082AE12 /* Launch */,
 				475997592E5C86C5008E20F0 /* Components */,
+				475997562E5C8671008E20F0 /* Models */,
+				475997572E5C8688008E20F0 /* ViewModels */,
+				47BAF0EE2E645B0A00287F10 /* Views */,
 				47BAF0ED2E645AFE00287F10 /* Main */,
 				475997492E5C690B008E20F0 /* Assets.xcassets */,
 				471BEF4F2EA793880093F962 /* Info.plist */,
@@ -277,6 +292,9 @@
 				475997502E5C6C9D008E20F0 /* Post.swift */,
 				471BBF9E2EC721480004AC45 /* Notice.swift */,
 				47BAF0F72E64A77A00287F10 /* Enums.swift */,
+				47FF42462EE454440069D232 /* TestSFSymbolsForRating.swift */,
+				47FF42482EE4572E0069D232 /* TestSFSymbolsForProgress.swift */,
+				47FF424E2EE4C69F0069D232 /* TestSFSymbolsForOrigin.swift */,
 				4732FB362EAA63810062269D /* Constants.swift */,
 				471BBFA42EC77C3D0004AC45 /* Support */,
 			);
@@ -296,7 +314,10 @@
 			isa = PBXGroup;
 			children = (
 				47BAF0A32E60613200287F10 /* SearchBarView.swift */,
+				4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */,
 				47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */,
+				47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */,
+				47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */,
 				478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */,
 				47BAF09E2E5F9C4500287F10 /* Buttons */,
 				470A21C42E6E389D006D2D66 /* Pickers */,
@@ -324,6 +345,7 @@
 				47E439B62EA9290E007001AD /* NetworkService.swift */,
 				4791CDFD2E747AC100687126 /* JSONFileManager.swift */,
 				4791CDFF2E747B2E00687126 /* HapticService.swift */,
+				47FF42582EE556DA0069D232 /* TapHandler.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -397,10 +419,6 @@
 		47BAF0ED2E645AFE00287F10 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				475997562E5C8671008E20F0 /* Models */,
-				475997572E5C8688008E20F0 /* ViewModels */,
-				47BAF0EE2E645B0A00287F10 /* Views */,
-				4791CDAD2E70186100687126 /* Preferences */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -409,12 +427,12 @@
 			isa = PBXGroup;
 			children = (
 				47B4657F2E6867930059CCB7 /* HomeView.swift */,
+				4725A5262EDC818600235C40 /* SidebarView.swift */,
 				472A9B582EDB6D6E00ED3344 /* HomeViewCustomNavBar.swift */,
 				4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */,
 				475997602E5CC0F8008E20F0 /* PostDetailsView.swift */,
 				4791CE032E748DA200687126 /* AddEditPostSheet.swift */,
-				4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */,
-				4725A5262EDC818600235C40 /* SidebarView.swift */,
+				4791CDAD2E70186100687126 /* Preferences */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -524,12 +542,14 @@
 				471DCBDE2EBBC68500AFA5F4 /* WhatsNew.swift in Sources */,
 				47656BFE2EE1EC4D00F45AA6 /* StudyProgressView.swift in Sources */,
 				47F38B1F2ED480B0006DEDBE /* DevData.swift in Sources */,
+				47FF424F2EE4C69F0069D232 /* TestSFSymbolsForOrigin.swift in Sources */,
 				47BAF0A42E60613200287F10 /* SearchBarView.swift in Sources */,
 				4791CD862E6ED58B00687126 /* ShrinkIconButtonStyle.swift in Sources */,
 				4732FB332EAA5A9E0062269D /* ActivityView.swift in Sources */,
 				47C56FEC2EC9C66700F0796C /* NoticeDetailsView.swift in Sources */,
 				4773545D2E65D03A001DEDEE /* FiltersSheetView.swift in Sources */,
 				47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */,
+				47FF42592EE556DB0069D232 /* TapHandler.swift in Sources */,
 				472E05CC2EDDC9BA005D774E /* KeyboardManager.swift in Sources */,
 				471DCBD02EBB88A400AFA5F4 /* CopyrightPolicy.swift in Sources */,
 				47BAF0F82E64A77A00287F10 /* Enums.swift in Sources */,
@@ -537,6 +557,7 @@
 				4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */,
 				471DCBDC2EBBC67500AFA5F4 /* Introduction.swift in Sources */,
 				4791CE002E747B2E00687126 /* HapticService.swift in Sources */,
+				47FF42492EE4572E0069D232 /* TestSFSymbolsForProgress.swift in Sources */,
 				475997532E5C7680008E20F0 /* PostsViewModel.swift in Sources */,
 				4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */,
 				477C745E2ECF6FB300F77F5B /* StaticPosts.swift in Sources */,
@@ -563,11 +584,13 @@
 				4732FB312EAA59B00062269D /* SharePostsView.swift in Sources */,
 				471BBFA12EC7251D0004AC45 /* NoticeViewModel.swift in Sources */,
 				4791CE082E75AAB000687126 /* UnderlineSermentedPickerNotOptional.swift in Sources */,
+				47FF425B2EE578DD0069D232 /* ProgressSelectionView.swift in Sources */,
 				47A7339F2ED1C55A006BB8A6 /* VoiceSearchView.swift in Sources */,
 				471DCBD22EBB89E000AFA5F4 /* FairUseNotice.swift in Sources */,
 				4791CDEA2E72E8CC00687126 /* Arrays.swift in Sources */,
 				472A9B5B2EDC3B6F00ED3344 /* BackButtonView.swift in Sources */,
 				471DCBCA2EBB633300AFA5F4 /* PrivacyPolicy.swift in Sources */,
+				47FF424B2EE4B5960069D232 /* RatingSelectionView.swift in Sources */,
 				470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */,
 				471BBFA62EC7AB640004AC45 /* NoticesView.swift in Sources */,
 				47870FBF2ECCD743004175E4 /* LinkButtonURL.swift in Sources */,
@@ -587,6 +610,7 @@
 				47E439B72EA9290E007001AD /* NetworkService.swift in Sources */,
 				471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */,
 				47AA558A2EA9741D000AF4E9 /* RestoreBackupView.swift in Sources */,
+				47FF42472EE454440069D232 /* TestSFSymbolsForRating.swift in Sources */,
 				4791CDBB2E702E9700687126 /* EraseAllPostsView.swift in Sources */,
 				4732FB372EAA63810062269D /* Constants.swift in Sources */,
 				4791CDFC2E746FF100687126 /* EmailService.swift in Sources */,

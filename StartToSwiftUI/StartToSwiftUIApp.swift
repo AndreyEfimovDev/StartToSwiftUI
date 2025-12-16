@@ -13,21 +13,21 @@ import Speech
 struct StartToSwiftUIApp: App {
     
     @Environment(\.dismiss) private var dismiss
-
+    
     @StateObject private var vm = PostsViewModel()
     @StateObject private var noticevm = NoticeViewModel()
-
+    
     private let hapticManager = HapticService.shared
     
     @State private var showLaunchView: Bool = true
     @State private var showTermsOfUse: Bool = false
-
+    
     init() {
         
         // Set a custom colour titles for NavigationStack and the magnifying class in the search bar
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground() // it also removes a dividing line
-                
+        
         // Explicitly setting the background colour
         appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
         
@@ -71,50 +71,67 @@ struct StartToSwiftUIApp: App {
                     print("Speech recognizer warmed up")
                 }
             }
-
+            
         }
     } // init()
     
     var body: some Scene {
         WindowGroup {
             ZStack{
-                ZStack {
-                    if showLaunchView {
-                        LaunchView() {
-                            showLaunchView = false
-                            hapticManager.impact(style: .light)
-                        }
-                        .transition(.move(edge: .leading))
+                if showLaunchView {
+                    LaunchView() {
+                        hapticManager.impact(style: .light)
+                        showLaunchView = false
                     }
-                }
-                .zIndex(2)
-                
-                
-                // Accept Terms of Use at the first launch
-                ZStack {
-                    if !vm.isTermsOfUseIsAccepted {
-                        welcomeAtFirstLauch
-                    }
-                }
-                .opacity(showLaunchView ? 0 : 1)
-                .zIndex(1)
-                
-                
-                if UIDevice.isiPad {
+                    .transition(.move(edge: .leading))
+                } else if !vm.isTermsOfUseIsAccepted {
+                    //                    NavigationStack {
+                    welcomeAtFirstLauch
+                    //                    }
+                } else if UIDevice.isiPad {
                     // iPad - NavigationSplitView
                     SidebarView()
                 } else {
                     // iPhone - NavigationStack (portrait only)
                     NavigationStack{
-//                        if let selectedCategory = vm.selectedCategory {
+                        //                        if let selectedCategory = vm.selectedCategory {
                         HomeView(selectedCategory: vm.selectedCategory)
-//                        }
+                        //                        }
                     }
                 }
             }
+            //            .zIndex(2)
             .environmentObject(vm)
             .environmentObject(noticevm)
             .preferredColorScheme(vm.selectedTheme.colorScheme)
+            
+            
+            
+            //                // Accept Terms of Use at the first launch
+            //                ZStack {
+            //                    if !vm.isTermsOfUseIsAccepted {
+            //                        welcomeAtFirstLauch
+            //                    }
+            //                }
+            //                .opacity(showLaunchView ? 0 : 1)
+            //                .zIndex(1)
+            
+            
+            //                if UIDevice.isiPad {
+            //                    // iPad - NavigationSplitView
+            //                    SidebarView()
+            //                } else {
+            //                    // iPhone - NavigationStack (portrait only)
+            //                    NavigationStack{
+            ////                        if let selectedCategory = vm.selectedCategory {
+            //                        HomeView(selectedCategory: vm.selectedCategory)
+            ////                        }
+            //                    }
+            //                }
+            //            }
+            //            .environmentObject(vm)
+            //            .environmentObject(noticevm)
+            //            .preferredColorScheme(vm.selectedTheme.colorScheme)
         }
     }
     
@@ -125,7 +142,6 @@ struct StartToSwiftUIApp: App {
             NavigationStack {
                 ScrollView {
                     VStack {
-                        
                         Text("""
                     This application is created for educational purposes and helps organise links to learning SwiftUI materials.
                      
@@ -148,6 +164,7 @@ struct StartToSwiftUIApp: App {
                         )
                         .multilineTextAlignment(.leading)
                         .textFormater()
+                        .padding(.top)
                         .padding(.horizontal)
                         
                         Button {
@@ -155,12 +172,19 @@ struct StartToSwiftUIApp: App {
                         } label: {
                             Text("Terms of Use")
                                 .font(.title)
+                                .padding()
+                                .background(.ultraThinMaterial)
+                                .clipShape(Capsule())
+                                .overlay(
+                                    Capsule()
+                                        .stroke(Color.mycolor.myBlue, lineWidth: 1)
+                                )
                         }
                         .tint(Color.mycolor.myBlue)
                         .padding()
-                        .sheet(isPresented: $showTermsOfUse) {
+                        .fullScreenCover(isPresented: $showTermsOfUse) {
                             NavigationStack {
-                                TermsOfUse() {dismiss()}
+                                TermsOfUse() { dismiss() }
                             }
                         }
                     } // VStack
@@ -172,6 +196,6 @@ struct StartToSwiftUIApp: App {
             } // NavigationStack
         } // ZStack
     }
-
+    
 }
 

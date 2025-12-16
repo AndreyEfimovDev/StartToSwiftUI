@@ -15,38 +15,45 @@ struct UnderlineSermentedPickerNotOptional<T: Hashable>: View {
     
     // Colors
     var selectedFont: Font = .footnote
-    var selectedTextColor: Color = .white
-    var unselectedTextColor: Color = .red
-    var selectedBackground: Color = .red
-    var unselectedBackground: Color = .clear
+    var selectedTextColor: Color = Color.mycolor.myBlue
+    var unselectedTextColor: Color = Color.mycolor.myAccent
+//    var selectedBackground: Color = Color.mycolor.myRed
+//    var unselectedBackground: Color = .clear
         
     @Namespace private var namespace
 
     var body: some View {
         
         HStack(alignment: .top) {
-            
             ForEach(allItems, id: \.self) { item in
+                let isSelected = selection == item
+                
                 VStack(spacing: 5) {
                     Text(titleForCase(item))
                         .font(selectedFont)
                         .fontWeight(selection == item ? .bold : .regular)
                         .frame(maxWidth: .infinity)
                     
-                    if selection == item {
+                    if isSelected {
                         RoundedRectangle(cornerRadius: 2)
                             .frame(height: 1.5)
                             .matchedGeometryEffect(id: "selection", in: namespace)
+                    } else { //
+                        RoundedRectangle(cornerRadius: 2)
+                            .frame(height: 1.5)
+                            .hidden()
                     }
                 }
                 .padding(.top, 8)
                 .foregroundStyle(selection == item ? selectedTextColor : unselectedTextColor)
                 .background(.black.opacity(0.001))
+//                .contentShape(Rectangle())
                 .onTapGesture {
-                    withAnimation {
+                    withAnimation(.easeInOut(duration: 0.2)) {
                         selection = item
                     }
                 }
+                .id(item) //
             }
         }
 //        .animation(.smooth, value: selection)
@@ -67,7 +74,7 @@ fileprivate struct UnderlineSermentedPickerNotOptionalPreview: View {
                 allItems: Theme.allCases,
                 titleForCase: { $0.displayName },
                 selectedTextColor: Color.mycolor.myBlue,
-                unselectedTextColor: Color.mycolor.mySecondaryText
+                unselectedTextColor: Color.mycolor.mySecondary
             )
             .frame(height: 40)
             .padding()
