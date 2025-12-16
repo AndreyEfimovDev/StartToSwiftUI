@@ -276,6 +276,9 @@
 				4759976C2E5D931F008E20F0 /* Services */,
 				47069EFC2EAFF2E30082AE12 /* Launch */,
 				475997592E5C86C5008E20F0 /* Components */,
+				475997562E5C8671008E20F0 /* Models */,
+				475997572E5C8688008E20F0 /* ViewModels */,
+				47BAF0EE2E645B0A00287F10 /* Views */,
 				47BAF0ED2E645AFE00287F10 /* Main */,
 				475997492E5C690B008E20F0 /* Assets.xcassets */,
 				471BEF4F2EA793880093F962 /* Info.plist */,
@@ -416,10 +419,6 @@
 		47BAF0ED2E645AFE00287F10 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				475997562E5C8671008E20F0 /* Models */,
-				475997572E5C8688008E20F0 /* ViewModels */,
-				47BAF0EE2E645B0A00287F10 /* Views */,
-				4791CDAD2E70186100687126 /* Preferences */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -433,6 +432,7 @@
 				4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */,
 				475997602E5CC0F8008E20F0 /* PostDetailsView.swift */,
 				4791CE032E748DA200687126 /* AddEditPostSheet.swift */,
+				4791CDAD2E70186100687126 /* Preferences */,
 			);
 			path = Views;
 			sourceTree = "<group>";
