@@ -9,12 +9,21 @@ import SwiftUI
 
 struct BackButtonView: View {
     
+    let iconName: String
     let completion: () -> Void
+    
+    init(
+        iconName: String = "chevron.left",
+        completion: @escaping () -> Void
+    ) {
+        self.iconName = iconName
+        self.completion = completion
+    }
     
     var body: some View {
         
         CircleStrokeButtonView(
-            iconName: "chevron.left",
+            iconName: iconName,
             isShownCircle: false)
         {
             completion()
@@ -23,5 +32,8 @@ struct BackButtonView: View {
 }
 
 #Preview {
-    BackButtonView() {}
+    VStack(spacing: 30) {
+        BackButtonView() {}
+        BackButtonView(iconName: "xmark") {}
+    }
 }

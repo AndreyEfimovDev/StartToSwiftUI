@@ -14,28 +14,30 @@ import SwiftUI
 extension Color {
     static let mycolor = MyColors()
     static let launch = LaunchColors()
-
 }
 
 struct MyColors {
     
-    let myAccent = Color("AppAccentColor")
-    let myBackground = Color("AppBackgroundColor")
-    let mySectionBackground = Color("AppSectionBackgroundColor")
-    let myBlue = Color("AppBlueColor")
-    let myGreen = Color("AppGreenColor")
-    let myYellow = Color("AppYellowColor")
-    let myOrange = Color("AppOrangeColor")
-    let myRed = Color("AppRedColor")
-    let mySecondaryText = Color("AppSecondaryTextColor")
-    let myButtonBGBlue = Color("AppButtonBGBlue")
-    let myButtonBGGray = Color("AppButtonBGGray")
-    let myButtonBGGreen = Color("AppButtonBGGreen")
-    let myButtonBGRed = Color("AppButtonBGRed")
+    let myAccent = Color("_myAccent")
+    let myBackground = Color("_myBackground")
+    let myBlue = Color("_myBlue")
+    let myGreen = Color("_myGreen")
+    let myOrange = Color("_myOrange")
+    let myPurple = Color("_myPurple")
+    let myRed = Color("_myRed")
+    let mySecondary = Color("_mySecondary")
+    let myYellow = Color("_myYellow")
     
-    let myButtonTextPrimary = Color("AppButtonTextPrimary")
-    let myButtonTextRed = Color("AppButtonTextRed")
-    let myButtonTextSecondary = Color("AppButtonTextSecondary")
+    let myButtonBGBlue = Color("ButtonBG_Blue")
+    let myButtonBGGray = Color("ButtonBG_Gray")
+    let myButtonBGGreen = Color("ButtonBG_Green")
+    let myButtonBGRed = Color("ButtonBG_Red")
+    
+    let myButtonTextPrimary = Color("ButtonTextPrimary")
+    let myButtonTextRed = Color("ButtonTextRed")
+    let myButtonTextSecondary = Color("ButtonTextSecondary")
+
+    let mySectionBackground = Color("SectionBackground")
 
 }
 

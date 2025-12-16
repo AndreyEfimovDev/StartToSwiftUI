@@ -26,7 +26,7 @@ struct CustomProgressView: View {
             if isNoText {
                 ProgressView()
             } else {
-                ProgressView("... loading ...")
+                ProgressView("loading ...")
                     .font(.caption2)
                     .padding()
             }
