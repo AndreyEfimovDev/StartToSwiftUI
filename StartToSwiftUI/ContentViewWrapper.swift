@@ -17,6 +17,7 @@ struct ContentViewWrapper: View {
     @State private var showLaunchView: Bool = true
     @State private var showTermsOfUse: Bool = false
     @State private var isLoadingData = true // 🔥 Локальное состояние загрузки
+    @State private var showTermsButton = false // 🔥 Новое состояние
 
     @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
         
@@ -86,6 +87,7 @@ struct ContentViewWrapper: View {
     }
     
     private var welcomeAtFirstLaunch: some View {
+        
         ZStack {
             Color.mycolor.myBackground
                 .ignoresSafeArea()
@@ -117,25 +119,27 @@ struct ContentViewWrapper: View {
                         .padding(.top)
                         .padding(.horizontal)
                         
-                        Button {
-                            showTermsOfUse = true
-                        } label: {
-                            Text("Terms of Use")
-                                .font(.title)
-                                .padding()
-                                .background(.ultraThinMaterial)
-                                .clipShape(Capsule())
-                                .overlay(
-                                    Capsule()
-                                        .stroke(Color.mycolor.myBlue, lineWidth: 1)
-                                )
-                        }
-                        .tint(Color.mycolor.myBlue)
-                        .padding()
-                        .fullScreenCover(isPresented: $showTermsOfUse) {
-                            NavigationStack {
-                                TermsOfUse(isTermsOfUseAccepted: $isTermsOfUseAccepted)
-                                .environmentObject(vm)
+                        if showTermsButton {
+                            Button {
+                                showTermsOfUse = true
+                            } label: {
+                                Text("Terms of Use")
+                                    .font(.title)
+                                    .padding()
+                                    .background(.ultraThinMaterial)
+                                    .clipShape(Capsule())
+                                    .overlay(
+                                        Capsule()
+                                            .stroke(Color.mycolor.myBlue, lineWidth: 1)
+                                    )
+                            }
+                            .tint(Color.mycolor.myBlue)
+                            .padding()
+                            .fullScreenCover(isPresented: $showTermsOfUse) {
+                                NavigationStack {
+                                    TermsOfUse(isTermsOfUseAccepted: $isTermsOfUseAccepted)
+                                    .environmentObject(vm)
+                                }
                             }
                         }
                     } // VStack
@@ -145,6 +149,14 @@ struct ContentViewWrapper: View {
                 .navigationTitle("Affirmation")
                 .navigationBarTitleDisplayMode(.inline)
             } // NavigationStack
+            .onAppear {
+                // 🔥 Задержка 8 секунд
+                DispatchQueue.main.asyncAfter(deadline: .now() + 15.0) {
+                    withAnimation(.easeInOut(duration: 3)) {
+                        showTermsButton = true
+                    }
+                }
+            }
         } // ZStack
     }
     
