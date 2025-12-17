@@ -81,7 +81,7 @@ extension View {
 extension View {
     func menuFormater(
         cornerRadius: CGFloat = 30,
-        borderColor: Color = Color.mycolor.myAccent,
+        borderColor: Color = Color.mycolor.myBlue,
         lineWidth: CGFloat = 1
     ) -> some View {
         self

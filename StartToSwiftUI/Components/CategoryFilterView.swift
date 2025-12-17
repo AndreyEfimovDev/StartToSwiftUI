@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CategoryFilterView: View {
     
@@ -56,7 +57,12 @@ struct CategoryButtonStyle: ButtonStyle {
 
 
 #Preview {
+    
+    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let context = ModelContext(container)
+    let vm = PostsViewModel(modelContext: context)
+    
     CategoryFilterView()
-        .environmentObject(PostsViewModel())
+        .environmentObject(vm)
     
 }

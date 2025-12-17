@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct AddEditPostSheet: View {
     
@@ -647,16 +648,26 @@ struct AddEditPostSheet: View {
 }
 
 #Preview {
+    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let context = ModelContext(container)
+    
+    let vm = PostsViewModel(modelContext: context)
+    
     NavigationStack {
         AddEditPostSheet(post: PreviewData.samplePost1)
-            .environmentObject(PostsViewModel())
+            .environmentObject(vm)
     }
 }
 
 #Preview {
+    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let context = ModelContext(container)
+    
+    let vm = PostsViewModel(modelContext: context)
+    
     NavigationStack {
         AddEditPostSheet(post: nil)
-            .environmentObject(PostsViewModel())
+            .environmentObject(vm)
     }
 }
 

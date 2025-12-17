@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct TermsOfUse: View {
     
@@ -13,14 +14,8 @@ struct TermsOfUse: View {
     @EnvironmentObject private var vm: PostsViewModel
     
     @State private var isAccepted: Bool = false
+    @Binding var isTermsOfUseAccepted: Bool
     
-    let action: () -> ()
-    
-    init(
-        action: @escaping () -> Void
-    ) {
-        self.action = action
-    }
     var body: some View {
         
         ScrollView {
@@ -189,21 +184,23 @@ struct TermsOfUse: View {
                 
                 .multilineTextAlignment(.leading)
                 .textFormater()
+                .foregroundStyle(Color.mycolor.myAccent)
                 .padding()
 
                 CapsuleButtonView(
                     primaryTitle: "I have read and accept",
                     secondaryTitle: "Accepted",
-                    isToChange: isAccepted || vm.isTermsOfUseIsAccepted) {
+                    isToChange: isAccepted || isTermsOfUseAccepted) {
                         isAccepted = true
                         DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                            vm.isTermsOfUseIsAccepted = true
+                            isTermsOfUseAccepted = true
+//                            completion()
                             dismiss()
                         }
                     }
                     .padding(.horizontal, 30)
                     .padding(15)
-                    .disabled(vm.isTermsOfUseIsAccepted)
+                    .disabled(isAccepted)
             }
         }
         .navigationTitle("Terms of Use")
@@ -217,8 +214,15 @@ struct TermsOfUse: View {
 }
 
 #Preview {
+    
+    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let context = ModelContext(container)
+    
+    let vm = PostsViewModel(modelContext: context)
+    
     NavigationStack {
-        TermsOfUse() {}
+        TermsOfUse(isTermsOfUseAccepted: .constant(true))
     }
-    .environmentObject(PostsViewModel())
+    .environmentObject(vm)
 }
+
