@@ -15,7 +15,18 @@ class NoticeViewModel: ObservableObject {
     
     // MARK: - Properties
     
-    private let modelContext: ModelContext
+    var modelContext: ModelContext? = nil {
+        didSet {
+            if modelContext != nil && !hasLoadedInitialData {
+                // Загружаем уведомления из SwiftData
+                loadNoticesFromSwiftData()
+                hasLoadedInitialData = true
+            }
+        }
+    }
+    private var hasLoadedInitialData = false
+    private var hasImportedFromCloud = false // 🔥 Флаг для однократного импорта
+
     private let hapticManager = HapticService.shared
     private let networkService: NetworkService
     
@@ -33,30 +44,46 @@ class NoticeViewModel: ObservableObject {
     // MARK: - Init
     
     init(
-        modelContext: ModelContext,
+        modelContext: ModelContext? = nil,
         networkService: NetworkService = NetworkService(baseURL: Constants.cloudNoticesURL)
     ) {
         self.modelContext = modelContext
         self.networkService = networkService
-        
-        // Загружаем уведомления из SwiftData
-        loadNoticesFromSwiftData()
-        
-        // Импортируем новые уведомления из облака
-        importNoticesFromCloud()
     }
     
     // MARK: - SwiftData Operations
     
+    
+    private var safeContext: ModelContext {
+        guard let context = modelContext else {
+            fatalError("ModelContext не установлен")
+        }
+        return context
+    }
+
     /// Загрузка уведомлений из SwiftData
     func loadNoticesFromSwiftData() {
+        
+        guard let context = modelContext, !hasLoadedInitialData else {
+            print("🍉 ⏩ Пропускаем загрузку: данные уже загружены")
+            return
+        }
+        
         let descriptor = FetchDescriptor<Notice>(
             sortBy: [SortDescriptor(\.noticeDate, order: .reverse)]
         )
         
         do {
-            notices = try modelContext.fetch(descriptor)
-            print("🍉 ✅ Загружено \(notices.count) уведомлений из SwiftData")
+            notices = try context.fetch(descriptor)
+            print("🍉 ✅ Загружено \(notices.count) уведомлений из SwiftData (однократно)")
+            hasLoadedInitialData = true
+            // 🔥 Импорт из облака делаем только после загрузки локальных данных
+            if !hasImportedFromCloud {
+                // Импортируем новые уведомления из облака
+                importNoticesFromCloud()
+                hasImportedFromCloud = true
+            }
+
         } catch {
             errorMessage = "Ошибка загрузки уведомлений"
             showErrorMessageAlert = true
@@ -86,7 +113,7 @@ class NoticeViewModel: ObservableObject {
             return
         }
         
-        modelContext.delete(validNotice)
+        safeContext.delete(validNotice)
         saveContext()
         loadNoticesFromSwiftData()
     }
@@ -94,7 +121,7 @@ class NoticeViewModel: ObservableObject {
     /// Удалить все уведомления
     func deleteAllNotices(completion: @escaping () -> Void) {
         do {
-            try modelContext.delete(model: Notice.self)
+            try safeContext.delete(model: Notice.self)
             saveContext()
             loadNoticesFromSwiftData()
             completion()
@@ -109,7 +136,7 @@ class NoticeViewModel: ObservableObject {
     /// Сохранение контекста
     private func saveContext() {
         do {
-            try modelContext.save()
+            try safeContext.save()
             print("🍉 💾 SwiftData контекст сохранён")
             // 🌥️ iCloud автоматически синхронизирует изменения!
         } catch {
@@ -124,6 +151,12 @@ class NoticeViewModel: ObservableObject {
     
     /// Импорт уведомлений из облака
     func importNoticesFromCloud() {
+        
+        guard !hasImportedFromCloud else {
+            print("🍉 ⏩ Импорт из облака уже выполнен, пропускаем")
+            return
+        }
+        
         errorMessage = nil
         showErrorMessageAlert = false
         
@@ -140,8 +173,9 @@ class NoticeViewModel: ObservableObject {
                         return
                     }
                     
-                    print("🍉 NVM(importNoticesFromCloud): Успешно импортировано \(cloudResponse.count) уведомлений из облака")
+                    print("🍉 NVM(importNoticesFromCloud): Успешно импортировано \(cloudResponse.count) уведомлений из облака (однократно)")
                     print("🍉 NVM(importNoticesFromCloud): Последнее обновление: \(self.dateOfLatestNoticesUpdate.formatted(date: .abbreviated, time: .shortened))")
+                    self.hasImportedFromCloud = true
                     
                     // Фильтруем уведомления с датой новее последнего обновления
                     let cloudNoticesWithNewerDates = cloudResponse.filter {
@@ -174,7 +208,7 @@ class NoticeViewModel: ObservableObject {
                     if !newLoadedNotices.isEmpty {
                         // Добавляем новые уведомления в SwiftData
                         for notice in newLoadedNotices {
-                            self.modelContext.insert(notice)
+                            self.safeContext.insert(notice)
                         }
                         self.saveContext()
                         self.loadNoticesFromSwiftData()
@@ -295,197 +329,3 @@ extension NoticeViewModel {
         return viewModel
     }
 }
-
-
-
-//class NoticeViewModel: ObservableObject {
-//    
-//    private let fileManager = JSONFileManager.shared
-//    private let hapticManager = HapticService.shared
-//    private let networkService: NetworkService
-//
-//    @Published var notices: [Notice] = []
-//    @Published var errorMessage: String?
-//    @Published var showErrorMessageAlert: Bool = false
-//    
-//    @AppStorage("isUserNotified") var isUserNotified: Bool = false
-//    @AppStorage("isNotificationOn") var isNotificationOn: Bool = true
-//    @AppStorage("isSoundNotificationOn") var isSoundNotificationOn: Bool = true
-//    @AppStorage("dateOfLatestNoticesUpdate") var dateOfLatestNoticesUpdate: Date = Date.distantPast
-//
-//    init(
-//        networkService: NetworkService = NetworkService(baseURL: Constants.cloudNoticesURL)
-//    ) {
-//        self.networkService = networkService
-//        
-//        // Loading notices from a local JSON file and after notices imported from Cloud
-//        if fileManager.checkIfFileExists(fileName: Constants.localNoticesFileName) {
-//            
-//            self.loadLocalNotices(from: Constants.localNoticesFileName) {[weak self] localNotices in
-//                self?.importNoticesFromCloud()
-//            }
-//        } else {
-//            self.importNoticesFromCloud()
-//        }
-//        
-//    }
-//    
-//    // MARK: PRIVATE FUNCTIONS
-//    
-//    private func loadLocalNotices(from urlOnLocalNotices: String, completion: @escaping ([Notice]) -> Void) {
-//        
-//        fileManager.loadData(
-//            fileName: urlOnLocalNotices
-//        ) { [weak self] (result: Result<[Notice], FileStorageError>) in
-//                DispatchQueue.main.async {
-//                    switch result {
-//                    case .success(let loadedNotices):
-//                        print("🍉 NVM(loadNotices): Successfully received array of notices from JSON file.")
-//                        if !loadedNotices.isEmpty {
-//                            // Updating App posts
-//                            self?.notices = loadedNotices
-//                            print("🍉 NVM(loadNotices): Successfully loaded \(loadedNotices.count) notices a local JSON file.")
-//                        } else {
-//                            print("🍉☑️ NVM(loadNotices): Array of notices from a local JSON file is empty.")
-//                        }
-//                        completion(loadedNotices)
-//                        
-//                    case .failure(let error):
-//                        self?.errorMessage = error.localizedDescription
-//                        self?.showErrorMessageAlert = true
-//                        self?.hapticManager.notification(type: .error)
-//                        print("🍉❌ NVM(loadNotices): Local load error: \(error.localizedDescription)")
-//                        completion([])
-//                    }
-//                }
-//            }
-//    }
-//    
-//    private func importNoticesFromCloud() {
-//        
-//        errorMessage = nil
-//        showErrorMessageAlert = false
-//        
-//        networkService.fetchDataFromURL() { [weak self] (result: Result<[Notice], Error>) in
-//            DispatchQueue.main.async {
-//                switch result {
-//                case .success(let cloudResponse):
-//                    
-//                    if !cloudResponse.isEmpty {
-//                        print("🍉 NVN(importNoticesFromCloud): Successfully imported \(cloudResponse.count) notices from the cloud")
-//                        print("🍉 NVN(importNoticesFromCloud): The latest notices update  \(self?.dateOfLatestNoticesUpdate.formatted(date: .abbreviated, time: .shortened) ?? "")")
-//
-//                        // Select Cloud notices with date older than date of latest notices update
-//                        let cloudNoticesWithNewerDates = cloudResponse.filter {
-//                            $0.noticeDate > (self?.dateOfLatestNoticesUpdate ?? .distantPast)
-//                        }
-//                        print("🍉 NVN(importNoticesFromCloud): Cloud notices with newer dates  \(cloudNoticesWithNewerDates.count)")
-//                        
-//                        if !cloudNoticesWithNewerDates.isEmpty {
-//                            
-//                            // Make User informed of new notifications
-//                            self?.isUserNotified = false
-//                            
-//                            // Set a new date of latest notices update
-//                            if let latestNoticeDate = cloudNoticesWithNewerDates.map({ $0.noticeDate }).max() {
-//                                self?.dateOfLatestNoticesUpdate = latestNoticeDate
-//                            }
-//                            print("🍉 NVN(importNoticesFromCloud): New date of latest notices update  \(self?.dateOfLatestNoticesUpdate.formatted(date: .abbreviated, time: .shortened) ?? "")")
-//
-//                            // Select Cloud notices with unique ID
-//                            let newLoadedNotices = cloudNoticesWithNewerDates.filter { notice in
-//                                !(self?.notices.contains(where: { $0.id == notice.id }) ?? false)
-//                            }
-//                            print("🍉 NVN(importNoticesFromCloud): Cloud notices with unique ID  \(newLoadedNotices.count)")
-//                                                        
-//                            if !newLoadedNotices.isEmpty {
-//                                self?.notices.append(contentsOf: newLoadedNotices)
-//                                self?.saveNotices()
-//                                print("🍉 NVN(importNoticesFromCloud): Successfully appended \(newLoadedNotices.count) notifications from the cloud")
-//                            } else {
-//                                print("🍉 NVN(importNoticesFromCloud): No new notices from the cloud")
-//                            }
-//                        } else {
-//                            print("🍉☑️ NVN(importNoticesFromCloud): No new notifications from the cloud.")
-//                        }
-//                    } else {
-//                        print("🍉☑️ NVN(importNoticesFromCloud): Array of notifications from the cloud is empty.")
-//                    }
-//                    
-//                case .failure(let error):
-//                    self?.errorMessage = error.localizedDescription
-//                    self?.showErrorMessageAlert = true
-//                    self?.hapticManager.notification(type: .error)
-//                    print("🍉❌ NVN(importNoticesFromCloud): Cloud import error: \(error.localizedDescription)")
-//                }
-//            }
-//        }
-//    }
-//
-//    
-//    private func saveNotices() {
-//        
-//        fileManager.saveData(notices, fileName: Constants.localNoticesFileName) { [weak self] result in
-//            
-//            self?.errorMessage = nil
-//            self?.showErrorMessageAlert = false
-//            
-//            DispatchQueue.main.async {
-//                switch result {
-//                case .success:
-//                    print("🍉 NVM(saveNotices): Notices saved successfully.")
-//                case .failure(let error):
-//                    self?.errorMessage = error.localizedDescription
-//                    self?.showErrorMessageAlert = true
-//                    self?.hapticManager.notification(type: .error)
-//                    print("🍉❌ NVM(saveNotices): Failed to save notices: \(error)")
-//                }
-//            }
-//        }
-//    }
-//
-////    
-////    private func getLatestDateFromNotices(notices: [Notice]) -> Date? {
-////        guard !notices.isEmpty else {
-////            print("🍉 ☑️ NVN(getLatestDateFromNotices): notices is empty")
-////
-////            return nil
-////        }
-////        
-////        return notices.max(by: { $0.noticeDate < $1.noticeDate })?.noticeDate
-////    }
-////    
-//    
-//    // MARK: FUNCTIONS
-//
-//    func isReadSetTrue(notice: Notice) {
-//        if let index = notices.firstIndex(of: notice) {
-//            notices[index].isRead = true
-//            saveNotices()
-//        } else {
-//            print("🍉 ❌ NVN(isReadSetTrue): passed notice is nil")
-//        }
-//    }
-//    
-//    func isReadToggle(notice: Notice) {
-//        if let index = notices.firstIndex(of: notice) {
-//            notices[index].isRead.toggle()
-//            saveNotices()
-//        }
-//        else {
-//            print("🍉 ❌ NVN(isReadToggle): passed notice is nil")
-//        }
-//    }
-//
-//    func deleteNotice(notice: Notice?) {
-//        if let validNotice = notice {
-//            if let index = notices.firstIndex(of: validNotice) {
-//                notices.remove(at: index)
-//                saveNotices()
-//            }
-//        } else {
-//            print("🍉 ❌ NVN(deletePost): passed notice is nil")
-//        }
-//    }
-//
-//}

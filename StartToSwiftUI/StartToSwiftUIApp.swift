@@ -4,7 +4,7 @@
 //
 //  Created by Andrey Efimov on 25.08.2025.
 //
-// v01.14 StartToSwiftUI_Github_GitKraken
+
 
 import SwiftUI
 import SwiftData

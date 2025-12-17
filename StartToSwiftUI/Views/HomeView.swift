@@ -47,7 +47,6 @@ struct HomeView: View {
         noticevm.isNotificationOn
     }
     private var isPerformingNoticeTask: Bool {
-//        vm.isTermsOfUseAccepted &&
         noticevm.isNotificationOn &&
         !noticevm.isUserNotified
     }
@@ -143,8 +142,6 @@ struct HomeView: View {
             }
             .onAppear {
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                // 🔄 Перезагружаем посты из SwiftData при появлении view
-                vm.loadPostsFromSwiftData()
             }
             .task {
                 if isPerformingNoticeTask {
