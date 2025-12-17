@@ -10,6 +10,18 @@ import SwiftUI
 import SwiftData
 import Speech
 
+
+//
+//**Порядок загрузки:**
+//```
+//1. App запускается
+//2. ContentViewWrapper.onAppear → initializeViewModels()
+//3. vm.modelContext = modelContext (в initializeViewModels)
+//4. PostsViewModel.didSet → loadPostsFromSwiftData() (первый и единственный раз)
+//5. NoticeViewModel.didSet → loadNoticesFromSwiftData() → importNoticesFromCloud()
+//6. .task → loadStaticPostsIfNeeded() (если база пустая)
+
+
 @main
 struct StartToSwiftUIApp: App {
     
