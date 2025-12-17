@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct PostDetailsView: View {
     
@@ -397,6 +398,8 @@ struct PostDetailsView: View {
 
 
 fileprivate struct PostDetailsPreView: View {
+    
+    
     var body: some View {
         NavigationStack {
             PostDetailsView(postId: PreviewData.samplePosts.first!.id)
@@ -404,7 +407,10 @@ fileprivate struct PostDetailsPreView: View {
         }
     }
     private func createPreviewViewModel() -> PostsViewModel {
-        let viewModel = PostsViewModel()
+        let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        let context = ModelContext(container)
+        let viewModel = PostsViewModel(modelContext: context)
+        
         viewModel.allPosts = PreviewData.samplePosts
         return viewModel
     }
@@ -412,8 +418,14 @@ fileprivate struct PostDetailsPreView: View {
 }
 
 #Preview {
+    
+    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let context = ModelContext(container)
+    
+    let vm = PostsViewModel(modelContext: context)
+    
     NavigationStack {
         PostDetailsPreView()
-            .environmentObject(PostsViewModel())
+            .environmentObject(vm)
     }
 }

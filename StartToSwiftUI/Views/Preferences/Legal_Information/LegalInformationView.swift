@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct LegalInformationView: View {
 
@@ -62,8 +63,13 @@ struct LegalInformationView: View {
 }
 
 #Preview {
+    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let context = ModelContext(container)
+    
+    let vm = PostsViewModel(modelContext: context)
+    
     NavigationStack{
         LegalInformationView()
     }
-    .environmentObject(PostsViewModel())
+    .environmentObject(vm)
 }

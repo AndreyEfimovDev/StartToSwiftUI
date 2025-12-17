@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import SwiftData
 
 //enum PreferencesDestination: Hashable {
 //    case cloudImport
@@ -303,9 +303,16 @@ struct PreferencesView: View {
 
 
 #Preview {
+    
+    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let context = ModelContext(container)
+    
+    let vm = PostsViewModel(modelContext: context)
+    let noticevm = NoticeViewModel(modelContext: context)
+    
     NavigationStack {
         PreferencesView ()
     }
-    .environmentObject(PostsViewModel())
-    .environmentObject(NoticeViewModel())
+    .environmentObject(vm)
+    .environmentObject(noticevm)
 }

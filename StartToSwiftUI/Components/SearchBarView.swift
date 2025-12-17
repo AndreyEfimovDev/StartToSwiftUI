@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 import Speech
 
 struct SearchBarView: View {
     
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
     @StateObject private var speechRecogniser = SpeechRecogniser()
     
@@ -134,11 +136,17 @@ struct SearchBarView: View {
 }
 
 #Preview {
+    
+    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let context = ModelContext(container)
+    
+    let vm = PostsViewModel(modelContext: context)
+    
     ZStack {
         Color.pink.opacity(0.1)
             .ignoresSafeArea()
         SearchBarView()
-            .environmentObject(PostsViewModel())
+            .environmentObject(vm)
     }
     
 }

@@ -6,12 +6,12 @@
 //
 //
 
+import Foundation
 import SwiftUI
-import AudioToolbox
 import SwiftData
 
-@Observable
-class NoticeViewModel {
+@MainActor
+class NoticeViewModel: ObservableObject {
     
     // MARK: - Properties
     
@@ -19,9 +19,9 @@ class NoticeViewModel {
     private let hapticManager = HapticService.shared
     private let networkService: NetworkService
     
-    var notices: [Notice] = []
-    var errorMessage: String?
-    var showErrorMessageAlert: Bool = false
+    @Published var notices: [Notice] = []
+    @Published var errorMessage: String?
+    @Published var showErrorMessageAlert: Bool = false
     
     // MARK: - AppStorage
     
@@ -127,7 +127,8 @@ class NoticeViewModel {
         errorMessage = nil
         showErrorMessageAlert = false
         
-        networkService.fetchDataFromURL() { [weak self] (result: Result<[CodableNotice], Error>) in
+        // Явно указываем тип для generic параметра
+        networkService.fetchDataFromURL { [weak self] (result: Result<[CodableNotice], Error>) in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
@@ -294,6 +295,7 @@ extension NoticeViewModel {
         return viewModel
     }
 }
+
 
 
 //class NoticeViewModel: ObservableObject {

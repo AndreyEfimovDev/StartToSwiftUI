@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CheckForPostsUpdateView: View {
     
@@ -141,8 +142,13 @@ struct CheckForPostsUpdateView: View {
 }
 
 #Preview {
+    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let context = ModelContext(container)
+    
+    let vm = PostsViewModel(modelContext: context)
+    
     NavigationStack{
         CheckForPostsUpdateView()
-            .environmentObject(PostsViewModel())
+            .environmentObject(vm)
     }
 }
