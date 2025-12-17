@@ -17,10 +17,9 @@ class NoticeViewModel: ObservableObject {
     
     var modelContext: ModelContext? = nil {
         didSet {
-            if modelContext != nil && !hasLoadedInitialData {
-                // Загружаем уведомления из SwiftData
+            if modelContext != nil {
+                // Загружаем уведомления из SwiftData - локальные данные
                 loadNoticesFromSwiftData()
-                hasLoadedInitialData = true
             }
         }
     }
@@ -53,7 +52,6 @@ class NoticeViewModel: ObservableObject {
     
     // MARK: - SwiftData Operations
     
-    
     private var safeContext: ModelContext {
         guard let context = modelContext else {
             fatalError("ModelContext не установлен")
@@ -64,7 +62,7 @@ class NoticeViewModel: ObservableObject {
     /// Загрузка уведомлений из SwiftData
     func loadNoticesFromSwiftData() {
         
-        guard let context = modelContext, !hasLoadedInitialData else {
+        guard let context = modelContext else {
             print("🍉 ⏩ Пропускаем загрузку: данные уже загружены")
             return
         }
@@ -152,11 +150,6 @@ class NoticeViewModel: ObservableObject {
     /// Импорт уведомлений из облака
     func importNoticesFromCloud() {
         
-        guard !hasImportedFromCloud else {
-            print("🍉 ⏩ Импорт из облака уже выполнен, пропускаем")
-            return
-        }
-        
         errorMessage = nil
         showErrorMessageAlert = false
         
@@ -211,13 +204,12 @@ class NoticeViewModel: ObservableObject {
                             self.safeContext.insert(notice)
                         }
                         self.saveContext()
-                        self.loadNoticesFromSwiftData()
-                        
+                        self.refreshNotices()
+
                         // Отправляем уведомление пользователю
                         if self.isNotificationOn {
                             self.sendLocalNotification(count: newLoadedNotices.count)
                         }
-                        
                         print("🍉 ✅ NVM(importNoticesFromCloud): Успешно добавлено \(newLoadedNotices.count) уведомлений")
                     } else {
                         print("🍉 ☑️ NVM(importNoticesFromCloud): Нет новых уведомлений из облака")
@@ -232,6 +224,25 @@ class NoticeViewModel: ObservableObject {
             }
         }
     }
+    
+    private func refreshNotices() {
+        guard let context = modelContext else {
+            print("🍉 ⚠️ Невозможно обновить: ModelContext не установлен")
+            return
+        }
+        
+        let descriptor = FetchDescriptor<Notice>(
+            sortBy: [SortDescriptor(\.noticeDate, order: .reverse)]
+        )
+        
+        do {
+            self.notices = try context.fetch(descriptor)
+            print("🍉 🔄 Список уведомлений обновлен, теперь: \(self.notices.count)")
+        } catch {
+            print("🍉 ❌ Ошибка обновления уведомлений: \(error)")
+        }
+    }
+
     
     // MARK: - Helper Methods
     

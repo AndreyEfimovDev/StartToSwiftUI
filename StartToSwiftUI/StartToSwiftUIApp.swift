@@ -29,7 +29,7 @@ struct StartToSwiftUIApp: App {
     
     private let hapticManager = HapticService.shared
     
-    @State private var showLaunchView: Bool = true
+//    @State private var showLaunchView: Bool = true
     
     // MARK: - SwiftData Container
     

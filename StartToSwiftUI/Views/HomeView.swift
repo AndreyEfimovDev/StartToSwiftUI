@@ -37,11 +37,6 @@ struct HomeView: View {
     private let limitToShortenTitle: Int = 30
     
     @State private var noticeButtonAnimation = false
-    
-    @State private var isDetectingLongPress: Bool = false
-    @State private var isLongPressSuccess: Bool = false
-    private let longPressDuration: Double = 0.5
-    
     private var isShowingNoticeMessageButton: Bool {
         !noticevm.notices.filter({ $0.isRead == false }).isEmpty &&
         noticevm.isNotificationOn
@@ -50,6 +45,13 @@ struct HomeView: View {
         noticevm.isNotificationOn &&
         !noticevm.isUserNotified
     }
+
+    
+    
+    @State private var isDetectingLongPress: Bool = false
+    @State private var isLongPressSuccess: Bool = false
+    private let longPressDuration: Double = 0.5
+    
    
     // MARK: VIEW BODY
     
@@ -142,19 +144,59 @@ struct HomeView: View {
             }
             .onAppear {
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
+                
+                // 🔥 ДЕБАГ: Проверяем состояние уведомлений
+                  print("🎯 HomeView появился")
+                  print("📊 Всего уведомлений: \(noticevm.notices.count)")
+                  print("📊 Непрочитанных уведомлений: \(noticevm.notices.filter { !$0.isRead }.count)")
+                  print("🔔 Уведомления включены: \(noticevm.isNotificationOn)")
+                  print("👤 Пользователь уведомлен: \(noticevm.isUserNotified)")
+                  print("🎯 isShowingNoticeMessageButton: \(isShowingNoticeMessageButton)")
+                  
+                  // 🔥 Кнопка показывается сразу, анимация через 3 секунды
+                  if isShowingNoticeMessageButton && !noticevm.isUserNotified {
+                      print("🚀 Запускаем таймер для уведомления...")
+                      
+                      DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                          print("🔔 3 секунды прошли, запускаем анимацию...")
+                          
+                          if noticevm.isSoundNotificationOn {
+                              AudioServicesPlaySystemSound(1013)
+                              print("🔊 Воспроизведен звук")
+                          }
+                          
+                          noticeButtonAnimation = true
+                          print("🌀 Анимация начата")
+                          
+                          DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                              noticeButtonAnimation = false
+                              noticevm.isUserNotified = true
+                              print("✅ Анимация завершена, пользователь уведомлен")
+                          }
+                      }
+                  } else {
+                      print("⏸️ Уведомление не требуется")
+                  }
             }
-            .task {
-                if isPerformingNoticeTask {
-                    try? await Task.sleep(nanoseconds: 3_000_000_000)
-                    if noticevm.isSoundNotificationOn {
-                        AudioServicesPlaySystemSound(1013)
-                    }
-                    noticeButtonAnimation = true
-                    try? await Task.sleep(nanoseconds: 1_000_000_000)
-                    noticeButtonAnimation = false
-                    noticevm.isUserNotified = true
-                }
-            }
+//            .task {
+//                if isPerformingNoticeTask && !noticevm.isUserNotified {
+//                    // 🔥 Ждем 3 секунды перед анимацией
+//                    try? await Task.sleep(nanoseconds: 3_000_000_000)
+//                    
+//                    if noticevm.isSoundNotificationOn {
+//                        AudioServicesPlaySystemSound(1013)
+//                    }
+//                    // 🔥 Запускаем анимацию
+//                    noticeButtonAnimation = true
+//
+//                    // 🔥 Анимация длится 1 секунду
+//                    try? await Task.sleep(nanoseconds: 1_000_000_000)
+//                    noticeButtonAnimation = false
+//                    
+//                    // 🔥 Помечаем пользователя как уведомленного
+//                    noticevm.isUserNotified = true
+//                }
+//            }
         }
     }
     
