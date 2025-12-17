@@ -39,7 +39,6 @@ class PostsViewModel: ObservableObject {
     // MARK: - AppStorage
     
     @AppStorage("selectedTheme") var selectedTheme: Theme = .system
-    @AppStorage("isTermsOfUseAccepted") var isTermsOfUseIsAccepted: Bool = false
     @AppStorage("localLastUpdated") var localLastUpdated: Date = Date.distantPast
     @AppStorage("isFirstImportPostsCompleted") var isFirstImportPostsCompleted: Bool = false {
         didSet {
