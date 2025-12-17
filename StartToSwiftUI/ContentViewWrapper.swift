@@ -11,11 +11,11 @@ import SwiftData
 struct ContentViewWrapper: View {
     
     @Environment(\.modelContext) private var modelContext
-    @State private var vm: PostsViewModel?
-    @State private var noticevm: NoticeViewModel?
+    @StateObject private var vm = PostsViewModel()
+    @StateObject private var noticevm = NoticeViewModel()
+    
     @State private var showLaunchView: Bool = true
     @State private var showTermsOfUse: Bool = false
-    @State private var areViewModelsInitialized = false // <- Новый флаг
     
     @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
     
@@ -25,29 +25,38 @@ struct ContentViewWrapper: View {
         ZStack {
             if showLaunchView {
                 LaunchView() {
-                    initializeViewModels() // <- Инициализируем после LaunchView
                     hapticManager.impact(style: .light)
                     showLaunchView = false
                 }
                 .transition(.move(edge: .leading))
-            } else if areViewModelsInitialized, let vm = vm, let noticevm = noticevm {
-                mainContent(vm: vm, noticevm: noticevm)
             } else {
-                ProgressView("Initializing...")
-                    .onAppear {
-                        initializeViewModels()
-                    }
+                mainContent
             }
         }
-        .preferredColorScheme(vm?.selectedTheme.colorScheme)
+        .preferredColorScheme(vm.selectedTheme.colorScheme)
+        .onAppear {
+            initializeViewModels() // ✅ Один раз при появлении
+        }
         .task {
             // Загружаем статические посты при первом запуске
             await loadStaticPostsIfNeeded()
         }
     }
     
+    private func initializeViewModels() {
+            // 🔥 Устанавливаем modelContext только если он еще не установлен
+            if vm.modelContext == nil {
+                vm.modelContext = modelContext
+                print("✅ PostsViewModel инициализирован с ModelContext")
+            }
+            
+            if noticevm.modelContext == nil {
+                noticevm.modelContext = modelContext
+                print("✅ NoticeViewModel инициализирован с ModelContext")
+            }
+        }
     @ViewBuilder
-    private func mainContent(vm: PostsViewModel, noticevm: NoticeViewModel) -> some View {
+    private var mainContent: some View {
         if !isTermsOfUseAccepted {
             welcomeAtFirstLaunch
         } else if UIDevice.isiPad {
@@ -115,7 +124,7 @@ struct ContentViewWrapper: View {
                         .fullScreenCover(isPresented: $showTermsOfUse) {
                             NavigationStack {
                                 TermsOfUse(isTermsOfUseAccepted: $isTermsOfUseAccepted)
-                                .environmentObject(vm!)
+                                .environmentObject(vm)
                             }
                         }
                     } // VStack
@@ -129,14 +138,7 @@ struct ContentViewWrapper: View {
     }
     
     // MARK: - Private Methods
-    
-    private func initializeViewModels() {
-        vm = PostsViewModel(modelContext: modelContext)
-        noticevm = NoticeViewModel(modelContext: modelContext)
-        areViewModelsInitialized = true // <- Устанавливаем флаг
-        print("✅ ViewModels инициализированы")
-    }
-    
+
     /// Загружает статические посты при первом запуске
     @MainActor
     private func loadStaticPostsIfNeeded() async {
@@ -187,9 +189,17 @@ struct ContentViewWrapper: View {
     }
 }
 
-#Preview {
+
+#Preview("Simple Test") {
+    // ТОЛЬКО ЭТО - должно работать
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+    
     NavigationStack {
         ContentViewWrapper()
-            .modelContainer(for: [Post.self, Notice.self], inMemory: true)
+            .environment(\.modelContext, container.mainContext)
+            .modelContainer(container)
     }
 }
