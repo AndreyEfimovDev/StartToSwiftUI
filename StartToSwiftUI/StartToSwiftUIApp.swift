@@ -4,23 +4,52 @@
 //
 //  Created by Andrey Efimov on 25.08.2025.
 //
-// v01.14 StartToSwiftUI_Github_GitKraken
+
 
 import SwiftUI
+import SwiftData
 import Speech
+
+
+//
+//**Порядок загрузки:**
+//```
+//1. App запускается
+//2. ContentViewWrapper.onAppear → initializeViewModels()
+//3. vm.modelContext = modelContext (в initializeViewModels)
+//4. PostsViewModel.didSet → loadPostsFromSwiftData() (первый и единственный раз)
+//5. NoticeViewModel.didSet → loadNoticesFromSwiftData() → importNoticesFromCloud()
+//6. .task → loadStaticPostsIfNeeded() (если база пустая)
+
 
 @main
 struct StartToSwiftUIApp: App {
     
     @Environment(\.dismiss) private var dismiss
     
-    @StateObject private var vm = PostsViewModel()
-    @StateObject private var noticevm = NoticeViewModel()
-    
     private let hapticManager = HapticService.shared
     
     @State private var showLaunchView: Bool = true
-    @State private var showTermsOfUse: Bool = false
+    
+    // MARK: - SwiftData Container
+    
+    /// ModelContainer с поддержкой iCloud синхронизации
+    let modelContainer: ModelContainer = {
+        let schema = Schema([Post.self, Notice.self])
+        let config = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: false,
+            cloudKitDatabase: .automatic // 🌥️ iCloud синхронизация
+        )
+        
+        do {
+            let container = try ModelContainer(for: schema, configurations: [config])
+            print("✅ SwiftData контейнер создан успешно")
+            return container
+        } catch {
+            fatalError("❌ Не удалось создать ModelContainer: \(error)")
+        }
+    }()
     
     init() {
         
@@ -71,131 +100,60 @@ struct StartToSwiftUIApp: App {
                     print("Speech recognizer warmed up")
                 }
             }
-            
         }
     } // init()
     
     var body: some Scene {
         WindowGroup {
-            ZStack{
-                if showLaunchView {
-                    LaunchView() {
-                        hapticManager.impact(style: .light)
-                        showLaunchView = false
-                    }
-                    .transition(.move(edge: .leading))
-                } else if !vm.isTermsOfUseIsAccepted {
-                    //                    NavigationStack {
-                    welcomeAtFirstLauch
-                    //                    }
-                } else if UIDevice.isiPad {
-                    // iPad - NavigationSplitView
-                    SidebarView()
-                } else {
-                    // iPhone - NavigationStack (portrait only)
-                    NavigationStack{
-                        //                        if let selectedCategory = vm.selectedCategory {
-                        HomeView(selectedCategory: vm.selectedCategory)
-                        //                        }
-                    }
-                }
-            }
-            //            .zIndex(2)
-            .environmentObject(vm)
-            .environmentObject(noticevm)
-            .preferredColorScheme(vm.selectedTheme.colorScheme)
-            
-            
-            
-            //                // Accept Terms of Use at the first launch
-            //                ZStack {
-            //                    if !vm.isTermsOfUseIsAccepted {
-            //                        welcomeAtFirstLauch
-            //                    }
-            //                }
-            //                .opacity(showLaunchView ? 0 : 1)
-            //                .zIndex(1)
-            
-            
-            //                if UIDevice.isiPad {
-            //                    // iPad - NavigationSplitView
-            //                    SidebarView()
-            //                } else {
-            //                    // iPhone - NavigationStack (portrait only)
-            //                    NavigationStack{
-            ////                        if let selectedCategory = vm.selectedCategory {
-            //                        HomeView(selectedCategory: vm.selectedCategory)
-            ////                        }
-            //                    }
-            //                }
-            //            }
-            //            .environmentObject(vm)
-            //            .environmentObject(noticevm)
-            //            .preferredColorScheme(vm.selectedTheme.colorScheme)
+            ContentViewWrapper()
         }
+        .modelContainer(modelContainer)
     }
-    
-    private var welcomeAtFirstLauch: some View {
-        ZStack {
-            Color.mycolor.myBackground
-                .ignoresSafeArea()
-            NavigationStack {
-                ScrollView {
-                    VStack {
-                        Text("""
-                    This application is created for educational purposes and helps organise links to learning SwiftUI materials.
-                     
-                    **It is importand to understand:**
-                     
-                    - The app stores only links to materials available from public sources.
-                    - All content belongs to its respective authors.
-                    - The app is free and intended for non-commercial use.
-                    - Users are responsible for respecting copyright when using materials.
-                     
-                    **For each material, you have ability to save:**
-                    
-                    - Direct link to the original source.
-                    - Author's name.
-                    - Source (website, YouTube, etc.).
-                    - Publication date (if known).
-                                         
-                    To use this application, you need to agree to **Terms of Use**.
-                    """
-                        )
-                        .multilineTextAlignment(.leading)
-                        .textFormater()
-                        .padding(.top)
-                        .padding(.horizontal)
-                        
-                        Button {
-                            showTermsOfUse = true
-                        } label: {
-                            Text("Terms of Use")
-                                .font(.title)
-                                .padding()
-                                .background(.ultraThinMaterial)
-                                .clipShape(Capsule())
-                                .overlay(
-                                    Capsule()
-                                        .stroke(Color.mycolor.myBlue, lineWidth: 1)
-                                )
-                        }
-                        .tint(Color.mycolor.myBlue)
-                        .padding()
-                        .fullScreenCover(isPresented: $showTermsOfUse) {
-                            NavigationStack {
-                                TermsOfUse() { dismiss() }
-                            }
-                        }
-                    } // VStack
-                    .frame(maxWidth: 600)
-                    .padding()
-                } // ScrollView
-                .navigationTitle("Affirmation")
-                .navigationBarTitleDisplayMode(.inline)
-            } // NavigationStack
-        } // ZStack
-    }
-    
 }
 
+
+#Preview("Full App Preview") {
+    // 1. Создаем in-memory контейнер
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self,
+        configurations: config
+    )
+    
+    // 2. Получаем контекст
+    let context = container.mainContext
+    
+    // 3. Вставляем ваши PreviewData в SwiftData
+    for notice in PreviewData.sampleNotices {
+        context.insert(notice)
+    }
+    
+    for post in PreviewData.samplePosts {
+        context.insert(post)
+    }
+    
+    // 4. Пробуем сохранить
+    do {
+        try context.save()
+        print("✅ Preview: Данные загружены в SwiftData")
+    } catch {
+        print("❌ Preview: Ошибка сохранения: \(error)")
+    }
+    
+    // 5. Создаем ViewModels
+    let vm = PostsViewModel(modelContext: context)
+    let noticevm = NoticeViewModel(modelContext: context)
+    
+//    // 6. Настраиваем состояние (пропускаем TermsOfUse для превью)
+//    vm.isTermsOfUseAccepted = true
+    
+    // 7. Возвращаем ContentViewWrapper со всеми зависимостями
+    return ContentViewWrapper()
+        .environment(\.modelContext, context) // Ключевой момент!
+        .environmentObject(vm)
+        .environmentObject(noticevm)
+        .modelContainer(container)
+        .onAppear {
+            print("📱 Preview запущен с \(PreviewData.samplePosts.count) постами")
+        }
+}

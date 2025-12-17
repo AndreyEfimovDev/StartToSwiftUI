@@ -6,6 +6,7 @@
 //  
 
 import SwiftUI
+import SwiftData
 import AudioToolbox
 
 struct HomeView: View {
@@ -13,6 +14,7 @@ struct HomeView: View {
     // MARK: PROPERTIES
     
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
 
@@ -45,7 +47,6 @@ struct HomeView: View {
         noticevm.isNotificationOn
     }
     private var isPerformingNoticeTask: Bool {
-        vm.isTermsOfUseIsAccepted &&
         noticevm.isNotificationOn &&
         !noticevm.isUserNotified
     }
@@ -67,7 +68,7 @@ struct HomeView: View {
                 }
             }
             .disabled(isLongPressSuccess || isShowingDeleteConfirmation)
-            .navigationTitle(vm.selectedCategory ?? "SwiftUI") // -> All Categories!!!
+            .navigationTitle(vm.selectedCategory ?? "SwiftUI")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
@@ -142,11 +143,11 @@ struct HomeView: View {
             .onAppear {
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
             }
-            .task { // task
+            .task {
                 if isPerformingNoticeTask {
                     try? await Task.sleep(nanoseconds: 3_000_000_000)
                     if noticevm.isSoundNotificationOn {
-                        AudioServicesPlaySystemSound(1013) // 1005
+                        AudioServicesPlaySystemSound(1013)
                     }
                     noticeButtonAnimation = true
                     try? await Task.sleep(nanoseconds: 1_000_000_000)
@@ -224,6 +225,10 @@ struct HomeView: View {
             )
         } // List
         .listStyle(.plain)
+        .refreshControl {
+            // 🔄 Pull to refresh - перезагружаем данные
+            vm.loadPostsFromSwiftData()
+        }
     }
     
     private var postDeletionConfirmation: some View {
@@ -363,7 +368,7 @@ struct HomeView: View {
     private func onTopButton(proxy: ScrollViewProxy) -> some View {
         if showOnTopButton {
             CircleStrokeButtonView(
-                iconName: "control", // control arrow.up
+                iconName: "control",
                 iconFont: .title,
                 imageColorPrimary: Color.mycolor.myBlue,
                 widthIn: 55,
@@ -401,18 +406,29 @@ struct HomeView: View {
         }
         return vm.filteredPosts.filter { $0.category == category }
     }
-        
+}
 
+// MARK: - Helper Extension для Pull to Refresh
+
+extension View {
+    func refreshControl(action: @escaping () -> Void) -> some View {
+        self.refreshable {
+            action()
+        }
+    }
 }
 
 #Preview {
+    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let context = ModelContext(container)
     
-    NavigationStack {
+    let vm = PostsViewModel(modelContext: context)
+    let noticevm = NoticeViewModel(modelContext: context)
+    
+    return NavigationStack {
         HomeView(selectedCategory: "SwiftUI")
     }
-    .environmentObject(PostsViewModel())
-    .environmentObject(NoticeViewModel())
+    .modelContainer(container)
+    .environmentObject(vm)
+    .environmentObject(noticevm)
 }
-
-
-//     .buttonStyle(.plain) // it makes the buttons accessable through the List elements
