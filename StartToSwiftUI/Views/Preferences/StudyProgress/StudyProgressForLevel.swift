@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct StudyProgressForLevel: View {
     
@@ -111,10 +112,14 @@ struct StudyProgressForLevel: View {
 }
 
 #Preview {
+    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let context = ModelContext(container)
+    
+    let vm = PostsViewModel(modelContext: context)
         
     NavigationStack {
         StudyProgressForLevel(studyLevel: nil)
     }
-    .environmentObject(PostsViewModel())
+    .environmentObject(vm)
     
 }

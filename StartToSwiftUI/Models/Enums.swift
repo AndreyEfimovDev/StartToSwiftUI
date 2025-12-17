@@ -272,6 +272,7 @@ enum FileStorageError: LocalizedError {
     case encodingFailed(Error)
     case decodingFailed(Error)
     case fileSystemError(Error)
+    case exportError(String)
     
     var errorDescription: String? {
         switch self {
@@ -285,6 +286,8 @@ enum FileStorageError: LocalizedError {
             return "Decoding failed: \(error.localizedDescription)"
         case .fileSystemError(let error):
             return "File system error: \(error.localizedDescription)"
+        case .exportError(let message):
+            return message
         }
     }
 }

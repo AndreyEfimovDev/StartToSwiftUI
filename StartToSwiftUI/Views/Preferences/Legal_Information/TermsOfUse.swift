@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct TermsOfUse: View {
     
@@ -189,6 +190,7 @@ struct TermsOfUse: View {
                 
                 .multilineTextAlignment(.leading)
                 .textFormater()
+                .foregroundStyle(Color.mycolor.myAccent)
                 .padding()
 
                 CapsuleButtonView(
@@ -217,8 +219,14 @@ struct TermsOfUse: View {
 }
 
 #Preview {
+    
+    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let context = ModelContext(container)
+    
+    let vm = PostsViewModel(modelContext: context)
+    
     NavigationStack {
         TermsOfUse() {}
     }
-    .environmentObject(PostsViewModel())
+    .environmentObject(vm)
 }

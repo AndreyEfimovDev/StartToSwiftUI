@@ -9,8 +9,6 @@ import Foundation
 import SwiftUI
 import SwiftData
 
-// MARK: - Post Model
-
 @Model
 final class Post {
     @Attribute(.unique) var id: String
