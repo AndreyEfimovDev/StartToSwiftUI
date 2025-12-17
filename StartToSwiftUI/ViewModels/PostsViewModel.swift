@@ -15,13 +15,13 @@ class PostsViewModel: ObservableObject {
     
     var modelContext: ModelContext? = nil {
         didSet {
-            if modelContext != nil && !hasLoadedInitialData {
+            if modelContext != nil /*&& !hasLoadedInitialData*/ {
                 loadPostsFromSwiftData()
-                hasLoadedInitialData = true
+//                hasLoadedInitialData = true
             }
         }
     }
-    private var hasLoadedInitialData = false // 🔥 Флаг для однократной загрузки
+//    private var hasLoadedInitialData = false // 🔥 Флаг для однократной загрузки
 
     private let fileManager = JSONFileManager.shared
     private let hapticManager = HapticService.shared
@@ -123,8 +123,8 @@ class PostsViewModel: ObservableObject {
     /// Загрузка постов из SwiftData
     func loadPostsFromSwiftData() {
         
-        guard let context = modelContext, !hasLoadedInitialData else {
-            print("⏩ Данные уже загружены или context не установлен")
+        guard let context = modelContext/*, !hasLoadedInitialData*/ else {
+            print("⏩ Context не установлен")
             return
         }
 
