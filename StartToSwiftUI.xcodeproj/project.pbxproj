@@ -35,6 +35,7 @@
 		4732FB332EAA5A9E0062269D /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4732FB322EAA5A9E0062269D /* ActivityView.swift */; };
 		4732FB372EAA63810062269D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4732FB362EAA63810062269D /* Constants.swift */; };
 		47453E042EAB73A9000D2C16 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47453E032EAB73A9000D2C16 /* Date.swift */; };
+		47542EB42EF2C8E400B0AB79 /* ContentViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47542EB32EF2C8E400B0AB79 /* ContentViewWrapper.swift */; };
 		4759974D2E5C690B008E20F0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 475997492E5C690B008E20F0 /* Assets.xcassets */; };
 		4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */; };
 		475997512E5C6C9D008E20F0 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997502E5C6C9D008E20F0 /* Post.swift */; };
@@ -48,6 +49,10 @@
 		47656BFE2EE1EC4D00F45AA6 /* StudyProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47656BFD2EE1EC4D00F45AA6 /* StudyProgressView.swift */; };
 		47656C002EE1EF9500F45AA6 /* StudyProgressForLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47656BFF2EE1EF9500F45AA6 /* StudyProgressForLevel.swift */; };
 		4765A76D2EAE5F7B00EACDF4 /* PostRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */; };
+		4767C95F2EF29349003838BA /* CodablePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4767C95E2EF29349003838BA /* CodablePost.swift */; };
+		4767C9612EF293FF003838BA /* PostMigrationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4767C9602EF293FF003838BA /* PostMigrationHelper.swift */; };
+		4767C9632EF29474003838BA /* NoticeMigrationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4767C9622EF29474003838BA /* NoticeMigrationHelper.swift */; };
+		4767C9652EF294B0003838BA /* CodableNotice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4767C9642EF294B0003838BA /* CodableNotice.swift */; };
 		4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773545A2E65C470001DEDEE /* CapsulesSegmentedPicker.swift */; };
 		4773545D2E65D03A001DEDEE /* FiltersSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */; };
 		477C745E2ECF6FB300F77F5B /* StaticPosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477C745D2ECF6FB300F77F5B /* StaticPosts.swift */; };
@@ -125,6 +130,8 @@
 		4732FB322EAA5A9E0062269D /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
 		4732FB362EAA63810062269D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		47453E032EAB73A9000D2C16 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		47542EB32EF2C8E400B0AB79 /* ContentViewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewWrapper.swift; sourceTree = "<group>"; };
+		47542EB52EF3171200B0AB79 /* StartToSwiftUIRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StartToSwiftUIRelease.entitlements; sourceTree = "<group>"; };
 		4759973B2E5C6901008E20F0 /* StartToSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StartToSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		475997492E5C690B008E20F0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartToSwiftUIApp.swift; sourceTree = "<group>"; };
@@ -139,6 +146,10 @@
 		47656BFD2EE1EC4D00F45AA6 /* StudyProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressView.swift; sourceTree = "<group>"; };
 		47656BFF2EE1EF9500F45AA6 /* StudyProgressForLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressForLevel.swift; sourceTree = "<group>"; };
 		4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRowView.swift; sourceTree = "<group>"; };
+		4767C95E2EF29349003838BA /* CodablePost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodablePost.swift; sourceTree = "<group>"; };
+		4767C9602EF293FF003838BA /* PostMigrationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostMigrationHelper.swift; sourceTree = "<group>"; };
+		4767C9622EF29474003838BA /* NoticeMigrationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeMigrationHelper.swift; sourceTree = "<group>"; };
+		4767C9642EF294B0003838BA /* CodableNotice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableNotice.swift; sourceTree = "<group>"; };
 		4773545A2E65C470001DEDEE /* CapsulesSegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsulesSegmentedPicker.swift; sourceTree = "<group>"; };
 		4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersSheetView.swift; sourceTree = "<group>"; };
 		477C745D2ECF6FB300F77F5B /* StaticPosts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticPosts.swift; sourceTree = "<group>"; };
@@ -270,16 +281,16 @@
 		4759974C2E5C690B008E20F0 /* StartToSwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				47542EB52EF3171200B0AB79 /* StartToSwiftUIRelease.entitlements */,
 				4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */,
+				47542EB32EF2C8E400B0AB79 /* ContentViewWrapper.swift */,
 				475997622E5CF0C3008E20F0 /* SupportFrom3rdParties */,
 				475997722E5DA436008E20F0 /* Extensions */,
-				4759976C2E5D931F008E20F0 /* Services */,
 				47069EFC2EAFF2E30082AE12 /* Launch */,
 				475997592E5C86C5008E20F0 /* Components */,
 				475997562E5C8671008E20F0 /* Models */,
 				475997572E5C8688008E20F0 /* ViewModels */,
 				47BAF0EE2E645B0A00287F10 /* Views */,
-				47BAF0ED2E645AFE00287F10 /* Main */,
 				475997492E5C690B008E20F0 /* Assets.xcassets */,
 				471BEF4F2EA793880093F962 /* Info.plist */,
 			);
@@ -291,6 +302,8 @@
 			children = (
 				475997502E5C6C9D008E20F0 /* Post.swift */,
 				471BBF9E2EC721480004AC45 /* Notice.swift */,
+				4767C95E2EF29349003838BA /* CodablePost.swift */,
+				4767C9642EF294B0003838BA /* CodableNotice.swift */,
 				47BAF0F72E64A77A00287F10 /* Enums.swift */,
 				47FF42462EE454440069D232 /* TestSFSymbolsForRating.swift */,
 				47FF42482EE4572E0069D232 /* TestSFSymbolsForProgress.swift */,
@@ -346,6 +359,8 @@
 				4791CDFD2E747AC100687126 /* JSONFileManager.swift */,
 				4791CDFF2E747B2E00687126 /* HapticService.swift */,
 				47FF42582EE556DA0069D232 /* TapHandler.swift */,
+				4767C9602EF293FF003838BA /* PostMigrationHelper.swift */,
+				4767C9622EF29474003838BA /* NoticeMigrationHelper.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -353,6 +368,7 @@
 		475997722E5DA436008E20F0 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				4759976C2E5D931F008E20F0 /* Services */,
 				4791CDE92E72E8CC00687126 /* Arrays.swift */,
 				475997792E5F1A32008E20F0 /* Colors.swift */,
 				47BAF0C92E635E2800287F10 /* Views.swift */,
@@ -414,13 +430,6 @@
 				47870FBE2ECCD743004175E4 /* LinkButtonURL.swift */,
 			);
 			path = Buttons;
-			sourceTree = "<group>";
-		};
-		47BAF0ED2E645AFE00287F10 /* Main */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Main;
 			sourceTree = "<group>";
 		};
 		47BAF0EE2E645B0A00287F10 /* Views */ = {
@@ -553,6 +562,7 @@
 				472E05CC2EDDC9BA005D774E /* KeyboardManager.swift in Sources */,
 				471DCBD02EBB88A400AFA5F4 /* CopyrightPolicy.swift in Sources */,
 				47BAF0F82E64A77A00287F10 /* Enums.swift in Sources */,
+				4767C95F2EF29349003838BA /* CodablePost.swift in Sources */,
 				475997552E5C7F81008E20F0 /* PreviewData.swift in Sources */,
 				4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */,
 				471DCBDC2EBBC67500AFA5F4 /* Introduction.swift in Sources */,
@@ -573,6 +583,8 @@
 				47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */,
 				477C74602ECFB0F300F77F5B /* News.swift in Sources */,
 				4791CDF12E7428EE00687126 /* CircleShadowButtonView.swift in Sources */,
+				47542EB42EF2C8E400B0AB79 /* ContentViewWrapper.swift in Sources */,
+				4767C9652EF294B0003838BA /* CodableNotice.swift in Sources */,
 				47E2AF4F2EBCD86000B0214F /* CategoryFilterView.swift in Sources */,
 				478116462EBFF9DD00EF25F8 /* CustomProgressView.swift in Sources */,
 				4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */,
@@ -606,6 +618,7 @@
 				4781D72E2ED716AE00B74F85 /* Bundle.swift in Sources */,
 				47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */,
 				4791CDC12E708E1300687126 /* DocumentPicker.swift in Sources */,
+				4767C9632EF29474003838BA /* NoticeMigrationHelper.swift in Sources */,
 				472A9B592EDB6D6E00ED3344 /* HomeViewCustomNavBar.swift in Sources */,
 				47E439B72EA9290E007001AD /* NetworkService.swift in Sources */,
 				471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */,
@@ -615,6 +628,7 @@
 				4732FB372EAA63810062269D /* Constants.swift in Sources */,
 				4791CDFC2E746FF100687126 /* EmailService.swift in Sources */,
 				475997612E5CC0F8008E20F0 /* PostDetailsView.swift in Sources */,
+				4767C9612EF293FF003838BA /* PostMigrationHelper.swift in Sources */,
 				47870FBA2ECC8628004175E4 /* Acknowledgements.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -800,6 +814,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = StartToSwiftUI/StartToSwiftUIRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;

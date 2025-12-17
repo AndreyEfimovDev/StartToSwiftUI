@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SharePostsView: View {
     
@@ -52,7 +53,10 @@ struct SharePostsView: View {
             }
         }
         .alert("Sharing Error", isPresented: $vm.showErrorMessageAlert) {
-            Button("OK", role: .cancel) { }
+            Button("OK", role: .cancel) {
+                vm.errorMessage = nil
+                isInProgress = false
+            }
         } message: {
             Text(vm.errorMessage ?? "Unknown error")
         }
@@ -68,14 +72,23 @@ struct SharePostsView: View {
     
     private func prepareDocumentSharing() {
         
-        let pathResult = vm.getFilePath(fileName: Constants.localPostsFileName)
-        switch pathResult {
-        case .success(let path):
-            shareURL = path
+        print("🍓 Preparing document sharing from SwiftData...")
+        
+        // 1. Экспортируем данные из SwiftData
+        let exportResult = vm.exportPostsToJSON()
+
+        switch exportResult {
+        case .success(let url):
+            isInProgress = false
+            shareURL = url
             showActivityView = true
+            print("🍓✅ Document ready for sharing: \(url.lastPathComponent)")
         case .failure(let error):
+            isInProgress = false
             vm.errorMessage = error.localizedDescription
+            hapticManager.notification(type: .error)
             vm.showErrorMessageAlert = true
+            print("🍓❌ Export failed: \(error.localizedDescription)")
         }
     }
 
@@ -87,20 +100,43 @@ struct SharePostsView: View {
         ActivityView(activityItems: [fileURL], applicationActivities: nil) { result in
             if result.completed {
                 // Successful sharing
-                isInProgress = false 
                 hapticManager.notification(type: .success)
                 isShareCompleted = true // Change Share Button status and disable it
                 showActivityView = false // Close sheet after sharing completion
+                
+                // Очищаем временный файл после успешного шаринга
+                cleanupTempFile(fileURL)
+                
                 print("✅ Successfully shared via: \(result.activityName)")
-                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+                
+                // Автоматическое закрытие через 2 секунды
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                     dismiss()
                 }
+
             } else {
                 // Sharing is cancelled
-                isInProgress = false
                 hapticManager.impact(style: .light)
+                // Очищаем временный файл после успешного шаринга
+                cleanupTempFile(fileURL)
                 print("✅ Shared is cancelled.")
             }
+            // Сбрасываем состояние
+            isInProgress = false
+            shareURL = nil
+
+        }
+    }
+    
+    /// Очистка временного файла после использования
+    private func cleanupTempFile(_ url: URL) {
+        do {
+            if FileManager.default.fileExists(atPath: url.path) {
+                try FileManager.default.removeItem(at: url)
+                print("🧹 Cleaned up temp file: \(url.lastPathComponent)")
+            }
+        } catch {
+            print("⚠️ Failed to cleanup temp file: \(error)")
         }
     }
     
@@ -118,9 +154,14 @@ struct SharePostsView: View {
 }
 
 #Preview {
+    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let context = ModelContext(container)
+    
+    let vm = PostsViewModel(modelContext: context)
+    
     NavigationStack{
         SharePostsView()
-            .environmentObject(PostsViewModel())
+            .environmentObject(vm)
     }
 }
 

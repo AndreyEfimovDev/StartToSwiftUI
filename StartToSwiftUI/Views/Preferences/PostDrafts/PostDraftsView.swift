@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct PostDraftsView: View {
     
@@ -81,8 +82,13 @@ struct PostDraftsView: View {
 }
 
 #Preview {
+    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let context = ModelContext(container)
+    
+    let vm = PostsViewModel(modelContext: context)
+    
     NavigationStack {
         PostDraftsView()
-            .environmentObject(PostsViewModel())
+            .environmentObject(vm)
     }
 }

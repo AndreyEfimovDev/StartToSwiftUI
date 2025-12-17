@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct NoticeRowView: View {
     
@@ -54,8 +55,13 @@ fileprivate struct NoticeRowPreView: View {
 
 
 #Preview {
+    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let context = ModelContext(container)
+    
+    let noticevm = NoticeViewModel(modelContext: context)
+    
     NavigationStack {
         NoticeRowPreView()
-            .environmentObject(NoticeViewModel())
+            .environmentObject(noticevm)
     }
 }
