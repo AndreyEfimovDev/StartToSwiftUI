@@ -17,7 +17,7 @@ struct LegalInformationView: View {
     var body: some View {
         Form {
             NavigationLink("Terms of Use") {
-                TermsOfUse() {}
+                TermsOfUse(isTermsOfUseAccepted: .constant(true))
             }
             .customListRowStyle(
                 iconName: "hand.raised",

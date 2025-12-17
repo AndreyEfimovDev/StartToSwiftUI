@@ -14,14 +14,8 @@ struct TermsOfUse: View {
     @EnvironmentObject private var vm: PostsViewModel
     
     @State private var isAccepted: Bool = false
+    @Binding var isTermsOfUseAccepted: Bool
     
-    let action: () -> ()
-    
-    init(
-        action: @escaping () -> Void
-    ) {
-        self.action = action
-    }
     var body: some View {
         
         ScrollView {
@@ -196,16 +190,17 @@ struct TermsOfUse: View {
                 CapsuleButtonView(
                     primaryTitle: "I have read and accept",
                     secondaryTitle: "Accepted",
-                    isToChange: isAccepted || vm.isTermsOfUseIsAccepted) {
+                    isToChange: isAccepted || isTermsOfUseAccepted) {
                         isAccepted = true
                         DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                            vm.isTermsOfUseIsAccepted = true
+                            isTermsOfUseAccepted = true
+//                            completion()
                             dismiss()
                         }
                     }
                     .padding(.horizontal, 30)
                     .padding(15)
-                    .disabled(vm.isTermsOfUseIsAccepted)
+                    .disabled(isAccepted)
             }
         }
         .navigationTitle("Terms of Use")
@@ -226,7 +221,8 @@ struct TermsOfUse: View {
     let vm = PostsViewModel(modelContext: context)
     
     NavigationStack {
-        TermsOfUse() {}
+        TermsOfUse(isTermsOfUseAccepted: .constant(true))
     }
     .environmentObject(vm)
 }
+
