@@ -16,22 +16,28 @@ struct ContentViewWrapper: View {
     
     @State private var showLaunchView: Bool = true
     @State private var showTermsOfUse: Bool = false
-    
+    @State private var isLoadingData = true // 🔥 Локальное состояние загрузки
+
     @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
-    
-    private let hapticManager = HapticService.shared
-    
+        
     var body: some View {
         ZStack {
-            if showLaunchView {
+            if !isTermsOfUseAccepted {
+                welcomeAtFirstLaunch
+            } else if showLaunchView {
                 LaunchView() {
-                    hapticManager.impact(style: .light)
                     showLaunchView = false
                 }
                 .transition(.move(edge: .leading))
+            } else if isLoadingData {
+                // 🔥 Показываем ProgressView пока идет загрузка
+                ProgressView("...loading data...")
+                    .controlSize(.large)
             } else {
+                // 🔥 Когда загрузка завершена - показываем контент
                 mainContent
             }
+            
         }
         .preferredColorScheme(vm.selectedTheme.colorScheme)
         .onAppear {
@@ -39,7 +45,12 @@ struct ContentViewWrapper: View {
         }
         .task {
             // Загружаем статические посты при первом запуске
-            await loadStaticPostsIfNeeded()
+            if !vm.hasLoadedInitialData {
+                await loadStaticPostsIfNeeded()
+            } else {
+                // 🔥 Если данные уже загружены - сразу скрываем ProgressView
+                isLoadingData = false
+            }
         }
     }
     
@@ -55,11 +66,11 @@ struct ContentViewWrapper: View {
                 print("✅ NoticeViewModel инициализирован с ModelContext")
             }
         }
+    
     @ViewBuilder
     private var mainContent: some View {
-        if !isTermsOfUseAccepted {
-            welcomeAtFirstLaunch
-        } else if UIDevice.isiPad {
+
+        if UIDevice.isiPad {
             // iPad - NavigationSplitView
             SidebarView()
                 .environmentObject(vm)
@@ -142,15 +153,10 @@ struct ContentViewWrapper: View {
     /// Загружает статические посты при первом запуске
     @MainActor
     private func loadStaticPostsIfNeeded() async {
-        // Проверяем, есть ли уже посты в базе
-        let descriptor = FetchDescriptor<Post>()
-        let existingPostsCount = (try? modelContext.fetchCount(descriptor)) ?? 0
         
-        guard existingPostsCount == 0 else {
-            print("✅ Посты уже загружены (\(existingPostsCount) шт.)")
-            return
+        defer {
+            isLoadingData = false // 🔥 Гарантированно завершаем загрузку
         }
-        
         print("📦 Загружаем статические посты при первом запуске...")
         
         // Конвертируем статические посты из старого формата в SwiftData
@@ -182,6 +188,14 @@ struct ContentViewWrapper: View {
         
         do {
             try modelContext.save()
+            print("💾 SwiftData контекст сохранён")
+
+            // 🔥 КРИТИЧЕСКО ВАЖНО: Обновляем ViewModel!
+            vm.loadPostsFromSwiftData()
+            
+            try? await Task.sleep(nanoseconds: 50_000_000) // 0.05 секунды
+
+            vm.hasLoadedInitialData = true
             print("✅ Загружено \(StaticPost.staticPosts.count) статических постов")
         } catch {
             print("❌ Ошибка загрузки статических постов: \(error)")

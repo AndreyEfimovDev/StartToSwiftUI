@@ -15,13 +15,12 @@ class PostsViewModel: ObservableObject {
     
     var modelContext: ModelContext? = nil {
         didSet {
-            if modelContext != nil /*&& !hasLoadedInitialData*/ {
+            if modelContext != nil {
                 loadPostsFromSwiftData()
-//                hasLoadedInitialData = true
             }
         }
     }
-//    private var hasLoadedInitialData = false // 🔥 Флаг для однократной загрузки
+    @AppStorage("hasLoadedInitialData") var hasLoadedInitialData = false // 🔥 Флаг для однократной загрузки
 
     private let fileManager = JSONFileManager.shared
     private let hapticManager = HapticService.shared
@@ -95,8 +94,6 @@ class PostsViewModel: ObservableObject {
     ) {
         self.modelContext = modelContext
         self.networkService = networkService
-        
-//        loadPostsFromSwiftData()
         
         // Инициализация фильтров
         self.selectedCategory = self.storedCategory
@@ -296,9 +293,6 @@ class PostsViewModel: ObservableObject {
     // MARK: - Filtering & Searching (без изменений)
     
     private func setupSubscriptions() {
-        // Ваш существующий код подписок
-        // addSubscribers() - переносим сюда
-        
         
         let filters = $selectedLevel
             .combineLatest($selectedFavorite, $selectedType, $selectedYear)
@@ -335,7 +329,6 @@ class PostsViewModel: ObservableObject {
                 self?.filteredPosts = selectedPosts
             }
             .store(in: &cancellables)
-
     }
     
     private func filterPosts(
