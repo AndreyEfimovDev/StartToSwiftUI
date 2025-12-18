@@ -151,7 +151,7 @@ struct ContentViewWrapper: View {
             } // NavigationStack
             .onAppear {
                 // 🔥 Задержка 8 секунд
-                DispatchQueue.main.asyncAfter(deadline: .now() + 15.0) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
                     withAnimation(.easeInOut(duration: 3)) {
                         showTermsButton = true
                     }
