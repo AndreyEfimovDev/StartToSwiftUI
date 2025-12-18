@@ -350,10 +350,12 @@ class PostsViewModel: ObservableObject {
             let matchesLevel = level == nil || post.studyLevel == level
             let matchesFavorite = favorite == nil || post.favoriteChoice == favorite
             let matchesType = type == nil || post.postType == type
+            let matchesPlatform = platform == nil || post.postPlatform == platform
+
             let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date.distantPast))
             let matchesYear = year == nil || postYear == year
             
-            return matchesLevel && matchesFavorite && matchesType && matchesYear
+            return matchesLevel && matchesFavorite && matchesType && matchesPlatform && matchesYear
         }
         
 //            if let category = category {
@@ -361,6 +363,15 @@ class PostsViewModel: ObservableObject {
 //            } else {
             return filteredPosts
 //            }
+    }
+    
+    func checkIfAllFiltersAreEmpty() -> Bool {
+        return selectedLevel == nil &&
+        selectedFavorite == nil &&
+        selectedType == nil &&
+        selectedPlatform == nil &&
+        selectedYear == nil &&
+        selectedSortOption == nil
     }
     
     private func searchPosts(posts: [Post]) -> [Post] {
@@ -649,14 +660,6 @@ class PostsViewModel: ObservableObject {
         
         return posts.max(by: { $0.date < $1.date })?.date
         
-    }
-    
-    func checkIfAllFiltersAreEmpty() -> Bool {
-        return selectedLevel == nil &&
-               selectedFavorite == nil &&
-               selectedType == nil &&
-               selectedYear == nil &&
-               selectedSortOption == nil
     }
     
     private func getAllYears() -> [String]? {
