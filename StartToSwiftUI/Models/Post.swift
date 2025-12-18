@@ -11,23 +11,23 @@ import SwiftData
 
 @Model
 final class Post {
-    @Attribute(.unique) var id: String
-    var category: String
-    var title: String
-    var intro: String
-    var author: String
-    var postTypeRawValue: String // Храним как String для Codable
-    var urlString: String
-    var postPlatformRawValue: String
+    var id: String = UUID().uuidString
+    var category: String = "SwiftUI"
+    var title: String = ""
+    var intro: String = ""
+    var author: String = ""
+    var postTypeRawValue: String = "post" // Храним как String для Codable
+    var urlString: String = "https://"
+    var postPlatformRawValue: String = "youtube"
     var postDate: Date?
-    var studyLevelRawValue: String
-    var progressRawValue: String
-    var favoriteChoiceRawValue: String
+    var studyLevelRawValue: String = "beginner"
+    var progressRawValue: String = "fresh"
+    var favoriteChoiceRawValue: String = "no"
     var postRatingRawValue: String?
-    var notes: String
-    var originRawValue: String
-    var draft: Bool
-    var date: Date
+    var notes: String = ""
+    var originRawValue: String = "cloud"
+    var draft: Bool = false
+    var date: Date = Date()
     var startedDateStamp: Date?
     var studiedDateStamp: Date?
     var practicedDateStamp: Date?
