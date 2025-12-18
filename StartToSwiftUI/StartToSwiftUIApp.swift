@@ -9,6 +9,7 @@
 import SwiftUI
 import SwiftData
 import Speech
+import CloudKit
 
 
 //
@@ -106,9 +107,28 @@ struct StartToSwiftUIApp: App {
     var body: some Scene {
         WindowGroup {
             ContentViewWrapper()
+                .onAppear {
+                    // Проверяем статус CloudKit (опционально)
+//                    checkCloudKitSetup()
+                    checkRuntimeEntitlements()
+                    quickCloudKitCheck()
+
+                }
         }
         .modelContainer(modelContainer)
     }
+    
+    private func checkCloudKitSetup() {
+            // Проверка только для отладки
+            CKContainer.default().accountStatus { status, error in
+                if status == .available {
+                    print("✅ iCloud доступен для CloudKit")
+                } else {
+                    print("⚠️ iCloud недоступен: \(status.rawValue)")
+                }
+            }
+        }
+
 }
 
 
