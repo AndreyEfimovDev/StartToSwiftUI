@@ -32,7 +32,7 @@ final class Post {
     var studiedDateStamp: Date?
     var practicedDateStamp: Date?
     
-    // Computed properties для удобства работы с enum
+    // Computed properties for ease of working with enumerations
     var postType: PostType {
         get { PostType(rawValue: postTypeRawValue) ?? .post }
         set { postTypeRawValue = newValue.rawValue }

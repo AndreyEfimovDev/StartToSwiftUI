@@ -33,6 +33,7 @@ struct FiltersSheetView: View {
             studyLevelFilter
             favoriteFilter
             typeFilter
+            typeMedia
             yearFilter
             //                sortOptions
             
@@ -141,6 +142,29 @@ struct FiltersSheetView: View {
         }
     }
     
+    private var typeMedia: some View {
+        VStack {
+            Text("Media:")
+                .font(.footnote)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            SegmentedOneLinePicker(
+                selection: $vm.selectedPlatform,
+                allItems: Platform.allCases,
+                titleForCase: { $0.displayName },
+                selectedFont: selectedFont,
+                selectedTextColor: Color.mycolor.myBackground,
+                unselectedTextColor: Color.mycolor.myAccent,
+                selectedBackground: Color.mycolor.myBlue,
+                unselectedBackground: .clear,
+                showNilOption: true,
+                nilTitle: "All"
+            )
+        }
+    }
+
+    
     private var yearFilter: some View {
         Group {
             if let list = vm.allYears {
@@ -212,6 +236,7 @@ struct FiltersSheetView: View {
                 vm.selectedLevel = nil
                 vm.selectedFavorite = nil
                 vm.selectedType = nil
+                vm.selectedPlatform = nil
                 vm.selectedYear = nil
                 vm.selectedSortOption = nil
                 updateFiltersSheetView.toggle()
@@ -227,6 +252,7 @@ struct FiltersSheetView: View {
                 vm.selectedLevel = nil
                 vm.selectedFavorite = nil
                 vm.selectedType = nil
+                vm.selectedPlatform = nil
                 vm.selectedYear = nil
                 vm.selectedSortOption = nil
                 isFilterButtonPressed.toggle()
@@ -236,19 +262,21 @@ struct FiltersSheetView: View {
     
 }
 
-fileprivate struct FiltersSheetPreview: View {
-    
-    var body: some View {
-        
-        ZStack {
-            Color.mycolor.myAccent
-                .ignoresSafeArea()
-            FiltersSheetView(
-                isFilterButtonPressed: .constant(true)
-            )
-        }
-    }
-}
+
+
+//fileprivate struct FiltersSheetPreview: View {
+//    
+//    var body: some View {
+//        
+//        ZStack {
+//            Color.mycolor.myAccent
+//                .ignoresSafeArea()
+//            FiltersSheetView(
+//                isFilterButtonPressed: .constant(true)
+//            )
+//        }
+//    }
+//}
 #Preview {
     let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
     let context = ModelContext(container)
