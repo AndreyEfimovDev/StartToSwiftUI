@@ -32,7 +32,7 @@ struct StartToSwiftUIApp: App {
         let config = ModelConfiguration(
             schema: schema,
             isStoredInMemoryOnly: false,
-//            cloudKitDatabase: .automatic // 🌥️ iCloud синхронизация
+            cloudKitDatabase: .automatic // 🌥️ iCloud синхронизация
         )
         
         do {
@@ -100,8 +100,6 @@ struct StartToSwiftUIApp: App {
 //                }
         }
         .modelContainer(modelContainer)
-//        .environmentObject(PostsViewModel(modelContext: modelContainer.mainContext))
-//        .environmentObject(NoticeViewModel(modelContext: modelContainer.mainContext))
     }
 }
 
