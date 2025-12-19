@@ -34,24 +34,15 @@ struct HomeView: View {
     
     @State private var isFilterButtonPressed: Bool = false
     @State private var isShowingDeleteConfirmation: Bool = false
-    private let limitToShortenTitle: Int = 30
     
     @State private var noticeButtonAnimation = false
-    private var isShowingNoticeMessageButton: Bool {
-        !noticevm.notices.filter({ $0.isRead == false }).isEmpty &&
-        noticevm.isNotificationOn
-    }
-    private var isPerformingNoticeTask: Bool {
-        noticevm.isNotificationOn &&
-        !noticevm.isUserNotified
-    }
-
-    
     
     @State private var isDetectingLongPress: Bool = false
     @State private var isLongPressSuccess: Bool = false
-    private let longPressDuration: Double = 0.5
     
+    private let longPressDuration: Double = 0.5
+    private let limitToShortenTitle: Int = 30
+
    
     // MARK: VIEW BODY
     
@@ -150,36 +141,16 @@ struct HomeView: View {
                   print("📊 Всего уведомлений: \(noticevm.notices.count)")
                   print("📊 Непрочитанных уведомлений: \(noticevm.notices.filter { !$0.isRead }.count)")
                   print("🔔 Уведомления включены: \(noticevm.isNotificationOn)")
-                  print("👤 Пользователь уведомлен: \(noticevm.isUserNotified)")
-                  print("🎯 isShowingNoticeMessageButton: \(isShowingNoticeMessageButton)")
-                  
-                  // 🔥 Кнопка показывается сразу, анимация через 3 секунды
-                  if isShowingNoticeMessageButton && !noticevm.isUserNotified {
-                      print("🚀 Запускаем таймер для уведомления...")
-                      
-                      DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                          print("🔔 3 секунды прошли, запускаем анимацию...")
-                          
-                          if noticevm.isSoundNotificationOn {
-                              AudioServicesPlaySystemSound(1013)
-                              print("🔊 Воспроизведен звук")
-                          }
-                          
-                          noticeButtonAnimation = true
-                          print("🌀 Анимация начата")
-                          
-                          DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                              noticeButtonAnimation = false
-                              noticevm.isUserNotified = true
-                              print("✅ Анимация завершена, пользователь уведомлен")
-                          }
-                      }
-                  } else {
-                      print("⏸️ Уведомление не требуется")
-                  }
+                
+                // Проверяем статус новых уведомлений, запускаем звуковое сопровождение если нужно
+                soundNotificationIfNeeded()
             }
 //            .task {
-//                if isPerformingNoticeTask && !noticevm.isUserNotified {
+//                let appStateManager = AppStateManager(modelContext: modelContext)
+//                let userIsNotNotified = appStateManager.checkUserNotifiedStatus()
+//                let isPerformingNoticeTask = noticevm.isNotificationOn && userIsNotNotified
+//                       
+//                if isPerformingNoticeTask {
 //                    // 🔥 Ждем 3 секунды перед анимацией
 //                    try? await Task.sleep(nanoseconds: 3_000_000_000)
 //                    
@@ -194,9 +165,43 @@ struct HomeView: View {
 //                    noticeButtonAnimation = false
 //                    
 //                    // 🔥 Помечаем пользователя как уведомленного
-//                    noticevm.isUserNotified = true
+//                    appStateManager.markUserNotified()
 //                }
 //            }
+        }
+    }
+    
+    
+    private func soundNotificationIfNeeded() {
+        if noticevm.hasUnreadNotices {
+            // Запускаем звуковое одноразовое оповещение пользователя при появлении новых уведомлений, если нужно
+            let appStateManager = AppStateManager(modelContext: modelContext)
+            let isPerformingSoundNoticeTask = noticevm.isNotificationOn && appStateManager.getUserNotifiedBySoundStatus()
+            // 🔥 Кнопка показывается сразу, анимация через 3 секунды
+            if isPerformingSoundNoticeTask {
+                print("🚀 Запускаем таймер для уведомления...")
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                    print("🔔 3 секунды прошли, запускаем анимацию...")
+                    
+                    if noticevm.isSoundNotificationOn {
+                        AudioServicesPlaySystemSound(1013)
+                        print("🔊 Воспроизведен звук")
+                        // Сбрасывам статус звукового оповещения пользователя -> пользователь оповещен
+                        appStateManager.markUserNotifiedBySound()
+                    }
+                    
+                    noticeButtonAnimation = true
+                    print("🌀 Анимация начата")
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        noticeButtonAnimation = false
+                        print("✅ Анимация завершена, пользователь уведомлен")
+                    }
+                }
+            } else {
+                print("⏸️ Звукового уведомление не требуется")
+            }
         }
     }
     
@@ -270,6 +275,7 @@ struct HomeView: View {
         .refreshControl {
             // 🔄 Pull to refresh - перезагружаем данные
             vm.loadPostsFromSwiftData()
+            hapticManager.impact(style: .light)
         }
     }
     
@@ -337,7 +343,7 @@ struct HomeView: View {
                 showPreferancesView.toggle()
             }
         }
-        if isShowingNoticeMessageButton {
+        if noticevm.hasUnreadNotices {
             ToolbarItem(placement: .navigationBarLeading) {
                 CircleStrokeButtonView(
                     iconName: "message",
@@ -461,7 +467,10 @@ extension View {
 }
 
 #Preview {
-    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
     let context = ModelContext(container)
     
     let vm = PostsViewModel(modelContext: context)

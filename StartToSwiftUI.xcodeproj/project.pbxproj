@@ -91,6 +91,9 @@
 		47C57E7F2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */; };
 		47E2AF4F2EBCD86000B0214F /* CategoryFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */; };
 		47E439B72EA9290E007001AD /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E439B62EA9290E007001AD /* NetworkService.swift */; };
+		47EA142D2EF4603E0064583B /* FirstLaunchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */; };
+		47EA14312EF530780064583B /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EA14302EF530780064583B /* AppState.swift */; };
+		47EA14332EF530B30064583B /* AppStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EA14322EF530B30064583B /* AppStateManager.swift */; };
 		47F38B1F2ED480B0006DEDBE /* DevData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F38B1E2ED480B0006DEDBE /* DevData.swift */; };
 		47FF42472EE454440069D232 /* TestSFSymbolsForRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF42462EE454440069D232 /* TestSFSymbolsForRating.swift */; };
 		47FF42492EE4572E0069D232 /* TestSFSymbolsForProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF42482EE4572E0069D232 /* TestSFSymbolsForProgress.swift */; };
@@ -189,6 +192,9 @@
 		47E229FE2EF42B9400341DD2 /* StartToSwiftUIDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StartToSwiftUIDebug.entitlements; sourceTree = "<group>"; };
 		47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilterView.swift; sourceTree = "<group>"; };
 		47E439B62EA9290E007001AD /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchManager.swift; sourceTree = "<group>"; };
+		47EA14302EF530780064583B /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		47EA14322EF530B30064583B /* AppStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppStateManager.swift; path = StartToSwiftUI/Models/AppStateManager.swift; sourceTree = SOURCE_ROOT; };
 		47F38B1E2ED480B0006DEDBE /* DevData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevData.swift; sourceTree = "<group>"; };
 		47FF42462EE454440069D232 /* TestSFSymbolsForRating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSFSymbolsForRating.swift; sourceTree = "<group>"; };
 		47FF42482EE4572E0069D232 /* TestSFSymbolsForProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSFSymbolsForProgress.swift; sourceTree = "<group>"; };
@@ -296,6 +302,7 @@
 				475997492E5C690B008E20F0 /* Assets.xcassets */,
 				471BEF4F2EA793880093F962 /* Info.plist */,
 				47542EB52EF3171200B0AB79 /* StartToSwiftUIRelease.entitlements */,
+				47E229FE2EF42B9400341DD2 /* StartToSwiftUIDebug.entitlements */,
 			);
 			path = StartToSwiftUI;
 			sourceTree = "<group>";
@@ -308,6 +315,7 @@
 				4767C95E2EF29349003838BA /* CodablePost.swift */,
 				4767C9642EF294B0003838BA /* CodableNotice.swift */,
 				477C745F2ECFB0E800F77F5B /* News.swift */,
+				47EA14302EF530780064583B /* AppState.swift */,
 				47BAF0F72E64A77A00287F10 /* Enums.swift */,
 				4732FB362EAA63810062269D /* Constants.swift */,
 				477C745D2ECF6FB300F77F5B /* StaticPosts.swift */,
@@ -363,6 +371,8 @@
 				47FF42582EE556DA0069D232 /* TapHandler.swift */,
 				4767C9602EF293FF003838BA /* PostMigrationHelper.swift */,
 				4767C9622EF29474003838BA /* NoticeMigrationHelper.swift */,
+				47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */,
+				47EA14322EF530B30064583B /* AppStateManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -473,7 +483,6 @@
 			isa = PBXGroup;
 			children = (
 				473A12BF2EF4274F006E33DF /* check_entitlements.swift */,
-				47E229FE2EF42B9400341DD2 /* StartToSwiftUIDebug.entitlements */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -554,6 +563,7 @@
 				47C57E7F2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift in Sources */,
 				471DCBD92EBBBF2200AFA5F4 /* JSON.swift in Sources */,
 				4765A76D2EAE5F7B00EACDF4 /* PostRowView.swift in Sources */,
+				47EA142D2EF4603E0064583B /* FirstLaunchManager.swift in Sources */,
 				4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */,
 				47B465802E6867930059CCB7 /* HomeView.swift in Sources */,
 				47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */,
@@ -593,6 +603,7 @@
 				47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */,
 				477C74602ECFB0F300F77F5B /* News.swift in Sources */,
 				4791CDF12E7428EE00687126 /* CircleShadowButtonView.swift in Sources */,
+				47EA14332EF530B30064583B /* AppStateManager.swift in Sources */,
 				47542EB42EF2C8E400B0AB79 /* ContentViewWrapper.swift in Sources */,
 				4767C9652EF294B0003838BA /* CodableNotice.swift in Sources */,
 				47E2AF4F2EBCD86000B0214F /* CategoryFilterView.swift in Sources */,
@@ -612,6 +623,7 @@
 				4791CDEA2E72E8CC00687126 /* Arrays.swift in Sources */,
 				472A9B5B2EDC3B6F00ED3344 /* BackButtonView.swift in Sources */,
 				471DCBCA2EBB633300AFA5F4 /* PrivacyPolicy.swift in Sources */,
+				47EA14312EF530780064583B /* AppState.swift in Sources */,
 				47FF424B2EE4B5960069D232 /* RatingSelectionView.swift in Sources */,
 				470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */,
 				471BBFA62EC7AB640004AC45 /* NoticesView.swift in Sources */,

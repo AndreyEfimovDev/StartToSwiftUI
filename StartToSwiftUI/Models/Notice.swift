@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 final class Notice {
-    var id: String = UUID().uuidString
+    var id: String = UUID().uuidString // CloudKit НЕ поддерживает @Attribute(.unique)
     var title: String = "Без названия"
     var noticeDate: Date = Date()
     var noticeMessage: String  = ""
@@ -18,9 +18,9 @@ final class Notice {
     
     init(
         id: String = UUID().uuidString,
-        title: String,
-        noticeDate: Date,
-        noticeMessage: String,
+        title: String = "Без названия",
+        noticeDate: Date = Date(),
+        noticeMessage: String = "",
         isRead: Bool = false
     ) {
         self.id = id

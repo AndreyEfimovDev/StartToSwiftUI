@@ -23,10 +23,8 @@ func checkRuntimeEntitlements() {
 func checkCloudKitAvailability() {
     print("\n=== CloudKit Direct Test ===")
     
-    // Пробуем простейший вызов
     let container = CKContainer.default()
     
-    // Важно: используем async/await для iOS 15+
     Task {
         do {
             let status = try await container.accountStatus()
@@ -35,7 +33,6 @@ func checkCloudKitAvailability() {
             
             if status == .available {
                 print("✅ CloudKit доступен!")
-                // Попробуем создать тестовую запись
                 await createTestRecord()
             } else {
                 print("⚠️ CloudKit не доступен: \(statusDescription(status))")
@@ -44,7 +41,7 @@ func checkCloudKitAvailability() {
                 if status == .temporarilyUnavailable {
                     print("⏳ Ждем 3 секунды и проверяем снова...")
                     try await Task.sleep(nanoseconds: 3_000_000_000)
-                    await checkCloudKitAvailability()
+                    await retryCloudKitCheck()
                 }
             }
         } catch {
@@ -62,6 +59,24 @@ func checkCloudKitAvailability() {
                 print("4. Собрать заново")
             }
         }
+    }
+}
+
+func retryCloudKitCheck() async {
+    print("\n=== Retrying CloudKit Check ===")
+    
+    let container = CKContainer.default()
+    
+    do {
+        let status = try await container.accountStatus()
+        
+        if status == .available {
+            print("✅ CloudKit теперь доступен!")
+        } else {
+            print("⚠️ CloudKit все еще не доступен: \(statusDescription(status))")
+        }
+    } catch {
+        print("❌ Retry failed: \(error)")
     }
 }
 
@@ -94,29 +109,61 @@ func createTestRecord() async {
     }
 }
 
-// Упрощенная проверка для быстрого теста
+// Быстрая проверка CloudKit
 func quickCloudKitCheck() {
-    CKContainer.default().accountStatus { status, error in
-        DispatchQueue.main.async {
-            if let error = error {
-                print("❌ Quick check error: \(error)")
-                return
-            }
-            
+    Task {
+        let container = CKContainer.default()
+        
+        do {
+            let status = try await container.accountStatus()
             let description: String
+            
             switch status {
-            case .available: description = "✅ Available"
-            case .noAccount: description = "❌ No iCloud Account"
-            case .restricted: description = "⚠️ Restricted"
-            case .couldNotDetermine: description = "❓ Could Not Determine"
-            case .temporarilyUnavailable: description = "⏳ Temporarily Unavailable"
-            @unknown default: description = "❓ Unknown"
+            case .available:
+                description = "✅ Available"
+            case .noAccount:
+                description = "❌ No iCloud Account"
+            case .restricted:
+                description = "⚠️ Restricted"
+            case .couldNotDetermine:
+                description = "❓ Could Not Determine"
+            case .temporarilyUnavailable:
+                description = "⏳ Temporarily Unavailable"
+            @unknown default:
+                description = "❓ Unknown"
             }
             
             print("Quick CloudKit check: \(description)")
+        } catch {
+            print("❌ Quick check error: \(error)")
         }
     }
 }
+
+// Async версия быстрой проверки
+func quickCloudKitCheckAsync() async {
+    let container = CKContainer.default()
+    
+    do {
+        let status = try await container.accountStatus()
+        let isAvailable = status == .available
+        print("Quick CloudKit check: \(isAvailable ? "✅ Available" : "❌ Not Available")")
+    } catch {
+        print("❌ Quick check error: \(error)")
+    }
+}
+
+func checkCloudKitSetup() {
+        // Проверка только для отладки
+        CKContainer.default().accountStatus { status, error in
+            if status == .available {
+                print("✅ iCloud доступен для CloudKit")
+            } else {
+                print("⚠️ iCloud недоступен: \(status.rawValue)")
+            }
+        }
+    }
+
 
 // Вызовите при запуске
 //checkRuntimeEntitlements()

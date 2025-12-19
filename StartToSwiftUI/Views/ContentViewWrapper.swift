@@ -8,24 +8,39 @@
 import SwiftUI
 import SwiftData
 
+
 struct ContentViewWrapper: View {
-    
     @Environment(\.modelContext) private var modelContext
-    @StateObject private var vm = PostsViewModel()
-    @StateObject private var noticevm = NoticeViewModel()
+    
+    var body: some View {
+        ContentViewWithViewModels(modelContext: modelContext)
+    }
+}
+
+
+struct ContentViewWithViewModels: View {
+    
+    @StateObject private var vm: PostsViewModel
+    @StateObject private var noticevm: NoticeViewModel
     
     @State private var showLaunchView: Bool = true
     @State private var showTermsOfUse: Bool = false
-    @State private var isLoadingData = true // 🔥 Локальное состояние загрузки
-    @State private var showTermsButton = false // 🔥 Новое состояние
+    @State private var showTermsButton = false // Контролирует анимацию появления кнопки Terms of Use
+    @State private var isLoadingData = true // Показывает ProgressView во время загрузки данных
 
     @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
-        
+    
+    init(modelContext: ModelContext) {
+            _vm = StateObject(wrappedValue: PostsViewModel(modelContext: modelContext))
+            _noticevm = StateObject(wrappedValue: NoticeViewModel(modelContext: modelContext))
+        }
+
     var body: some View {
         ZStack {
-            if !isTermsOfUseAccepted {
-                welcomeAtFirstLaunch
-            } else if showLaunchView {
+//            if !isTermsOfUseAccepted {
+//                welcomeAtFirstLaunch
+//            } else
+            if showLaunchView {
                 LaunchView() {
                     showLaunchView = false
                 }
@@ -41,32 +56,13 @@ struct ContentViewWrapper: View {
             
         }
         .preferredColorScheme(vm.selectedTheme.colorScheme)
-        .onAppear {
-            initializeViewModels() // ✅ Один раз при появлении
-        }
         .task {
-            // Загружаем статические посты при первом запуске
-            if !vm.hasLoadedInitialData {
-                await loadStaticPostsIfNeeded()
-            } else {
-                // 🔥 Если данные уже загружены - сразу скрываем ProgressView
-                isLoadingData = false
-            }
+            vm.loadStaticPostsIfNeeded()
+            vm.loadPostsFromSwiftData()
+            await noticevm.importNoticesFromCloud()
+            isLoadingData = false
         }
     }
-    
-    private func initializeViewModels() {
-            // 🔥 Устанавливаем modelContext только если он еще не установлен
-            if vm.modelContext == nil {
-                vm.modelContext = modelContext
-                print("✅ PostsViewModel инициализирован с ModelContext")
-            }
-            
-            if noticevm.modelContext == nil {
-                noticevm.modelContext = modelContext
-                print("✅ NoticeViewModel инициализирован с ModelContext")
-            }
-        }
     
     @ViewBuilder
     private var mainContent: some View {
@@ -160,69 +156,15 @@ struct ContentViewWrapper: View {
         } // ZStack
     }
     
-    // MARK: - Private Methods
-
-    /// Загружает статические посты при первом запуске
-    @MainActor
-    private func loadStaticPostsIfNeeded() async {
-        
-        defer {
-            isLoadingData = false // 🔥 Гарантированно завершаем загрузку
-        }
-        print("📦 Загружаем статические посты при первом запуске...")
-        
-        // Конвертируем статические посты из старого формата в SwiftData
-        for staticPost in StaticPost.staticPosts {
-            let newPost = Post(
-                id: staticPost.id,
-                category: staticPost.category,
-                title: staticPost.title,
-                intro: staticPost.intro,
-                author: staticPost.author,
-                postType: staticPost.postType,
-                urlString: staticPost.urlString,
-                postPlatform: staticPost.postPlatform,
-                postDate: staticPost.postDate,
-                studyLevel: staticPost.studyLevel,
-                progress: staticPost.progress,
-                favoriteChoice: staticPost.favoriteChoice,
-                postRating: staticPost.postRating,
-                notes: staticPost.notes,
-                origin: staticPost.origin,
-                draft: staticPost.draft,
-                date: staticPost.date,
-                startedDateStamp: staticPost.startedDateStamp,
-                studiedDateStamp: staticPost.studiedDateStamp,
-                practicedDateStamp: staticPost.practicedDateStamp
-            )
-            modelContext.insert(newPost)
-        }
-        
-        do {
-            try modelContext.save()
-            print("💾 SwiftData контекст сохранён")
-
-            // 🔥 КРИТИЧЕСКО ВАЖНО: Обновляем ViewModel!
-            vm.loadPostsFromSwiftData()
-            
-            try? await Task.sleep(nanoseconds: 50_000_000) // 0.05 секунды
-
-            vm.hasLoadedInitialData = true
-            print("✅ Загружено \(StaticPost.staticPosts.count) статических постов")
-        } catch {
-            print("❌ Ошибка загрузки статических постов: \(error)")
-        }
-    }
 }
 
 
 #Preview("Simple Test") {
-    // ТОЛЬКО ЭТО - должно работать
     let container = try! ModelContainer(
-        for: Post.self, Notice.self,
+        for: Post.self, Notice.self, AppState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
-    
+
     NavigationStack {
         ContentViewWrapper()
             .environment(\.modelContext, container.mainContext)
