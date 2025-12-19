@@ -229,7 +229,7 @@ struct PreferencesView: View {
     }
     
     private var erasePosts: some View {
-        NavigationLink("Delete all materials") {
+        NavigationLink("Erase all materials") {
             EraseAllPostsView()
         }
         .customListRowStyle(
@@ -304,7 +304,10 @@ struct PreferencesView: View {
 
 #Preview {
     
-    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
     let context = ModelContext(container)
     
     let vm = PostsViewModel(modelContext: context)

@@ -11,12 +11,12 @@ import SwiftData
 
 @Model
 final class Post {
-    var id: String = UUID().uuidString
+    var id: String = UUID().uuidString // CloudKit НЕ поддерживает @Attribute(.unique)
     var category: String = "SwiftUI"
     var title: String = ""
     var intro: String = ""
     var author: String = ""
-    var postTypeRawValue: String = "post" // Храним как String для Codable
+    var postTypeRawValue: String = "post"
     var urlString: String = "https://"
     var postPlatformRawValue: String = "youtube"
     var postDate: Date?

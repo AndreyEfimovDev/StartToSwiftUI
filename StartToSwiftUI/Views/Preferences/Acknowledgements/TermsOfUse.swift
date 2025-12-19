@@ -215,7 +215,10 @@ struct TermsOfUse: View {
 
 #Preview {
     
-    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
     let context = ModelContext(container)
     
     let vm = PostsViewModel(modelContext: context)

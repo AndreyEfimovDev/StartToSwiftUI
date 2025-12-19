@@ -27,7 +27,7 @@ struct EraseAllPostsView: View {
                 .textFormater()
             
             CapsuleButtonView(
-                primaryTitle: "Delete",
+                primaryTitle: "ERASE",
                 secondaryTitle: "\(postCount) Materials Deleted!",
                 textColorPrimary: Color.mycolor.myButtonTextRed,
                 buttonColorPrimary: Color.mycolor.myButtonBGRed,
@@ -114,7 +114,10 @@ struct EraseAllPostsView: View {
 }
 
 #Preview {
-    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
     let context = ModelContext(container)
     
     let vm = PostsViewModel(modelContext: context)
