@@ -9,18 +9,28 @@ import SwiftUI
 import SwiftData
 import Combine
 
+@MainActor
 class PostsViewModel: ObservableObject {
     
     // MARK: - Properties
     
     private let modelContext: ModelContext
-    
-    @AppStorage("hasLoadedInitialData") var hasLoadedInitialData = false { // Контролирует загрузку статических постов
+
+    // Загружать ли статические посты - привязано к AppStateManager, используем только в Toggle в Preferences
+    @AppStorage("shouldLoadStaticPosts") var shouldLoadStaticPosts: Bool = true {
         didSet {
-            print("🔄 hasLoadedInitialData изменился с \(oldValue) на \(hasLoadedInitialData)")
+            print("🔄 shouldLoadStaticPosts изменился: \(shouldLoadStaticPosts)")
+            let appStateManager = AppStateManager(modelContext: modelContext)
+            
+            switch shouldLoadStaticPosts {
+            case true:
+                appStateManager.setShouldLoadStaticPostsOn()
+            case false:
+                appStateManager.setShouldLoadStaticPostsOff()
+            }
         }
     }
-    
+
     private let fileManager = JSONFileManager.shared
     private let hapticManager = HapticService.shared
     private let networkService: NetworkService
@@ -114,64 +124,108 @@ class PostsViewModel: ObservableObject {
         // Подписки для фильтрации
         setupSubscriptions()
     }
-    
-    
+
     // MARK: - Private Methods
     
+    // MARK: - Funcrtions for Static Posts
     /// Загружает статические посты при первом запуске
-    @MainActor
-    func loadStaticPostsIfNeeded() {
-        
+    func loadStaticPostsIfNeeded() async {
         print("🔍 Проверка необходимости загрузки статических постов...")
         
-        // Используем AppStateManager для проверки
+        // Используем глобальные значения в AppStateManager для проверки
         let appStateManager = AppStateManager(modelContext: modelContext)
-                
-        // Проверяем флаг из SwiftData (синхронизируется через iCloud!)
-        if appStateManager.hasLoadedStaticPosts() {
-            print("✅ ✅ Статические посты уже загружены (проверка через iCloud)")
-            print("✅ ✅ appStateManager.hasLoadedStaticPosts: \(String(describing: appStateManager.hasLoadedStaticPosts()))")
+        let globalShouldLoadStaticPostsStatus = appStateManager.getStaticPostsLoadToggleStatus()
+        let globalCheckIfStaticPostsHasLoaded = appStateManager.checkIfStaticPostsHasLoaded()
+        
+        print("⚠️⚠️ Переключатель загрузки стат. постов shouldLoadStaticPosts: \(globalShouldLoadStaticPostsStatus)")
+        print("⚠️⚠️ Статус загрузки стат. постов hasLoadedStaticPosts: \(globalCheckIfStaticPostsHasLoaded)")
+
+
+        // Проверяем совпадение локального значения статуса shouldLoadStaticPosts с AppStateManager
+        // Если не совпадают, корректируем локальный - глобальный в приоритете
+        if shouldLoadStaticPosts != globalShouldLoadStaticPostsStatus {
+            shouldLoadStaticPosts = globalShouldLoadStaticPostsStatus
+        }
+        // ШАГ 0: проверяем статус shouldLoadStaticPosts в AppStateManager, если оключена, выходим
+        guard globalShouldLoadStaticPostsStatus else {
+            print("⚠️⚠️ Загрузка статических постов отключена пользователем")
             return
         }
         
-        print("📦 Статические посты ещё не загружены, начинаем загрузку...")
+        // ШАГ 1: Ждём синхронизацию с iCloud (КРИТИЧЕСКИ ВАЖНО!)
+        // Даём время на получение данных с другого устройства
+        print("⚠️⚠️ ⏳ Ожидание синхронизации iCloud (2 секунды)...")
+        try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 секунды
+
+        // ШАГ 2: Проверяем флаг из SwiftData (синхронизируется через iCloud!)
+        // ШАГ 2: Проверяем статус hasLoadedStaticPosts в AppStateManager, если уже загружали, выходим
+        if globalCheckIfStaticPostsHasLoaded {
+            print("⚠️⚠️ Статические посты уже были загружены ранее (проверка через iCloud)")
+            print("⚠️⚠️ appStateManager.hasLoadedStaticPosts: \(String(describing: appStateManager.checkIfStaticPostsHasLoaded()))")
+            
+            // ШАГ 3: ОБЯЗАТЕЛЬНАЯ ОЧИСТКА дубликатов после синхронизации (SwiftUI + CloudKit задваивают одинаковые статические и авторские посты
+            await removeDuplicateStaticPosts()
+            return
+        }
         
-        // Проверяем, нет ли уже постов с такими же ID
+        print("⚠️⚠️ 📦 Статические посты ещё не загружены, начинаем загрузку...")
+        
+        // ШАГ 4: Проверяем, нет ли уже постов с такими же ID в базе статических постов
         let allStaticIds = Set(StaticPost.staticPosts.map { $0.id })
         
         let descriptor = FetchDescriptor<Post>(
             predicate: #Predicate { post in
+                // Фильтруем только те посты, чьи ID содержится в наборе статических ID
                 allStaticIds.contains(post.id)
             }
         )
         
         do {
+            // Загружаем посты, чьи ID содержится в наборе статических ID
             let existingStaticPosts = try modelContext.fetch(descriptor)
             
-            // 3. Получаем ID существующих постов
-            let existingIds = Set(existingStaticPosts.map { $0.id })
-            // Например: ["static_post_1", "static_post_2"]
-            
-            // 4. Находим РАЗНИЦУ: какие ID есть в allStaticIds (StaticPost.staticPosts), но нет в existingIds (SwiftData)
-            let missingIds = allStaticIds.subtracting(existingIds)
-            // Например: ["static_post_3", "static_post_4", "static_post_5", "static_post_6"]
-            
-            print("📊 Анализ:")
-            print("  Всего статических ID: \(allStaticIds.count)")
-            print("  Уже есть в базе: \(existingIds.count)")
-            print("  Отсутствуют: \(missingIds.count)")
-            
-            if missingIds.isEmpty {
-                print("✅ Все статические посты уже существуют")
+            // 🔥 ШАГ 5: Если уже есть хотя бы один пост - НЕ создаём новые
+            if !existingStaticPosts.isEmpty {
+                print("⚠️⚠️ Обнаружены существующие статические посты: \(existingStaticPosts.count) шт.")
+                print("⚠️⚠️ Вероятно, они синхронизированы с другого устройства")
+                
+                // Удаляем дубликаты
+                await removeDuplicateStaticPosts()
+                print("⚠️⚠️ Удаляем дубликаты")
+
+                // Отмечаем как загруженные
                 appStateManager.markStaticPostsAsLoaded()
+                print("⚠️⚠️ Отмечаем как загруженные hasLoadedStaticPosts: \(appStateManager.markStaticPostsAsLoaded())")
+
+                loadPostsFromSwiftData()
                 return
             }
-            
-            // 5. Создаём ТОЛЬКО отсутствующие посты
-            print("➕ Создаём отсутствующие посты: \(missingIds.count) шт.")
+
+            // ШАГ 6: Только если базы ПОЛНОСТЬЮ ПУСТАЯ - создаём посты
+//            // 3. Получаем ID существующих постов
+//            let existingIds = Set(existingStaticPosts.map { $0.id })
+//            // Например: ["static_post_1", "static_post_2"]
+//            
+//            // 4. Находим РАЗНИЦУ: какие ID есть в allStaticIds (StaticPost.staticPosts), но нет в existingIds (SwiftData)
+//            let missingIds = allStaticIds.subtracting(existingIds)
+//            // Например: ["static_post_3", "static_post_4", "static_post_5", "static_post_6"]
+//            
+//            print("📊 Анализ:")
+//            print("  Всего статических ID: \(allStaticIds.count)")
+//            print("  Уже есть в базе: \(existingIds.count)")
+//            print("  Отсутствуют: \(missingIds.count)")
+//            
+//            if missingIds.isEmpty {
+//                print("✅ Все статические посты уже существуют")
+//                appStateManager.markStaticPostsAsLoaded()
+//                return
+//            }
+//            
+//            // 5. Создаём ТОЛЬКО отсутствующие посты
+//            print("➕ Создаём отсутствующие посты: \(missingIds.count) шт.")
             
             for staticPost in StaticPost.staticPosts {
-                if missingIds.contains(staticPost.id) {
+//                if missingIds.contains(staticPost.id) {
                     let newPost = Post(
                         id: staticPost.id,
                         category: staticPost.category,
@@ -195,24 +249,116 @@ class PostsViewModel: ObservableObject {
                         practicedDateStamp: staticPost.practicedDateStamp
                     )
                     modelContext.insert(newPost)
-                    print("  ✓ Добавлен: \(staticPost.title)")
-                }
+                    print("⚠️⚠️  ✓ Добавлен: \(staticPost.title)")
+//                }
             }
 
             try modelContext.save()
-            print("💾 Статические посты сохранены в SwiftData")
+            print("⚠️⚠️ 💾 Статические посты сохранены в SwiftData")
             
             // Отмечаем как загруженные
+            print("⚠️⚠️ Отмечаем ФЛАГ - статические посты как загруженные")
+            
             appStateManager.markStaticPostsAsLoaded()
-            print("✅ ✅ ✅ Отмечаем ФЛАГ - статические посты как загруженные")
-            print("✅ ✅ ✅ appStateManager.hasLoadedStaticPosts: \(String(describing: appStateManager.hasLoadedStaticPosts()))")
-            print("✅ Загрузка статических постов завершена")
+            
+            print("⚠️⚠️ appStateManager.hasLoadedStaticPosts: \(String(describing: appStateManager.checkIfStaticPostsHasLoaded()))")
+
+            loadPostsFromSwiftData()
+
+            print("⚠️⚠️ ✅ Загрузка статических постов завершена")
         } catch {
             print("❌ Ошибка при загрузке статических постов: \(error)")
         }
     }
 
+    // MARK: - Remove Duplicates
+    /// Удаляет дубликаты статических постов, оставляя только один экземпляр каждого ID
+    private func removeDuplicateStaticPosts() async {
+        print("🔍 Проверка дубликатов статических постов...")
+        
+        let allStaticIds = Set(StaticPost.staticPosts.map { $0.id })
+        
+        let descriptor = FetchDescriptor<Post>(
+            predicate: #Predicate { post in
+                allStaticIds.contains(post.id)
+            }
+        )
+        
+        do {
+            let existingStaticPosts = try modelContext.fetch(descriptor)
+            
+            guard existingStaticPosts.count > StaticPost.staticPosts.count else {
+                print("✅ Дубликатов не обнаружено (\(existingStaticPosts.count) постов)")
+                return
+            }
+            
+            print("🗑️ Обнаружены дубликаты! Всего: \(existingStaticPosts.count), ожидалось: \(StaticPost.staticPosts.count)")
+            
+            // Группируем по ID
+            let groupedById = Dictionary(grouping: existingStaticPosts, by: { $0.id })
+            
+            var deletedCount = 0
+            
+            // Для каждого ID оставляем только первый пост, остальные удаляем
+            for (id, posts) in groupedById where posts.count > 1 {
+                print("  🔍 ID \(id): найдено \(posts.count) дубликатов")
                 
+                // Сортируем по дате создания и оставляем самый старый
+                let sortedPosts = posts.sorted { $0.date < $1.date }
+                
+                // Удаляем все кроме первого
+                for duplicatePost in sortedPosts.dropFirst() {
+                    modelContext.delete(duplicatePost)
+                    deletedCount += 1
+                    print("    ✗ Удалён дубликат: \(duplicatePost.title)")
+                }
+            }
+            
+            if deletedCount > 0 {
+                try modelContext.save()
+                print("✅ Удалено \(deletedCount) дубликатов")
+                loadPostsFromSwiftData()
+            }
+        } catch {
+            print("❌ Ошибка при удалении дубликатов: \(error)")
+        }
+    }
+                
+    private func removeStaticPosts() {
+        print("🗑️ Удаление статических постов...")
+        
+        let staticIds = Set(StaticPost.staticPosts.map { $0.id })
+        
+        let descriptor = FetchDescriptor<Post>(
+            predicate: #Predicate { post in
+                staticIds.contains(post.id)
+            }
+        )
+        
+        do {
+            let staticPosts = try modelContext.fetch(descriptor)
+            
+            for post in staticPosts {
+                modelContext.delete(post)
+            }
+            
+            try modelContext.save()
+            print("✅ Удалено \(staticPosts.count) статических постов")
+            
+            // Сбрасываем флаг
+            let appStateManager = AppStateManager(modelContext: modelContext)
+            appStateManager.markStaticPostsAsNotLoaded()
+            
+            // Обновляем UI
+            loadPostsFromSwiftData()
+            
+        } catch {
+            print("❌ Ошибка удаления статических постов: \(error)")
+        }
+    }
+    
+
+    
     // MARK: - SwiftData Operations
     
     /// Загрузка постов из SwiftData
@@ -227,16 +373,14 @@ class PostsViewModel: ObservableObject {
             // 🔍 ДЕБАГ: Выводим все посты с ID
             print("📊 Загружено \(allPosts.count) постов из SwiftData:")
             for (index, post) in allPosts.enumerated() {
-                print("  \(index + 1). ID: \(post.id), Title: \(post.title)")
+                print("📊 \(index + 1). ID: \(post.id), Title: \(post.title)")
             }
-            
             allYears = getAllYears()
             allCategories = getAllCategories()
-            print("✅ Загружено \(allPosts.count) постов из SwiftData")
         } catch {
             errorMessage = "Ошибка загрузки данных"
             showErrorMessageAlert = true
-            print("❌ Ошибка загрузки из SwiftData: \(error)")
+            print("📊 ❌ Ошибка загрузки из SwiftData: \(error)")
         }
     }
     
@@ -280,12 +424,27 @@ class PostsViewModel: ObservableObject {
         
         modelContext.delete(post)
         saveContextAndReload()
+        
+        // ✅ Проверяем, остались ли посты после удаления
+            if allPosts.isEmpty {
+                let appStateManager = AppStateManager(modelContext: modelContext)
+                appStateManager.markStaticPostsAsNotLoaded()
+                print("🗑️ Все посты удалены, флаг hasLoadedStaticPosts сброшен")
+            }
+
     }
     
     /// Удаление всех постов
     func eraseAllPosts(_ completion: @escaping () -> ()) {
         do {
+            // Удаляем все посты
             try modelContext.delete(model: Post.self)
+            
+            // ✅ Сбрасываем флаг, так как удалены ВСЕ посты (включая статические)
+            let appStateManager = AppStateManager(modelContext: modelContext)
+            appStateManager.markStaticPostsAsNotLoaded()
+            print("🗑️ Все посты удалены, флаг hasLoadedStaticPosts сброшен")
+            
             saveContextAndReload()
             completion()
         } catch {

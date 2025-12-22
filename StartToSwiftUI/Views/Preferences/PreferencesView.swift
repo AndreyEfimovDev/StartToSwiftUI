@@ -69,6 +69,35 @@ struct PreferencesView: View {
                     )
                 } // gauge.open.with.lines.needle.67percent.and.arrowtriangle
                 
+//                Section {
+//                    
+//                    
+//                    VStack(alignment: .leading, spacing: 12) {
+//                        Toggle(isOn: $vm.shouldLoadStaticPosts) {
+//                            VStack(alignment: .leading, spacing: 4) {
+//                                Text("Load Static Posts")
+//                                    .font(.headline)
+//                                Text("Include 6 curated SwiftUI learning resources at app launch")
+//                                    .font(.caption)
+//                                    .foregroundColor(.secondary)
+//                            }
+//                        }
+//                        .tint(Color.mycolor.myBlue)
+//                        
+//                        if !vm.shouldLoadStaticPosts {
+//                            Text("Static posts will be removed on next app launch")
+//                                .font(.caption2)
+//                                .foregroundColor(.orange)
+//                                .padding(.leading, 4)
+//                        }
+//                    }
+//                    .padding(.vertical, 8)
+//                } header: {
+//                    Text("Content")
+//                        .font(.subheadline)
+//                        .foregroundColor(Color.mycolor.myAccent)
+//                }
+//                
                 Section(header: sectionHeader("Manage materials (\(postsCount))")) {
                     postDrafts
                     checkForPostsUpdate
@@ -76,6 +105,7 @@ struct PreferencesView: View {
                     shareBackup
                     restoreBackup
                     erasePosts
+                    notificationToggle
                 }
                                                 
                 
@@ -158,6 +188,38 @@ struct PreferencesView: View {
             Toggle(noticevm.isSoundNotificationOn ? "Sound On" : "Sound Off", isOn: $noticevm.isSoundNotificationOn)
                 .tint(Color.mycolor.myBlue)
         }
+    }
+    
+    private var loadStaticPostsToggle: some View {
+        
+        HStack {
+            Image(systemName: "arrow.2.squarepath")
+                .frame(width: iconWidth)
+                .foregroundStyle(Color.mycolor.myBlue)
+            Toggle("Load static posts", isOn: $vm.shouldLoadStaticPosts)
+                .tint(Color.mycolor.myBlue)
+        }
+        
+        //        VStack(alignment: .leading, spacing: 12) {
+        //            Toggle(isOn: $vm.shouldLoadStaticPosts) {
+        //                VStack(alignment: .leading, spacing: 4) {
+        //                    Text("Load Static Posts")
+        //                        .font(.headline)
+        //                    Text("Include 6 curated SwiftUI learning resources at app launch")
+        //                        .font(.caption)
+        //                        .foregroundColor(.secondary)
+        //                }
+        //            }
+        //            .tint(Color.mycolor.myBlue)
+        //
+        //            if !vm.shouldLoadStaticPosts {
+        //                Text("Static posts will be removed on next app launch")
+        //                    .font(.caption2)
+        //                    .foregroundColor(.orange)
+        //                    .padding(.leading, 4)
+        //            }
+        //        }
+        //        .padding(.vertical, 8)
     }
     
     private var noticeMessages: some View {

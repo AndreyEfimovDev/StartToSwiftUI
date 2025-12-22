@@ -20,6 +20,8 @@ struct ContentViewWrapper: View {
 
 struct ContentViewWithViewModels: View {
     
+    @Environment(\.modelContext) private var modelContext  // ✅ Добавили
+    
     @StateObject private var vm: PostsViewModel
     @StateObject private var noticevm: NoticeViewModel
     
@@ -56,10 +58,28 @@ struct ContentViewWithViewModels: View {
             
         }
         .preferredColorScheme(vm.selectedTheme.colorScheme)
+//        .onAppear {
+////            print("🔍 AppStorage hasLoadedInitialData: \(vm.hasLoadedInitialData)")
+////            print("🔍 Всего постов в VM: \(vm.allPosts.count)")
+////            print("🔍 NoticeVM уведомлений: \(noticevm.notices.count)")
+//        }
         .task {
-            vm.loadStaticPostsIfNeeded()
+            // 🧹 ШАГ 0: Очистка дубликатов AppState из прошлых запусков
+            let appStateManager = AppStateManager(modelContext: modelContext)
+            appStateManager.cleanupDuplicateAppStates()
+            
+            // Загружаем посты
+            print("🔥🔥 Загружаем посты из SwiftData")
             vm.loadPostsFromSwiftData()
+            
+            // 🔥🔥Если нужно, загружаем статические посты при первом запуске"
+            print("🔥🔥 Если нужно, загружаем статические посты при первом запуске")
+            await vm.loadStaticPostsIfNeeded()
+            
+            // 🔥🔥 Импортируем уведомления (включает задержку и удаление дубликатов)
+            print("🔥🔥 Импортируем уведомления (включает задержку и удаление дубликатов)")
             await noticevm.importNoticesFromCloud()
+            
             isLoadingData = false
         }
     }
