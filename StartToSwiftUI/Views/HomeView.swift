@@ -135,39 +135,8 @@ struct HomeView: View {
             }
             .onAppear {
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                
-                // 🔥 ДЕБАГ: Проверяем состояние уведомлений
-                  print("🎯 HomeView появился")
-                  print("📊 Всего уведомлений: \(noticevm.notices.count)")
-                  print("📊 Непрочитанных уведомлений: \(noticevm.notices.filter { !$0.isRead }.count)")
-                  print("🔔 Уведомления включены: \(noticevm.isNotificationOn)")
-                
-                // Проверяем статус новых уведомлений, запускаем звуковое сопровождение если нужно
                 soundNotificationIfNeeded()
             }
-//            .task {
-//                let appStateManager = AppStateManager(modelContext: modelContext)
-//                let userIsNotNotified = appStateManager.checkUserNotifiedStatus()
-//                let isPerformingNoticeTask = noticevm.isNotificationOn && userIsNotNotified
-//                       
-//                if isPerformingNoticeTask {
-//                    // 🔥 Ждем 3 секунды перед анимацией
-//                    try? await Task.sleep(nanoseconds: 3_000_000_000)
-//                    
-//                    if noticevm.isSoundNotificationOn {
-//                        AudioServicesPlaySystemSound(1013)
-//                    }
-//                    // 🔥 Запускаем анимацию
-//                    noticeButtonAnimation = true
-//
-//                    // 🔥 Анимация длится 1 секунду
-//                    try? await Task.sleep(nanoseconds: 1_000_000_000)
-//                    noticeButtonAnimation = false
-//                    
-//                    // 🔥 Помечаем пользователя как уведомленного
-//                    appStateManager.markUserNotified()
-//                }
-//            }
         }
     }
     
@@ -179,28 +148,28 @@ struct HomeView: View {
             let isPerformingSoundNoticeTask = noticevm.isNotificationOn && appStateManager.getUserNotifiedBySoundStatus()
             // 🔥 Кнопка показывается сразу, анимация через 3 секунды
             if isPerformingSoundNoticeTask {
-                print("🚀 Запускаем таймер для уведомления...")
+//                print("🚀 Запускаем таймер для уведомления...")
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                     print("🔔 3 секунды прошли, запускаем анимацию...")
                     
                     if noticevm.isSoundNotificationOn {
                         AudioServicesPlaySystemSound(1013)
-                        print("🔊 Воспроизведен звук")
+//                        print("🔊 Воспроизведен звук")
                         // Сбрасывам статус звукового оповещения пользователя -> пользователь оповещен
                         appStateManager.markUserNotifiedBySound()
                     }
                     
                     noticeButtonAnimation = true
-                    print("🌀 Анимация начата")
+//                    print("🌀 Анимация начата")
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                         noticeButtonAnimation = false
-                        print("✅ Анимация завершена, пользователь уведомлен")
+//                        print("✅ Анимация завершена, пользователь уведомлен")
                     }
                 }
             } else {
-                print("⏸️ Звукового уведомление не требуется")
+//                print("⏸️ Звукового уведомление не требуется")
             }
         }
     }

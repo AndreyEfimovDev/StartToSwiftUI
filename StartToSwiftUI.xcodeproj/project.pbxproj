@@ -78,6 +78,7 @@
 		47AA558A2EA9741D000AF4E9 /* RestoreBackupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */; };
 		47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AE6C802E7D7FD0006230DA /* Modifiers.swift */; };
 		47B465802E6867930059CCB7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B4657F2E6867930059CCB7 /* HomeView.swift */; };
+		47B78A1A2EF60A5800355BCA /* BrokenCircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B78A192EF60A5800355BCA /* BrokenCircleProgressView.swift */; };
 		47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */; };
 		47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF09F2E5F9E9800287F10 /* MoreLessTextButton.swift */; };
 		47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF0A12E60485D00287F10 /* FavoriteButton.swift */; };
@@ -177,6 +178,7 @@
 		47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreBackupView.swift; sourceTree = "<group>"; };
 		47AE6C802E7D7FD0006230DA /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
 		47B4657F2E6867930059CCB7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		47B78A192EF60A5800355BCA /* BrokenCircleProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrokenCircleProgressView.swift; sourceTree = "<group>"; };
 		47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedCupsuleButton.swift; sourceTree = "<group>"; };
 		47BAF09F2E5F9E9800287F10 /* MoreLessTextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreLessTextButton.swift; sourceTree = "<group>"; };
 		47BAF0A12E60485D00287F10 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
@@ -339,6 +341,7 @@
 				47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */,
 				47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */,
 				478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */,
+				47B78A192EF60A5800355BCA /* BrokenCircleProgressView.swift */,
 				47BAF09E2E5F9C4500287F10 /* Buttons */,
 				470A21C42E6E389D006D2D66 /* Pickers */,
 			);
@@ -589,6 +592,7 @@
 				4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */,
 				477C745E2ECF6FB300F77F5B /* StaticPosts.swift in Sources */,
 				47BAF0CA2E635E2800287F10 /* Views.swift in Sources */,
+				47B78A1A2EF60A5800355BCA /* BrokenCircleProgressView.swift in Sources */,
 				47656C002EE1EF9500F45AA6 /* StudyProgressForLevel.swift in Sources */,
 				4725A52B2EDD757F00235C40 /* UIDevice.swift in Sources */,
 				47656BFC2EE1EBF000F45AA6 /* ProgressIndicatorView.swift in Sources */,
