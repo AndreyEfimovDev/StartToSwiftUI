@@ -141,6 +141,34 @@ extension Post {
 }
 
 
+extension Post {
+    func copy() -> Post {
+        return Post(
+            id: self.id,
+            category: self.category,
+            title: self.title,
+            intro: self.intro,
+            author: self.author,
+            postType: self.postType,
+            urlString: self.urlString,
+            postPlatform: self.postPlatform,
+            postDate: self.postDate,
+            studyLevel: self.studyLevel,
+            progress: self.progress,
+            favoriteChoice: self.favoriteChoice,
+            postRating: self.postRating,
+            notes: self.notes,
+            origin: self.origin,
+            draft: self.draft,
+            date: self.date,
+            startedDateStamp: self.startedDateStamp,
+            studiedDateStamp: self.studiedDateStamp,
+            practicedDateStamp: self.practicedDateStamp
+        )
+    }
+}
+
+
 
 //struct Post: Identifiable, Hashable, Codable {
 //    let id: String

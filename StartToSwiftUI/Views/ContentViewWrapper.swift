@@ -94,11 +94,9 @@ struct ContentViewWithViewModels: View {
                 .environmentObject(noticevm)
         } else {
             // iPhone - NavigationStack (portrait only)
-            NavigationStack {
-                HomeView(selectedCategory: vm.selectedCategory)
-            }
-            .environmentObject(vm)
-            .environmentObject(noticevm)
+            HomeView(selectedCategory: vm.selectedCategory)
+                .environmentObject(vm)
+                .environmentObject(noticevm)
         }
     }
     
