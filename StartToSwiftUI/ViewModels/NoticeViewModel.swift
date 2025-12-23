@@ -20,7 +20,7 @@ class NoticeViewModel: ObservableObject {
     @Published var hasUnreadNotices: Bool = false // флаг наличия непрочиатнных уведомлений
     @AppStorage("isNotificationOn") var isNotificationOn: Bool = true
     @AppStorage("isSoundNotificationOn") var isSoundNotificationOn: Bool = true
-        
+    
     @Published var errorMessage: String?
     @Published var showErrorMessageAlert: Bool = false
     
@@ -37,10 +37,10 @@ class NoticeViewModel: ObservableObject {
     // MARK: - Load Notices
     func loadNoticesFromSwiftData() {
         print("🍉 🔄 Перед загрузкой локальных уведомлений из SwiftData, проверяем сколько сейчас уведомлений в notices: \(notices.count)")
-
-//        let startTime = Date()
-//        print("🍉 🔄 Начало загрузки уведомлений...")
-
+        
+        //        let startTime = Date()
+        //        print("🍉 🔄 Начало загрузки уведомлений...")
+        
         
         do {
             
@@ -54,8 +54,8 @@ class NoticeViewModel: ObservableObject {
             self.notices = fetchedNotices
             print("🍉 🔄 Список уведомлений обновлен, теперь: \(notices.count)")
             
-//            let duration = Date().timeIntervalSince(startTime)
-//            print("🍉 ✅ Загрузка завершена за \(String(format: "%.2f", duration))с. Уведомлений: \(fetchedNotices.count)")
+            //            let duration = Date().timeIntervalSince(startTime)
+            //            print("🍉 ✅ Загрузка завершена за \(String(format: "%.2f", duration))с. Уведомлений: \(fetchedNotices.count)")
             
         } catch {
             print("🍉 ❌ Ошибка загрузки уведомлений: \(error)")
@@ -77,7 +77,7 @@ class NoticeViewModel: ObservableObject {
     /// 7. Уведомляем пользователя:
     /// - markUserNotNotifiedBySound() - флаг для звукового оповещения
     /// - sendLocalNotification() - системное уведомление (если включено)
-
+    
     
     func importNoticesFromCloud() async {
         
@@ -91,14 +91,14 @@ class NoticeViewModel: ObservableObject {
             
             let cloudResponse: [CodableNotice] = try await networkService.fetchDataFromURLAsync()
             print("🍉 📦 Получено \(cloudResponse.count) уведомлений из облака")
-
+            
             // Фильтрация по дате
             let lastDate = appStateManager.getLastNoticeDate() ?? Date.distantPast
             let relevantCloudNotices = cloudResponse.filter {
                 $0.noticeDate > lastDate
             }
             print("🍉 📦 Отобрано \(relevantCloudNotices.count) уведомлений из облака")
-
+            
             guard !relevantCloudNotices.isEmpty else {
                 print("🍉 ☑️ Массив новых (ранее не загруженных) уведомлений из облака пуст, ✅ выходим из импорта")
                 return
@@ -107,7 +107,7 @@ class NoticeViewModel: ObservableObject {
             // ШАГ 2: Проверяем и удаляем локальные дубликаты ПЕРЕД добавлением новых
             // Удаляем дубликаты уведомлений в SwiftUI, оставляя только один экземпляр для каждого ID
             removeDuplicateNotices()
-
+            
             // Собираем ID локальный уведомлений
             let existingIDs = Set(notices.map { $0.id })
             // Фильтруем новые по ID, которых нет в SwiftData
@@ -115,7 +115,7 @@ class NoticeViewModel: ObservableObject {
             
             guard !newNoticesByID.isEmpty else {
                 print("🍉 ✅ Все уведомления уже есть в базе (дубликатов нет)")
-                loadNoticesFromSwiftData()
+//                loadNoticesFromSwiftData()
                 updateUnreadStatus()
                 return
             }
@@ -135,12 +135,12 @@ class NoticeViewModel: ObservableObject {
                 appStateManager.updateLatestNoticeDate(latestDate)
                 print("🍉 💾 Новая дата обновления уведомлений: \(latestDate)")
             }
-
+            
             // Сохраняем в SwiftData
             saveContext()
             print("🍉 💾 Уведомления сохранены в SwiftData")
             
-            // Добавляем в массив notices вручную!
+            // Обнровляем массив уведомлений
             loadNoticesFromSwiftData()
             updateUnreadStatus() // устанавливаем флаг наличия непрочиатнных сообщений
             print("🍉 🔄 Список уведомлений обновлен, теперь: \(notices.count)")
@@ -165,46 +165,46 @@ class NoticeViewModel: ObservableObject {
     
     // MARK: - Sync Notice Status
     /// Синхронизирует статус isRead из облака в локальные уведомления
-//    private func syncNoticeStatusFromCloud(cloudNotices: [CodableNotice], localNotices: [Notice]) {
-//        print("🍉🔄 Синхронизация статуса уведомлений из облака...")
-//        // Создаём словарь: ID → isRead из облака
-//        let cloudStatusMap = Dictionary(
-//            uniqueKeysWithValues: cloudNotices.map { ($0.id, $0.isRead)
-//            })
-//        
-//        var updatedCount = 0
-//
-//        for localNotice in localNotices {
-//            guard let cloudIsRead = cloudStatusMap[localNotice.id] else {
-//                continue // Уведомления нет в облаке
-//            }
-//            
-//            if localNotice.isRead != cloudIsRead {
-//                print("  🔄 [\(localNotice.id)] локально: \(localNotice.isRead) → облако: \(cloudIsRead)")
-//                localNotice.isRead = cloudIsRead
-//                updatedCount += 1
-//            }
-//        }
-//        
-//        if updatedCount > 0 {
-//            saveContext()
-//            print(" 🍉 ✅ Обновлено статусов: \(updatedCount)")
-//        } else {
-//            print(" 🍉 Нет обновления, все статусы синхронизированы")
-//        }
-//    }
-//    
-//    
+    //    private func syncNoticeStatusFromCloud(cloudNotices: [CodableNotice], localNotices: [Notice]) {
+    //        print("🍉🔄 Синхронизация статуса уведомлений из облака...")
+    //        // Создаём словарь: ID → isRead из облака
+    //        let cloudStatusMap = Dictionary(
+    //            uniqueKeysWithValues: cloudNotices.map { ($0.id, $0.isRead)
+    //            })
+    //
+    //        var updatedCount = 0
+    //
+    //        for localNotice in localNotices {
+    //            guard let cloudIsRead = cloudStatusMap[localNotice.id] else {
+    //                continue // Уведомления нет в облаке
+    //            }
+    //
+    //            if localNotice.isRead != cloudIsRead {
+    //                print("  🔄 [\(localNotice.id)] локально: \(localNotice.isRead) → облако: \(cloudIsRead)")
+    //                localNotice.isRead = cloudIsRead
+    //                updatedCount += 1
+    //            }
+    //        }
+    //
+    //        if updatedCount > 0 {
+    //            saveContext()
+    //            print(" 🍉 ✅ Обновлено статусов: \(updatedCount)")
+    //        } else {
+    //            print(" 🍉 Нет обновления, все статусы синхронизированы")
+    //        }
+    //    }
+    //
+    //
     // MARK: - Remove Duplicates
     /// Удаляет дубликаты уведомлений в SwiftUI, оставляя только один экземпляр каждого ID
-
+    
     private func removeDuplicateNotices() {
         print("🍉 🔍 Проверка дубликатов уведомлений...")
         let descriptor = FetchDescriptor<Notice>()
-
+        
         do {
             let allNotices = try modelContext.fetch(descriptor)
-
+            
             if !allNotices.isEmpty {
                 // Группируем по ID
                 let groupedById = Dictionary(grouping: allNotices, by: { $0.id })
@@ -219,7 +219,6 @@ class NoticeViewModel: ObservableObject {
                 }
                 print("🍉 🗑️ Обнаружены дубликаты уведомлений: \(duplicates.count) ID с дубликатами")
                 
-                var deletedCount = 0
                 // Для каждого ID оставляем только первый, остальные удаляем
                 // id - уникальный идентификатор уведомления (String)
                 // noticesList - массив дубликатов с одинаковым ID (массив Notice)
@@ -248,29 +247,13 @@ class NoticeViewModel: ObservableObject {
                     }
                 }
                 
-                if deletedCount > 0 {
-                    try modelContext.save()
-                    print("🍉 ✅ Удалено \(deletedCount) дубликатов уведомлений")
-                    
-                    // Обновляем локальный массив
-                    loadNoticesFromSwiftData()
-                }
+                saveContext()
+//                loadNoticesFromSwiftData()
+//                updateUnreadStatus()
             }
         } catch {
             print("🍉 ❌ Ошибка при удалении дубликатов: \(error)")
         }
-    }
-    
-    private func deleteAllExcept(_ noticeToKeep: Notice, from notices: [Notice]) -> Int {
-        var deleted = 0
-        for notice in notices {
-            if notice.objectID != noticeToKeep.objectID {
-                modelContext.delete(notice)
-                deleted += 1
-                print("    ✗ Удалён дубликат: '\(notice.title)' (прочитано: \(notice.isRead))")
-            }
-        }
-        return deleted
     }
     
     // MARK: - Отметить все как прочитанные
