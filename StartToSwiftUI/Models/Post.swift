@@ -27,7 +27,7 @@ final class Post {
     var notes: String = ""
     var originRawValue: String = "cloud"
     var draft: Bool = false
-    var date: Date = Date()
+    var date: Date = Date() // Дата создание данной записи
     var startedDateStamp: Date?
     var studiedDateStamp: Date?
     var practicedDateStamp: Date?

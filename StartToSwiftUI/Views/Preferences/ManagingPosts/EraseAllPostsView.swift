@@ -11,6 +11,7 @@ import SwiftData
 struct EraseAllPostsView: View {
     
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
     
     private let hapticManager = HapticService.shared
@@ -37,7 +38,12 @@ struct EraseAllPostsView: View {
                     vm.eraseAllPosts{
                         isDeleted = true
                         isInProgress = false
-                        vm.isFirstImportPostsCompleted = false
+                        // Сбрасываем статус первого импорта авторских ссылок на материалы
+                        // Чтобы с пустым локальным массивом данных была возможность
+                        // снова импортировать авторские ссылоки на материалы
+                        let appStateManager = AppSyncStateManager(modelContext: modelContext)
+                        appStateManager.setCuratedPostsLoadStatusOn()
+                        
                         DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
                             dismiss()
                         }
@@ -115,7 +121,7 @@ struct EraseAllPostsView: View {
 
 #Preview {
     let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppState.self,
+        for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     let context = ModelContext(container)
@@ -124,6 +130,7 @@ struct EraseAllPostsView: View {
 
     NavigationStack{
         EraseAllPostsView()
+            .modelContainer(container)
             .environmentObject(vm)
     }
 }

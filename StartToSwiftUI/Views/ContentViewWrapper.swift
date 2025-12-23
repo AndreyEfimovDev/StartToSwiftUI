@@ -20,7 +20,7 @@ struct ContentViewWrapper: View {
 
 struct ContentViewWithViewModels: View {
     
-    @Environment(\.modelContext) private var modelContext  // ✅ Добавили
+    @Environment(\.modelContext) private var modelContext
     
     @StateObject private var vm: PostsViewModel
     @StateObject private var noticevm: NoticeViewModel
@@ -65,7 +65,7 @@ struct ContentViewWithViewModels: View {
 //        }
         .task {
             // 🧹 ШАГ 0: Очистка дубликатов AppState из прошлых запусков
-            let appStateManager = AppStateManager(modelContext: modelContext)
+            let appStateManager = AppSyncStateManager(modelContext: modelContext)
             appStateManager.cleanupDuplicateAppStates()
             
             // Загружаем посты
@@ -181,7 +181,7 @@ struct ContentViewWithViewModels: View {
 
 #Preview("Simple Test") {
     let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppState.self,
+        for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
 
