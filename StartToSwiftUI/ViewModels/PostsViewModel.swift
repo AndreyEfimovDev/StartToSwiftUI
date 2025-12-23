@@ -147,7 +147,7 @@ class PostsViewModel: ObservableObject {
             return
         }
         
-        // ШАГ 1: Ждём синхронизацию с iCloud (КРИТИЧЕСКИ ВАЖНО!)
+        // ШАГ 1: Ждём синхронизацию с iCloud
         // Даём время на получение данных с другого устройства
         print("⚠️⚠️ ⏳ Ожидание синхронизации iCloud (2 секунды)...")
         try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 секунды
@@ -374,14 +374,12 @@ class PostsViewModel: ObservableObject {
     
     /// Добавление нового поста
     func addPost(_ newPost: Post) {
-        print("➕ Добавление нового поста")
         modelContext.insert(newPost)
         saveContextAndReload()
     }
     
     /// Обновление поста
     func updatePost(_ updatedPost: Post) {
-        print("✏️ Обновление поста")
         saveContextAndReload()
     }
     
@@ -395,12 +393,11 @@ class PostsViewModel: ObservableObject {
         modelContext.delete(post)
         saveContextAndReload()
         
-        // ✅ Проверяем, остались ли посты после удаления
-            if allPosts.isEmpty {
-                let appStateManager = AppSyncStateManager(modelContext: modelContext)
-                appStateManager.markStaticPostsAsNotLoaded()
-                print("🗑️ Все посты удалены, флаг hasLoadedStaticPosts сброшен")
-            }
+        // Все посты удалены, флаг hasLoadedStaticPosts сброшен
+        if allPosts.isEmpty {
+            let appStateManager = AppSyncStateManager(modelContext: modelContext)
+            appStateManager.markStaticPostsAsNotLoaded()
+        }
 
     }
     
@@ -410,17 +407,15 @@ class PostsViewModel: ObservableObject {
             // Удаляем все посты
             try modelContext.delete(model: Post.self)
             
-            // ✅ Сбрасываем флаг, так как удалены ВСЕ посты (включая статические)
+            // Сбрасываем флаг, так как удалены ВСЕ посты (включая статические)
             let appStateManager = AppSyncStateManager(modelContext: modelContext)
             appStateManager.markStaticPostsAsNotLoaded()
-            print("🗑️ Все посты удалены, флаг hasLoadedStaticPosts сброшен")
             
             saveContextAndReload()
             completion()
         } catch {
             errorMessage = "Ошибка удаления данных"
             showErrorMessageAlert = true
-            print("❌ Ошибка удаления всех постов: \(error)")
         }
     }
     
@@ -463,14 +458,12 @@ class PostsViewModel: ObservableObject {
     private func saveContextAndReload() {
         do {
             try modelContext.save()
-            print("💾 SwiftData контекст сохранён")
-            // 🌥️ iCloud автоматически синхронизирует изменения!
-            loadPostsFromSwiftData() // Обновляем данные для UI
+            // Обновляем данные для UI
+            loadPostsFromSwiftData()
         } catch {
             errorMessage = "Ошибка сохранения данных"
             showErrorMessageAlert = true
             hapticManager.notification(type: .error)
-            print("❌ Ошибка сохранения контекста: \(error)")
         }
     }
     
@@ -524,45 +517,6 @@ class PostsViewModel: ObservableObject {
         
         completion()
 
-
-        
-//        networkService.fetchDataFromURL { [weak self] (result: Result<[CodablePost], Error>) in
-//            guard let self = self else { return }
-//            
-//            DispatchQueue.main.async {
-//                switch result {
-//                case .success(let cloudResponse):
-//                    print("☁️ Импортировано \(cloudResponse.count) постов из облака")
-//                    
-//                    // Фильтруем уникальные посты
-//                    let existingTitles = Set(self.allPosts.map { $0.title })
-//                    let existingIds = Set(self.allPosts.map { $0.id })
-//                    
-//                    let newPosts = cloudResponse
-//                        .filter { !existingTitles.contains($0.title) && !existingIds.contains($0.id) }
-//                        .map { PostMigrationHelper.convertFromCodable($0) }
-//                    
-//                    if !newPosts.isEmpty {
-//                        for post in newPosts {
-//                            self.modelContext.insert(post)
-//                        }
-//                        self.saveContextAndReload()
-//                        self.hapticManager.notification(type: .success)
-//                        print("✅ Добавлено \(newPosts.count) новых постов")
-//                    } else {
-//                        self.hapticManager.impact(style: .light)
-//                        print("ℹ️ Новых постов нет")
-//                    }
-//                    
-//                case .failure(let error):
-//                    self.errorMessage = error.localizedDescription
-//                    self.showErrorMessageAlert = true
-//                    self.hapticManager.notification(type: .error)
-//                    print("❌ Ошибка импорта: \(error)")
-//                }
-//                completion()
-//            }
-//        }
     }
     
     // MARK: - Filtering & Searching (без изменений)
@@ -760,52 +714,6 @@ class PostsViewModel: ObservableObject {
         }
     }
     
-//    func checkCloudCuratedPostsForUpdates(completion: @escaping (Bool) -> Void) {
-//        networkService.fetchDataFromURL() { (result: Result<[CodablePost], Error>) in
-//            self.errorMessage = nil
-//            self.showErrorMessageAlert = false
-//            
-//            switch result {
-//            case .success(let cloudResponse):
-//                
-//                let localPosts = self.allPosts.filter { $0.origin == .cloud }
-//                let cloudPostsConverted = cloudResponse
-//                    .filter { $0.origin == .cloud }
-//                    .map { PostMigrationHelper.convertFromCodable($0) }
-//                
-//                
-//                var hasUpdates = false
-//                
-//                if let latestLocalDate = self.getLatestDateFromPosts(posts: localPosts),
-//                   let latestCloudDate = self.getLatestDateFromPosts(posts: cloudPostsConverted) {
-//                    hasUpdates = latestLocalDate < latestCloudDate
-//                } else if localPosts.isEmpty && !cloudPostsConverted.isEmpty {
-//                    // Если локально нет cloud-постов, а в облаке есть — это тоже обновление
-//                    hasUpdates = true
-//                }
-//                
-//                // 3. Если есть обновления
-//                if hasUpdates {
-//                    print("🍓 checkCloudForUpdates: Posts update is available")
-//                } else {
-//                    print("🍓☑️ checkCloudForUpdates: No Updates available")
-//                }
-//                DispatchQueue.main.async {
-//                    completion(hasUpdates)
-//                }
-//            case .failure (let error):
-//                self.errorMessage = error.localizedDescription
-//                self.showErrorMessageAlert = true
-//                self.hapticManager.notification(type: .error)
-//                
-//                DispatchQueue.main.async {
-//                    print("🍓❌ checkCloudForUpdates: Error \(error.localizedDescription)")
-//                    completion(false)
-//                }
-//            }
-//        }
-//    }
-//    
     func getFilePath(fileName: String) -> Result<URL, FileStorageError> {
         print("🍓FM(getFilePath): Exporting from SwiftData...")
         print("🍓FM(getFilePath): Getting url...")
@@ -923,8 +831,6 @@ class PostsViewModel: ObservableObject {
             return .failure(error)
         }
     }
-    
-    
     
     private func checkAndReturnUniquePosts(posts: [Post]) -> [Post] {
         

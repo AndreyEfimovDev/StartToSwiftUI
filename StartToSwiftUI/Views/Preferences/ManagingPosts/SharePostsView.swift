@@ -10,8 +10,8 @@ import SwiftData
 
 struct SharePostsView: View {
     
-    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
+    @EnvironmentObject private var coordinator: NavigationCoordinator
 
     private let hapticManager = HapticService.shared
     
@@ -64,8 +64,18 @@ struct SharePostsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                BackButtonView() { dismiss() }
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView() {
+                    coordinator.pop()
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    coordinator.popToRoot()
+                } label: {
+                    Image(systemName: "house")
+                        .foregroundStyle(Color.mycolor.myAccent)
+                }
             }
         }
     }
@@ -111,7 +121,7 @@ struct SharePostsView: View {
                 
                 // Автоматическое закрытие через 2 секунды
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                    dismiss()
+                    coordinator.popToRoot()
                 }
 
             } else {
@@ -165,6 +175,7 @@ struct SharePostsView: View {
     NavigationStack{
         SharePostsView()
             .environmentObject(vm)
+            .environmentObject(NavigationCoordinator())
     }
 }
 

@@ -14,41 +14,40 @@ struct HomeView: View {
     
     // MARK: PROPERTIES
     
-    @Environment(\.dismiss) private var dismiss
+//    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
-
+    @StateObject private var coordinator = NavigationCoordinator()
     private let hapticManager = HapticService.shared
     
     let selectedCategory: String?
     
-    @State private var selectedPost: Post?
     @State private var selectedPostToDelete: Post?
-
-    @State private var showDetailView: Bool = false
-    @State private var showPreferancesView: Bool = false
-    @State private var showAddPostView: Bool = false
-    @State private var showNoticesView: Bool = false
     @State private var showOnTopButton: Bool = false
-    @State private var showProgressSelectionView: Bool = false
-    
-    @State private var isFilterButtonPressed: Bool = false
     @State private var isShowingDeleteConfirmation: Bool = false
-    
     @State private var noticeButtonAnimation = false
-    
     @State private var isDetectingLongPress: Bool = false
     @State private var isLongPressSuccess: Bool = false
-    
+    @State private var showProgressSelectionView: Bool = false
+
     private let longPressDuration: Double = 0.5
     private let limitToShortenTitle: Int = 30
 
+
+//    @State private var selectedPost: Post?
+//    @State private var showDetailView: Bool = false
+//    @State private var showPreferancesView: Bool = false
+//    @State private var showAddPostView: Bool = false
+//    @State private var showNoticesView: Bool = false
+    @State private var isFilterButtonPressed: Bool = false
+    
+    
    
     // MARK: VIEW BODY
     
     var body: some View {
-        NavigationStack {
+        NavigationStack (path: $coordinator.path) {
             GeometryReader { proxy in
                 ScrollViewReader { scrollProxy in
                     ZStack (alignment: .bottom) {
@@ -72,29 +71,33 @@ struct HomeView: View {
                 .safeAreaInset(edge: .top) {
                     SearchBarView()
                 }
-                .navigationDestination(isPresented: $showDetailView) {
-                    if let id = vm.selectedPostId {
-                        withAnimation {
-                            PostDetailsView(postId: id)
-                        }
-                    }
+                .navigationDestination(for: AppRoute.self) { route in
+                    destinationView(for: route)
                 }
-                .sheetForUIDeviceBoolean(isPresented: $showPreferancesView) {
+//                .navigationDestination(isPresented: $showDetailView) {
+//                    if let id = vm.selectedPostId {
+//                        withAnimation {
+//                            PostDetailsView(postId: id)
+//                        }
+//                    }
+//                }
+                .sheetForUIDeviceBoolean(isPresented: $coordinator.showPreferences) {
                     PreferencesView()
+                        .environmentObject(coordinator)
                 }
-                .sheetForUIDeviceBoolean(isPresented: $showNoticesView) {
+                .sheetForUIDeviceBoolean(isPresented: $coordinator.showNotices) {
                     NavigationStack {
                         NoticesView()
                     }
                 }
-                .sheetForUIDeviceBoolean(isPresented: $showAddPostView) {
+                .sheetForUIDeviceBoolean(isPresented: $coordinator.showAddPost) {
                     NavigationStack {
                         AddEditPostSheet(post: nil)
                     }
                 }
-                .sheetForUIDeviceItem(item: $selectedPost) { selectedPostToEdit in
+                .sheetForUIDeviceItem(item: $coordinator.showEditPost) { post in
                     NavigationStack {
-                        AddEditPostSheet(post: selectedPostToEdit)
+                        AddEditPostSheet(post: post)
                     }
                 }
                 .sheet(isPresented: $isFilterButtonPressed) {
@@ -143,33 +146,55 @@ struct HomeView: View {
         }
     }
     
-    /// Звуковое одноразовое оповещение пользователя при появлении новых уведомлений
-    private func soundNotificationIfNeeded() {
-        if noticevm.hasUnreadNotices {
-            let appStateManager = AppSyncStateManager(modelContext: modelContext)
-            let isPerformingSoundNoticeTask = noticevm.isNotificationOn && appStateManager.getUserNotifiedBySoundStatus()
-            // Кнопка показывается сразу, анимация через 3 секунды
-            if isPerformingSoundNoticeTask {
-                // Создаем задержку для уведомления...
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                    print("🔔 3 секунды прошли, запускаем анимацию...")
-                    
-                    if noticevm.isSoundNotificationOn {
-                        // Воспроизведен звук
-                        AudioServicesPlaySystemSound(1013)
-                        // Сбрасывам статус звукового оповещения пользователя -> пользователь оповещен
-                        appStateManager.markUserNotifiedBySound()
-                    }
-                    // Анимация начата
-                    noticeButtonAnimation = true
-                    // Анимация завершена, пользователь уведомлен
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                        noticeButtonAnimation = false
-                    }
-                }
-            }
+    // MARK: - Destination View Builder
+    @ViewBuilder
+    private func destinationView(for route: AppRoute) -> some View {
+        switch route {
+        case .postDetails(let postId):
+            PostDetailsView(postId: postId)
+            
+        case .preferences:
+            PreferencesView()
+            
+        case .studyProgress:
+            StudyProgressView()
+            
+        case .postDrafts:
+            PostDraftsView()
+            
+        case .checkForUpdates:
+            CheckForPostsUpdateView()
+            
+        case .importFromCloud:
+            ImportPostsFromCloudView()
+            
+        case .shareBackup:
+            SharePostsView()
+            
+        case .restoreBackup:
+            RestoreBackupView()
+            
+        case .erasePosts:
+            EraseAllPostsView()
+            
+        case .notices:
+            NoticesView()
+            
+        case .acknowledgements:
+            Acknowledgements()
+            
+        case .aboutApp:
+            AboutApp()
+            
+        case .legalInfo:
+            LegalInformationView()
+            
+        default:
+            Text("Unknown route")
         }
     }
+    
+
     
     // MARK: Subviews
    
@@ -201,8 +226,8 @@ struct HomeView: View {
                         })
                     .onTapAndDoubleTap(
                         singleTap: {
-                            vm.selectedPostId = post.id
-                            showDetailView.toggle()
+                            coordinator.push(.postDetails(postId: post.id))
+//                            showDetailView.toggle()
                         },
                         doubleTap: {
                             vm.selectedStudyProgress = post.progress
@@ -219,7 +244,8 @@ struct HomeView: View {
                         .tint(Color.mycolor.myRed)
                         
                         Button("Edit", systemImage: post.origin == .cloud  || post.origin == .statical ? "pencil.slash" : "pencil") {
-                            selectedPost = post
+//                            selectedPost = post
+                            coordinator.presentEditPost(post)
                         }
                         .tint(Color.mycolor.myBlue)
                         .disabled(post.origin == .cloud || post.origin == .statical)
@@ -233,9 +259,7 @@ struct HomeView: View {
             .listRowBackground(Color.clear)
             .listRowSeparatorTint(Color.mycolor.myAccent.opacity(0.35))
             .listRowSeparator(.hidden, edges: [.top])
-            .listRowInsets(
-                EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-            )
+            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
         } // List
         .listStyle(.plain)
         .refreshControl {
@@ -244,6 +268,34 @@ struct HomeView: View {
             hapticManager.impact(style: .light)
             Task {
                 await noticevm.importNoticesFromCloud()
+            }
+        }
+    }
+    
+    /// Звуковое одноразовое оповещение пользователя при появлении новых уведомлений
+    private func soundNotificationIfNeeded() {
+        if noticevm.hasUnreadNotices {
+            let appStateManager = AppSyncStateManager(modelContext: modelContext)
+            let isPerformingSoundNoticeTask = noticevm.isNotificationOn && appStateManager.getUserNotifiedBySoundStatus()
+            // Кнопка показывается сразу, анимация через 3 секунды
+            if isPerformingSoundNoticeTask {
+                // Создаем задержку для уведомления...
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                    print("🔔 3 секунды прошли, запускаем анимацию...")
+                    
+                    if noticevm.isSoundNotificationOn {
+                        // Воспроизведен звук
+                        AudioServicesPlaySystemSound(1013)
+                        // Сбрасывам статус звукового оповещения пользователя -> пользователь оповещен
+                        appStateManager.markUserNotifiedBySound()
+                    }
+                    // Анимация начата
+                    noticeButtonAnimation = true
+                    // Анимация завершена, пользователь уведомлен
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        noticeButtonAnimation = false
+                    }
+                }
             }
         }
     }
@@ -309,7 +361,9 @@ struct HomeView: View {
                 iconName: "gearshape",
                 isShownCircle: false)
             {
-                showPreferancesView.toggle()
+//                showPreferancesView.toggle()
+                coordinator.presentPreferences()
+
             }
         }
         if noticevm.hasUnreadNotices {
@@ -318,7 +372,9 @@ struct HomeView: View {
                     iconName: "message",
                     isShownCircle: false)
                 {
-                    showNoticesView = true
+//                    showNoticesView = true
+                    coordinator.presentNotices()
+
                 }
                 .overlay {
                     Capsule()
@@ -356,15 +412,20 @@ struct HomeView: View {
             if UIDevice.isiPhone {
                 CircleStrokeButtonView(
                     iconName: "plus",
-                    isShownCircle: false)
-                { showAddPostView.toggle() }
+                    isShownCircle: false
+                ){
+//                    showAddPostView.toggle()
+                    coordinator.presentAddPost()
+                }
             }
             
             CircleStrokeButtonView(
                 iconName: "line.3.horizontal.decrease",
                 isIconColorToChange: !vm.isFiltersEmpty,
-                isShownCircle: false)
-            { isFilterButtonPressed.toggle() }
+                isShownCircle: false
+            ){
+                isFilterButtonPressed.toggle()
+            }
         }
     }
     
@@ -451,4 +512,5 @@ extension View {
     .modelContainer(container)
     .environmentObject(vm)
     .environmentObject(noticevm)
+    .environmentObject(NavigationCoordinator())
 }

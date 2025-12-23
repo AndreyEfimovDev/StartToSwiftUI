@@ -58,11 +58,6 @@ struct ContentViewWithViewModels: View {
             
         }
         .preferredColorScheme(vm.selectedTheme.colorScheme)
-//        .onAppear {
-////            print("🔍 AppStorage hasLoadedInitialData: \(vm.hasLoadedInitialData)")
-////            print("🔍 Всего постов в VM: \(vm.allPosts.count)")
-////            print("🔍 NoticeVM уведомлений: \(noticevm.notices.count)")
-//        }
         .task {
             // 🧹 ШАГ 0: Очистка дубликатов AppState из прошлых запусков
             let appStateManager = AppSyncStateManager(modelContext: modelContext)

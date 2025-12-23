@@ -671,6 +671,8 @@ struct AddEditPostSheet: View {
     NavigationStack {
         AddEditPostSheet(post: PreviewData.samplePost1)
             .environmentObject(vm)
+            .environmentObject(NavigationCoordinator())
+
     }
 }
 
@@ -686,6 +688,7 @@ struct AddEditPostSheet: View {
     NavigationStack {
         AddEditPostSheet(post: nil)
             .environmentObject(vm)
+            .environmentObject(NavigationCoordinator())
     }
 }
 

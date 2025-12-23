@@ -9,10 +9,9 @@ import SwiftUI
 
 struct PostRowView: View {
     
-    @State private var showFullIntro: Bool = false
-    
     let post: Post
-    
+
+    @State private var showFullIntro: Bool = false
     @State private var introLineCount: Int = 0
     
     private let introFont: Font = .footnote
@@ -20,7 +19,6 @@ struct PostRowView: View {
     private let introLinesCountLimit: Int = 2
     
     // MARK: MAIN BODY
-    
     var body: some View {
         VStack(alignment: .leading, spacing: 5){
             Group {
@@ -64,7 +62,6 @@ struct PostRowView: View {
     }
     
     private var level: some View {
-        
         HStack {
             Text(post.studyLevel.displayName.capitalized + " level")
                 .font(.body)
@@ -86,9 +83,7 @@ struct PostRowView: View {
                 post.progress.icon
                     .foregroundStyle(Color.mycolor.myGreen)
                 
-//                if post.origin != .local {
-                    post.origin.icon
-//                }
+                post.origin.icon
             }
             .font(.caption)
             .foregroundStyle(Color.mycolor.myAccent)

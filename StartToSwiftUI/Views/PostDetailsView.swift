@@ -12,15 +12,9 @@ struct PostDetailsView: View {
     
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject private var vm: PostsViewModel
+    @EnvironmentObject private var coordinator: NavigationCoordinator
     
     private let hapticManager = HapticService.shared
-    
-    @State private var showSafariView = false
-    @State private var showFullIntro: Bool = false
-    @State private var showFullFreeTextField: Bool = false
-    @State private var showEditPostView: Bool = false
-    @State private var showAddPostView: Bool = false
-    @State private var showRatingSelectionView: Bool = false
     
     let postId: String
     
@@ -28,6 +22,13 @@ struct PostDetailsView: View {
         vm.allPosts.first(where: { $0.id == postId })
         //                        PreviewData.samplePost3
     }
+    
+    @State private var showSafariView = false
+    @State private var showFullIntro: Bool = false
+    @State private var showFullFreeTextField: Bool = false
+    @State private var showEditPostView: Bool = false
+    @State private var showAddPostView: Bool = false
+    @State private var showRatingSelectionView: Bool = false
     
     @State private var lineCountIntro: Int = 0
     private let introFont: Font = .subheadline
@@ -88,12 +89,12 @@ struct PostDetailsView: View {
                     .toolbar {
                         toolbarForPostDetails(validPost: validPost)
                     }
-                    .sheetForUIDeviceBoolean(isPresented: $showEditPostView) {
+                    .sheetForUIDeviceItem(item: $coordinator.showEditPost) { post in
                         NavigationStack {
                             AddEditPostSheet(post: post)
                         }
                     }
-                    .sheetForUIDeviceBoolean(isPresented: $showAddPostView) {
+                    .sheetForUIDeviceBoolean(isPresented: $coordinator.showAddPost) {
                         NavigationStack {
                             AddEditPostSheet(post: nil)
                         }
@@ -221,14 +222,20 @@ struct PostDetailsView: View {
         ToolbarItemGroup(placement: .topBarLeading) {
             
             if UIDevice.isiPhone {
-                BackButtonView() { dismiss() }
+                BackButtonView() {
+//                    dismiss()
+                    coordinator.pop()
+                }
             }
             
             if UIDevice.isiPad {
                 CircleStrokeButtonView(
                     iconName: "plus",
-                    isShownCircle: false)
-                { showAddPostView.toggle() }
+                    isShownCircle: false
+                ){
+//                    showAddPostView.toggle()
+                    coordinator.presentAddPost()
+                }
             }
             
             ShareLink(item: validPost.urlString) {
@@ -430,5 +437,6 @@ fileprivate struct PostDetailsPreView: View {
     NavigationStack {
         PostDetailsPreView()
             .environmentObject(vm)
+            .environmentObject(NavigationCoordinator())
     }
 }
