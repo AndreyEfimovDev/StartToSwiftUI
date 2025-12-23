@@ -20,7 +20,7 @@ class PostsViewModel: ObservableObject {
     @AppStorage("shouldLoadStaticPosts") var shouldLoadStaticPosts: Bool = true {
         didSet {
             print("🔄 shouldLoadStaticPosts изменился: \(shouldLoadStaticPosts)")
-            let appStateManager = AppStateManager(modelContext: modelContext)
+            let appStateManager = AppSyncStateManager(modelContext: modelContext)
             
             switch shouldLoadStaticPosts {
             case true:
@@ -37,6 +37,7 @@ class PostsViewModel: ObservableObject {
     
     @Published var allPosts: [Post] = []
     @Published var filteredPosts: [Post] = []
+    @Published var selectedPostId: String? = nil
     @Published var searchText: String = ""
     @Published var isFiltersEmpty: Bool = true
     @Published var selectedRating: PostRating? = nil
@@ -55,46 +56,31 @@ class PostsViewModel: ObservableObject {
     var dispatchTime: DispatchTime { .now() + 1.5 }
     
     // MARK: - AppStorage
-    
     @AppStorage("selectedTheme") var selectedTheme: Theme = .system
-    @AppStorage("localLastUpdated") var localLastUpdated: Date = Date.distantPast
-    @AppStorage("isFirstImportPostsCompleted") var isFirstImportPostsCompleted: Bool = false {
-        didSet {
-            localLastUpdated = getLatestDateFromPosts(posts: allPosts) ?? .now
-        }
-    }
     
     // Filters
     @AppStorage("storedCategory") var storedCategory: String?
-    @AppStorage("storedLevel") var storedLevel: StudyLevel?
-    @AppStorage("storedFavorite") var storedFavorite: FavoriteChoice?
-    @AppStorage("storedType") var storedType: PostType?
-    @AppStorage("storedPlatform") var storedPlatform: Platform?
-    @AppStorage("storedYear") var storedYear: String?
-    @AppStorage("storedSortOption") var storedSortOption: SortOption?
-    
     @Published var selectedCategory: String? = nil {
-        didSet { storedCategory = selectedCategory }
-    }
+        didSet { storedCategory = selectedCategory }}
+    @AppStorage("storedLevel") var storedLevel: StudyLevel?
     @Published var selectedLevel: StudyLevel? = nil {
-        didSet { storedLevel = selectedLevel }
-    }
+        didSet { storedLevel = selectedLevel }}
+    @AppStorage("storedFavorite") var storedFavorite: FavoriteChoice?
     @Published var selectedFavorite: FavoriteChoice? = nil {
-        didSet { storedFavorite = selectedFavorite }
-    }
+        didSet { storedFavorite = selectedFavorite }}
+    @AppStorage("storedType") var storedType: PostType?
     @Published var selectedType: PostType? = nil {
-        didSet { storedType = selectedType }
-    }
+        didSet { storedType = selectedType }}
+    @AppStorage("storedPlatform") var storedPlatform: Platform?
     @Published var selectedPlatform: Platform? = nil {
-        didSet { storedPlatform = selectedPlatform }
-    }
+        didSet { storedPlatform = selectedPlatform }}
+    @AppStorage("storedYear") var storedYear: String?
     @Published var selectedYear: String? = nil {
-        didSet { storedYear = selectedYear }
-    }
+        didSet { storedYear = selectedYear }}
+    @AppStorage("storedSortOption") var storedSortOption: SortOption?
     @Published var selectedSortOption: SortOption? = nil {
-        didSet { storedSortOption = selectedSortOption }
-    }
-    @Published var selectedPostId: String? = nil
+        didSet { storedSortOption = selectedSortOption }}
+    
     
     // MARK: - Init
     
@@ -116,6 +102,15 @@ class PostsViewModel: ObservableObject {
         
         self.isFiltersEmpty = checkIfAllFiltersAreEmpty()
         
+        Task {
+            let appStateManager = AppSyncStateManager(modelContext: modelContext)
+            let hasUpdates = await checkCloudCuratedPostsForUpdates()
+            
+            if hasUpdates {
+                appStateManager.setCuratedPostsLoadStatusOn()
+            }
+        }
+
         // Настройка timezone
         if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
             utcCalendar.timeZone = utcTimeZone
@@ -133,7 +128,7 @@ class PostsViewModel: ObservableObject {
         print("🔍 Проверка необходимости загрузки статических постов...")
         
         // Используем глобальные значения в AppStateManager для проверки
-        let appStateManager = AppStateManager(modelContext: modelContext)
+        let appStateManager = AppSyncStateManager(modelContext: modelContext)
         let globalShouldLoadStaticPostsStatus = appStateManager.getStaticPostsLoadToggleStatus()
         let globalCheckIfStaticPostsHasLoaded = appStateManager.checkIfStaticPostsHasLoaded()
         
@@ -200,32 +195,8 @@ class PostsViewModel: ObservableObject {
                 loadPostsFromSwiftData()
                 return
             }
-
-            // ШАГ 6: Только если базы ПОЛНОСТЬЮ ПУСТАЯ - создаём посты
-//            // 3. Получаем ID существующих постов
-//            let existingIds = Set(existingStaticPosts.map { $0.id })
-//            // Например: ["static_post_1", "static_post_2"]
-//            
-//            // 4. Находим РАЗНИЦУ: какие ID есть в allStaticIds (StaticPost.staticPosts), но нет в existingIds (SwiftData)
-//            let missingIds = allStaticIds.subtracting(existingIds)
-//            // Например: ["static_post_3", "static_post_4", "static_post_5", "static_post_6"]
-//            
-//            print("📊 Анализ:")
-//            print("  Всего статических ID: \(allStaticIds.count)")
-//            print("  Уже есть в базе: \(existingIds.count)")
-//            print("  Отсутствуют: \(missingIds.count)")
-//            
-//            if missingIds.isEmpty {
-//                print("✅ Все статические посты уже существуют")
-//                appStateManager.markStaticPostsAsLoaded()
-//                return
-//            }
-//            
-//            // 5. Создаём ТОЛЬКО отсутствующие посты
-//            print("➕ Создаём отсутствующие посты: \(missingIds.count) шт.")
             
             for staticPost in StaticPost.staticPosts {
-//                if missingIds.contains(staticPost.id) {
                     let newPost = Post(
                         id: staticPost.id,
                         category: staticPost.category,
@@ -250,7 +221,6 @@ class PostsViewModel: ObservableObject {
                     )
                     modelContext.insert(newPost)
                     print("⚠️⚠️  ✓ Добавлен: \(staticPost.title)")
-//                }
             }
 
             try modelContext.save()
@@ -346,7 +316,7 @@ class PostsViewModel: ObservableObject {
             print("✅ Удалено \(staticPosts.count) статических постов")
             
             // Сбрасываем флаг
-            let appStateManager = AppStateManager(modelContext: modelContext)
+            let appStateManager = AppSyncStateManager(modelContext: modelContext)
             appStateManager.markStaticPostsAsNotLoaded()
             
             // Обновляем UI
@@ -427,7 +397,7 @@ class PostsViewModel: ObservableObject {
         
         // ✅ Проверяем, остались ли посты после удаления
             if allPosts.isEmpty {
-                let appStateManager = AppStateManager(modelContext: modelContext)
+                let appStateManager = AppSyncStateManager(modelContext: modelContext)
                 appStateManager.markStaticPostsAsNotLoaded()
                 print("🗑️ Все посты удалены, флаг hasLoadedStaticPosts сброшен")
             }
@@ -441,7 +411,7 @@ class PostsViewModel: ObservableObject {
             try modelContext.delete(model: Post.self)
             
             // ✅ Сбрасываем флаг, так как удалены ВСЕ посты (включая статические)
-            let appStateManager = AppStateManager(modelContext: modelContext)
+            let appStateManager = AppSyncStateManager(modelContext: modelContext)
             appStateManager.markStaticPostsAsNotLoaded()
             print("🗑️ Все посты удалены, флаг hasLoadedStaticPosts сброшен")
             
@@ -504,50 +474,95 @@ class PostsViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Cloud Import (остаётся для импорта новых данных)
+    // MARK: - Cloud import of curated study materials
     
-    func importPostsFromCloud(urlString: String = Constants.cloudPostsURL, completion: @escaping () -> Void) {
+    func importPostsFromCloud(urlString: String = Constants.cloudPostsURL, completion: @escaping () -> Void) async {
+        
         errorMessage = nil
         showErrorMessageAlert = false
         
-        // Явно указываем тип для generic параметра
-        networkService.fetchDataFromURL { [weak self] (result: Result<[CodablePost], Error>) in
-            guard let self = self else { return }
+        do {
+            let cloudResponse: [CodablePost] = try await networkService.fetchDataFromURLAsync()
+            print("☁️ Импортировано \(cloudResponse.count) постов из облака")
             
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let cloudResponse):
-                    print("☁️ Импортировано \(cloudResponse.count) постов из облака")
-                    
-                    // Фильтруем уникальные посты
-                    let existingTitles = Set(self.allPosts.map { $0.title })
-                    let existingIds = Set(self.allPosts.map { $0.id })
-                    
-                    let newPosts = cloudResponse
-                        .filter { !existingTitles.contains($0.title) && !existingIds.contains($0.id) }
-                        .map { PostMigrationHelper.convertFromCodable($0) }
-                    
-                    if !newPosts.isEmpty {
-                        for post in newPosts {
-                            self.modelContext.insert(post)
-                        }
-                        self.saveContextAndReload()
-                        self.hapticManager.notification(type: .success)
-                        print("✅ Добавлено \(newPosts.count) новых постов")
-                    } else {
-                        self.hapticManager.impact(style: .light)
-                        print("ℹ️ Новых постов нет")
-                    }
-                    
-                case .failure(let error):
-                    self.errorMessage = error.localizedDescription
-                    self.showErrorMessageAlert = true
-                    self.hapticManager.notification(type: .error)
-                    print("❌ Ошибка импорта: \(error)")
+            // Фильтруем уникальные посты по ID и Title и конвертируем в формат модели данных в SwiftData
+            let existingTitles = Set(self.allPosts.map { $0.title })
+            let existingIds = Set(self.allPosts.map { $0.id })
+            
+            let newPosts = cloudResponse
+                .filter { !existingTitles.contains($0.title) && !existingIds.contains($0.id) }
+                .map { PostMigrationHelper.convertFromCodable($0) }
+            
+            // Проверка на наличие новых авторских постов
+            if !newPosts.isEmpty {
+                for post in newPosts {
+                    self.modelContext.insert(post)
                 }
-                completion()
+                let appStateManager = AppSyncStateManager(modelContext: modelContext)
+
+                // Обновляем дату последнего импорта автосрких постов - берем старщую дату создания записи поста
+                let latestDateOfCuaratedPosts = getLatestDateFromPosts(posts: allPosts) ?? .now
+                appStateManager.setLastDateOfCuaratedPostsLoaded(latestDateOfCuaratedPosts)
+
+                // Как результат импорта авторских ссылок на материалы - новых материалов нет -> false
+                appStateManager.setCuratedPostsLoadStatusOff()
+
+                self.saveContextAndReload()
+                self.hapticManager.notification(type: .success)
+                print("✅ Добавлено \(newPosts.count) новых постов")
+            } else {
+                self.hapticManager.impact(style: .light)
+                print("ℹ️ Новых постов нет")
             }
+
+        } catch {
+            self.errorMessage = error.localizedDescription
+            self.showErrorMessageAlert = true
+            self.hapticManager.notification(type: .error)
+            print("❌ Ошибка импорта: \(error)")
         }
+        
+        completion()
+
+
+        
+//        networkService.fetchDataFromURL { [weak self] (result: Result<[CodablePost], Error>) in
+//            guard let self = self else { return }
+//            
+//            DispatchQueue.main.async {
+//                switch result {
+//                case .success(let cloudResponse):
+//                    print("☁️ Импортировано \(cloudResponse.count) постов из облака")
+//                    
+//                    // Фильтруем уникальные посты
+//                    let existingTitles = Set(self.allPosts.map { $0.title })
+//                    let existingIds = Set(self.allPosts.map { $0.id })
+//                    
+//                    let newPosts = cloudResponse
+//                        .filter { !existingTitles.contains($0.title) && !existingIds.contains($0.id) }
+//                        .map { PostMigrationHelper.convertFromCodable($0) }
+//                    
+//                    if !newPosts.isEmpty {
+//                        for post in newPosts {
+//                            self.modelContext.insert(post)
+//                        }
+//                        self.saveContextAndReload()
+//                        self.hapticManager.notification(type: .success)
+//                        print("✅ Добавлено \(newPosts.count) новых постов")
+//                    } else {
+//                        self.hapticManager.impact(style: .light)
+//                        print("ℹ️ Новых постов нет")
+//                    }
+//                    
+//                case .failure(let error):
+//                    self.errorMessage = error.localizedDescription
+//                    self.showErrorMessageAlert = true
+//                    self.hapticManager.notification(type: .error)
+//                    print("❌ Ошибка импорта: \(error)")
+//                }
+//                completion()
+//            }
+//        }
     }
     
     // MARK: - Filtering & Searching (без изменений)
@@ -704,52 +719,93 @@ class PostsViewModel: ObservableObject {
     /// - Warning: This application is intended for self-study.
     /// - Returns: Returns a boolean result or error within completion handler.
     
-    func checkCloudForUpdates(completion: @escaping (Bool) -> Void) {
-        networkService.fetchDataFromURL() { (result: Result<[CodablePost], Error>) in
+    func checkCloudCuratedPostsForUpdates() async -> Bool {
+        do {
+            let cloudResponse: [CodablePost] = try await networkService.fetchDataFromURLAsync()
+            
             self.errorMessage = nil
             self.showErrorMessageAlert = false
             
-            switch result {
-            case .success(let cloudResponse):
-                
-                let localPosts = self.allPosts.filter { $0.origin == .cloud }
-                let cloudPostsConverted = cloudResponse
-                    .filter { $0.origin == .cloud }
-                    .map { PostMigrationHelper.convertFromCodable($0) }
-                
-                
-                var hasUpdates = false
-                
-                if let latestLocalDate = self.getLatestDateFromPosts(posts: localPosts),
-                   let latestCloudDate = self.getLatestDateFromPosts(posts: cloudPostsConverted) {
-                    hasUpdates = latestLocalDate < latestCloudDate
-                } else if localPosts.isEmpty && !cloudPostsConverted.isEmpty {
-                    // Если локально нет cloud-постов, а в облаке есть — это тоже обновление
-                    hasUpdates = true
-                }
-                
-                // 3. Если есть обновления
-                if hasUpdates {
-                    print("🍓 checkCloudForUpdates: Posts update is available")
-                } else {
-                    print("🍓☑️ checkCloudForUpdates: No Updates available")
-                }
-                DispatchQueue.main.async {
-                    completion(hasUpdates)
-                }
-            case .failure (let error):
-                self.errorMessage = error.localizedDescription
-                self.showErrorMessageAlert = true
-                self.hapticManager.notification(type: .error)
-                
-                DispatchQueue.main.async {
-                    print("🍓❌ checkCloudForUpdates: Error \(error.localizedDescription)")
-                    completion(false)
-                }
+            let localPosts = self.allPosts.filter { $0.origin == .cloud }
+            let cloudPostsConverted = cloudResponse
+                .filter { $0.origin == .cloud }
+                .map { PostMigrationHelper.convertFromCodable($0) }
+            
+            var hasUpdates = false
+            
+            if let latestLocalDate = self.getLatestDateFromPosts(posts: localPosts),
+               let latestCloudDate = self.getLatestDateFromPosts(posts: cloudPostsConverted) {
+                hasUpdates = latestLocalDate < latestCloudDate
+            } else if localPosts.isEmpty && !cloudPostsConverted.isEmpty {
+                // Если локально нет cloud-постов, а в облаке есть — это тоже обновление
+                hasUpdates = true
             }
+            
+            // 3. Если есть обновления
+            if hasUpdates {
+                print("🍓 checkCloudForUpdates: Posts update is available")
+            } else {
+                print("🍓☑️ checkCloudForUpdates: No Updates available")
+            }
+            
+            return hasUpdates
+            
+        } catch {
+            self.errorMessage = error.localizedDescription
+            self.showErrorMessageAlert = true
+            self.hapticManager.notification(type: .error)
+            
+            print("🍓❌ checkCloudForUpdates: Error \(error.localizedDescription)")
+            return false
         }
     }
     
+//    func checkCloudCuratedPostsForUpdates(completion: @escaping (Bool) -> Void) {
+//        networkService.fetchDataFromURL() { (result: Result<[CodablePost], Error>) in
+//            self.errorMessage = nil
+//            self.showErrorMessageAlert = false
+//            
+//            switch result {
+//            case .success(let cloudResponse):
+//                
+//                let localPosts = self.allPosts.filter { $0.origin == .cloud }
+//                let cloudPostsConverted = cloudResponse
+//                    .filter { $0.origin == .cloud }
+//                    .map { PostMigrationHelper.convertFromCodable($0) }
+//                
+//                
+//                var hasUpdates = false
+//                
+//                if let latestLocalDate = self.getLatestDateFromPosts(posts: localPosts),
+//                   let latestCloudDate = self.getLatestDateFromPosts(posts: cloudPostsConverted) {
+//                    hasUpdates = latestLocalDate < latestCloudDate
+//                } else if localPosts.isEmpty && !cloudPostsConverted.isEmpty {
+//                    // Если локально нет cloud-постов, а в облаке есть — это тоже обновление
+//                    hasUpdates = true
+//                }
+//                
+//                // 3. Если есть обновления
+//                if hasUpdates {
+//                    print("🍓 checkCloudForUpdates: Posts update is available")
+//                } else {
+//                    print("🍓☑️ checkCloudForUpdates: No Updates available")
+//                }
+//                DispatchQueue.main.async {
+//                    completion(hasUpdates)
+//                }
+//            case .failure (let error):
+//                self.errorMessage = error.localizedDescription
+//                self.showErrorMessageAlert = true
+//                self.hapticManager.notification(type: .error)
+//                
+//                DispatchQueue.main.async {
+//                    print("🍓❌ checkCloudForUpdates: Error \(error.localizedDescription)")
+//                    completion(false)
+//                }
+//            }
+//        }
+//    }
+//    
     func getFilePath(fileName: String) -> Result<URL, FileStorageError> {
         print("🍓FM(getFilePath): Exporting from SwiftData...")
         print("🍓FM(getFilePath): Getting url...")

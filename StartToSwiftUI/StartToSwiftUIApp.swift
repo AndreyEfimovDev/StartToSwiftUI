@@ -26,7 +26,7 @@ struct StartToSwiftUIApp: App {
         let schema = Schema([
             Post.self,
             Notice.self,
-            AppState.self
+            AppSyncState.self
         ])
         
         let config = ModelConfiguration(
@@ -108,7 +108,7 @@ struct StartToSwiftUIApp: App {
     // 1. Создаем in-memory контейнер
 //    let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppState.self,
+        for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
 

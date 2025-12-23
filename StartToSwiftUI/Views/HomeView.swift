@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 import AudioToolbox
 
+
 struct HomeView: View {
     
     // MARK: PROPERTIES
@@ -140,42 +141,36 @@ struct HomeView: View {
         }
     }
     
-    
+    /// Звуковое одноразовое оповещение пользователя при появлении новых уведомлений
     private func soundNotificationIfNeeded() {
         if noticevm.hasUnreadNotices {
-            // Запускаем звуковое одноразовое оповещение пользователя при появлении новых уведомлений, если нужно
-            let appStateManager = AppStateManager(modelContext: modelContext)
+            let appStateManager = AppSyncStateManager(modelContext: modelContext)
             let isPerformingSoundNoticeTask = noticevm.isNotificationOn && appStateManager.getUserNotifiedBySoundStatus()
-            // 🔥 Кнопка показывается сразу, анимация через 3 секунды
+            // Кнопка показывается сразу, анимация через 3 секунды
             if isPerformingSoundNoticeTask {
-//                print("🚀 Запускаем таймер для уведомления...")
-                
+                // Создаем задержку для уведомления...
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                     print("🔔 3 секунды прошли, запускаем анимацию...")
                     
                     if noticevm.isSoundNotificationOn {
+                        // Воспроизведен звук
                         AudioServicesPlaySystemSound(1013)
-//                        print("🔊 Воспроизведен звук")
                         // Сбрасывам статус звукового оповещения пользователя -> пользователь оповещен
                         appStateManager.markUserNotifiedBySound()
                     }
-                    
+                    // Анимация начата
                     noticeButtonAnimation = true
-//                    print("🌀 Анимация начата")
-                    
+                    // Анимация завершена, пользователь уведомлен
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                         noticeButtonAnimation = false
-//                        print("✅ Анимация завершена, пользователь уведомлен")
                     }
                 }
-            } else {
-//                print("⏸️ Звукового уведомление не требуется")
             }
         }
     }
     
     // MARK: Subviews
-    
+   
     private var mainViewBody: some View {
         List {
             ForEach(postsForCategory(selectedCategory)) { post in
@@ -245,6 +240,9 @@ struct HomeView: View {
             // 🔄 Pull to refresh - перезагружаем данные
             vm.loadPostsFromSwiftData()
             hapticManager.impact(style: .light)
+            Task {
+                await noticevm.importNoticesFromCloud()
+            }
         }
     }
     
@@ -437,7 +435,7 @@ extension View {
 
 #Preview {
     let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppState.self,
+        for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     let context = ModelContext(container)

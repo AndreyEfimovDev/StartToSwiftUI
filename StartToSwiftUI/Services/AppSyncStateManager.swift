@@ -11,34 +11,65 @@ import SwiftData
 // MARK: - AppState Model для синхронизации флагов через iCloud
 
 @Model
-final class AppState {
+final class AppSyncState {
     var id: String = "app_state_singleton" // Всегда один экземпляр
-    var shouldLoadStaticPosts: Bool = true // Флаг необходимости загрузки статических постов, устанавливается пользователем в Preferences: true - загружать
-    var hasLoadedStaticPosts: Bool = false // Флаг факта загрузки статических постов: true - уже загружались
-    var isUserNotNotifiedBySound: Bool = true // Используем только при запуске приложения для одноразового звукового оповещения, ставим флаг в true чтобы известить звуком пользователя о новом сообщении в случае их появления
-    var appFirstLaunchDate: Date?
+    
+    // Флаг необходимости загрузки статических постов, устанавливается пользователем в Preferences: true - загружать
+    var shouldLoadStaticPosts: Bool = true
+    // Флаг факта загрузки статических постов: true - уже загружались
+    var hasLoadedStaticPosts: Bool = false
+    
+    // Ставим флаг в true чтобы одноразово известить звуком пользователя о новых уведомлениях в случае их появления
+    var isUserNotNotifiedBySound: Bool = true
+    // Дата последней уведомления
+    var latestNoticeDate: Date?
+
+    // Флаг наличия новых авторских материалов:
+    var isNewCuratedPostsAvailable: Bool = false // Для певрого запуска false, обновится в checkCloudCuratedPostsForUpdates()
+    var latestDateOfCuaratedPostsLoaded: Date? // Обновляем в importPostsFromCloud() и используем в CheckForPostsUpdateView()
+    
+    // For internal purposes:
+    // - cleanupDuplicateAppStates()
+    // - getOrCreateAppState()
+    // - mergeDuplicateAppStates()
     var lastCloudSyncDate: Date?
+    var appFirstLaunchDate: Date?
     
     init(
         id: String = "app_state_singleton",
+        
         shouldLoadStaticPosts: Bool = true,
         hasLoadedStaticPosts: Bool = false,
+        
+        lastNoticeDate: Date? = nil,
         isUserNotNotifiedBySound: Bool = true,
-        appFirstLaunchDate: Date? = nil,
-        lastCloudSyncDate: Date? = nil
+        
+        isNewCuratedPostsAvailable: Bool = true,
+        latestDateOfCuaratedPostsLoaded: Date? = nil,
+
+        lastCloudSyncDate: Date? = nil,
+        appFirstLaunchDate: Date? = nil
+        
     ) {
         self.id = id
         self.shouldLoadStaticPosts = shouldLoadStaticPosts
         self.hasLoadedStaticPosts = hasLoadedStaticPosts
+        
         self.isUserNotNotifiedBySound = isUserNotNotifiedBySound
-        self.appFirstLaunchDate = appFirstLaunchDate
+        self.latestNoticeDate = lastNoticeDate
+
+        self.isNewCuratedPostsAvailable = isNewCuratedPostsAvailable
+        self.latestDateOfCuaratedPostsLoaded = latestDateOfCuaratedPostsLoaded
+        
         self.lastCloudSyncDate = lastCloudSyncDate
+        self.appFirstLaunchDate = appFirstLaunchDate
+        
     }
 }
 
 
 @MainActor
-class AppStateManager {
+class AppSyncStateManager {
     
     private let modelContext: ModelContext
     
@@ -46,10 +77,33 @@ class AppStateManager {
         self.modelContext = modelContext
     }
     
+    // MARK: - Maintenance Methods
+    /// Принудительная очистка всех дубликатов AppState (для обслуживания)
+    func cleanupDuplicateAppStates() {
+        print("🧹 Запуск очистки дубликатов AppState...")
+        let descriptor = FetchDescriptor<AppSyncState>(
+            predicate: #Predicate { $0.id == "app_state_singleton" }
+        )
+        
+        do {
+            let results = try modelContext.fetch(descriptor)
+            
+            if results.count > 1 {
+                print("⚠️ Найдено \(results.count) дубликатов, очищаем...")
+                _ = mergeDuplicateAppStates(results)
+                print("✅ Очистка завершена")
+            } else {
+                print("✅ Дубликатов не обнаружено (\(results.count) AppState)")
+            }
+        } catch {
+            print("❌ Ошибка при очистке дубликатов: \(error)")
+        }
+    }
+
     /// Получить или создать AppState с атомарной проверкой и дедупликацией
-    func getOrCreateAppState() -> AppState {
+    func getOrCreateAppState() -> AppSyncState {
         // 1. Ищем все AppState с нашим singleton ID
-        let descriptor = FetchDescriptor<AppState>(
+        let descriptor = FetchDescriptor<AppSyncState>(
             predicate: #Predicate { $0.id == "app_state_singleton" }
         )
         
@@ -78,7 +132,7 @@ class AppStateManager {
             }
             
             print("📦 Создаём новый AppState")
-            let newState = AppState(
+            let newState = AppSyncState(
                 id: "app_state_singleton",
                 appFirstLaunchDate: Date()
             )
@@ -89,14 +143,14 @@ class AppStateManager {
             
         } catch {
             print("❌ Ошибка при получении AppState: \(error)")
-            let newState = AppState()
+            let newState = AppSyncState()
             modelContext.insert(newState)
             return newState
         }
     }
     
     /// Объединяет дубликаты AppState, сохраняя самые актуальные данные
-    private func mergeDuplicateAppStates(_ states: [AppState]) -> AppState {
+    private func mergeDuplicateAppStates(_ states: [AppSyncState]) -> AppSyncState {
         print("🔄 Объединяем \(states.count) AppState...")
         
         // Сортируем по дате создания (самый старый = оригинальный)
@@ -105,7 +159,7 @@ class AppStateManager {
         }
         
         guard let primaryState = sortedStates.first else {
-            return AppState()
+            return AppSyncState()
         }
         
         print("  📌 Основной AppState: \(primaryState.id)")
@@ -169,8 +223,7 @@ class AppStateManager {
         return primaryState
     }
     
-    // MARK: - Public Methods
-    
+    // MARK: - Methods for Static posts
     /// Проверить, загружались ли статические посты
     func getStaticPostsLoadToggleStatus() -> Bool {
         let appState = getOrCreateAppState()
@@ -191,8 +244,7 @@ class AppStateManager {
             print("❌ Ошибка сохранения AppState: \(error)")
         }
     }
-    
-    
+        
     /// Включить загрузку статических постов, устанавливается пользователем в Preferences: true - загружать
     func setShouldLoadStaticPostsOff() {
         let appState = getOrCreateAppState()
@@ -205,9 +257,6 @@ class AppStateManager {
             print("❌ Ошибка сохранения AppState: \(error)")
         }
     }
-
-
-
     
     /// Проверить, загружены ли статические посты
     func checkIfStaticPostsHasLoaded() -> Bool {
@@ -243,7 +292,7 @@ class AppStateManager {
         }
     }
 
-    
+    // MARK: - Methods for Notices
     /// Проверить, нужно ли уведомить пользователя звуком
     func getUserNotifiedBySoundStatus() -> Bool {
         let appState = getOrCreateAppState()
@@ -291,28 +340,75 @@ class AppStateManager {
         }
     }
     
-    // MARK: - Maintenance
-    
-    /// Принудительная очистка всех дубликатов AppState (для обслуживания)
-    func cleanupDuplicateAppStates() {
-        print("🧹 Запуск очистки дубликатов AppState...")
+    func getLastNoticeDate() -> Date? {
+        let appState = getOrCreateAppState()
+        return appState.latestNoticeDate
         
-        let descriptor = FetchDescriptor<AppState>(
-            predicate: #Predicate { $0.id == "app_state_singleton" }
-        )
+    }
+
+    
+    func updateLatestNoticeDate(_ date: Date) {
+        let appState = getOrCreateAppState()
+        appState.latestNoticeDate = date
         
         do {
-            let results = try modelContext.fetch(descriptor)
-            
-            if results.count > 1 {
-                print("⚠️ Найдено \(results.count) дубликатов, очищаем...")
-                _ = mergeDuplicateAppStates(results)
-                print("✅ Очистка завершена")
-            } else {
-                print("✅ Дубликатов не обнаружено (\(results.count) AppState)")
-            }
+            try modelContext.save()
+            print("✅ Дата последней синхронизации обновлена")
         } catch {
-            print("❌ Ошибка при очистке дубликатов: \(error)")
+            print("❌ Ошибка сохранения AppState: \(error)")
         }
     }
+
+    // MARK: - Methods for Cloud import of curated posts status
+    /// Статус isNewCuratedPostsAvailable устанавливается в false, после:
+    /// - после  импорта новых материалы авторских ссылок из облаке самим пользователем
+    /// Статус isFirstImportCuratedPostsCompleted устанавливается в true:
+    /// - иначальное значение для первой загрузки приложения
+    /// - при проверке и обнаружении новых материалов авторских ссылок в облаке (включено в init()  PostsViewModel)
+    /// - при удалении всех локальных материалов - функция "Erase all materials"
+
+    /// Получить статус наличия новых материалы авторских ссылок в облаке
+    func getAvailableNewCuratedPostsStatus() -> Bool {
+        let appState = getOrCreateAppState()
+        return appState.isNewCuratedPostsAvailable
+    }
+    
+    /// Установить флаг наличия новых материалы авторских ссылок в облаке
+    func setCuratedPostsLoadStatusOn() {
+        let appState = getOrCreateAppState()
+        appState.shouldLoadStaticPosts = true
+        
+        do {
+            try modelContext.save()
+            print("✅ Флаг hasLoadedStaticPosts установлен в true")
+        } catch {
+            print("❌ Ошибка сохранения AppState: \(error)")
+        }
+    }
+        
+    /// Сбросить флаг  наличия новых материалы авторских ссылок в облаке
+    func setCuratedPostsLoadStatusOff() {
+        let appState = getOrCreateAppState()
+        appState.shouldLoadStaticPosts = false
+        
+        do {
+            try modelContext.save()
+            print("✅ Флаг hasLoadedStaticPosts установлен в true")
+        } catch {
+            print("❌ Ошибка сохранения AppState: \(error)")
+        }
+    }
+    
+    /// Обновить старшую дату загруженных материалы авторских ссылок из облака
+    func setLastDateOfCuaratedPostsLoaded(_ date: Date) {
+        let appState = getOrCreateAppState()
+        appState.latestDateOfCuaratedPostsLoaded = date
+    }
+
+    /// Получить старшую дату загруженных материалы авторских ссылок из облака
+    func getLastDateOfCuaratedPostsLoaded() -> Date? {
+        let appState = getOrCreateAppState()
+        return appState.latestDateOfCuaratedPostsLoaded
+    }
+    
 }

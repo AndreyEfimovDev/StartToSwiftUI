@@ -19,6 +19,7 @@ import SwiftData
 struct PreferencesView: View {
     
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
     
@@ -69,43 +70,14 @@ struct PreferencesView: View {
                     )
                 } // gauge.open.with.lines.needle.67percent.and.arrowtriangle
                 
-//                Section {
-//                    
-//                    
-//                    VStack(alignment: .leading, spacing: 12) {
-//                        Toggle(isOn: $vm.shouldLoadStaticPosts) {
-//                            VStack(alignment: .leading, spacing: 4) {
-//                                Text("Load Static Posts")
-//                                    .font(.headline)
-//                                Text("Include 6 curated SwiftUI learning resources at app launch")
-//                                    .font(.caption)
-//                                    .foregroundColor(.secondary)
-//                            }
-//                        }
-//                        .tint(Color.mycolor.myBlue)
-//                        
-//                        if !vm.shouldLoadStaticPosts {
-//                            Text("Static posts will be removed on next app launch")
-//                                .font(.caption2)
-//                                .foregroundColor(.orange)
-//                                .padding(.leading, 4)
-//                        }
-//                    }
-//                    .padding(.vertical, 8)
-//                } header: {
-//                    Text("Content")
-//                        .font(.subheadline)
-//                        .foregroundColor(Color.mycolor.myAccent)
-//                }
-//                
                 Section(header: sectionHeader("Manage materials (\(postsCount))")) {
+                    loadStaticPostsToggle
                     postDrafts
                     checkForPostsUpdate
                     importFromCloud
                     shareBackup
                     restoreBackup
                     erasePosts
-                    notificationToggle
                 }
                                                 
                 
@@ -199,27 +171,6 @@ struct PreferencesView: View {
             Toggle("Load static posts", isOn: $vm.shouldLoadStaticPosts)
                 .tint(Color.mycolor.myBlue)
         }
-        
-        //        VStack(alignment: .leading, spacing: 12) {
-        //            Toggle(isOn: $vm.shouldLoadStaticPosts) {
-        //                VStack(alignment: .leading, spacing: 4) {
-        //                    Text("Load Static Posts")
-        //                        .font(.headline)
-        //                    Text("Include 6 curated SwiftUI learning resources at app launch")
-        //                        .font(.caption)
-        //                        .foregroundColor(.secondary)
-        //                }
-        //            }
-        //            .tint(Color.mycolor.myBlue)
-        //
-        //            if !vm.shouldLoadStaticPosts {
-        //                Text("Static posts will be removed on next app launch")
-        //                    .font(.caption2)
-        //                    .foregroundColor(.orange)
-        //                    .padding(.leading, 4)
-        //            }
-        //        }
-        //        .padding(.vertical, 8)
     }
     
     private var noticeMessages: some View {
@@ -246,9 +197,16 @@ struct PreferencesView: View {
         }
     }
     
+    /// Проверка наличие новых авторских ссылок на материалы доступна если:
+    /// - статус наличия новых материалов = true, и
+    /// - в локальном массиве материалов есть авторские (для постов с .origin = ,cloud)
     private var checkForPostsUpdate: some View {
         Group {
-            if (!vm.allPosts.isEmpty) && vm.isFirstImportPostsCompleted {
+            let appStateManager = AppSyncStateManager(modelContext: modelContext)
+            let status = appStateManager.getAvailableNewCuratedPostsStatus()
+            let localPostsFromCloud = vm.allPosts.filter { $0.origin == .cloud }
+
+            if status && !localPostsFromCloud.isEmpty {
                 NavigationLink("Check for materials update") {
                     CheckForPostsUpdateView()
                 }
@@ -260,14 +218,22 @@ struct PreferencesView: View {
         }
     }
     
+    /// Импорт доступен, если в локальных массиве материалов нет авторских (для постов с .origin = ,cloud)
+
     private var importFromCloud: some View {
-        NavigationLink("Download the curated collection") {
-            ImportPostsFromCloudView()
+        Group {
+            let localPostsFromCloud = vm.allPosts.filter { $0.origin == .cloud }
+
+            if localPostsFromCloud.isEmpty {
+                NavigationLink("Download the curated collection") {
+                    ImportPostsFromCloudView()
+                }
+                .customListRowStyle(
+                    iconName: "icloud.and.arrow.down",
+                    iconWidth: iconWidth
+                )
+            }
         }
-        .customListRowStyle(
-            iconName: "icloud.and.arrow.down",
-            iconWidth: iconWidth
-        )
     }
     
     private var shareBackup: some View {
@@ -347,27 +313,9 @@ struct PreferencesView: View {
     }
 }
 
-
-//// MARK: - Wrapping all child views for lazy loading (for testing)
-//
-//struct LazyView<Content: View>: View {
-//
-//    let build: () -> Content
-//
-//    init(_ build: @escaping () -> Content) {
-//        self.build = build
-//    }
-//
-//    var body: Content {
-//        build()
-//    }
-//}
-
-
 #Preview {
-    
     let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppState.self,
+        for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     let context = ModelContext(container)
@@ -378,6 +326,7 @@ struct PreferencesView: View {
     NavigationStack {
         PreferencesView ()
     }
+    .modelContainer(container)
     .environmentObject(vm)
     .environmentObject(noticevm)
 }

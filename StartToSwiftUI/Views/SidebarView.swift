@@ -72,7 +72,7 @@ struct SidebarView: View {
 
 #Preview {
     let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppState.self,
+        for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     let context = ModelContext(container)
