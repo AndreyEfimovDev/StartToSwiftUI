@@ -68,11 +68,11 @@ struct AddEditPostSheet: View {
         
         if let post = post { // post for editing initialising
             _editedPost = State(initialValue: post)
-            _draftPost = State(initialValue: post)
+            _draftPost = State(initialValue: post.copy())
             self.isNewPost = false
         } else { // if post is not passed (nil) - add a new post initialising
             _editedPost = State(initialValue: templateForNewPost)
-            _draftPost = State(initialValue: templateForNewPost)
+            _draftPost = State(initialValue: templateForNewPost.copy())
             self.isNewPost = true
         }
     }
@@ -187,7 +187,14 @@ struct AddEditPostSheet: View {
                 iconName: "checkmark",
                 isShownCircle: false)
             {
-                if editedPost.draft == false && editedPost == draftPost {  // if no changes
+                guard let draftPost = draftPost else {
+                    // На всякий случай, если draftPost nil - просто сохраняем
+                    editedPost.draft = false
+                    checkPostAndSave()
+                    return
+                }
+                
+                if editedPost.draft == false && editedPost.isEqual(to: draftPost) {  // if no changes
                     dismiss()
                 } else {
                     editedPost.draft = false
@@ -203,9 +210,14 @@ struct AddEditPostSheet: View {
                 imageColorPrimary: Color.mycolor.myRed,
                 isShownCircle: false)
             {
-                if editedPost == draftPost {  // if no changes
+                guard let draftPost = draftPost else {
+                    // Если draftPost nil, значит что-то пошло не так, но лучше просто выйти
+                    dismiss()
+                    return
+                }
+                
+                if editedPost.isEqual(to: draftPost) {  // if no changes
                     print("🧁 no changes: editedPost == draftPost - dismiss()")
-                    
                     dismiss()
                 } else {
                     print("🧁 are changes: editedPost != draftPost - dismiss()")
@@ -648,7 +660,10 @@ struct AddEditPostSheet: View {
 }
 
 #Preview {
-    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppSyncState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
     let context = ModelContext(container)
     
     let vm = PostsViewModel(modelContext: context)
@@ -660,7 +675,10 @@ struct AddEditPostSheet: View {
 }
 
 #Preview {
-    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppSyncState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
     let context = ModelContext(container)
     
     let vm = PostsViewModel(modelContext: context)

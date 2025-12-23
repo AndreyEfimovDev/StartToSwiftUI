@@ -15,9 +15,7 @@ struct NoticeDetailsView: View {
     
     let noticeId: String
     
-    init(
-        noticeId: String,
-    ) {
+    init(noticeId: String) {
         self.noticeId = noticeId
     }
     
@@ -26,15 +24,12 @@ struct NoticeDetailsView: View {
 //                DevData.sampleNotice2
     }
     
-    
     private let sectionCornerRadius: CGFloat = 15
     
     var body: some View {
         ZStack {
-            
             if let validNotice = notice {
                 ScrollView(showsIndicators: false) {
-                    
                     VStack (alignment: .leading){
                         Text(validNotice.noticeDate.formatted(date: .numeric, time: .omitted))
                             .font(.caption)
@@ -66,11 +61,7 @@ struct NoticeDetailsView: View {
             }
         } // ZStack root
         .onAppear {
-            if let notice = notice {
-                if notice.isRead == false {
-                    noticevm.isReadSetTrue(notice: notice)
-                }
-            }
+            noticevm.markAsRead(noticeId: noticeId)
         }
         .navigationTitle("Notice message")
         .navigationBarBackButtonHidden(true)
@@ -103,7 +94,10 @@ struct NoticeDetailsView: View {
 }
 
 #Preview {
-    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppSyncState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
     let context = ModelContext(container)
     
     let noticevm = NoticeViewModel(modelContext: context)

@@ -94,10 +94,13 @@ struct NoticesView: View {
 }
 
 #Preview {
-    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
-       let context = ModelContext(container)
-       
-       let noticevm = NoticeViewModel(modelContext: context)
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppSyncState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+    let context = ModelContext(container)
+    
+    let noticevm = NoticeViewModel(modelContext: context)
     
     NavigationStack {
         NoticesView()
