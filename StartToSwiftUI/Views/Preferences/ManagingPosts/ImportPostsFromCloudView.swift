@@ -37,7 +37,9 @@ struct ImportPostsFromCloudView: View {
                         isToChange: isLoaded) {
                             isInProgress = true
                             initialPostCount = vm.allPosts.count
-                            importFromCloud()
+                            Task {
+                                await importFromCloud()
+                            }
                         }
                         .disabled(isLoaded || isInProgress)
                         .padding(.top, 30)
@@ -113,7 +115,7 @@ struct ImportPostsFromCloudView: View {
     
     // MARK: - Import Methods
     
-    private func importFromCloud() {
+    private func importFromCloud() async {
         
         // ВАРИАНТ 1: Загрузка DevData (для формирования JSON)
         // Раскомментируйте эту часть, когда нужно загрузить DevData
@@ -123,7 +125,7 @@ struct ImportPostsFromCloudView: View {
         // ВАРИАНТ 2: Загрузка из облака (основной режим)
         // Закомментируйте эту часть, когда используете DevData
         
-        loadFromCloudService()
+        await loadFromCloudService()
         
     }
     
@@ -207,10 +209,15 @@ struct ImportPostsFromCloudView: View {
     }
     
     /// ВАРИАНТ 2: Загрузка из облачного сервиса
-    private func loadFromCloudService() {
+    private func loadFromCloudService() async {
+        
+//        let appStateManager = AppStateManager(modelContext: modelContext)
+        print("⏳ loadFromCloudService(): Ожидание синхронизации iCloud (1 секунда)...")
+        try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 секунда
+
         print("☁️ Начинаем загрузку из облака...")
         
-        vm.importPostsFromCloud() { [self] in
+        await vm.importPostsFromCloud() { [self] in
             Task { @MainActor in
                 isInProgress = false
                 
@@ -219,11 +226,6 @@ struct ImportPostsFromCloudView: View {
                     
                     // Обновляем счётчик загруженных постов
                     postCount = vm.allPosts.count - initialPostCount
-                    
-                    // Отмечаем первый импорт как завершённый
-                    if !vm.isFirstImportPostsCompleted {
-                        vm.isFirstImportPostsCompleted = true
-                    }
                     
                     hapticManager.notification(type: .success)
                     

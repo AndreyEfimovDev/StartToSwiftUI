@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 import AudioToolbox
 
+
 struct HomeView: View {
     
     // MARK: PROPERTIES
@@ -34,132 +35,144 @@ struct HomeView: View {
     
     @State private var isFilterButtonPressed: Bool = false
     @State private var isShowingDeleteConfirmation: Bool = false
-    private let limitToShortenTitle: Int = 30
     
     @State private var noticeButtonAnimation = false
     
     @State private var isDetectingLongPress: Bool = false
     @State private var isLongPressSuccess: Bool = false
-    private let longPressDuration: Double = 0.5
     
-    private var isShowingNoticeMessageButton: Bool {
-        !noticevm.notices.filter({ $0.isRead == false }).isEmpty &&
-        noticevm.isNotificationOn
-    }
-    private var isPerformingNoticeTask: Bool {
-        noticevm.isNotificationOn &&
-        !noticevm.isUserNotified
-    }
+    private let longPressDuration: Double = 0.5
+    private let limitToShortenTitle: Int = 30
+
    
     // MARK: VIEW BODY
     
     var body: some View {
-        GeometryReader { proxy in
-            ScrollViewReader { scrollProxy in
-                ZStack (alignment: .bottom) {
-                    if vm.allPosts.isEmpty {
-                        allPostsIsEmpty
-                    } else if vm.filteredPosts.isEmpty {
-                        filteredPostsIsEmpty
-                    } else {
-                        mainViewBody
-                        onTopButton(proxy: scrollProxy)
-                    }
-                }
-            }
-            .disabled(isLongPressSuccess || isShowingDeleteConfirmation)
-            .navigationTitle(vm.selectedCategory ?? "SwiftUI")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                toolbarForMainViewBody()
-            }
-            .safeAreaInset(edge: .top) {
-                SearchBarView()
-            }
-            .navigationDestination(isPresented: $showDetailView) {
-                if let id = vm.selectedPostId {
-                    withAnimation {
-                        PostDetailsView(postId: id)
-                    }
-                }
-            }
-            .sheetForUIDeviceBoolean(isPresented: $showPreferancesView) {
-                PreferencesView()
-            }
-            .sheetForUIDeviceBoolean(isPresented: $showNoticesView) {
-                NavigationStack {
-                    NoticesView()
-                }
-            }
-            .sheetForUIDeviceBoolean(isPresented: $showAddPostView) {
-                NavigationStack {
-                    AddEditPostSheet(post: nil)
-                }
-            }
-            .sheetForUIDeviceItem(item: $selectedPost) { selectedPostToEdit in
-                NavigationStack {
-                    AddEditPostSheet(post: selectedPostToEdit)
-                }
-            }
-            .sheet(isPresented: $isFilterButtonPressed) {
-                FiltersSheetView(
-                    isFilterButtonPressed: $isFilterButtonPressed
-                )
-                .presentationBackground(.ultraThinMaterial)
-                .presentationDetents([.height(600)])
-                .presentationDragIndicator(.visible)
-                .presentationCornerRadius(30)
-            }
-            .overlay {
-                if UIDevice.isiPhone {
-                    if isLongPressSuccess {
-                        RatingSelectionView() {
-                            isLongPressSuccess = false
+        NavigationStack {
+            GeometryReader { proxy in
+                ScrollViewReader { scrollProxy in
+                    ZStack (alignment: .bottom) {
+                        if vm.allPosts.isEmpty {
+                            allPostsIsEmpty
+                        } else if vm.filteredPosts.isEmpty {
+                            filteredPostsIsEmpty
+                        } else {
+                            mainViewBody
+                            onTopButton(proxy: scrollProxy)
                         }
-                        .frame(maxHeight: max(proxy.size.height / 3, 300))
-                        .padding(.horizontal, 30)
                     }
                 }
-            }
-            .overlay {
-                if UIDevice.isiPhone {
-                    if showProgressSelectionView {
-                        ProgressSelectionView() {
-                            showProgressSelectionView = false
+                .disabled(isLongPressSuccess || isShowingDeleteConfirmation)
+                .navigationTitle(vm.selectedCategory ?? "SwiftUI")
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    toolbarForMainViewBody()
+                }
+                .safeAreaInset(edge: .top) {
+                    SearchBarView()
+                }
+                .navigationDestination(isPresented: $showDetailView) {
+                    if let id = vm.selectedPostId {
+                        withAnimation {
+                            PostDetailsView(postId: id)
                         }
-                        .frame(maxHeight: max(proxy.size.height / 3, 300))
-                        .padding(.horizontal, 30)
                     }
                 }
-            }
-            .overlay {
-                if isShowingDeleteConfirmation {
-                    postDeletionConfirmation
-                        .opacity(isShowingDeleteConfirmation ? 1 : 0)
-                        .transition(.move(edge: .bottom))
+                .sheetForUIDeviceBoolean(isPresented: $showPreferancesView) {
+                    PreferencesView()
+                }
+                .sheetForUIDeviceBoolean(isPresented: $showNoticesView) {
+                    NavigationStack {
+                        NoticesView()
+                    }
+                }
+                .sheetForUIDeviceBoolean(isPresented: $showAddPostView) {
+                    NavigationStack {
+                        AddEditPostSheet(post: nil)
+                    }
+                }
+                .sheetForUIDeviceItem(item: $selectedPost) { selectedPostToEdit in
+                    NavigationStack {
+                        AddEditPostSheet(post: selectedPostToEdit)
+                    }
+                }
+                .sheet(isPresented: $isFilterButtonPressed) {
+                    FiltersSheetView(
+                        isFilterButtonPressed: $isFilterButtonPressed
+                    )
+                    .presentationBackground(.ultraThinMaterial)
+                    .presentationDetents([.height(600)])
+                    .presentationDragIndicator(.visible)
+                    .presentationCornerRadius(30)
+                }
+                .overlay {
+                    if UIDevice.isiPhone {
+                        if isLongPressSuccess {
+                            RatingSelectionView() {
+                                isLongPressSuccess = false
+                            }
+                            .frame(maxHeight: max(proxy.size.height / 3, 300))
+                            .padding(.horizontal, 30)
+                        }
+                    }
+                }
+                .overlay {
+                    if UIDevice.isiPhone {
+                        if showProgressSelectionView {
+                            ProgressSelectionView() {
+                                showProgressSelectionView = false
+                            }
+                            .frame(maxHeight: max(proxy.size.height / 3, 300))
+                            .padding(.horizontal, 30)
+                        }
+                    }
+                }
+                .overlay {
+                    if isShowingDeleteConfirmation {
+                        postDeletionConfirmation
+                            .opacity(isShowingDeleteConfirmation ? 1 : 0)
+                            .transition(.move(edge: .bottom))
+                    }
+                }
+                .onAppear {
+                    vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
+                    soundNotificationIfNeeded()
                 }
             }
-            .onAppear {
-                vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-            }
-            .task {
-                if isPerformingNoticeTask {
-                    try? await Task.sleep(nanoseconds: 3_000_000_000)
+        }
+    }
+    
+    /// Звуковое одноразовое оповещение пользователя при появлении новых уведомлений
+    private func soundNotificationIfNeeded() {
+        if noticevm.hasUnreadNotices {
+            let appStateManager = AppSyncStateManager(modelContext: modelContext)
+            let isPerformingSoundNoticeTask = noticevm.isNotificationOn && appStateManager.getUserNotifiedBySoundStatus()
+            // Кнопка показывается сразу, анимация через 3 секунды
+            if isPerformingSoundNoticeTask {
+                // Создаем задержку для уведомления...
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                    print("🔔 3 секунды прошли, запускаем анимацию...")
+                    
                     if noticevm.isSoundNotificationOn {
+                        // Воспроизведен звук
                         AudioServicesPlaySystemSound(1013)
+                        // Сбрасывам статус звукового оповещения пользователя -> пользователь оповещен
+                        appStateManager.markUserNotifiedBySound()
                     }
+                    // Анимация начата
                     noticeButtonAnimation = true
-                    try? await Task.sleep(nanoseconds: 1_000_000_000)
-                    noticeButtonAnimation = false
-                    noticevm.isUserNotified = true
+                    // Анимация завершена, пользователь уведомлен
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        noticeButtonAnimation = false
+                    }
                 }
             }
         }
     }
     
     // MARK: Subviews
-    
+   
     private var mainViewBody: some View {
         List {
             ForEach(postsForCategory(selectedCategory)) { post in
@@ -228,6 +241,10 @@ struct HomeView: View {
         .refreshControl {
             // 🔄 Pull to refresh - перезагружаем данные
             vm.loadPostsFromSwiftData()
+            hapticManager.impact(style: .light)
+            Task {
+                await noticevm.importNoticesFromCloud()
+            }
         }
     }
     
@@ -295,7 +312,7 @@ struct HomeView: View {
                 showPreferancesView.toggle()
             }
         }
-        if isShowingNoticeMessageButton {
+        if noticevm.hasUnreadNotices {
             ToolbarItem(placement: .navigationBarLeading) {
                 CircleStrokeButtonView(
                     iconName: "message",
@@ -419,7 +436,10 @@ extension View {
 }
 
 #Preview {
-    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppSyncState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
     let context = ModelContext(container)
     
     let vm = PostsViewModel(modelContext: context)

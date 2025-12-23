@@ -32,6 +32,8 @@ enum Theme: String, CaseIterable, Codable {
     }
 }
 
+// MARK: Tabs to shift study levels in StudyProgressView
+
 enum StudyLevelTabs: String, CaseIterable, Codable, Hashable {
     case all
     case beginner
@@ -57,7 +59,7 @@ enum StudyLevelTabs: String, CaseIterable, Codable, Hashable {
     }
 }
 
-// MARK: Sorting option
+// MARK: Sorting options
 
 enum SortOption: String, CaseIterable {
     case newestFirst
@@ -238,8 +240,8 @@ enum Platform: String, CaseIterable, Codable {
     
     var displayName: String {
         switch self {
-        case .youtube: return "YouTube"
-        case .website: return "Website"
+        case .youtube: return "Watch"
+        case .website: return "Read"
 //        case .others: return "Others"
         }
     }

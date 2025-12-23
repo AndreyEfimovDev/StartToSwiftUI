@@ -11,28 +11,28 @@ import SwiftData
 
 @Model
 final class Post {
-    @Attribute(.unique) var id: String
-    var category: String
-    var title: String
-    var intro: String
-    var author: String
-    var postTypeRawValue: String // Храним как String для Codable
-    var urlString: String
-    var postPlatformRawValue: String
+    var id: String = UUID().uuidString // CloudKit НЕ поддерживает @Attribute(.unique)
+    var category: String = "SwiftUI"
+    var title: String = ""
+    var intro: String = ""
+    var author: String = ""
+    var postTypeRawValue: String = "post"
+    var urlString: String = "https://"
+    var postPlatformRawValue: String = "youtube"
     var postDate: Date?
-    var studyLevelRawValue: String
-    var progressRawValue: String
-    var favoriteChoiceRawValue: String
+    var studyLevelRawValue: String = "beginner"
+    var progressRawValue: String = "fresh"
+    var favoriteChoiceRawValue: String = "no"
     var postRatingRawValue: String?
-    var notes: String
-    var originRawValue: String
-    var draft: Bool
-    var date: Date
+    var notes: String = ""
+    var originRawValue: String = "cloud"
+    var draft: Bool = false
+    var date: Date = Date() // Дата создание данной записи
     var startedDateStamp: Date?
     var studiedDateStamp: Date?
     var practicedDateStamp: Date?
     
-    // Computed properties для удобства работы с enum
+    // Computed properties for ease of working with enumerations
     var postType: PostType {
         get { PostType(rawValue: postTypeRawValue) ?? .post }
         set { postTypeRawValue = newValue.rawValue }
@@ -115,6 +115,59 @@ final class Post {
         self.practicedDateStamp = practicedDateStamp
     }
 }
+
+
+extension Post {
+    func isEqual(to other: Post) -> Bool {
+        return self.id == other.id &&
+               self.category == other.category &&
+               self.title == other.title &&
+               self.intro == other.intro &&
+               self.author == other.author &&
+               self.postTypeRawValue == other.postTypeRawValue &&
+               self.urlString == other.urlString &&
+               self.postPlatformRawValue == other.postPlatformRawValue &&
+               self.postDate == other.postDate &&
+               self.studyLevelRawValue == other.studyLevelRawValue &&
+               self.progressRawValue == other.progressRawValue &&
+               self.favoriteChoiceRawValue == other.favoriteChoiceRawValue &&
+               self.postRatingRawValue == other.postRatingRawValue &&
+               self.notes == other.notes &&
+               self.draft == other.draft &&
+               self.startedDateStamp == other.startedDateStamp &&
+               self.studiedDateStamp == other.studiedDateStamp &&
+               self.practicedDateStamp == other.practicedDateStamp
+    }
+}
+
+
+extension Post {
+    func copy() -> Post {
+        return Post(
+            id: self.id,
+            category: self.category,
+            title: self.title,
+            intro: self.intro,
+            author: self.author,
+            postType: self.postType,
+            urlString: self.urlString,
+            postPlatform: self.postPlatform,
+            postDate: self.postDate,
+            studyLevel: self.studyLevel,
+            progress: self.progress,
+            favoriteChoice: self.favoriteChoice,
+            postRating: self.postRating,
+            notes: self.notes,
+            origin: self.origin,
+            draft: self.draft,
+            date: self.date,
+            startedDateStamp: self.startedDateStamp,
+            studiedDateStamp: self.studiedDateStamp,
+            practicedDateStamp: self.practicedDateStamp
+        )
+    }
+}
+
 
 
 //struct Post: Identifiable, Hashable, Codable {
