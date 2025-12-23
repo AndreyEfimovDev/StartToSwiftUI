@@ -12,6 +12,7 @@ struct NoticesView: View {
     
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var noticevm: NoticeViewModel
+    @EnvironmentObject private var coordinator: NavigationCoordinator
     
     private let hapticManager = HapticService.shared
     
@@ -105,6 +106,7 @@ struct NoticesView: View {
     NavigationStack {
         NoticesView()
             .environmentObject(noticevm)
+            .environmentObject(NavigationCoordinator())
     }
 }
 

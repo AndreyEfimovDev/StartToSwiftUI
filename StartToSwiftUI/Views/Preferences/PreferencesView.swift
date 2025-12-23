@@ -22,6 +22,8 @@ struct PreferencesView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
+    @EnvironmentObject private var coordinator: NavigationCoordinator
+
     
     let iconWidth: CGFloat = 18
     
@@ -60,14 +62,19 @@ struct PreferencesView: View {
 
                 
                 Section(header: sectionHeader("Achievements")) {
-                    
-                    NavigationLink("Check progress") {
-                        StudyProgressView()
+                    Button("Check progress") {
+                        // ✅ Используем координатор
+                        coordinator.push(.studyProgress)
                     }
-                    .customListRowStyle(
-                        iconName: "hare",
-                        iconWidth: iconWidth
-                    )
+                    .customListRowStyle(iconName: "hare", iconWidth: iconWidth)
+                    
+                    //                    NavigationLink("Check progress") {
+                    //                        StudyProgressView()
+                    //                    }
+                    //                    .customListRowStyle(
+                    //                        iconName: "hare",
+                    //                        iconWidth: iconWidth
+//                    )
                 } // gauge.open.with.lines.needle.67percent.and.arrowtriangle
                 
                 Section(header: sectionHeader("Manage materials (\(postsCount))")) {
@@ -329,4 +336,5 @@ struct PreferencesView: View {
     .modelContainer(container)
     .environmentObject(vm)
     .environmentObject(noticevm)
+    .environmentObject(NavigationCoordinator())
 }

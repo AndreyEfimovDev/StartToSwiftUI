@@ -10,10 +10,10 @@ import SwiftData
 
 struct EraseAllPostsView: View {
     
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
-    
+    @EnvironmentObject private var coordinator: NavigationCoordinator
+
     private let hapticManager = HapticService.shared
     
     @State private var isDeleted: Bool = false
@@ -45,7 +45,7 @@ struct EraseAllPostsView: View {
                         appStateManager.setCuratedPostsLoadStatusOn()
                         
                         DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                            dismiss()
+                            coordinator.popToRoot()
                         }
                     }
                 }
@@ -71,8 +71,18 @@ struct EraseAllPostsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                BackButtonView() { dismiss() }
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView() {
+                    coordinator.pop()
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    coordinator.popToRoot()
+                } label: {
+                    Image(systemName: "house")
+                        .foregroundStyle(Color.mycolor.myAccent)
+                }
             }
         }
     }
@@ -132,5 +142,6 @@ struct EraseAllPostsView: View {
         EraseAllPostsView()
             .modelContainer(container)
             .environmentObject(vm)
+            .environmentObject(NavigationCoordinator())
     }
 }

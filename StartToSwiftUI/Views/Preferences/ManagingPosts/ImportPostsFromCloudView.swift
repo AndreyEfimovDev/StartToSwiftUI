@@ -11,9 +11,9 @@ import SwiftData
 
 struct ImportPostsFromCloudView: View {
     
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
+    @EnvironmentObject private var coordinator: NavigationCoordinator
     
     private let hapticManager = HapticService.shared
     
@@ -33,7 +33,7 @@ struct ImportPostsFromCloudView: View {
                 Group {
                     CapsuleButtonView(
                         primaryTitle: "Confirm and Download",
-                        secondaryTitle: "\(postCount) Posts Downloaded",
+                        secondaryTitle: "\(postCount) New Materials Added",
                         isToChange: isLoaded) {
                             isInProgress = true
                             initialPostCount = vm.allPosts.count
@@ -48,7 +48,7 @@ struct ImportPostsFromCloudView: View {
                         primaryTitle: "Don't confirm",
                         textColorPrimary: Color.mycolor.myButtonTextRed,
                         buttonColorPrimary: Color.mycolor.myButtonBGRed) {
-                            dismiss()
+                            coordinator.popToRoot()
                         }
                         .opacity(isLoaded ? 0 : 1)
                         .disabled(isInProgress)
@@ -66,7 +66,7 @@ struct ImportPostsFromCloudView: View {
         .padding(.top, 30)
         .alert("Download Error", isPresented: $vm.showErrorMessageAlert) {
             Button("OK", role: .cancel) {
-                dismiss()
+                coordinator.pop()
             }
         } message: {
             Text(vm.errorMessage ?? "Unknown error")
@@ -75,8 +75,18 @@ struct ImportPostsFromCloudView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                BackButtonView() { dismiss() }
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView() {
+                    coordinator.pop()
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    coordinator.popToRoot()
+                } label: {
+                    Image(systemName: "house")
+                        .foregroundStyle(Color.mycolor.myAccent)
+                }
             }
         }
     }
@@ -117,19 +127,17 @@ struct ImportPostsFromCloudView: View {
     
     private func importFromCloud() async {
         
-        // ВАРИАНТ 1: Загрузка DevData (для формирования JSON)
-        // Раскомментируйте эту часть, когда нужно загрузить DevData
-        
+        // Раскомментировать эту часть, когда нужно загрузить DevData
 //        loadDevData()
        
-        // ВАРИАНТ 2: Загрузка из облака (основной режим)
+        // Загрузка из облака (основной режим)
         // Закомментируйте эту часть, когда используете DevData
-        
         await loadFromCloudService()
         
     }
     
-    /// ВАРИАНТ 1: Загрузка DevData для формирования JSON
+    /// Загрузка DevData для формирования JSON
+    /// Для внутреннего использования, чтобы сформировать JSON файл для облака
     private func loadDevData() {
         print("🔵 Начинаем загрузку DevData...")
         
@@ -181,22 +189,19 @@ struct ImportPostsFromCloudView: View {
                 try modelContext.save()
                 print("✅ DevData: Загружено \(addedCount) постов из \(DevData.postsForCloud.count)")
                 
-                // 🌥️ Автоматическая синхронизация с iCloud!
-                
-                // Обновляем ViewModel
+                // Обновляем UI
                 vm.loadPostsFromSwiftData()
                 
-                // Обновляем счётчик
+                // Количесвто итого сколько загрузили
                 postCount = vm.allPosts.count - initialPostCount
                 
-                // Завершаем
                 isInProgress = false
                 isLoaded = true
                 hapticManager.notification(type: .success)
                 
                 // Закрываем через 1.5 секунды
                 try? await Task.sleep(nanoseconds: 1_500_000_000)
-                dismiss()
+                coordinator.popToRoot()
                 
             } catch {
                 print("❌ Ошибка загрузки DevData: \(error)")
@@ -208,10 +213,9 @@ struct ImportPostsFromCloudView: View {
         }
     }
     
-    /// ВАРИАНТ 2: Загрузка из облачного сервиса
+    /// Загрузка из облачного сервиса
     private func loadFromCloudService() async {
         
-//        let appStateManager = AppStateManager(modelContext: modelContext)
         print("⏳ loadFromCloudService(): Ожидание синхронизации iCloud (1 секунда)...")
         try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 секунда
 
@@ -231,7 +235,7 @@ struct ImportPostsFromCloudView: View {
                     
                     // Закрываем через 1.5 секунды
                     try? await Task.sleep(nanoseconds: 1_500_000_000)
-                    dismiss()
+                    coordinator.popToRoot()
                 } else {
                     hapticManager.notification(type: .error)
                 }
@@ -240,14 +244,34 @@ struct ImportPostsFromCloudView: View {
     }
 }
 
+//#Preview {
+//    NavigationStack {
+//        ImportPostsFromCloudView()
+//            .environmentObject(PostsViewModel(
+//                modelContext: ModelContext(
+//                    try! ModelContainer(for: Post.self, Notice.self)
+//                )
+//            ))
+//            .environmentObject(NavigationCoordinator())
+//    }
+//    .modelContainer(for: [Post.self, Notice.self], inMemory: true)
+//}
+
+
 #Preview {
-    NavigationStack {
+    
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppSyncState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+    let context = ModelContext(container)
+    
+    let vm = PostsViewModel(modelContext: context)
+    
+    NavigationStack{
         ImportPostsFromCloudView()
-            .environmentObject(PostsViewModel(
-                modelContext: ModelContext(
-                    try! ModelContainer(for: Post.self, Notice.self)
-                )
-            ))
+            .modelContainer(container)
+            .environmentObject(vm)
+            .environmentObject(NavigationCoordinator())
     }
-    .modelContainer(for: [Post.self, Notice.self], inMemory: true)
 }
