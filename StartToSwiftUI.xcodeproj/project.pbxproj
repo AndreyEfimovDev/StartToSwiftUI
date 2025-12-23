@@ -312,8 +312,8 @@
 			children = (
 				475997502E5C6C9D008E20F0 /* Post.swift */,
 				471BBF9E2EC721480004AC45 /* Notice.swift */,
-				4767C95E2EF29349003838BA /* CodablePost.swift */,
 				4767C9642EF294B0003838BA /* CodableNotice.swift */,
+				4767C95E2EF29349003838BA /* CodablePost.swift */,
 				477C745F2ECFB0E800F77F5B /* News.swift */,
 				47BAF0F72E64A77A00287F10 /* Enums.swift */,
 				4732FB362EAA63810062269D /* Constants.swift */,

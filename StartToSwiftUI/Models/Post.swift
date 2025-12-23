@@ -117,6 +117,31 @@ final class Post {
 }
 
 
+extension Post {
+    func isEqual(to other: Post) -> Bool {
+        return self.id == other.id &&
+               self.category == other.category &&
+               self.title == other.title &&
+               self.intro == other.intro &&
+               self.author == other.author &&
+               self.postTypeRawValue == other.postTypeRawValue &&
+               self.urlString == other.urlString &&
+               self.postPlatformRawValue == other.postPlatformRawValue &&
+               self.postDate == other.postDate &&
+               self.studyLevelRawValue == other.studyLevelRawValue &&
+               self.progressRawValue == other.progressRawValue &&
+               self.favoriteChoiceRawValue == other.favoriteChoiceRawValue &&
+               self.postRatingRawValue == other.postRatingRawValue &&
+               self.notes == other.notes &&
+               self.draft == other.draft &&
+               self.startedDateStamp == other.startedDateStamp &&
+               self.studiedDateStamp == other.studiedDateStamp &&
+               self.practicedDateStamp == other.practicedDateStamp
+    }
+}
+
+
+
 //struct Post: Identifiable, Hashable, Codable {
 //    let id: String
 //    var category: String // post category, e.g. "SwiftUI", "C++", "JavaScript", etc.
