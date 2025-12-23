@@ -68,11 +68,11 @@ struct AddEditPostSheet: View {
         
         if let post = post { // post for editing initialising
             _editedPost = State(initialValue: post)
-            _draftPost = State(initialValue: post)
+            _draftPost = State(initialValue: post.copy())
             self.isNewPost = false
         } else { // if post is not passed (nil) - add a new post initialising
             _editedPost = State(initialValue: templateForNewPost)
-            _draftPost = State(initialValue: templateForNewPost)
+            _draftPost = State(initialValue: templateForNewPost.copy())
             self.isNewPost = true
         }
     }

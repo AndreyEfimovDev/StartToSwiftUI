@@ -48,95 +48,97 @@ struct HomeView: View {
     // MARK: VIEW BODY
     
     var body: some View {
-        GeometryReader { proxy in
-            ScrollViewReader { scrollProxy in
-                ZStack (alignment: .bottom) {
-                    if vm.allPosts.isEmpty {
-                        allPostsIsEmpty
-                    } else if vm.filteredPosts.isEmpty {
-                        filteredPostsIsEmpty
-                    } else {
-                        mainViewBody
-                        onTopButton(proxy: scrollProxy)
-                    }
-                }
-            }
-            .disabled(isLongPressSuccess || isShowingDeleteConfirmation)
-            .navigationTitle(vm.selectedCategory ?? "SwiftUI")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                toolbarForMainViewBody()
-            }
-            .safeAreaInset(edge: .top) {
-                SearchBarView()
-            }
-            .navigationDestination(isPresented: $showDetailView) {
-                if let id = vm.selectedPostId {
-                    withAnimation {
-                        PostDetailsView(postId: id)
-                    }
-                }
-            }
-            .sheetForUIDeviceBoolean(isPresented: $showPreferancesView) {
-                PreferencesView()
-            }
-            .sheetForUIDeviceBoolean(isPresented: $showNoticesView) {
-                NavigationStack {
-                    NoticesView()
-                }
-            }
-            .sheetForUIDeviceBoolean(isPresented: $showAddPostView) {
-                NavigationStack {
-                    AddEditPostSheet(post: nil)
-                }
-            }
-            .sheetForUIDeviceItem(item: $selectedPost) { selectedPostToEdit in
-                NavigationStack {
-                    AddEditPostSheet(post: selectedPostToEdit)
-                }
-            }
-            .sheet(isPresented: $isFilterButtonPressed) {
-                FiltersSheetView(
-                    isFilterButtonPressed: $isFilterButtonPressed
-                )
-                .presentationBackground(.ultraThinMaterial)
-                .presentationDetents([.height(600)])
-                .presentationDragIndicator(.visible)
-                .presentationCornerRadius(30)
-            }
-            .overlay {
-                if UIDevice.isiPhone {
-                    if isLongPressSuccess {
-                        RatingSelectionView() {
-                            isLongPressSuccess = false
+        NavigationStack {
+            GeometryReader { proxy in
+                ScrollViewReader { scrollProxy in
+                    ZStack (alignment: .bottom) {
+                        if vm.allPosts.isEmpty {
+                            allPostsIsEmpty
+                        } else if vm.filteredPosts.isEmpty {
+                            filteredPostsIsEmpty
+                        } else {
+                            mainViewBody
+                            onTopButton(proxy: scrollProxy)
                         }
-                        .frame(maxHeight: max(proxy.size.height / 3, 300))
-                        .padding(.horizontal, 30)
                     }
                 }
-            }
-            .overlay {
-                if UIDevice.isiPhone {
-                    if showProgressSelectionView {
-                        ProgressSelectionView() {
-                            showProgressSelectionView = false
+                .disabled(isLongPressSuccess || isShowingDeleteConfirmation)
+                .navigationTitle(vm.selectedCategory ?? "SwiftUI")
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    toolbarForMainViewBody()
+                }
+                .safeAreaInset(edge: .top) {
+                    SearchBarView()
+                }
+                .navigationDestination(isPresented: $showDetailView) {
+                    if let id = vm.selectedPostId {
+                        withAnimation {
+                            PostDetailsView(postId: id)
                         }
-                        .frame(maxHeight: max(proxy.size.height / 3, 300))
-                        .padding(.horizontal, 30)
                     }
                 }
-            }
-            .overlay {
-                if isShowingDeleteConfirmation {
-                    postDeletionConfirmation
-                        .opacity(isShowingDeleteConfirmation ? 1 : 0)
-                        .transition(.move(edge: .bottom))
+                .sheetForUIDeviceBoolean(isPresented: $showPreferancesView) {
+                    PreferencesView()
                 }
-            }
-            .onAppear {
-                vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                soundNotificationIfNeeded()
+                .sheetForUIDeviceBoolean(isPresented: $showNoticesView) {
+                    NavigationStack {
+                        NoticesView()
+                    }
+                }
+                .sheetForUIDeviceBoolean(isPresented: $showAddPostView) {
+                    NavigationStack {
+                        AddEditPostSheet(post: nil)
+                    }
+                }
+                .sheetForUIDeviceItem(item: $selectedPost) { selectedPostToEdit in
+                    NavigationStack {
+                        AddEditPostSheet(post: selectedPostToEdit)
+                    }
+                }
+                .sheet(isPresented: $isFilterButtonPressed) {
+                    FiltersSheetView(
+                        isFilterButtonPressed: $isFilterButtonPressed
+                    )
+                    .presentationBackground(.ultraThinMaterial)
+                    .presentationDetents([.height(600)])
+                    .presentationDragIndicator(.visible)
+                    .presentationCornerRadius(30)
+                }
+                .overlay {
+                    if UIDevice.isiPhone {
+                        if isLongPressSuccess {
+                            RatingSelectionView() {
+                                isLongPressSuccess = false
+                            }
+                            .frame(maxHeight: max(proxy.size.height / 3, 300))
+                            .padding(.horizontal, 30)
+                        }
+                    }
+                }
+                .overlay {
+                    if UIDevice.isiPhone {
+                        if showProgressSelectionView {
+                            ProgressSelectionView() {
+                                showProgressSelectionView = false
+                            }
+                            .frame(maxHeight: max(proxy.size.height / 3, 300))
+                            .padding(.horizontal, 30)
+                        }
+                    }
+                }
+                .overlay {
+                    if isShowingDeleteConfirmation {
+                        postDeletionConfirmation
+                            .opacity(isShowingDeleteConfirmation ? 1 : 0)
+                            .transition(.move(edge: .bottom))
+                    }
+                }
+                .onAppear {
+                    vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
+                    soundNotificationIfNeeded()
+                }
             }
         }
     }
