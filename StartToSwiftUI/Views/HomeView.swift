@@ -15,10 +15,11 @@ struct HomeView: View {
     // MARK: PROPERTIES
     
 //    @Environment(\.dismiss) private var dismiss
-    @Environment(\.modelContext) private var modelContext
+    @Environment(\.modelContext) private var modelContext    
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
-    @StateObject private var coordinator = NavigationCoordinator()
+    @EnvironmentObject private var coordinator: NavigationCoordinator
+
     private let hapticManager = HapticService.shared
     
     let selectedCategory: String?
@@ -30,6 +31,7 @@ struct HomeView: View {
     @State private var isDetectingLongPress: Bool = false
     @State private var isLongPressSuccess: Bool = false
     @State private var showProgressSelectionView: Bool = false
+    @State private var isFilterButtonPressed: Bool = false
 
     private let longPressDuration: Double = 0.5
     private let limitToShortenTitle: Int = 30
@@ -40,7 +42,6 @@ struct HomeView: View {
 //    @State private var showPreferancesView: Bool = false
 //    @State private var showAddPostView: Bool = false
 //    @State private var showNoticesView: Bool = false
-    @State private var isFilterButtonPressed: Bool = false
     
     
    
@@ -88,18 +89,21 @@ struct HomeView: View {
                 .sheetForUIDeviceBoolean(isPresented: $coordinator.showNotices) {
                     NavigationStack {
                         NoticesView()
+                            .environmentObject(coordinator)
                     }
                 }
-                .sheetForUIDeviceBoolean(isPresented: $coordinator.showAddPost) {
-                    NavigationStack {
-                        AddEditPostSheet(post: nil)
-                    }
-                }
-                .sheetForUIDeviceItem(item: $coordinator.showEditPost) { post in
-                    NavigationStack {
-                        AddEditPostSheet(post: post)
-                    }
-                }
+//                .sheetForUIDeviceBoolean(isPresented: $coordinator.showAddPost) {
+//                    NavigationStack {
+//                        AddEditPostSheet(post: nil)
+//                            .environmentObject(coordinator)
+//                    }
+//                }
+//                .sheetForUIDeviceItem(item: $coordinator.showEditPost) { post in
+//                    NavigationStack {
+//                        AddEditPostSheet(post: post)
+//                            .environmentObject(coordinator)
+//                    }
+//                }
                 .sheet(isPresented: $isFilterButtonPressed) {
                     FiltersSheetView(
                         isFilterButtonPressed: $isFilterButtonPressed
@@ -152,50 +156,87 @@ struct HomeView: View {
         switch route {
         case .postDetails(let postId):
             PostDetailsView(postId: postId)
+                .environmentObject(coordinator)
+        case .addPost:
+            AddEditPostSheet(post: nil)
+                .environmentObject(coordinator)
+            
+        case .editPost(let post):
+            AddEditPostSheet(post: post)
+                .environmentObject(coordinator)
             
         case .preferences:
             PreferencesView()
+                .environmentObject(coordinator)
             
         case .studyProgress:
             StudyProgressView()
+                .environmentObject(coordinator)
             
         case .postDrafts:
             PostDraftsView()
+                .environmentObject(coordinator)
             
         case .checkForUpdates:
             CheckForPostsUpdateView()
+                .environmentObject(coordinator)
             
         case .importFromCloud:
             ImportPostsFromCloudView()
+                .environmentObject(coordinator)
             
         case .shareBackup:
             SharePostsView()
+                .environmentObject(coordinator)
             
         case .restoreBackup:
             RestoreBackupView()
+                .environmentObject(coordinator)
             
         case .erasePosts:
             EraseAllPostsView()
+                .environmentObject(coordinator)
             
         case .notices:
             NoticesView()
+                .environmentObject(coordinator)
             
         case .acknowledgements:
             Acknowledgements()
+                .environmentObject(coordinator)
             
         case .aboutApp:
             AboutApp()
+                .environmentObject(coordinator)
             
         case .legalInfo:
             LegalInformationView()
+                .environmentObject(coordinator)
+            
+        case .termsOfUse:
+            TermsOfUse()
+                .environmentObject(coordinator)
+                .environmentObject(vm)
+
+        case .privacyPolicy:
+            PrivacyPolicy()
+                .environmentObject(coordinator)
+            
+        case .copyrightPolicy:
+            CopyrightPolicy()
+                .environmentObject(coordinator)
+            
+        case .fairUseNotice:
+            FairUseNotice()
+                .environmentObject(coordinator)
             
         default:
             Text("Unknown route")
+
+            
         }
     }
-    
-
-    
+        
     // MARK: Subviews
    
     private var mainViewBody: some View {
@@ -245,7 +286,7 @@ struct HomeView: View {
                         
                         Button("Edit", systemImage: post.origin == .cloud  || post.origin == .statical ? "pencil.slash" : "pencil") {
 //                            selectedPost = post
-                            coordinator.presentEditPost(post)
+                            coordinator.push(.editPost(post))
                         }
                         .tint(Color.mycolor.myBlue)
                         .disabled(post.origin == .cloud || post.origin == .statical)
@@ -362,8 +403,8 @@ struct HomeView: View {
                 isShownCircle: false)
             {
 //                showPreferancesView.toggle()
-                coordinator.presentPreferences()
-
+//                coordinator.presentPreferences()
+                coordinator.push(.preferences)
             }
         }
         if noticevm.hasUnreadNotices {
@@ -372,8 +413,12 @@ struct HomeView: View {
                     iconName: "message",
                     isShownCircle: false)
                 {
+                    print("=== HomeView: Opening Preferences ===")
+                    print("📱 Current path before push: \(coordinator.path.count)")
+
 //                    showNoticesView = true
                     coordinator.presentNotices()
+                    print("📱 Path after push (should be 1): \(coordinator.path.count)")
 
                 }
                 .overlay {
@@ -415,7 +460,7 @@ struct HomeView: View {
                     isShownCircle: false
                 ){
 //                    showAddPostView.toggle()
-                    coordinator.presentAddPost()
+                    coordinator.push(.addPost)
                 }
             }
             

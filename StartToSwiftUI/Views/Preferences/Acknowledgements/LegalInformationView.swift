@@ -10,38 +10,42 @@ import SwiftData
 
 struct LegalInformationView: View {
 
-    @Environment(\.dismiss) private var dismiss
+//    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var coordinator: NavigationCoordinator
     
     let iconWidth: CGFloat = 18
 
     var body: some View {
         Form {
-            NavigationLink("Terms of Use") {
-                TermsOfUse(isTermsOfUseAccepted: .constant(true))
+//            NavigationLink("Terms of Use") {
+//                TermsOfUse(isTermsOfUseAccepted: .constant(true))
+//            }
+            Button("Terms of Use") {
+                coordinator.push(.termsOfUse)
             }
             .customListRowStyle(
                 iconName: "hand.raised",
                 iconWidth: iconWidth
             )
 
-            NavigationLink("Privacy Policy") {
-                PrivacyPolicy()
+            Button("Privacy Policy") {
+                coordinator.push(.privacyPolicy)
             }
             .customListRowStyle(
                 iconName: "lock",
                 iconWidth: iconWidth
             )
 
-            NavigationLink("Copyright/DMCA Policy") {
-                CopyrightPolicy()
+            Button("Copyright/DMCA Policy") {
+                coordinator.push(.copyrightPolicy)
             }
             .customListRowStyle(
                 iconName: "c.circle",
                 iconWidth: iconWidth
             )
 
-            NavigationLink("Fair Use Notice") {
-                FairUseNotice()
+            Button("Fair Use Notice") {
+                coordinator.push(.fairUseNotice)
             }
             .customListRowStyle(
                 iconName: "book",
@@ -53,8 +57,18 @@ struct LegalInformationView: View {
         .navigationTitle("Legal Information")
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                BackButtonView() { dismiss() }
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView() {
+                    coordinator.pop()
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    coordinator.popToRoot()
+                } label: {
+                    Image(systemName: "house")
+                        .foregroundStyle(Color.mycolor.myAccent)
+                }
             }
         }
         .padding(.vertical)
@@ -75,4 +89,5 @@ struct LegalInformationView: View {
         LegalInformationView()
     }
     .environmentObject(vm)
+    .environmentObject(NavigationCoordinator())
 }

@@ -13,6 +13,7 @@ import SwiftData
 @Model
 final class AppSyncState {
     var id: String = "app_state_singleton" // Всегда один экземпляр
+    var isTermsOfUseAccepted: Bool = false
     
     // Флаг необходимости загрузки статических постов, устанавливается пользователем в Preferences: true - загружать
     var shouldLoadStaticPosts: Bool = true
@@ -37,6 +38,7 @@ final class AppSyncState {
     
     init(
         id: String = "app_state_singleton",
+        isTermsOfUseAccepted: Bool = false,
         
         shouldLoadStaticPosts: Bool = true,
         hasLoadedStaticPosts: Bool = false,
@@ -52,6 +54,8 @@ final class AppSyncState {
         
     ) {
         self.id = id
+        self.isTermsOfUseAccepted = isTermsOfUseAccepted
+        
         self.shouldLoadStaticPosts = shouldLoadStaticPosts
         self.hasLoadedStaticPosts = hasLoadedStaticPosts
         
@@ -223,6 +227,36 @@ class AppSyncStateManager {
         return primaryState
     }
     
+    // MARK: - Method for isTermsOfUseAccepted
+    
+    func getTermsOfUseAcceptedStatus() -> Bool {
+        let appState = getOrCreateAppState()
+        return appState.isTermsOfUseAccepted
+    }
+
+    func setTermsOfUseAccepted(_ accepted: Bool) {
+        let appState = getOrCreateAppState()
+        appState.isTermsOfUseAccepted = accepted
+        
+        do {
+            try modelContext.save()
+            print("✅ Флаг hasLoadedStaticPosts установлен в true")
+        } catch {
+            print("❌ Ошибка сохранения AppState: \(error)")
+        }
+    }
+        
+    // Принять условия использования
+    func acceptTermsOfUse() {
+        setTermsOfUseAccepted(true)
+    }
+    
+    // Сбросить принятие условий (на случай если нужно сбросить)
+    func resetTermsOfUseAccepted() {
+        setTermsOfUseAccepted(false)
+    }
+
+        
     // MARK: - Methods for Static posts
     /// Проверить, загружались ли статические посты
     func getStaticPostsLoadToggleStatus() -> Bool {

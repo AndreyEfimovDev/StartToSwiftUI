@@ -11,9 +11,11 @@ import SwiftData
 
 struct ContentViewWrapper: View {
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var coordinator: NavigationCoordinator
     
     var body: some View {
         ContentViewWithViewModels(modelContext: modelContext)
+            .environmentObject(coordinator)
     }
 }
 
@@ -21,16 +23,15 @@ struct ContentViewWrapper: View {
 struct ContentViewWithViewModels: View {
     
     @Environment(\.modelContext) private var modelContext
-    
     @StateObject private var vm: PostsViewModel
     @StateObject private var noticevm: NoticeViewModel
+    @EnvironmentObject private var coordinator: NavigationCoordinator
+
     
     @State private var showLaunchView: Bool = true
     @State private var showTermsOfUse: Bool = false
     @State private var showTermsButton = false // Контролирует анимацию появления кнопки Terms of Use
     @State private var isLoadingData = true // Показывает ProgressView во время загрузки данных
-
-    @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
     
     init(modelContext: ModelContext) {
             _vm = StateObject(wrappedValue: PostsViewModel(modelContext: modelContext))
@@ -39,9 +40,9 @@ struct ContentViewWithViewModels: View {
 
     var body: some View {
         ZStack {
-//            if !isTermsOfUseAccepted {
-//                welcomeAtFirstLaunch
-//            } else
+            if !vm.isTermsOfUseAccepted {
+                welcomeAtFirstLaunch
+            } else
             if showLaunchView {
                 LaunchView() {
                     showLaunchView = false
@@ -87,11 +88,13 @@ struct ContentViewWithViewModels: View {
             SidebarView()
                 .environmentObject(vm)
                 .environmentObject(noticevm)
+                .environmentObject(coordinator)
         } else {
             // iPhone - NavigationStack (portrait only)
             HomeView(selectedCategory: vm.selectedCategory)
                 .environmentObject(vm)
                 .environmentObject(noticevm)
+                .environmentObject(coordinator)
         }
     }
     
@@ -130,7 +133,7 @@ struct ContentViewWithViewModels: View {
                         
                         if showTermsButton {
                             Button {
-                                showTermsOfUse = true
+                                coordinator.push(.termsOfUse)
                             } label: {
                                 Text("Terms of Use")
                                     .font(.title)
@@ -144,12 +147,12 @@ struct ContentViewWithViewModels: View {
                             }
                             .tint(Color.mycolor.myBlue)
                             .padding()
-                            .fullScreenCover(isPresented: $showTermsOfUse) {
-                                NavigationStack {
-                                    TermsOfUse(isTermsOfUseAccepted: $isTermsOfUseAccepted)
-                                    .environmentObject(vm)
-                                }
-                            }
+//                            .fullScreenCover(isPresented: $showTermsOfUse) {
+//                                NavigationStack {
+//                                    TermsOfUse(isTermsOfUseAccepted: $isTermsOfUseAccepted)
+//                                    .environmentObject(vm)
+//                                }
+//                            }
                         }
                     } // VStack
                     .frame(maxWidth: 600)
@@ -182,5 +185,6 @@ struct ContentViewWithViewModels: View {
         ContentViewWrapper()
             .environment(\.modelContext, container.mainContext)
             .modelContainer(container)
+            .environmentObject(NavigationCoordinator())
     }
 }

@@ -89,16 +89,18 @@ struct PostDetailsView: View {
                     .toolbar {
                         toolbarForPostDetails(validPost: validPost)
                     }
-                    .sheetForUIDeviceItem(item: $coordinator.showEditPost) { post in
-                        NavigationStack {
-                            AddEditPostSheet(post: post)
-                        }
-                    }
-                    .sheetForUIDeviceBoolean(isPresented: $coordinator.showAddPost) {
-                        NavigationStack {
-                            AddEditPostSheet(post: nil)
-                        }
-                    }
+//                    .sheetForUIDeviceItem(item: $coordinator.showEditPost) { post in
+//                        NavigationStack {
+//                            AddEditPostSheet(post: post)
+//                                .environmentObject(coordinator)
+//                        }
+//                    }
+//                    .sheetForUIDeviceBoolean(isPresented: $coordinator.showAddPost) {
+//                        NavigationStack {
+//                            AddEditPostSheet(post: nil)
+//                                .environmentObject(coordinator)
+//                        }
+//                    }
                 } else {
                     Text("Post is not found")
                 }
@@ -223,7 +225,6 @@ struct PostDetailsView: View {
             
             if UIDevice.isiPhone {
                 BackButtonView() {
-//                    dismiss()
                     coordinator.pop()
                 }
             }
@@ -233,8 +234,7 @@ struct PostDetailsView: View {
                     iconName: "plus",
                     isShownCircle: false
                 ){
-//                    showAddPostView.toggle()
-                    coordinator.presentAddPost()
+                    coordinator.push(.addPost)
                 }
             }
             
@@ -262,7 +262,7 @@ struct PostDetailsView: View {
                 iconName: post?.origin == .cloud || post?.origin == .statical ? "pencil.slash" : "pencil",
                 isShownCircle: false)
             {
-                showEditPostView.toggle()
+                coordinator.push(.editPost(validPost))
             }
             .disabled(post?.origin == .cloud || post?.origin == .statical)
         }

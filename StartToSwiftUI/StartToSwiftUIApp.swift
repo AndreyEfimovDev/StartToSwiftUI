@@ -15,6 +15,7 @@ import CloudKit
 struct StartToSwiftUIApp: App {
     
     @Environment(\.dismiss) private var dismiss
+    @StateObject private var navigationCoordinator = NavigationCoordinator()
     
     private let hapticManager = HapticService.shared
         
@@ -90,8 +91,9 @@ struct StartToSwiftUIApp: App {
     var body: some Scene {
         WindowGroup {
             ContentViewWrapper()
+                .modelContainer(modelContainer)
+                .environmentObject(navigationCoordinator)
         }
-        .modelContainer(modelContainer)
     }
 }
 

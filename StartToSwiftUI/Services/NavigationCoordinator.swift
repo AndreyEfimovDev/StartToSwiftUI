@@ -25,6 +25,11 @@ enum AppRoute: Hashable {
     case acknowledgements
     case aboutApp
     case legalInfo
+    case termsOfUse
+    case privacyPolicy
+    case copyrightPolicy
+    case fairUseNotice
+
     
     // Modals (will be handled separately)
     case addPost
@@ -34,14 +39,28 @@ enum AppRoute: Hashable {
 // MARK: - Navigation Coordinator
 @MainActor
 class NavigationCoordinator: ObservableObject {
-    @Published var path = NavigationPath()
-    
+    @Published var path = NavigationPath() {
+        didSet {
+            print("📱 NavigationCoordinator: path changed. Count: \(path.count)")
+        }
+    }
+
     // Модальные окна (не входят в path)
-    @Published var showAddPost = false
-    @Published var showEditPost: Post?
+//    @Published var showAddPost = false
+//    @Published var showEditPost: Post?
     @Published var showPreferences = false
     @Published var showNotices = false
     
+    /// Текущая глубина навигации (сколько экранов в стеке)
+    var currentDepth: Int {
+        path.count
+    }
+
+    /// Находимся ли мы на корневом экране (HomeView)
+    var isAtRoot: Bool {
+        path.isEmpty
+    }
+
     // MARK: - Navigation Methods
     
     /// Переход на экран
@@ -79,13 +98,13 @@ class NavigationCoordinator: ObservableObject {
     
     // MARK: - Modal Methods
     
-    func presentAddPost() {
-        showAddPost = true
-    }
-    
-    func presentEditPost(_ post: Post) {
-        showEditPost = post
-    }
+//    func presentAddPost() {
+//        showAddPost = true
+//    }
+//    
+//    func presentEditPost(_ post: Post) {
+//        showEditPost = post
+//    }
     
     func presentPreferences() {
         showPreferences = true
@@ -96,8 +115,8 @@ class NavigationCoordinator: ObservableObject {
     }
     
     func dismissModals() {
-        showAddPost = false
-        showEditPost = nil
+//        showAddPost = false
+//        showEditPost = nil
         showPreferences = false
         showNotices = false
     }

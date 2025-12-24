@@ -10,7 +10,9 @@ import SwiftData
 
 struct PrivacyPolicy: View {
     
-    @Environment(\.dismiss) private var dismiss
+//    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var coordinator: NavigationCoordinator
+
 
     var body: some View {
         ScrollView {
@@ -120,8 +122,18 @@ struct PrivacyPolicy: View {
         .navigationTitle("Privacy Policy")
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                BackButtonView() { dismiss() }
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView() {
+                    coordinator.pop()
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    coordinator.popToRoot()
+                } label: {
+                    Image(systemName: "house")
+                        .foregroundStyle(Color.mycolor.myAccent)
+                }
             }
         }
     }
@@ -138,5 +150,6 @@ struct PrivacyPolicy: View {
     
     PrivacyPolicy()
 //        .environmentObject(vm)
+        .environmentObject(NavigationCoordinator())
 
 }
