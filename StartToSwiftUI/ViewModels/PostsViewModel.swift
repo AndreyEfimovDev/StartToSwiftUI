@@ -57,6 +57,7 @@ class PostsViewModel: ObservableObject {
     
     // MARK: - AppStorage
     @AppStorage("selectedTheme") var selectedTheme: Theme = .system
+//    @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
     
     // Filters
     @AppStorage("storedCategory") var storedCategory: String?
@@ -81,6 +82,25 @@ class PostsViewModel: ObservableObject {
     @Published var selectedSortOption: SortOption? = nil {
         didSet { storedSortOption = selectedSortOption }}
     
+    var isTermsOfUseAccepted: Bool {
+        get {
+            let appStateManager = AppSyncStateManager(modelContext: modelContext)
+            return appStateManager.getTermsOfUseAcceptedStatus()
+        }
+        set {
+            let appStateManager = AppSyncStateManager(modelContext: modelContext)
+            appStateManager.setTermsOfUseAccepted(newValue)
+            objectWillChange.send() // Уведомляем об изменении
+        }
+    }
+    
+    // ✅ Метод для принятия условий
+    func acceptTermsOfUse() {
+        let appStateManager = AppSyncStateManager(modelContext: modelContext)
+        appStateManager.acceptTermsOfUse()
+        objectWillChange.send()
+    }
+
     
     // MARK: - Init
     

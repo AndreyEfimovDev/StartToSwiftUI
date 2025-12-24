@@ -9,7 +9,8 @@ import SwiftUI
 
 struct AboutApp: View {
     
-    @Environment(\.dismiss) private var dismiss
+//    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var coordinator: NavigationCoordinator
 
     let iconWidth: CGFloat = 18
     let frameHeight: CGFloat = 30
@@ -79,8 +80,18 @@ struct AboutApp: View {
         .navigationTitle("About App")
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                BackButtonView() { dismiss() }
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView() {
+                    coordinator.pop()
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    coordinator.popToRoot()
+                } label: {
+                    Image(systemName: "house")
+                        .foregroundStyle(Color.mycolor.myAccent)
+                }
             }
         }
     }
@@ -90,5 +101,6 @@ struct AboutApp: View {
 #Preview {
     NavigationStack{
         AboutApp()
+            .environmentObject(NavigationCoordinator())
     }
 }

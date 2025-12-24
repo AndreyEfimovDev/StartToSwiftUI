@@ -13,6 +13,8 @@ struct SidebarView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
+    @EnvironmentObject private var coordinator: NavigationCoordinator
+    
     @State private var visibility: NavigationSplitViewVisibility = .doubleColumn
     @State private var showPreferencesView = false
     

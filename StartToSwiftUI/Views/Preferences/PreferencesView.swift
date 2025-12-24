@@ -8,14 +8,6 @@
 import SwiftUI
 import SwiftData
 
-//enum PreferencesDestination: Hashable {
-//    case cloudImport
-//    case shareBackup
-//    case restoreBackup
-//    case erasePosts
-//    case aboutApp
-//}
-
 struct PreferencesView: View {
     
     @Environment(\.dismiss) private var dismiss
@@ -41,13 +33,39 @@ struct PreferencesView: View {
     }
     
     var body: some View {
-        NavigationStack {
             Form {
+                
+                Section(header: Text("Debug Navigation")) {
+                    // Простая тестовая кнопка
+                    Button("🚀 Test Push to StudyProgress") {
+                        print("=== DEBUG: PreferencesView button tapped ===")
+                        print("Path count before: \(coordinator.path.count)")
+                        
+                        // Пробуем самый простой переход
+                        coordinator.push(.studyProgress)
+                        
+                        print("Path count after push: \(coordinator.path.count)")
+                    }
+                    .customListRowStyle(iconName: "testtube.2", iconWidth: 18)
+                    
+                    // Кнопка для проверки текущего состояния
+                    Button("📊 Print Current State") {
+                        print("=== PreferencesView State ===")
+                        print("Coordinator instance: \(Unmanaged.passUnretained(coordinator).toOpaque())")
+                        print("Path count: \(coordinator.path.count)")
+                        
+                        // Попробуем получить hashValue path для проверки
+                        let mirror = Mirror(reflecting: coordinator.path)
+                        print("Path type: \(type(of: coordinator.path))")
+                        print("Path mirror children count: \(mirror.children.count)")
+                    }
+                }
+                
                 
                 Section(header: sectionHeader("Appearance")) {
                     themeAppearence
                 }
-
+                
                 Section(header: sectionHeader("Notifications")) {
                     noticeMessages
                     notificationToggle
@@ -59,7 +77,7 @@ struct PreferencesView: View {
                 //                        selectedCategory
                 //                    }
                 //                }
-
+                
                 
                 Section(header: sectionHeader("Achievements")) {
                     Button("Check progress") {
@@ -74,7 +92,7 @@ struct PreferencesView: View {
                     //                    .customListRowStyle(
                     //                        iconName: "hare",
                     //                        iconWidth: iconWidth
-//                    )
+                    //                    )
                 } // gauge.open.with.lines.needle.67percent.and.arrowtriangle
                 
                 Section(header: sectionHeader("Manage materials (\(postsCount))")) {
@@ -86,7 +104,7 @@ struct PreferencesView: View {
                     restoreBackup
                     erasePosts
                 }
-                                                
+                
                 
                 Section(header: sectionHeader("Сommunication")){
                     acknowledgements
@@ -104,14 +122,31 @@ struct PreferencesView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     if UIDevice.isiPad {
-                        BackButtonView(iconName: "xmark") { dismiss() }
+                        BackButtonView(iconName: "xmark") {
+                            print("📱 PreferencesView: Back button tapped")
+                            coordinator.pop()
+                        }
                     } else {
-                        BackButtonView() { dismiss() }
+                        BackButtonView() {
+                            print("📱 PreferencesView: Back button tapped")
+                            coordinator.pop()
+                        }
                     }
                 }
             }
-        }
-        .preferredColorScheme(vm.selectedTheme.colorScheme)
+            .onAppear {
+                print("=== PreferencesView APPEARED ===")
+                print("✅ Coordinator IS available")
+                print("Path count on appear: \(coordinator.path.count)")
+                
+                // Простой способ проверить, что координатор работает
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    print("Path count after 0.5s: \(coordinator.path.count)")
+                }
+                
+            }
+            .preferredColorScheme(vm.selectedTheme.colorScheme)
+       
     }
     
     // MARK: - Subviews
@@ -181,8 +216,11 @@ struct PreferencesView: View {
     }
     
     private var noticeMessages: some View {
-        NavigationLink("Messages (\(newNoticesCount)/\(noticevm.notices.count))") {
-            NoticesView()
+//        NavigationLink("Messages (\(newNoticesCount)/\(noticevm.notices.count))") {
+//            NoticesView()
+//        }
+        Button("Messages (\(newNoticesCount)/\(noticevm.notices.count))") {
+            coordinator.push(.notices) // ✅ Используем координатор
         }
         .customListRowStyle(
             iconName: newNoticesCount == 0 ? "message" : "message.badge",
@@ -193,8 +231,11 @@ struct PreferencesView: View {
     private var postDrafts: some View {
         Group {
             if !vm.allPosts.filter({ $0.draft == true }).isEmpty {
-                NavigationLink("Post drafts (\(draftsCount))") {
-                    PostDraftsView()
+//                NavigationLink("Post drafts (\(draftsCount))") {
+//                    PostDraftsView()
+//                }
+                Button("Post drafts (\(draftsCount))") {
+                    coordinator.push(.postDrafts) // ✅ Используем координатор
                 }
                 .customListRowStyle(
                     iconName: "square.stack.3d.up",
@@ -214,8 +255,11 @@ struct PreferencesView: View {
             let localPostsFromCloud = vm.allPosts.filter { $0.origin == .cloud }
 
             if status && !localPostsFromCloud.isEmpty {
-                NavigationLink("Check for materials update") {
-                    CheckForPostsUpdateView()
+//                NavigationLink("Check for materials update") {
+//                    CheckForPostsUpdateView()
+//                }
+                Button("Check for materials update") {
+                    coordinator.push(.checkForUpdates)
                 }
                 .customListRowStyle(
                     iconName: "arrow.trianglehead.counterclockwise",
@@ -232,8 +276,11 @@ struct PreferencesView: View {
             let localPostsFromCloud = vm.allPosts.filter { $0.origin == .cloud }
 
             if localPostsFromCloud.isEmpty {
-                NavigationLink("Download the curated collection") {
-                    ImportPostsFromCloudView()
+//                NavigationLink("Download the curated collection") {
+//                    ImportPostsFromCloudView()
+//                }
+                Button("Download the curated collection") {
+                    coordinator.push(.importFromCloud)
                 }
                 .customListRowStyle(
                     iconName: "icloud.and.arrow.down",
@@ -244,8 +291,11 @@ struct PreferencesView: View {
     }
     
     private var shareBackup: some View {
-        NavigationLink("Share/Backup") {
-            SharePostsView()
+//        NavigationLink("Share/Backup") {
+//            SharePostsView()
+//        }
+        Button("Share/Backup") {
+            coordinator.push(.shareBackup)
         }
         .customListRowStyle(
             iconName: "square.and.arrow.up",
@@ -254,8 +304,11 @@ struct PreferencesView: View {
     }
     
     private var restoreBackup: some View {
-        NavigationLink("Restore backup") {
-            RestoreBackupView()
+//        NavigationLink("Restore backup") {
+//            RestoreBackupView()
+//        }
+        Button("Restore backup") {
+            coordinator.push(.restoreBackup)
         }
         .customListRowStyle(
             iconName: "tray.and.arrow.up",
@@ -264,8 +317,11 @@ struct PreferencesView: View {
     }
     
     private var erasePosts: some View {
-        NavigationLink("Erase all materials") {
-            EraseAllPostsView()
+//        NavigationLink("Erase all materials") {
+//            EraseAllPostsView()
+//        }
+        Button("Erase all materials") {
+            coordinator.push(.erasePosts)
         }
         .customListRowStyle(
             iconName: "trash",
@@ -274,9 +330,11 @@ struct PreferencesView: View {
     }
     
     private var acknowledgements: some View {
-        
-        NavigationLink("Acknowledgements") {
-            Acknowledgements()
+//        NavigationLink("Acknowledgements") {
+//            Acknowledgements()
+//        }
+        Button("Acknowledgements") {
+            coordinator.push(.acknowledgements)
         }
         .customListRowStyle(
             iconName: "hand.thumbsup",
@@ -285,8 +343,11 @@ struct PreferencesView: View {
     }
     
     private var aboutApplication: some View {
-        NavigationLink("About App") {
-            AboutApp()
+//        NavigationLink("About App") {
+//            AboutApp()
+//        }
+        Button("About App") {
+            coordinator.push(.aboutApp)
         }
         .customListRowStyle(
             iconName: "info.circle",
@@ -295,9 +356,11 @@ struct PreferencesView: View {
     }
     
     private var legalInformation: some View {
-        
-        NavigationLink("Legal information") {
-            LegalInformationView()
+//        NavigationLink("Legal information") {
+//            LegalInformationView()
+//        }
+        Button("Legal information") {
+            coordinator.push(.legalInfo)
         }
         .customListRowStyle(
             iconName: "long.text.page.and.pencil",

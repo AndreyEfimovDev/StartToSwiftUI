@@ -10,11 +10,12 @@ import SwiftData
 
 struct TermsOfUse: View {
     
-    @Environment(\.dismiss) private var dismiss
+//    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
+    @EnvironmentObject private var coordinator: NavigationCoordinator
     
     @State private var isAccepted: Bool = false
-    @Binding var isTermsOfUseAccepted: Bool
+//    @Binding var isTermsOfUseAccepted: Bool
     
     var body: some View {
         
@@ -190,12 +191,14 @@ struct TermsOfUse: View {
                 CapsuleButtonView(
                     primaryTitle: "I have read and accept",
                     secondaryTitle: "Accepted",
-                    isToChange: isAccepted || isTermsOfUseAccepted) {
+                    isToChange: isAccepted || vm.isTermsOfUseAccepted) {
                         isAccepted = true
                         DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                            isTermsOfUseAccepted = true
-//                            completion()
-                            dismiss()
+                            vm.isTermsOfUseAccepted = true
+                            
+                            coordinator.popToRoot()
+                            
+                            coordinator.pop()
                         }
                     }
                     .padding(.horizontal, 30)
@@ -206,8 +209,18 @@ struct TermsOfUse: View {
         .navigationTitle("Terms of Use")
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                BackButtonView() { dismiss() }
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView() {
+                    coordinator.pop()
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    coordinator.popToRoot()
+                } label: {
+                    Image(systemName: "house")
+                        .foregroundStyle(Color.mycolor.myAccent)
+                }
             }
         }
     }
@@ -224,8 +237,9 @@ struct TermsOfUse: View {
     let vm = PostsViewModel(modelContext: context)
     
     NavigationStack {
-        TermsOfUse(isTermsOfUseAccepted: .constant(true))
+        TermsOfUse()
     }
     .environmentObject(vm)
+    .environmentObject(NavigationCoordinator())
 }
 
