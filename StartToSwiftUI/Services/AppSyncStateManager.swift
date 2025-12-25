@@ -219,7 +219,7 @@ class AppSyncStateManager {
         // Сохраняем изменения
         do {
             try modelContext.save()
-            print("✅ AppState объединён и сохранён")
+//            print("✅ AppState объединён и сохранён")
         } catch {
             print("❌ Ошибка сохранения AppState: \(error)")
         }
@@ -240,7 +240,7 @@ class AppSyncStateManager {
         
         do {
             try modelContext.save()
-            print("✅ Флаг hasLoadedStaticPosts установлен в true")
+//            print("✅ Флаг hasLoadedStaticPosts установлен в true")
         } catch {
             print("❌ Ошибка сохранения AppState: \(error)")
         }
@@ -262,7 +262,7 @@ class AppSyncStateManager {
     func getStaticPostsLoadToggleStatus() -> Bool {
         let appState = getOrCreateAppState()
         let result = appState.shouldLoadStaticPosts
-        print("🔍 shouldLoadStaticPosts: \(result)")
+//        print("🔍 shouldLoadStaticPosts: \(result)")
         return result
     }
     
@@ -273,7 +273,7 @@ class AppSyncStateManager {
         
         do {
             try modelContext.save()
-            print("✅ Флаг hasLoadedStaticPosts установлен в true")
+//            print("✅ Флаг hasLoadedStaticPosts установлен в true")
         } catch {
             print("❌ Ошибка сохранения AppState: \(error)")
         }
@@ -286,7 +286,7 @@ class AppSyncStateManager {
         
         do {
             try modelContext.save()
-            print("✅ Флаг hasLoadedStaticPosts установлен в true")
+//            print("✅ Флаг hasLoadedStaticPosts установлен в true")
         } catch {
             print("❌ Ошибка сохранения AppState: \(error)")
         }
@@ -296,7 +296,7 @@ class AppSyncStateManager {
     func checkIfStaticPostsHasLoaded() -> Bool {
         let appState = getOrCreateAppState()
         let result = appState.hasLoadedStaticPosts
-        print("🔍 hasLoadedStaticPosts: \(result)")
+//        print("🔍 hasLoadedStaticPosts: \(result)")
         return result
     }
     
@@ -307,7 +307,7 @@ class AppSyncStateManager {
         
         do {
             try modelContext.save()
-            print("✅ Флаг hasLoadedStaticPosts установлен в true")
+//            print("✅ Флаг hasLoadedStaticPosts установлен в true")
         } catch {
             print("❌ Ошибка сохранения AppState: \(error)")
         }
@@ -320,7 +320,7 @@ class AppSyncStateManager {
         
         do {
             try modelContext.save()
-            print("✅ Флаг hasLoadedStaticPosts установлен в false (сброшен)")
+//            print("✅ Флаг hasLoadedStaticPosts установлен в false (сброшен)")
         } catch {
             print("❌ Ошибка сохранения AppState: \(error)")
         }
@@ -331,7 +331,7 @@ class AppSyncStateManager {
     func getUserNotifiedBySoundStatus() -> Bool {
         let appState = getOrCreateAppState()
         let result = appState.isUserNotNotifiedBySound
-        print("🔍 isUserNotNotifiedBySound: \(result)")
+//        print("🔍 isUserNotNotifiedBySound: \(result)")
         return result
     }
     
@@ -342,7 +342,7 @@ class AppSyncStateManager {
         
         do {
             try modelContext.save()
-            print("✅ Флаг isUserNotNotifiedBySound установлен в true (нужно уведомить)")
+//            print("✅ Флаг isUserNotNotifiedBySound установлен в true (нужно уведомить)")
         } catch {
             print("❌ Ошибка сохранения AppState: \(error)")
         }
@@ -355,7 +355,7 @@ class AppSyncStateManager {
         
         do {
             try modelContext.save()
-            print("✅ Флаг isUserNotNotifiedBySound установлен в false (уже уведомлён)")
+ /* */          print("✅ Флаг isUserNotNotifiedBySound установлен в false (уже уведомлён)")
         } catch {
             print("❌ Ошибка сохранения AppState: \(error)")
         }
@@ -368,7 +368,7 @@ class AppSyncStateManager {
         
         do {
             try modelContext.save()
-            print("✅ Дата последней синхронизации обновлена")
+//            print("✅ Дата последней синхронизации обновлена")
         } catch {
             print("❌ Ошибка сохранения AppState: \(error)")
         }
@@ -387,7 +387,7 @@ class AppSyncStateManager {
         
         do {
             try modelContext.save()
-            print("✅ Дата последней синхронизации обновлена")
+//            print("✅ Дата последней синхронизации обновлена")
         } catch {
             print("❌ Ошибка сохранения AppState: \(error)")
         }
@@ -414,7 +414,7 @@ class AppSyncStateManager {
         
         do {
             try modelContext.save()
-            print("✅ Флаг hasLoadedStaticPosts установлен в true")
+//            print("✅ Флаг hasLoadedStaticPosts установлен в true")
         } catch {
             print("❌ Ошибка сохранения AppState: \(error)")
         }
@@ -427,7 +427,7 @@ class AppSyncStateManager {
         
         do {
             try modelContext.save()
-            print("✅ Флаг hasLoadedStaticPosts установлен в true")
+//            print("✅ Флаг hasLoadedStaticPosts установлен в true")
         } catch {
             print("❌ Ошибка сохранения AppState: \(error)")
         }

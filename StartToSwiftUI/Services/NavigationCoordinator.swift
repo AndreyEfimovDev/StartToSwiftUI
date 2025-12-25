@@ -61,7 +61,7 @@ enum AppRoute: Hashable {
 class NavigationCoordinator: ObservableObject {
     @Published var path = NavigationPath() {
         didSet {
-            print("📱 NavigationCoordinator: path changed. Count: \(path.count)")
+//            print("📱 NavigationCoordinator: path changed. Count: \(path.count)")
         }
     }
 
