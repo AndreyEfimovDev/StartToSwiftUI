@@ -21,7 +21,7 @@ struct LegalInformationView: View {
         ) {
             Form {
                 Button("Terms of Use") {
-                    coordinator.push(.termsOfUse)
+                    coordinator.pushModal(.termsOfUse)
                 }
                 .customListRowStyle(
                     iconName: "hand.raised",
@@ -29,7 +29,7 @@ struct LegalInformationView: View {
                 )
 
                 Button("Privacy Policy") {
-                    coordinator.push(.privacyPolicy)
+                    coordinator.pushModal(.privacyPolicy)
                 }
                 .customListRowStyle(
                     iconName: "lock",
@@ -37,7 +37,7 @@ struct LegalInformationView: View {
                 )
 
                 Button("Copyright/DMCA Policy") {
-                    coordinator.push(.copyrightPolicy)
+                    coordinator.pushModal(.copyrightPolicy)
                 }
                 .customListRowStyle(
                     iconName: "c.circle",
@@ -45,7 +45,7 @@ struct LegalInformationView: View {
                 )
 
                 Button("Fair Use Notice") {
-                    coordinator.push(.fairUseNotice)
+                    coordinator.pushModal(.fairUseNotice)
                 }
                 .customListRowStyle(
                     iconName: "book",

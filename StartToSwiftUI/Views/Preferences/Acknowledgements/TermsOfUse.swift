@@ -193,7 +193,7 @@ struct TermsOfUse: View {
                         vm.isTermsOfUseAccepted = true
                         vm.acceptTermsOfUse()
                         DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                            coordinator.popToRoot()
+                            coordinator.closeModal()
                         }
                     }
                     .padding(.horizontal, 30)
@@ -206,14 +206,14 @@ struct TermsOfUse: View {
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 BackButtonView() {
-                    coordinator.pop()
+                    coordinator.popModal()
                 }
             }
             if vm.isTermsOfUseAccepted {
                 ToolbarItem(placement: .topBarTrailing) {
                     if vm.isTermsOfUseAccepted {
                         Button {
-                            coordinator.popToRoot()
+                            coordinator.closeModal()
                         } label: {
                             Image(systemName: "house")
                                 .foregroundStyle(Color.mycolor.myAccent)

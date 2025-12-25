@@ -398,7 +398,7 @@ struct PostDetailsView: View {
                     }
                     .offset(y: -15)
                 }
-            } // if isShowingFullFreeTextField
+            }
         } // VStack
     }
 }

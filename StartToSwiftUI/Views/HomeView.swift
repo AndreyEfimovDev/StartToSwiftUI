@@ -13,8 +13,6 @@ import AudioToolbox
 struct HomeView: View {
     
     // MARK: PROPERTIES
-    
-    //    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
@@ -47,7 +45,6 @@ struct HomeView: View {
     }
     
     // MARK: Subviews
-    
     private var mainConent: some View {
         GeometryReader { proxy in
             ScrollViewReader { scrollProxy in
@@ -112,7 +109,6 @@ struct HomeView: View {
             }
             .onAppear {
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                // Задержка лоя синхронизации с appStateManager
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     if vm.isTermsOfUseAccepted {
                         soundNotificationIfNeeded()
@@ -335,7 +331,6 @@ struct HomeView: View {
                     iconName: "plus",
                     isShownCircle: false
                 ){
-                    //                    showAddPostView.toggle()
                     coordinator.push(.addPost)
                 }
             }
@@ -398,7 +393,6 @@ struct HomeView: View {
     }
     
     // MARK: Private functions
-    
     private func postsForCategory(_ category: String?) -> [Post] {
         guard let category = category else {
             return vm.filteredPosts
