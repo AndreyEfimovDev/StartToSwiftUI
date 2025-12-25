@@ -44,7 +44,6 @@ struct ProgressIndicator: View {
             .bold()
             .foregroundStyle(Color.mycolor.myAccent)
             .opacity(isAppear ? 1 : 0)
-//            .animation(.bouncy(duration: 1), value: isAppear)
         }
         .onAppear {
             isAppear.toggle()

@@ -10,8 +10,8 @@ import SwiftData
 
 struct StudyProgressView: View {
     
-    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
+    @EnvironmentObject private var coordinator: NavigationCoordinator
     
     @State private var selectedTab: StudyLevelTabs = .all
         
@@ -69,8 +69,18 @@ struct StudyProgressView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                BackButtonView() { dismiss() }
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView() {
+                    coordinator.pop()
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    coordinator.popToRoot()
+                } label: {
+                    Image(systemName: "house")
+                        .foregroundStyle(Color.mycolor.myAccent)
+                }
             }
         }
     }
@@ -88,5 +98,6 @@ struct StudyProgressView: View {
     NavigationStack{
         StudyProgressView()
             .environmentObject(vm)
+            .environmentObject(NavigationCoordinator())
     }
 }

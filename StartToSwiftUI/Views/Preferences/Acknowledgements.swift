@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct Acknowledgements: View {
-    @Environment(\.dismiss) private var dismiss
+//    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var coordinator: NavigationCoordinator
+
 
     let seanAllen: AttributedString = {
         var attributedString = AttributedString("Sean Allen")
@@ -94,8 +96,18 @@ struct Acknowledgements: View {
         .navigationTitle("Acknowledgements")
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                BackButtonView() { dismiss() }
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView() {
+                    coordinator.pop()
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    coordinator.popToRoot()
+                } label: {
+                    Image(systemName: "house")
+                        .foregroundStyle(Color.mycolor.myAccent)
+                }
             }
         }
     }
@@ -104,5 +116,6 @@ struct Acknowledgements: View {
 #Preview {
     NavigationStack {
         Acknowledgements()
+            .environmentObject(NavigationCoordinator())
     }
 }

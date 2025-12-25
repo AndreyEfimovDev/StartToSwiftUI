@@ -10,8 +10,8 @@ import SwiftData
 
 struct RestoreBackupView: View {
     
-    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
+    @EnvironmentObject private var coordinator: NavigationCoordinator
 
     private let hapticManager = HapticService.shared
     
@@ -56,7 +56,7 @@ struct RestoreBackupView: View {
                         isInProgress = false
                         if !vm.showErrorMessageAlert {
                             DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                                dismiss()
+                                coordinator.popToRoot()
                             }
                         }
                     }
@@ -69,7 +69,7 @@ struct RestoreBackupView: View {
         }
         .alert("Error", isPresented: $vm.showErrorMessageAlert) {
             Button("OK", role: .cancel) {
-                dismiss()
+                coordinator.pop()
             }
         } message: {
             Text(vm.errorMessage ?? "Unknown error")
@@ -78,11 +78,20 @@ struct RestoreBackupView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                BackButtonView() { dismiss() }
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView() {
+                    coordinator.pop()
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    coordinator.popToRoot()
+                } label: {
+                    Image(systemName: "house")
+                        .foregroundStyle(Color.mycolor.myAccent)
+                }
             }
         }
-
     }
     
     // MARK: Subviews
@@ -111,5 +120,6 @@ struct RestoreBackupView: View {
     NavigationStack{
         RestoreBackupView()
             .environmentObject(vm)
+            .environmentObject(NavigationCoordinator())
     }
 }

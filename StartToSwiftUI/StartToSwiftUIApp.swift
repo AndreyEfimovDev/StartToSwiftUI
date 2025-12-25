@@ -15,11 +15,11 @@ import CloudKit
 struct StartToSwiftUIApp: App {
     
     @Environment(\.dismiss) private var dismiss
+    @StateObject private var navigationCoordinator = NavigationCoordinator()
     
     private let hapticManager = HapticService.shared
         
     // MARK: - SwiftData Container
-    
     /// ModelContainer с поддержкой iCloud синхронизации
     let modelContainer: ModelContainer = {
         
@@ -37,7 +37,7 @@ struct StartToSwiftUIApp: App {
         
         do {
             let container = try ModelContainer(for: schema, configurations: [config])
-            print("✅ SwiftData контейнер создан успешно")
+//            print("✅ SwiftData контейнер создан успешно")
             return container
         } catch {
             fatalError("❌ Не удалось создать ModelContainer: \(error)")
@@ -45,7 +45,6 @@ struct StartToSwiftUIApp: App {
     }()
     
     init() {
-        
         // Set custom colour for NavigationStack titles
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground() // it also removes a dividing line
@@ -87,35 +86,26 @@ struct StartToSwiftUIApp: App {
                 }
             }
         }
-    } // init()
+    }
     
     var body: some Scene {
         WindowGroup {
             ContentViewWrapper()
-//                .onAppear {
-                    // ОТЛАДКА: Проверяем статус CloudKit (опционально)
-//                    checkCloudKitSetup()
-//                    checkRuntimeEntitlements()
-//                    quickCloudKitCheck()
-//                }
+                .modelContainer(modelContainer)
+                .environmentObject(navigationCoordinator)
         }
-        .modelContainer(modelContainer)
     }
 }
 
 
 #Preview("Full App Preview") {
-    // 1. Создаем in-memory контейнер
-//    let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
 
-    // 2. Получаем контекст
     let context = container.mainContext
     
-    // 3. Вставляем ваши PreviewData в SwiftData
     for notice in PreviewData.sampleNotices {
         context.insert(notice)
     }
@@ -124,7 +114,6 @@ struct StartToSwiftUIApp: App {
         context.insert(post)
     }
     
-    // 4. Пробуем сохранить
     do {
         try context.save()
         print("✅ Preview: Данные загружены в SwiftData")
@@ -132,13 +121,11 @@ struct StartToSwiftUIApp: App {
         print("❌ Preview: Ошибка сохранения: \(error)")
     }
     
-    // 5. Создаем ViewModels
     let vm = PostsViewModel(modelContext: context)
     let noticevm = NoticeViewModel(modelContext: context)
     
-    // 7. Возвращаем ContentViewWrapper со всеми зависимостями
     return ContentViewWrapper()
-        .environment(\.modelContext, context) // Ключевой момент!
+        .environment(\.modelContext, context)
         .environmentObject(vm)
         .environmentObject(noticevm)
         .modelContainer(container)

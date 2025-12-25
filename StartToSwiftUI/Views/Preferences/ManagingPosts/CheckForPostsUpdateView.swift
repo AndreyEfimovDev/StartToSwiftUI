@@ -10,9 +10,9 @@ import SwiftData
 
 struct CheckForPostsUpdateView: View {
     
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
+    @EnvironmentObject private var coordinator: NavigationCoordinator
     
     private let hapticManager = HapticService.shared
     
@@ -26,32 +26,42 @@ struct CheckForPostsUpdateView: View {
     @State private var postCount: Int = 0
     
     var body: some View {
-            VStack {
-                Form {
-                    section_1
-                    section_2
+        VStack {
+            Form {
+                section_1
+                section_2
+            }
+        }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime + 1) {
+                checkForUpdates()
+            }
+        }
+        .alert("Import Error", isPresented: $vm.showErrorMessageAlert) {
+            Button("OK", role: .cancel) {
+                coordinator.pop()
+            }
+        } message: {
+            Text(vm.errorMessage ?? "Unknown error")
+        }
+        .navigationTitle("Check for posts update")
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView() {
+                    coordinator.pop()
                 }
             }
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime + 1) {
-                    checkForUpdates()
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    coordinator.popToRoot()
+                } label: {
+                    Image(systemName: "house")
+                        .foregroundStyle(Color.mycolor.myAccent)
                 }
             }
-            .alert("Import Error", isPresented: $vm.showErrorMessageAlert) {
-                Button("OK", role: .cancel) {
-                    dismiss()
-                }
-            } message: {
-                Text(vm.errorMessage ?? "Unknown error")
-            }
-            .navigationTitle("Check for posts update")
-            .navigationBarBackButtonHidden(true)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    BackButtonView() { dismiss() }
-                }
-            }
+        }
     }
     
     // MARK: Subviews
@@ -96,7 +106,7 @@ struct CheckForPostsUpdateView: View {
                                 isImported = true
                                 hapticManager.notification(type: .success)
                                 DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                                    dismiss()
+                                    coordinator.popToRoot()
                                 }
                             }
                         }
@@ -149,9 +159,9 @@ struct CheckForPostsUpdateView: View {
 }
 
 #Preview {
+    
     let container = try! ModelContainer(
-        for: Post.self,
-        Notice.self,
+        for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     let context = ModelContext(container)
@@ -162,5 +172,6 @@ struct CheckForPostsUpdateView: View {
         CheckForPostsUpdateView()
             .modelContainer(container)
             .environmentObject(vm)
+            .environmentObject(NavigationCoordinator())
     }
 }

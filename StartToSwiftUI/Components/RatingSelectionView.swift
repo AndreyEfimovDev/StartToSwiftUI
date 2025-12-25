@@ -28,7 +28,9 @@ struct RatingSelectionView: View {
                             iconName: "xmark",
                             isShownCircle: false)
                         {
-                            completion()
+                            withAnimation {
+                                completion()
+                            }
                         }
                         .padding()
                         .zIndex(1)

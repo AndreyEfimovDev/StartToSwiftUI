@@ -49,7 +49,7 @@ struct LaunchView: View {
             showLoadingProgress.toggle()
         }
         .onDisappear{
-            hapticManager.impact(style: .light)
+            hapticManager.notification(type: .success)
         }
         .onReceive(timer) { _ in
             withAnimation() {

@@ -9,7 +9,9 @@ import SwiftUI
 
 struct FairUseNotice: View {
     
-    @Environment(\.dismiss) private var dismiss
+//    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var coordinator: NavigationCoordinator
+
 
     var body: some View {
         ScrollView {
@@ -35,8 +37,18 @@ struct FairUseNotice: View {
         .navigationTitle("Fair Use Notice")
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                BackButtonView() { dismiss() }
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView() {
+                    coordinator.pop()
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    coordinator.popToRoot()
+                } label: {
+                    Image(systemName: "house")
+                        .foregroundStyle(Color.mycolor.myAccent)
+                }
             }
         }
     }
@@ -44,4 +56,5 @@ struct FairUseNotice: View {
 
 #Preview {
     FairUseNotice()
+        .environmentObject(NavigationCoordinator())
 }

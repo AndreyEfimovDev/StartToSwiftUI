@@ -10,9 +10,10 @@ import SwiftData
 
 struct AddEditPostSheet: View {
     
-    @Environment(\.dismiss) private var dismiss
+//    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
-    
+    @EnvironmentObject private var coordinator: NavigationCoordinator
+
     @StateObject private var keyboardManager = KeyboardManager()
     
     private let hapticManager = HapticService.shared
@@ -152,7 +153,7 @@ struct AddEditPostSheet: View {
                 ClearCupsuleButton(
                     primaryTitle: "Don't save",
                     primaryTitleColor: Color.mycolor.myRed) {
-                            dismiss()
+                        coordinator.pop()
                     }
                 
                 ClearCupsuleButton(
@@ -195,7 +196,7 @@ struct AddEditPostSheet: View {
                 }
                 
                 if editedPost.draft == false && editedPost.isEqual(to: draftPost) {  // if no changes
-                    dismiss()
+                    coordinator.pop()
                 } else {
                     editedPost.draft = false
                     checkPostAndSave()
@@ -212,13 +213,13 @@ struct AddEditPostSheet: View {
             {
                 guard let draftPost = draftPost else {
                     // Если draftPost nil, значит что-то пошло не так, но лучше просто выйти
-                    dismiss()
+                    coordinator.pop()
                     return
                 }
                 
                 if editedPost.isEqual(to: draftPost) {  // if no changes
                     print("🧁 no changes: editedPost == draftPost - dismiss()")
-                    dismiss()
+                    coordinator.pop()
                 } else {
                     print("🧁 are changes: editedPost != draftPost - dismiss()")
                     withAnimation(.easeInOut) {
@@ -631,7 +632,7 @@ struct AddEditPostSheet: View {
                     message: Text("Tap OK to continue"),
                     dismissButton: .default(Text("OK")) {
                         isPostDraftSaved = true
-                        dismiss()
+                        coordinator.pop()
                     }
                 )
             }
@@ -640,7 +641,7 @@ struct AddEditPostSheet: View {
                     title: Text("New Post added successfully"),
                     message: Text("Tap OK to continue"),
                     dismissButton: .default(Text("OK")) {
-                        dismiss()
+                        coordinator.pop()
                     }
                 )
             }
@@ -648,7 +649,7 @@ struct AddEditPostSheet: View {
                 title: Text("Post saved successfully"),
                 message: Text("Tap OK to continue"),
                 dismissButton: .default(Text("OK")) {
-                    dismiss()
+                    coordinator.pop()
                 }
             )
             
@@ -671,6 +672,8 @@ struct AddEditPostSheet: View {
     NavigationStack {
         AddEditPostSheet(post: PreviewData.samplePost1)
             .environmentObject(vm)
+            .environmentObject(NavigationCoordinator())
+
     }
 }
 
@@ -686,6 +689,7 @@ struct AddEditPostSheet: View {
     NavigationStack {
         AddEditPostSheet(post: nil)
             .environmentObject(vm)
+            .environmentObject(NavigationCoordinator())
     }
 }
 

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		47069F002EAFF6210082AE12 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47069EFF2EAFF6210082AE12 /* LaunchView.swift */; };
 		470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */; };
+		470E63702EFB241D007B75B5 /* BaseViewWithPreinstalledNavToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470E636F2EFB241D007B75B5 /* BaseViewWithPreinstalledNavToolbar.swift */; };
+		470E63722EFBDC90007B75B5 /* WelcomeAtFirstLaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470E63712EFBDC90007B75B5 /* WelcomeAtFirstLaunchView.swift */; };
 		471639782ED4C43400DB1371 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 471639772ED4C43400DB1371 /* LaunchScreen.storyboard */; };
 		471BBF9A2EC5F6170004AC45 /* PostDraftsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471BBF992EC5F6170004AC45 /* PostDraftsView.swift */; };
 		471BBF9C2EC620D70004AC45 /* PostDraftsRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471BBF9B2EC620D70004AC45 /* PostDraftsRowView.swift */; };
@@ -49,10 +51,8 @@
 		47656BFE2EE1EC4D00F45AA6 /* StudyProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47656BFD2EE1EC4D00F45AA6 /* StudyProgressView.swift */; };
 		47656C002EE1EF9500F45AA6 /* StudyProgressForLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47656BFF2EE1EF9500F45AA6 /* StudyProgressForLevel.swift */; };
 		4765A76D2EAE5F7B00EACDF4 /* PostRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */; };
-		4767C95F2EF29349003838BA /* CodablePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4767C95E2EF29349003838BA /* CodablePost.swift */; };
 		4767C9612EF293FF003838BA /* PostMigrationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4767C9602EF293FF003838BA /* PostMigrationHelper.swift */; };
 		4767C9632EF29474003838BA /* NoticeMigrationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4767C9622EF29474003838BA /* NoticeMigrationHelper.swift */; };
-		4767C9652EF294B0003838BA /* CodableNotice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4767C9642EF294B0003838BA /* CodableNotice.swift */; };
 		4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773545A2E65C470001DEDEE /* CapsulesSegmentedPicker.swift */; };
 		4773545D2E65D03A001DEDEE /* FiltersSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */; };
 		477C745E2ECF6FB300F77F5B /* StaticPosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477C745D2ECF6FB300F77F5B /* StaticPosts.swift */; };
@@ -78,7 +78,6 @@
 		47AA558A2EA9741D000AF4E9 /* RestoreBackupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */; };
 		47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AE6C802E7D7FD0006230DA /* Modifiers.swift */; };
 		47B465802E6867930059CCB7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B4657F2E6867930059CCB7 /* HomeView.swift */; };
-		47B78A1A2EF60A5800355BCA /* BrokenCircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B78A192EF60A5800355BCA /* BrokenCircleProgressView.swift */; };
 		47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */; };
 		47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF09F2E5F9E9800287F10 /* MoreLessTextButton.swift */; };
 		47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF0A12E60485D00287F10 /* FavoriteButton.swift */; };
@@ -95,6 +94,7 @@
 		47EA142D2EF4603E0064583B /* FirstLaunchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */; };
 		47EA14312EF530780064583B /* AppSyncStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EA14302EF530780064583B /* AppSyncStateManager.swift */; };
 		47F38B1F2ED480B0006DEDBE /* DevData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F38B1E2ED480B0006DEDBE /* DevData.swift */; };
+		47F68A4A2EFB0232003786D0 /* NavigationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F68A492EFB0232003786D0 /* NavigationCoordinator.swift */; };
 		47FF42472EE454440069D232 /* TestSFSymbolsForRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF42462EE454440069D232 /* TestSFSymbolsForRating.swift */; };
 		47FF42492EE4572E0069D232 /* TestSFSymbolsForProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF42482EE4572E0069D232 /* TestSFSymbolsForProgress.swift */; };
 		47FF424B2EE4B5960069D232 /* RatingSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */; };
@@ -106,6 +106,8 @@
 /* Begin PBXFileReference section */
 		47069EFF2EAFF6210082AE12 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleStrokeButtonView.swift; sourceTree = "<group>"; };
+		470E636F2EFB241D007B75B5 /* BaseViewWithPreinstalledNavToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewWithPreinstalledNavToolbar.swift; sourceTree = "<group>"; };
+		470E63712EFBDC90007B75B5 /* WelcomeAtFirstLaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeAtFirstLaunchView.swift; sourceTree = "<group>"; };
 		471639772ED4C43400DB1371 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		471BBF992EC5F6170004AC45 /* PostDraftsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDraftsView.swift; sourceTree = "<group>"; };
 		471BBF9B2EC620D70004AC45 /* PostDraftsRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDraftsRowView.swift; sourceTree = "<group>"; };
@@ -149,10 +151,8 @@
 		47656BFD2EE1EC4D00F45AA6 /* StudyProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressView.swift; sourceTree = "<group>"; };
 		47656BFF2EE1EF9500F45AA6 /* StudyProgressForLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressForLevel.swift; sourceTree = "<group>"; };
 		4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRowView.swift; sourceTree = "<group>"; };
-		4767C95E2EF29349003838BA /* CodablePost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodablePost.swift; sourceTree = "<group>"; };
 		4767C9602EF293FF003838BA /* PostMigrationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostMigrationHelper.swift; sourceTree = "<group>"; };
 		4767C9622EF29474003838BA /* NoticeMigrationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeMigrationHelper.swift; sourceTree = "<group>"; };
-		4767C9642EF294B0003838BA /* CodableNotice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableNotice.swift; sourceTree = "<group>"; };
 		4773545A2E65C470001DEDEE /* CapsulesSegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsulesSegmentedPicker.swift; sourceTree = "<group>"; };
 		4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersSheetView.swift; sourceTree = "<group>"; };
 		477C745D2ECF6FB300F77F5B /* StaticPosts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticPosts.swift; sourceTree = "<group>"; };
@@ -178,7 +178,6 @@
 		47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreBackupView.swift; sourceTree = "<group>"; };
 		47AE6C802E7D7FD0006230DA /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
 		47B4657F2E6867930059CCB7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		47B78A192EF60A5800355BCA /* BrokenCircleProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrokenCircleProgressView.swift; sourceTree = "<group>"; };
 		47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedCupsuleButton.swift; sourceTree = "<group>"; };
 		47BAF09F2E5F9E9800287F10 /* MoreLessTextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreLessTextButton.swift; sourceTree = "<group>"; };
 		47BAF0A12E60485D00287F10 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
@@ -196,6 +195,7 @@
 		47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchManager.swift; sourceTree = "<group>"; };
 		47EA14302EF530780064583B /* AppSyncStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSyncStateManager.swift; sourceTree = "<group>"; };
 		47F38B1E2ED480B0006DEDBE /* DevData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevData.swift; sourceTree = "<group>"; };
+		47F68A492EFB0232003786D0 /* NavigationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCoordinator.swift; sourceTree = "<group>"; };
 		47FF42462EE454440069D232 /* TestSFSymbolsForRating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSFSymbolsForRating.swift; sourceTree = "<group>"; };
 		47FF42482EE4572E0069D232 /* TestSFSymbolsForProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSFSymbolsForProgress.swift; sourceTree = "<group>"; };
 		47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingSelectionView.swift; sourceTree = "<group>"; };
@@ -219,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				47069EFF2EAFF6210082AE12 /* LaunchView.swift */,
+				470E63712EFBDC90007B75B5 /* WelcomeAtFirstLaunchView.swift */,
 				471639772ED4C43400DB1371 /* LaunchScreen.storyboard */,
 			);
 			path = Launch;
@@ -312,8 +313,6 @@
 			children = (
 				475997502E5C6C9D008E20F0 /* Post.swift */,
 				471BBF9E2EC721480004AC45 /* Notice.swift */,
-				4767C9642EF294B0003838BA /* CodableNotice.swift */,
-				4767C95E2EF29349003838BA /* CodablePost.swift */,
 				477C745F2ECFB0E800F77F5B /* News.swift */,
 				47BAF0F72E64A77A00287F10 /* Enums.swift */,
 				4732FB362EAA63810062269D /* Constants.swift */,
@@ -341,7 +340,6 @@
 				47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */,
 				47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */,
 				478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */,
-				47B78A192EF60A5800355BCA /* BrokenCircleProgressView.swift */,
 				47BAF09E2E5F9C4500287F10 /* Buttons */,
 				470A21C42E6E389D006D2D66 /* Pickers */,
 			);
@@ -373,6 +371,7 @@
 				4767C9622EF29474003838BA /* NoticeMigrationHelper.swift */,
 				47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */,
 				47EA14302EF530780064583B /* AppSyncStateManager.swift */,
+				47F68A492EFB0232003786D0 /* NavigationCoordinator.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -451,6 +450,7 @@
 				4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */,
 				475997602E5CC0F8008E20F0 /* PostDetailsView.swift */,
 				4791CE032E748DA200687126 /* AddEditPostSheet.swift */,
+				470E636F2EFB241D007B75B5 /* BaseViewWithPreinstalledNavToolbar.swift */,
 				4791CDAD2E70186100687126 /* Preferences */,
 			);
 			path = Views;
@@ -567,6 +567,7 @@
 				4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */,
 				47B465802E6867930059CCB7 /* HomeView.swift in Sources */,
 				47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */,
+				47F68A4A2EFB0232003786D0 /* NavigationCoordinator.swift in Sources */,
 				471BBF9C2EC620D70004AC45 /* PostDraftsRowView.swift in Sources */,
 				471DCBDE2EBBC68500AFA5F4 /* WhatsNew.swift in Sources */,
 				47656BFE2EE1EC4D00F45AA6 /* StudyProgressView.swift in Sources */,
@@ -582,7 +583,6 @@
 				472E05CC2EDDC9BA005D774E /* KeyboardManager.swift in Sources */,
 				471DCBD02EBB88A400AFA5F4 /* CopyrightPolicy.swift in Sources */,
 				47BAF0F82E64A77A00287F10 /* Enums.swift in Sources */,
-				4767C95F2EF29349003838BA /* CodablePost.swift in Sources */,
 				475997552E5C7F81008E20F0 /* PreviewData.swift in Sources */,
 				4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */,
 				471DCBDC2EBBC67500AFA5F4 /* Introduction.swift in Sources */,
@@ -592,7 +592,6 @@
 				4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */,
 				477C745E2ECF6FB300F77F5B /* StaticPosts.swift in Sources */,
 				47BAF0CA2E635E2800287F10 /* Views.swift in Sources */,
-				47B78A1A2EF60A5800355BCA /* BrokenCircleProgressView.swift in Sources */,
 				47656C002EE1EF9500F45AA6 /* StudyProgressForLevel.swift in Sources */,
 				4725A52B2EDD757F00235C40 /* UIDevice.swift in Sources */,
 				47656BFC2EE1EBF000F45AA6 /* ProgressIndicatorView.swift in Sources */,
@@ -605,11 +604,11 @@
 				477C74602ECFB0F300F77F5B /* News.swift in Sources */,
 				4791CDF12E7428EE00687126 /* CircleShadowButtonView.swift in Sources */,
 				47542EB42EF2C8E400B0AB79 /* ContentViewWrapper.swift in Sources */,
-				4767C9652EF294B0003838BA /* CodableNotice.swift in Sources */,
 				47E2AF4F2EBCD86000B0214F /* CategoryFilterView.swift in Sources */,
 				478116462EBFF9DD00EF25F8 /* CustomProgressView.swift in Sources */,
 				4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */,
 				4791CDFE2E747AC100687126 /* JSONFileManager.swift in Sources */,
+				470E63702EFB241D007B75B5 /* BaseViewWithPreinstalledNavToolbar.swift in Sources */,
 				475997512E5C6C9D008E20F0 /* Post.swift in Sources */,
 				47C56FEE2EC9C94100F0796C /* NoticeRowView.swift in Sources */,
 				471BBF9F2EC721480004AC45 /* Notice.swift in Sources */,
@@ -623,6 +622,7 @@
 				4791CDEA2E72E8CC00687126 /* Arrays.swift in Sources */,
 				472A9B5B2EDC3B6F00ED3344 /* BackButtonView.swift in Sources */,
 				471DCBCA2EBB633300AFA5F4 /* PrivacyPolicy.swift in Sources */,
+				470E63722EFBDC90007B75B5 /* WelcomeAtFirstLaunchView.swift in Sources */,
 				47EA14312EF530780064583B /* AppSyncStateManager.swift in Sources */,
 				47FF424B2EE4B5960069D232 /* RatingSelectionView.swift in Sources */,
 				470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */,
