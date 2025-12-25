@@ -10,13 +10,11 @@ import SwiftData
 
 struct PreferencesView: View {
     
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
     @EnvironmentObject private var coordinator: NavigationCoordinator
 
-    
     let iconWidth: CGFloat = 18
     
     private var postsCount: Int {
@@ -34,38 +32,9 @@ struct PreferencesView: View {
     
     var body: some View {
             Form {
-                
-                Section(header: Text("Debug Navigation")) {
-                    // Простая тестовая кнопка
-                    Button("🚀 Test Push to StudyProgress") {
-                        print("=== DEBUG: PreferencesView button tapped ===")
-                        print("Path count before: \(coordinator.path.count)")
-                        
-                        // Пробуем самый простой переход
-                        coordinator.push(.studyProgress)
-                        
-                        print("Path count after push: \(coordinator.path.count)")
-                    }
-                    .customListRowStyle(iconName: "testtube.2", iconWidth: 18)
-                    
-                    // Кнопка для проверки текущего состояния
-                    Button("📊 Print Current State") {
-                        print("=== PreferencesView State ===")
-                        print("Coordinator instance: \(Unmanaged.passUnretained(coordinator).toOpaque())")
-                        print("Path count: \(coordinator.path.count)")
-                        
-                        // Попробуем получить hashValue path для проверки
-                        let mirror = Mirror(reflecting: coordinator.path)
-                        print("Path type: \(type(of: coordinator.path))")
-                        print("Path mirror children count: \(mirror.children.count)")
-                    }
-                }
-                
-                
                 Section(header: sectionHeader("Appearance")) {
                     themeAppearence
                 }
-                
                 Section(header: sectionHeader("Notifications")) {
                     noticeMessages
                     notificationToggle
@@ -78,23 +47,9 @@ struct PreferencesView: View {
                 //                    }
                 //                }
                 
-                
                 Section(header: sectionHeader("Achievements")) {
-                    Button("Check progress") {
-                        // ✅ Используем координатор
-                        coordinator.push(.studyProgress)
-                    }
-                    .customListRowStyle(iconName: "hare", iconWidth: iconWidth)
-                    
-                    //                    NavigationLink("Check progress") {
-                    //                        StudyProgressView()
-                    //                    }
-                    //                    .customListRowStyle(
-                    //                        iconName: "hare",
-                    //                        iconWidth: iconWidth
-                    //                    )
-                } // gauge.open.with.lines.needle.67percent.and.arrowtriangle
-                
+                    achievements
+                }
                 Section(header: sectionHeader("Manage materials (\(postsCount))")) {
                     loadStaticPostsToggle
                     postDrafts
@@ -104,15 +59,13 @@ struct PreferencesView: View {
                     restoreBackup
                     erasePosts
                 }
-                
-                
                 Section(header: sectionHeader("Сommunication")){
                     acknowledgements
                     aboutApplication
                     legalInformation
                     contactDeveloperButton
                 }
-            } // Form
+            }
             .foregroundStyle(Color.mycolor.myAccent)
             .listSectionSpacing(0)
             .navigationTitle("Preferences")
@@ -123,30 +76,16 @@ struct PreferencesView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     if UIDevice.isiPad {
                         BackButtonView(iconName: "xmark") {
-                            print("📱 PreferencesView: Back button tapped")
                             coordinator.pop()
                         }
                     } else {
                         BackButtonView() {
-                            print("📱 PreferencesView: Back button tapped")
                             coordinator.pop()
                         }
                     }
                 }
             }
-            .onAppear {
-                print("=== PreferencesView APPEARED ===")
-                print("✅ Coordinator IS available")
-                print("Path count on appear: \(coordinator.path.count)")
-                
-                // Простой способ проверить, что координатор работает
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    print("Path count after 0.5s: \(coordinator.path.count)")
-                }
-                
-            }
             .preferredColorScheme(vm.selectedTheme.colorScheme)
-       
     }
     
     // MARK: - Subviews
@@ -204,8 +143,17 @@ struct PreferencesView: View {
         }
     }
     
+    private var achievements: some View {
+        Button("Check progress") {
+            coordinator.push(.studyProgress)
+        }
+        .customListRowStyle(
+            iconName: "hare",
+            iconWidth: iconWidth
+        ) // gauge.open.with.lines.needle.67percent.and.arrowtriangle
+    }
+    
     private var loadStaticPostsToggle: some View {
-        
         HStack {
             Image(systemName: "arrow.2.squarepath")
                 .frame(width: iconWidth)
@@ -216,11 +164,8 @@ struct PreferencesView: View {
     }
     
     private var noticeMessages: some View {
-//        NavigationLink("Messages (\(newNoticesCount)/\(noticevm.notices.count))") {
-//            NoticesView()
-//        }
         Button("Messages (\(newNoticesCount)/\(noticevm.notices.count))") {
-            coordinator.push(.notices) // ✅ Используем координатор
+            coordinator.push(.notices)
         }
         .customListRowStyle(
             iconName: newNoticesCount == 0 ? "message" : "message.badge",
@@ -231,11 +176,8 @@ struct PreferencesView: View {
     private var postDrafts: some View {
         Group {
             if !vm.allPosts.filter({ $0.draft == true }).isEmpty {
-//                NavigationLink("Post drafts (\(draftsCount))") {
-//                    PostDraftsView()
-//                }
                 Button("Post drafts (\(draftsCount))") {
-                    coordinator.push(.postDrafts) // ✅ Используем координатор
+                    coordinator.push(.postDrafts)
                 }
                 .customListRowStyle(
                     iconName: "square.stack.3d.up",
@@ -255,9 +197,6 @@ struct PreferencesView: View {
             let localPostsFromCloud = vm.allPosts.filter { $0.origin == .cloud }
 
             if status && !localPostsFromCloud.isEmpty {
-//                NavigationLink("Check for materials update") {
-//                    CheckForPostsUpdateView()
-//                }
                 Button("Check for materials update") {
                     coordinator.push(.checkForUpdates)
                 }
@@ -269,16 +208,12 @@ struct PreferencesView: View {
         }
     }
     
-    /// Импорт доступен, если в локальных массиве материалов нет авторских (для постов с .origin = ,cloud)
-
+    /// Импорт доступен, если в локальных массиве материалов нет авторских (для постов с origin = .cloud)
     private var importFromCloud: some View {
         Group {
             let localPostsFromCloud = vm.allPosts.filter { $0.origin == .cloud }
 
             if localPostsFromCloud.isEmpty {
-//                NavigationLink("Download the curated collection") {
-//                    ImportPostsFromCloudView()
-//                }
                 Button("Download the curated collection") {
                     coordinator.push(.importFromCloud)
                 }
@@ -291,9 +226,6 @@ struct PreferencesView: View {
     }
     
     private var shareBackup: some View {
-//        NavigationLink("Share/Backup") {
-//            SharePostsView()
-//        }
         Button("Share/Backup") {
             coordinator.push(.shareBackup)
         }
@@ -304,9 +236,6 @@ struct PreferencesView: View {
     }
     
     private var restoreBackup: some View {
-//        NavigationLink("Restore backup") {
-//            RestoreBackupView()
-//        }
         Button("Restore backup") {
             coordinator.push(.restoreBackup)
         }
@@ -317,9 +246,6 @@ struct PreferencesView: View {
     }
     
     private var erasePosts: some View {
-//        NavigationLink("Erase all materials") {
-//            EraseAllPostsView()
-//        }
         Button("Erase all materials") {
             coordinator.push(.erasePosts)
         }
@@ -330,9 +256,6 @@ struct PreferencesView: View {
     }
     
     private var acknowledgements: some View {
-//        NavigationLink("Acknowledgements") {
-//            Acknowledgements()
-//        }
         Button("Acknowledgements") {
             coordinator.push(.acknowledgements)
         }
@@ -343,9 +266,6 @@ struct PreferencesView: View {
     }
     
     private var aboutApplication: some View {
-//        NavigationLink("About App") {
-//            AboutApp()
-//        }
         Button("About App") {
             coordinator.push(.aboutApp)
         }
@@ -356,9 +276,6 @@ struct PreferencesView: View {
     }
     
     private var legalInformation: some View {
-//        NavigationLink("Legal information") {
-//            LegalInformationView()
-//        }
         Button("Legal information") {
             coordinator.push(.legalInfo)
         }

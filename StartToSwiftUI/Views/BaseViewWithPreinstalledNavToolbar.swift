@@ -9,12 +9,13 @@ import SwiftUI
 
 import SwiftUI
 
-struct BaseNavigationView<Content: View>: View {
-    let title: String
-    let content: Content
-    let showHomeButton: Bool
+struct BaseViewWithPreinstalledNavToolbar<Content: View>: View {
     
     @EnvironmentObject private var coordinator: NavigationCoordinator
+
+    let title: String
+    let showHomeButton: Bool
+    let content: Content    
     
     init(title: String, showHomeButton: Bool = false, @ViewBuilder content: () -> Content) {
         self.title = title

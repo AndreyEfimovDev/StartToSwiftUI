@@ -10,15 +10,13 @@ import SwiftData
 
 struct TermsOfUse: View {
     
-//    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: NavigationCoordinator
     
     @State private var isAccepted: Bool = false
-//    @Binding var isTermsOfUseAccepted: Bool
     
     var body: some View {
-        
         ScrollView {
             VStack {
                 //                     **TERMS OF USE FOR THE APPLICATION**
@@ -193,12 +191,10 @@ struct TermsOfUse: View {
                     secondaryTitle: "Accepted",
                     isToChange: isAccepted || vm.isTermsOfUseAccepted) {
                         isAccepted = true
+                        vm.isTermsOfUseAccepted = true
+                        vm.acceptTermsOfUse()
                         DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                            vm.isTermsOfUseAccepted = true
-                            
                             coordinator.popToRoot()
-                            
-                            coordinator.pop()
                         }
                     }
                     .padding(.horizontal, 30)
@@ -214,12 +210,16 @@ struct TermsOfUse: View {
                     coordinator.pop()
                 }
             }
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    coordinator.popToRoot()
-                } label: {
-                    Image(systemName: "house")
-                        .foregroundStyle(Color.mycolor.myAccent)
+            if vm.isTermsOfUseAccepted {
+                ToolbarItem(placement: .topBarTrailing) {
+                    if vm.isTermsOfUseAccepted {
+                        Button {
+                            coordinator.popToRoot()
+                        } label: {
+                            Image(systemName: "house")
+                                .foregroundStyle(Color.mycolor.myAccent)
+                        }
+                    }
                 }
             }
         }
@@ -238,8 +238,8 @@ struct TermsOfUse: View {
     
     NavigationStack {
         TermsOfUse()
+            .modelContainer(container)
+            .environmentObject(vm)
+            .environmentObject(NavigationCoordinator())
     }
-    .environmentObject(vm)
-    .environmentObject(NavigationCoordinator())
 }
-

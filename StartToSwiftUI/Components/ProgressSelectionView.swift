@@ -27,7 +27,9 @@ struct ProgressSelectionView: View {
                         CircleStrokeButtonView(
                             iconName: "xmark",
                             isShownCircle: false) {
-                                completion()
+                                withAnimation {
+                                    completion()
+                                }
                             }
                         .padding()
                         .zIndex(1)

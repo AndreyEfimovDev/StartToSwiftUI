@@ -10,13 +10,11 @@ import SwiftData
 
 struct NoticesView: View {
     
-    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var noticevm: NoticeViewModel
     @EnvironmentObject private var coordinator: NavigationCoordinator
     
     private let hapticManager = HapticService.shared
     
-    @State private var selectedNoticeID: String?
     @State private var showNoticeDetails: Bool = false
     
     var body: some View {
@@ -30,8 +28,9 @@ struct NoticesView: View {
                             NoticeRowView(notice: notice)
                                 .background(.black.opacity(0.001))
                                 .onTapGesture {
-                                    selectedNoticeID = notice.id
-                                    showNoticeDetails.toggle()
+//                                    withAnimation {
+                                        coordinator.push(.noticeDetails(noticeId: notice.id))
+//                                    }
                                 }
                                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                     Button {
@@ -70,14 +69,17 @@ struct NoticesView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                BackButtonView() { dismiss() }
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView() {
+                    coordinator.pop()
+                }
             }
-        }
-        .navigationDestination(isPresented: $showNoticeDetails) {
-            if let id = selectedNoticeID {
-                withAnimation {
-                    NoticeDetailsView(noticeId: id)
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    coordinator.popToRoot()
+                } label: {
+                    Image(systemName: "house")
+                        .foregroundStyle(Color.mycolor.myAccent)
                 }
             }
         }
@@ -90,7 +92,6 @@ struct NoticesView: View {
             description: Text("Messages will appear here when are available.")
         )
     }
-    
     
 }
 

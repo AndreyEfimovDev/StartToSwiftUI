@@ -57,7 +57,6 @@ class PostsViewModel: ObservableObject {
     
     // MARK: - AppStorage
     @AppStorage("selectedTheme") var selectedTheme: Theme = .system
-//    @AppStorage("isTermsOfUseAccepted") var isTermsOfUseAccepted: Bool = false
     
     // Filters
     @AppStorage("storedCategory") var storedCategory: String?
@@ -82,19 +81,9 @@ class PostsViewModel: ObservableObject {
     @Published var selectedSortOption: SortOption? = nil {
         didSet { storedSortOption = selectedSortOption }}
     
-    var isTermsOfUseAccepted: Bool {
-        get {
-            let appStateManager = AppSyncStateManager(modelContext: modelContext)
-            return appStateManager.getTermsOfUseAcceptedStatus()
-        }
-        set {
-            let appStateManager = AppSyncStateManager(modelContext: modelContext)
-            appStateManager.setTermsOfUseAccepted(newValue)
-            objectWillChange.send() // Уведомляем об изменении
-        }
-    }
+    @Published var isTermsOfUseAccepted: Bool = false
     
-    // ✅ Метод для принятия условий
+    // Метод для принятия условий
     func acceptTermsOfUse() {
         let appStateManager = AppSyncStateManager(modelContext: modelContext)
         appStateManager.acceptTermsOfUse()
@@ -124,6 +113,10 @@ class PostsViewModel: ObservableObject {
         
         Task {
             let appStateManager = AppSyncStateManager(modelContext: modelContext)
+            // Проверяем стостояние TermsOfUseAccepted
+            self.isTermsOfUseAccepted = appStateManager.getTermsOfUseAcceptedStatus()
+
+            // Проверяем наличие новых материалов в авторской коллекции в облаке
             let hasUpdates = await checkCloudCuratedPostsForUpdates()
             
             if hasUpdates {
@@ -145,15 +138,15 @@ class PostsViewModel: ObservableObject {
     // MARK: - Funcrtions for Static Posts
     /// Загружает статические посты при первом запуске
     func loadStaticPostsIfNeeded() async {
-        print("🔍 Проверка необходимости загрузки статических постов...")
+//        print("🔍 Проверка необходимости загрузки статических постов...")
         
         // Используем глобальные значения в AppStateManager для проверки
         let appStateManager = AppSyncStateManager(modelContext: modelContext)
         let globalShouldLoadStaticPostsStatus = appStateManager.getStaticPostsLoadToggleStatus()
         let globalCheckIfStaticPostsHasLoaded = appStateManager.checkIfStaticPostsHasLoaded()
         
-        print("⚠️⚠️ Переключатель загрузки стат. постов shouldLoadStaticPosts: \(globalShouldLoadStaticPostsStatus)")
-        print("⚠️⚠️ Статус загрузки стат. постов hasLoadedStaticPosts: \(globalCheckIfStaticPostsHasLoaded)")
+//        print("⚠️⚠️ Переключатель загрузки стат. постов shouldLoadStaticPosts: \(globalShouldLoadStaticPostsStatus)")
+//        print("⚠️⚠️ Статус загрузки стат. постов hasLoadedStaticPosts: \(globalCheckIfStaticPostsHasLoaded)")
 
 
         // Проверяем совпадение локального значения статуса shouldLoadStaticPosts с AppStateManager
@@ -163,7 +156,7 @@ class PostsViewModel: ObservableObject {
         }
         // ШАГ 0: проверяем статус shouldLoadStaticPosts в AppStateManager, если оключена, выходим
         guard globalShouldLoadStaticPostsStatus else {
-            print("⚠️⚠️ Загрузка статических постов отключена пользователем")
+//            print("⚠️⚠️ Загрузка статических постов отключена пользователем")
             return
         }
         
@@ -175,15 +168,15 @@ class PostsViewModel: ObservableObject {
         // ШАГ 2: Проверяем флаг из SwiftData (синхронизируется через iCloud!)
         // ШАГ 2: Проверяем статус hasLoadedStaticPosts в AppStateManager, если уже загружали, выходим
         if globalCheckIfStaticPostsHasLoaded {
-            print("⚠️⚠️ Статические посты уже были загружены ранее (проверка через iCloud)")
-            print("⚠️⚠️ appStateManager.hasLoadedStaticPosts: \(String(describing: appStateManager.checkIfStaticPostsHasLoaded()))")
+//            print("⚠️⚠️ Статические посты уже были загружены ранее (проверка через iCloud)")
+//            print("⚠️⚠️ appStateManager.hasLoadedStaticPosts: \(String(describing: appStateManager.checkIfStaticPostsHasLoaded()))")
             
             // ШАГ 3: ОБЯЗАТЕЛЬНАЯ ОЧИСТКА дубликатов после синхронизации (SwiftUI + CloudKit задваивают одинаковые статические и авторские посты
             await removeDuplicateStaticPosts()
             return
         }
         
-        print("⚠️⚠️ 📦 Статические посты ещё не загружены, начинаем загрузку...")
+//        print("⚠️⚠️ 📦 Статические посты ещё не загружены, начинаем загрузку...")
         
         // ШАГ 4: Проверяем, нет ли уже постов с такими же ID в базе статических постов
         let allStaticIds = Set(StaticPost.staticPosts.map { $0.id })
@@ -201,16 +194,16 @@ class PostsViewModel: ObservableObject {
             
             // 🔥 ШАГ 5: Если уже есть хотя бы один пост - НЕ создаём новые
             if !existingStaticPosts.isEmpty {
-                print("⚠️⚠️ Обнаружены существующие статические посты: \(existingStaticPosts.count) шт.")
-                print("⚠️⚠️ Вероятно, они синхронизированы с другого устройства")
+//                print("⚠️⚠️ Обнаружены существующие статические посты: \(existingStaticPosts.count) шт.")
+//                print("⚠️⚠️ Вероятно, они синхронизированы с другого устройства")
                 
                 // Удаляем дубликаты
                 await removeDuplicateStaticPosts()
-                print("⚠️⚠️ Удаляем дубликаты")
+//                print("⚠️⚠️ Удаляем дубликаты")
 
                 // Отмечаем как загруженные
                 appStateManager.markStaticPostsAsLoaded()
-                print("⚠️⚠️ Отмечаем как загруженные hasLoadedStaticPosts: \(appStateManager.markStaticPostsAsLoaded())")
+//                print("⚠️⚠️ Отмечаем как загруженные hasLoadedStaticPosts: \(appStateManager.markStaticPostsAsLoaded())")
 
                 loadPostsFromSwiftData()
                 return
@@ -240,31 +233,31 @@ class PostsViewModel: ObservableObject {
                         practicedDateStamp: staticPost.practicedDateStamp
                     )
                     modelContext.insert(newPost)
-                    print("⚠️⚠️  ✓ Добавлен: \(staticPost.title)")
+//                    print("⚠️⚠️  ✓ Добавлен: \(staticPost.title)")
             }
 
             try modelContext.save()
-            print("⚠️⚠️ 💾 Статические посты сохранены в SwiftData")
+//            print("⚠️⚠️ 💾 Статические посты сохранены в SwiftData")
             
             // Отмечаем как загруженные
-            print("⚠️⚠️ Отмечаем ФЛАГ - статические посты как загруженные")
+//            print("⚠️⚠️ Отмечаем ФЛАГ - статические посты как загруженные")
             
             appStateManager.markStaticPostsAsLoaded()
             
-            print("⚠️⚠️ appStateManager.hasLoadedStaticPosts: \(String(describing: appStateManager.checkIfStaticPostsHasLoaded()))")
+//            print("⚠️⚠️ appStateManager.hasLoadedStaticPosts: \(String(describing: appStateManager.checkIfStaticPostsHasLoaded()))")
 
             loadPostsFromSwiftData()
 
-            print("⚠️⚠️ ✅ Загрузка статических постов завершена")
+//            print("⚠️⚠️ ✅ Загрузка статических постов завершена")
         } catch {
-            print("❌ Ошибка при загрузке статических постов: \(error)")
+//            print("❌ Ошибка при загрузке статических постов: \(error)")
         }
     }
 
     // MARK: - Remove Duplicates
     /// Удаляет дубликаты статических постов, оставляя только один экземпляр каждого ID
     private func removeDuplicateStaticPosts() async {
-        print("🔍 Проверка дубликатов статических постов...")
+//        print("🔍 Проверка дубликатов статических постов...")
         
         let allStaticIds = Set(StaticPost.staticPosts.map { $0.id })
         
@@ -278,11 +271,11 @@ class PostsViewModel: ObservableObject {
             let existingStaticPosts = try modelContext.fetch(descriptor)
             
             guard existingStaticPosts.count > StaticPost.staticPosts.count else {
-                print("✅ Дубликатов не обнаружено (\(existingStaticPosts.count) постов)")
+//                print("✅ Дубликатов не обнаружено (\(existingStaticPosts.count) постов)")
                 return
             }
             
-            print("🗑️ Обнаружены дубликаты! Всего: \(existingStaticPosts.count), ожидалось: \(StaticPost.staticPosts.count)")
+//            print("🗑️ Обнаружены дубликаты! Всего: \(existingStaticPosts.count), ожидалось: \(StaticPost.staticPosts.count)")
             
             // Группируем по ID
             let groupedById = Dictionary(grouping: existingStaticPosts, by: { $0.id })
@@ -291,7 +284,7 @@ class PostsViewModel: ObservableObject {
             
             // Для каждого ID оставляем только первый пост, остальные удаляем
             for (id, posts) in groupedById where posts.count > 1 {
-                print("  🔍 ID \(id): найдено \(posts.count) дубликатов")
+//                print("  🔍 ID \(id): найдено \(posts.count) дубликатов")
                 
                 // Сортируем по дате создания и оставляем самый старый
                 let sortedPosts = posts.sorted { $0.date < $1.date }
@@ -306,7 +299,7 @@ class PostsViewModel: ObservableObject {
             
             if deletedCount > 0 {
                 try modelContext.save()
-                print("✅ Удалено \(deletedCount) дубликатов")
+//                print("✅ Удалено \(deletedCount) дубликатов")
                 loadPostsFromSwiftData()
             }
         } catch {
@@ -361,16 +354,16 @@ class PostsViewModel: ObservableObject {
         do {
             allPosts = try modelContext.fetch(descriptor)
             // 🔍 ДЕБАГ: Выводим все посты с ID
-            print("📊 Загружено \(allPosts.count) постов из SwiftData:")
+//            print("📊 Загружено \(allPosts.count) постов из SwiftData:")
             for (index, post) in allPosts.enumerated() {
-                print("📊 \(index + 1). ID: \(post.id), Title: \(post.title)")
+//                print("📊 \(index + 1). ID: \(post.id), Title: \(post.title)")
             }
             allYears = getAllYears()
             allCategories = getAllCategories()
         } catch {
             errorMessage = "Ошибка загрузки данных"
             showErrorMessageAlert = true
-            print("📊 ❌ Ошибка загрузки из SwiftData: \(error)")
+//            print("📊 ❌ Ошибка загрузки из SwiftData: \(error)")
         }
     }
     
