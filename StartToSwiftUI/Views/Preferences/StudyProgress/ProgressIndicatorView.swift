@@ -52,11 +52,12 @@ struct ProgressIndicator: View {
     }
 }
 
+
 fileprivate
 struct ProgressViewCircleTrimPreview: View {
     
     @State var proportion: Double = 0.9
-    @State var titles: [String] = ["Untapped", "Learning", "Studied", "Practiced"] // virgin untapped untouched
+    @State var titles: [String] = ["Untapped", "Learning", "Studied", "Practiced"]
     @State var posts: [PostForTest] = [
         .init(title: "Title 1", progress: .fresh),
         .init(title: "Title 2", progress: .fresh),

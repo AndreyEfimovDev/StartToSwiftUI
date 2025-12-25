@@ -10,7 +10,7 @@ import SwiftData
 
 struct AddEditPostSheet: View {
     
-//    @Environment(\.dismiss) private var dismiss
+    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: NavigationCoordinator
 
@@ -82,46 +82,48 @@ struct AddEditPostSheet: View {
     
     var body: some View {
         
-        VStack {
-            ScrollView {
-                titleSection
-                introSection
-                authorSection
-                urlSection
-                postDateSection
-                typeSection
-                platformSection
-                studyLevelSection
-//                favoviteChoiceSection
-                notesSection
+        NavigationView {
+            VStack {
+                ScrollView {
+                    titleSection
+                    introSection
+                    authorSection
+                    urlSection
+                    postDateSection
+                    typeSection
+                    platformSection
+                    studyLevelSection
+                    //                favoviteChoiceSection
+                    notesSection
+                }
+                .foregroundStyle(Color.mycolor.myAccent)
+                .padding(.horizontal, 8)
             }
-            .foregroundStyle(Color.mycolor.myAccent)
-            .padding(.horizontal, 8)
-        }
-        .navigationTitle(viewTitle)
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .background(Color.mycolor.myBackground)
-        .toolbar {
-            toolbarForAddEditView()
-        }
-        .overlay(
-            hideKeybordButton
-        )
-        .opacity(isShowingExitMenuConfirmation ? 0.5 : 1.0)
-        .alert(isPresented: $showAlert) {
-            getAlert(
-                alertTitle: alertTitle,
-                alertMessage: alertMessage)
-        }
-        .onAppear {
-            focusedField = .postTitle
-        }
-        .overlay {
-            if isShowingExitMenuConfirmation {
-                exitConfirmation
-                    .opacity(isShowingExitMenuConfirmation ? 1 : 0)
-                    .transition(.move(edge: .bottom))
+            .navigationTitle(viewTitle)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .background(Color.mycolor.myBackground)
+            .toolbar {
+                toolbarForAddEditView()
+            }
+            .overlay(
+                hideKeybordButton
+            )
+            .opacity(isShowingExitMenuConfirmation ? 0.5 : 1.0)
+            .alert(isPresented: $showAlert) {
+                getAlert(
+                    alertTitle: alertTitle,
+                    alertMessage: alertMessage)
+            }
+            .onAppear {
+                focusedField = .postTitle
+            }
+            .overlay {
+                if isShowingExitMenuConfirmation {
+                    exitConfirmation
+                        .opacity(isShowingExitMenuConfirmation ? 1 : 0)
+                        .transition(.move(edge: .bottom))
+                }
             }
         }
     }
@@ -153,7 +155,7 @@ struct AddEditPostSheet: View {
                 ClearCupsuleButton(
                     primaryTitle: "Don't save",
                     primaryTitleColor: Color.mycolor.myRed) {
-                        coordinator.pop()
+                        dismiss()
                     }
                 
                 ClearCupsuleButton(
@@ -196,7 +198,7 @@ struct AddEditPostSheet: View {
                 }
                 
                 if editedPost.draft == false && editedPost.isEqual(to: draftPost) {  // if no changes
-                    coordinator.pop()
+                    dismiss()
                 } else {
                     editedPost.draft = false
                     checkPostAndSave()
@@ -213,12 +215,12 @@ struct AddEditPostSheet: View {
             {
                 guard let draftPost = draftPost else {
                     // Если draftPost nil, значит что-то пошло не так, но лучше просто выйти
-                    coordinator.pop()
+                    dismiss()
                     return
                 }
                 
                 if editedPost.isEqual(to: draftPost) {  // if no changes
-                    coordinator.pop()
+                    dismiss()
                 } else {
                     withAnimation(.easeInOut) {
                         isShowingExitMenuConfirmation = true
@@ -630,7 +632,7 @@ struct AddEditPostSheet: View {
                     message: Text("Tap OK to continue"),
                     dismissButton: .default(Text("OK")) {
                         isPostDraftSaved = true
-                        coordinator.pop()
+                        dismiss()
                     }
                 )
             }
@@ -639,7 +641,7 @@ struct AddEditPostSheet: View {
                     title: Text("New Post added successfully"),
                     message: Text("Tap OK to continue"),
                     dismissButton: .default(Text("OK")) {
-                        coordinator.pop()
+                        dismiss()
                     }
                 )
             }
@@ -647,7 +649,7 @@ struct AddEditPostSheet: View {
                 title: Text("Post saved successfully"),
                 message: Text("Tap OK to continue"),
                 dismissButton: .default(Text("OK")) {
-                    coordinator.pop()
+                    dismiss()
                 }
             )
             

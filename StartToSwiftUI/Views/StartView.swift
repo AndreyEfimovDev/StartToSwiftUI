@@ -44,6 +44,17 @@ struct StartView: View {
         .task {
             await loadInitialData()
         }
+        .fullScreenCover(item: $coordinator.presentedSheet) { route in
+            if UIDevice.isiPad {
+                ModalNavigationContainer(initialRoute: route)
+                    .presentationDetents([.large])  // На iPad можно sheet
+                    .presentationDragIndicator(.visible)
+            } else {
+                ModalNavigationContainer(initialRoute: route)
+            }
+        }
+        .environmentObject(vm)
+        .environmentObject(noticevm)
     }
     
     // MARK: - Subviews
@@ -51,36 +62,132 @@ struct StartView: View {
     private var mainContent: some View {
         if UIDevice.isiPad {
             // iPad - NavigationSplitView
-            SidebarView()
-                .environmentObject(vm)
-                .environmentObject(noticevm)
-                .environmentObject(coordinator)
+            EmptyView()
+//            SidebarView()
         } else {
             // iPhone - NavigationStack (portrait only)
-            HomeView(selectedCategory: vm.selectedCategory)
-                .environmentObject(vm)
-                .environmentObject(noticevm)
-                .environmentObject(coordinator)
+            NavigationStack(path: $coordinator.path) {
+                HomeView(selectedCategory: vm.selectedCategory)
+                    .navigationDestination(for: AppRoute.self) { route in
+                        if case .postDetails(let postId) = route {
+                            PostDetailsView(postId: postId)
+                        }
+                    }
+            }
         }
     }
     
+    // MARK: - Destination View for routing
+    @ViewBuilder
+    private func destinationView(for route: AppRoute) -> some View {
+        switch route {
+            
+            // Post details View
+        case .postDetails(let postId):
+            PostDetailsView(postId: postId)
+                    
+            // Welcome at first launch to accept Terms of Use
+        case .welcomeAtFirstLaunch:
+            WelcomeAtFirstLaunchView()
+
+            // Preferences
+        case .preferences:
+            PreferencesView()
+
+            // Managing notices
+        case .notices:
+            NoticesView(isRootModal: false)
+        case .noticeDetails(let noticeId):
+            NoticeDetailsView(noticeId: noticeId)
+
+            // Study progress
+        case .studyProgress:
+            StudyProgressView()
+
+            // Managing posts (materials)
+        case .postDrafts:
+            PostDraftsView()
+        case .checkForUpdates:
+            CheckForPostsUpdateView()
+        case .importFromCloud:
+            ImportPostsFromCloudView()
+        case .shareBackup:
+            SharePostsView()
+        case .restoreBackup:
+            RestoreBackupView()
+        case .erasePosts:
+            EraseAllPostsView()
+            
+            // Gratitude
+        case .acknowledgements:
+            Acknowledgements()
+            
+            // About App
+        case .aboutApp:
+            AboutApp()
+        case .welcome:
+            WelcomeMessage()
+        case .introduction:
+            Introduction()
+        case .whatIsNew:
+            WhatsNewView()
+            
+            // Legal information
+        case .legalInfo:
+            LegalInformationView()
+        case .termsOfUse:
+            TermsOfUse()
+        case .privacyPolicy:
+            PrivacyPolicy()
+        case .copyrightPolicy:
+            CopyrightPolicy()
+        case .fairUseNotice:
+            FairUseNotice()
+        default:
+                EmptyView()
+        }
+        
+
+    }
+    
+    // Модальные вью (для .sheet)
+    @ViewBuilder
+    private func modalSheetView(for route: AppRoute) -> some View {
+        switch route {
+        case .addPost:
+            AddEditPostSheet(post: nil)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+        case .editPost(let post):
+            AddEditPostSheet(post: post)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+        default:
+            EmptyView()
+        }
+    }
+
+
     // MARK: - Data Loading
     private func loadInitialData() async {
-        // Очистка дубликатов AppState из прошлых запусков (Xcode)
+        // Clearing duplicate AppState from previous runs (Xcode)
         let appStateManager = AppSyncStateManager(modelContext: modelContext)
         appStateManager.cleanupDuplicateAppStates()
         
         vm.loadPostsFromSwiftData()
         
-        // Если нужно, загружаем статические посты при первом запуске
+        // If necessary, load static posts on first launch
         await vm.loadStaticPostsIfNeeded()
         
-        // Импортируем уведомления (включает удаление дубликатов)
+        // Import notifications (includes deleting duplicates)
         await noticevm.importNoticesFromCloud()
         
         isLoadingData = false
     }
 }
+
+
+
 
 #Preview("Simple Test") {
     let container = try! ModelContainer(
