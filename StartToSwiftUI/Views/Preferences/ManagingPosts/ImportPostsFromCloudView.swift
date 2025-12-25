@@ -24,76 +24,60 @@ struct ImportPostsFromCloudView: View {
     @State private var initialPostCount: Int = 0
     
     var body: some View {
-        
-        ZStack(alignment: .bottom) {
-            VStack {
-                textSection
-                    .textFormater()
-                
-                Group {
-                    CapsuleButtonView(
-                        primaryTitle: "Confirm and Download",
-                        secondaryTitle: "\(postCount) New Materials Added",
-                        isToChange: isLoaded) {
-                            isInProgress = true
-                            initialPostCount = vm.allPosts.count
-                            Task {
-                                await importFromCloud()
-                            }
-                        }
-                        .disabled(isLoaded || isInProgress)
-                        .padding(.top, 30)
+        ViewWrapperWithCustomNavToolbar(
+            title: "Import materials from cloud",
+            showHomeButton: true
+        ) {
+            ZStack(alignment: .bottom) {
+                VStack {
+                    textSection
+                        .textFormater()
                     
-                    CapsuleButtonView(
-                        primaryTitle: "Don't confirm",
-                        textColorPrimary: Color.mycolor.myButtonTextRed,
-                        buttonColorPrimary: Color.mycolor.myButtonBGRed) {
-                            coordinator.popToRoot()
-                        }
-                        .opacity(isLoaded ? 0 : 1)
-                        .disabled(isInProgress)
+                    Group {
+                        CapsuleButtonView(
+                            primaryTitle: "Confirm and Download",
+                            secondaryTitle: "\(postCount) New Materials Added",
+                            isToChange: isLoaded) {
+                                isInProgress = true
+                                initialPostCount = vm.allPosts.count
+                                Task {
+                                    await importFromCloud()
+                                }
+                            }
+                            .disabled(isLoaded || isInProgress)
+                            .padding(.top, 30)
+                        
+                        CapsuleButtonView(
+                            primaryTitle: "Don't confirm",
+                            textColorPrimary: Color.mycolor.myButtonTextRed,
+                            buttonColorPrimary: Color.mycolor.myButtonBGRed) {
+                                coordinator.popToRoot()
+                            }
+                            .opacity(isLoaded ? 0 : 1)
+                            .disabled(isInProgress)
+                    }
+                    .padding(.horizontal, 50)
+                    
+                    Spacer()
+                    
                 }
-                .padding(.horizontal, 50)
-                
-                Spacer()
-                
+                if isInProgress {
+                    CustomProgressView()
+                }
             }
-            if isInProgress {
-                CustomProgressView()
-            }
-        }
-        .padding(.horizontal, 30)
-        .padding(.top, 30)
-        .alert("Download Error", isPresented: $vm.showErrorMessageAlert) {
-            Button("OK", role: .cancel) {
-                coordinator.pop()
-            }
-        } message: {
-            Text(vm.errorMessage ?? "Unknown error")
-        }
-        .navigationTitle("Import posts from cloud")
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView() {
+            .padding(.horizontal, 30)
+            .padding(.top, 30)
+            .alert("Download Error", isPresented: $vm.showErrorMessageAlert) {
+                Button("OK", role: .cancel) {
                     coordinator.pop()
                 }
-            }
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    coordinator.popToRoot()
-                } label: {
-                    Image(systemName: "house")
-                        .foregroundStyle(Color.mycolor.myAccent)
-                }
+            } message: {
+                Text(vm.errorMessage ?? "Unknown error")
             }
         }
     }
     
-    
     // MARK: Subviews
-    
     private var textSection: some View {
         VStack {
             Group {
@@ -127,37 +111,36 @@ struct ImportPostsFromCloudView: View {
     
     private func importFromCloud() async {
         
-        // Раскомментировать эту часть, когда нужно загрузить DevData
+        // Download local DevData (for internal use)
+        // Uncomment this part when you need to load DevData
 //        loadDevData()
        
-        // Загрузка из облака (основной режим)
-        // Закомментируйте эту часть, когда используете DevData
+        // Download from the cloud (main stream)
+        // Comment out this part when using DevData
         await loadFromCloudService()
         
     }
     
-    /// Загрузка DevData для формирования JSON
-    /// Для внутреннего использования, чтобы сформировать JSON файл для облака
+    /// Loading DevData to generate JSON
+    /// For internal use, to generate a JSON file for the cloud
     private func loadDevData() {
-        print("🔵 Начинаем загрузку DevData...")
-        
         Task { @MainActor in
             do {
-                // Получаем существующие заголовки для фильтрации дубликатов
+                // Get existing titles to filter duplicates
                 let existingTitles = Set(vm.allPosts.map { $0.title })
                 let existingIds = Set(vm.allPosts.map { $0.id })
                 
                 var addedCount = 0
                 
-                // Фильтруем и добавляем только уникальные посты
+                // Filter and add only unique posts
                 for devPost in DevData.postsForCloud {
-                    // Проверяем, что пост уникален
+                    // We check that the post is unique
                     guard !existingTitles.contains(devPost.title) && !existingIds.contains(devPost.id) else {
-                        print("⚠️ Пост '\(devPost.title)' уже существует, пропускаем")
+                        log("⚠️ Post '\(devPost.title)' already exists, skipping", level: .info)
                         continue
                     }
                     
-                    // Создаём новый SwiftData Post
+                    // Create a new Post for SwiftData
                     let newPost = Post(
                         id: devPost.id,
                         category: devPost.category,
@@ -185,26 +168,25 @@ struct ImportPostsFromCloudView: View {
                     addedCount += 1
                 }
                 
-                // Сохраняем в SwiftData
+                // Save in SwiftData
                 try modelContext.save()
-                print("✅ DevData: Загружено \(addedCount) постов из \(DevData.postsForCloud.count)")
+                log("✅ DevData: Loaded \(addedCount) posts from \(DevData.postsForCloud.count)", level: .info)
                 
-                // Обновляем UI
+                // Update UI
                 vm.loadPostsFromSwiftData()
                 
-                // Количесвто итого сколько загрузили
+                // Total quantity uploaded
                 postCount = vm.allPosts.count - initialPostCount
                 
                 isInProgress = false
                 isLoaded = true
                 hapticManager.notification(type: .success)
                 
-                // Закрываем через 1.5 секунды
+                // Closing in 1.5 seconds
                 try? await Task.sleep(nanoseconds: 1_500_000_000)
                 coordinator.popToRoot()
                 
             } catch {
-                print("❌ Ошибка загрузки DevData: \(error)")
                 vm.errorMessage = "Failed to load DevData: \(error.localizedDescription)"
                 vm.showErrorMessageAlert = true
                 isInProgress = false
@@ -213,14 +195,11 @@ struct ImportPostsFromCloudView: View {
         }
     }
     
-    /// Загрузка из облачного сервиса
+    /// Downloading from a cloud service
     private func loadFromCloudService() async {
-        
-        print("⏳ loadFromCloudService(): Ожидание синхронизации iCloud (1 секунда)...")
-        try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 секунда
+        // Waiting for iCloud sync (1 second)...
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
 
-        print("☁️ Начинаем загрузку из облака...")
-        
         await vm.importPostsFromCloud() { [self] in
             Task { @MainActor in
                 isInProgress = false
@@ -228,12 +207,12 @@ struct ImportPostsFromCloudView: View {
                 if !vm.showErrorMessageAlert {
                     isLoaded = true
                     
-                    // Обновляем счётчик загруженных постов
+                    // Updating the counter of downloaded posts
                     postCount = vm.allPosts.count - initialPostCount
                     
                     hapticManager.notification(type: .success)
                     
-                    // Закрываем через 1.5 секунды
+                    // Closing in 1.5 seconds
                     try? await Task.sleep(nanoseconds: 1_500_000_000)
                     coordinator.popToRoot()
                 } else {
@@ -243,20 +222,6 @@ struct ImportPostsFromCloudView: View {
         }
     }
 }
-
-//#Preview {
-//    NavigationStack {
-//        ImportPostsFromCloudView()
-//            .environmentObject(PostsViewModel(
-//                modelContext: ModelContext(
-//                    try! ModelContainer(for: Post.self, Notice.self)
-//                )
-//            ))
-//            .environmentObject(NavigationCoordinator())
-//    }
-//    .modelContainer(for: [Post.self, Notice.self], inMemory: true)
-//}
-
 
 #Preview {
     

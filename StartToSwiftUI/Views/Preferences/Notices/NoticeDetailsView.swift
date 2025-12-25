@@ -22,7 +22,6 @@ struct NoticeDetailsView: View {
     
     private var notice: Notice? {
         noticevm.notices.first(where: { $0.id == noticeId })
-//                DevData.sampleNotice2
     }
     
     private let sectionCornerRadius: CGFloat = 15

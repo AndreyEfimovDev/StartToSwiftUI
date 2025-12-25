@@ -19,7 +19,6 @@ struct TermsOfUse: View {
     var body: some View {
         ScrollView {
             VStack {
-                //                     **TERMS OF USE FOR THE APPLICATION**
                 Text("""
                         **Last Updated:** November 8, 2025
                         

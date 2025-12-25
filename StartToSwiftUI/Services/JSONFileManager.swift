@@ -25,12 +25,12 @@ class JSONFileManager: ObservableObject {
                 .default
                 .urls(for: .documentDirectory, in: .userDomainMask)
                 .first else {
-            print("🍎❌ FM(getFileURL): Error in getting path for \(fileName).")
+            log("🍎❌ FM(getFileURL): Error in getting path for \(fileName).", level: .error)
             return .failure(.invalidURL)
         }
 
         let fileURL = documentsDirectory.appendingPathComponent(fileName)
-                print("🍎 FM(getFileURL): Successfully in getting path: \(fileURL).")
+                log("🍎 FM(getFileURL): Successfully in getting path: \(fileURL).", level: .info)
                 return .success(fileURL)
         }
     
@@ -42,7 +42,7 @@ class JSONFileManager: ObservableObject {
         encoder: JSONEncoder = .appEncoder, // we use the date encoding strategy - ISO8601 (string)
         completion: @escaping (Result<Void, FileStorageError>) -> Void
     ) {
-        print("🍎 FM(saveData): Getting URL")
+        log("🍎 FM(saveData): Getting URL", level: .info)
 
         let urlResult = getFileURL(fileName: fileName)
         
@@ -51,10 +51,10 @@ class JSONFileManager: ObservableObject {
             do {
                 let jsonData = try encoder.encode(data)
                 try jsonData.write(to: url)
-                print("🍎 FM(saveData): Data successfully saved in: \(url)")
+                log("🍎 FM(saveData): Data successfully saved in: \(url)", level: .info)
                 completion(.success(()))
             } catch {
-                print("🍎❌ FM(saveData): Error in saving data: \(error)")
+                log("🍎❌ FM(saveData): Error in saving data: \(error)", level: .error)
                 completion(.failure(.encodingFailed(error)))
             }
             
@@ -69,7 +69,7 @@ class JSONFileManager: ObservableObject {
         decoder: JSONDecoder = .appDecoder, // we use the date decoding strategy - ISO8601 (string)
         completion: @escaping (Result<T, FileStorageError>) -> Void
     ) {
-        print("🍎 FM(loadData): Getting URL")
+        log("🍎 FM(loadData): Getting URL", level: .info)
 
         let urlResult = getFileURL(fileName: fileName)
         
@@ -77,7 +77,7 @@ class JSONFileManager: ObservableObject {
         case .success(let url):
             // Check the file for existance
             guard FileManager.default.fileExists(atPath: url.path) else {
-                print("🍎☑️ FM(loadData): No JSON file found")
+                log("🍎☑️ FM(loadData): No JSON file found", level: .info)
                 completion(.failure(.fileNotFound))
                 return
             }
@@ -85,10 +85,10 @@ class JSONFileManager: ObservableObject {
             do {
                 let jsonData = try Data(contentsOf: url)
                 let decodedData = try decoder.decode(T.self, from: jsonData)
-                print("🍎 FM(loadData): Successfully uploaded \(T.self)")
+                log("🍎 FM(loadData): Successfully uploaded \(T.self)", level: .info)
                 completion(.success(decodedData))
             } catch {
-                print("🍎☑️ FM(loadData): Decoding error: \(error)")
+                log("🍎☑️ FM(loadData): Decoding error: \(error)", level: .error)
                 completion(.failure(.decodingFailed(error)))
             }
             
@@ -99,8 +99,7 @@ class JSONFileManager: ObservableObject {
     }
     
     func checkIfFileExists(fileName: String) -> Bool {
-        
-        print("🍎 FM(checkIfFileExists): Getting URL")
+        log("🍎 FM(checkIfFileExists): Getting URL", level: .info)
 
             guard case .success(let url) = getFileURL(fileName: fileName) else {
                 return false

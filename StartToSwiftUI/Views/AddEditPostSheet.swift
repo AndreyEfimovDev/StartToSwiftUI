@@ -218,10 +218,8 @@ struct AddEditPostSheet: View {
                 }
                 
                 if editedPost.isEqual(to: draftPost) {  // if no changes
-                    print("🧁 no changes: editedPost == draftPost - dismiss()")
                     coordinator.pop()
                 } else {
-                    print("🧁 are changes: editedPost != draftPost - dismiss()")
                     withAnimation(.easeInOut) {
                         isShowingExitMenuConfirmation = true
                         hapticManager.notification(type: .warning)
