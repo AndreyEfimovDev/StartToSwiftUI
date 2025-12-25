@@ -32,10 +32,10 @@ struct StartToSwiftUIApp: App {
         
         do {
             let container = try ModelContainer(for: schema, configurations: [config])
-            log("✅ SwiftData контейнер создан успешно", level: .info)
+            log("✅ SwiftData container created successfully", level: .info)
             return container
         } catch {
-            fatalError("❌ Не удалось создать ModelContainer: \(error)")
+            fatalError("❌ Failed to create ModelContainer: \(error)")
         }
     }()
     
