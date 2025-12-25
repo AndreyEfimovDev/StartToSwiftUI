@@ -10,7 +10,6 @@ import SwiftData
 
 struct AddEditPostSheet: View {
     
-//    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: NavigationCoordinator
 
