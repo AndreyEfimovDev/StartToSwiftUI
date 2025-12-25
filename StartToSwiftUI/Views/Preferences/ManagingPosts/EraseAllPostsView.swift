@@ -10,9 +10,10 @@ import SwiftData
 
 struct EraseAllPostsView: View {
     
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
-    
+    @EnvironmentObject private var coordinator: NavigationCoordinator
+
     private let hapticManager = HapticService.shared
     
     @State private var isDeleted: Bool = false
@@ -27,7 +28,7 @@ struct EraseAllPostsView: View {
                 .textFormater()
             
             CapsuleButtonView(
-                primaryTitle: "Delete",
+                primaryTitle: "ERASE",
                 secondaryTitle: "\(postCount) Materials Deleted!",
                 textColorPrimary: Color.mycolor.myButtonTextRed,
                 buttonColorPrimary: Color.mycolor.myButtonBGRed,
@@ -37,9 +38,14 @@ struct EraseAllPostsView: View {
                     vm.eraseAllPosts{
                         isDeleted = true
                         isInProgress = false
-                        vm.isFirstImportPostsCompleted = false
+                        // Сбрасываем статус первого импорта авторских ссылок на материалы
+                        // Чтобы с пустым локальным массивом данных была возможность
+                        // снова импортировать авторские ссылоки на материалы
+                        let appStateManager = AppSyncStateManager(modelContext: modelContext)
+                        appStateManager.setCuratedPostsLoadStatusOn()
+                        
                         DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                            dismiss()
+                            coordinator.popToRoot()
                         }
                     }
                 }
@@ -65,8 +71,18 @@ struct EraseAllPostsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                BackButtonView() { dismiss() }
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView() {
+                    coordinator.pop()
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    coordinator.popToRoot()
+                } label: {
+                    Image(systemName: "house")
+                        .foregroundStyle(Color.mycolor.myAccent)
+                }
             }
         }
     }
@@ -114,13 +130,18 @@ struct EraseAllPostsView: View {
 }
 
 #Preview {
-    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppSyncState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
     let context = ModelContext(container)
     
     let vm = PostsViewModel(modelContext: context)
 
     NavigationStack{
         EraseAllPostsView()
+            .modelContainer(container)
             .environmentObject(vm)
+            .environmentObject(NavigationCoordinator())
     }
 }

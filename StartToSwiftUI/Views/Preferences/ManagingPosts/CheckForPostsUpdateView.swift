@@ -10,8 +10,9 @@ import SwiftData
 
 struct CheckForPostsUpdateView: View {
     
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
+    @EnvironmentObject private var coordinator: NavigationCoordinator
     
     private let hapticManager = HapticService.shared
     
@@ -25,50 +26,63 @@ struct CheckForPostsUpdateView: View {
     @State private var postCount: Int = 0
     
     var body: some View {
-            VStack {
-                Form {
-                    section_1
-                    section_2
+        VStack {
+            Form {
+                section_1
+                section_2
+            }
+        }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime + 1) {
+                checkForUpdates()
+            }
+        }
+        .alert("Import Error", isPresented: $vm.showErrorMessageAlert) {
+            Button("OK", role: .cancel) {
+                coordinator.pop()
+            }
+        } message: {
+            Text(vm.errorMessage ?? "Unknown error")
+        }
+        .navigationTitle("Check for posts update")
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView() {
+                    coordinator.pop()
                 }
             }
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime + 1) {
-                    checkForUpdates()
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    coordinator.popToRoot()
+                } label: {
+                    Image(systemName: "house")
+                        .foregroundStyle(Color.mycolor.myAccent)
                 }
             }
-            .alert("Import Error", isPresented: $vm.showErrorMessageAlert) {
-                Button("OK", role: .cancel) {
-                    dismiss()
-                }
-            } message: {
-                Text(vm.errorMessage ?? "Unknown error")
-            }
-            .navigationTitle("Check for posts update")
-            .navigationBarBackButtonHidden(true)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    BackButtonView() { dismiss() }
-                }
-            }
+        }
     }
     
     // MARK: Subviews
     
     private var section_1: some View {
         Section {
-            HStack {
-                Text(followingText)
-                    .foregroundStyle(followingTextColor)
-                Spacer()
-                if isInProgress {
-                    CustomProgressView(scale: 1, isNoText: true)
+            let appStateManager = AppSyncStateManager(modelContext: modelContext)
+            if let lastDateUpdated = appStateManager.getLastDateOfCuaratedPostsLoaded() {
+                HStack {
+                    Text(followingText)
+                        .foregroundStyle(followingTextColor)
+                    Spacer()
+                    if isInProgress {
+                        CustomProgressView(scale: 1, isNoText: true)
+                    }
                 }
-            }
-            HStack {
-                Text("Last update from:")
-                Spacer()
-                Text(vm.localLastUpdated.formatted(date: .numeric, time: .omitted))
+                HStack {
+                    Text("Last update from:")
+                    Spacer()
+                    Text(lastDateUpdated.formatted(date: .numeric, time: .omitted))
+                }
             }
         }
         .foregroundStyle(Color.mycolor.myAccent)
@@ -85,14 +99,15 @@ struct CheckForPostsUpdateView: View {
                     primaryTitle: "Update now",
                     secondaryTitle: "Imported \(postCount) posts",
                     isToChange: isImported) {
-                        
-                        isInProgress = true
-                        vm.importPostsFromCloud() {
-                            isInProgress = false
-                            isImported = true
-                            hapticManager.notification(type: .success)
-                            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                                dismiss()
+                        Task {
+                            isInProgress = true
+                            await vm.importPostsFromCloud() {
+                                isInProgress = false
+                                isImported = true
+                                hapticManager.notification(type: .success)
+                                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+                                    coordinator.popToRoot()
+                                }
                             }
                         }
                     }
@@ -120,15 +135,17 @@ struct CheckForPostsUpdateView: View {
     // MARK: Functions
     
     private func checkForUpdates() {
-        vm.checkCloudForUpdates { hasUpdates in
-            if hasUpdates {
+        Task {
+            let hasUpdates = await vm.checkCloudCuratedPostsForUpdates()
+            switch hasUpdates {
+            case true:
                 followingText = "Updates available!"
                 followingTextColor = Color.mycolor.myRed
                 isPostsUpdateAvailable = true
                 isInProgress = false
                 print("Updates available")
-                
-            } else {
+
+            case false:
                 followingText = "No update available"
                 followingTextColor = Color.mycolor.myGreen
                 isPostsUpdateAvailable = false
@@ -142,13 +159,19 @@ struct CheckForPostsUpdateView: View {
 }
 
 #Preview {
-    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppSyncState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
     let context = ModelContext(container)
     
     let vm = PostsViewModel(modelContext: context)
     
     NavigationStack{
         CheckForPostsUpdateView()
+            .modelContainer(container)
             .environmentObject(vm)
+            .environmentObject(NavigationCoordinator())
     }
 }

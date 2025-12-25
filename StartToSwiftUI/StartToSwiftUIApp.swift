@@ -9,33 +9,26 @@
 import SwiftUI
 import SwiftData
 import Speech
-
-
-//
-//**Порядок загрузки:**
-//```
-//1. App запускается
-//2. ContentViewWrapper.onAppear → initializeViewModels()
-//3. vm.modelContext = modelContext (в initializeViewModels)
-//4. PostsViewModel.didSet → loadPostsFromSwiftData() (первый и единственный раз)
-//5. NoticeViewModel.didSet → loadNoticesFromSwiftData() → importNoticesFromCloud()
-//6. .task → loadStaticPostsIfNeeded() (если база пустая)
-
+import CloudKit
 
 @main
 struct StartToSwiftUIApp: App {
     
     @Environment(\.dismiss) private var dismiss
+    @StateObject private var navigationCoordinator = NavigationCoordinator()
     
     private let hapticManager = HapticService.shared
-    
-    @State private var showLaunchView: Bool = true
-    
+        
     // MARK: - SwiftData Container
-    
     /// ModelContainer с поддержкой iCloud синхронизации
     let modelContainer: ModelContainer = {
-        let schema = Schema([Post.self, Notice.self])
+        
+        let schema = Schema([
+            Post.self,
+            Notice.self,
+            AppSyncState.self
+        ])
+        
         let config = ModelConfiguration(
             schema: schema,
             isStoredInMemoryOnly: false,
@@ -44,7 +37,7 @@ struct StartToSwiftUIApp: App {
         
         do {
             let container = try ModelContainer(for: schema, configurations: [config])
-            print("✅ SwiftData контейнер создан успешно")
+//            print("✅ SwiftData контейнер создан успешно")
             return container
         } catch {
             fatalError("❌ Не удалось создать ModelContainer: \(error)")
@@ -52,15 +45,12 @@ struct StartToSwiftUIApp: App {
     }()
     
     init() {
-        
-        // Set a custom colour titles for NavigationStack and the magnifying class in the search bar
+        // Set custom colour for NavigationStack titles
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground() // it also removes a dividing line
         
-        // Explicitly setting the background colour
         appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
         
-        // Setting colour for titles using NSAttributedString
         let accentColor = UIColor(Color.mycolor.myAccent)
         appearance.largeTitleTextAttributes = [
             .foregroundColor: accentColor,
@@ -71,16 +61,11 @@ struct StartToSwiftUIApp: App {
             .font: UIFont.systemFont(ofSize: 17, weight: .semibold)
         ]
         
-        // Apply to all possible states
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().compactAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().compactScrollEdgeAppearance = appearance
-        
-        // Buttons colour
         UINavigationBar.appearance().tintColor = accentColor
-        
-        // For UITableView
         UITableView.appearance().backgroundColor = UIColor.clear
         
         // Warm Keyboard
@@ -101,29 +86,26 @@ struct StartToSwiftUIApp: App {
                 }
             }
         }
-    } // init()
+    }
     
     var body: some Scene {
         WindowGroup {
             ContentViewWrapper()
+                .modelContainer(modelContainer)
+                .environmentObject(navigationCoordinator)
         }
-        .modelContainer(modelContainer)
     }
 }
 
 
 #Preview("Full App Preview") {
-    // 1. Создаем in-memory контейнер
-    let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(
-        for: Post.self, Notice.self,
-        configurations: config
+        for: Post.self, Notice.self, AppSyncState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
-    
-    // 2. Получаем контекст
+
     let context = container.mainContext
     
-    // 3. Вставляем ваши PreviewData в SwiftData
     for notice in PreviewData.sampleNotices {
         context.insert(notice)
     }
@@ -132,7 +114,6 @@ struct StartToSwiftUIApp: App {
         context.insert(post)
     }
     
-    // 4. Пробуем сохранить
     do {
         try context.save()
         print("✅ Preview: Данные загружены в SwiftData")
@@ -140,16 +121,11 @@ struct StartToSwiftUIApp: App {
         print("❌ Preview: Ошибка сохранения: \(error)")
     }
     
-    // 5. Создаем ViewModels
     let vm = PostsViewModel(modelContext: context)
     let noticevm = NoticeViewModel(modelContext: context)
     
-//    // 6. Настраиваем состояние (пропускаем TermsOfUse для превью)
-//    vm.isTermsOfUseAccepted = true
-    
-    // 7. Возвращаем ContentViewWrapper со всеми зависимостями
     return ContentViewWrapper()
-        .environment(\.modelContext, context) // Ключевой момент!
+        .environment(\.modelContext, context)
         .environmentObject(vm)
         .environmentObject(noticevm)
         .modelContainer(container)

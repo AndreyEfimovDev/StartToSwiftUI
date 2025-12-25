@@ -8,20 +8,13 @@
 import SwiftUI
 import SwiftData
 
-//enum PreferencesDestination: Hashable {
-//    case cloudImport
-//    case shareBackup
-//    case restoreBackup
-//    case erasePosts
-//    case aboutApp
-//}
-
 struct PreferencesView: View {
     
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
-    
+    @EnvironmentObject private var coordinator: NavigationCoordinator
+
     let iconWidth: CGFloat = 18
     
     private var postsCount: Int {
@@ -38,13 +31,10 @@ struct PreferencesView: View {
     }
     
     var body: some View {
-        NavigationStack {
             Form {
-                
                 Section(header: sectionHeader("Appearance")) {
                     themeAppearence
                 }
-
                 Section(header: sectionHeader("Notifications")) {
                     noticeMessages
                     notificationToggle
@@ -56,20 +46,12 @@ struct PreferencesView: View {
                 //                        selectedCategory
                 //                    }
                 //                }
-
                 
                 Section(header: sectionHeader("Achievements")) {
-                    
-                    NavigationLink("Check progress") {
-                        StudyProgressView()
-                    }
-                    .customListRowStyle(
-                        iconName: "hare",
-                        iconWidth: iconWidth
-                    )
-                } // gauge.open.with.lines.needle.67percent.and.arrowtriangle
-                
+                    achievements
+                }
                 Section(header: sectionHeader("Manage materials (\(postsCount))")) {
+                    loadStaticPostsToggle
                     postDrafts
                     checkForPostsUpdate
                     importFromCloud
@@ -77,15 +59,13 @@ struct PreferencesView: View {
                     restoreBackup
                     erasePosts
                 }
-                                                
-                
                 Section(header: sectionHeader("Сommunication")){
                     acknowledgements
                     aboutApplication
                     legalInformation
                     contactDeveloperButton
                 }
-            } // Form
+            }
             .foregroundStyle(Color.mycolor.myAccent)
             .listSectionSpacing(0)
             .navigationTitle("Preferences")
@@ -95,14 +75,17 @@ struct PreferencesView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     if UIDevice.isiPad {
-                        BackButtonView(iconName: "xmark") { dismiss() }
+                        BackButtonView(iconName: "xmark") {
+                            coordinator.pop()
+                        }
                     } else {
-                        BackButtonView() { dismiss() }
+                        BackButtonView() {
+                            coordinator.pop()
+                        }
                     }
                 }
             }
-        }
-        .preferredColorScheme(vm.selectedTheme.colorScheme)
+            .preferredColorScheme(vm.selectedTheme.colorScheme)
     }
     
     // MARK: - Subviews
@@ -160,9 +143,29 @@ struct PreferencesView: View {
         }
     }
     
+    private var achievements: some View {
+        Button("Check progress") {
+            coordinator.push(.studyProgress)
+        }
+        .customListRowStyle(
+            iconName: "hare",
+            iconWidth: iconWidth
+        ) // gauge.open.with.lines.needle.67percent.and.arrowtriangle
+    }
+    
+    private var loadStaticPostsToggle: some View {
+        HStack {
+            Image(systemName: "arrow.2.squarepath")
+                .frame(width: iconWidth)
+                .foregroundStyle(Color.mycolor.myBlue)
+            Toggle("Load static posts", isOn: $vm.shouldLoadStaticPosts)
+                .tint(Color.mycolor.myBlue)
+        }
+    }
+    
     private var noticeMessages: some View {
-        NavigationLink("Messages (\(newNoticesCount)/\(noticevm.notices.count))") {
-            NoticesView()
+        Button("Messages (\(newNoticesCount)/\(noticevm.notices.count))") {
+            coordinator.push(.notices)
         }
         .customListRowStyle(
             iconName: newNoticesCount == 0 ? "message" : "message.badge",
@@ -173,8 +176,8 @@ struct PreferencesView: View {
     private var postDrafts: some View {
         Group {
             if !vm.allPosts.filter({ $0.draft == true }).isEmpty {
-                NavigationLink("Post drafts (\(draftsCount))") {
-                    PostDraftsView()
+                Button("Post drafts (\(draftsCount))") {
+                    coordinator.push(.postDrafts)
                 }
                 .customListRowStyle(
                     iconName: "square.stack.3d.up",
@@ -184,11 +187,18 @@ struct PreferencesView: View {
         }
     }
     
+    /// Проверка наличие новых авторских ссылок на материалы доступна если:
+    /// - статус наличия новых материалов = true, и
+    /// - в локальном массиве материалов есть авторские (для постов с .origin = ,cloud)
     private var checkForPostsUpdate: some View {
         Group {
-            if (!vm.allPosts.isEmpty) && vm.isFirstImportPostsCompleted {
-                NavigationLink("Check for materials update") {
-                    CheckForPostsUpdateView()
+            let appStateManager = AppSyncStateManager(modelContext: modelContext)
+            let status = appStateManager.getAvailableNewCuratedPostsStatus()
+            let localPostsFromCloud = vm.allPosts.filter { $0.origin == .cloud }
+
+            if status && !localPostsFromCloud.isEmpty {
+                Button("Check for materials update") {
+                    coordinator.push(.checkForUpdates)
                 }
                 .customListRowStyle(
                     iconName: "arrow.trianglehead.counterclockwise",
@@ -198,19 +208,26 @@ struct PreferencesView: View {
         }
     }
     
+    /// Импорт доступен, если в локальных массиве материалов нет авторских (для постов с origin = .cloud)
     private var importFromCloud: some View {
-        NavigationLink("Download the curated collection") {
-            ImportPostsFromCloudView()
+        Group {
+            let localPostsFromCloud = vm.allPosts.filter { $0.origin == .cloud }
+
+            if localPostsFromCloud.isEmpty {
+                Button("Download the curated collection") {
+                    coordinator.push(.importFromCloud)
+                }
+                .customListRowStyle(
+                    iconName: "icloud.and.arrow.down",
+                    iconWidth: iconWidth
+                )
+            }
         }
-        .customListRowStyle(
-            iconName: "icloud.and.arrow.down",
-            iconWidth: iconWidth
-        )
     }
     
     private var shareBackup: some View {
-        NavigationLink("Share/Backup") {
-            SharePostsView()
+        Button("Share/Backup") {
+            coordinator.push(.shareBackup)
         }
         .customListRowStyle(
             iconName: "square.and.arrow.up",
@@ -219,8 +236,8 @@ struct PreferencesView: View {
     }
     
     private var restoreBackup: some View {
-        NavigationLink("Restore backup") {
-            RestoreBackupView()
+        Button("Restore backup") {
+            coordinator.push(.restoreBackup)
         }
         .customListRowStyle(
             iconName: "tray.and.arrow.up",
@@ -229,8 +246,8 @@ struct PreferencesView: View {
     }
     
     private var erasePosts: some View {
-        NavigationLink("Delete all materials") {
-            EraseAllPostsView()
+        Button("Erase all materials") {
+            coordinator.push(.erasePosts)
         }
         .customListRowStyle(
             iconName: "trash",
@@ -239,9 +256,8 @@ struct PreferencesView: View {
     }
     
     private var acknowledgements: some View {
-        
-        NavigationLink("Acknowledgements") {
-            Acknowledgements()
+        Button("Acknowledgements") {
+            coordinator.push(.acknowledgements)
         }
         .customListRowStyle(
             iconName: "hand.thumbsup",
@@ -250,8 +266,8 @@ struct PreferencesView: View {
     }
     
     private var aboutApplication: some View {
-        NavigationLink("About App") {
-            AboutApp()
+        Button("About App") {
+            coordinator.push(.aboutApp)
         }
         .customListRowStyle(
             iconName: "info.circle",
@@ -260,9 +276,8 @@ struct PreferencesView: View {
     }
     
     private var legalInformation: some View {
-        
-        NavigationLink("Legal information") {
-            LegalInformationView()
+        Button("Legal information") {
+            coordinator.push(.legalInfo)
         }
         .customListRowStyle(
             iconName: "long.text.page.and.pencil",
@@ -285,26 +300,11 @@ struct PreferencesView: View {
     }
 }
 
-
-//// MARK: - Wrapping all child views for lazy loading (for testing)
-//
-//struct LazyView<Content: View>: View {
-//
-//    let build: () -> Content
-//
-//    init(_ build: @escaping () -> Content) {
-//        self.build = build
-//    }
-//
-//    var body: Content {
-//        build()
-//    }
-//}
-
-
 #Preview {
-    
-    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppSyncState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
     let context = ModelContext(container)
     
     let vm = PostsViewModel(modelContext: context)
@@ -313,6 +313,8 @@ struct PreferencesView: View {
     NavigationStack {
         PreferencesView ()
     }
+    .modelContainer(container)
     .environmentObject(vm)
     .environmentObject(noticevm)
+    .environmentObject(NavigationCoordinator())
 }
