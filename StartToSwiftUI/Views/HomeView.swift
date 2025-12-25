@@ -333,31 +333,6 @@ struct HomeView: View {
                 noticeButtonAnimation = false
             }
         }
-
-//        if noticevm.hasUnreadNotices {
-//            let appStateManager = AppSyncStateManager(modelContext: modelContext)
-//            let isPerformingSoundNoticeTask = noticevm.isNotificationOn && appStateManager.getUserNotifiedBySoundStatus()
-            // Кнопка показывается сразу, анимация через 3 секунды
-//            if isPerformingSoundNoticeTask {
-                // Создаем задержку для уведомления...
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-//                    //                    print("🔔 3 секунды прошли, запускаем анимацию...")
-//                    
-//                    if noticevm.isSoundNotificationOn {
-//                        // Воспроизведен звук
-//                        AudioServicesPlaySystemSound(1013)
-//                        // Сбрасывам статус звукового оповещения пользователя -> пользователь оповещен
-//                        appStateManager.markUserNotifiedBySound()
-//                    }
-//                    // Анимация начата
-//                    noticeButtonAnimation = true
-//                    // Анимация завершена, пользователь уведомлен
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-//                        noticeButtonAnimation = false
-//                    }
-//                }
-//            }
-//        }
     }
     
     private var postDeletionConfirmation: some View {
@@ -432,11 +407,7 @@ struct HomeView: View {
                     iconName: "message",
                     isShownCircle: false)
                 {
-//                    print("=== HomeView: Opening Preferences ===")
-//                    print("📱 Current path before push: \(coordinator.path.count)")
-                    //                    showNoticesView = true
                     coordinator.push(.notices)
-//                    print("📱 Path after push (should be 1): \(coordinator.path.count)")
                 }
                 .overlay {
                     Capsule()
