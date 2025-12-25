@@ -40,7 +40,7 @@ class SpeechRecogniser: NSObject, ObservableObject {
             audioEngine.inputNode.removeTap(onBus: 0)
         }
         
-        print("SpeechRecogniser deinitialized")
+        log("SpeechRecogniser deinitialized", level: .info)
 
     }
     
@@ -50,7 +50,7 @@ class SpeechRecogniser: NSObject, ObservableObject {
             DispatchQueue.main.async {
                 switch authStatus {
                 case .authorized:
-                    print("Speech recognition authorised")
+                    log("Speech recognition authorised", level: .info)
                 case .denied:
                     self.errorMessage = "Speech recognition access denied"
                 case .restricted:
@@ -146,7 +146,7 @@ class SpeechRecogniser: NSObject, ObservableObject {
             DispatchQueue.main.async { [weak self] in
                 self?.silenceTimer = Timer.scheduledTimer(withTimeInterval: 15.0, repeats: false) { [weak self] _ in
                     self?.stopRecording()
-                    print("🛑 15-second timeout reached")
+                    log("🛑 15-second timeout reached", level: .info)
                 }
             }
             
@@ -172,7 +172,7 @@ class SpeechRecogniser: NSObject, ObservableObject {
                         self.hasRecognisedText = true
                     }
                     
-                    print("Recognized: \(newText)")
+                    log("Recognized: \(newText)", level: .info)
                 }
                 
                 // Auto-stop after a pause in speech
@@ -192,7 +192,7 @@ class SpeechRecogniser: NSObject, ObservableObject {
                 // Error 301 - Check the flag
                 if nsError.code == 301 {
                     if self.hasRecognisedText {
-                        print("Speech recognition completed successfully")
+                        log("Speech recognition completed successfully", level: .info)
                         self.stopRecording()
                     } else {
                         DispatchQueue.main.async {
@@ -239,12 +239,8 @@ class SpeechRecogniser: NSObject, ObservableObject {
         do {
             try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
         } catch {
-            print("Error deactivating audio session: \(error)")
+            log("Error deactivating audio session: \(error)", level: .error)
         }
-        
-//        DispatchQueue.main.async {
-//            self.isRecording = false
-//        }
     }
     
 }

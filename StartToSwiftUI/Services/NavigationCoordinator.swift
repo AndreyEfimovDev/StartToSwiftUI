@@ -61,40 +61,34 @@ enum AppRoute: Hashable {
 class NavigationCoordinator: ObservableObject {
     @Published var path = NavigationPath() {
         didSet {
-//            print("📱 NavigationCoordinator: path changed. Count: \(path.count)")
+//            log("📱 NavigationCoordinator: path changed. Count: \(path.count)", level: .info)
         }
     }
-
-    // Модальные окна (не входят в path)
-//    @Published var showAddPost = false
-//    @Published var showEditPost: Post?
-//    @Published var showPreferences = false
     @Published var showNotices = false
     
-    /// Текущая глубина навигации (сколько экранов в стеке)
+    /// Current navigation depth (how many screens are in the stack)
     var currentDepth: Int {
         path.count
     }
 
-    /// Находимся ли мы на корневом экране (HomeView)
+    /// Are we on the root screen (HomeView)?
     var isAtRoot: Bool {
         path.isEmpty
     }
 
     // MARK: - Navigation Methods
-    
-    /// Переход на экран
+    /// Go to View
     func push(_ route: AppRoute) {
         path.append(route)
     }
     
-    /// Назад на 1 уровень
+    /// One level back
     func pop() {
         guard !path.isEmpty else { return }
         path.removeLast()
     }
     
-    /// Назад через N уровней
+    /// Back through N levels
     func pop(levels: Int) {
         guard path.count >= levels else {
             popToRoot()
@@ -103,41 +97,16 @@ class NavigationCoordinator: ObservableObject {
         path.removeLast(levels)
     }
     
-    /// Вернуться в HomeView
+    /// Return to HomeView
     func popToRoot() {
         path = NavigationPath()
     }
     
-    /// Заменить текущий экран
+    /// Replace the current View
     func replace(with route: AppRoute) {
         if !path.isEmpty {
             path.removeLast()
         }
         path.append(route)
-    }
-    
-    // MARK: - Modal Methods
-    
-//    func presentAddPost() {
-//        showAddPost = true
-//    }
-//    
-//    func presentEditPost(_ post: Post) {
-//        showEditPost = post
-//    }
-    
-//    func presentPreferences() {
-//        showPreferences = true
-//    }
-    
-    func presentNotices() {
-        showNotices = true
-    }
-    
-    func dismissModals() {
-//        showAddPost = false
-//        showEditPost = nil
-//        showPreferences = false
-        showNotices = false
     }
 }

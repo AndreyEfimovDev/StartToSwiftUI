@@ -7,9 +7,7 @@
 
 import SwiftUI
 
-import SwiftUI
-
-struct BaseViewWithPreinstalledNavToolbar<Content: View>: View {
+struct ViewWrapperWithCustomNavToolbar<Content: View>: View {
     
     @EnvironmentObject private var coordinator: NavigationCoordinator
 
@@ -37,26 +35,14 @@ struct BaseViewWithPreinstalledNavToolbar<Content: View>: View {
                 
                 if showHomeButton {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
+                        Button {
                             coordinator.popToRoot()
-                        }) {
-                            Image(systemName: "house.fill")
-                                .foregroundColor(.blue)
+                        } label: {
+                            Image(systemName: "house")
+                                .foregroundStyle(Color.mycolor.myAccent)
                         }
                     }
                 }
             }
     }
 }
-
-//struct StudyProgressView: View {
-//    var body: some View {
-//        BaseNavigationView(title: "Study Progress", showHomeButton: true) {
-//            // ... ваш контент ...
-//        }
-//    }
-//}
-//
-//#Preview {
-//    BaseNavigationView()
-//}

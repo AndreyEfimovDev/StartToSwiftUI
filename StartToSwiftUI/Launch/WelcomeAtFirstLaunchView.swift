@@ -12,7 +12,8 @@ struct WelcomeAtFirstLaunchView: View {
     @EnvironmentObject private var coordinator: NavigationCoordinator
 
     @State private var showTermsOfUse: Bool = false
-    @State private var showTermsButton = false // Контролирует анимацию появления кнопки Terms of Use
+    @State private var showTermsButton = false
+    private var count: Int = 10
     
     var body: some View {
         ZStack {
@@ -48,14 +49,7 @@ struct WelcomeAtFirstLaunchView: View {
                         ZStack {
                             if showTermsButton {
                                 Button {
-#if DEBUG
-                                    print("📱 Welcome: Terms button tapped")
-                                    print("📱 Before push - path count: \(coordinator.path.count)")
-#endif
                                     coordinator.push(.termsOfUse)
-#if DEBUG
-                                    print("📱 After push - path count: \(coordinator.path.count)")
-#endif
                                 } label: {
                                     Text("Terms of Use")
                                         .font(.title)
@@ -68,11 +62,12 @@ struct WelcomeAtFirstLaunchView: View {
                                         )
                                 }
                                 .tint(Color.mycolor.myBlue)
-                                .padding()
+                                .padding() 
                             }
                             
                             if !showTermsButton {
-                                CustomProgressView()
+                                CountdownView(initialSeconds: count)
+                                    .padding()
                             }
                         }
                     } // VStack
@@ -83,9 +78,9 @@ struct WelcomeAtFirstLaunchView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
             .onAppear {
-                // Задержка появдения кнопки "Terms of Use" с анимацией
-                // Вместе с CustomProgressView()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                // Delayed appearance of the "Terms of Use" button with animation
+                // Визуальный отсчет 10 секунд CountdownView(initialSeconds: 10)
+                DispatchQueue.main.asyncAfter(deadline: .now() + Double(count)) {
                     withAnimation(.easeInOut(duration: 3)) {
                         showTermsButton = true
                     }
