@@ -12,6 +12,7 @@ struct NoticeDetailsView: View {
     
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject private var noticevm: NoticeViewModel
+    @EnvironmentObject private var coordinator: NavigationCoordinator
     
     let noticeId: String
     
@@ -85,7 +86,7 @@ struct NoticeDetailsView: View {
             ) {
                 withAnimation {
                     noticevm.deleteNotice(notice: notice)
-                    dismiss()
+                    coordinator.pop()
                 }
             }
         }
@@ -106,4 +107,5 @@ struct NoticeDetailsView: View {
         NoticeDetailsView(noticeId: "001")
     }
     .environmentObject(noticevm)
+    .environmentObject(NavigationCoordinator())
 }

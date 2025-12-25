@@ -10,9 +10,9 @@ import SwiftData
 
 struct PostDraftsView: View {
     
-    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
-    
+    @EnvironmentObject private var coordinator: NavigationCoordinator
+
     private let hapticManager = HapticService.shared
     
     @State private var selectedPost: Post?
@@ -31,7 +31,7 @@ struct PostDraftsView: View {
                         PostDraftsRowView(post: post)
                             .background(.black.opacity(0.001))
                             .onTapGesture {
-                                selectedPost = post
+                                coordinator.push(.editPost(post))
                             }
                             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                 Button("Delete", systemImage: "trash") {
@@ -56,19 +56,23 @@ struct PostDraftsView: View {
         .navigationTitle("Post drafts")
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                CircleStrokeButtonView(
-                    iconName: "chevron.left",
-                    imageColorPrimary: Color.mycolor.myAccent,
-                    isShownCircle: false
-                ) {
-                    dismiss()
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView() {
+                    coordinator.pop()
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    coordinator.popToRoot()
+                } label: {
+                    Image(systemName: "house")
+                        .foregroundStyle(Color.mycolor.myAccent)
                 }
             }
         }
-        .navigationDestination(item: $selectedPost) {selectedPostToEdit in
-            AddEditPostSheet(post: selectedPostToEdit)
-        }
+//        .navigationDestination(item: $selectedPost) {selectedPostToEdit in
+//            AddEditPostSheet(post: selectedPostToEdit)
+//        }
     }
     
     private var postDraftsIsEmpty: some View {
@@ -93,5 +97,6 @@ struct PostDraftsView: View {
     NavigationStack {
         PostDraftsView()
             .environmentObject(vm)
+            .environmentObject(NavigationCoordinator())
     }
 }

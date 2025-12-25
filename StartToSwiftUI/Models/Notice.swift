@@ -31,26 +31,11 @@ final class Notice {
     }
 }
 
+struct CodableNotice: Codable {
+    let id: String
+    let title: String
+    let noticeDate: Date
+    let noticeMessage: String
+    var isRead: Bool
+}
 
-//struct Notice: Identifiable, Codable, Equatable, Hashable {
-//    
-//    let id: String
-//    let title: String
-//    let noticeDate: Date
-//    let noticeMessage: String
-//    var isRead: Bool
-//    
-//    init(
-//        id: String,
-//        title: String,
-//        noticeDate: Date,
-//        noticeMessage: String,
-//        isRead: Bool = false
-//    ) {
-//        self.id = id
-//        self.title = title
-//        self.noticeDate = noticeDate
-//        self.noticeMessage = noticeMessage
-//        self.isRead = isRead
-//    }
-//}

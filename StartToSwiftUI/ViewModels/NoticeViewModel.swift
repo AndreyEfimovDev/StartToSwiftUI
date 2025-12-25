@@ -36,12 +36,6 @@ class NoticeViewModel: ObservableObject {
     
     // MARK: - Load Notices
     func loadNoticesFromSwiftData() {
-        print("🍉 🔄 Перед загрузкой локальных уведомлений из SwiftData, проверяем сколько сейчас уведомлений в notices: \(notices.count)")
-        
-        //        let startTime = Date()
-        //        print("🍉 🔄 Начало загрузки уведомлений...")
-        
-        
         do {
             
             let descriptor = FetchDescriptor<Notice>(
@@ -49,10 +43,10 @@ class NoticeViewModel: ObservableObject {
             )
             
             let fetchedNotices = try modelContext.fetch(descriptor)
-            print("🍉 🔄 Загрузили локальные уведомления из SwiftData, сейчас их: \(fetchedNotices.count)")
+//            print("🍉 🔄 Загрузили локальные уведомления из SwiftData, сейчас их: \(fetchedNotices.count)")
             
             self.notices = fetchedNotices
-            print("🍉 🔄 Список уведомлений обновлен, теперь: \(notices.count)")
+//            print("🍉 🔄 Список уведомлений обновлен, теперь: \(notices.count)")
             
             //            let duration = Date().timeIntervalSince(startTime)
             //            print("🍉 ✅ Загрузка завершена за \(String(format: "%.2f", duration))с. Уведомлений: \(fetchedNotices.count)")
@@ -83,24 +77,24 @@ class NoticeViewModel: ObservableObject {
         
         let appStateManager = AppSyncStateManager(modelContext: modelContext)
         // ШАГ 1: Ждём синхронизацию с iCloud
-        print("🍉 ⏳ Ожидание синхронизации iCloud (1 секунда)...")
+//        print("🍉 ⏳ Ожидание синхронизации iCloud (1 секунда)...")
         try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 секунда
         
         do {
-            print("🍉 ☁️ Начинаем импорт уведомлений из облака...")
+//            print("🍉 ☁️ Начинаем импорт уведомлений из облака...")
             
             let cloudResponse: [CodableNotice] = try await networkService.fetchDataFromURLAsync()
-            print("🍉 📦 Получено \(cloudResponse.count) уведомлений из облака")
+//            print("🍉 📦 Получено \(cloudResponse.count) уведомлений из облака")
             
             // Фильтрация по дате
             let lastDate = appStateManager.getLastNoticeDate() ?? Date.distantPast
             let relevantCloudNotices = cloudResponse.filter {
                 $0.noticeDate > lastDate
             }
-            print("🍉 📦 Отобрано \(relevantCloudNotices.count) уведомлений из облака")
+//            print("🍉 📦 Отобрано \(relevantCloudNotices.count) уведомлений из облака")
             
             guard !relevantCloudNotices.isEmpty else {
-                print("🍉 ☑️ Массив новых (ранее не загруженных) уведомлений из облака пуст, ✅ выходим из импорта")
+//                print("🍉 ☑️ Массив новых (ранее не загруженных) уведомлений из облака пуст, ✅ выходим из импорта")
                 return
             }
             
@@ -114,23 +108,23 @@ class NoticeViewModel: ObservableObject {
             let newNoticesByID = relevantCloudNotices.filter { !existingIDs.contains($0.id) }
             
             guard !newNoticesByID.isEmpty else {
-                print("🍉 ✅ Все уведомления уже есть в базе (дубликатов нет)")
+//                print("🍉 ✅ Все уведомления уже есть в базе (дубликатов нет)")
 //                loadNoticesFromSwiftData()
                 updateUnreadStatus()
                 return
             }
-            print("🍉 🆕 Новых уведомлений (по ID): \(newNoticesByID.count)")
+//            print("🍉 🆕 Новых уведомлений (по ID): \(newNoticesByID.count)")
             
             // Конвертируем и добавляем новые уведомления
-            print("🍉 ➕ Добавляем \(newNoticesByID.count) новых уведомлений...")
+//            print("🍉 ➕ Добавляем \(newNoticesByID.count) новых уведомлений...")
             for cloudNotice in newNoticesByID {
                 let newNotice = NoticeMigrationHelper.convertFromCodable(cloudNotice)
                 modelContext.insert(newNotice)
-                print("  ✓ Добавлено: \(newNotice.title)")
+//                print("  ✓ Добавлено: \(newNotice.title)")
             }
-            print("🍉 💾 Сохранены в SwiftData")
+//            print("🍉 💾 Сохранены в SwiftData")
             
-            print("🍉 💾 Предыдущая дата обновления уведомлений: \(lastDate)")
+//            print("🍉 💾 Предыдущая дата обновления уведомлений: \(lastDate)")
             if let latestDate = cloudResponse.map({ $0.noticeDate }).max() {
                 appStateManager.updateLatestNoticeDate(latestDate)
                 print("🍉 💾 Новая дата обновления уведомлений: \(latestDate)")
@@ -138,12 +132,12 @@ class NoticeViewModel: ObservableObject {
             
             // Сохраняем в SwiftData
             saveContext()
-            print("🍉 💾 Уведомления сохранены в SwiftData")
+//            print("🍉 💾 Уведомления сохранены в SwiftData")
             
             // Обнровляем массив уведомлений
             loadNoticesFromSwiftData()
             updateUnreadStatus() // устанавливаем флаг наличия непрочиатнных сообщений
-            print("🍉 🔄 Список уведомлений обновлен, теперь: \(notices.count)")
+//            print("🍉 🔄 Список уведомлений обновлен, теперь: \(notices.count)")
             
             // Включаем флаг оповещения, чтобы уведомить пользователя о новых уведомлениях
             appStateManager.markUserNotNotifiedBySound() // isUserNotNotified -> true
@@ -153,12 +147,12 @@ class NoticeViewModel: ObservableObject {
             if isNotificationOn {
                 sendLocalNotification(count: newNoticesByID.count)
             }
-            print("🍉 ✅ Импорт завершён: добавлено \(newNoticesByID.count) уведомлений")
+//            print("🍉 ✅ Импорт завершён: добавлено \(newNoticesByID.count) уведомлений")
         } catch {
             self.errorMessage = error.localizedDescription
             self.showErrorMessageAlert = true
             self.hapticManager.notification(type: .error)
-            print("🍉 ❌ Ошибка импорта: \(error.localizedDescription)")
+//            print("🍉 ❌ Ошибка импорта: \(error.localizedDescription)")
         }
     }
     
@@ -199,7 +193,7 @@ class NoticeViewModel: ObservableObject {
     /// Удаляет дубликаты уведомлений в SwiftUI, оставляя только один экземпляр каждого ID
     
     private func removeDuplicateNotices() {
-        print("🍉 🔍 Проверка дубликатов уведомлений...")
+//        print("🍉 🔍 Проверка дубликатов уведомлений...")
         let descriptor = FetchDescriptor<Notice>()
         
         do {
@@ -214,16 +208,16 @@ class NoticeViewModel: ObservableObject {
                 let duplicates = groupedById.filter { $0.value.count > 1 }
                 
                 guard !duplicates.isEmpty else {
-                    print("🍉 ✅ Дубликатов уведомлений не обнаружено")
+//                    print("🍉 ✅ Дубликатов уведомлений не обнаружено")
                     return
                 }
-                print("🍉 🗑️ Обнаружены дубликаты уведомлений: \(duplicates.count) ID с дубликатами")
+//                print("🍉 🗑️ Обнаружены дубликаты уведомлений: \(duplicates.count) ID с дубликатами")
                 
                 // Для каждого ID оставляем только первый, остальные удаляем
                 // id - уникальный идентификатор уведомления (String)
                 // noticesList - массив дубликатов с одинаковым ID (массив Notice)
                 for (id, noticesList) in duplicates {
-                    print("  🔍 ID \(id): найдено \(noticesList.count) дубликатов")
+//                    print("  🔍 ID \(id): найдено \(noticesList.count) дубликатов")
                     
                     // Проходим по всем дубликатам с одинаковым id
                     // Проверяем: есть ли хотя бы одно уведомление с isRead = true
@@ -233,17 +227,17 @@ class NoticeViewModel: ObservableObject {
                     if let readNotice = noticesList.first(where: { $0.isRead }) {
                         // Есть прочитанная версия - оставляем ее
                         noticeToKeep = readNotice
-                        print("    ✓ Сохраняем ПРОЧИТАННУЮ версию")
+//                        print("    ✓ Сохраняем ПРОЧИТАННУЮ версию")
                     } else {
                         // Все непрочитанные - оставляем первую
                         noticeToKeep = noticesList.first!
-                        print("    ✓ Сохраняем первую версию (все непрочитанные)")
+//                        print("    ✓ Сохраняем первую версию (все непрочитанные)")
                     }
                     
                     // Удаляем все кроме noticeToKeep
                     for notice in noticesList where notice.persistentModelID != noticeToKeep.persistentModelID {
                         modelContext.delete(notice)
-                        print("    ✗ Удалён дубликат: '\(notice.title)'")
+//                        print("    ✗ Удалён дубликат: '\(notice.title)'")
                     }
                 }
                 
@@ -269,26 +263,26 @@ class NoticeViewModel: ObservableObject {
     func updateUnreadStatus() {
         // проверяем, есть ли хотя бы одно непрочитанное учедомления
         hasUnreadNotices = notices.contains(where: { !$0.isRead })
-        print("📊 Непрочитанных уведомлений: \(notices.filter { !$0.isRead }.count)")
+//        print("📊 Непрочитанных уведомлений: \(notices.filter { !$0.isRead }.count)")
     }
     
     // MARK: - Mark as Read
     func markAsRead(noticeId: String) {
         // Ищем уведомление по ID в массиве
         guard let notice = notices.first(where: { $0.id == noticeId }) else {
-            print("🍉 ⚠️ Уведомление с ID \(noticeId) не найдено")
+//            print("🍉 ⚠️ Уведомление с ID \(noticeId) не найдено")
             return
         }
         
         guard !notice.isRead else {
-            print("🍉 ℹ️ Уведомление уже прочитано")
+//            print("🍉 ℹ️ Уведомление уже прочитано")
             return
         }
         
         notice.isRead = true
         saveContext()
         updateUnreadStatus()
-        print("🍉 ✅ Уведомление \(noticeId) отмечено как прочитанное")
+//        print("🍉 ✅ Уведомление \(noticeId) отмечено как прочитанное")
         
     }
     
@@ -309,7 +303,7 @@ class NoticeViewModel: ObservableObject {
         
         // Удаляем из массива вручную
         notices.removeAll { $0.id == notice.id }
-        print("🍉 🗑️ Уведомление удалено, осталось: \(notices.count)")
+//        print("🍉 🗑️ Уведомление удалено, осталось: \(notices.count)")
         
         updateUnreadStatus()
     }
@@ -327,7 +321,7 @@ class NoticeViewModel: ObservableObject {
         
         // ✅ Добавляем в массив вручную
         notices.insert(notice, at: 0)
-        print("🍉 ➕ Уведомление добавлено, всего: \(notices.count)")
+//        print("🍉 ➕ Уведомление добавлено, всего: \(notices.count)")
         
         updateUnreadStatus()
     }
@@ -337,9 +331,9 @@ class NoticeViewModel: ObservableObject {
     private func saveContext() {
         do {
             try modelContext.save()
-            print("🍉 💾 SwiftData контекст сохранён")
+//            print("🍉 💾 SwiftData контекст сохранён")
         } catch {
-            print("🍉 ❌ Ошибка сохранения контекста: \(error)")
+//            print("🍉 ❌ Ошибка сохранения контекста: \(error)")
             errorMessage = "Ошибка сохранения данных"
             showErrorMessageAlert = true
             hapticManager.notification(type: .error)
@@ -357,64 +351,61 @@ class NoticeViewModel: ObservableObject {
             hapticManager.notification(type: .success)
         }
         
-        print("🍉 🔔 Отправлено локальное уведомление: \(count) новых уведомлений")
+//        print("🍉 🔔 Отправлено локальное уведомление: \(count) новых уведомлений")
     }
     
 }
 
 
+// MARK: - Preview Helper
 
+extension NoticeViewModel {
 
+    /// Создание mock ViewModel для Preview
+    static func mockViewModel() -> NoticeViewModel {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try! ModelContainer(
+            for: Notice.self,
+            configurations: config
+        )
 
-//// MARK: - Preview Helper
-//
-//extension NoticeViewModel {
-//
-//    /// Создание mock ViewModel для Preview
-//    static func mockViewModel() -> NoticeViewModel {
-//        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-//        let container = try! ModelContainer(
-//            for: Notice.self,
-//            configurations: config
-//        )
-//
-//        let viewModel = NoticeViewModel(
-//            modelContext: container.mainContext,
-//            networkService: NetworkService(baseURL: Constants.cloudNoticesURL)
-//        )
-//
-//        // Добавляем mock данные
-//        let mockNotices = [
-//            Notice(
-//                id: "1",
-//                title: "Обновление приложения",
-//                noticeDate: Date().addingTimeInterval(-86400),
-//                noticeMessage: "Доступна новая версия приложения с улучшениями",
-//                isRead: false
-//            ),
-//            Notice(
-//                id: "2",
-//                title: "Новые материалы",
-//                noticeDate: Date().addingTimeInterval(-172800),
-//                noticeMessage: "Добавлены новые учебные материалы по SwiftUI",
-//                isRead: true
-//            ),
-//            Notice(
-//                id: "3",
-//                title: "Напоминание",
-//                noticeDate: Date().addingTimeInterval(-259200),
-//                noticeMessage: "Не забудьте синхронизировать данные",
-//                isRead: false
-//            )
-//        ]
-//
-//        for notice in mockNotices {
-//            container.mainContext.insert(notice)
-//        }
-//
-//        try? container.mainContext.save()
-//        viewModel.refreshNotices()
-//
-//        return viewModel
-//    }
-//}
+        let viewModel = NoticeViewModel(
+            modelContext: container.mainContext,
+            networkService: NetworkService(baseURL: Constants.cloudNoticesURL)
+        )
+
+        // Добавляем mock данные
+        let mockNotices = [
+            Notice(
+                id: "1",
+                title: "Обновление приложения",
+                noticeDate: Date().addingTimeInterval(-86400),
+                noticeMessage: "Доступна новая версия приложения с улучшениями",
+                isRead: false
+            ),
+            Notice(
+                id: "2",
+                title: "Новые материалы",
+                noticeDate: Date().addingTimeInterval(-172800),
+                noticeMessage: "Добавлены новые учебные материалы по SwiftUI",
+                isRead: true
+            ),
+            Notice(
+                id: "3",
+                title: "Напоминание",
+                noticeDate: Date().addingTimeInterval(-259200),
+                noticeMessage: "Не забудьте синхронизировать данные",
+                isRead: false
+            )
+        ]
+
+        for notice in mockNotices {
+            container.mainContext.insert(notice)
+        }
+
+        try? container.mainContext.save()
+        viewModel.loadNoticesFromSwiftData()
+
+        return viewModel
+    }
+}

@@ -9,7 +9,8 @@ import SwiftUI
 
 struct AboutApp: View {
     
-    @Environment(\.dismiss) private var dismiss
+//    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var coordinator: NavigationCoordinator
 
     let iconWidth: CGFloat = 18
     let frameHeight: CGFloat = 30
@@ -47,40 +48,75 @@ struct AboutApp: View {
                 .frame(maxWidth: .infinity)
                 
                 Section {
-                    NavigationLink("Welcome") {
-                        WelcomeMessage()
+                    Button("Welcome") {
+                        coordinator.push(.welcome)
                     }
                     .customListRowStyle(
                         iconName: "suit.heart",
                         iconWidth: iconWidth
                     )
-                    NavigationLink("Introduction") {
-                        Introduction()
+                    Button("Introduction") {
+                        coordinator.push(.introduction)
                     }
                     .customListRowStyle(
                         iconName: "textformat.size.larger",
                         iconWidth: iconWidth
                     )
-                    NavigationLink("What's New") {
-                        WhatsNewView()
+                    Button("What's New") {
+                        coordinator.push(.whatIsNew)
                     }
-                    .customListRowStyle( 
+                    .customListRowStyle(
                         iconName: "newspaper",
                         iconWidth: iconWidth
                     )
+                    
+                    
+//                    
+//                    
+//                    NavigationLink("Welcome") {
+//                        WelcomeMessage()
+//                    }
+//                    .customListRowStyle(
+//                        iconName: "suit.heart",
+//                        iconWidth: iconWidth
+//                    )
+//                    NavigationLink("Introduction") {
+//                        Introduction()
+//                    }
+//                    .customListRowStyle(
+//                        iconName: "textformat.size.larger",
+//                        iconWidth: iconWidth
+//                    )
+//                    NavigationLink("What's New") {
+//                        WhatsNewView()
+//                    }
+//                    .customListRowStyle( 
+//                        iconName: "newspaper",
+//                        iconWidth: iconWidth
+//                    )
                 }
-            } // Form
+            }
             .scrollContentBackground(.hidden)
             .listSectionSpacing(8)
             .background(.clear)
-        } // ZStack
+        }
         .foregroundStyle(Color.mycolor.myAccent)
         .background(.thickMaterial)
         .navigationTitle("About App")
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                BackButtonView() { dismiss() }
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView() {
+                    coordinator.pop()
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    coordinator.popToRoot()
+                } label: {
+                    Image(systemName: "house")
+                        .foregroundStyle(Color.mycolor.myAccent)
+                }
             }
         }
     }
@@ -90,5 +126,6 @@ struct AboutApp: View {
 #Preview {
     NavigationStack{
         AboutApp()
+            .environmentObject(NavigationCoordinator())
     }
 }
