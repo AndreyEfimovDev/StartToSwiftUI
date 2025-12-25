@@ -84,7 +84,7 @@ class AppSyncStateManager {
     // MARK: - Maintenance Methods
     /// Force clearing all duplicate AppState (for maintenance)
     func cleanupDuplicateAppStates() {
-        log("✅ 🧹 Запуск очистки дубликатов AppState...", level: .debug)
+        log("✅ 🧹 Starting duplicate cleaning AppState...", level: .debug)
 
         let descriptor = FetchDescriptor<AppSyncState>(
             predicate: #Predicate { $0.id == "app_state_singleton" }
@@ -99,10 +99,10 @@ class AppSyncStateManager {
                 _ = mergeDuplicateAppStates(results)
                 log("✅ Очистка завершена", level: .info)
             } else {
-                log("✅ Дубликатов не обнаружено (\(results.count) AppState)", level: .info)
+                log("✅ No duplicates found (\(results.count) AppState)", level: .info)
             }
         } catch {
-            log("❌ Ошибка при очистке дубликатов: \(error)", level: .error)
+            log("❌ Error clearing duplicates: \(error)", level: .error)
         }
     }
 
