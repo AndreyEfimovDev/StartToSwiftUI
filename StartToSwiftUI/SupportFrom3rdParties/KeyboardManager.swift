@@ -8,6 +8,7 @@
 import SwiftUI
 import Combine
 
+// Adaptation for iPadMagic Keyboard
 class KeyboardManager: ObservableObject {
     
     @Published var shouldShowHideButton = false
