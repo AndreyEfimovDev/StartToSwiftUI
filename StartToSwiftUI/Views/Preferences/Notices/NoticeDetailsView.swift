@@ -71,11 +71,12 @@ struct NoticeDetailsView: View {
         }
     }
     
-    
     @ToolbarContentBuilder
     private func toolbarForNoticeDetails() -> some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
-            BackButtonView() { dismiss() }
+            BackButtonView() {
+                coordinator.popModal()
+            }
         }
         ToolbarItem(placement: .topBarTrailing) {
             CircleStrokeButtonView(
@@ -85,7 +86,7 @@ struct NoticeDetailsView: View {
             ) {
                 withAnimation {
                     noticevm.deleteNotice(notice: notice)
-                    coordinator.pop()
+                    coordinator.popModal()
                 }
             }
         }

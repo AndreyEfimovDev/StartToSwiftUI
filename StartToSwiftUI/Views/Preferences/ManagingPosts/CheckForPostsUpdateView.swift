@@ -93,7 +93,7 @@ struct CheckForPostsUpdateView: View {
                                 isImported = true
                                 hapticManager.notification(type: .success)
                                 DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                                    coordinator.popToRoot()
+                                    coordinator.closeModal()
                                 }
                             }
                         }

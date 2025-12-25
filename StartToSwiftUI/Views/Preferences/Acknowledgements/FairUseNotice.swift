@@ -9,9 +9,7 @@ import SwiftUI
 
 struct FairUseNotice: View {
     
-//    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var coordinator: NavigationCoordinator
-
 
     var body: some View {
         ViewWrapperWithCustomNavToolbar(

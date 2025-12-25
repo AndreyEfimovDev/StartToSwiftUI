@@ -29,14 +29,14 @@ struct ViewWrapperWithCustomNavToolbar<Content: View>: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     BackButtonView() {
-                        coordinator.pop()
+                        coordinator.popModal()
                     }
                 }
                 
                 if showHomeButton {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
-                            coordinator.popToRoot()
+                            coordinator.closeModal()
                         } label: {
                             Image(systemName: "house")
                                 .foregroundStyle(Color.mycolor.myAccent)

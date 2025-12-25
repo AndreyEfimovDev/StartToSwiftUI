@@ -79,7 +79,7 @@ struct WelcomeAtFirstLaunchView: View {
                 .navigationBarBackButtonHidden(true)
             .onAppear {
                 // Delayed appearance of the "Terms of Use" button with animation
-                // Визуальный отсчет 10 секунд CountdownView(initialSeconds: 10)
+                // Visual countdown of given in count seconds
                 DispatchQueue.main.asyncAfter(deadline: .now() + Double(count)) {
                     withAnimation(.easeInOut(duration: 3)) {
                         showTermsButton = true
