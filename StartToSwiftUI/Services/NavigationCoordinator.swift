@@ -2,38 +2,58 @@
 //  NavigationCoordinator.swift
 //  StartToSwiftUI
 //
-//  Created by Andrey Efimov on 23.12.2025.
+//  Created by Andrey Efimov on 08.12.2025.
 //
 
 import SwiftUI
 
 // MARK: - Navigation Routes
 enum AppRoute: Hashable {
-    // Main flow
-    case postDetails(postId: String)
     
-    // Preferences flow
+    // Dealing with details
+    case postDetails(postId: String)
+        
+    // Addind and editing posts
+    case addPost
+    case editPost(Post)
+    
+    // Welcome at first launch to accept Terms of Use
+    case welcomeAtFirstLaunch
+    
+    // Preferences
     case preferences
+    
+    // Managing notices
+    case notices
+    case noticeDetails(noticeId: String)
+
+    // Study progress
     case studyProgress
+    
+    // Managing posts (materials)
     case postDrafts
     case checkForUpdates
     case importFromCloud
     case shareBackup
     case restoreBackup
     case erasePosts
-    case notices
+    
+    // Gratitude
     case acknowledgements
+    
+    // About App
     case aboutApp
+    case welcome
+    case introduction
+    case whatIsNew
+    
+    // Legal information
     case legalInfo
     case termsOfUse
     case privacyPolicy
     case copyrightPolicy
     case fairUseNotice
 
-    
-    // Modals (will be handled separately)
-    case addPost
-    case editPost(Post)
 }
 
 // MARK: - Navigation Coordinator
@@ -48,7 +68,7 @@ class NavigationCoordinator: ObservableObject {
     // Модальные окна (не входят в path)
 //    @Published var showAddPost = false
 //    @Published var showEditPost: Post?
-    @Published var showPreferences = false
+//    @Published var showPreferences = false
     @Published var showNotices = false
     
     /// Текущая глубина навигации (сколько экранов в стеке)
@@ -106,9 +126,9 @@ class NavigationCoordinator: ObservableObject {
 //        showEditPost = post
 //    }
     
-    func presentPreferences() {
-        showPreferences = true
-    }
+//    func presentPreferences() {
+//        showPreferences = true
+//    }
     
     func presentNotices() {
         showNotices = true
@@ -117,7 +137,7 @@ class NavigationCoordinator: ObservableObject {
     func dismissModals() {
 //        showAddPost = false
 //        showEditPost = nil
-        showPreferences = false
+//        showPreferences = false
         showNotices = false
     }
 }

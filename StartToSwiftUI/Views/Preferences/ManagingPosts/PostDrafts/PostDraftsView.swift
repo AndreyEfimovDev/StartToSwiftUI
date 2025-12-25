@@ -10,11 +10,9 @@ import SwiftData
 
 struct PostDraftsView: View {
     
-//    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: NavigationCoordinator
 
-    
     private let hapticManager = HapticService.shared
     
     @State private var selectedPost: Post?

@@ -9,9 +9,7 @@ import SwiftUI
 
 struct WhatsNewView: View {
     
-//    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var coordinator: NavigationCoordinator
-
 
     var body: some View {
         ScrollView {

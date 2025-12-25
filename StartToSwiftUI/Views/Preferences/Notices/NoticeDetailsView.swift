@@ -86,7 +86,7 @@ struct NoticeDetailsView: View {
             ) {
                 withAnimation {
                     noticevm.deleteNotice(notice: notice)
-                    dismiss()
+                    coordinator.pop()
                 }
             }
         }

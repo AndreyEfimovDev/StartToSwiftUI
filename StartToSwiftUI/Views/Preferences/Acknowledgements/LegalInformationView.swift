@@ -10,16 +10,12 @@ import SwiftData
 
 struct LegalInformationView: View {
 
-//    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var coordinator: NavigationCoordinator
     
     let iconWidth: CGFloat = 18
 
     var body: some View {
         Form {
-//            NavigationLink("Terms of Use") {
-//                TermsOfUse(isTermsOfUseAccepted: .constant(true))
-//            }
             Button("Terms of Use") {
                 coordinator.push(.termsOfUse)
             }
@@ -52,7 +48,7 @@ struct LegalInformationView: View {
                 iconWidth: iconWidth
             )
 
-        } // Form
+        }
         .foregroundStyle(Color.mycolor.myAccent)
         .navigationTitle("Legal Information")
         .navigationBarBackButtonHidden(true)
@@ -72,7 +68,6 @@ struct LegalInformationView: View {
             }
         }
         .padding(.vertical)
-
     }
 }
 
