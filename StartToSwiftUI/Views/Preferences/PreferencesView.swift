@@ -76,11 +76,11 @@ struct PreferencesView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     if UIDevice.isiPad {
                         BackButtonView(iconName: "xmark") {
-                            coordinator.pop()
+//                            coordinator.pop()
                         }
                     } else {
                         BackButtonView() {
-                            coordinator.pop()
+                            coordinator.closeModal()
                         }
                     }
                 }
@@ -123,6 +123,16 @@ struct PreferencesView: View {
         )
     }
     
+    private var noticeMessages: some View {
+        Button("Messages (\(newNoticesCount)/\(noticevm.notices.count))") {
+            coordinator.pushModal(.notices)
+        }
+        .customListRowStyle(
+            iconName: newNoticesCount == 0 ? "message" : "message.badge",
+            iconWidth: iconWidth
+        )
+    }
+
     private var notificationToggle: some View {
         HStack {
             Image(systemName: noticevm.isNotificationOn ? "bell" : "bell.slash")
@@ -145,7 +155,7 @@ struct PreferencesView: View {
     
     private var achievements: some View {
         Button("Check progress") {
-            coordinator.push(.studyProgress)
+            coordinator.pushModal(.studyProgress)
         }
         .customListRowStyle(
             iconName: "hare",
@@ -163,21 +173,11 @@ struct PreferencesView: View {
         }
     }
     
-    private var noticeMessages: some View {
-        Button("Messages (\(newNoticesCount)/\(noticevm.notices.count))") {
-            coordinator.push(.notices)
-        }
-        .customListRowStyle(
-            iconName: newNoticesCount == 0 ? "message" : "message.badge",
-            iconWidth: iconWidth
-        )
-    }
-    
     private var postDrafts: some View {
         Group {
             if !vm.allPosts.filter({ $0.draft == true }).isEmpty {
                 Button("Post drafts (\(draftsCount))") {
-                    coordinator.push(.postDrafts)
+                    coordinator.pushModal(.postDrafts)
                 }
                 .customListRowStyle(
                     iconName: "square.stack.3d.up",
@@ -187,9 +187,9 @@ struct PreferencesView: View {
         }
     }
     
-    /// Проверка наличие новых авторских ссылок на материалы доступна если:
-    /// - статус наличия новых материалов = true, и
-    /// - в локальном массиве материалов есть авторские (для постов с .origin = ,cloud)
+    /// Checking for new curated links to materials is available if:
+    /// - new materials availability status = true, and
+    /// - The local array of materials contains author's materials (for posts with origin = .cloud)
     private var checkForPostsUpdate: some View {
         Group {
             let appStateManager = AppSyncStateManager(modelContext: modelContext)
@@ -198,7 +198,7 @@ struct PreferencesView: View {
 
             if status && !localPostsFromCloud.isEmpty {
                 Button("Check for materials update") {
-                    coordinator.push(.checkForUpdates)
+                    coordinator.pushModal(.checkForUpdates)
                 }
                 .customListRowStyle(
                     iconName: "arrow.trianglehead.counterclockwise",
@@ -208,14 +208,14 @@ struct PreferencesView: View {
         }
     }
     
-    /// Импорт доступен, если в локальных массиве материалов нет авторских (для постов с origin = .cloud)
+    /// Import is available if there are no curated materials in the local array (for posts with origin = .cloud)
     private var importFromCloud: some View {
         Group {
             let localPostsFromCloud = vm.allPosts.filter { $0.origin == .cloud }
 
             if localPostsFromCloud.isEmpty {
                 Button("Download the curated collection") {
-                    coordinator.push(.importFromCloud)
+                    coordinator.pushModal(.importFromCloud)
                 }
                 .customListRowStyle(
                     iconName: "icloud.and.arrow.down",
@@ -227,7 +227,7 @@ struct PreferencesView: View {
     
     private var shareBackup: some View {
         Button("Share/Backup") {
-            coordinator.push(.shareBackup)
+            coordinator.pushModal(.shareBackup)
         }
         .customListRowStyle(
             iconName: "square.and.arrow.up",
@@ -237,7 +237,7 @@ struct PreferencesView: View {
     
     private var restoreBackup: some View {
         Button("Restore backup") {
-            coordinator.push(.restoreBackup)
+            coordinator.pushModal(.restoreBackup)
         }
         .customListRowStyle(
             iconName: "tray.and.arrow.up",
@@ -247,7 +247,7 @@ struct PreferencesView: View {
     
     private var erasePosts: some View {
         Button("Erase all materials") {
-            coordinator.push(.erasePosts)
+            coordinator.pushModal(.erasePosts)
         }
         .customListRowStyle(
             iconName: "trash",
@@ -257,7 +257,7 @@ struct PreferencesView: View {
     
     private var acknowledgements: some View {
         Button("Acknowledgements") {
-            coordinator.push(.acknowledgements)
+            coordinator.pushModal(.acknowledgements)
         }
         .customListRowStyle(
             iconName: "hand.thumbsup",
@@ -267,7 +267,7 @@ struct PreferencesView: View {
     
     private var aboutApplication: some View {
         Button("About App") {
-            coordinator.push(.aboutApp)
+            coordinator.pushModal(.legalInfo)
         }
         .customListRowStyle(
             iconName: "info.circle",
@@ -277,7 +277,7 @@ struct PreferencesView: View {
     
     private var legalInformation: some View {
         Button("Legal information") {
-            coordinator.push(.legalInfo)
+            coordinator.pushModal(.legalInfo)
         }
         .customListRowStyle(
             iconName: "long.text.page.and.pencil",

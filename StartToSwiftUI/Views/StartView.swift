@@ -44,6 +44,15 @@ struct StartView: View {
         .task {
             await loadInitialData()
         }
+        .fullScreenCover(item: $coordinator.presentedSheet) { route in
+            if UIDevice.isiPad {
+                ModalNavigationContainer(initialRoute: route)
+                    .presentationDetents([.large])  // На iPad можно sheet
+                    .presentationDragIndicator(.visible)
+            } else {
+                ModalNavigationContainer(initialRoute: route)
+            }
+        }
         .environmentObject(vm)
         .environmentObject(noticevm)
     }
@@ -60,10 +69,11 @@ struct StartView: View {
             NavigationStack(path: $coordinator.path) {
                 HomeView(selectedCategory: vm.selectedCategory)
                     .navigationDestination(for: AppRoute.self) { route in
-                        destinationView(for: route)
+                        if case .postDetails(let postId) = route {
+                            PostDetailsView(postId: postId)
+                        }
                     }
             }
-
         }
     }
     
@@ -72,13 +82,9 @@ struct StartView: View {
     private func destinationView(for route: AppRoute) -> some View {
         switch route {
             
-            // Dealing with post
+            // Post details View
         case .postDetails(let postId):
             PostDetailsView(postId: postId)
-        case .addPost:
-            AddEditPostSheet(post: nil)
-        case .editPost(let post):
-            AddEditPostSheet(post: post)
                     
             // Welcome at first launch to accept Terms of Use
         case .welcomeAtFirstLaunch:
@@ -90,7 +96,7 @@ struct StartView: View {
 
             // Managing notices
         case .notices:
-            NoticesView()
+            NoticesView(isRootModal: false)
         case .noticeDetails(let noticeId):
             NoticeDetailsView(noticeId: noticeId)
 
@@ -137,10 +143,30 @@ struct StartView: View {
             CopyrightPolicy()
         case .fairUseNotice:
             FairUseNotice()
-//        default:
-//                EmptyView()
+        default:
+                EmptyView()
+        }
+        
+
+    }
+    
+    // Модальные вью (для .sheet)
+    @ViewBuilder
+    private func modalSheetView(for route: AppRoute) -> some View {
+        switch route {
+        case .addPost:
+            AddEditPostSheet(post: nil)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+        case .editPost(let post):
+            AddEditPostSheet(post: post)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+        default:
+            EmptyView()
         }
     }
+
 
     // MARK: - Data Loading
     private func loadInitialData() async {
@@ -159,6 +185,9 @@ struct StartView: View {
         isLoadingData = false
     }
 }
+
+
+
 
 #Preview("Simple Test") {
     let container = try! ModelContainer(

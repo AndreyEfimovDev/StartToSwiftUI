@@ -10,6 +10,8 @@ import SwiftData
 
 struct NoticesView: View {
     
+    let isRootModal: Bool
+    
     @EnvironmentObject private var noticevm: NoticeViewModel
     @EnvironmentObject private var coordinator: NavigationCoordinator
     
@@ -18,10 +20,7 @@ struct NoticesView: View {
     @State private var showNoticeDetails: Bool = false
     
     var body: some View {
-        ViewWrapperWithCustomNavToolbar(
-            title: "Notices",
-            showHomeButton: true
-        ) {
+     
             ZStack {
                 if noticevm.notices.isEmpty {
                     noticesIsEmpty
@@ -32,8 +31,9 @@ struct NoticesView: View {
                                 NoticeRowView(notice: notice)
                                     .background(.black.opacity(0.001))
                                     .onTapGesture {
-                                        coordinator.push(.noticeDetails(noticeId: notice.id))
+                                        coordinator.pushModal(.noticeDetails(noticeId: notice.id))
                                     }
+                                    // right side swipe action buttonss
                                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                         Button {
                                             withAnimation {
@@ -48,14 +48,14 @@ struct NoticesView: View {
                                             }
                                         }
                                         .tint(Color.mycolor.myRed)
-                                    } // right side swipe action buttonss
+                                    }
+                                    // left side swipe action buttons
                                     .swipeActions(edge: .leading, allowsFullSwipe: false) {
                                         Button(notice.isRead ? "Unread" : "Read", systemImage: notice.isRead ?  "eye.slash.circle" : "eye.circle") {
                                             noticevm.isReadToggle(notice: notice)
                                         }
                                         .tint(notice.isRead ? Color.mycolor.mySecondary : Color.mycolor.myBlue)
-                                    } // left side swipe action buttons
-                            } // ForEach
+                                    }                            } // ForEach
                             .listRowBackground(Color.clear)
                             .listRowSeparatorTint(Color.mycolor.myAccent.opacity(0.35))
                             .listRowSeparator(.hidden, edges: [.top])
@@ -65,9 +65,36 @@ struct NoticesView: View {
                         } // List
                         .listStyle(.plain)
                     } // ZStack
-                } // if empty
+                }
             } // ZStack
-        }
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                if isRootModal {
+                    // Open as root window (from HomeView)
+                    // Show Back button only
+                    ToolbarItem(placement: .topBarLeading) {
+                        BackButtonView() {
+                            coordinator.closeModal()
+                        }
+                    }
+                } else {
+                    // Opened as a child window (from PreferencesView)
+                    // Show Back and Home buttons
+                    ToolbarItem(placement: .topBarLeading) {
+                        BackButtonView() {
+                            coordinator.popModal()
+                        }
+                    }
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            coordinator.closeModal()
+                        } label: {
+                            Image(systemName: "house")
+                                .foregroundStyle(Color.mycolor.myAccent)
+                        }
+                    }
+                }
+            }
     }
     
     private var noticesIsEmpty: some View {
@@ -90,7 +117,7 @@ struct NoticesView: View {
     let noticevm = NoticeViewModel(modelContext: context)
     
     NavigationStack {
-        NoticesView()
+        NoticesView(isRootModal: true)
             .environmentObject(noticevm)
             .environmentObject(NavigationCoordinator())
     }

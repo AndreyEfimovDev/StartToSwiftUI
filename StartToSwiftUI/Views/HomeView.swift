@@ -13,8 +13,6 @@ import AudioToolbox
 struct HomeView: View {
     
     // MARK: PROPERTIES
-    
-    //    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
@@ -42,84 +40,86 @@ struct HomeView: View {
         if !vm.isTermsOfUseAccepted {
             WelcomeAtFirstLaunchView()
         } else {
-            
-            GeometryReader { proxy in
-                ScrollViewReader { scrollProxy in
-                    ZStack (alignment: .bottom) {
-                        if vm.allPosts.isEmpty {
-                            allPostsIsEmpty
-                        } else if vm.filteredPosts.isEmpty {
-                            filteredPostsIsEmpty
-                        } else {
-                            mainViewBody
-                            onTopButton(proxy: scrollProxy)
-                        }
-                    }
-                }
-                .disabled(isLongPressSuccess || isShowingDeleteConfirmation)
-                .navigationTitle(vm.selectedCategory ?? "SwiftUI")
-                .navigationBarTitleDisplayMode(.inline)
-                .navigationBarBackButtonHidden(true)
-                .toolbar {
-                    toolbarForMainViewBody()
-                }
-                .safeAreaInset(edge: .top) {
-                    SearchBarView()
-                }
-                .sheet(isPresented: $isFilterButtonPressed) {
-                    FiltersSheetView(
-                        isFilterButtonPressed: $isFilterButtonPressed
-                    )
-                    .presentationBackground(.ultraThinMaterial)
-                    .presentationDetents([.height(600)])
-                    .presentationDragIndicator(.visible)
-                    .presentationCornerRadius(30)
-                }
-                .overlay {
-                    if UIDevice.isiPhone {
-                        ZStack {
-                            // On long press gesture
-                            if isLongPressSuccess {
-                                RatingSelectionView() {
-                                    isLongPressSuccess = false
-                                }
-                                .frame(maxHeight: max(proxy.size.height / 3, 300))
-                                .padding(.horizontal, 30)
-                            }
-                            // On double tap gesture
-                            if showProgressSelectionView {
-                                ProgressSelectionView() {
-                                    showProgressSelectionView = false
-                                }
-                                .frame(maxHeight: max(proxy.size.height / 3, 300))
-                                .padding(.horizontal, 30)
-                            }
-                        }
-                    }
-                }
-                .overlay {
-                    if isShowingDeleteConfirmation {
-                        postDeletionConfirmation
-                            .opacity(isShowingDeleteConfirmation ? 1 : 0)
-                            .transition(.move(edge: .bottom))
-                    }
-                }
-                .onAppear {
-                    vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                    // Задержка лоя синхронизации с appStateManager
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                        if vm.isTermsOfUseAccepted {
-                            soundNotificationIfNeeded()
-                        }
-                    }
-                }
-            }
+            mainConent
         }
     }
     
     // MARK: Subviews
+    private var mainConent: some View {
+        GeometryReader { proxy in
+            ScrollViewReader { scrollProxy in
+                ZStack (alignment: .bottom) {
+                    if vm.allPosts.isEmpty {
+                        allPostsIsEmpty
+                    } else if vm.filteredPosts.isEmpty {
+                        filteredPostsIsEmpty
+                    } else {
+                        listPostRowsContent
+                        onTopButton(proxy: scrollProxy)
+                    }
+                }
+            }
+            .disabled(isLongPressSuccess || isShowingDeleteConfirmation)
+            .navigationTitle(vm.selectedCategory ?? "SwiftUI")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                toolbarForMainViewBody()
+            }
+            .safeAreaInset(edge: .top) {
+                SearchBarView()
+            }
+            .sheet(isPresented: $isFilterButtonPressed) {
+                FiltersSheetView(
+                    isFilterButtonPressed: $isFilterButtonPressed
+                )
+                .presentationBackground(.ultraThinMaterial)
+                .presentationDetents([.height(600)])
+                .presentationDragIndicator(.visible)
+                .presentationCornerRadius(30)
+            }
+            .overlay {
+                if UIDevice.isiPhone {
+                    ZStack {
+                        // On long press gesture
+                        if isLongPressSuccess {
+                            RatingSelectionView() {
+                                isLongPressSuccess = false
+                            }
+                            .frame(maxHeight: max(proxy.size.height / 3, 300))
+                            .padding(.horizontal, 30)
+                        }
+                        // On double tap gesture
+                        if showProgressSelectionView {
+                            ProgressSelectionView() {
+                                showProgressSelectionView = false
+                            }
+                            .frame(maxHeight: max(proxy.size.height / 3, 300))
+                            .padding(.horizontal, 30)
+                        }
+                    }
+                }
+            }
+            .overlay {
+                if isShowingDeleteConfirmation {
+                    postDeletionConfirmation
+                        .opacity(isShowingDeleteConfirmation ? 1 : 0)
+                        .transition(.move(edge: .bottom))
+                }
+            }
+            .onAppear {
+                vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    if vm.isTermsOfUseAccepted {
+                        soundNotificationIfNeeded()
+                    }
+                }
+            }
+        }
+
+    }
     
-    private var mainViewBody: some View {
+    private var listPostRowsContent: some View {
         List {
             ForEach(postsForCategory(selectedCategory)) { post in
                 PostRowView(post: post)
@@ -331,7 +331,6 @@ struct HomeView: View {
                     iconName: "plus",
                     isShownCircle: false
                 ){
-                    //                    showAddPostView.toggle()
                     coordinator.push(.addPost)
                 }
             }
@@ -394,7 +393,6 @@ struct HomeView: View {
     }
     
     // MARK: Private functions
-    
     private func postsForCategory(_ category: String?) -> [Post] {
         guard let category = category else {
             return vm.filteredPosts

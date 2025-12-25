@@ -54,8 +54,8 @@ struct PostDraftsView: View {
                         )
                     } // List
                     .listStyle(.plain)
-                } // if empty
-            } // ZStack
+                }
+            }
         }
     }
     
