@@ -12,6 +12,7 @@
 		470E63702EFB241D007B75B5 /* ViewWrapperWithCustomNavToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470E636F2EFB241D007B75B5 /* ViewWrapperWithCustomNavToolbar.swift */; };
 		470E63722EFBDC90007B75B5 /* WelcomeAtFirstLaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470E63712EFBDC90007B75B5 /* WelcomeAtFirstLaunchView.swift */; };
 		470E63762EFD5044007B75B5 /* CountdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470E63752EFD5044007B75B5 /* CountdownView.swift */; };
+		470E637A2EFDE1CF007B75B5 /* ModalNavigationContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470E63792EFDE1CF007B75B5 /* ModalNavigationContainer.swift */; };
 		471639782ED4C43400DB1371 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 471639772ED4C43400DB1371 /* LaunchScreen.storyboard */; };
 		471BBF9A2EC5F6170004AC45 /* PostDraftsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471BBF992EC5F6170004AC45 /* PostDraftsView.swift */; };
 		471BBF9C2EC620D70004AC45 /* PostDraftsRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471BBF9B2EC620D70004AC45 /* PostDraftsRowView.swift */; };
@@ -109,6 +110,7 @@
 		470E636F2EFB241D007B75B5 /* ViewWrapperWithCustomNavToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewWrapperWithCustomNavToolbar.swift; sourceTree = "<group>"; };
 		470E63712EFBDC90007B75B5 /* WelcomeAtFirstLaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeAtFirstLaunchView.swift; sourceTree = "<group>"; };
 		470E63752EFD5044007B75B5 /* CountdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownView.swift; sourceTree = "<group>"; };
+		470E63792EFDE1CF007B75B5 /* ModalNavigationContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalNavigationContainer.swift; sourceTree = "<group>"; };
 		471639772ED4C43400DB1371 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		471BBF992EC5F6170004AC45 /* PostDraftsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDraftsView.swift; sourceTree = "<group>"; };
 		471BBF9B2EC620D70004AC45 /* PostDraftsRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDraftsRowView.swift; sourceTree = "<group>"; };
@@ -373,6 +375,7 @@
 				47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */,
 				47EA14302EF530780064583B /* AppSyncStateManager.swift */,
 				47F68A492EFB0232003786D0 /* NavigationCoordinator.swift */,
+				470E63792EFDE1CF007B75B5 /* ModalNavigationContainer.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -635,6 +638,7 @@
 				4791CDC12E708E1300687126 /* DocumentPicker.swift in Sources */,
 				4767C9632EF29474003838BA /* NoticeMigrationHelper.swift in Sources */,
 				47E439B72EA9290E007001AD /* NetworkService.swift in Sources */,
+				470E637A2EFDE1CF007B75B5 /* ModalNavigationContainer.swift in Sources */,
 				471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */,
 				47AA558A2EA9741D000AF4E9 /* RestoreBackupView.swift in Sources */,
 				47FF42472EE454440069D232 /* TestSFSymbolsForRating.swift in Sources */,

@@ -18,7 +18,6 @@ struct CopyrightPolicy: View {
             showHomeButton: true
         ) {
             ScrollView {
-                //                     COPYRIGHT/DMCA POLICY
                 Text("""
                         **StartToSwiftUI** respects intellectual property rights and complies with copyright legislation.
                         

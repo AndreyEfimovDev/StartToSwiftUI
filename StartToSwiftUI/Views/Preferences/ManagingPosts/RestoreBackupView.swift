@@ -60,7 +60,7 @@ struct RestoreBackupView: View {
                             isInProgress = false
                             if !vm.showErrorMessageAlert {
                                 DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                                    coordinator.popToRoot()
+                                    coordinator.closeModal()
                                 }
                             }
                         }
