@@ -26,40 +26,27 @@ struct CheckForPostsUpdateView: View {
     @State private var postCount: Int = 0
     
     var body: some View {
-        VStack {
-            Form {
-                section_1
-                section_2
+        ViewWrapperWithCustomNavToolbar(
+            title: "Check for posts update",
+            showHomeButton: true
+        ) {
+            VStack {
+                Form {
+                    section_1
+                    section_2
+                }
             }
-        }
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime + 1) {
-                checkForUpdates()
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime + 1) {
+                    checkForUpdates()
+                }
             }
-        }
-        .alert("Import Error", isPresented: $vm.showErrorMessageAlert) {
-            Button("OK", role: .cancel) {
-                coordinator.pop()
-            }
-        } message: {
-            Text(vm.errorMessage ?? "Unknown error")
-        }
-        .navigationTitle("Check for posts update")
-        .navigationBarBackButtonHidden(true)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView() {
+            .alert("Import Error", isPresented: $vm.showErrorMessageAlert) {
+                Button("OK", role: .cancel) {
                     coordinator.pop()
                 }
-            }
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    coordinator.popToRoot()
-                } label: {
-                    Image(systemName: "house")
-                        .foregroundStyle(Color.mycolor.myAccent)
-                }
+            } message: {
+                Text(vm.errorMessage ?? "Unknown error")
             }
         }
     }
@@ -143,7 +130,6 @@ struct CheckForPostsUpdateView: View {
                 followingTextColor = Color.mycolor.myRed
                 isPostsUpdateAvailable = true
                 isInProgress = false
-                print("Updates available")
 
             case false:
                 followingText = "No update available"
@@ -151,7 +137,6 @@ struct CheckForPostsUpdateView: View {
                 isPostsUpdateAvailable = false
                 isPostsUpdated = true
                 isInProgress = false
-                print("No updates available")
             }
         }
     }

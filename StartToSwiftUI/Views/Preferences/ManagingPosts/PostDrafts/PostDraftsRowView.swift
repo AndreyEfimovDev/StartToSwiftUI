@@ -12,7 +12,6 @@ struct PostDraftsRowView: View {
     let post: Post
     
     // MARK: MAIN BODY
-    
     var body: some View {
         VStack(spacing: 5){
             Group {
@@ -23,11 +22,9 @@ struct PostDraftsRowView: View {
             .padding(.horizontal)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-//        .background(Color.mycolor.mySectionBackground)
     }
         
     // MARK: Subviews
-    
     private var title: some View {
         Text(post.title)
             .font(.title3)
