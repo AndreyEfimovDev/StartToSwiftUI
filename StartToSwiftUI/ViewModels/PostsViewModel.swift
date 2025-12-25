@@ -162,7 +162,7 @@ class PostsViewModel: ObservableObject {
         
         // ШАГ 1: Ждём синхронизацию с iCloud
         // Даём время на получение данных с другого устройства
-        print("⚠️⚠️ ⏳ Ожидание синхронизации iCloud (2 секунды)...")
+//        print("⚠️⚠️ ⏳ Ожидание синхронизации iCloud (2 секунды)...")
         try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 секунды
 
         // ШАГ 2: Проверяем флаг из SwiftData (синхронизируется через iCloud!)
@@ -275,7 +275,7 @@ class PostsViewModel: ObservableObject {
                 return
             }
             
-//            print("🗑️ Обнаружены дубликаты! Всего: \(existingStaticPosts.count), ожидалось: \(StaticPost.staticPosts.count)")
+            print("🗑️ Обнаружены дубликаты! Всего: \(existingStaticPosts.count), ожидалось: \(StaticPost.staticPosts.count)")
             
             // Группируем по ID
             let groupedById = Dictionary(grouping: existingStaticPosts, by: { $0.id })
@@ -299,7 +299,7 @@ class PostsViewModel: ObservableObject {
             
             if deletedCount > 0 {
                 try modelContext.save()
-//                print("✅ Удалено \(deletedCount) дубликатов")
+                print("✅ Удалено \(deletedCount) дубликатов")
                 loadPostsFromSwiftData()
             }
         } catch {
@@ -308,7 +308,7 @@ class PostsViewModel: ObservableObject {
     }
                 
     private func removeStaticPosts() {
-        print("🗑️ Удаление статических постов...")
+//        print("🗑️ Удаление статических постов...")
         
         let staticIds = Set(StaticPost.staticPosts.map { $0.id })
         
@@ -326,7 +326,7 @@ class PostsViewModel: ObservableObject {
             }
             
             try modelContext.save()
-            print("✅ Удалено \(staticPosts.count) статических постов")
+//            print("✅ Удалено \(staticPosts.count) статических постов")
             
             // Сбрасываем флаг
             let appStateManager = AppSyncStateManager(modelContext: modelContext)
@@ -339,8 +339,6 @@ class PostsViewModel: ObservableObject {
             print("❌ Ошибка удаления статических постов: \(error)")
         }
     }
-    
-
     
     // MARK: - SwiftData Operations
     
@@ -363,7 +361,6 @@ class PostsViewModel: ObservableObject {
         } catch {
             errorMessage = "Ошибка загрузки данных"
             showErrorMessageAlert = true
-//            print("📊 ❌ Ошибка загрузки из SwiftData: \(error)")
         }
     }
     
