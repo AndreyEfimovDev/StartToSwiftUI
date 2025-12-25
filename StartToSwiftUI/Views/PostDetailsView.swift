@@ -229,14 +229,14 @@ struct PostDetailsView: View {
                 }
             }
             
-            if UIDevice.isiPad {
-                CircleStrokeButtonView(
-                    iconName: "plus",
-                    isShownCircle: false
-                ){
-                    coordinator.push(.addPost)
-                }
-            }
+//            if UIDevice.isiPad {
+//                CircleStrokeButtonView(
+//                    iconName: "plus",
+//                    isShownCircle: false
+//                ){
+//                    
+//                }
+//            }
             
             ShareLink(item: validPost.urlString) {
                 Image(systemName: "square.and.arrow.up")

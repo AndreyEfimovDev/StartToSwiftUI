@@ -405,7 +405,6 @@
 		47870FBB2ECCB927004175E4 /* PostDrafts */ = {
 			isa = PBXGroup;
 			children = (
-				471BBF992EC5F6170004AC45 /* PostDraftsView.swift */,
 				471BBF9B2EC620D70004AC45 /* PostDraftsRowView.swift */,
 			);
 			path = PostDrafts;
@@ -464,6 +463,7 @@
 				4732FB302EAA59B00062269D /* SharePostsView.swift */,
 				47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */,
 				4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */,
+				471BBF992EC5F6170004AC45 /* PostDraftsView.swift */,
 				47870FBB2ECCB927004175E4 /* PostDrafts */,
 			);
 			path = ManagingPosts;

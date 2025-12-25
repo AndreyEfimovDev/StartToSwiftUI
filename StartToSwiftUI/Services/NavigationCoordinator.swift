@@ -8,7 +8,7 @@
 import SwiftUI
 
 // MARK: - Navigation Routes
-enum AppRoute: Hashable {
+enum AppRoute: Hashable, Identifiable {
     
     // Dealing with details
     case postDetails(postId: String)
@@ -53,6 +53,68 @@ enum AppRoute: Hashable {
     case privacyPolicy
     case copyrightPolicy
     case fairUseNotice
+    
+    var shouldOpenAsModal: Bool {
+        switch self {
+        case .addPost, .editPost:
+            return true  // We open these cases as modal - for AddEditView
+        default:
+            return false // The rest is regular navigation
+        }
+    }
+
+    var id: String {
+        switch self {
+        case .postDetails(let postId):
+            return "postDetails_\(postId)"
+        case .addPost:
+            return "addPost"
+        case .editPost(let post):
+            return "editPost_\(post.id)"
+        case .welcomeAtFirstLaunch:
+            return "welcomeAtFirstLaunch"
+        case .preferences:
+            return "preferences"
+        case .notices:
+            return "notices"
+        case .noticeDetails(let noticeId):
+            return "noticeDetails_\(noticeId)"
+        case .studyProgress:
+            return "studyProgress"
+        case .postDrafts:
+            return "postDrafts"
+        case .checkForUpdates:
+            return "checkForUpdates"
+        case .importFromCloud:
+            return "importFromCloud"
+        case .shareBackup:
+            return "shareBackup"
+        case .restoreBackup:
+            return "restoreBackup"
+        case .erasePosts:
+            return "erasePosts"
+        case .acknowledgements:
+            return "acknowledgements"
+        case .aboutApp:
+            return "aboutApp"
+        case .welcome:
+            return "welcome"
+        case .introduction:
+            return "introduction"
+        case .whatIsNew:
+            return "whatIsNew"
+        case .legalInfo:
+            return "legalInfo"
+        case .termsOfUse:
+            return "termsOfUse"
+        case .privacyPolicy:
+            return "privacyPolicy"
+        case .copyrightPolicy:
+            return "copyrightPolicy"
+        case .fairUseNotice:
+            return "fairUseNotice"
+        }
+    }
 
 }
 
@@ -61,10 +123,13 @@ enum AppRoute: Hashable {
 class NavigationCoordinator: ObservableObject {
     @Published var path = NavigationPath() {
         didSet {
-//            log("📱 NavigationCoordinator: path changed. Count: \(path.count)", level: .info)
+            log("📱 NavigationCoordinator: path changed. Count: \(path.count)", level: .info)
         }
     }
-    @Published var showNotices = false
+    
+    // For modal Views
+    @Published var presentedSheet: AppRoute?
+
     
     /// Current navigation depth (how many screens are in the stack)
     var currentDepth: Int {
@@ -79,12 +144,25 @@ class NavigationCoordinator: ObservableObject {
     // MARK: - Navigation Methods
     /// Go to View
     func push(_ route: AppRoute) {
-        path.append(route)
+        // If AddEditView - open it as a modal
+        if route.shouldOpenAsModal {
+            presentedSheet = route
+        } else {
+            // The rest is regular navigation
+            path.append(route)
+        }
     }
-    
+
+    func dismissModal() {
+        presentedSheet = nil
+    }
+
     /// One level back
     func pop() {
-        guard !path.isEmpty else { return }
+        guard !path.isEmpty else {
+            log("pop(): path is empty", level: .info)
+            return
+        }
         path.removeLast()
     }
     
