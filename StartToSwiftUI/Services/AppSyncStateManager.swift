@@ -94,10 +94,10 @@ class AppSyncStateManager {
             let results = try modelContext.fetch(descriptor)
             
             if results.count > 1 {
-                log("⚠️ Найдено \(results.count) дубликатов, очищаем...", level: .info)
+                log("⚠️ Found \(results.count) duplicates, clearing...", level: .info)
 
                 _ = mergeDuplicateAppStates(results)
-                log("✅ Очистка завершена", level: .info)
+                log("✅ Cleaning completed", level: .info)
             } else {
                 log("✅ No duplicates found (\(results.count) AppState)", level: .info)
             }
@@ -142,12 +142,13 @@ class AppSyncStateManager {
                 appFirstLaunchDate: Date()
             )
             modelContext.insert(newState)
-            try modelContext.save()
             
+            saveContext()
+
             return newState
             
         } catch {
-            log("❌ Ошибка при получении AppState: \(error)", level: .error)
+            log("❌ Error getting AppState: \(error)", level: .error)
             let newState = AppSyncState()
             modelContext.insert(newState)
             return newState
@@ -156,7 +157,7 @@ class AppSyncStateManager {
     
     /// Merge AppState duplicates while preserving the most up-to-date data
     private func mergeDuplicateAppStates(_ states: [AppSyncState]) -> AppSyncState {
-        log("🔄 Объединяем \(states.count) AppState...", level: .info)
+        log("🔄 Merge \(states.count) AppState...", level: .info)
         
         // Sort by creation date (oldest = original)
         let sortedStates = states.sorted {
@@ -166,7 +167,7 @@ class AppSyncStateManager {
         guard let primaryState = sortedStates.first else {
             return AppSyncState()
         }
-        log("  📌 Основной AppState: \(primaryState.id)", level: .info)
+        log("  📌 Main AppState: \(primaryState.id)", level: .info)
         
         // Merge the flags: if at least one is true, we take true
         var mergedHasLoadedStatic = false
@@ -206,23 +207,18 @@ class AppSyncStateManager {
         primaryState.appFirstLaunchDate = earliestDate
         primaryState.lastCloudSyncDate = latestSyncDate
         
-        log("  ✅ Объединённые данные:", level: .info)
+        log("  ✅ Combined data:", level: .info)
         log("     hasLoadedStaticPosts: \(mergedHasLoadedStatic)", level: .info)
         log("     isUserNotNotifiedBySound: \(mergedIsUserNotNotified)", level: .info)
         
-        // Удаляем дубликаты
+        // Remove duplicates
         for duplicateState in sortedStates.dropFirst() {
             modelContext.delete(duplicateState)
-            log("  ✗ Удалён дубликат AppState", level: .info)
+            log("  ✗ Duplicate AppState removed", level: .info)
         }
         
         // Remove duplicates
-        do {
-            try modelContext.save()
-            log("✅ AppState объединён и сохранён", level: .info)
-        } catch {
-            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
-        }
+        saveContext()
         
         return primaryState
     }
@@ -238,22 +234,13 @@ class AppSyncStateManager {
         let appState = getOrCreateAppState()
         appState.isTermsOfUseAccepted = accepted
         
-        do {
-            try modelContext.save()
-        } catch {
-            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
-        }
+        saveContext()
     }
         
     // Accept Terms of Use
     func acceptTermsOfUse() {
         setTermsOfUseAccepted(true)
     }
-    
-//    func resetTermsOfUseAccepted() {
-//        setTermsOfUseAccepted(false)
-//    }
-
         
     // MARK: - Methods for Static posts
     /// Check if static posts were loaded
@@ -268,11 +255,7 @@ class AppSyncStateManager {
         let appState = getOrCreateAppState()
         appState.shouldLoadStaticPosts = true
         
-        do {
-            try modelContext.save()
-        } catch {
-            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
-        }
+        saveContext()
     }
         
     /// Enable loading of static posts, set by the user in Preferences: false - do not load
@@ -280,11 +263,7 @@ class AppSyncStateManager {
         let appState = getOrCreateAppState()
         appState.shouldLoadStaticPosts = false
         
-        do {
-            try modelContext.save()
-        } catch {
-            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
-        }
+        saveContext()
     }
     
     /// Check if static posts are loaded
@@ -299,11 +278,7 @@ class AppSyncStateManager {
         let appState = getOrCreateAppState()
         appState.hasLoadedStaticPosts = true
         
-        do {
-            try modelContext.save()
-        } catch {
-            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
-        }
+        saveContext()
     }
     
     /// Mark static posts as not loaded
@@ -311,11 +286,7 @@ class AppSyncStateManager {
         let appState = getOrCreateAppState()
         appState.hasLoadedStaticPosts = false
         
-        do {
-            try modelContext.save()
-        } catch {
-            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
-        }
+        saveContext()
     }
 
     // MARK: - Methods for Notices
@@ -331,11 +302,7 @@ class AppSyncStateManager {
         let appState = getOrCreateAppState()
         appState.isUserNotNotifiedBySound = true
         
-        do {
-            try modelContext.save()
-        } catch {
-            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
-        }
+        saveContext()
     }
     
     /// Отметить, что пользователь уже уведомлён
@@ -343,11 +310,7 @@ class AppSyncStateManager {
         let appState = getOrCreateAppState()
         appState.isUserNotNotifiedBySound = false
         
-        do {
-            try modelContext.save()
-        } catch {
-            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
-        }
+        saveContext()
     }
     
     /// Обновить дату последней синхронизации
@@ -355,11 +318,7 @@ class AppSyncStateManager {
         let appState = getOrCreateAppState()
         appState.lastCloudSyncDate = Date()
         
-        do {
-            try modelContext.save()
-        } catch {
-            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
-        }
+        saveContext()
     }
     
     func getLastNoticeDate() -> Date? {
@@ -372,11 +331,7 @@ class AppSyncStateManager {
         let appState = getOrCreateAppState()
         appState.latestNoticeDate = date
         
-        do {
-            try modelContext.save()
-        } catch {
-            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
-        }
+        saveContext()
     }
 
     // MARK: - Methods for Cloud import of curated posts status
@@ -398,23 +353,15 @@ class AppSyncStateManager {
         let appState = getOrCreateAppState()
         appState.shouldLoadStaticPosts = true
         
-        do {
-            try modelContext.save()
-        } catch {
-            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
-        }
+        saveContext()
     }
         
     /// Reset the flag for the presence of new materials with author links in the cloud
     func setCuratedPostsLoadStatusOff() {
         let appState = getOrCreateAppState()
         appState.shouldLoadStaticPosts = false
-        
-        do {
-            try modelContext.save()
-        } catch {
-            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
-        }
+
+        saveContext()
     }
     
     /// Update the latest date of downloaded materials and author links from the cloud
@@ -427,6 +374,14 @@ class AppSyncStateManager {
     func getLastDateOfCuaratedPostsLoaded() -> Date? {
         let appState = getOrCreateAppState()
         return appState.latestDateOfCuaratedPostsLoaded
+    }
+    
+    private func saveContext() {
+        do {
+            try modelContext.save()
+        } catch {
+            log("❌ Error saving AppState: \(error)", level: .error)
+        }
     }
     
 }
