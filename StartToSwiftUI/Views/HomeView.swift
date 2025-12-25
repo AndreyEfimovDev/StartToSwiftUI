@@ -432,13 +432,11 @@ struct HomeView: View {
                     iconName: "message",
                     isShownCircle: false)
                 {
-                    print("=== HomeView: Opening Preferences ===")
-                    print("📱 Current path before push: \(coordinator.path.count)")
-                    
+//                    print("=== HomeView: Opening Preferences ===")
+//                    print("📱 Current path before push: \(coordinator.path.count)")
                     //                    showNoticesView = true
-                    coordinator.presentNotices()
-                    print("📱 Path after push (should be 1): \(coordinator.path.count)")
-                    
+                    coordinator.push(.notices)
+//                    print("📱 Path after push (should be 1): \(coordinator.path.count)")
                 }
                 .overlay {
                     Capsule()

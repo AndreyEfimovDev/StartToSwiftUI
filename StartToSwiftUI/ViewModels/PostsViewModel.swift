@@ -284,7 +284,7 @@ class PostsViewModel: ObservableObject {
             
             // Для каждого ID оставляем только первый пост, остальные удаляем
             for (id, posts) in groupedById where posts.count > 1 {
-//                print("  🔍 ID \(id): найдено \(posts.count) дубликатов")
+                print("  🔍 ID \(id): найдено \(posts.count) дубликатов")
                 
                 // Сортируем по дате создания и оставляем самый старый
                 let sortedPosts = posts.sorted { $0.date < $1.date }
@@ -355,9 +355,9 @@ class PostsViewModel: ObservableObject {
             allPosts = try modelContext.fetch(descriptor)
             // 🔍 ДЕБАГ: Выводим все посты с ID
 //            print("📊 Загружено \(allPosts.count) постов из SwiftData:")
-            for (index, post) in allPosts.enumerated() {
+//            for (index, post) in allPosts.enumerated() {
 //                print("📊 \(index + 1). ID: \(post.id), Title: \(post.title)")
-            }
+//            }
             allYears = getAllYears()
             allCategories = getAllCategories()
         } catch {
