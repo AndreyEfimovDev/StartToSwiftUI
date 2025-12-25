@@ -38,164 +38,82 @@ struct HomeView: View {
     
     // MARK: VIEW BODY
     var body: some View {
-        NavigationStack (path: $coordinator.path) {
-            Group {
-                
-                if !vm.isTermsOfUseAccepted {
-                    WelcomeAtFirstLaunchView()
-                } else {
-                    
-                    GeometryReader { proxy in
-                        ScrollViewReader { scrollProxy in
-                            ZStack (alignment: .bottom) {
-                                if vm.allPosts.isEmpty {
-                                    allPostsIsEmpty
-                                } else if vm.filteredPosts.isEmpty {
-                                    filteredPostsIsEmpty
-                                } else {
-                                    mainViewBody
-                                    onTopButton(proxy: scrollProxy)
+        
+        if !vm.isTermsOfUseAccepted {
+            WelcomeAtFirstLaunchView()
+        } else {
+            
+            GeometryReader { proxy in
+                ScrollViewReader { scrollProxy in
+                    ZStack (alignment: .bottom) {
+                        if vm.allPosts.isEmpty {
+                            allPostsIsEmpty
+                        } else if vm.filteredPosts.isEmpty {
+                            filteredPostsIsEmpty
+                        } else {
+                            mainViewBody
+                            onTopButton(proxy: scrollProxy)
+                        }
+                    }
+                }
+                .disabled(isLongPressSuccess || isShowingDeleteConfirmation)
+                .navigationTitle(vm.selectedCategory ?? "SwiftUI")
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    toolbarForMainViewBody()
+                }
+                .safeAreaInset(edge: .top) {
+                    SearchBarView()
+                }
+                .sheet(isPresented: $isFilterButtonPressed) {
+                    FiltersSheetView(
+                        isFilterButtonPressed: $isFilterButtonPressed
+                    )
+                    .presentationBackground(.ultraThinMaterial)
+                    .presentationDetents([.height(600)])
+                    .presentationDragIndicator(.visible)
+                    .presentationCornerRadius(30)
+                }
+                .overlay {
+                    if UIDevice.isiPhone {
+                        ZStack {
+                            // On long press gesture
+                            if isLongPressSuccess {
+                                RatingSelectionView() {
+                                    isLongPressSuccess = false
                                 }
+                                .frame(maxHeight: max(proxy.size.height / 3, 300))
+                                .padding(.horizontal, 30)
                             }
-                        }
-                        .disabled(isLongPressSuccess || isShowingDeleteConfirmation)
-                        .navigationTitle(vm.selectedCategory ?? "SwiftUI")
-                        .navigationBarTitleDisplayMode(.inline)
-                        .navigationBarBackButtonHidden(true)
-                        .toolbar {
-                            toolbarForMainViewBody()
-                        }
-                        .safeAreaInset(edge: .top) {
-                            SearchBarView()
-                        }
-                        .sheet(isPresented: $isFilterButtonPressed) {
-                            FiltersSheetView(
-                                isFilterButtonPressed: $isFilterButtonPressed
-                            )
-                            .presentationBackground(.ultraThinMaterial)
-                            .presentationDetents([.height(600)])
-                            .presentationDragIndicator(.visible)
-                            .presentationCornerRadius(30)
-                        }
-                        .overlay {
-                            if UIDevice.isiPhone {
-                                ZStack {
-                                    // On long press gesture
-                                    if isLongPressSuccess {
-                                        RatingSelectionView() {
-                                            isLongPressSuccess = false
-                                        }
-                                        .frame(maxHeight: max(proxy.size.height / 3, 300))
-                                        .padding(.horizontal, 30)
-                                    }
-                                    // On double tap gesture
-                                    if showProgressSelectionView {
-                                        ProgressSelectionView() {
-                                            showProgressSelectionView = false
-                                        }
-                                        .frame(maxHeight: max(proxy.size.height / 3, 300))
-                                        .padding(.horizontal, 30)
-                                    }
+                            // On double tap gesture
+                            if showProgressSelectionView {
+                                ProgressSelectionView() {
+                                    showProgressSelectionView = false
                                 }
-                            }
-                        }
-                        .overlay {
-                            if isShowingDeleteConfirmation {
-                                postDeletionConfirmation
-                                    .opacity(isShowingDeleteConfirmation ? 1 : 0)
-                                    .transition(.move(edge: .bottom))
-                            }
-                        }
-                        .onAppear {
-                            vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                            // Задержка лоя синхронизации с appStateManager
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                if vm.isTermsOfUseAccepted {
-                                    soundNotificationIfNeeded()
-                                }
+                                .frame(maxHeight: max(proxy.size.height / 3, 300))
+                                .padding(.horizontal, 30)
                             }
                         }
                     }
                 }
+                .overlay {
+                    if isShowingDeleteConfirmation {
+                        postDeletionConfirmation
+                            .opacity(isShowingDeleteConfirmation ? 1 : 0)
+                            .transition(.move(edge: .bottom))
+                    }
+                }
+                .onAppear {
+                    vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
+                    // Задержка лоя синхронизации с appStateManager
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        if vm.isTermsOfUseAccepted {
+                            soundNotificationIfNeeded()
+                        }
+                    }
+                }
             }
-            .navigationDestination(for: AppRoute.self) { route in
-                destinationView(for: route)
-            }
-        }
-    }
-    
-    // MARK: - Destination View Builder
-    @ViewBuilder
-    private func destinationView(for route: AppRoute) -> some View {
-        switch route {
-            
-            // Dealing with post
-        case .postDetails(let postId):
-            PostDetailsView(postId: postId)
-        case .addPost:
-            AddEditPostSheet(post: nil)
-        case .editPost(let post):
-            AddEditPostSheet(post: post)
-                    
-            // Welcome at first launch to accept Terms of Use
-        case .welcomeAtFirstLaunch:
-            WelcomeAtFirstLaunchView()
-
-            // Preferences
-        case .preferences:
-            PreferencesView()
-
-            // Managing notices
-        case .notices:
-            NoticesView()
-        case .noticeDetails(let noticeId):
-            NoticeDetailsView(noticeId: noticeId)
-
-            // Study progress
-        case .studyProgress:
-            StudyProgressView()
-
-            // Managing posts (materials)
-        case .postDrafts:
-            PostDraftsView()
-        case .checkForUpdates:
-            CheckForPostsUpdateView()
-        case .importFromCloud:
-            ImportPostsFromCloudView()
-        case .shareBackup:
-            SharePostsView()
-        case .restoreBackup:
-            RestoreBackupView()
-        case .erasePosts:
-            EraseAllPostsView()
-            
-            // Gratitude
-        case .acknowledgements:
-            Acknowledgements()
-            
-            // About App
-        case .aboutApp:
-            AboutApp()
-        case .welcome:
-            WelcomeMessage()
-        case .introduction:
-            Introduction()
-        case .whatIsNew:
-            WhatsNewView()
-            
-            // Legal information
-        case .legalInfo:
-            LegalInformationView()
-        case .termsOfUse:
-            TermsOfUse()
-        case .privacyPolicy:
-            PrivacyPolicy()
-        case .copyrightPolicy:
-            CopyrightPolicy()
-        case .fairUseNotice:
-            FairUseNotice()
-//        default:
-//                EmptyView()
         }
     }
     
@@ -231,8 +149,10 @@ struct HomeView: View {
                     .onTapAndDoubleTap(
                         singleTap: {
                             vm.selectedPostId = post.id
-                            coordinator.push(.postDetails(postId: post.id))
-                        },
+                            if UIDevice.isiPhone {
+                                coordinator.push(.postDetails(postId: post.id))
+                            }
+                                                    },
                         doubleTap: {
                             vm.selectedStudyProgress = post.progress
                             vm.selectedPostId = post.id
@@ -280,11 +200,11 @@ struct HomeView: View {
         
         let appStateManager = AppSyncStateManager(modelContext: modelContext)
         let status = appStateManager.getUserNotifiedBySoundStatus()
-
+        
         guard noticevm.hasUnreadNotices, noticevm.isNotificationOn, status else {
             return
         }
-
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
             if noticevm.isSoundNotificationOn {
                 // Sound played
