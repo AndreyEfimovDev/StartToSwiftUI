@@ -20,7 +20,6 @@ struct PostDetailsView: View {
     
     private var post: Post? {
         vm.allPosts.first(where: { $0.id == postId })
-        //                        PreviewData.samplePost3
     }
     
     @State private var showSafariView = false
@@ -44,6 +43,7 @@ struct PostDetailsView: View {
     @State private var showProgressTab: Bool = false
     @State private var zIndexBarRating: Double = 0
     @State private var zIndexBarProgress: Double = 0
+    
     private var minHeight: CGFloat {
         if UIDevice.isiPad { 60 }
         else { 75 }

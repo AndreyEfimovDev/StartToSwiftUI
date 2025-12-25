@@ -22,60 +22,47 @@ struct SharePostsView: View {
     @State private var shareURL: URL?
         
     var body: some View {
-        VStack {
-            textSection
-                .textFormater()
-            
-            CapsuleButtonView(
-                primaryTitle: "Share/Store",
-                secondaryTitle: "Completed",
-                isToChange: isShareCompleted
-            ) {
-                isInProgress = true
-                prepareDocumentSharing()
-                showActivityView = true
-            }
-            .disabled(isShareCompleted)
-            .padding(.top, 30)
-            .padding(.horizontal, 50)
+        ViewWrapperWithCustomNavToolbar(
+            title: "Share/Store",
+            showHomeButton: true
+        ) {
+            VStack {
+                textSection
+                    .textFormater()
+                
+                CapsuleButtonView(
+                    primaryTitle: "Share/Store",
+                    secondaryTitle: "Completed",
+                    isToChange: isShareCompleted
+                ) {
+                    isInProgress = true
+                    prepareDocumentSharing()
+                    showActivityView = true
+                }
+                .disabled(isShareCompleted)
+                .padding(.top, 30)
+                .padding(.horizontal, 50)
 
-            Spacer()
-            
-            if isInProgress {
-                CustomProgressView()
-            }
-        }
-        .padding(.horizontal, 30)
-        .padding(.top, 30)
-        .sheet(isPresented: $showActivityView) {
-            if let url = shareURL {
-                handleDocumentSharing(fileURL: url)
-            }
-        }
-        .alert("Sharing Error", isPresented: $vm.showErrorMessageAlert) {
-            Button("OK", role: .cancel) {
-                vm.errorMessage = nil
-                isInProgress = false
-            }
-        } message: {
-            Text(vm.errorMessage ?? "Unknown error")
-        }
-        .navigationTitle("Share/Store")
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView() {
-                    coordinator.pop()
+                Spacer()
+                
+                if isInProgress {
+                    CustomProgressView()
                 }
             }
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    coordinator.popToRoot()
-                } label: {
-                    Image(systemName: "house")
-                        .foregroundStyle(Color.mycolor.myAccent)
+            .padding(.horizontal, 30)
+            .padding(.top, 30)
+            .sheet(isPresented: $showActivityView) {
+                if let url = shareURL {
+                    handleDocumentSharing(fileURL: url)
                 }
+            }
+            .alert("Sharing Error", isPresented: $vm.showErrorMessageAlert) {
+                Button("OK", role: .cancel) {
+                    vm.errorMessage = nil
+                    isInProgress = false
+                }
+            } message: {
+                Text(vm.errorMessage ?? "Unknown error")
             }
         }
     }
@@ -84,7 +71,7 @@ struct SharePostsView: View {
         
         print("🍓 Preparing document sharing from SwiftData...")
         
-        // 1. Экспортируем данные из SwiftData
+        // Export data from SwiftData
         let exportResult = vm.exportPostsToJSON()
 
         switch exportResult {
@@ -104,7 +91,6 @@ struct SharePostsView: View {
 
     
     // MARK: Subviews
-
     @ViewBuilder
     private func handleDocumentSharing(fileURL: URL) -> some View {
         ActivityView(activityItems: [fileURL], applicationActivities: nil) { result in
@@ -138,7 +124,7 @@ struct SharePostsView: View {
         }
     }
     
-    /// Очистка временного файла после использования
+    /// Clearing temporary file after use
     private func cleanupTempFile(_ url: URL) {
         do {
             if FileManager.default.fileExists(atPath: url.path) {
@@ -154,10 +140,7 @@ struct SharePostsView: View {
         Text("""
             You are about to store the materials on your local device in JSON format 
             or
-            share them directly via AirDop / Mail / Messenger / etc.
-            
-            While storing on local device please use a name different from 'app_posts' for your convenience, i.e. 'app_posts_backup'.
-            
+            share them directly via AirDop / Mail / Messenger / etc.            
             """)
         .multilineTextAlignment(.center)
     }

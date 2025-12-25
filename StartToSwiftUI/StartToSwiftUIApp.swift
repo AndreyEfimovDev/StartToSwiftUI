@@ -1,10 +1,9 @@
 //
 //  StartToSwiftUIApp.swift
-//  StartToSwiftUI
+//  StartToSwiftUI App for study practicing
 //
 //  Created by Andrey Efimov on 25.08.2025.
 //
-
 
 import SwiftUI
 import SwiftData
@@ -19,8 +18,7 @@ struct StartToSwiftUIApp: App {
     
     private let hapticManager = HapticService.shared
         
-    // MARK: - SwiftData Container
-    /// ModelContainer с поддержкой iCloud синхронизации
+    // MARK: - SwiftData Container with sync via iCloud
     let modelContainer: ModelContainer = {
         
         let schema = Schema([
@@ -32,12 +30,12 @@ struct StartToSwiftUIApp: App {
         let config = ModelConfiguration(
             schema: schema,
             isStoredInMemoryOnly: false,
-            cloudKitDatabase: .automatic // 🌥️ iCloud синхронизация
+            cloudKitDatabase: .automatic //
         )
         
         do {
             let container = try ModelContainer(for: schema, configurations: [config])
-//            print("✅ SwiftData контейнер создан успешно")
+            print("✅ SwiftData контейнер создан успешно")
             return container
         } catch {
             fatalError("❌ Не удалось создать ModelContainer: \(error)")
@@ -97,39 +95,39 @@ struct StartToSwiftUIApp: App {
     }
 }
 
-
-#Preview("Full App Preview") {
-    let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppSyncState.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-    )
-
-    let context = container.mainContext
-    
-    for notice in PreviewData.sampleNotices {
-        context.insert(notice)
-    }
-    
-    for post in PreviewData.samplePosts {
-        context.insert(post)
-    }
-    
-    do {
-        try context.save()
-        print("✅ Preview: Данные загружены в SwiftData")
-    } catch {
-        print("❌ Preview: Ошибка сохранения: \(error)")
-    }
-    
-    let vm = PostsViewModel(modelContext: context)
-    let noticevm = NoticeViewModel(modelContext: context)
-    
-    return ContentViewWrapper()
-        .environment(\.modelContext, context)
-        .environmentObject(vm)
-        .environmentObject(noticevm)
-        .modelContainer(container)
-        .onAppear {
-            print("📱 Preview запущен с \(PreviewData.samplePosts.count) постами")
-        }
-}
+//
+//#Preview("Full App Preview") {
+//    let container = try! ModelContainer(
+//        for: Post.self, Notice.self, AppSyncState.self,
+//        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+//    )
+//
+//    let context = container.mainContext
+//    
+//    for notice in PreviewData.sampleNotices {
+//        context.insert(notice)
+//    }
+//    
+//    for post in PreviewData.samplePosts {
+//        context.insert(post)
+//    }
+//    
+//    do {
+//        try context.save()
+//        print("✅ Preview: Данные загружены в SwiftData")
+//    } catch {
+//        print("❌ Preview: Ошибка сохранения: \(error)")
+//    }
+//    
+//    let vm = PostsViewModel(modelContext: context)
+//    let noticevm = NoticeViewModel(modelContext: context)
+//    
+//    return ContentViewWrapper()
+//        .environment(\.modelContext, context)
+//        .environmentObject(vm)
+//        .environmentObject(noticevm)
+//        .modelContainer(container)
+//        .onAppear {
+//            print("📱 Preview запущен с \(PreviewData.samplePosts.count) постами")
+//        }
+//}

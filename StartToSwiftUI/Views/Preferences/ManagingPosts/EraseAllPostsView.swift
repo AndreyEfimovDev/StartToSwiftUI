@@ -23,66 +23,53 @@ struct EraseAllPostsView: View {
     @State private var postCount: Int = 0
     
     var body: some View {
-        VStack {
-            textSection
-                .textFormater()
-            
-            CapsuleButtonView(
-                primaryTitle: "ERASE",
-                secondaryTitle: "\(postCount) Materials Deleted!",
-                textColorPrimary: Color.mycolor.myButtonTextRed,
-                buttonColorPrimary: Color.mycolor.myButtonBGRed,
-                buttonColorSecondary: Color.mycolor.myButtonBGGreen,
-                isToChange: isDeleted) {
-                    isInProgress = true
-                    vm.eraseAllPosts{
-                        isDeleted = true
-                        isInProgress = false
-                        // Сбрасываем статус первого импорта авторских ссылок на материалы
-                        // Чтобы с пустым локальным массивом данных была возможность
-                        // снова импортировать авторские ссылоки на материалы
-                        let appStateManager = AppSyncStateManager(modelContext: modelContext)
-                        appStateManager.setCuratedPostsLoadStatusOn()
-                        
-                        DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                            coordinator.popToRoot()
+        ViewWrapperWithCustomNavToolbar(
+            title: "Erase all materials",
+            showHomeButton: true
+        ) {
+            VStack {
+                textSection
+                    .textFormater()
+                
+                CapsuleButtonView(
+                    primaryTitle: "ERASE",
+                    secondaryTitle: "\(postCount) Materials Deleted!",
+                    textColorPrimary: Color.mycolor.myButtonTextRed,
+                    buttonColorPrimary: Color.mycolor.myButtonBGRed,
+                    buttonColorSecondary: Color.mycolor.myButtonBGGreen,
+                    isToChange: isDeleted) {
+                        isInProgress = true
+                        vm.eraseAllPosts{
+                            isDeleted = true
+                            isInProgress = false
+                            // Сбрасываем статус первого импорта авторских ссылок на материалы
+                            // Чтобы с пустым локальным массивом данных была возможность
+                            // снова импортировать авторские ссылоки на материалы
+                            let appStateManager = AppSyncStateManager(modelContext: modelContext)
+                            appStateManager.setCuratedPostsLoadStatusOn()
+                            
+                            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+                                coordinator.popToRoot()
+                            }
                         }
                     }
-                }
-                .padding(.top, 30)
-                .padding(.horizontal, 50)
-                .onChange(of: vm.allPosts.count, { oldValue, _ in
-                    postCount = oldValue
-                })
-                .disabled(isDeleted)
-            
-            Spacer()
-            
-            if isInProgress {
-                CustomProgressView()
-            }
-        }
-        .padding(.horizontal, 30)
-        .padding(.top, 30)
-        .onAppear {
-            hapticManager.notification(type: .warning)
-        }
-        .navigationTitle("Delete all materials")
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView() {
-                    coordinator.pop()
+                    .padding(.top, 30)
+                    .padding(.horizontal, 50)
+                    .onChange(of: vm.allPosts.count, { oldValue, _ in
+                        postCount = oldValue
+                    })
+                    .disabled(isDeleted)
+                
+                Spacer()
+                
+                if isInProgress {
+                    CustomProgressView()
                 }
             }
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    coordinator.popToRoot()
-                } label: {
-                    Image(systemName: "house")
-                        .foregroundStyle(Color.mycolor.myAccent)
-                }
+            .padding(.horizontal, 30)
+            .padding(.top, 30)
+            .onAppear {
+                hapticManager.notification(type: .warning)
             }
         }
     }
