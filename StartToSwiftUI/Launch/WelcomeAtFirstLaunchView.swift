@@ -49,14 +49,7 @@ struct WelcomeAtFirstLaunchView: View {
                         ZStack {
                             if showTermsButton {
                                 Button {
-#if DEBUG
-                                    print("📱 Welcome: Terms button tapped")
-                                    print("📱 Before push - path count: \(coordinator.path.count)")
-#endif
                                     coordinator.push(.termsOfUse)
-#if DEBUG
-                                    print("📱 After push - path count: \(coordinator.path.count)")
-#endif
                                 } label: {
                                     Text("Terms of Use")
                                         .font(.title)

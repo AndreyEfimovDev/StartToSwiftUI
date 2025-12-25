@@ -136,7 +136,7 @@ struct ImportPostsFromCloudView: View {
                 for devPost in DevData.postsForCloud {
                     // We check that the post is unique
                     guard !existingTitles.contains(devPost.title) && !existingIds.contains(devPost.id) else {
-                        print("⚠️ Пост '\(devPost.title)' уже существует, пропускаем")
+                        log("⚠️ Post '\(devPost.title)' already exists, skipping", level: .info)
                         continue
                     }
                     
@@ -170,7 +170,7 @@ struct ImportPostsFromCloudView: View {
                 
                 // Save in SwiftData
                 try modelContext.save()
-                print("✅ DevData: Загружено \(addedCount) постов из \(DevData.postsForCloud.count)")
+                log("✅ DevData: Loaded \(addedCount) posts from \(DevData.postsForCloud.count)", level: .info)
                 
                 // Update UI
                 vm.loadPostsFromSwiftData()
@@ -187,7 +187,6 @@ struct ImportPostsFromCloudView: View {
                 coordinator.popToRoot()
                 
             } catch {
-                print("❌ Ошибка загрузки DevData: \(error)")
                 vm.errorMessage = "Failed to load DevData: \(error.localizedDescription)"
                 vm.showErrorMessageAlert = true
                 isInProgress = false
@@ -199,7 +198,6 @@ struct ImportPostsFromCloudView: View {
     /// Downloading from a cloud service
     private func loadFromCloudService() async {
         // Waiting for iCloud sync (1 second)...
-//        print("⏳ loadFromCloudService(): Ожидание синхронизации iCloud (1 секунда)...")
         try? await Task.sleep(nanoseconds: 1_000_000_000)
 
         await vm.importPostsFromCloud() { [self] in

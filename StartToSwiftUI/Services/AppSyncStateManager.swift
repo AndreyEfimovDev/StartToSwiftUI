@@ -82,9 +82,10 @@ class AppSyncStateManager {
     }
     
     // MARK: - Maintenance Methods
-    /// Принудительная очистка всех дубликатов AppState (для обслуживания)
+    /// Force clearing all duplicate AppState (for maintenance)
     func cleanupDuplicateAppStates() {
-//        print("🧹 Запуск очистки дубликатов AppState...")
+        log("✅ 🧹 Запуск очистки дубликатов AppState...", level: .debug)
+
         let descriptor = FetchDescriptor<AppSyncState>(
             predicate: #Predicate { $0.id == "app_state_singleton" }
         )
@@ -93,20 +94,21 @@ class AppSyncStateManager {
             let results = try modelContext.fetch(descriptor)
             
             if results.count > 1 {
-                print("⚠️ Найдено \(results.count) дубликатов, очищаем...")
+                log("⚠️ Найдено \(results.count) дубликатов, очищаем...", level: .info)
+
                 _ = mergeDuplicateAppStates(results)
-                print("✅ Очистка завершена")
+                log("✅ Очистка завершена", level: .info)
             } else {
-                print("✅ Дубликатов не обнаружено (\(results.count) AppState)")
+                log("✅ Дубликатов не обнаружено (\(results.count) AppState)", level: .info)
             }
         } catch {
-            print("❌ Ошибка при очистке дубликатов: \(error)")
+            log("❌ Ошибка при очистке дубликатов: \(error)", level: .error)
         }
     }
 
-    /// Получить или создать AppState с атомарной проверкой и дедупликацией
+    /// Get or create AppState with atomic validation and deduplication
     func getOrCreateAppState() -> AppSyncState {
-        // 1. Ищем все AppState с нашим singleton ID
+        // 1. Search for all AppStates with our singleton ID
         let descriptor = FetchDescriptor<AppSyncState>(
             predicate: #Predicate { $0.id == "app_state_singleton" }
         )
@@ -114,28 +116,27 @@ class AppSyncStateManager {
         do {
             let results = try modelContext.fetch(descriptor)
             
-            // 2. Если найдено несколько - объединяем в один
+            // 2. If several are found, merge them into one
             if results.count > 1 {
-                print("⚠️ Обнаружено \(results.count) AppState, объединяем дубликаты...")
+                log("⚠️ Detected \(results.count) AppState, merging duplicates...", level: .info)
                 return mergeDuplicateAppStates(results)
             }
             
-            // 3. Если найден один - возвращаем его
+            // 3. If one is found, return it
             if let existingState = results.first {
-                // ✅ Тихо возвращаем, без лишних принтов
                 return existingState
             }
             
-            // 4. Создаём новый ТОЛЬКО если базы ПОЛНОСТЬЮ ПУСТАЯ
-            // 🔥 ВАЖНО: Делаем финальную проверку перед созданием
-            // (на случай, если другое устройство создало AppState в это время)
+            // 4. Create a new one ONLY if the database is COMPLETELY EMPTY
+            // 🔥 Final check before creation
+            // (in case another device created AppState at that time)
             let finalCheck = try modelContext.fetch(descriptor)
             if let existingState = finalCheck.first {
-                print("✅ AppState создан другим устройством, используем его")
+                log("✅ AppState создан другим устройством, используем его", level: .info)
                 return existingState
             }
             
-            print("📦 Создаём новый AppState")
+            log("📦 Создаём новый AppState", level: .info)
             let newState = AppSyncState(
                 id: "app_state_singleton",
                 appFirstLaunchDate: Date()
@@ -146,18 +147,18 @@ class AppSyncStateManager {
             return newState
             
         } catch {
-            print("❌ Ошибка при получении AppState: \(error)")
+            log("❌ Ошибка при получении AppState: \(error)", level: .error)
             let newState = AppSyncState()
             modelContext.insert(newState)
             return newState
         }
     }
     
-    /// Объединяет дубликаты AppState, сохраняя самые актуальные данные
+    /// Merge AppState duplicates while preserving the most up-to-date data
     private func mergeDuplicateAppStates(_ states: [AppSyncState]) -> AppSyncState {
-        print("🔄 Объединяем \(states.count) AppState...")
+        log("🔄 Объединяем \(states.count) AppState...", level: .info)
         
-        // Сортируем по дате создания (самый старый = оригинальный)
+        // Sort by creation date (oldest = original)
         let sortedStates = states.sorted {
             ($0.appFirstLaunchDate ?? .distantPast) < ($1.appFirstLaunchDate ?? .distantPast)
         }
@@ -165,34 +166,33 @@ class AppSyncStateManager {
         guard let primaryState = sortedStates.first else {
             return AppSyncState()
         }
+        log("  📌 Основной AppState: \(primaryState.id)", level: .info)
         
-        print("  📌 Основной AppState: \(primaryState.id)")
-        
-        // Объединяем флаги: если хотя бы один true - берём true
+        // Merge the flags: if at least one is true, we take true
         var mergedHasLoadedStatic = false
         var mergedIsUserNotNotified = true
         var earliestDate: Date?
         var latestSyncDate: Date?
         
         for state in sortedStates {
-            // Логика OR для hasLoadedStaticPosts
+            // OR logic for hasLoadedStaticPosts
             if state.hasLoadedStaticPosts {
                 mergedHasLoadedStatic = true
             }
             
-            // Логика AND для isUserNotNotifiedBySound (если хотя бы один уже уведомлён - берём false)
+            // AND logic for isUserNotNotifiedBySound (if at least one is already notified, we take false)
             if !state.isUserNotNotifiedBySound {
                 mergedIsUserNotNotified = false
             }
             
-            // Самая ранняя дата запуска
+            // Earliest launch date
             if let date = state.appFirstLaunchDate {
                 if earliestDate == nil || date < earliestDate! {
                     earliestDate = date
                 }
             }
             
-            // Самая поздняя синхронизация
+            // Latest synchronization
             if let date = state.lastCloudSyncDate {
                 if latestSyncDate == nil || date > latestSyncDate! {
                     latestSyncDate = date
@@ -200,28 +200,28 @@ class AppSyncStateManager {
             }
         }
         
-        // Обновляем основной объект объединёнными данными
+        // Updating the main object with the merged data
         primaryState.hasLoadedStaticPosts = mergedHasLoadedStatic
         primaryState.isUserNotNotifiedBySound = mergedIsUserNotNotified
         primaryState.appFirstLaunchDate = earliestDate
         primaryState.lastCloudSyncDate = latestSyncDate
         
-        print("  ✅ Объединённые данные:")
-        print("     hasLoadedStaticPosts: \(mergedHasLoadedStatic)")
-        print("     isUserNotNotifiedBySound: \(mergedIsUserNotNotified)")
+        log("  ✅ Объединённые данные:", level: .info)
+        log("     hasLoadedStaticPosts: \(mergedHasLoadedStatic)", level: .info)
+        log("     isUserNotNotifiedBySound: \(mergedIsUserNotNotified)", level: .info)
         
         // Удаляем дубликаты
         for duplicateState in sortedStates.dropFirst() {
             modelContext.delete(duplicateState)
-            print("  ✗ Удалён дубликат AppState")
+            log("  ✗ Удалён дубликат AppState", level: .info)
         }
         
-        // Сохраняем изменения
+        // Remove duplicates
         do {
             try modelContext.save()
-//            print("✅ AppState объединён и сохранён")
+            log("✅ AppState объединён и сохранён", level: .info)
         } catch {
-            print("❌ Ошибка сохранения AppState: \(error)")
+            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
         }
         
         return primaryState
@@ -240,111 +240,101 @@ class AppSyncStateManager {
         
         do {
             try modelContext.save()
-//            print("✅ Флаг hasLoadedStaticPosts установлен в true")
         } catch {
-            print("❌ Ошибка сохранения AppState: \(error)")
+            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
         }
     }
         
-    // Принять условия использования
+    // Accept Terms of Use
     func acceptTermsOfUse() {
         setTermsOfUseAccepted(true)
     }
     
-    // Сбросить принятие условий (на случай если нужно сбросить)
-    func resetTermsOfUseAccepted() {
-        setTermsOfUseAccepted(false)
-    }
+//    func resetTermsOfUseAccepted() {
+//        setTermsOfUseAccepted(false)
+//    }
 
         
     // MARK: - Methods for Static posts
-    /// Проверить, загружались ли статические посты
+    /// Check if static posts were loaded
     func getStaticPostsLoadToggleStatus() -> Bool {
         let appState = getOrCreateAppState()
         let result = appState.shouldLoadStaticPosts
-//        print("🔍 shouldLoadStaticPosts: \(result)")
         return result
     }
     
-    /// Включить загрузку статических постов, устанавливается пользователем в Preferences: true - загружать
+    /// Enable loading of static posts, set by the user in Preferences: true - load
     func setShouldLoadStaticPostsOn() {
         let appState = getOrCreateAppState()
         appState.shouldLoadStaticPosts = true
         
         do {
             try modelContext.save()
-//            print("✅ Флаг hasLoadedStaticPosts установлен в true")
         } catch {
-            print("❌ Ошибка сохранения AppState: \(error)")
+            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
         }
     }
         
-    /// Включить загрузку статических постов, устанавливается пользователем в Preferences: true - загружать
+    /// Enable loading of static posts, set by the user in Preferences: false - do not load
     func setShouldLoadStaticPostsOff() {
         let appState = getOrCreateAppState()
         appState.shouldLoadStaticPosts = false
         
         do {
             try modelContext.save()
-//            print("✅ Флаг hasLoadedStaticPosts установлен в true")
         } catch {
-            print("❌ Ошибка сохранения AppState: \(error)")
+            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
         }
     }
     
-    /// Проверить, загружены ли статические посты
+    /// Check if static posts are loaded
     func checkIfStaticPostsHasLoaded() -> Bool {
         let appState = getOrCreateAppState()
         let result = appState.hasLoadedStaticPosts
-//        print("🔍 hasLoadedStaticPosts: \(result)")
         return result
     }
     
-    /// Отметить, что статические посты загружены
+    /// Mark static posts loaded
     func markStaticPostsAsLoaded() {
         let appState = getOrCreateAppState()
         appState.hasLoadedStaticPosts = true
         
         do {
             try modelContext.save()
-//            print("✅ Флаг hasLoadedStaticPosts установлен в true")
         } catch {
-            print("❌ Ошибка сохранения AppState: \(error)")
+            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
         }
     }
     
-    /// Отметить, что статические посты как не загруженные
+    /// Mark static posts as not loaded
     func markStaticPostsAsNotLoaded() {
         let appState = getOrCreateAppState()
         appState.hasLoadedStaticPosts = false
         
         do {
             try modelContext.save()
-//            print("✅ Флаг hasLoadedStaticPosts установлен в false (сброшен)")
         } catch {
-            print("❌ Ошибка сохранения AppState: \(error)")
+            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
         }
     }
 
     // MARK: - Methods for Notices
-    /// Проверить, нужно ли уведомить пользователя звуком
+    /// Check whether the user should be notified with a sound
     func getUserNotifiedBySoundStatus() -> Bool {
         let appState = getOrCreateAppState()
         let result = appState.isUserNotNotifiedBySound
-//        print("🔍 isUserNotNotifiedBySound: \(result)")
         return result
     }
     
-    /// Включить флаг "нужно уведомить пользователя"
+    /// Enable the "Need to notify user" flag.
     func markUserNotNotifiedBySound() {
         let appState = getOrCreateAppState()
         appState.isUserNotNotifiedBySound = true
         
         do {
             try modelContext.save()
-//            print("✅ Флаг isUserNotNotifiedBySound установлен в true (нужно уведомить)")
         } catch {
-            print("❌ Ошибка сохранения AppState: \(error)")
+            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
         }
     }
     
@@ -355,9 +345,8 @@ class AppSyncStateManager {
         
         do {
             try modelContext.save()
- /* */          print("✅ Флаг isUserNotNotifiedBySound установлен в false (уже уведомлён)")
         } catch {
-            print("❌ Ошибка сохранения AppState: \(error)")
+            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
         }
     }
     
@@ -368,9 +357,8 @@ class AppSyncStateManager {
         
         do {
             try modelContext.save()
-//            print("✅ Дата последней синхронизации обновлена")
         } catch {
-            print("❌ Ошибка сохранения AppState: \(error)")
+            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
         }
     }
     
@@ -379,7 +367,6 @@ class AppSyncStateManager {
         return appState.latestNoticeDate
         
     }
-
     
     func updateLatestNoticeDate(_ date: Date) {
         let appState = getOrCreateAppState()
@@ -387,9 +374,8 @@ class AppSyncStateManager {
         
         do {
             try modelContext.save()
-//            print("✅ Дата последней синхронизации обновлена")
         } catch {
-            print("❌ Ошибка сохранения AppState: \(error)")
+            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
         }
     }
 
@@ -407,39 +393,37 @@ class AppSyncStateManager {
         return appState.isNewCuratedPostsAvailable
     }
     
-    /// Установить флаг наличия новых материалы авторских ссылок в облаке
+    /// Set the status of new materials and author references in the cloud
     func setCuratedPostsLoadStatusOn() {
         let appState = getOrCreateAppState()
         appState.shouldLoadStaticPosts = true
         
         do {
             try modelContext.save()
-//            print("✅ Флаг hasLoadedStaticPosts установлен в true")
         } catch {
-            print("❌ Ошибка сохранения AppState: \(error)")
+            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
         }
     }
         
-    /// Сбросить флаг  наличия новых материалы авторских ссылок в облаке
+    /// Reset the flag for the presence of new materials with author links in the cloud
     func setCuratedPostsLoadStatusOff() {
         let appState = getOrCreateAppState()
         appState.shouldLoadStaticPosts = false
         
         do {
             try modelContext.save()
-//            print("✅ Флаг hasLoadedStaticPosts установлен в true")
         } catch {
-            print("❌ Ошибка сохранения AppState: \(error)")
+            log("❌ Ошибка сохранения AppState: \(error)", level: .error)
         }
     }
     
-    /// Обновить старшую дату загруженных материалы авторских ссылок из облака
+    /// Update the latest date of downloaded materials and author links from the cloud
     func setLastDateOfCuaratedPostsLoaded(_ date: Date) {
         let appState = getOrCreateAppState()
         appState.latestDateOfCuaratedPostsLoaded = date
     }
 
-    /// Получить старшую дату загруженных материалы авторских ссылок из облака
+    /// Get the latest date of downloaded materials and author links from the cloud
     func getLastDateOfCuaratedPostsLoaded() -> Date? {
         let appState = getOrCreateAppState()
         return appState.latestDateOfCuaratedPostsLoaded

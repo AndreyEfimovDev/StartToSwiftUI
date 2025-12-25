@@ -130,7 +130,6 @@ struct CheckForPostsUpdateView: View {
                 followingTextColor = Color.mycolor.myRed
                 isPostsUpdateAvailable = true
                 isInProgress = false
-                print("Updates available")
 
             case false:
                 followingText = "No update available"
@@ -138,7 +137,6 @@ struct CheckForPostsUpdateView: View {
                 isPostsUpdateAvailable = false
                 isPostsUpdated = true
                 isInProgress = false
-                print("No updates available")
             }
         }
     }
