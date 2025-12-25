@@ -42,7 +42,7 @@ class KeyboardManager: ObservableObject {
         }
         
         let keyboardHeight = keyboardFrame.height
-        print("Keyboard height: \(keyboardHeight)")
+        log("Keyboard height: \(keyboardHeight)", level: .info)
         
         // Magic Keyboard: ~0-55pt, On-screen keyboard: > 200pt
         let isPhysicalKeyboard = keyboardHeight < 100

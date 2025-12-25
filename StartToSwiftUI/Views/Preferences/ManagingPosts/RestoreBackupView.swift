@@ -67,7 +67,6 @@ struct RestoreBackupView: View {
                     },
                     onCancel: {
                         isInProgress = false
-                        print("Document picker cancelled")
                     }
                 )
             }

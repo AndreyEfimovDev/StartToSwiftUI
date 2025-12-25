@@ -37,7 +37,6 @@ struct HomeView: View {
     private let limitToShortenTitle: Int = 30
     
     // MARK: VIEW BODY
-    
     var body: some View {
         NavigationStack (path: $coordinator.path) {
             Group {
@@ -130,104 +129,73 @@ struct HomeView: View {
     private func destinationView(for route: AppRoute) -> some View {
         switch route {
             
-            // Dealing with post details
+            // Dealing with post
         case .postDetails(let postId):
             PostDetailsView(postId: postId)
-                .environmentObject(coordinator)
-            
-            // Addind and editing posts
         case .addPost:
             AddEditPostSheet(post: nil)
-                .environmentObject(coordinator)
         case .editPost(let post):
             AddEditPostSheet(post: post)
-                .environmentObject(coordinator)
                     
             // Welcome at first launch to accept Terms of Use
         case .welcomeAtFirstLaunch:
             WelcomeAtFirstLaunchView()
-                .environmentObject(coordinator)
 
             // Preferences
         case .preferences:
             PreferencesView()
-                .environmentObject(coordinator)
 
             // Managing notices
         case .notices:
             NoticesView()
-                .environmentObject(coordinator)
         case .noticeDetails(let noticeId):
             NoticeDetailsView(noticeId: noticeId)
-                .environmentObject(coordinator)
-                .environmentObject(noticevm)
 
             // Study progress
         case .studyProgress:
             StudyProgressView()
-                .environmentObject(coordinator)
 
             // Managing posts (materials)
         case .postDrafts:
             PostDraftsView()
-                .environmentObject(coordinator)
         case .checkForUpdates:
             CheckForPostsUpdateView()
-                .environmentObject(coordinator)
         case .importFromCloud:
             ImportPostsFromCloudView()
-                .environmentObject(coordinator)
         case .shareBackup:
             SharePostsView()
-                .environmentObject(coordinator)
         case .restoreBackup:
             RestoreBackupView()
-                .environmentObject(coordinator)
         case .erasePosts:
             EraseAllPostsView()
-                .environmentObject(coordinator)
             
             // Gratitude
         case .acknowledgements:
             Acknowledgements()
-                .environmentObject(coordinator)
             
             // About App
         case .aboutApp:
             AboutApp()
-                .environmentObject(coordinator)
         case .welcome:
             WelcomeMessage()
-                .environmentObject(coordinator)
         case .introduction:
             Introduction()
-                .environmentObject(coordinator)
         case .whatIsNew:
             WhatsNewView()
-                .environmentObject(coordinator)
             
             // Legal information
         case .legalInfo:
             LegalInformationView()
-                .environmentObject(coordinator)
         case .termsOfUse:
             TermsOfUse()
-                .environmentObject(coordinator)
-                .environmentObject(vm)
         case .privacyPolicy:
             PrivacyPolicy()
-                .environmentObject(coordinator)
         case .copyrightPolicy:
             CopyrightPolicy()
-                .environmentObject(coordinator)
         case .fairUseNotice:
             FairUseNotice()
-                .environmentObject(coordinator)
-            
-        default:
-            Text("Unknown route")
-            
-            
+//        default:
+//                EmptyView()
         }
     }
     
@@ -307,7 +275,7 @@ struct HomeView: View {
         }
     }
     
-    /// Звуковое одноразовое оповещение пользователя при появлении новых уведомлений
+    /// One-time sound alert to the user when new notifications appear
     private func soundNotificationIfNeeded() {
         
         let appStateManager = AppSyncStateManager(modelContext: modelContext)
@@ -318,17 +286,15 @@ struct HomeView: View {
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-            // print("🔔 3 секунды прошли, запускаем анимацию...")
-            
             if noticevm.isSoundNotificationOn {
-                // Воспроизведен звук
+                // Sound played
                 AudioServicesPlaySystemSound(1013)
-                // Сбрасывам статус звукового оповещения пользователя -> пользователь оповещен
+                // Setting the user's sound notification status -> user notified
                 appStateManager.markUserNotifiedBySound()
             }
-            // Анимация начата
+            // Animation has started
             noticeButtonAnimation = true
-            // Анимация завершена, пользователь уведомлен
+            // Animation completed, user notified
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 noticeButtonAnimation = false
             }
@@ -396,8 +362,6 @@ struct HomeView: View {
                 iconName: "gearshape",
                 isShownCircle: false)
             {
-                //                showPreferancesView.toggle()
-                //                coordinator.presentPreferences()
                 coordinator.push(.preferences)
             }
         }

@@ -69,8 +69,6 @@ struct SharePostsView: View {
     
     private func prepareDocumentSharing() {
         
-        print("🍓 Preparing document sharing from SwiftData...")
-        
         // Export data from SwiftData
         let exportResult = vm.exportPostsToJSON()
 
@@ -79,13 +77,11 @@ struct SharePostsView: View {
             isInProgress = false
             shareURL = url
             showActivityView = true
-            print("🍓✅ Document ready for sharing: \(url.lastPathComponent)")
         case .failure(let error):
             isInProgress = false
             vm.errorMessage = error.localizedDescription
             hapticManager.notification(type: .error)
             vm.showErrorMessageAlert = true
-            print("🍓❌ Export failed: \(error.localizedDescription)")
         }
     }
 
@@ -100,12 +96,12 @@ struct SharePostsView: View {
                 isShareCompleted = true // Change Share Button status and disable it
                 showActivityView = false // Close sheet after sharing completion
                 
-                // Очищаем временный файл после успешного шаринга
+                // Clearing the temporary file after sharing
                 cleanupTempFile(fileURL)
                 
-                print("✅ Successfully shared via: \(result.activityName)")
+                log("✅ Successfully shared via: \(result.activityName)", level: .info)
                 
-                // Автоматическое закрытие через 2 секунды
+                // Automatic closing after 2 seconds
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                     coordinator.popToRoot()
                 }
@@ -113,11 +109,11 @@ struct SharePostsView: View {
             } else {
                 // Sharing is cancelled
                 hapticManager.impact(style: .light)
-                // Очищаем временный файл после успешного шаринга
+                // Clearing the temporary file
                 cleanupTempFile(fileURL)
-                print("✅ Shared is cancelled.")
+                log("✅ Shared is cancelled.", level: .info)
             }
-            // Сбрасываем состояние
+            // Resetting the states
             isInProgress = false
             shareURL = nil
 
@@ -129,10 +125,10 @@ struct SharePostsView: View {
         do {
             if FileManager.default.fileExists(atPath: url.path) {
                 try FileManager.default.removeItem(at: url)
-                print("🧹 Cleaned up temp file: \(url.lastPathComponent)")
+                log("🧹 Cleaned up temp file: \(url.lastPathComponent)", level: .info)
             }
         } catch {
-            print("⚠️ Failed to cleanup temp file: \(error)")
+            log("⚠️ Failed to cleanup temp file: \(error)", level: .error)
         }
     }
     
