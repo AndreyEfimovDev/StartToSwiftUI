@@ -291,7 +291,6 @@
 			isa = PBXGroup;
 			children = (
 				4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */,
-				47E229FF2EF4366500341DD2 /* Debug */,
 				475997622E5CF0C3008E20F0 /* SupportFrom3rdParties */,
 				475997722E5DA436008E20F0 /* Extensions */,
 				4759976C2E5D931F008E20F0 /* Services */,
@@ -478,13 +477,6 @@
 				47C56FEB2EC9C66700F0796C /* NoticeDetailsView.swift */,
 			);
 			path = Notices;
-			sourceTree = "<group>";
-		};
-		47E229FF2EF4366500341DD2 /* Debug */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Debug;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
