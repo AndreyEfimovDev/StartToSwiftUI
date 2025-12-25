@@ -14,41 +14,29 @@ struct FairUseNotice: View {
 
 
     var body: some View {
-        ScrollView {
-            Text("""
-                    **StartToSwiftUI** operates in accordance with fair use principles for educational purposes. Our application is designed to be a legal and respectful tool for learners.
-                    
-                    **Why the Application is Legitimate:**
-                    
-                    **Educational Purpose**: The app serves exclusively for non-commercial educational use, helping users organise learning materials.
-                    
-                    **Links, Not Content**: We store only references to materials through links, never copying, hosting, or distributing the actual content.
-                    
-                    **Author Attribution**: Complete authorship information is preserved and displayed for each resource (author name, source, publication date).
-                    
-                    **Direct Source Access**: All links lead directly to original sources, ensuring content creators receive proper traffic and recognition.
-                    
-                    The application acts as an organisational tool that respects intellectual property rights while supporting the educational community. We encourage users to always access materials through the original sources and respect creators' rights.
-                    """)
-            .multilineTextAlignment(.leading)
-            .textFormater()
-            .padding()
-        }
-        .navigationTitle("Fair Use Notice")
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView() {
-                    coordinator.pop()
-                }
-            }
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    coordinator.popToRoot()
-                } label: {
-                    Image(systemName: "house")
-                        .foregroundStyle(Color.mycolor.myAccent)
-                }
+        ViewWrapperWithCustomNavToolbar(
+            title: "Fair Use Notice",
+            showHomeButton: true
+        ) {
+            ScrollView {
+                Text("""
+                        **StartToSwiftUI** operates in accordance with fair use principles for educational purposes. Our application is designed to be a legal and respectful tool for learners.
+                        
+                        **Why the Application is Legitimate:**
+                        
+                        **Educational Purpose**: The app serves exclusively for non-commercial educational use, helping users organise learning materials.
+                        
+                        **Links, Not Content**: We store only references to materials through links, never copying, hosting, or distributing the actual content.
+                        
+                        **Author Attribution**: Complete authorship information is preserved and displayed for each resource (author name, source, publication date).
+                        
+                        **Direct Source Access**: All links lead directly to original sources, ensuring content creators receive proper traffic and recognition.
+                        
+                        The application acts as an organisational tool that respects intellectual property rights while supporting the educational community. We encourage users to always access materials through the original sources and respect creators' rights.
+                        """)
+                .multilineTextAlignment(.leading)
+                .textFormater()
+                .padding()
             }
         }
     }

@@ -84,7 +84,7 @@ class AppSyncStateManager {
     // MARK: - Maintenance Methods
     /// Принудительная очистка всех дубликатов AppState (для обслуживания)
     func cleanupDuplicateAppStates() {
-        print("🧹 Запуск очистки дубликатов AppState...")
+//        print("🧹 Запуск очистки дубликатов AppState...")
         let descriptor = FetchDescriptor<AppSyncState>(
             predicate: #Predicate { $0.id == "app_state_singleton" }
         )
