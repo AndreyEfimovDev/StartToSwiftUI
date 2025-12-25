@@ -44,6 +44,9 @@ struct StartView: View {
         .task {
             await loadInitialData()
         }
+        .fullScreenCover(item: $coordinator.presentedSheet) { route in
+            modalSheetView(for: route)
+        }
         .environmentObject(vm)
         .environmentObject(noticevm)
     }
@@ -75,10 +78,10 @@ struct StartView: View {
             // Dealing with post
         case .postDetails(let postId):
             PostDetailsView(postId: postId)
-        case .addPost:
-            AddEditPostSheet(post: nil)
-        case .editPost(let post):
-            AddEditPostSheet(post: post)
+//        case .addPost:
+//            AddEditPostSheet(post: nil)
+//        case .editPost(let post):
+//            AddEditPostSheet(post: post)
                     
             // Welcome at first launch to accept Terms of Use
         case .welcomeAtFirstLaunch:
@@ -137,10 +140,30 @@ struct StartView: View {
             CopyrightPolicy()
         case .fairUseNotice:
             FairUseNotice()
-//        default:
-//                EmptyView()
+        default:
+                EmptyView()
+        }
+        
+
+    }
+    
+    // Модальные вью (для .sheet)
+    @ViewBuilder
+    private func modalSheetView(for route: AppRoute) -> some View {
+        switch route {
+        case .addPost:
+            AddEditPostSheet(post: nil)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+        case .editPost(let post):
+            AddEditPostSheet(post: post)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+        default:
+            EmptyView()
         }
     }
+
 
     // MARK: - Data Loading
     private func loadInitialData() async {
