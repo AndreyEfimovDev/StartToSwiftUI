@@ -10,17 +10,17 @@ import SwiftData
 
 @Model
 final class Notice {
-    @Attribute(.unique) var id: String
-    var title: String
-    var noticeDate: Date
-    var noticeMessage: String
-    var isRead: Bool
+    var id: String = UUID().uuidString // CloudKit НЕ поддерживает @Attribute(.unique)
+    var title: String = "Без названия"
+    var noticeDate: Date = Date()
+    var noticeMessage: String  = ""
+    var isRead: Bool = false
     
     init(
         id: String = UUID().uuidString,
-        title: String,
-        noticeDate: Date,
-        noticeMessage: String,
+        title: String = "Без названия",
+        noticeDate: Date = Date(),
+        noticeMessage: String = "",
         isRead: Bool = false
     ) {
         self.id = id
@@ -31,26 +31,11 @@ final class Notice {
     }
 }
 
+struct CodableNotice: Codable {
+    let id: String
+    let title: String
+    let noticeDate: Date
+    let noticeMessage: String
+    var isRead: Bool
+}
 
-//struct Notice: Identifiable, Codable, Equatable, Hashable {
-//    
-//    let id: String
-//    let title: String
-//    let noticeDate: Date
-//    let noticeMessage: String
-//    var isRead: Bool
-//    
-//    init(
-//        id: String,
-//        title: String,
-//        noticeDate: Date,
-//        noticeMessage: String,
-//        isRead: Bool = false
-//    ) {
-//        self.id = id
-//        self.title = title
-//        self.noticeDate = noticeDate
-//        self.noticeMessage = noticeMessage
-//        self.isRead = isRead
-//    }
-//}

@@ -10,9 +10,10 @@ import SwiftData
 
 struct AddEditPostSheet: View {
     
-    @Environment(\.dismiss) private var dismiss
+//    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
-    
+    @EnvironmentObject private var coordinator: NavigationCoordinator
+
     @StateObject private var keyboardManager = KeyboardManager()
     
     private let hapticManager = HapticService.shared
@@ -68,11 +69,11 @@ struct AddEditPostSheet: View {
         
         if let post = post { // post for editing initialising
             _editedPost = State(initialValue: post)
-            _draftPost = State(initialValue: post)
+            _draftPost = State(initialValue: post.copy())
             self.isNewPost = false
         } else { // if post is not passed (nil) - add a new post initialising
             _editedPost = State(initialValue: templateForNewPost)
-            _draftPost = State(initialValue: templateForNewPost)
+            _draftPost = State(initialValue: templateForNewPost.copy())
             self.isNewPost = true
         }
     }
@@ -152,7 +153,7 @@ struct AddEditPostSheet: View {
                 ClearCupsuleButton(
                     primaryTitle: "Don't save",
                     primaryTitleColor: Color.mycolor.myRed) {
-                            dismiss()
+                        coordinator.pop()
                     }
                 
                 ClearCupsuleButton(
@@ -187,8 +188,15 @@ struct AddEditPostSheet: View {
                 iconName: "checkmark",
                 isShownCircle: false)
             {
-                if editedPost.draft == false && editedPost == draftPost {  // if no changes
-                    dismiss()
+                guard let draftPost = draftPost else {
+                    // На всякий случай, если draftPost nil - просто сохраняем
+                    editedPost.draft = false
+                    checkPostAndSave()
+                    return
+                }
+                
+                if editedPost.draft == false && editedPost.isEqual(to: draftPost) {  // if no changes
+                    coordinator.pop()
                 } else {
                     editedPost.draft = false
                     checkPostAndSave()
@@ -203,10 +211,15 @@ struct AddEditPostSheet: View {
                 imageColorPrimary: Color.mycolor.myRed,
                 isShownCircle: false)
             {
-                if editedPost == draftPost {  // if no changes
+                guard let draftPost = draftPost else {
+                    // Если draftPost nil, значит что-то пошло не так, но лучше просто выйти
+                    coordinator.pop()
+                    return
+                }
+                
+                if editedPost.isEqual(to: draftPost) {  // if no changes
                     print("🧁 no changes: editedPost == draftPost - dismiss()")
-                    
-                    dismiss()
+                    coordinator.pop()
                 } else {
                     print("🧁 are changes: editedPost != draftPost - dismiss()")
                     withAnimation(.easeInOut) {
@@ -619,7 +632,7 @@ struct AddEditPostSheet: View {
                     message: Text("Tap OK to continue"),
                     dismissButton: .default(Text("OK")) {
                         isPostDraftSaved = true
-                        dismiss()
+                        coordinator.pop()
                     }
                 )
             }
@@ -628,7 +641,7 @@ struct AddEditPostSheet: View {
                     title: Text("New Post added successfully"),
                     message: Text("Tap OK to continue"),
                     dismissButton: .default(Text("OK")) {
-                        dismiss()
+                        coordinator.pop()
                     }
                 )
             }
@@ -636,7 +649,7 @@ struct AddEditPostSheet: View {
                 title: Text("Post saved successfully"),
                 message: Text("Tap OK to continue"),
                 dismissButton: .default(Text("OK")) {
-                    dismiss()
+                    coordinator.pop()
                 }
             )
             
@@ -648,7 +661,10 @@ struct AddEditPostSheet: View {
 }
 
 #Preview {
-    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppSyncState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
     let context = ModelContext(container)
     
     let vm = PostsViewModel(modelContext: context)
@@ -656,11 +672,16 @@ struct AddEditPostSheet: View {
     NavigationStack {
         AddEditPostSheet(post: PreviewData.samplePost1)
             .environmentObject(vm)
+            .environmentObject(NavigationCoordinator())
+
     }
 }
 
 #Preview {
-    let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppSyncState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
     let context = ModelContext(container)
     
     let vm = PostsViewModel(modelContext: context)
@@ -668,6 +689,7 @@ struct AddEditPostSheet: View {
     NavigationStack {
         AddEditPostSheet(post: nil)
             .environmentObject(vm)
+            .environmentObject(NavigationCoordinator())
     }
 }
 

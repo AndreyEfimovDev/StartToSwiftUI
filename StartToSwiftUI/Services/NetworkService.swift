@@ -60,5 +60,14 @@ class NetworkService: ObservableObject {
         }
         task.resume()
     }
+    
+    func fetchDataFromURLAsync<T: Codable>() async throws -> T {
+        return try await withCheckedThrowingContinuation { continuation in
+            fetchDataFromURL { (result: Result<T, Error>) in
+                continuation.resume(with: result)
+            }
+        }
+    }
+
 }
 
