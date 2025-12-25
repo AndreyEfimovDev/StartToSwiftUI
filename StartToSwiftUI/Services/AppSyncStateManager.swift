@@ -12,22 +12,22 @@ import SwiftData
 
 @Model
 final class AppSyncState {
-    var id: String = "app_state_singleton" // Всегда один экземпляр
+    var id: String = "app_state_singleton" // Always one copy
     var isTermsOfUseAccepted: Bool = false
     
-    // Флаг необходимости загрузки статических постов, устанавливается пользователем в Preferences: true - загружать
+    // Flag for the need to load static posts, set by the user in Preferences: true - load
     var shouldLoadStaticPosts: Bool = true
-    // Флаг факта загрузки статических постов: true - уже загружались
+    // Flag indicating load static posts status: true - already loaded
     var hasLoadedStaticPosts: Bool = false
     
-    // Ставим флаг в true чтобы одноразово известить звуком пользователя о новых уведомлениях в случае их появления
+    // Set the flag to true to notify the user with a sound once about new notices if they appear
     var isUserNotNotifiedBySound: Bool = true
-    // Дата последней уведомления
+    // Date of last notices
     var latestNoticeDate: Date?
 
-    // Флаг наличия новых авторских материалов:
-    var isNewCuratedPostsAvailable: Bool = false // Для певрого запуска false, обновится в checkCloudCuratedPostsForUpdates()
-    var latestDateOfCuaratedPostsLoaded: Date? // Обновляем в importPostsFromCloud() и используем в CheckForPostsUpdateView()
+    // Flag indicating the presence of new curated materials
+    var isNewCuratedPostsAvailable: Bool = false // For the first launch, false, it will be updated in checkCloudCuratedPostsForUpdates()
+    var latestDateOfCuaratedPostsLoaded: Date? // Update in importPostsFromCloud() and use in CheckForPostsUpdateView()
     
     // For internal purposes:
     // - cleanupDuplicateAppStates()
@@ -305,7 +305,7 @@ class AppSyncStateManager {
         saveContext()
     }
     
-    /// Отметить, что пользователь уже уведомлён
+    /// Mark the user as already notified
     func markUserNotifiedBySound() {
         let appState = getOrCreateAppState()
         appState.isUserNotNotifiedBySound = false
@@ -313,11 +313,10 @@ class AppSyncStateManager {
         saveContext()
     }
     
-    /// Обновить дату последней синхронизации
+    /// Update last sync date
     func updateLastCloudSyncDate() {
         let appState = getOrCreateAppState()
         appState.lastCloudSyncDate = Date()
-        
         saveContext()
     }
     
@@ -335,14 +334,14 @@ class AppSyncStateManager {
     }
 
     // MARK: - Methods for Cloud import of curated posts status
-    /// Статус isNewCuratedPostsAvailable устанавливается в false, после:
-    /// - после  импорта новых материалы авторских ссылок из облаке самим пользователем
-    /// Статус isFirstImportCuratedPostsCompleted устанавливается в true:
-    /// - иначальное значение для первой загрузки приложения
-    /// - при проверке и обнаружении новых материалов авторских ссылок в облаке (включено в init()  PostsViewModel)
-    /// - при удалении всех локальных материалов - функция "Erase all materials"
-
-    /// Получить статус наличия новых материалы авторских ссылок в облаке
+    /// The isNewCuratedPostsAvailable status is set to false after:
+    /// - after the user imports new curated post materials from the cloud
+    /// The isFirstImportCuratedPostsCompleted status is set to true:
+    /// - initial value for the first app load
+    /// - when checking and detecting new curated post materials in the cloud (included in PostsViewModel init())
+    /// - when deleting all study materials - the "Erase all materials" function
+    ///
+    /// Get the status of new materials and author references in the cloud
     func getAvailableNewCuratedPostsStatus() -> Bool {
         let appState = getOrCreateAppState()
         return appState.isNewCuratedPostsAvailable
@@ -351,7 +350,7 @@ class AppSyncStateManager {
     /// Set the status of new materials and author references in the cloud
     func setCuratedPostsLoadStatusOn() {
         let appState = getOrCreateAppState()
-        appState.shouldLoadStaticPosts = true
+        appState.isNewCuratedPostsAvailable = true
         
         saveContext()
     }
@@ -359,7 +358,7 @@ class AppSyncStateManager {
     /// Reset the flag for the presence of new materials with author links in the cloud
     func setCuratedPostsLoadStatusOff() {
         let appState = getOrCreateAppState()
-        appState.shouldLoadStaticPosts = false
+        appState.isNewCuratedPostsAvailable = false
 
         saveContext()
     }
