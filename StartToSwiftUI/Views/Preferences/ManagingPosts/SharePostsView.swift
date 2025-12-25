@@ -68,7 +68,6 @@ struct SharePostsView: View {
     }
     
     private func prepareDocumentSharing() {
-        
         // Export data from SwiftData
         let exportResult = vm.exportPostsToJSON()
 
@@ -84,7 +83,6 @@ struct SharePostsView: View {
             vm.showErrorMessageAlert = true
         }
     }
-
     
     // MARK: Subviews
     @ViewBuilder
@@ -103,7 +101,7 @@ struct SharePostsView: View {
                 
                 // Automatic closing after 2 seconds
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                    coordinator.popToRoot()
+                    coordinator.closeModal()
                 }
 
             } else {

@@ -33,7 +33,7 @@ struct EraseAllPostsView: View {
                 
                 CapsuleButtonView(
                     primaryTitle: "ERASE",
-                    secondaryTitle: "\(postCount) Materials Deleted!",
+                    secondaryTitle: "\(postCount) Materials Erased!",
                     textColorPrimary: Color.mycolor.myButtonTextRed,
                     buttonColorPrimary: Color.mycolor.myButtonBGRed,
                     buttonColorSecondary: Color.mycolor.myButtonBGGreen,
@@ -42,14 +42,13 @@ struct EraseAllPostsView: View {
                         vm.eraseAllPosts{
                             isDeleted = true
                             isInProgress = false
-                            // Сбрасываем статус первого импорта авторских ссылок на материалы
-                            // Чтобы с пустым локальным массивом данных была возможность
-                            // снова импортировать авторские ссылоки на материалы
+                            // Reset the status of the first import of curated links to materials
+                            // To allow directly import curated links to materials again
                             let appStateManager = AppSyncStateManager(modelContext: modelContext)
                             appStateManager.setCuratedPostsLoadStatusOn()
                             
                             DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                                coordinator.popToRoot()
+                                coordinator.closeModal()
                             }
                         }
                     }

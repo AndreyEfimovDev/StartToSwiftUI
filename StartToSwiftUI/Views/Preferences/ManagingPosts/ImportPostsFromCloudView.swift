@@ -197,7 +197,6 @@ struct ImportPostsFromCloudView: View {
     
     /// Downloading from a cloud service
     private func loadFromCloudService() async {
-        // Waiting for iCloud sync (1 second)...
         try? await Task.sleep(nanoseconds: 1_000_000_000)
 
         await vm.importPostsFromCloud() { [self] in
@@ -214,7 +213,7 @@ struct ImportPostsFromCloudView: View {
                     
                     // Closing in 1.5 seconds
                     try? await Task.sleep(nanoseconds: 1_500_000_000)
-                    coordinator.popToRoot()
+                    coordinator.closeModal()
                 } else {
                     hapticManager.notification(type: .error)
                 }
