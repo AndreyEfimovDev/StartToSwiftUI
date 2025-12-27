@@ -20,6 +20,10 @@ struct StartView: View {
     @State private var isLoadingData = true
     
     @State private var visibility: NavigationSplitViewVisibility = .doubleColumn
+//    @State private var showFullScreenWelcome = false
+//    @State private var isModalPresented = false
+
+
     
     // MARK: - Init
     init(modelContext: ModelContext) {
@@ -65,17 +69,16 @@ struct StartView: View {
         if UIDevice.isiPad {
             // iPad - NavigationSplitView - DEBUGGING
             NavigationSplitView (columnVisibility: $visibility) {
-    //            if let categories = vm.allCategories {
-    //                List(categories, id: \.self, selection: $vm.selectedCategory) { category in
-    //                    //                    NavigationLink(post.title, value: post)
-    //                    Text(category)
-    //                }
-    //                .navigationTitle("Categories")
-    //            .navigationSplitViewColumnWidth(150)
-    //            } else {
-    //                Text("No categories")
-    //            }
-                //        } content: {
+                if let categories = vm.allCategories {
+                    List(categories, id: \.self, selection: $vm.selectedCategory) { category in
+                        Text(category)
+                    }
+                    .navigationTitle("Categories")
+                    .navigationSplitViewColumnWidth(150)
+                } else {
+                    Text("No categories")
+                }
+            } content: {
                 if let selectedCategory = vm.selectedCategory {
                     NavigationStack(path: $coordinator.path) {
                         HomeView(selectedCategory: selectedCategory)

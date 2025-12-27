@@ -36,16 +36,6 @@ struct HomeView: View {
     
     // MARK: VIEW BODY
     var body: some View {
-        
-        if !vm.isTermsOfUseAccepted {
-            WelcomeAtFirstLaunchView()
-        } else {
-            mainConent
-        }
-    }
-    
-    // MARK: Subviews
-    private var mainConent: some View {
         GeometryReader { proxy in
             ScrollViewReader { scrollProxy in
                 ZStack (alignment: .bottom) {
@@ -64,7 +54,7 @@ struct HomeView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
-                toolbarForMainViewBody()
+                navigationToolbar()
             }
             .safeAreaInset(edge: .top) {
                 SearchBarView()
@@ -109,16 +99,13 @@ struct HomeView: View {
             }
             .onAppear {
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    if vm.isTermsOfUseAccepted {
-                        soundNotificationIfNeeded()
-                    }
-                }
+                soundNotificationIfNeeded()
             }
         }
-
     }
     
+    // MARK: Subviews
+
     private var listPostRowsContent: some View {
         List {
             ForEach(postsForCategory(selectedCategory)) { post in
@@ -259,12 +246,12 @@ struct HomeView: View {
                     primaryTitleColor: Color.mycolor.myAccent) {
                         isShowingDeleteConfirmation = false
                     }
-            } // VStack
+            }
             .padding()
             .background(.ultraThinMaterial)
             .menuFormater()
             .padding(.horizontal, 40)
-        } // ZStack
+        }
     }
     
     private func shortenPostTitle(title: String) -> String {
@@ -275,7 +262,7 @@ struct HomeView: View {
     }
     
     @ToolbarContentBuilder
-    private func toolbarForMainViewBody() -> some ToolbarContent {
+    private func navigationToolbar() -> some ToolbarContent {
         
         ToolbarItem(placement: .navigationBarLeading) {
             CircleStrokeButtonView(
