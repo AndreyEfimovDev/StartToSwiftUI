@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AboutApp: View {
     
-    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var coordinator: Coordinator
 
     let iconWidth: CGFloat = 18
     let frameHeight: CGFloat = 30
@@ -88,6 +88,6 @@ struct AboutApp: View {
 #Preview {
     NavigationStack{
         AboutApp()
-            .environmentObject(NavigationCoordinator())
+            .environmentObject(Coordinator())
     }
 }

@@ -12,7 +12,7 @@ struct NoticeDetailsView: View {
     
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject private var noticevm: NoticeViewModel
-    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var coordinator: Coordinator
     
     let noticeId: String
     
@@ -107,5 +107,5 @@ struct NoticeDetailsView: View {
         NoticeDetailsView(noticeId: "001")
     }
     .environmentObject(noticevm)
-    .environmentObject(NavigationCoordinator())
+    .environmentObject(Coordinator())
 }

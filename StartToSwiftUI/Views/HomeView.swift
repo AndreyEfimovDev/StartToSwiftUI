@@ -16,7 +16,7 @@ struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
-    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var coordinator: Coordinator
     
     private let hapticManager = HapticService.shared
     
@@ -427,5 +427,5 @@ extension View {
     .modelContainer(container)
     .environmentObject(vm)
     .environmentObject(noticevm)
-    .environmentObject(NavigationCoordinator())
+    .environmentObject(Coordinator())
 }
