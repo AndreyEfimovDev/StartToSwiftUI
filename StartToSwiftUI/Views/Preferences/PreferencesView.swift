@@ -267,7 +267,7 @@ struct PreferencesView: View {
     
     private var aboutApplication: some View {
         Button("About App") {
-            coordinator.pushModal(.legalInfo)
+            coordinator.pushModal(.aboutApp)
         }
         .customListRowStyle(
             iconName: "info.circle",
