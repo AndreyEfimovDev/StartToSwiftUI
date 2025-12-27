@@ -10,11 +10,11 @@ import SwiftUI
 // MARK: - Navigation Routes
 enum AppRoute: Hashable, Identifiable {
     
-    // MARK: Regular Views
+    // MARK: Main stack Views
     // Dealing with details
     case postDetails(postId: String)
     
-    // MARK: Modal Views
+    // MARK: Modal stack Views
     // Adding and editing posts
     // Dead end View, no further navigation
     case addPost
@@ -125,14 +125,14 @@ enum AppRoute: Hashable, Identifiable {
 @MainActor
 class Coordinator: ObservableObject {
     
-    // For regular navigation
+    // For main stack navigation
     @Published var path = NavigationPath() {
         didSet {
             log("🏃🏼‍♀️ Coordinator: path changed. Count: \(path.count)", level: .info)
         }
     }
     
-    // For modal navigation
+    // For modal stack navigation
     @Published var modalPath = NavigationPath()  {
         didSet {
             log("🏃🏼‍♀️ Modal Coordinator: path changed. Count: \(modalPath.count)", level: .info)
@@ -143,7 +143,7 @@ class Coordinator: ObservableObject {
     @Published var presentedSheet: AppRoute?
 
     
-    // MARK: Regular Navigation Methods - in fact for PostDetails only so far
+    // MARK: Main Stack Navigation Methods - in fact for PostDetails only so far
     /// One level back
     func pop() {
         guard !path.isEmpty else {

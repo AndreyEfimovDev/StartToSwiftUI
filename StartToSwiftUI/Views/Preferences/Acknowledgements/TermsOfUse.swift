@@ -206,7 +206,17 @@ struct TermsOfUse: View {
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 BackButtonView() {
-                    coordinator.popModal()
+                    // Сheck where we came from
+                    if coordinator.presentedSheet != nil && !coordinator.modalPath.isEmpty {
+                        // In the modal stack
+                        coordinator.popModal()
+                    } else if !coordinator.path.isEmpty {
+                        // In the main stack
+                        coordinator.pop()
+                    } else {
+                        // Fallback: just close
+                        coordinator.closeModal()
+                    }
                 }
             }
             if vm.isTermsOfUseAccepted {
