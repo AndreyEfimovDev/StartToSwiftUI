@@ -57,7 +57,7 @@ enum AppRoute: Hashable, Identifiable {
     case copyrightPolicy
     case fairUseNotice
     
-    // Denfying root modal Views - different behaviour
+    // Denfying root modal Views to manage different behaviour
     var isRootModal: Bool {
         switch self {
         case .preferences, .notices, .aboutApp, .legalInfo:
