@@ -52,21 +52,21 @@ struct AboutApp: View {
                     
                     Section {
                         Button("Welcome") {
-                            coordinator.push(.welcome)
+                            coordinator.pushModal(.welcome)
                         }
                         .customListRowStyle(
                             iconName: "suit.heart",
                             iconWidth: iconWidth
                         )
                         Button("Introduction") {
-                            coordinator.push(.introduction)
+                            coordinator.pushModal(.introduction)
                         }
                         .customListRowStyle(
                             iconName: "textformat.size.larger",
                             iconWidth: iconWidth
                         )
                         Button("What's New") {
-                            coordinator.push(.whatIsNew)
+                            coordinator.pushModal(.whatIsNew)
                         }
                         .customListRowStyle(
                             iconName: "newspaper",
