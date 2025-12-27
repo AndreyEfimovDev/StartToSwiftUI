@@ -185,11 +185,7 @@ struct StartView: View {
         appStateManager.cleanupDuplicateAppStates()
         
         vm.loadPostsFromSwiftData()
-        
-        // If necessary, load static posts on first launch
         await vm.loadStaticPostsIfNeeded()
-        
-        // Import notifications (includes deleting duplicates)
         await noticevm.importNoticesFromCloud()
         
         isLoadingData = false
