@@ -2,7 +2,7 @@
 //  ContentViewWrapper.swift
 //  StartToSwiftUI
 //
-//  Created by Andrey Efimov on 17.12.2025.
+//  Created by Andrey Efimov on 14.12.2025.
 //
 
 import SwiftUI
@@ -145,23 +145,6 @@ struct StartView: View {
                 EmptyView()
         }
     }
-    
-//    // Модальные вью (для .sheet)
-//    @ViewBuilder
-//    private func modalSheetView(for route: AppRoute) -> some View {
-//        switch route {
-//        case .addPost:
-//            AddEditPostSheet(post: nil)
-//                .presentationDetents([.large])
-//                .presentationDragIndicator(.visible)
-//        case .editPost(let post):
-//            AddEditPostSheet(post: post)
-//                .presentationDetents([.large])
-//                .presentationDragIndicator(.visible)
-//        default:
-//            EmptyView()
-//        }
-//    }
 
 
     // MARK: - Data Loading
@@ -181,9 +164,6 @@ struct StartView: View {
         isLoadingData = false
     }
 }
-
-
-
 
 #Preview("Simple Test") {
     let container = try! ModelContainer(
