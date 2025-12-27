@@ -13,7 +13,7 @@ struct NoticesView: View {
     let isRootModal: Bool
     
     @EnvironmentObject private var noticevm: NoticeViewModel
-    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var coordinator: Coordinator
     
     private let hapticManager = HapticService.shared
     
@@ -119,7 +119,7 @@ struct NoticesView: View {
     NavigationStack {
         NoticesView(isRootModal: true)
             .environmentObject(noticevm)
-            .environmentObject(NavigationCoordinator())
+            .environmentObject(Coordinator())
     }
 }
 

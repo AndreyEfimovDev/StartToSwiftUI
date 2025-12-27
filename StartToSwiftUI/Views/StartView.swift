@@ -11,7 +11,7 @@ import SwiftData
 struct StartView: View {
     
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var coordinator: Coordinator
     
     @StateObject private var vm: PostsViewModel
     @StateObject private var noticevm: NoticeViewModel
@@ -62,10 +62,10 @@ struct StartView: View {
     private var mainContent: some View {
         if UIDevice.isiPad {
             // iPad - NavigationSplitView
-            EmptyView()
 //            SidebarView()
+            EmptyView()
         } else {
-            // iPhone - NavigationStack (portrait only)
+            // iPhone - portrait only
             NavigationStack(path: $coordinator.path) {
                 HomeView(selectedCategory: vm.selectedCategory)
                     .navigationDestination(for: AppRoute.self) { route in
@@ -200,6 +200,6 @@ struct StartView: View {
     NavigationStack {
         StartView(modelContext: context)
             .modelContainer(container)
-            .environmentObject(NavigationCoordinator())
+            .environmentObject(Coordinator())
     }
 }

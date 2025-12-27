@@ -17,7 +17,7 @@ class PostsViewModel: ObservableObject {
     private let modelContext: ModelContext
 
     // Load static posts trigger - tied to AppStateManager, used only in Toggle in Preferences
-    @AppStorage("shouldLoadStaticPosts") var shouldLoadStaticPosts: Bool = true {
+    @AppStorage("shouldLoadStaticPosts") var shouldLoadStaticPosts: Bool = false {
         didSet {
             log("🔄 shouldLoadStaticPosts изменился: \(shouldLoadStaticPosts)", level: .info)
             let appStateManager = AppSyncStateManager(modelContext: modelContext)
@@ -324,9 +324,9 @@ class PostsViewModel: ObservableObject {
             allPosts = try modelContext.fetch(descriptor)
             // DEBUG: Display all posts with ID
             log("📊 Loaded \(allPosts.count) posts from SwiftData:", level: .debug)
-            for (index, post) in allPosts.enumerated() {
-                log("📊 \(index + 1). ID: \(post.id), Title: \(post.title)", level: .debug)
-            }
+//            for (index, post) in allPosts.enumerated() {
+//                log("📊 \(index + 1). ID: \(post.id), Title: \(post.title)", level: .debug)
+//            }
             allYears = getAllYears()
             allCategories = getAllCategories()
         } catch {

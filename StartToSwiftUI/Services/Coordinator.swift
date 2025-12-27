@@ -123,19 +123,19 @@ enum AppRoute: Hashable, Identifiable {
 
 // MARK: - Navigation Coordinator
 @MainActor
-class NavigationCoordinator: ObservableObject {
+class Coordinator: ObservableObject {
     
     // For regular navigation
     @Published var path = NavigationPath() {
         didSet {
-            log("📱 NavigationCoordinator: path changed. Count: \(path.count)", level: .info)
+            log("🏃🏼‍♀️ Coordinator: path changed. Count: \(path.count)", level: .info)
         }
     }
     
     // For modal navigation
     @Published var modalPath = NavigationPath()  {
         didSet {
-            log("📱 Modal NavigationCoordinator: path changed. Count: \(modalPath.count)", level: .info)
+            log("🏃🏼‍♀️ Modal Coordinator: path changed. Count: \(modalPath.count)", level: .info)
         }
     }
 

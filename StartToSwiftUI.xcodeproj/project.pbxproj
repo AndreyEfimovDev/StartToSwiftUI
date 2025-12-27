@@ -29,6 +29,7 @@
 		471DCBDC2EBBC67500AFA5F4 /* Introduction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBDB2EBBC67500AFA5F4 /* Introduction.swift */; };
 		471DCBDE2EBBC68500AFA5F4 /* WhatsNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBDD2EBBC68500AFA5F4 /* WhatsNew.swift */; };
 		471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBDF2EBBC6B900AFA5F4 /* WelcomeMessage.swift */; };
+		472243782EFFE31F0055461A /* GlobalMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472243772EFFE31F0055461A /* GlobalMethods.swift */; };
 		4725A5272EDC818600235C40 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4725A5262EDC818600235C40 /* SidebarView.swift */; };
 		4725A52B2EDD757F00235C40 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4725A52A2EDD757F00235C40 /* UIDevice.swift */; };
 		472A9B5B2EDC3B6F00ED3344 /* BackButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472A9B5A2EDC3B6F00ED3344 /* BackButtonView.swift */; };
@@ -95,7 +96,7 @@
 		47EA142D2EF4603E0064583B /* FirstLaunchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */; };
 		47EA14312EF530780064583B /* AppSyncStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EA14302EF530780064583B /* AppSyncStateManager.swift */; };
 		47F38B1F2ED480B0006DEDBE /* DevData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F38B1E2ED480B0006DEDBE /* DevData.swift */; };
-		47F68A4A2EFB0232003786D0 /* NavigationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F68A492EFB0232003786D0 /* NavigationCoordinator.swift */; };
+		47F68A4A2EFB0232003786D0 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F68A492EFB0232003786D0 /* Coordinator.swift */; };
 		47FF42472EE454440069D232 /* TestSFSymbolsForRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF42462EE454440069D232 /* TestSFSymbolsForRating.swift */; };
 		47FF42492EE4572E0069D232 /* TestSFSymbolsForProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF42482EE4572E0069D232 /* TestSFSymbolsForProgress.swift */; };
 		47FF424B2EE4B5960069D232 /* RatingSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */; };
@@ -128,6 +129,7 @@
 		471DCBDB2EBBC67500AFA5F4 /* Introduction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Introduction.swift; sourceTree = "<group>"; };
 		471DCBDD2EBBC68500AFA5F4 /* WhatsNew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNew.swift; sourceTree = "<group>"; };
 		471DCBDF2EBBC6B900AFA5F4 /* WelcomeMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeMessage.swift; sourceTree = "<group>"; };
+		472243772EFFE31F0055461A /* GlobalMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalMethods.swift; sourceTree = "<group>"; };
 		4725A5262EDC818600235C40 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		4725A52A2EDD757F00235C40 /* UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		472A9B5A2EDC3B6F00ED3344 /* BackButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButtonView.swift; sourceTree = "<group>"; };
@@ -197,7 +199,7 @@
 		47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchManager.swift; sourceTree = "<group>"; };
 		47EA14302EF530780064583B /* AppSyncStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSyncStateManager.swift; sourceTree = "<group>"; };
 		47F38B1E2ED480B0006DEDBE /* DevData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevData.swift; sourceTree = "<group>"; };
-		47F68A492EFB0232003786D0 /* NavigationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCoordinator.swift; sourceTree = "<group>"; };
+		47F68A492EFB0232003786D0 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		47FF42462EE454440069D232 /* TestSFSymbolsForRating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSFSymbolsForRating.swift; sourceTree = "<group>"; };
 		47FF42482EE4572E0069D232 /* TestSFSymbolsForProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSFSymbolsForProgress.swift; sourceTree = "<group>"; };
 		47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingSelectionView.swift; sourceTree = "<group>"; };
@@ -343,6 +345,7 @@
 				478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */,
 				470E636F2EFB241D007B75B5 /* ViewWrapperWithCustomNavToolbar.swift */,
 				470E63752EFD5044007B75B5 /* CountdownView.swift */,
+				472243772EFFE31F0055461A /* GlobalMethods.swift */,
 				47BAF09E2E5F9C4500287F10 /* Buttons */,
 				470A21C42E6E389D006D2D66 /* Pickers */,
 			);
@@ -374,7 +377,7 @@
 				4767C9622EF29474003838BA /* NoticeMigrationHelper.swift */,
 				47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */,
 				47EA14302EF530780064583B /* AppSyncStateManager.swift */,
-				47F68A492EFB0232003786D0 /* NavigationCoordinator.swift */,
+				47F68A492EFB0232003786D0 /* Coordinator.swift */,
 				470E63792EFDE1CF007B75B5 /* ModalNavigationContainer.swift */,
 			);
 			path = Services;
@@ -562,7 +565,7 @@
 				4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */,
 				47B465802E6867930059CCB7 /* HomeView.swift in Sources */,
 				47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */,
-				47F68A4A2EFB0232003786D0 /* NavigationCoordinator.swift in Sources */,
+				47F68A4A2EFB0232003786D0 /* Coordinator.swift in Sources */,
 				471BBF9C2EC620D70004AC45 /* PostDraftsRowView.swift in Sources */,
 				471DCBDE2EBBC68500AFA5F4 /* WhatsNew.swift in Sources */,
 				47656BFE2EE1EC4D00F45AA6 /* StudyProgressView.swift in Sources */,
@@ -617,6 +620,7 @@
 				4791CDEA2E72E8CC00687126 /* Arrays.swift in Sources */,
 				472A9B5B2EDC3B6F00ED3344 /* BackButtonView.swift in Sources */,
 				471DCBCA2EBB633300AFA5F4 /* PrivacyPolicy.swift in Sources */,
+				472243782EFFE31F0055461A /* GlobalMethods.swift in Sources */,
 				470E63722EFBDC90007B75B5 /* WelcomeAtFirstLaunchView.swift in Sources */,
 				47EA14312EF530780064583B /* AppSyncStateManager.swift in Sources */,
 				47FF424B2EE4B5960069D232 /* RatingSelectionView.swift in Sources */,
@@ -823,7 +827,7 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -883,7 +887,7 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FairUseNotice: View {
     
-    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var coordinator: Coordinator
 
     var body: some View {
         ViewWrapperWithCustomNavToolbar(
@@ -42,5 +42,5 @@ struct FairUseNotice: View {
 
 #Preview {
     FairUseNotice()
-        .environmentObject(NavigationCoordinator())
+        .environmentObject(Coordinator())
 }
