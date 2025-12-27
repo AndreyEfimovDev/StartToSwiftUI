@@ -89,18 +89,7 @@ struct PostDetailsView: View {
                     .toolbar {
                         toolbarForPostDetails(validPost: validPost)
                     }
-//                    .sheetForUIDeviceItem(item: $coordinator.showEditPost) { post in
-//                        NavigationStack {
-//                            AddEditPostSheet(post: post)
-//                                .environmentObject(coordinator)
-//                        }
-//                    }
-//                    .sheetForUIDeviceBoolean(isPresented: $coordinator.showAddPost) {
-//                        NavigationStack {
-//                            AddEditPostSheet(post: nil)
-//                                .environmentObject(coordinator)
-//                        }
-//                    }
+
                 } else {
                     postNotSelectedEmptyView(text: "Post is not found")
                 }
@@ -228,15 +217,6 @@ struct PostDetailsView: View {
             if UIDevice.isiPhone {
                 BackButtonView() {
                     coordinator.pop()
-                }
-            }
-            
-            if UIDevice.isiPad {
-                CircleStrokeButtonView(
-                    iconName: "plus",
-                    isShownCircle: false
-                ){
-                    coordinator.push(.addPost)
                 }
             }
             
@@ -401,13 +381,12 @@ struct PostDetailsView: View {
                     .offset(y: -15)
                 }
             }
-        } // VStack
+        }
     }
 }
 
 
 fileprivate struct PostDetailsPreView: View {
-    
     
     var body: some View {
         NavigationStack {
@@ -427,7 +406,6 @@ fileprivate struct PostDetailsPreView: View {
 }
 
 #Preview {
-    
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
