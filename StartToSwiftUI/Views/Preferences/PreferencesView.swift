@@ -76,7 +76,7 @@ struct PreferencesView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     if UIDevice.isiPad {
                         BackButtonView(iconName: "xmark") {
-//                            coordinator.pop()
+                            coordinator.closeModal()
                         }
                     } else {
                         BackButtonView() {
@@ -267,7 +267,7 @@ struct PreferencesView: View {
     
     private var aboutApplication: some View {
         Button("About App") {
-            coordinator.pushModal(.legalInfo)
+            coordinator.pushModal(.aboutApp)
         }
         .customListRowStyle(
             iconName: "info.circle",
