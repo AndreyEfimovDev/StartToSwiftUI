@@ -252,7 +252,7 @@
 			path = Support;
 			sourceTree = "<group>";
 		};
-		471DCBD72EBBB97000AFA5F4 /* Acknowledgements */ = {
+		471DCBD72EBBB97000AFA5F4 /* LegalInformation */ = {
 			isa = PBXGroup;
 			children = (
 				471DCBCD2EBB83D200AFA5F4 /* LegalInformationView.swift */,
@@ -261,7 +261,7 @@
 				471DCBCF2EBB88A400AFA5F4 /* CopyrightPolicy.swift */,
 				471DCBD12EBB89E000AFA5F4 /* FairUseNotice.swift */,
 			);
-			path = Acknowledgements;
+			path = LegalInformation;
 			sourceTree = "<group>";
 		};
 		471DCBDA2EBBC60E00AFA5F4 /* AboutApp */ = {
@@ -425,7 +425,7 @@
 				47656BFA2EE1EBBD00F45AA6 /* StudyProgress */,
 				47C56FEF2EC9CE8200F0796C /* ManagingPosts */,
 				471DCBDA2EBBC60E00AFA5F4 /* AboutApp */,
-				471DCBD72EBBB97000AFA5F4 /* Acknowledgements */,
+				471DCBD72EBBB97000AFA5F4 /* LegalInformation */,
 				47870FB92ECC8628004175E4 /* Acknowledgements.swift */,
 			);
 			path = Preferences;
