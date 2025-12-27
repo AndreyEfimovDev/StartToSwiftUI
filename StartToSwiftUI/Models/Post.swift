@@ -190,6 +190,29 @@ extension Post {
             practicedDateStamp: self.practicedDateStamp
         )
     }
+    
+    func update(with post: Post) {
+        self.id = post.id
+        self.category = post.category
+        self.title = post.title
+        self.intro = post.intro
+        self.author = post.author
+        self.postType = post.postType
+        self.urlString = post.urlString
+        self.postPlatform = post.postPlatform
+        self.postDate = post.postDate
+        self.studyLevel = post.studyLevel
+        self.progress = post.progress
+        self.favoriteChoice = post.favoriteChoice
+        self.postRating = post.postRating
+        self.notes = post.notes
+        self.origin = post.origin
+        self.draft = post.draft
+        self.date = post.date
+        self.startedDateStamp = post.startedDateStamp
+        self.studiedDateStamp = post.studiedDateStamp
+        self.practicedDateStamp = post.practicedDateStamp
+    }
 }
 
 
