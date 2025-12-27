@@ -79,7 +79,7 @@ struct StartView: View {
                     NavigationStack(path: $coordinator.path) {
                         HomeView(selectedCategory: selectedCategory)
                             .navigationDestination(for: AppRoute.self) { route in
-                                destinationView(for: route)
+                                destinationView(for: route) // for PostDetails only in fact
                             }
                     }
                     .navigationSplitViewColumnWidth(430)
@@ -100,11 +100,11 @@ struct StartView: View {
             }
 
         } else {
-            // iPhone - portrait only
+            // iPhone - portrait mode only
             NavigationStack(path: $coordinator.path) {
                 HomeView(selectedCategory: vm.selectedCategory)
                     .navigationDestination(for: AppRoute.self) { route in
-                        destinationView(for: route)  // for PostDetails only
+                        destinationView(for: route)  // for PostDetails only in fact
                     }
             }
         }
