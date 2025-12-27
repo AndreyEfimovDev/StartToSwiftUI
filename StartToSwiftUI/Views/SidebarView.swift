@@ -36,9 +36,9 @@ struct SidebarView: View {
                 NavigationStack(path: $coordinator.path) {
                     HomeView(selectedCategory: selectedCategory)
                         .navigationDestination(for: AppRoute.self) { route in
-                            if case .postDetails(let postId) = route {
-                                PostDetailsView(postId: postId)
-                            }
+//                            if case .postDetails(let postId) = route {
+//                                PostDetailsView(postId: postId)
+//                            }
                         }
                 }
                 .navigationSplitViewColumnWidth(530)
