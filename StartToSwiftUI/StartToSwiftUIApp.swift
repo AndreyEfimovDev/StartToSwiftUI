@@ -13,7 +13,7 @@ import CloudKit
 @main
 struct StartToSwiftUIApp: App {
     
-    @StateObject private var navigationCoordinator = NavigationCoordinator()
+    @StateObject private var navigationCoordinator = Coordinator()
     private let hapticManager = HapticService.shared
     
     // MARK: - SwiftData Container with sync via iCloud

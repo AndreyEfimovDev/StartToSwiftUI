@@ -11,7 +11,7 @@ struct ModalNavigationContainer: View {
     
     let initialRoute: AppRoute
     
-    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var coordinator: Coordinator
     
     var body: some View {
         NavigationStack(path: $coordinator.modalPath) {
@@ -35,50 +35,6 @@ struct ModalNavigationContainer: View {
             AddEditPostSheet(post: nil)
         case .editPost(let post):
             AddEditPostSheet(post: post)
-        case .studyProgress:
-            StudyProgressView()
-        case .postDrafts:
-            PostDraftsView()
-        case .checkForUpdates:
-            CheckForPostsUpdateView()
-        case .importFromCloud:
-            ImportPostsFromCloudView()
-        case .shareBackup:
-            SharePostsView()
-        case .restoreBackup:
-            RestoreBackupView()
-        case .erasePosts:
-            EraseAllPostsView()
-        case .acknowledgements:
-            Acknowledgements()
-        case .aboutApp:
-            AboutApp()
-        case .welcome:
-            WelcomeMessage()
-        case .introduction:
-            Introduction()
-        case .whatIsNew:
-            WhatsNewView()
-        case .legalInfo:
-            LegalInformationView()
-        case .termsOfUse:
-            TermsOfUse()
-        case .privacyPolicy:
-            PrivacyPolicy()
-        case .copyrightPolicy:
-            CopyrightPolicy()
-        case .fairUseNotice:
-            FairUseNotice()
-        case .noticeDetails(let noticeId):
-            NoticeDetailsView(noticeId: noticeId)
-        default:
-            EmptyView()
-        }
-    }
-    
-    @ViewBuilder
-    private func destinationView(for route: AppRoute) -> some View {
-        switch route {
         case .studyProgress:
             StudyProgressView()
         case .postDrafts:
