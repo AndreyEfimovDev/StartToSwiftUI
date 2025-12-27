@@ -10,18 +10,15 @@ import SwiftUI
 // MARK: - Navigation Routes
 enum AppRoute: Hashable, Identifiable {
     
-    // MARK: Main stack Views
     // Dealing with details
     case postDetails(postId: String)
     
-    // MARK: Modal stack Views
     // Adding and editing posts
-    // Dead end View, no further navigation
     case addPost
     case editPost(Post)
     
     // Welcome at first launch to accept Terms of Use
-    case welcomeAtFirstLaunch
+//    case welcomeAtFirstLaunch
     
     // Preferences
     case preferences
@@ -75,8 +72,8 @@ enum AppRoute: Hashable, Identifiable {
             return "addPost"
         case .editPost(let post):
             return "editPost_\(post.id)"
-        case .welcomeAtFirstLaunch:
-            return "welcomeAtFirstLaunch"
+//        case .welcomeAtFirstLaunch:
+//            return "welcomeAtFirstLaunch"
         case .preferences:
             return "preferences"
         case .notices:
@@ -184,11 +181,10 @@ class Coordinator: ObservableObject {
         path.append(route)
     }
 
-    // MARK: Modal Navigation Methods
     /// Go to View
     func push(_ route: AppRoute) {
          switch route {
-         case .postDetails, .welcomeAtFirstLaunch:
+         case .postDetails:
              path.append(route)
          default:
              presentedSheet = route  // ALL others are modal
@@ -196,6 +192,7 @@ class Coordinator: ObservableObject {
          }
      }
 
+    // MARK: Modal Navigation Methods
     /// Go to View in modal navigation
     func pushModal(_ route: AppRoute) {
         modalPath.append(route)

@@ -31,7 +31,7 @@ struct CustomProgressView: View {
                     .padding()
             }
         }
-        .scaleEffect(scale < 1.5 ? scale : 1.5)
+        .scaleEffect(scale < 1.5 ? scale : 1.5) // set scale the largest -> 1.5
         .padding()
         .background(.ultraThinMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 15))
