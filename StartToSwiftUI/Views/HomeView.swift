@@ -37,11 +37,11 @@ struct HomeView: View {
     // MARK: VIEW BODY
     var body: some View {
         
-//        if !vm.isTermsOfUseAccepted {
-//            WelcomeAtFirstLaunchView()
-//        } else {
+        if !vm.isTermsOfUseAccepted {
+            WelcomeAtFirstLaunchView()
+        } else {
             mainConent
-//        }
+        }
     }
     
     // MARK: Subviews

@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 
 
+
+
 // MARK: Adaptaion for iPad
 
 extension View {
@@ -53,7 +55,6 @@ extension View {
     }
 }
 
-
 extension View {
     func applyTabViewStyle() -> some View {
         Group {
@@ -67,6 +68,27 @@ extension View {
         }
     }
 }
+
+extension View {
+    func postNotSelectedEmptyView(text: String) -> some View {
+        ZStack {
+            VStack {
+                Image("A_1024x1024_PhosphateInline_tr")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 300)
+                    .opacity(0.15)
+                Text(text)
+                    .font(.largeTitle)
+                    .bold()
+                    .padding()
+            }
+            .foregroundStyle(Color.mycolor.myAccent)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
 
 // MARK: CUSTOM BACKGROUND
 
