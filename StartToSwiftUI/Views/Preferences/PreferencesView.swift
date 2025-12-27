@@ -76,7 +76,7 @@ struct PreferencesView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     if UIDevice.isiPad {
                         BackButtonView(iconName: "xmark") {
-//                            coordinator.pop()
+                            coordinator.closeModal()
                         }
                     } else {
                         BackButtonView() {
