@@ -62,8 +62,8 @@ struct StartView: View {
     private var mainContent: some View {
         if UIDevice.isiPad {
             // iPad - NavigationSplitView
-//            SidebarView() // debugging
-            EmptyView()
+            SidebarView() // debugging
+//            EmptyView()
         } else {
             // iPhone - portrait only
             NavigationStack(path: $coordinator.path) {
