@@ -62,7 +62,7 @@ struct CheckForPostsUpdateView: View {
                         .foregroundStyle(followingTextColor)
                     Spacer()
                     if isInProgress {
-                        CustomProgressView(scale: 0.5, isNoText: true)
+                        CustomProgressView(scale: 1, isNoText: true)
                     }
                 }
                 HStack {
@@ -120,7 +120,7 @@ struct CheckForPostsUpdateView: View {
     }
     
     // MARK: Functions
-    
+    /// Check if updates for curated links to study materials are available
     private func checkForUpdates() {
         Task {
             let hasUpdates = await vm.checkCloudCuratedPostsForUpdates()

@@ -27,6 +27,8 @@ struct ModalNavigationContainer: View {
     @ViewBuilder
     private func contentView(for route: AppRoute, isRoot: Bool) -> some View {
         switch route {
+//        case .welcomeAtFirstLaunch:
+//            WelcomeAtFirstLaunchView()
         case .preferences:
             PreferencesView()
         case .notices:

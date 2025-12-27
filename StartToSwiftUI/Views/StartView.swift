@@ -19,6 +19,8 @@ struct StartView: View {
     @State private var showLaunchView: Bool = true
     @State private var isLoadingData = true
     
+    @State private var visibility: NavigationSplitViewVisibility = .doubleColumn
+    
     // MARK: - Init
     init(modelContext: ModelContext) {
         _vm = StateObject(wrappedValue: PostsViewModel(modelContext: modelContext))
@@ -61,15 +63,48 @@ struct StartView: View {
     @ViewBuilder
     private var mainContent: some View {
         if UIDevice.isiPad {
-            // iPad - NavigationSplitView
-            SidebarView() // debugging
-//            EmptyView()
+            // iPad - NavigationSplitView - DEBUGGING
+            NavigationSplitView (columnVisibility: $visibility) {
+//                if let categories = vm.allCategories {
+//                    List(categories, id: \.self, selection: $vm.selectedCategory) { category in
+//                        Text(category)
+//                    }
+//                    .navigationTitle("Categories")
+//                    .navigationSplitViewColumnWidth(150)
+//                } else {
+//                    Text("No categories")
+//                }
+//            } content: {
+                if let selectedCategory = vm.selectedCategory {
+                    NavigationStack(path: $coordinator.path) {
+                        HomeView(selectedCategory: selectedCategory)
+                            .navigationDestination(for: AppRoute.self) { route in
+                                destinationView(for: route)
+                            }
+                    }
+                    .navigationSplitViewColumnWidth(430)
+                } else {
+                    postNotSelectedEmptyView(text: "Select Category")
+                }
+            }
+            detail: {
+                    if let selectedPostId = vm.selectedPostId {
+                        PostDetailsView(postId: selectedPostId)
+                        .id(selectedPostId)
+                    } else {
+                        postNotSelectedEmptyView(text: "Select Topic")
+                    }
+            }
+            .onAppear {
+                vm.selectedCategory = "SwiftUI"
+            }
+
         } else {
             // iPhone - portrait only
             NavigationStack(path: $coordinator.path) {
                 HomeView(selectedCategory: vm.selectedCategory)
                     .navigationDestination(for: AppRoute.self) { route in
-                        destinationView(for: route)  // Только для PostDetails по сути
+                        destinationView(for: route)  // for PostDetails only
                     }
             }
         }
@@ -84,10 +119,6 @@ struct StartView: View {
         case .postDetails(let postId):
             PostDetailsView(postId: postId)
                     
-            // Welcome at first launch to accept Terms of Use
-        case .welcomeAtFirstLaunch:
-            WelcomeAtFirstLaunchView()
-
 //            // Preferences
 //        case .preferences:
 //            PreferencesView()
@@ -154,11 +185,7 @@ struct StartView: View {
         appStateManager.cleanupDuplicateAppStates()
         
         vm.loadPostsFromSwiftData()
-        
-        // If necessary, load static posts on first launch
         await vm.loadStaticPostsIfNeeded()
-        
-        // Import notifications (includes deleting duplicates)
         await noticevm.importNoticesFromCloud()
         
         isLoadingData = false
