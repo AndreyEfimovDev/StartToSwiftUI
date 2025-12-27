@@ -146,22 +146,22 @@ struct StartView: View {
         }
     }
     
-    // Модальные вью (для .sheet)
-    @ViewBuilder
-    private func modalSheetView(for route: AppRoute) -> some View {
-        switch route {
-        case .addPost:
-            AddEditPostSheet(post: nil)
-                .presentationDetents([.large])
-                .presentationDragIndicator(.visible)
-        case .editPost(let post):
-            AddEditPostSheet(post: post)
-                .presentationDetents([.large])
-                .presentationDragIndicator(.visible)
-        default:
-            EmptyView()
-        }
-    }
+//    // Модальные вью (для .sheet)
+//    @ViewBuilder
+//    private func modalSheetView(for route: AppRoute) -> some View {
+//        switch route {
+//        case .addPost:
+//            AddEditPostSheet(post: nil)
+//                .presentationDetents([.large])
+//                .presentationDragIndicator(.visible)
+//        case .editPost(let post):
+//            AddEditPostSheet(post: post)
+//                .presentationDetents([.large])
+//                .presentationDragIndicator(.visible)
+//        default:
+//            EmptyView()
+//        }
+//    }
 
 
     // MARK: - Data Loading
