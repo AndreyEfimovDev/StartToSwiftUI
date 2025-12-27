@@ -36,16 +36,6 @@ struct HomeView: View {
     
     // MARK: VIEW BODY
     var body: some View {
-        
-        if !vm.isTermsOfUseAccepted {
-            WelcomeAtFirstLaunchView()
-        } else {
-            mainConent
-        }
-    }
-    
-    // MARK: Subviews
-    private var mainConent: some View {
         GeometryReader { proxy in
             ScrollViewReader { scrollProxy in
                 ZStack (alignment: .bottom) {
@@ -64,7 +54,7 @@ struct HomeView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
-                toolbarForMainViewBody()
+                navigationToolbar()
             }
             .safeAreaInset(edge: .top) {
                 SearchBarView()
@@ -109,16 +99,13 @@ struct HomeView: View {
             }
             .onAppear {
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    if vm.isTermsOfUseAccepted {
-                        soundNotificationIfNeeded()
-                    }
-                }
+                soundNotificationIfNeeded()
             }
         }
-
     }
     
+    // MARK: Subviews
+
     private var listPostRowsContent: some View {
         List {
             ForEach(postsForCategory(selectedCategory)) { post in
@@ -221,61 +208,8 @@ struct HomeView: View {
         }
     }
     
-    private var postDeletionConfirmation: some View {
-        ZStack {
-            Color.mycolor.myAccent.opacity(0.001)
-                .ignoresSafeArea()
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    isShowingDeleteConfirmation = false
-                }
-            VStack(spacing: 8) {
-                Text("Are you sure you want to delete the material?")
-                    .font(.headline)
-                    .foregroundColor(Color.mycolor.myRed)
-                    .multilineTextAlignment(.center)
-                    .padding(.vertical)
-                Text(selectedPostToDelete?.title ?? "No material selected")
-                    .font(.subheadline)
-                    .foregroundColor(Color.mycolor.myAccent)
-                    .minimumScaleFactor(0.75)
-                    .lineLimit(3)
-                    .multilineTextAlignment(.center)
-                Text("This cannot be undone.")
-                    .font(.caption2)
-                    .foregroundColor(Color.mycolor.myAccent)
-                    .padding(.vertical)
-                ClearCupsuleButton(
-                    primaryTitle: "Delete",
-                    primaryTitleColor: Color.mycolor.myRed) {
-                        withAnimation {
-                            vm.deletePost(post: selectedPostToDelete ?? nil)
-                            hapticManager.notification(type: .success)
-                            isShowingDeleteConfirmation = false
-                        }
-                    }
-                ClearCupsuleButton(
-                    primaryTitle: "Cancel",
-                    primaryTitleColor: Color.mycolor.myAccent) {
-                        isShowingDeleteConfirmation = false
-                    }
-            } // VStack
-            .padding()
-            .background(.ultraThinMaterial)
-            .menuFormater()
-            .padding(.horizontal, 40)
-        } // ZStack
-    }
-    
-    private func shortenPostTitle(title: String) -> String {
-        if title.count > limitToShortenTitle {
-            return String(title.prefix(limitToShortenTitle - 3)) + "..."
-        }
-        return title
-    }
-    
     @ToolbarContentBuilder
-    private func toolbarForMainViewBody() -> some ToolbarContent {
+    private func navigationToolbar() -> some ToolbarContent {
         
         ToolbarItem(placement: .navigationBarLeading) {
             CircleStrokeButtonView(
@@ -325,16 +259,14 @@ struct HomeView: View {
         }
         
         ToolbarItemGroup(placement: .navigationBarTrailing) {
-            
-            if UIDevice.isiPhone {
-                CircleStrokeButtonView(
-                    iconName: "plus",
-                    isShownCircle: false
-                ){
-                    coordinator.push(.addPost)
-                }
+            // Add a new post
+            CircleStrokeButtonView(
+                iconName: "plus",
+                isShownCircle: false
+            ){
+                coordinator.push(.addPost)
             }
-            
+            // Filters sheet
             CircleStrokeButtonView(
                 iconName: "line.3.horizontal.decrease",
                 isIconColorToChange: !vm.isFiltersEmpty,
@@ -392,23 +324,68 @@ struct HomeView: View {
         )
     }
     
-    // MARK: Private functions
     private func postsForCategory(_ category: String?) -> [Post] {
         guard let category = category else {
             return vm.filteredPosts
         }
         return vm.filteredPosts.filter { $0.category == category }
     }
-}
-
-// MARK: - Helper Extension для Pull to Refresh
-
-extension View {
-    func refreshControl(action: @escaping () -> Void) -> some View {
-        self.refreshable {
-            action()
+    
+    
+    private var postDeletionConfirmation: some View {
+        ZStack {
+            Color.mycolor.myAccent.opacity(0.001)
+                .ignoresSafeArea()
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    isShowingDeleteConfirmation = false
+                }
+            VStack(spacing: 8) {
+                Text("Are you sure you want to delete the material?")
+                    .font(.headline)
+                    .foregroundColor(Color.mycolor.myRed)
+                    .multilineTextAlignment(.center)
+                    .padding(.vertical)
+                Text(selectedPostToDelete?.title ?? "No material selected")
+                    .font(.subheadline)
+                    .foregroundColor(Color.mycolor.myAccent)
+                    .minimumScaleFactor(0.75)
+                    .lineLimit(3)
+                    .multilineTextAlignment(.center)
+                Text("This cannot be undone.")
+                    .font(.caption2)
+                    .foregroundColor(Color.mycolor.myAccent)
+                    .padding(.vertical)
+                ClearCupsuleButton(
+                    primaryTitle: "Delete",
+                    primaryTitleColor: Color.mycolor.myRed) {
+                        withAnimation {
+                            vm.deletePost(post: selectedPostToDelete ?? nil)
+                            hapticManager.notification(type: .success)
+                            isShowingDeleteConfirmation = false
+                        }
+                    }
+                ClearCupsuleButton(
+                    primaryTitle: "Cancel",
+                    primaryTitleColor: Color.mycolor.myAccent) {
+                        isShowingDeleteConfirmation = false
+                    }
+            }
+            .padding()
+            .background(.ultraThinMaterial)
+            .menuFormater()
+            .padding(.horizontal, 40)
         }
     }
+    
+    private func shortenPostTitle(title: String) -> String {
+        if title.count > limitToShortenTitle {
+            return String(title.prefix(limitToShortenTitle - 3)) + "..."
+        }
+        return title
+    }
+    
+
 }
 
 #Preview {
