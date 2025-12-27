@@ -18,7 +18,7 @@ enum AppRoute: Hashable, Identifiable {
     case editPost(Post)
     
     // Welcome at first launch to accept Terms of Use
-    case welcomeAtFirstLaunch
+//    case welcomeAtFirstLaunch
     
     // Preferences
     case preferences
@@ -72,8 +72,8 @@ enum AppRoute: Hashable, Identifiable {
             return "addPost"
         case .editPost(let post):
             return "editPost_\(post.id)"
-        case .welcomeAtFirstLaunch:
-            return "welcomeAtFirstLaunch"
+//        case .welcomeAtFirstLaunch:
+//            return "welcomeAtFirstLaunch"
         case .preferences:
             return "preferences"
         case .notices:
@@ -184,7 +184,7 @@ class Coordinator: ObservableObject {
     /// Go to View
     func push(_ route: AppRoute) {
          switch route {
-         case .postDetails/*, .welcomeAtFirstLaunch*/:
+         case .postDetails:
              path.append(route)
          default:
              presentedSheet = route  // ALL others are modal
