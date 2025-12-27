@@ -33,8 +33,18 @@ struct SidebarView: View {
 //            }
             //        } content: {
             if let selectedCategory = vm.selectedCategory {
-                HomeView(selectedCategory: selectedCategory)
-                    .navigationSplitViewColumnWidth(430)
+                NavigationStack(path: $coordinator.path) {
+                    HomeView(selectedCategory: vm.selectedCategory)
+                        .navigationDestination(for: AppRoute.self) { route in
+                            if case .postDetails(let postId) = route {
+                                PostDetailsView(postId: postId)
+                            }
+                        }
+                        .navigationSplitViewColumnWidth(430)
+                }
+//                
+//                HomeView(selectedCategory: selectedCategory)
+//                    .navigationSplitViewColumnWidth(430)
             } else {
                 notSelectedEmptyView(text: "Select Category")
             }
