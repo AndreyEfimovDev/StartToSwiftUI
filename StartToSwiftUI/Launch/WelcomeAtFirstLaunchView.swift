@@ -49,7 +49,7 @@ struct WelcomeAtFirstLaunchView: View {
                         ZStack {
                             if showTermsButton {
                                 Button {
-                                    coordinator.push(.termsOfUse)
+                                    coordinator.presentedSheet = .termsOfUse
                                 } label: {
                                     Text("Terms of Use")
                                         .font(.title)
