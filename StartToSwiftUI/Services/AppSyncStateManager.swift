@@ -132,11 +132,11 @@ class AppSyncStateManager {
             // (in case another device created AppState at that time)
             let finalCheck = try modelContext.fetch(descriptor)
             if let existingState = finalCheck.first {
-                log("✅ AppState создан другим устройством, используем его", level: .info)
+                log("✅ AppState was created by another device, use it", level: .info)
                 return existingState
             }
             
-            log("📦 Создаём новый AppState", level: .info)
+            log("📦 Create a new AppState", level: .info)
             let newState = AppSyncState(
                 id: "app_state_singleton",
                 appFirstLaunchDate: Date()
