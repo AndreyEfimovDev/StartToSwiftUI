@@ -37,7 +37,7 @@ struct SidebarView: View {
                         .navigationDestination(for: AppRoute.self) { route in
                         }
                 }
-                .navigationSplitViewColumnWidth(530)
+                .navigationSplitViewColumnWidth(430)
             } else {
                 postNotSelectedEmptyView(text: "Select Category")
             }

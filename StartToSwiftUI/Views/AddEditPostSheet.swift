@@ -10,7 +10,7 @@ import SwiftData
 
 struct AddEditPostSheet: View {
     
-    @Environment(\.dismiss) private var dismiss
+//    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: Coordinator
 
@@ -155,7 +155,7 @@ struct AddEditPostSheet: View {
                 ClearCupsuleButton(
                     primaryTitle: "Don't save",
                     primaryTitleColor: Color.mycolor.myRed) {
-                        dismiss()
+                        coordinator.closeModal()
                     }
                 
                 ClearCupsuleButton(
@@ -197,7 +197,7 @@ struct AddEditPostSheet: View {
                 }
                 
                 if editedPost.draft == false && editedPost.isEqual(to: draftPost) {  // if no changes
-                    dismiss()
+                    coordinator.closeModal()
                 } else {
                     editedPost.draft = false
                     checkPostAndSave()
@@ -213,12 +213,12 @@ struct AddEditPostSheet: View {
                 isShownCircle: false)
             {
                 guard let draftPost = draftPost else {
-                    dismiss()
+                    coordinator.closeModal()
                     return
                 }
                 
                 if editedPost.isEqual(to: draftPost) {  // if no changes
-                    dismiss()
+                    coordinator.closeModal()
                 } else {
                     withAnimation(.easeInOut) {
                         isShowingExitMenuConfirmation = true
@@ -630,7 +630,7 @@ struct AddEditPostSheet: View {
                     message: Text("Tap OK to continue"),
                     dismissButton: .default(Text("OK")) {
                         isPostDraftSaved = true
-                        dismiss()
+                        coordinator.closeModal()
                     }
                 )
             }
@@ -639,7 +639,7 @@ struct AddEditPostSheet: View {
                     title: Text("New Post added successfully"),
                     message: Text("Tap OK to continue"),
                     dismissButton: .default(Text("OK")) {
-                        dismiss()
+                        coordinator.closeModal()
                     }
                 )
             }
@@ -647,7 +647,7 @@ struct AddEditPostSheet: View {
                 title: Text("Post saved successfully"),
                 message: Text("Tap OK to continue"),
                 dismissButton: .default(Text("OK")) {
-                    dismiss()
+                    coordinator.closeModal()
                 }
             )
             
