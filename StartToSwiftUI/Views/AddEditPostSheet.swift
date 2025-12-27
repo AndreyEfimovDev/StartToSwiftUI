@@ -12,7 +12,7 @@ struct AddEditPostSheet: View {
     
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var coordinator: Coordinator
 
     @StateObject private var keyboardManager = KeyboardManager()
     
@@ -672,7 +672,7 @@ struct AddEditPostSheet: View {
     NavigationStack {
         AddEditPostSheet(post: PreviewData.samplePost1)
             .environmentObject(vm)
-            .environmentObject(NavigationCoordinator())
+            .environmentObject(Coordinator())
 
     }
 }
@@ -689,7 +689,7 @@ struct AddEditPostSheet: View {
     NavigationStack {
         AddEditPostSheet(post: nil)
             .environmentObject(vm)
-            .environmentObject(NavigationCoordinator())
+            .environmentObject(Coordinator())
     }
 }
 
