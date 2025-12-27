@@ -48,9 +48,9 @@ struct LaunchView: View {
         .onAppear {
             showLoadingProgress.toggle()
         }
-        .onDisappear{
-            hapticManager.notification(type: .success)
-        }
+//        .onDisappear{
+//            hapticManager.notification(type: .success)
+//        }
         .onReceive(timer) { _ in
             withAnimation() {
                 let lastIndex = loadingString.count - 1
