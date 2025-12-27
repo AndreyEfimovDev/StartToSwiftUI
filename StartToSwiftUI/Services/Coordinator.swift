@@ -57,10 +57,10 @@ enum AppRoute: Hashable, Identifiable {
     case copyrightPolicy
     case fairUseNotice
     
-    // Denfying root modal Views (that open directly)
+    // Denfying root modal Views - different behaviour
     var isRootModal: Bool {
         switch self {
-        case .addPost, .editPost, .preferences, .notices:
+        case .preferences, .notices, .aboutApp, .legalInfo:
             return true  // These items open as root modal Views
         default:
             return false // Other open inside other modal Views
@@ -189,7 +189,7 @@ class Coordinator: ObservableObject {
     func push(_ route: AppRoute) {
          switch route {
          case .postDetails, .welcomeAtFirstLaunch:
-             path.append(route)  // ONLY PostDetails in main navigation
+             path.append(route)
          default:
              presentedSheet = route  // ALL others are modal
              modalPath = NavigationPath()  // Resetting the modal path when a new View opens

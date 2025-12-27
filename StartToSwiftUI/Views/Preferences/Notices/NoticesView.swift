@@ -55,7 +55,8 @@ struct NoticesView: View {
                                             noticevm.isReadToggle(notice: notice)
                                         }
                                         .tint(notice.isRead ? Color.mycolor.mySecondary : Color.mycolor.myBlue)
-                                    }                            } // ForEach
+                                    }
+                            } // ForEach
                             .listRowBackground(Color.clear)
                             .listRowSeparatorTint(Color.mycolor.myAccent.opacity(0.35))
                             .listRowSeparator(.hidden, edges: [.top])
