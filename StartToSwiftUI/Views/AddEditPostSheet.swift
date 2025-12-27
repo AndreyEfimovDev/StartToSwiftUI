@@ -191,7 +191,6 @@ struct AddEditPostSheet: View {
                 isShownCircle: false)
             {
                 guard let draftPost = draftPost else {
-                    // На всякий случай, если draftPost nil - просто сохраняем
                     editedPost.draft = false
                     checkPostAndSave()
                     return
@@ -214,7 +213,6 @@ struct AddEditPostSheet: View {
                 isShownCircle: false)
             {
                 guard let draftPost = draftPost else {
-                    // Если draftPost nil, значит что-то пошло не так, но лучше просто выйти
                     dismiss()
                     return
                 }
