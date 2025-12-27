@@ -378,9 +378,9 @@ struct HomeView: View {
     
     private var allPostsIsEmpty: some View {
         ContentUnavailableView(
-            "No Posts",
+            "No Study Materials",
             systemImage: "tray.and.arrow.down",
-            description: Text("Posts will appear here when you create your own or download a curated collection.")
+            description: Text("Materials will appear here when you create your own or download a curated collection.")
         )
     }
     
