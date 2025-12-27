@@ -621,7 +621,9 @@ struct AddEditPostSheet: View {
             return Alert(
                 title: Text(alertTitle),
                 message: Text(alertMessage),
-                dismissButton: .default(Text("OK")) {}
+                dismissButton: .default(Text("OK")) {
+                    coordinator.closeModal()
+                }
             )
         case .success:
             if editedPost.draft {

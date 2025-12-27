@@ -63,7 +63,7 @@ struct StartView: View {
     @ViewBuilder
     private var mainContent: some View {
         if UIDevice.isiPad {
-            // iPad - NavigationSplitView - DEBUGING
+            // iPad - NavigationSplitView - DEBUGGING
             NavigationSplitView (columnVisibility: $visibility) {
     //            if let categories = vm.allCategories {
     //                List(categories, id: \.self, selection: $vm.selectedCategory) { category in
@@ -120,10 +120,6 @@ struct StartView: View {
         case .postDetails(let postId):
             PostDetailsView(postId: postId)
                     
-            // Welcome at first launch to rout to Terms of Use
-//        case .welcomeAtFirstLaunch:
-//            WelcomeAtFirstLaunchView()
-
 //            // Preferences
 //        case .preferences:
 //            PreferencesView()
