@@ -44,10 +44,10 @@ struct StartView: View {
         .task {
             await loadInitialData()
         }
-        .fullScreenCover(item: $coordinator.presentedSheet) { route in
+        .sheetForUIDeviceItem(item: $coordinator.presentedSheet) { route in
             if UIDevice.isiPad {
                 ModalNavigationContainer(initialRoute: route)
-                    .presentationDetents([.large])  // На iPad можно sheet
+                    .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
             } else {
                 ModalNavigationContainer(initialRoute: route)
