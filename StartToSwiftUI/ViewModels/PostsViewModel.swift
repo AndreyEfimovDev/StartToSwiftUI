@@ -17,7 +17,7 @@ class PostsViewModel: ObservableObject {
     private let modelContext: ModelContext
 
     // Load static posts trigger - tied to AppStateManager, used only in Toggle in Preferences
-    @AppStorage("shouldLoadStaticPosts") var shouldLoadStaticPosts: Bool = true {
+    @AppStorage("shouldLoadStaticPosts") var shouldLoadStaticPosts: Bool = false {
         didSet {
             log("🔄 shouldLoadStaticPosts изменился: \(shouldLoadStaticPosts)", level: .info)
             let appStateManager = AppSyncStateManager(modelContext: modelContext)
