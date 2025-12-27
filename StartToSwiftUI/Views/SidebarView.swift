@@ -16,7 +16,6 @@ struct SidebarView: View {
     @EnvironmentObject private var coordinator: Coordinator
     
     @State private var visibility: NavigationSplitViewVisibility = .doubleColumn
-//    @State private var showPreferencesView = false
     
     var body: some View {
         
@@ -36,9 +35,6 @@ struct SidebarView: View {
                 NavigationStack(path: $coordinator.path) {
                     HomeView(selectedCategory: selectedCategory)
                         .navigationDestination(for: AppRoute.self) { route in
-//                            if case .postDetails(let postId) = route {
-//                                PostDetailsView(postId: postId)
-//                            }
                         }
                 }
                 .navigationSplitViewColumnWidth(530)
@@ -54,29 +50,10 @@ struct SidebarView: View {
                     postNotSelectedEmptyView(text: "Select Topic")
                 }
         }
-//        .sheet(isPresented: $showPreferencesView) {
-//            PreferencesView()
-//        }
         .onAppear {
             vm.selectedCategory = "SwiftUI"
         }
     }
-    
-//    private func notSelectedEmptyView(text: String) -> some View {
-//        VStack {
-//            Image("A_1024x1024_PhosphateInline_tr")
-//                .resizable()
-//                .scaledToFit()
-//                .frame(width: 300)
-//                .opacity(0.15)
-//            Text(text)
-//                .font(.largeTitle)
-//                .bold()
-//                .padding()
-//        }
-//        .foregroundStyle(Color.mycolor.myAccent)
-//    }
-    
 }
 
 #Preview {

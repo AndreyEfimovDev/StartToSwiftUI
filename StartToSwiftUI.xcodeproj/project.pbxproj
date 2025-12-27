@@ -386,14 +386,14 @@
 		475997722E5DA436008E20F0 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				47BAF0C92E635E2800287F10 /* Views.swift */,
 				4791CDE92E72E8CC00687126 /* Arrays.swift */,
 				475997792E5F1A32008E20F0 /* Colors.swift */,
-				47BAF0C92E635E2800287F10 /* Views.swift */,
-				47AE6C802E7D7FD0006230DA /* Modifiers.swift */,
 				47453E032EAB73A9000D2C16 /* Date.swift */,
 				471DCBD82EBBBF2200AFA5F4 /* JSON.swift */,
 				4781D72D2ED716AE00B74F85 /* Bundle.swift */,
 				4725A52A2EDD757F00235C40 /* UIDevice.swift */,
+				47AE6C802E7D7FD0006230DA /* Modifiers.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";

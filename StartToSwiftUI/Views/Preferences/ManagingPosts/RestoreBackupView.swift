@@ -45,7 +45,7 @@ struct RestoreBackupView: View {
                 Spacer()
                 
                 if isInProgress {
-                    CustomProgressView()
+                    CustomProgressView(isNoText: true)
                 }
             }
             .padding(.horizontal, 30)
