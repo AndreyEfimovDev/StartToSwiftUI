@@ -142,6 +142,7 @@ class Coordinator: ObservableObject {
     // For modal Views
     @Published var presentedSheet: AppRoute?
 
+    
     // MARK: Regular Navigation Methods - in fact for PostDetails only so far
     /// One level back
     func pop() {
@@ -187,7 +188,7 @@ class Coordinator: ObservableObject {
     /// Go to View
     func push(_ route: AppRoute) {
          switch route {
-         case .postDetails:
+         case .postDetails, .welcomeAtFirstLaunch:
              path.append(route)  // ONLY PostDetails in main navigation
          default:
              presentedSheet = route  // ALL others are modal
