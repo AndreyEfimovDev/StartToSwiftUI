@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WhatsNewView: View {
     
-    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var coordinator: Coordinator
     
     var body: some View {
         ViewWrapperWithCustomNavToolbar(
@@ -58,6 +58,6 @@ struct WhatsNewView: View {
 #Preview {
     NavigationStack {
         WhatsNewView()
-            .environmentObject(NavigationCoordinator())
+            .environmentObject(Coordinator())
     }
 }

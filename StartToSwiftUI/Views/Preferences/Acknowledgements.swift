@@ -9,7 +9,7 @@ import SwiftUI
 
 struct Acknowledgements: View {
     //    @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var coordinator: Coordinator
     
     let seanAllen: AttributedString = {
         var attributedString = AttributedString("Sean Allen")
@@ -103,6 +103,6 @@ struct Acknowledgements: View {
 #Preview {
     NavigationStack {
         Acknowledgements()
-            .environmentObject(NavigationCoordinator())
+            .environmentObject(Coordinator())
     }
 }

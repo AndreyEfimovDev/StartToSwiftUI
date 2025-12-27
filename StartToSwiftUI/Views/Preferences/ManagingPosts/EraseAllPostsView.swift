@@ -12,7 +12,7 @@ struct EraseAllPostsView: View {
     
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var coordinator: Coordinator
 
     private let hapticManager = HapticService.shared
     
@@ -128,6 +128,6 @@ struct EraseAllPostsView: View {
         EraseAllPostsView()
             .modelContainer(container)
             .environmentObject(vm)
-            .environmentObject(NavigationCoordinator())
+            .environmentObject(Coordinator())
     }
 }
