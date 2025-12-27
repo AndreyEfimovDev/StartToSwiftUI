@@ -13,10 +13,10 @@ struct SidebarView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
-    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var coordinator: Coordinator
     
     @State private var visibility: NavigationSplitViewVisibility = .doubleColumn
-    @State private var showPreferencesView = false
+//    @State private var showPreferencesView = false
     
     var body: some View {
         
@@ -34,19 +34,16 @@ struct SidebarView: View {
             //        } content: {
             if let selectedCategory = vm.selectedCategory {
                 NavigationStack(path: $coordinator.path) {
-                    HomeView(selectedCategory: vm.selectedCategory)
+                    HomeView(selectedCategory: selectedCategory)
                         .navigationDestination(for: AppRoute.self) { route in
                             if case .postDetails(let postId) = route {
                                 PostDetailsView(postId: postId)
                             }
                         }
-                        .navigationSplitViewColumnWidth(430)
                 }
-//                
-//                HomeView(selectedCategory: selectedCategory)
-//                    .navigationSplitViewColumnWidth(430)
+                .navigationSplitViewColumnWidth(530)
             } else {
-                notSelectedEmptyView(text: "Select Category")
+                postNotSelectedEmptyView(text: "Select Category")
             }
         }
         detail: {
@@ -54,31 +51,31 @@ struct SidebarView: View {
                     PostDetailsView(postId: selectedPostId)
                     .id(selectedPostId)
                 } else {
-                    notSelectedEmptyView(text: "Select Topic")
+                    postNotSelectedEmptyView(text: "Select Topic")
                 }
         }
-        .sheet(isPresented: $showPreferencesView) {
-            PreferencesView()
-        }
+//        .sheet(isPresented: $showPreferencesView) {
+//            PreferencesView()
+//        }
         .onAppear {
             vm.selectedCategory = "SwiftUI"
         }
     }
     
-    private func notSelectedEmptyView(text: String) -> some View {
-        VStack {
-            Image("A_1024x1024_PhosphateInline_tr")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 300)
-                .opacity(0.15)
-            Text(text)
-                .font(.largeTitle)
-                .bold()
-                .padding()
-        }
-        .foregroundStyle(Color.mycolor.myAccent)
-    }
+//    private func notSelectedEmptyView(text: String) -> some View {
+//        VStack {
+//            Image("A_1024x1024_PhosphateInline_tr")
+//                .resizable()
+//                .scaledToFit()
+//                .frame(width: 300)
+//                .opacity(0.15)
+//            Text(text)
+//                .font(.largeTitle)
+//                .bold()
+//                .padding()
+//        }
+//        .foregroundStyle(Color.mycolor.myAccent)
+//    }
     
 }
 

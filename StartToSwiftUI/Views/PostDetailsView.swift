@@ -12,7 +12,7 @@ struct PostDetailsView: View {
     
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var coordinator: Coordinator
     
     private let hapticManager = HapticService.shared
     
@@ -37,7 +37,7 @@ struct PostDetailsView: View {
     @State private var lineCountFreeTextField: Int = 0
     private let fullFreeTextFieldFont: Font = .footnote
     private let fullFreeTextFieldLineSpacing: CGFloat = 0
-    private let FreeTextFieldLinesCountLimit: Int = 2
+    private let freeTextFieldLinesCountLimit: Int = 2
     
     @State private var showRatingTab: Bool = false
     @State private var showProgressTab: Bool = false
@@ -102,7 +102,7 @@ struct PostDetailsView: View {
 //                        }
 //                    }
                 } else {
-                    Text("Post is not found")
+                    postNotSelectedEmptyView(text: "Post is not found")
                 }
             }
             .onAppear {
@@ -114,7 +114,9 @@ struct PostDetailsView: View {
                 expandedWidth = newValue
             })
             .safeAreaInset(edge: .bottom) {
-                bottomTabsContainer
+                if post != nil {
+                    bottomTabsContainer
+                }
             }
             .ignoresSafeArea(edges: .bottom)
         }
@@ -437,6 +439,6 @@ fileprivate struct PostDetailsPreView: View {
     NavigationStack {
         PostDetailsPreView()
             .environmentObject(vm)
-            .environmentObject(NavigationCoordinator())
+            .environmentObject(Coordinator())
     }
 }

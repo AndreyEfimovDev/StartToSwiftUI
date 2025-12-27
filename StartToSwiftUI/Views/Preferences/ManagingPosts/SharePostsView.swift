@@ -11,7 +11,7 @@ import SwiftData
 struct SharePostsView: View {
     
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var coordinator: Coordinator
 
     private let hapticManager = HapticService.shared
     
@@ -152,7 +152,7 @@ struct SharePostsView: View {
     NavigationStack{
         SharePostsView()
             .environmentObject(vm)
-            .environmentObject(NavigationCoordinator())
+            .environmentObject(Coordinator())
     }
 }
 

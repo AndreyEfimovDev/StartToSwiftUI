@@ -12,7 +12,7 @@ struct TermsOfUse: View {
     
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var coordinator: Coordinator
     
     @State private var isAccepted: Bool = false
     
@@ -239,6 +239,6 @@ struct TermsOfUse: View {
         TermsOfUse()
             .modelContainer(container)
             .environmentObject(vm)
-            .environmentObject(NavigationCoordinator())
+            .environmentObject(Coordinator())
     }
 }

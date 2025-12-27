@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WelcomeAtFirstLaunchView: View {
     
-    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var coordinator: Coordinator
 
     @State private var showTermsOfUse: Bool = false
     @State private var showTermsButton = false
@@ -92,5 +92,5 @@ struct WelcomeAtFirstLaunchView: View {
 
 #Preview {
     WelcomeAtFirstLaunchView()
-        .environmentObject(NavigationCoordinator())
+        .environmentObject(Coordinator())
 }

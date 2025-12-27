@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ViewWrapperWithCustomNavToolbar<Content: View>: View {
     
-    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var coordinator: Coordinator
 
     let title: String
     let showHomeButton: Bool

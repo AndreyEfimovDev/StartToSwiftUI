@@ -13,7 +13,7 @@ struct ImportPostsFromCloudView: View {
     
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var coordinator: Coordinator
     
     private let hapticManager = HapticService.shared
     
@@ -236,6 +236,6 @@ struct ImportPostsFromCloudView: View {
         ImportPostsFromCloudView()
             .modelContainer(container)
             .environmentObject(vm)
-            .environmentObject(NavigationCoordinator())
+            .environmentObject(Coordinator())
     }
 }

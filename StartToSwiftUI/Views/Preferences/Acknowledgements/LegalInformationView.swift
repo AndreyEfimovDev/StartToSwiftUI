@@ -10,7 +10,7 @@ import SwiftData
 
 struct LegalInformationView: View {
 
-    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var coordinator: Coordinator
     
     let iconWidth: CGFloat = 18
 
@@ -72,5 +72,5 @@ struct LegalInformationView: View {
         LegalInformationView()
     }
     .environmentObject(vm)
-    .environmentObject(NavigationCoordinator())
+    .environmentObject(Coordinator())
 }

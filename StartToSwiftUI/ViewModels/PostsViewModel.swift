@@ -324,9 +324,9 @@ class PostsViewModel: ObservableObject {
             allPosts = try modelContext.fetch(descriptor)
             // DEBUG: Display all posts with ID
             log("📊 Loaded \(allPosts.count) posts from SwiftData:", level: .debug)
-            for (index, post) in allPosts.enumerated() {
-                log("📊 \(index + 1). ID: \(post.id), Title: \(post.title)", level: .debug)
-            }
+//            for (index, post) in allPosts.enumerated() {
+//                log("📊 \(index + 1). ID: \(post.id), Title: \(post.title)", level: .debug)
+//            }
             allYears = getAllYears()
             allCategories = getAllCategories()
         } catch {
