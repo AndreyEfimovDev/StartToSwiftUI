@@ -21,13 +21,12 @@ struct AddEditPostSheet: View {
     @State private var focusedFieldSaved: PostFields?
     
     private var viewTitle: String {
-        isNewPost ? "Add" : "Edit"
+        originalPost == nil ? "Add" : "Edit"
     }
     
     @State private var originalPost: Post?
     @State private var editedPost: Post
-    @State private var draftPost: Post?
-    @State private var isNewPost: Bool
+    @State private var copyOfThePost: Post
     
     @State private var isPostDraftSaved: Bool = false
     @State private var isShowingExitMenuConfirmation: Bool = false
@@ -39,7 +38,7 @@ struct AddEditPostSheet: View {
     private let fontTextInput: Font = .callout
     private let colorSubheader: Color = Color.mycolor.myAccent.opacity(0.5)
     
-    // set beginning year for choice
+    // set 2019 as a beginning year for starting in choice
     private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date.distantPast
     
     private let endingDate: Date = .now
@@ -73,12 +72,12 @@ struct AddEditPostSheet: View {
             // Copy for editing
             _editedPost = State(initialValue: post.copy())
             // Copy for comparison
-            _draftPost = State(initialValue: post.copy())
-            self.isNewPost = false
+            _copyOfThePost = State(initialValue: post.copy())
+            
         } else { // if post is not passed (nil) - add a new post initialising
+            _originalPost = State(initialValue: nil)
             _editedPost = State(initialValue: templateForNewPost.copy())
-            _draftPost = State(initialValue: templateForNewPost.copy())
-            self.isNewPost = true
+            _copyOfThePost = State(initialValue: templateForNewPost.copy())
         }
     }
     
@@ -142,28 +141,14 @@ struct AddEditPostSheet: View {
                 iconName: "checkmark",
                 isShownCircle: false)
             {
-                guard let draftPost = draftPost else {
-                    editedPost.draft = false
-                    checkPostAndSave()
-                    return
-                }
-                
-                if editedPost.draft == false && editedPost.isEqual(to: draftPost) {
-                    // editedPost НЕ изменился относительно draftPost
-                    // → просто закрываем
+                if hasNoChanges {
+                    // if NOT changed → just close
                     coordinator.closeModal()
                 } else {
-                    // editedPost изменился → сохраняем
+                    // if changes → save
                     editedPost.draft = false
                     checkPostAndSave()
                 }
-                
-//                if editedPost.draft == false && editedPost.isEqual(to: draftPost) {  // if no changes
-//                    coordinator.closeModal()
-//                } else {
-//                    editedPost.draft = false
-//                    checkPostAndSave()
-//                }
             }
             .disabled(isShowingExitMenuConfirmation)
         }
@@ -174,14 +159,11 @@ struct AddEditPostSheet: View {
                 imageColorPrimary: Color.mycolor.myRed,
                 isShownCircle: false)
             {
-                guard let draftPost = draftPost else {
-                    coordinator.closeModal()
-                    return
-                }
-                
-                if editedPost.isEqual(to: draftPost) {  // if no changes
+                if hasNoChanges {
+                    // if NOT changed → just close
                     coordinator.closeModal()
                 } else {
+                    // if changes → exit confirmation dialog
                     withAnimation(.easeInOut) {
                         isShowingExitMenuConfirmation = true
                         hapticManager.notification(type: .warning)
@@ -194,6 +176,10 @@ struct AddEditPostSheet: View {
         }
     }
 
+    private var hasNoChanges: Bool {
+        return editedPost.isEqual(to: copyOfThePost)
+    }
+    
     private var exitConfirmation: some View {
         ZStack {
             Color.mycolor.myAccent.opacity(0.001)
@@ -219,7 +205,6 @@ struct AddEditPostSheet: View {
                 ClearCupsuleButton(
                     primaryTitle: "Don't save",
                     primaryTitleColor: Color.mycolor.myRed) {
-                        discardChanges()
                         coordinator.closeModal()
                     }
                 
@@ -248,46 +233,60 @@ struct AddEditPostSheet: View {
     
     private func checkPostAndSave() {
         
-        if !isTexLengthAppropriate(text: editedPost.title, limit: 3) {
+        guard validatePost() else { return }
+        
+        if let originalPost = originalPost {
+            // If originalPost != nil, then update the post
+            originalPost.update(with: editedPost)
+            vm.updatePost()
+        } else {
+            // If originalPost == nil, then add a new post
+            vm.addPost(editedPost)
+        }
+        alertType = .success
+        showAlert.toggle()
+        
+    }
+
+    private func validatePost() -> Bool {
+        if !isTexLengthAppropriate(
+            text: editedPost.title,
+            limit: 3
+        ) {
             alertType = .error
             alertTitle = "The Title must contain at least 3 characters."
             alertMessage = "Please correct the Title."
             focusedField = .postTitle
             showAlert.toggle()
-        } else if !isTexLengthAppropriate(text: editedPost.author, limit: 2) {
+            return false
+        }
+        
+        if !isTexLengthAppropriate(
+            text: editedPost.author,
+            limit: 2
+        ) {
             alertType = .error
             alertTitle = "The Author must contain at least 2 characters."
             alertMessage = "Please correct the Author."
             focusedField = .author
             showAlert.toggle()
-        } else if vm.checkNewPostForUniqueTitle(editedPost.title, editingPostId: isNewPost ? nil : editedPost.id) {
+            return false
+        }
+        
+        if vm.checkNewPostForUniqueTitle(
+            editedPost.title,
+            editingPostId: originalPost?.id // nil or valid
+        ) {
             alertType = .error
             alertTitle = "The Title must be unique."
             alertMessage = "Please correct the Title."
             focusedField = .postTitle
             showAlert.toggle()
-        } else {
-            switch isNewPost {
-            case true: // Add a new post
-                vm.addPost(editedPost)
-            case false: // Save an edited post
-                originalPost?.update(with: editedPost)
-                vm.updatePost()
-            }
-            alertType = .success
-            showAlert.toggle()
+            return false
         }
+        
+        return true
     }
-
-    // Recovering ORIGINAL values ​​from draftPost
-    private func discardChanges() {
-        if let draftPost = draftPost {
-            editedPost = draftPost.copy()
-        }
-    }
-
-
-    
     
     @ViewBuilder
     private func textEditorRightButton(
@@ -442,12 +441,8 @@ struct AddEditPostSheet: View {
                 )
             ZStack {
                 HStack {
-                    Button(editedPost.postDate == nil ? "Set date" : "Set no date") {
-                        if editedPost.postDate == nil {
-                            editedPost.postDate = Date()
-                        } else {
-                            editedPost.postDate = nil
-                        }
+                    Button(editedPost.postDate == nil ? "Set date" : "Reset date") {
+                        editedPost.postDate = editedPost.postDate == nil ? Date() : nil
                     }
                     .foregroundColor(editedPost.postDate == nil ? .blue : .red)
                     .padding(8)
@@ -659,17 +654,11 @@ struct AddEditPostSheet: View {
                     }
                 )
             }
-            if isNewPost {
-                return Alert(
-                    title: Text("New Post added successfully"),
-                    message: Text("Tap OK to continue"),
-                    dismissButton: .default(Text("OK")) {
-                        coordinator.closeModal()
-                    }
-                )
-            }
+            let title = originalPost == nil
+                ? "New Post added successfully"
+                : "Post saved successfully"
             return Alert(
-                title: Text("Post saved successfully"),
+                title: Text(title),
                 message: Text("Tap OK to continue"),
                 dismissButton: .default(Text("OK")) {
                     coordinator.closeModal()

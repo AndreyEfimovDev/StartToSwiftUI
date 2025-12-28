@@ -192,7 +192,7 @@ extension Post {
     }
     
     func update(with post: Post) {
-        self.id = post.id
+//        self.id = post.id
         self.category = post.category
         self.title = post.title
         self.intro = post.intro
