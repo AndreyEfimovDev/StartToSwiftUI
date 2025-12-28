@@ -640,7 +640,6 @@ struct AddEditPostSheet: View {
                 title: Text(alertTitle),
                 message: Text(alertMessage),
                 dismissButton: .default(Text("OK")) {
-                    coordinator.closeModal()
                 }
             )
         case .success:
