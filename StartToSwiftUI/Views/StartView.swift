@@ -11,7 +11,7 @@ import SwiftData
 struct StartView: View {
     
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject private var coordinator: Coordinator
+    @EnvironmentObject private var coordinator: AppCoordinator
     
     @StateObject private var vm: PostsViewModel
     @StateObject private var noticevm: NoticeViewModel
@@ -30,7 +30,7 @@ struct StartView: View {
     // MARK: - Body
     var body: some View {
         ZStack {
-            if showLaunchView {
+           if showLaunchView {
                 LaunchView() {
                     showLaunchView = false
                 }
@@ -40,21 +40,18 @@ struct StartView: View {
                     .controlSize(.large)
             } else {
                 mainContent
+                    .onAppear {
+                        if !vm.isTermsOfUseAccepted {
+                            coordinator.push(.welcomeAtFirstLaunch)
+                        }
+                    }
             }
         }
         .preferredColorScheme(vm.selectedTheme.colorScheme)
         .task {
             await loadInitialData()
         }
-        .sheetForUIDeviceItem(item: $coordinator.presentedSheet) { route in
-            if UIDevice.isiPad {
-                ModalNavigationContainer(initialRoute: route)
-                    .presentationDetents([.large])
-                    .presentationDragIndicator(.visible)
-            } else {
-                ModalNavigationContainer(initialRoute: route)
-            }
-        }
+        .adaptiveModal(item: $coordinator.presentedSheet)
         .environmentObject(vm)
         .environmentObject(noticevm)
     }
@@ -62,50 +59,52 @@ struct StartView: View {
     // MARK: - Subviews
     @ViewBuilder
     private var mainContent: some View {
-        if UIDevice.isiPad {
-            // iPad - NavigationSplitView - DEBUGGING
-            NavigationSplitView (columnVisibility: $visibility) {
-//                if let categories = vm.allCategories {
-//                    List(categories, id: \.self, selection: $vm.selectedCategory) { category in
-//                        Text(category)
-//                    }
-//                    .navigationTitle("Categories")
-//                    .navigationSplitViewColumnWidth(150)
-//                } else {
-//                    Text("No categories")
-//                }
-//            } content: {
-                if let selectedCategory = vm.selectedCategory {
-                    NavigationStack(path: $coordinator.path) {
-                        HomeView(selectedCategory: selectedCategory)
-                            .navigationDestination(for: AppRoute.self) { route in
-                                destinationView(for: route) // for PostDetails only in fact
-                            }
+        Group {
+            if UIDevice.isiPad {
+                // iPad - NavigationSplitView - DEBUGGING
+                NavigationSplitView (columnVisibility: $visibility) {
+                    //                if let categories = vm.allCategories {
+                    //                    List(categories, id: \.self, selection: $vm.selectedCategory) { category in
+                    //                        Text(category)
+                    //                    }
+                    //                    .navigationTitle("Categories")
+                    //                    .navigationSplitViewColumnWidth(150)
+                    //                } else {
+                    //                    Text("No categories")
+                    //                }
+                    //            } content: {
+                    if let selectedCategory = vm.selectedCategory {
+                        NavigationStack(path: $coordinator.path) {
+                            HomeView(selectedCategory: selectedCategory)
+                                .navigationDestination(for: AppRoute.self) { route in
+                                    destinationView(for: route)
+                                }
+                        }
+                        .navigationSplitViewColumnWidth(430)
+                    } else {
+                        postNotSelectedEmptyView(text: "Select Category")
                     }
-                    .navigationSplitViewColumnWidth(430)
-                } else {
-                    postNotSelectedEmptyView(text: "Select Category")
                 }
-            }
-            detail: {
-                if let selectedPostId = vm.selectedPostId {
-                    PostDetailsView(postId: selectedPostId)
-                        .id(selectedPostId)
-                } else {
-                    postNotSelectedEmptyView(text: "Select Topic")
-                }
-            }
-            .onAppear {
-                vm.selectedCategory = "SwiftUI"
-            }
-
-        } else {
-            // iPhone - portrait mode only
-            NavigationStack(path: $coordinator.path) {
-                HomeView(selectedCategory: vm.selectedCategory)
-                    .navigationDestination(for: AppRoute.self) { route in
-                        destinationView(for: route)  // for PostDetails only in fact
+                detail: {
+                    if let selectedPostId = vm.selectedPostId {
+                        PostDetailsView(postId: selectedPostId)
+                            .id(selectedPostId)
+                    } else {
+                        postNotSelectedEmptyView(text: "Select Topic")
                     }
+                }
+                .onAppear { // Temprorary - only for single SwiftUI mode
+                    vm.selectedCategory = "SwiftUI"
+                }
+                
+            } else {
+                // iPhone - portrait mode only
+                NavigationStack(path: $coordinator.path) {
+                    HomeView(selectedCategory: vm.selectedCategory)
+                        .navigationDestination(for: AppRoute.self) { route in
+                            destinationView(for: route)  // for PostDetails only in fact
+                        }
+                }
             }
         }
     }
@@ -203,6 +202,6 @@ struct StartView: View {
     NavigationStack {
         StartView(modelContext: context)
             .modelContainer(container)
-            .environmentObject(Coordinator())
+            .environmentObject(AppCoordinator())
     }
 }

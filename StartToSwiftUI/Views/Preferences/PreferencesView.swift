@@ -13,7 +13,7 @@ struct PreferencesView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
-    @EnvironmentObject private var coordinator: Coordinator
+    @EnvironmentObject private var coordinator: AppCoordinator
 
     let iconWidth: CGFloat = 18
     
@@ -316,5 +316,5 @@ struct PreferencesView: View {
     .modelContainer(container)
     .environmentObject(vm)
     .environmentObject(noticevm)
-    .environmentObject(Coordinator())
+    .environmentObject(AppCoordinator())
 }

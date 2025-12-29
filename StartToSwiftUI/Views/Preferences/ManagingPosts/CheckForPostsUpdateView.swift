@@ -12,7 +12,7 @@ struct CheckForPostsUpdateView: View {
     
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var coordinator: Coordinator
+    @EnvironmentObject private var coordinator: AppCoordinator
     
     private let hapticManager = HapticService.shared
     
@@ -157,6 +157,6 @@ struct CheckForPostsUpdateView: View {
         CheckForPostsUpdateView()
             .modelContainer(container)
             .environmentObject(vm)
-            .environmentObject(Coordinator())
+            .environmentObject(AppCoordinator())
     }
 }

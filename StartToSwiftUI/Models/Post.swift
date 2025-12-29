@@ -17,7 +17,7 @@ final class Post {
     var intro: String = ""
     var author: String = ""
     var postTypeRawValue: String = "post"
-    var urlString: String = "https://"
+    var urlString: String = Constants.urlStart
     var postPlatformRawValue: String = "youtube"
     var postDate: Date?
     var studyLevelRawValue: String = "beginner"
@@ -78,7 +78,7 @@ final class Post {
         intro: String = "",
         author: String = "",
         postType: PostType = .post,
-        urlString: String = "https://",
+        urlString: String = Constants.urlStart,
         postPlatform: Platform = .youtube,
         postDate: Date? = nil,
         studyLevel: StudyLevel = .beginner,
