@@ -196,7 +196,6 @@ struct PostDetailsView: View {
             .opacity(isExpanded ? 0 : 1)
             .disabled(isExpanded)
             
-            
             if isExpanded {
                 content()
             }
@@ -204,10 +203,10 @@ struct PostDetailsView: View {
         .frame(height: isExpanded ? maxHeight : minHeight)
         .frame(maxWidth: isExpanded ? expandedWidth : tabWidth)
         .frame(maxWidth: .infinity, alignment: alignment)
-        .padding()
+        .padding(UIDevice.isiPad ? 8 : 0)
         .zIndex(zIndexTab)
         .offset(y: otherIsExpanded && !isExpanded ? maxHeight : 0)
-        .animation(.bouncy(duration: 0.3), value: isExpanded)
+        .animation(.easeInOut(duration: 0), value: isExpanded)
     }
     
     // MARK: Subviews

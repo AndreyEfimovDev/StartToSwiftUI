@@ -88,12 +88,12 @@ struct StartView: View {
                 }
             }
             detail: {
-                    if let selectedPostId = vm.selectedPostId {
-                        PostDetailsView(postId: selectedPostId)
+                if let selectedPostId = vm.selectedPostId {
+                    PostDetailsView(postId: selectedPostId)
                         .id(selectedPostId)
-                    } else {
-                        postNotSelectedEmptyView(text: "Select Topic")
-                    }
+                } else {
+                    postNotSelectedEmptyView(text: "Select Topic")
+                }
             }
             .onAppear {
                 vm.selectedCategory = "SwiftUI"
