@@ -12,7 +12,7 @@ struct PostDetailsView: View {
     
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var coordinator: Coordinator
+    @EnvironmentObject private var coordinator: AppCoordinator
     
     private let hapticManager = HapticService.shared
     
@@ -239,7 +239,6 @@ struct PostDetailsView: View {
                 isShownCircle: false)
             {
                 vm.favoriteToggle(post: validPost)
-                hapticManager.impact(style: .light)
             }
             
             CircleStrokeButtonView(
@@ -418,6 +417,6 @@ fileprivate struct PostDetailsPreView: View {
     NavigationStack {
         PostDetailsPreView()
             .environmentObject(vm)
-            .environmentObject(Coordinator())
+            .environmentObject(AppCoordinator())
     }
 }

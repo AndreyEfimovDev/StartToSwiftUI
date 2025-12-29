@@ -81,14 +81,15 @@ class PostsViewModel: ObservableObject {
     @Published var selectedSortOption: SortOption? = nil {
         didSet { storedSortOption = selectedSortOption }}
     
-//    @Published var isTermsOfUseAccepted: Bool = false
+    @Published var isTermsOfUseAccepted: Bool = false
     
     // Set Terms Of Use accepted
-//    func acceptTermsOfUse() {
-//        let appStateManager = AppSyncStateManager(modelContext: modelContext)
-//        appStateManager.acceptTermsOfUse()
-//        objectWillChange.send()
-//    }
+    func acceptTermsOfUse() {
+        let appStateManager = AppSyncStateManager(modelContext: modelContext)
+        appStateManager.acceptTermsOfUse()
+        isTermsOfUseAccepted = true
+        objectWillChange.send()
+    }
 
     // MARK: - Init
     init(
@@ -112,8 +113,9 @@ class PostsViewModel: ObservableObject {
         Task {
             let appStateManager = AppSyncStateManager(modelContext: modelContext)
             // Checking the TermsOfUseAccepted state
-//            self.isTermsOfUseAccepted = appStateManager.getTermsOfUseAcceptedStatus()
-
+            if appStateManager.getTermsOfUseAcceptedStatus() {
+                self.isTermsOfUseAccepted = true
+            }
             // We check for new materials in the author's collection in the cloud
             let hasUpdates = await checkCloudCuratedPostsForUpdates()
             

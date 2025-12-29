@@ -11,7 +11,7 @@ import SwiftData
 struct RestoreBackupView: View {
     
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var coordinator: Coordinator
+    @EnvironmentObject private var coordinator: AppCoordinator
 
     private let hapticManager = HapticService.shared
     
@@ -104,6 +104,6 @@ struct RestoreBackupView: View {
     NavigationStack{
         RestoreBackupView()
             .environmentObject(vm)
-            .environmentObject(Coordinator())
+            .environmentObject(AppCoordinator())
     }
 }

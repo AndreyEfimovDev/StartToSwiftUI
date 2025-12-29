@@ -30,7 +30,6 @@
 		471DCBDE2EBBC68500AFA5F4 /* WhatsNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBDD2EBBC68500AFA5F4 /* WhatsNew.swift */; };
 		471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471DCBDF2EBBC6B900AFA5F4 /* WelcomeMessage.swift */; };
 		472243782EFFE31F0055461A /* GlobalMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472243772EFFE31F0055461A /* GlobalMethods.swift */; };
-		4725A5272EDC818600235C40 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4725A5262EDC818600235C40 /* SidebarView.swift */; };
 		4725A52B2EDD757F00235C40 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4725A52A2EDD757F00235C40 /* UIDevice.swift */; };
 		472A9B5B2EDC3B6F00ED3344 /* BackButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472A9B5A2EDC3B6F00ED3344 /* BackButtonView.swift */; };
 		472E05CC2EDDC9BA005D774E /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472E05CB2EDDC9BA005D774E /* KeyboardManager.swift */; };
@@ -96,7 +95,8 @@
 		47EA142D2EF4603E0064583B /* FirstLaunchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */; };
 		47EA14312EF530780064583B /* AppSyncStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EA14302EF530780064583B /* AppSyncStateManager.swift */; };
 		47F38B1F2ED480B0006DEDBE /* DevData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F38B1E2ED480B0006DEDBE /* DevData.swift */; };
-		47F68A4A2EFB0232003786D0 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F68A492EFB0232003786D0 /* Coordinator.swift */; };
+		47F68A4A2EFB0232003786D0 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F68A492EFB0232003786D0 /* AppCoordinator.swift */; };
+		47F78A552F02DB12005394BE /* ModalNavigationContainerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F78A542F02DB12005394BE /* ModalNavigationContainerWrapper.swift */; };
 		47FF42472EE454440069D232 /* TestSFSymbolsForRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF42462EE454440069D232 /* TestSFSymbolsForRating.swift */; };
 		47FF42492EE4572E0069D232 /* TestSFSymbolsForProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF42482EE4572E0069D232 /* TestSFSymbolsForProgress.swift */; };
 		47FF424B2EE4B5960069D232 /* RatingSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */; };
@@ -130,7 +130,6 @@
 		471DCBDD2EBBC68500AFA5F4 /* WhatsNew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNew.swift; sourceTree = "<group>"; };
 		471DCBDF2EBBC6B900AFA5F4 /* WelcomeMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeMessage.swift; sourceTree = "<group>"; };
 		472243772EFFE31F0055461A /* GlobalMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalMethods.swift; sourceTree = "<group>"; };
-		4725A5262EDC818600235C40 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		4725A52A2EDD757F00235C40 /* UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		472A9B5A2EDC3B6F00ED3344 /* BackButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButtonView.swift; sourceTree = "<group>"; };
 		472E05CB2EDDC9BA005D774E /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
@@ -199,7 +198,8 @@
 		47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchManager.swift; sourceTree = "<group>"; };
 		47EA14302EF530780064583B /* AppSyncStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSyncStateManager.swift; sourceTree = "<group>"; };
 		47F38B1E2ED480B0006DEDBE /* DevData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevData.swift; sourceTree = "<group>"; };
-		47F68A492EFB0232003786D0 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		47F68A492EFB0232003786D0 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		47F78A542F02DB12005394BE /* ModalNavigationContainerWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalNavigationContainerWrapper.swift; sourceTree = "<group>"; };
 		47FF42462EE454440069D232 /* TestSFSymbolsForRating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSFSymbolsForRating.swift; sourceTree = "<group>"; };
 		47FF42482EE4572E0069D232 /* TestSFSymbolsForProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSFSymbolsForProgress.swift; sourceTree = "<group>"; };
 		47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingSelectionView.swift; sourceTree = "<group>"; };
@@ -344,6 +344,7 @@
 				47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */,
 				478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */,
 				470E636F2EFB241D007B75B5 /* ViewWrapperWithCustomNavToolbar.swift */,
+				47F78A542F02DB12005394BE /* ModalNavigationContainerWrapper.swift */,
 				470E63752EFD5044007B75B5 /* CountdownView.swift */,
 				472243772EFFE31F0055461A /* GlobalMethods.swift */,
 				47BAF09E2E5F9C4500287F10 /* Buttons */,
@@ -377,7 +378,7 @@
 				4767C9622EF29474003838BA /* NoticeMigrationHelper.swift */,
 				47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */,
 				47EA14302EF530780064583B /* AppSyncStateManager.swift */,
-				47F68A492EFB0232003786D0 /* Coordinator.swift */,
+				47F68A492EFB0232003786D0 /* AppCoordinator.swift */,
 				470E63792EFDE1CF007B75B5 /* ModalNavigationContainer.swift */,
 			);
 			path = Services;
@@ -453,7 +454,6 @@
 			children = (
 				47542EB32EF2C8E400B0AB79 /* StartView.swift */,
 				47B4657F2E6867930059CCB7 /* HomeView.swift */,
-				4725A5262EDC818600235C40 /* SidebarView.swift */,
 				4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */,
 				475997602E5CC0F8008E20F0 /* PostDetailsView.swift */,
 				4791CE032E748DA200687126 /* AddEditPostSheet.swift */,
@@ -565,7 +565,7 @@
 				4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */,
 				47B465802E6867930059CCB7 /* HomeView.swift in Sources */,
 				47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */,
-				47F68A4A2EFB0232003786D0 /* Coordinator.swift in Sources */,
+				47F68A4A2EFB0232003786D0 /* AppCoordinator.swift in Sources */,
 				471BBF9C2EC620D70004AC45 /* PostDraftsRowView.swift in Sources */,
 				471DCBDE2EBBC68500AFA5F4 /* WhatsNew.swift in Sources */,
 				47656BFE2EE1EC4D00F45AA6 /* StudyProgressView.swift in Sources */,
@@ -622,6 +622,7 @@
 				471DCBCA2EBB633300AFA5F4 /* PrivacyPolicy.swift in Sources */,
 				472243782EFFE31F0055461A /* GlobalMethods.swift in Sources */,
 				470E63722EFBDC90007B75B5 /* WelcomeAtFirstLaunchView.swift in Sources */,
+				47F78A552F02DB12005394BE /* ModalNavigationContainerWrapper.swift in Sources */,
 				47EA14312EF530780064583B /* AppSyncStateManager.swift in Sources */,
 				47FF424B2EE4B5960069D232 /* RatingSelectionView.swift in Sources */,
 				470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */,
@@ -629,7 +630,6 @@
 				471BBFA62EC7AB640004AC45 /* NoticesView.swift in Sources */,
 				47870FBF2ECCD743004175E4 /* LinkButtonURL.swift in Sources */,
 				47BAF0F62E6485B000287F10 /* SegmentedOneLinePicker.swift in Sources */,
-				4725A5272EDC818600235C40 /* SidebarView.swift in Sources */,
 				471BBF9A2EC5F6170004AC45 /* PostDraftsView.swift in Sources */,
 				4791CDAF2E70187E00687126 /* PreferencesView.swift in Sources */,
 				47453E042EAB73A9000D2C16 /* Date.swift in Sources */,

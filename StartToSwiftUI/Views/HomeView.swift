@@ -16,7 +16,7 @@ struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
-    @EnvironmentObject private var coordinator: Coordinator
+    @EnvironmentObject private var coordinator: AppCoordinator
     
     private let hapticManager = HapticService.shared
     
@@ -120,6 +120,7 @@ struct HomeView: View {
                             vm.selectedRating = post.postRating
                             vm.selectedPostId = post.id
                             isLongPressSuccess = true
+                            hapticManager.impact(style: .light)
                         },
                         onPressingChanged: { isPressing in
                             if isPressing {
@@ -139,11 +140,13 @@ struct HomeView: View {
                             if UIDevice.isiPhone {
                                 coordinator.push(.postDetails(postId: post.id))
                             }
+                            hapticManager.impact(style: .light)
                                                     },
                         doubleTap: {
                             vm.selectedStudyProgress = post.progress
                             vm.selectedPostId = post.id
                             showProgressSelectionView = true
+                            hapticManager.impact(style: .light)
                         }
                     )
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
@@ -182,32 +185,6 @@ struct HomeView: View {
         }
     }
     
-    /// One-time sound alert to the user when new notifications appear
-    private func soundNotificationIfNeeded() {
-        
-        let appStateManager = AppSyncStateManager(modelContext: modelContext)
-        let status = appStateManager.getUserNotifiedBySoundStatus()
-        
-        guard noticevm.hasUnreadNotices, noticevm.isNotificationOn, status else {
-            return
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-            if noticevm.isSoundNotificationOn {
-                // Sound played
-                AudioServicesPlaySystemSound(1013)
-                // Setting the user's sound notification status -> user notified
-                appStateManager.markUserNotifiedBySound()
-            }
-            // Animation has started
-            noticeButtonAnimation = true
-            // Animation completed, user notified
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                noticeButtonAnimation = false
-            }
-        }
-    }
-    
     @ToolbarContentBuilder
     private func navigationToolbar() -> some ToolbarContent {
         
@@ -223,8 +200,8 @@ struct HomeView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 CircleStrokeButtonView(
                     iconName: "message",
-                    isShownCircle: false)
-                {
+                    isShownCircle: false
+                ){
                     coordinator.push(.notices)
                 }
                 .overlay {
@@ -273,6 +250,7 @@ struct HomeView: View {
                 isShownCircle: false
             ){
                 isFilterButtonPressed.toggle()
+                hapticManager.impact(style: .light)
             }
         }
     }
@@ -331,7 +309,6 @@ struct HomeView: View {
         return vm.filteredPosts.filter { $0.category == category }
     }
     
-    
     private var postDeletionConfirmation: some View {
         ZStack {
             Color.mycolor.myAccent.opacity(0.001)
@@ -385,7 +362,32 @@ struct HomeView: View {
         return title
     }
     
-
+    /// One-time sound alert to the user when new notifications appear
+    private func soundNotificationIfNeeded() {
+        
+        let appStateManager = AppSyncStateManager(modelContext: modelContext)
+        let status = appStateManager.getUserNotifiedBySoundStatus()
+        
+        guard noticevm.hasUnreadNotices, noticevm.isNotificationOn, status else {
+            return
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            if noticevm.isSoundNotificationOn {
+                // Sound played
+                AudioServicesPlaySystemSound(1013)
+                // Setting the user's sound notification status -> user notified
+                appStateManager.markUserNotifiedBySound()
+            }
+            // Animation has started
+            noticeButtonAnimation = true
+            // Animation completed, user notified
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                noticeButtonAnimation = false
+            }
+        }
+    }
+    
 }
 
 #Preview {
@@ -404,5 +406,5 @@ struct HomeView: View {
     .modelContainer(container)
     .environmentObject(vm)
     .environmentObject(noticevm)
-    .environmentObject(Coordinator())
+    .environmentObject(AppCoordinator())
 }
