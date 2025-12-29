@@ -49,77 +49,64 @@ struct AdaptiveTabViewStyle: ViewModifier {
     }
 }
 
+// MARK: Adaptive Modal Modifier
+
+struct AdaptiveModalModifier: ViewModifier {
+    @Binding var route: AppRoute?
+    @EnvironmentObject private var coordinator: AppCoordinator
+    
+    func body(content: Content) -> some View {
+        content
+        // FullScreen for iPhone and for WelcomeAtFirstLaunchView on iPad
+            .fullScreenCover(isPresented: Binding(
+                get: {
+                    route != nil && shouldBeFullScreen(route!)
+                },
+                set: {
+                    if !$0 {
+                        coordinator.closeModal()
+                    }
+                }
+            )) {
+                if let route = route {
+                    ModalNavigationContainerWrapper(initialRoute: route)
+                }
+            }
+        // Sheet for iPad only (кроме welcome)
+            .sheet(isPresented: Binding(
+                get: {
+                    route != nil && UIDevice.isiPad && !shouldBeFullScreen(route!)
+                },
+                set: {
+                    if !$0 {
+                        coordinator.closeModal()
+                    }
+                }
+            )) {
+                if let route = route {
+                    ModalNavigationContainerWrapper(initialRoute: route)
+                        .presentationDetents([.large])
+                        .presentationDragIndicator(.visible)
+                }
+            }
+    }
+    
+    /// Determine which routes should be full-screen
+    private func shouldBeFullScreen(_ route: AppRoute) -> Bool {
+        
+        // On iPhone all modal views are full-screen
+        if UIDevice.isiPhone {
+            return true
+        }
+        
+        // On iPad, only welcomeAtFirstLaunch is full-screen
+        switch route {
+        case .welcomeAtFirstLaunch:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 //            .tabViewStyle(.page(indexDisplayMode: .never))
-
-
-
-//struct Modifiers: View {
-//    var body: some View {
-//        VStack {
-//            
-//            Image(systemName: "square.and.arrow.up")
-//               .shareLink("https://www.apple.com")
-//            
-//            Text("Share")
-//                .font(.caption2)
-//        }
-//    }
-//}
-//
-//#Preview {
-//    Modifiers()
-//}
-//
-//
-//struct ActivityView: UIViewControllerRepresentable {
-//    let activityItems: [Any]
-//    let applicationActivities: [UIActivity]?
-//    
-//    func makeUIViewController(context: Context) -> UIActivityViewController {
-//        let controller = UIActivityViewController(
-//            activityItems: activityItems,
-//            applicationActivities: applicationActivities
-//        )
-//        return controller
-//    }
-//    
-//    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {
-//        // Ничего не нужно обновлять
-//    }
-//}
-//
-//
-//struct ShareLinkModifier: ViewModifier {
-//    let urlString: String
-//    @State private var showingShareSheet = false
-//    
-//    func body(content: Content) -> some View {
-//        content
-//            .onTapGesture {
-//                if URL(string: urlString) != nil {
-//                    showingShareSheet = true
-//                    
-//                    // Haptic feedback
-//                    let generator = UIImpactFeedbackGenerator(style: .medium)
-//                    generator.impactOccurred()
-//                }
-//            }
-//            .sheet(isPresented: $showingShareSheet) {
-//                if let url = URL(string: urlString) {
-//                    ActivityView(activityItems: [url], applicationActivities: nil)
-//                }
-//            }
-//    }
-//}
-//
-//
-//extension View {
-//    func shareLink(_ urlString: String) -> some View {
-//        self.modifier(ShareLinkModifier(urlString: urlString))
-//    }
-//}
-//
-//// Использование
-//// Image(systemName: "square.and.arrow.up")
-////    .shareLink("https://www.apple.com")
-//

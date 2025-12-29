@@ -11,7 +11,7 @@ import SwiftData
 struct StudyProgressView: View {
     
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var coordinator: Coordinator
+    @EnvironmentObject private var coordinator: AppCoordinator
     
     @State private var selectedTab: StudyLevelTabs = .all
         
@@ -85,6 +85,6 @@ struct StudyProgressView: View {
     NavigationStack{
         StudyProgressView()
             .environmentObject(vm)
-            .environmentObject(Coordinator())
+            .environmentObject(AppCoordinator())
     }
 }

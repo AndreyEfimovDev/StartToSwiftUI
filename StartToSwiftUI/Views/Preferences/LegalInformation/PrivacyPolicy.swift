@@ -10,7 +10,7 @@ import SwiftData
 
 struct PrivacyPolicy: View {
     
-    @EnvironmentObject private var coordinator: Coordinator
+    @EnvironmentObject private var coordinator: AppCoordinator
 
     var body: some View {
         ViewWrapperWithCustomNavToolbar(
@@ -127,6 +127,6 @@ struct PrivacyPolicy: View {
 
 #Preview {
     PrivacyPolicy()
-        .environmentObject(Coordinator())
+        .environmentObject(AppCoordinator())
 
 }

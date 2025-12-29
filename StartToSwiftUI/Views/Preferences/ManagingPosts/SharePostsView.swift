@@ -11,7 +11,7 @@ import SwiftData
 struct SharePostsView: View {
     
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var coordinator: Coordinator
+    @EnvironmentObject private var coordinator: AppCoordinator
 
     private let hapticManager = HapticService.shared
     
@@ -132,9 +132,11 @@ struct SharePostsView: View {
     
     private var textSection: some View {
         Text("""
-            You are about to store the materials on your local device in JSON format 
+            You are about to store the materials
+            on your local device (JSON format) 
             or
-            share them directly via AirDop / Mail / Messenger / etc.            
+            share them directly via
+            AirDop / Mail / Messenger / etc.            
             """)
         .multilineTextAlignment(.center)
     }
@@ -152,7 +154,7 @@ struct SharePostsView: View {
     NavigationStack{
         SharePostsView()
             .environmentObject(vm)
-            .environmentObject(Coordinator())
+            .environmentObject(AppCoordinator())
     }
 }
 

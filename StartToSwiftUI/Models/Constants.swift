@@ -25,5 +25,5 @@ struct Constants {
     // Filename for File Manager to keep all notificaions locally saved
     static let localNoticesFileName = "notificaions_app.json"
 
-    
+    static let urlStart = "https://"
 }

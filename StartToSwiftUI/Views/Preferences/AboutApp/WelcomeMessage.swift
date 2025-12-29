@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WelcomeMessage: View {
 
-    @EnvironmentObject private var coordinator: Coordinator
+    @EnvironmentObject private var coordinator: AppCoordinator
 
     var body: some View {
         ViewWrapperWithCustomNavToolbar(
@@ -49,6 +49,6 @@ struct WelcomeMessage: View {
 #Preview {
     NavigationStack {
         WelcomeMessage()
-            .environmentObject(Coordinator())
+            .environmentObject(AppCoordinator())
     }
 }
