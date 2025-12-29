@@ -671,7 +671,7 @@ struct AddEditPostSheet: View {
     
 }
 
-#Preview {
+#Preview("Edit post"){
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
@@ -688,7 +688,7 @@ struct AddEditPostSheet: View {
     }
 }
 
-#Preview {
+#Preview("Add post") {
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
