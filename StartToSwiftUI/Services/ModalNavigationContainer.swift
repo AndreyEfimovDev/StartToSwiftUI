@@ -11,12 +11,15 @@ struct ModalNavigationContainer: View {
     
     let initialRoute: AppRoute
     
-    @EnvironmentObject private var coordinator: Coordinator
+    @EnvironmentObject private var coordinator: AppCoordinator
     
     var body: some View {
+        // Тested navigation for modal views
         NavigationStack(path: $coordinator.modalPath) {
+            // ROOT of the stack - first view opens as root
             contentView(for: initialRoute, isRoot: true)
                 .navigationDestination(for: AppRoute.self) { route in
+                    // NESTED views, other sub-views are opened
                     contentView(for: route, isRoot: false)
                 }
         }
@@ -27,18 +30,26 @@ struct ModalNavigationContainer: View {
     @ViewBuilder
     private func contentView(for route: AppRoute, isRoot: Bool) -> some View {
         switch route {
-//        case .welcomeAtFirstLaunch:
-//            WelcomeAtFirstLaunchView()
-        case .preferences:
-            PreferencesView()
-        case .notices:
-            NoticesView(isRootModal: isRoot)  // true if called from HomeView, false - is from Preferences
+        case .welcomeAtFirstLaunch:
+            WelcomeAtFirstLaunchView()
+            
+        case .postDetails(let postId): // postId is extracted from enum and available as String
+            PostDetailsView(postId: postId)
         case .addPost:
             AddEditPostSheet(post: nil)
         case .editPost(let post):
             AddEditPostSheet(post: post)
+            
+        case .preferences:
+            PreferencesView()
+        case .notices:
+            NoticesView(isRootModal: isRoot)  // true if called from HomeView, false - from Preferences
+        case .noticeDetails(let noticeId):
+            NoticeDetailsView(noticeId: noticeId)
+
         case .studyProgress:
             StudyProgressView()
+            
         case .postDrafts:
             PostDraftsView()
         case .checkForUpdates:
@@ -51,8 +62,10 @@ struct ModalNavigationContainer: View {
             RestoreBackupView()
         case .erasePosts:
             EraseAllPostsView()
+            
         case .acknowledgements:
             Acknowledgements()
+            
         case .aboutApp:
             AboutApp()
         case .welcome:
@@ -61,6 +74,7 @@ struct ModalNavigationContainer: View {
             Introduction()
         case .whatIsNew:
             WhatsNewView()
+            
         case .legalInfo:
             LegalInformationView()
         case .termsOfUse:
@@ -71,10 +85,6 @@ struct ModalNavigationContainer: View {
             CopyrightPolicy()
         case .fairUseNotice:
             FairUseNotice()
-        case .noticeDetails(let noticeId):
-            NoticeDetailsView(noticeId: noticeId)
-        default:
-            EmptyView()
         }
     }
 }
