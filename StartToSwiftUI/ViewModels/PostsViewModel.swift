@@ -360,7 +360,7 @@ class PostsViewModel: ObservableObject {
     }
     
     /// Post update
-    func updatePost(_ updatedPost: Post) {
+    func updatePost() {
         saveContextAndReload()
     }
     
