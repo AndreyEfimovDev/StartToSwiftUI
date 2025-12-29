@@ -79,7 +79,7 @@ struct StartView: View {
                     NavigationStack(path: $coordinator.path) {
                         HomeView(selectedCategory: selectedCategory)
                             .navigationDestination(for: AppRoute.self) { route in
-                                destinationView(for: route)
+                                destinationView(for: route) // for PostDetails only in fact
                             }
                     }
                     .navigationSplitViewColumnWidth(430)
@@ -88,23 +88,23 @@ struct StartView: View {
                 }
             }
             detail: {
-                    if let selectedPostId = vm.selectedPostId {
-                        PostDetailsView(postId: selectedPostId)
+                if let selectedPostId = vm.selectedPostId {
+                    PostDetailsView(postId: selectedPostId)
                         .id(selectedPostId)
-                    } else {
-                        postNotSelectedEmptyView(text: "Select Topic")
-                    }
+                } else {
+                    postNotSelectedEmptyView(text: "Select Topic")
+                }
             }
             .onAppear {
                 vm.selectedCategory = "SwiftUI"
             }
 
         } else {
-            // iPhone - portrait only
+            // iPhone - portrait mode only
             NavigationStack(path: $coordinator.path) {
                 HomeView(selectedCategory: vm.selectedCategory)
                     .navigationDestination(for: AppRoute.self) { route in
-                        destinationView(for: route)  // for PostDetails only
+                        destinationView(for: route)  // for PostDetails only in fact
                     }
             }
         }
