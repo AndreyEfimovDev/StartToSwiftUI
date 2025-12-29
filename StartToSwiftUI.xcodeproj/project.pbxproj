@@ -422,7 +422,6 @@
 			isa = PBXGroup;
 			children = (
 				4791CDAE2E70187E00687126 /* PreferencesView.swift */,
-				47C56FF02EC9CEA300F0796C /* Notices */,
 				47656BFA2EE1EBBD00F45AA6 /* StudyProgress */,
 				47C56FEF2EC9CE8200F0796C /* ManagingPosts */,
 				471DCBDA2EBBC60E00AFA5F4 /* AboutApp */,
@@ -457,6 +456,8 @@
 				4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */,
 				475997602E5CC0F8008E20F0 /* PostDetailsView.swift */,
 				4791CE032E748DA200687126 /* AddEditPostSheet.swift */,
+				47C56FF02EC9CEA300F0796C /* Notices */,
+				47870FBB2ECCB927004175E4 /* PostDrafts */,
 				4791CDAD2E70186100687126 /* Preferences */,
 			);
 			path = Views;
@@ -470,7 +471,6 @@
 				4732FB302EAA59B00062269D /* SharePostsView.swift */,
 				47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */,
 				4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */,
-				47870FBB2ECCB927004175E4 /* PostDrafts */,
 			);
 			path = ManagingPosts;
 			sourceTree = "<group>";

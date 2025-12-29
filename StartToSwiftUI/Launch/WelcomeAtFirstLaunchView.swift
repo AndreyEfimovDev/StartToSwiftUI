@@ -11,6 +11,8 @@ struct WelcomeAtFirstLaunchView: View {
     
     @EnvironmentObject private var coordinator: AppCoordinator
     
+    private let hapticManager = HapticService.shared
+
     @State private var showTermsOfUse: Bool = false
     @State private var showTermsButton = false
     private var count: Int = 10
