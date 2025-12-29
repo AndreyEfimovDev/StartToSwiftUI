@@ -14,12 +14,9 @@ struct AddEditPostSheet: View {
     @EnvironmentObject private var coordinator: Coordinator
 
     @StateObject private var keyboardManager = KeyboardManager()
-    
     private let hapticManager = HapticService.shared
     
-    @FocusState private var focusedField: PostFields?
-    @State private var focusedFieldSaved: PostFields?
-    
+
     private var viewTitle: String {
         originalPost == nil ? "Add" : "Edit"
     }
@@ -30,6 +27,10 @@ struct AddEditPostSheet: View {
     
     @State private var isPostDraftSaved: Bool = false
     @State private var isShowingExitMenuConfirmation: Bool = false
+    @State private var urlTrigger: Bool = false
+
+    @FocusState private var focusedField: PostFields?
+    @State private var focusedFieldSaved: PostFields?
     
     private let sectionBackground: Color = Color.mycolor.mySectionBackground
     private let sectionCornerRadius: CGFloat = 8
@@ -142,7 +143,7 @@ struct AddEditPostSheet: View {
                 isShownCircle: false)
             {
                 if hasNoChanges {
-                    // if NOT changed → just close
+                    // if NO changes → just close
                     coordinator.closeModal()
                 } else {
                     // if changes → save
@@ -160,7 +161,7 @@ struct AddEditPostSheet: View {
                 isShownCircle: false)
             {
                 if hasNoChanges {
-                    // if NOT changed → just close
+                    // if NO changes → just close
                     coordinator.closeModal()
                 } else {
                     // if changes → exit confirmation dialog
@@ -289,7 +290,7 @@ struct AddEditPostSheet: View {
     }
     
     @ViewBuilder
-    private func textEditorRightButton(
+    private func textEditorXmarkButton(
         text: String,
         iconName: String = "xmark",
         iconColor: Color = Color.mycolor.myRed,
@@ -324,7 +325,7 @@ struct AddEditPostSheet: View {
                     .focused($focusedField, equals: .postTitle)
                     .onSubmit {focusedField = .intro }
                     .submitLabel(.next)
-                textEditorRightButton(
+                textEditorXmarkButton(
                     text: editedPost.title,
                     iconColor: Color.mycolor.myRed) {
                         editedPost.title = ""
@@ -355,10 +356,10 @@ struct AddEditPostSheet: View {
                     .onSubmit {focusedField = .author }
                     .submitLabel(.return)
                 VStack {
-                    textEditorRightButton(text: editedPost.intro) {
+                    textEditorXmarkButton(text: editedPost.intro) {
                         editedPost.intro = ""
                     }
-                    textEditorRightButton(
+                    textEditorXmarkButton(
                         text: editedPost.intro,
                         iconName: "arrow.turn.right.down",
                         iconColor: Color.mycolor.myBlue) {
@@ -391,7 +392,7 @@ struct AddEditPostSheet: View {
                     .focused($focusedField, equals: .author)
                     .onSubmit {focusedField = .urlString }
                     .submitLabel(.next)
-                textEditorRightButton(text: editedPost.author) {
+                textEditorXmarkButton(text: editedPost.author) {
                     editedPost.author = ""
                 }
             }
@@ -409,19 +410,42 @@ struct AddEditPostSheet: View {
                     fontSubheader: fontSubheader,
                     colorSubheader: colorSubheader
                 )
-            HStack(spacing: 0) {
-                TextField("", text: $editedPost.urlString)
-                    .font(fontTextInput)
-                    .padding(.leading, 5)
-                    .frame(height: 50)
-                    .textInputAutocapitalization(.none)
-                    .autocorrectionDisabled(true) // fixing leaking memory
-                    .keyboardType(.URL)
-                    .focused($focusedField, equals: .urlString)
-                    .onSubmit {focusedField = nil }
-                    .submitLabel(.next)
-                textEditorRightButton(text: editedPost.urlString) {
-                    editedPost.urlString = ""
+            Text(editedPost.urlString)
+                .font(.caption2)
+            ZStack {
+                HStack(spacing: 0) {
+                    Button(urlTrigger ? "Set url" : "Reset url") {
+                        if !urlTrigger {
+                            editedPost.urlString = Constants.urlStart
+                        }
+                        urlTrigger.toggle()
+                    }
+                    .foregroundColor(urlTrigger ? .blue : .red)
+                    .padding(8)
+                    .background(
+                        .ultraThinMaterial,
+                        in: .capsule
+                    )
+                    .padding(8)
+                    .zIndex(1)
+                    
+                    HStack(spacing: 0) {
+                        TextField("", text: $editedPost.urlString)
+                            .font(fontTextInput)
+                            .padding(.leading, 5)
+                            .frame(height: 50)
+                            .padding(.horizontal, 3)
+                            .textInputAutocapitalization(.none)
+                            .autocorrectionDisabled(true) // fixing leaking memory
+                            .keyboardType(.URL)
+                            .focused($focusedField, equals: .urlString)
+                            .onSubmit {focusedField = nil }
+                            .submitLabel(.next)
+                        textEditorXmarkButton(text: editedPost.urlString) {
+                            editedPost.urlString = Constants.urlStart
+                        }
+                    }
+                    .opacity(urlTrigger ? 0 : 1)
                 }
             }
             .background(
@@ -454,7 +478,7 @@ struct AddEditPostSheet: View {
                 }
                 .padding(8)
                 .zIndex(1)
-                
+
                 DatePicker("",
                            selection: bindingPostDate,
                            in: startingDate...endingDate,
@@ -583,10 +607,10 @@ struct AddEditPostSheet: View {
                     .onSubmit {focusedField = nil }
                     .submitLabel(.return)
                 VStack {
-                    textEditorRightButton(text: editedPost.notes) {
+                    textEditorXmarkButton(text: editedPost.notes) {
                         editedPost.notes = ""
                     }
-                    textEditorRightButton(
+                    textEditorXmarkButton(
                         text: editedPost.notes,
                         iconName: "arrow.turn.right.down",
                         iconColor: Color.mycolor.myBlue) {
