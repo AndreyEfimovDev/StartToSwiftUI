@@ -11,7 +11,7 @@ import SwiftData
 struct PostDraftsView: View {
     
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var coordinator: Coordinator
+    @EnvironmentObject private var coordinator: AppCoordinator
 
     private let hapticManager = HapticService.shared
     
@@ -81,6 +81,6 @@ struct PostDraftsView: View {
     NavigationStack {
         PostDraftsView()
             .environmentObject(vm)
-            .environmentObject(Coordinator())
+            .environmentObject(AppCoordinator())
     }
 }

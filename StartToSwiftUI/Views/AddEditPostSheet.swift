@@ -11,7 +11,7 @@ import SwiftData
 struct AddEditPostSheet: View {
     
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var coordinator: Coordinator
+    @EnvironmentObject private var coordinator: AppCoordinator
 
     @StateObject private var keyboardManager = KeyboardManager()
     private let hapticManager = HapticService.shared
@@ -27,7 +27,7 @@ struct AddEditPostSheet: View {
     
     @State private var isPostDraftSaved: Bool = false
     @State private var isShowingExitMenuConfirmation: Bool = false
-    @State private var urlTrigger: Bool = false
+    @State private var urlTrigger: Bool = true
 
     @FocusState private var focusedField: PostFields?
     @State private var focusedFieldSaved: PostFields?
@@ -150,6 +150,7 @@ struct AddEditPostSheet: View {
                     editedPost.draft = false
                     checkPostAndSave()
                 }
+                hapticManager.impact(style: .light)
             }
             .disabled(isShowingExitMenuConfirmation)
         }
@@ -172,6 +173,7 @@ struct AddEditPostSheet: View {
                         focusedField = nil
                     }
                 }
+                hapticManager.impact(style: .light)
             }
             .disabled(isShowingExitMenuConfirmation)
         }
@@ -215,6 +217,7 @@ struct AddEditPostSheet: View {
                         editedPost.draft = true
                         isShowingExitMenuConfirmation = false
                         checkPostAndSave()
+                        hapticManager.impact(style: .light)
                     }
                 
                 ClearCupsuleButton(
@@ -222,6 +225,7 @@ struct AddEditPostSheet: View {
                     primaryTitleColor: Color.mycolor.myAccent) {
                         focusedField = focusedFieldSaved
                         isShowingExitMenuConfirmation = false
+                        hapticManager.impact(style: .light)
                     }
             }
             .padding()
@@ -246,7 +250,6 @@ struct AddEditPostSheet: View {
         }
         alertType = .success
         showAlert.toggle()
-        
     }
 
     private func validatePost() -> Bool {
@@ -707,7 +710,7 @@ struct AddEditPostSheet: View {
     NavigationStack {
         AddEditPostSheet(post: PreviewData.samplePost1)
             .environmentObject(vm)
-            .environmentObject(Coordinator())
+            .environmentObject(AppCoordinator())
 
     }
 }
@@ -724,7 +727,7 @@ struct AddEditPostSheet: View {
     NavigationStack {
         AddEditPostSheet(post: nil)
             .environmentObject(vm)
-            .environmentObject(Coordinator())
+            .environmentObject(AppCoordinator())
     }
 }
 

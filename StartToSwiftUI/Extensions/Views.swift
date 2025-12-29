@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 
-
 // MARK: - Helper Extension для Pull to Refresh
 
 extension View {
@@ -16,6 +15,14 @@ extension View {
         self.refreshable {
             action()
         }
+    }
+}
+
+// MARK: - Adaptive Modifier for Modal views
+
+extension View {
+    func adaptiveModal(item: Binding<AppRoute?>) -> some View {
+        modifier(AdaptiveModalModifier(route: item))
     }
 }
 

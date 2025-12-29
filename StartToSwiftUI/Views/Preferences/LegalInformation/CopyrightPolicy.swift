@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CopyrightPolicy: View {
     
-    @EnvironmentObject private var coordinator: Coordinator
+    @EnvironmentObject private var coordinator: AppCoordinator
     
     var body: some View {
         
@@ -56,5 +56,5 @@ struct CopyrightPolicy: View {
 
 #Preview {
     CopyrightPolicy()
-        .environmentObject(Coordinator())
+        .environmentObject(AppCoordinator())
 }
