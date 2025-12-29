@@ -13,7 +13,7 @@ import SwiftData
 @Model
 final class AppSyncState {
     var id: String = "app_state_singleton" // Always one copy
-//    var isTermsOfUseAccepted: Bool = false
+    var isTermsOfUseAccepted: Bool = false
     
     // Flag for the need to load static posts, set by the user in Preferences: true - load
     var shouldLoadStaticPosts: Bool = true
@@ -38,7 +38,7 @@ final class AppSyncState {
     
     init(
         id: String = "app_state_singleton",
-//        isTermsOfUseAccepted: Bool = false,
+        isTermsOfUseAccepted: Bool = false,
         
         shouldLoadStaticPosts: Bool = true,
         hasLoadedStaticPosts: Bool = false,
@@ -54,7 +54,7 @@ final class AppSyncState {
         
     ) {
         self.id = id
-//        self.isTermsOfUseAccepted = isTermsOfUseAccepted
+        self.isTermsOfUseAccepted = isTermsOfUseAccepted
         
         self.shouldLoadStaticPosts = shouldLoadStaticPosts
         self.hasLoadedStaticPosts = hasLoadedStaticPosts
@@ -225,22 +225,22 @@ class AppSyncStateManager {
     
     // MARK: - Method for isTermsOfUseAccepted
     
-//    func getTermsOfUseAcceptedStatus() -> Bool {
-//        let appState = getOrCreateAppState()
-//        return appState.isTermsOfUseAccepted
-//    }
-//
-//    func setTermsOfUseAccepted(_ accepted: Bool) {
-//        let appState = getOrCreateAppState()
-//        appState.isTermsOfUseAccepted = accepted
-//        
-//        saveContext()
-//    }
-//        
-//    // Accept Terms of Use
-//    func acceptTermsOfUse() {
-//        setTermsOfUseAccepted(true)
-//    }
+    func getTermsOfUseAcceptedStatus() -> Bool {
+        let appState = getOrCreateAppState()
+        return appState.isTermsOfUseAccepted
+    }
+
+    func setTermsOfUseAccepted(_ accepted: Bool) {
+        let appState = getOrCreateAppState()
+        appState.isTermsOfUseAccepted = accepted
+        
+        saveContext()
+    }
+        
+    // Accept Terms of Use
+    func acceptTermsOfUse() {
+        setTermsOfUseAccepted(true)
+    }
         
     // MARK: - Methods for Static posts
     /// Check if static posts were loaded

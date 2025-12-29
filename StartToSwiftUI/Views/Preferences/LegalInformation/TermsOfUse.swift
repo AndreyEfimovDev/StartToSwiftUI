@@ -12,18 +12,15 @@ struct TermsOfUse: View {
     
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var coordinator: Coordinator
+    @EnvironmentObject private var coordinator: AppCoordinator
+    private let hapticManager = HapticService.shared
     
     @State private var isAccepted: Bool = false
     
     var body: some View {
-        ViewWrapperWithCustomNavToolbar(
-            title: "Terms of Use",
-            showHomeButton: true
-        ) {
-            ScrollView {
-                VStack {
-                    Text("""
+        ScrollView {
+            VStack {
+                Text("""
                             **Last Updated:** November 8, 2025
                             
                             Please read and accept these Terms of Use carefully before using the StartToSwiftUI application.
@@ -183,64 +180,56 @@ struct TermsOfUse: View {
                             **Effective Date:** November 8, 2025
                             
                             """)
-                    
-                    .multilineTextAlignment(.leading)
-                    .textFormater()
-                    .foregroundStyle(Color.mycolor.myAccent)
-                    .padding()
-                    //                CapsuleButtonView(
-                    //                    primaryTitle: "I have read and accept",
-                    //                    secondaryTitle: "Accepted",
-                    //                    isToChange: isAccepted || vm.isTermsOfUseAccepted) {
-                    //                        isAccepted = true
-                    //                        vm.isTermsOfUseAccepted = true
-                    //                        vm.acceptTermsOfUse()
-                    //                        coordinator.closeModal()
-                    //                    }
-                    //                    .padding(.horizontal, 30)
-                    //                    .padding(15)
-                    //                    .disabled(isAccepted)
-                    
-                }
+                .multilineTextAlignment(.leading)
+                .textFormater()
+                .foregroundStyle(Color.mycolor.myAccent)
+                .padding()
                 
+                CapsuleButtonView(
+                    primaryTitle: "I have read and accept",
+                    secondaryTitle: "Accepted",
+                    isToChange: isAccepted || vm.isTermsOfUseAccepted) {
+                        isAccepted = true
+                        vm.acceptTermsOfUse()
+                        coordinator.closeModal()
+                    }
+                    .padding(.horizontal, 30)
+                    .padding(15)
+                    .disabled(isAccepted)
             }
         }
-        //        .navigationTitle("Terms of Use")
-        //        .navigationBarBackButtonHidden(true)
-        //        .toolbar {
-        //            ToolbarItem(placement: .topBarLeading) {
-        //                BackButtonView() {
-        //                    // Сheck where we came from
-        //                    if coordinator.presentedSheet != nil && !coordinator.modalPath.isEmpty {
-        //                        // In the modal stack
-        //                        coordinator.popModal()
-        //                    } else if !coordinator.path.isEmpty {
-        //                        // In the main stack
-        //                        coordinator.pop()
-        //                    } else {
-        //                        // Fallback: just close
-        //                        coordinator.closeModal()
-        //                    }
-        //                }
-        //            }
-        //            if vm.isTermsOfUseAccepted {
-        //                ToolbarItem(placement: .topBarTrailing) {
-        //                    if vm.isTermsOfUseAccepted {
-        //                        Button {
-        //                            coordinator.closeModal()
-        //                        } label: {
-        //                            Image(systemName: "house")
-        //                                .foregroundStyle(Color.mycolor.myAccent)
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
+        .navigationTitle("Terms of Use")
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView() {
+                    // Check where the view is called from
+                    if coordinator.modalPath.isEmpty {
+                        // The stack is empty -> came from StartView, just close it
+                        coordinator.closeModal()
+                    } else {
+                        // The stack is not empty -> came from LegalInformationView, go step back
+                        coordinator.popModal()
+                    }
+                }
+            }
+            if vm.isTermsOfUseAccepted {
+                ToolbarItem(placement: .topBarTrailing) {
+                    if vm.isTermsOfUseAccepted {
+                        Button {
+                            coordinator.closeModal()
+                        } label: {
+                            Image(systemName: "house")
+                                .foregroundStyle(Color.mycolor.myAccent)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
 #Preview {
-    
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
@@ -253,6 +242,6 @@ struct TermsOfUse: View {
         TermsOfUse()
             .modelContainer(container)
             .environmentObject(vm)
-            .environmentObject(Coordinator())
+            .environmentObject(AppCoordinator())
     }
 }
