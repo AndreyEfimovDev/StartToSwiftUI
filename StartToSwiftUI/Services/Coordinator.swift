@@ -1,5 +1,5 @@
 //
-//  NavigationCoordinator.swift
+//  Coordinator.swift
 //  StartToSwiftUI
 //
 //  Created by Andrey Efimov on 08.12.2025.
@@ -54,7 +54,7 @@ enum AppRoute: Hashable, Identifiable {
     case copyrightPolicy
     case fairUseNotice
     
-    // Denfying root modal Views to manage different behaviour
+    // Set root modal Views to manage different behaviour
     var isRootModal: Bool {
         switch self {
         case .preferences, .notices, .aboutApp, .legalInfo:
