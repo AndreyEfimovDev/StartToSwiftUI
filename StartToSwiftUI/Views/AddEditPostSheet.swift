@@ -10,7 +10,6 @@ import SwiftData
 
 struct AddEditPostSheet: View {
     
-//    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: Coordinator
 
@@ -22,12 +21,12 @@ struct AddEditPostSheet: View {
     @State private var focusedFieldSaved: PostFields?
     
     private var viewTitle: String {
-        isNewPost ? "Add" : "Edit"
+        originalPost == nil ? "Add" : "Edit"
     }
     
+    @State private var originalPost: Post?
     @State private var editedPost: Post
-    @State private var draftPost: Post?
-    @State private var isNewPost: Bool
+    @State private var copyOfThePost: Post
     
     @State private var isPostDraftSaved: Bool = false
     @State private var isShowingExitMenuConfirmation: Bool = false
@@ -39,7 +38,7 @@ struct AddEditPostSheet: View {
     private let fontTextInput: Font = .callout
     private let colorSubheader: Color = Color.mycolor.myAccent.opacity(0.5)
     
-    // set beginning year for choice
+    // set 2019 as a beginning year for starting in choice
     private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date.distantPast
     
     private let endingDate: Date = .now
@@ -68,13 +67,17 @@ struct AddEditPostSheet: View {
     init(post: Post?) {
         
         if let post = post { // post for editing initialising
-            _editedPost = State(initialValue: post)
-            _draftPost = State(initialValue: post.copy())
-            self.isNewPost = false
+            // Link to the original from the context
+            _originalPost = State(initialValue: post)
+            // Copy for editing
+            _editedPost = State(initialValue: post.copy())
+            // Copy for comparison
+            _copyOfThePost = State(initialValue: post.copy())
+            
         } else { // if post is not passed (nil) - add a new post initialising
-            _editedPost = State(initialValue: templateForNewPost)
-            _draftPost = State(initialValue: templateForNewPost.copy())
-            self.isNewPost = true
+            _originalPost = State(initialValue: nil)
+            _editedPost = State(initialValue: templateForNewPost.copy())
+            _copyOfThePost = State(initialValue: templateForNewPost.copy())
         }
     }
     
@@ -129,6 +132,53 @@ struct AddEditPostSheet: View {
     }
     
     // MARK: Subviews
+    @ToolbarContentBuilder
+    private func toolbarForAddEditView() -> some ToolbarContent {
+        
+        ToolbarItem(placement: .topBarLeading) {
+            // SAVE button
+            CircleStrokeButtonView(
+                iconName: "checkmark",
+                isShownCircle: false)
+            {
+                if hasNoChanges {
+                    // if NOT changed → just close
+                    coordinator.closeModal()
+                } else {
+                    // if changes → save
+                    editedPost.draft = false
+                    checkPostAndSave()
+                }
+            }
+            .disabled(isShowingExitMenuConfirmation)
+        }
+        ToolbarItem(placement: .topBarTrailing) {
+            // EXIT button
+            CircleStrokeButtonView(
+                iconName: "xmark",
+                imageColorPrimary: Color.mycolor.myRed,
+                isShownCircle: false)
+            {
+                if hasNoChanges {
+                    // if NOT changed → just close
+                    coordinator.closeModal()
+                } else {
+                    // if changes → exit confirmation dialog
+                    withAnimation(.easeInOut) {
+                        isShowingExitMenuConfirmation = true
+                        hapticManager.notification(type: .warning)
+                        focusedFieldSaved = focusedField ?? nil
+                        focusedField = nil
+                    }
+                }
+            }
+            .disabled(isShowingExitMenuConfirmation)
+        }
+    }
+
+    private var hasNoChanges: Bool {
+        return editedPost.isEqual(to: copyOfThePost)
+    }
     
     private var exitConfirmation: some View {
         ZStack {
@@ -172,64 +222,70 @@ struct AddEditPostSheet: View {
                         focusedField = focusedFieldSaved
                         isShowingExitMenuConfirmation = false
                     }
-            } // VStack
+            }
             .padding()
             .background(.ultraThinMaterial)
             .menuFormater()
             .padding(.horizontal, 40)
-        } // ZStack
+        }
         .opacity(isPostDraftSaved ? 0 : 1)
     }
     
-    @ToolbarContentBuilder
-    private func toolbarForAddEditView() -> some ToolbarContent {
+    private func checkPostAndSave() {
         
-        ToolbarItem(placement: .topBarLeading) {
-            // SAVE button
-            CircleStrokeButtonView(
-                iconName: "checkmark",
-                isShownCircle: false)
-            {
-                guard let draftPost = draftPost else {
-                    editedPost.draft = false
-                    checkPostAndSave()
-                    return
-                }
-                
-                if editedPost.draft == false && editedPost.isEqual(to: draftPost) {  // if no changes
-                    coordinator.closeModal()
-                } else {
-                    editedPost.draft = false
-                    checkPostAndSave()
-                }
-            }
-            .disabled(isShowingExitMenuConfirmation)
+        guard validatePost() else { return }
+        
+        if let originalPost = originalPost {
+            // If originalPost != nil, then update the post
+            originalPost.update(with: editedPost)
+            vm.updatePost()
+        } else {
+            // If originalPost == nil, then add a new post
+            vm.addPost(editedPost)
         }
-        ToolbarItem(placement: .topBarTrailing) {
-            // Exit button
-            CircleStrokeButtonView(
-                iconName: "xmark",
-                imageColorPrimary: Color.mycolor.myRed,
-                isShownCircle: false)
-            {
-                guard let draftPost = draftPost else {
-                    coordinator.closeModal()
-                    return
-                }
-                
-                if editedPost.isEqual(to: draftPost) {  // if no changes
-                    coordinator.closeModal()
-                } else {
-                    withAnimation(.easeInOut) {
-                        isShowingExitMenuConfirmation = true
-                        hapticManager.notification(type: .warning)
-                        focusedFieldSaved = focusedField ?? nil
-                        focusedField = nil
-                    }
-                }
-            }
-            .disabled(isShowingExitMenuConfirmation)
+        alertType = .success
+        showAlert.toggle()
+        
+    }
+
+    private func validatePost() -> Bool {
+        if !isTexLengthAppropriate(
+            text: editedPost.title,
+            limit: 3
+        ) {
+            alertType = .error
+            alertTitle = "The Title must contain at least 3 characters."
+            alertMessage = "Please correct the Title."
+            focusedField = .postTitle
+            showAlert.toggle()
+            return false
         }
+        
+        if !isTexLengthAppropriate(
+            text: editedPost.author,
+            limit: 2
+        ) {
+            alertType = .error
+            alertTitle = "The Author must contain at least 2 characters."
+            alertMessage = "Please correct the Author."
+            focusedField = .author
+            showAlert.toggle()
+            return false
+        }
+        
+        if vm.checkNewPostForUniqueTitle(
+            editedPost.title,
+            editingPostId: originalPost?.id // nil or valid
+        ) {
+            alertType = .error
+            alertTitle = "The Title must be unique."
+            alertMessage = "Please correct the Title."
+            focusedField = .postTitle
+            showAlert.toggle()
+            return false
+        }
+        
+        return true
     }
     
     @ViewBuilder
@@ -385,12 +441,8 @@ struct AddEditPostSheet: View {
                 )
             ZStack {
                 HStack {
-                    Button(editedPost.postDate == nil ? "Set date" : "Set no date") {
-                        if editedPost.postDate == nil {
-                            editedPost.postDate = Date()
-                        } else {
-                            editedPost.postDate = nil
-                        }
+                    Button(editedPost.postDate == nil ? "Set date" : "Reset date") {
+                        editedPost.postDate = editedPost.postDate == nil ? Date() : nil
                     }
                     .foregroundColor(editedPost.postDate == nil ? .blue : .red)
                     .padding(8)
@@ -570,41 +622,7 @@ struct AddEditPostSheet: View {
             }
         }
     }
-    
-    // MARK: Functions
-    
-    private func checkPostAndSave() {
         
-        if !isTexLengthAppropriate(text: editedPost.title, limit: 3) {
-            alertType = .error
-            alertTitle = "The Title must contain at least 3 characters."
-            alertMessage = "Please correct the Title."
-            focusedField = .postTitle
-            showAlert.toggle()
-        } else if !isTexLengthAppropriate(text: editedPost.author, limit: 2) {
-            alertType = .error
-            alertTitle = "The Author must contain at least 2 characters."
-            alertMessage = "Please correct the Author."
-            focusedField = .author
-            showAlert.toggle()
-        } else if vm.checkNewPostForUniqueTitle(editedPost.title, editingPostId: isNewPost ? nil : editedPost.id) {
-            alertType = .error
-            alertTitle = "The Title must be unique."
-            alertMessage = "Please correct the Title."
-            focusedField = .postTitle
-            showAlert.toggle()
-        } else {
-            switch isNewPost {
-            case true:
-                vm.addPost(editedPost)
-            case false:
-                vm.updatePost(editedPost)
-            }
-            alertType = .success
-            showAlert.toggle()
-        }
-    }
-    
     private func isTexLengthAppropriate(text: String, limit: Int) -> Bool {
         return text.count >= limit
     }
@@ -622,7 +640,6 @@ struct AddEditPostSheet: View {
                 title: Text(alertTitle),
                 message: Text(alertMessage),
                 dismissButton: .default(Text("OK")) {
-                    coordinator.closeModal()
                 }
             )
         case .success:
@@ -636,17 +653,11 @@ struct AddEditPostSheet: View {
                     }
                 )
             }
-            if isNewPost {
-                return Alert(
-                    title: Text("New Post added successfully"),
-                    message: Text("Tap OK to continue"),
-                    dismissButton: .default(Text("OK")) {
-                        coordinator.closeModal()
-                    }
-                )
-            }
+            let title = originalPost == nil
+                ? "New Post added successfully"
+                : "Post saved successfully"
             return Alert(
-                title: Text("Post saved successfully"),
+                title: Text(title),
                 message: Text("Tap OK to continue"),
                 dismissButton: .default(Text("OK")) {
                     coordinator.closeModal()
@@ -660,7 +671,7 @@ struct AddEditPostSheet: View {
     
 }
 
-#Preview {
+#Preview("Edit post"){
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
@@ -677,7 +688,7 @@ struct AddEditPostSheet: View {
     }
 }
 
-#Preview {
+#Preview("Add post") {
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)

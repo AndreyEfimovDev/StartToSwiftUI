@@ -160,13 +160,14 @@ struct PostDetailsView: View {
         completion: @escaping () -> Void
     ) -> some View {
         ZStack (alignment: .top) {
-            UnevenRoundedRectangle(
-                topLeadingRadius: 30,
-                bottomLeadingRadius: 0,
-                bottomTrailingRadius: 0,
-                topTrailingRadius: 30,
-                style: .continuous
-            )
+            RoundedRectangle(cornerRadius: 30)
+//            UnevenRoundedRectangle(
+//                topLeadingRadius: 30,
+//                bottomLeadingRadius: 0,
+//                bottomTrailingRadius: 0,
+//                topTrailingRadius: 30,
+//                style: .continuous
+//            )
             .fill(.bar)
             .strokeBorder(
                 (isExpanded ? .clear : Color.mycolor.mySecondary.opacity(0.5)),
@@ -195,7 +196,6 @@ struct PostDetailsView: View {
             .opacity(isExpanded ? 0 : 1)
             .disabled(isExpanded)
             
-            
             if isExpanded {
                 content()
             }
@@ -203,9 +203,10 @@ struct PostDetailsView: View {
         .frame(height: isExpanded ? maxHeight : minHeight)
         .frame(maxWidth: isExpanded ? expandedWidth : tabWidth)
         .frame(maxWidth: .infinity, alignment: alignment)
+        .padding(UIDevice.isiPad ? 8 : 0)
         .zIndex(zIndexTab)
         .offset(y: otherIsExpanded && !isExpanded ? maxHeight : 0)
-        .animation(.bouncy(duration: 0.3), value: isExpanded)
+        .animation(.easeInOut(duration: 0), value: isExpanded)
     }
     
     // MARK: Subviews
