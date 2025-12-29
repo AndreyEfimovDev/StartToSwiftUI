@@ -75,6 +75,7 @@ struct HomeView: View {
                         if isLongPressSuccess {
                             RatingSelectionView() {
                                 isLongPressSuccess = false
+                                hapticManager.impact(style: .light)
                             }
                             .frame(maxHeight: max(proxy.size.height / 3, 300))
                             .padding(.horizontal, 30)
@@ -83,6 +84,7 @@ struct HomeView: View {
                         if showProgressSelectionView {
                             ProgressSelectionView() {
                                 showProgressSelectionView = false
+                                hapticManager.impact(style: .light)
                             }
                             .frame(maxHeight: max(proxy.size.height / 3, 300))
                             .padding(.horizontal, 30)
@@ -140,8 +142,10 @@ struct HomeView: View {
                             if UIDevice.isiPhone {
                                 coordinator.push(.postDetails(postId: post.id))
                             }
-                            hapticManager.impact(style: .light)
-                                                    },
+                            if UIDevice.isiPad {
+                                hapticManager.impact(style: .light)
+                            }
+                        },
                         doubleTap: {
                             vm.selectedStudyProgress = post.progress
                             vm.selectedPostId = post.id
