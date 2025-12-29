@@ -71,9 +71,11 @@ struct PostDetailsView: View {
                                     .thinMaterial,
                                     in: RoundedRectangle(cornerRadius: 15)
                                 )
-                            goToTheSourceButton(for: validPost)
-                                .padding(.top, 30)
-                                .frame(maxWidth: 250)
+                            if validPost.urlString != Constants.urlStart {
+                                goToTheSourceButton(validPost.urlString)
+                                    .padding(.top, 30)
+                                    .frame(maxWidth: 250)
+                            }
                             
                             notesToPost(for: validPost)
                                 .background(
@@ -220,7 +222,6 @@ struct PostDetailsView: View {
                     coordinator.pop()
                 }
             }
-            
             ShareLink(item: validPost.urlString) {
                 Image(systemName: "square.and.arrow.up")
                     .font(.headline)
@@ -344,11 +345,10 @@ struct PostDetailsView: View {
         .padding()
     }
     
-    private func goToTheSourceButton(for post: Post) -> some View {
-        
+    private func goToTheSourceButton(_ urlString: String) -> some View {
         LinkButtonURL(
             buttonTitle: "Go to the Source",
-            urlString: post.urlString
+            urlString: urlString
         )
     }
     
