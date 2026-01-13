@@ -34,7 +34,7 @@ struct PostDraftsView: View {
                             PostDraftsRowView(post: post)
                                 .background(.black.opacity(0.001))
                                 .onTapGesture {
-                                    coordinator.push(.editPost(post))
+                                    coordinator.pushModal(.editPost(post))
                                 }
                                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                     Button("Delete", systemImage: "trash") {

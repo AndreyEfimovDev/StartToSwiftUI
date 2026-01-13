@@ -50,7 +50,21 @@ struct AdaptiveTabViewStyle: ViewModifier {
 }
 
 // MARK: Adaptive Modal Modifier
-
+/// If route != nil (the is a modal view to show):
+/// ┌────────────────────────────┐
+/// │                    for iPhone (always fullscreen)                                  │
+/// ├────────────────────────────┤
+/// │ ✅ fullScreenCover (all modal views are fullscreen)                  │
+/// └────────────────────────────┘
+///
+/// ┌────────────────────────────┐
+/// │                    for iPad (separation)                                                │
+/// ├────────────────────────────┤
+/// │ ❓ Check: shouldBeFullScreen(route!) ?                                   │
+/// │     ├─ YES (welcomeAtFirstLaunch) →  fullScreen                  │
+/// │     └─ NO (preferences, notices, etc.) → sheet                        │
+/// └────────────────────────────┘
+///
 struct AdaptiveModalModifier: ViewModifier {
     @Binding var route: AppRoute?
     @EnvironmentObject private var coordinator: AppCoordinator
@@ -62,6 +76,7 @@ struct AdaptiveModalModifier: ViewModifier {
                 get: {
                     route != nil && shouldBeFullScreen(route!)
                 },
+                // action at close the view
                 set: {
                     if !$0 {
                         coordinator.closeModal()
@@ -77,12 +92,14 @@ struct AdaptiveModalModifier: ViewModifier {
                 get: {
                     route != nil && UIDevice.isiPad && !shouldBeFullScreen(route!)
                 },
+                // action at close the view
                 set: {
                     if !$0 {
                         coordinator.closeModal()
                     }
                 }
             )) {
+                // case when the iPad device and not fullscreen
                 if let route = route {
                     ModalNavigationContainerWrapper(initialRoute: route)
                         .presentationDetents([.large])
