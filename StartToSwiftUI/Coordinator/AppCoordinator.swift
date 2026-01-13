@@ -39,7 +39,6 @@ class AppCoordinator: ObservableObject {
             return
         }
         path.removeLast()
-        hapticManager.impact(style: .light)
     }
     /// Move back through N levels
     func pop(levels: Int) {
@@ -49,7 +48,6 @@ class AppCoordinator: ObservableObject {
             return
         }
         path.removeLast(levels)
-        hapticManager.impact(style: .light)
     }
     
     /// Current navigation depth (how many Views are in the stack)
@@ -65,7 +63,6 @@ class AppCoordinator: ObservableObject {
     /// Return to HomeView
     func popToRoot() {
         path = NavigationPath()
-        hapticManager.impact(style: .light)
     }
     
     /// Replace the current View
@@ -80,12 +77,15 @@ class AppCoordinator: ObservableObject {
     func push(_ route: AppRoute) {
          switch route {
          case .postDetails:
-             path.append(route) // To the main stack
-             hapticManager.impact(style: .light)
+             if modalPath.isEmpty { // if empty it is called in main stack
+                 path.append(route) // To the main stack
+             } else { // if not empty it is called in modal stack
+                 presentedSheet = route
+                 modalPath = NavigationPath()
+             }
          default:
              presentedSheet = route  // ALL others are modal, opens a modal view
              modalPath = NavigationPath()  // Resets the modal stack, resetting the modal path when a new View opens
-             hapticManager.impact(style: .light)
          }
      }
     
@@ -93,7 +93,6 @@ class AppCoordinator: ObservableObject {
     /// Go to View in modal navigation
     func pushModal(_ route: AppRoute) {
         modalPath.append(route)
-        hapticManager.impact(style: .light)
     }
     
     /// Move one level back in modal navigation
@@ -103,7 +102,6 @@ class AppCoordinator: ObservableObject {
             return
         }
         modalPath.removeLast()
-        hapticManager.impact(style: .light)
     }
 
     /// Return to the root of modal navigation (Preferences)
@@ -115,7 +113,6 @@ class AppCoordinator: ObservableObject {
     func closeModal() {
         presentedSheet = nil
         modalPath = NavigationPath()
-        hapticManager.impact(style: .light)
     }
 }
 

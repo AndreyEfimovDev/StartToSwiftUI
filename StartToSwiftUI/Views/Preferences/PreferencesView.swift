@@ -52,7 +52,7 @@ struct PreferencesView: View {
                 }
                 Section(header: sectionHeader("Manage materials (\(postsCount))")) {
                     loadStaticPostsToggle
-//                    postDrafts
+                    postDrafts
                     checkForPostsUpdate
                     importFromCloud
                     shareBackup

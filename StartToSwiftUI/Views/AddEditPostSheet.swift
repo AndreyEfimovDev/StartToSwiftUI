@@ -86,7 +86,7 @@ struct AddEditPostSheet: View {
     
     var body: some View {
         
-        NavigationView {
+        Group {
             VStack {
                 ScrollView {
                     titleSection
@@ -142,15 +142,7 @@ struct AddEditPostSheet: View {
                 iconName: "checkmark",
                 isShownCircle: false)
             {
-                if hasNoChanges {
-                    // if NO changes → just close
-                    coordinator.closeModal()
-                } else {
-                    // if changes → save
-                    editedPost.draft = false
-                    checkPostAndSave()
-                }
-                hapticManager.impact(style: .light)
+                handleSave()
             }
             .disabled(isShowingExitMenuConfirmation)
         }
@@ -161,24 +153,53 @@ struct AddEditPostSheet: View {
                 imageColorPrimary: Color.mycolor.myRed,
                 isShownCircle: false)
             {
-                if hasNoChanges {
-                    // if NO changes → just close
-                    coordinator.closeModal()
-                } else {
-                    // if changes → exit confirmation dialog
-                    withAnimation(.easeInOut) {
-                        isShowingExitMenuConfirmation = true
-                        hapticManager.notification(type: .warning)
-                        focusedFieldSaved = focusedField ?? nil
-                        focusedField = nil
-                    }
-                }
-                hapticManager.impact(style: .light)
+                handleCancel()
             }
             .disabled(isShowingExitMenuConfirmation)
         }
     }
 
+    private func handleSave() {
+        if hasNoChanges {
+            // If it is draft - save it as not draft -> .draft = false
+            if editedPost.draft == true {
+                editedPost.draft = false
+                checkPostAndSave()
+            } else {
+                // If it is not draft - just exit
+                navigateBack()
+            }
+        } else {
+            // Drop draft -> .draft = false and Check&Save the post
+            editedPost.draft = false
+            checkPostAndSave()
+        }
+    }
+
+    private func handleCancel() {
+        if hasNoChanges {
+            navigateBack()
+        } else {
+            withAnimation(.easeInOut) {
+                isShowingExitMenuConfirmation = true
+                hapticManager.notification(type: .warning)
+                focusedFieldSaved = focusedField ?? nil
+                focusedField = nil
+            }
+        }
+    }
+
+    private func navigateBack() {
+        // Wetermine where to return
+        if coordinator.modalPath.isEmpty {
+            // In the main stack or this is the root modal view
+            coordinator.closeModal()
+        } else {
+            // In the modal stack
+            coordinator.popModal()
+        }
+    }
+    
     private var hasNoChanges: Bool {
         return editedPost.isEqual(to: copyOfThePost)
     }
@@ -208,7 +229,7 @@ struct AddEditPostSheet: View {
                 ClearCupsuleButton(
                     primaryTitle: "Don't save",
                     primaryTitleColor: Color.mycolor.myRed) {
-                        coordinator.closeModal()
+                        navigateBack()
                     }
                 
                 ClearCupsuleButton(
@@ -676,7 +697,7 @@ struct AddEditPostSheet: View {
                     message: Text("Tap OK to continue"),
                     dismissButton: .default(Text("OK")) {
                         isPostDraftSaved = true
-                        coordinator.closeModal()
+                        navigateBack()
                     }
                 )
             }
@@ -687,7 +708,7 @@ struct AddEditPostSheet: View {
                 title: Text(title),
                 message: Text("Tap OK to continue"),
                 dismissButton: .default(Text("OK")) {
-                    coordinator.closeModal()
+                    navigateBack()
                 }
             )
             
