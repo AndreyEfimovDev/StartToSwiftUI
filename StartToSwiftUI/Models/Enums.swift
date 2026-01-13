@@ -198,14 +198,64 @@ enum StudyLevel: String, CaseIterable, Codable {
     }
 }
 
+// MARK: - Time periods for statistics
+enum TimePeriod: String, CaseIterable, Identifiable {
+    case quarter = "Quarter"
+    case halfYear = "1/2 Year"
+    case year = "Year"
+    case twoYears = "2 Years"
+    case threeYears = "3 Years"
+    
+    var id: String { rawValue }
+    
+    var months: Int {
+        switch self {
+        case .quarter: return 3
+        case .halfYear: return 6
+        case .year: return 12
+        case .twoYears: return 24
+        case .threeYears: return 36
+        }
+    }
+    
+    var displayName: String {
+        switch self {
+        case .quarter: return "Quarter"
+        case .halfYear: return "1/2 Year"
+        case .year: return "Year"
+        case .twoYears: return "2 Years"
+        case .threeYears: return "3 Years"
+        }
+    }
+
+}
+
+// MARK: - Type of progress
+//enum ProgressType: String, CaseIterable {
+//    case added = "Added"
+//    case started = "Started"
+//    case studied = "Learnt"
+//    case practiced = "Practiced"
+//    
+//    var color: Color {
+//        switch self {
+//        case .added: return .blue
+//        case .started: return .orange
+//        case .studied: return .green
+//        case .practiced: return .purple
+//        }
+//    }
+//}
+
+
 enum StudyProgress: String, CaseIterable, Codable { // progress in mastering educational materials
-    case fresh, started, studied, practiced
+    case added, started, studied, practiced
     
     // 􀐾 chart.bar, 􀓎 hare, 􁗟 bird, 􁝯 tree, 􀑁 chart.line.uptrend.xyaxis
     
     var displayName: String {
         switch self {
-        case .fresh: return "New"
+        case .added: return "New"
         case .started: return "Started"
         case .studied: return "Learnt"
         case .practiced: return "Practiced"
@@ -214,7 +264,7 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
     
     var icon: Image { // for other options look at TestSFSymbolsForProgress
         switch self {
-        case .fresh: return Image(systemName: "sparkles") // lightbulb signpost.right
+        case .added: return Image(systemName: "sparkles") // lightbulb signpost.right
         case .started: return Image(systemName: "signpost.right")
         case .studied: return Image(systemName: "flag.checkered") // brain.head.profile flag.checkered
         case .practiced: return Image(systemName: "mountain.2.fill") // hand.raised.fingers.spread mountain.2.fill
@@ -223,7 +273,7 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
     
     var color: Color {
         switch self {
-        case .fresh: return Color.mycolor.myGreen
+        case .added: return Color.mycolor.myGreen
         case .started: return Color.mycolor.myPurple
         case .studied: return Color.mycolor.myBlue
         case .practiced: return Color.mycolor.myRed
