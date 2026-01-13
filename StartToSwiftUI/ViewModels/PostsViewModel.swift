@@ -41,7 +41,7 @@ class PostsViewModel: ObservableObject {
     @Published var searchText: String = ""
     @Published var isFiltersEmpty: Bool = true
     @Published var selectedRating: PostRating? = nil
-    @Published var selectedStudyProgress: StudyProgress = .added
+    @Published var selectedStudyProgress: StudyProgress = .fresh
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -419,7 +419,7 @@ class PostsViewModel: ObservableObject {
         post.progress = selectedStudyProgress
         
         switch selectedStudyProgress {
-        case .added:
+        case .fresh:
             post.startedDateStamp = nil
             post.studiedDateStamp = nil
             post.practicedDateStamp = nil

@@ -11,9 +11,7 @@ import SwiftUI
 struct CumulativeLegendView: View {
     
     var body: some View {
-        
-        
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(spacing: 8) {
             
             Text("Cumulative progress")
                 .font(.caption)
@@ -21,9 +19,9 @@ struct CumulativeLegendView: View {
             HStack(spacing: 20) {
                 ForEach([StudyProgress.started, StudyProgress.studied, StudyProgress.practiced], id: \.self) { type in
                     HStack(spacing: 6) {
-                        Circle()
+                        Capsule()
                             .fill(type.color)
-                            .frame(width: 8, height: 8)
+                            .frame(width: 12, height: 8)
                         Text(type.displayName)
                             .font(.caption)
                     }
@@ -31,10 +29,8 @@ struct CumulativeLegendView: View {
             }
         }
         .foregroundStyle(Color.mycolor.myAccent)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(Color.mycolor.myBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 8)
     }
 }
 

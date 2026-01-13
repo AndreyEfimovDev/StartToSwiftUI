@@ -31,7 +31,7 @@ struct StudyProgressView: View {
                 }
                 .pickerStyle(.segmented)
                 .padding()
-                .background(Color(.systemBackground))
+                .background(Color.mycolor.myBackground)
                 
                 TabView(selection: $selectedTab) {
                     LearningProgressChartView(posts: vm.allPosts)
@@ -59,3 +59,5 @@ struct StudyProgressView: View {
         .environmentObject(vm)
         .environmentObject(AppCoordinator())
 }
+
+
