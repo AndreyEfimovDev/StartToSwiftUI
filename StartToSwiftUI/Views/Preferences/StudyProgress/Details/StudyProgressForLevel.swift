@@ -50,7 +50,7 @@ struct StudyProgressForLevel: View {
                         .font(.title3)
                 }
                 .foregroundStyle(studyLevel?.color ?? Color.mycolor.myAccent)
-                .padding(.bottom)
+//                .padding(.bottom)
                 
                 // PROGRESS VIEWS
                 ForEach(StudyProgress.allCases, id: \.self) { progressLevel in

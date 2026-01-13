@@ -1,8 +1,8 @@
 //
-//  StudyProgressView.swift
+//  StudyProgressTabsView.swift
 //  StartToSwiftUI
 //
-//  Created by Andrey Efimov on 04.12.2025.
+//  Created by Andrey Efimov on 13.01.2026.
 //
 
 import SwiftUI
@@ -10,64 +10,36 @@ import SwiftData
 
 struct StudyProgressView: View {
     
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
-    
-    @State private var selectedTab: StudyLevelTabs = .all
-        
-    private var tabs: [StudyLevelTabs] {
-            [.all, .beginner, .middle, .advanced]
-        }
 
+    @State private var selectedTab = 0
+    let tabs = ["Overview", "Details"]
+    
     var body: some View {
         ViewWrapperWithCustomNavToolbar(
             title: "Achievements",
             showHomeButton: true
         ) {
-            Group {
-    //            if UIDevice.isiPad {
-                    VStack(spacing: 0)  {
-                        Group {
-                            switch selectedTab {
-                            case .all:
-                                StudyProgressForLevel(studyLevel: nil)
-                                    .opacity(selectedTab == .all ? 1 : 0)
-                            case .beginner:
-                                StudyProgressForLevel(studyLevel: .beginner)
-                                    .opacity(selectedTab == .beginner ? 1 : 0)
-                            case .middle:
-                                StudyProgressForLevel(studyLevel: .middle)
-                                    .opacity(selectedTab == .middle ? 1 : 0)
-                            case .advanced:
-                                StudyProgressForLevel(studyLevel: .advanced)
-                                    .opacity(selectedTab == .advanced ? 1 : 0)
-                            }
-                        }
-                        .transition(.slide)
-                        .animation(.linear(duration: 0.3), value: selectedTab)
-                        
-                        UnderlineSermentedPickerNotOptional(
-                            selection: $selectedTab,
-                            allItems: StudyLevelTabs.allCases,
-                            titleForCase: { $0.displayName },
-                            selectedFont: UIDevice.isiPad ? .headline : .subheadline
-                        )
-                        .padding(.horizontal)
-                        .padding(.top)
+            VStack(spacing: 0) {
+                Picker("Select tab", selection: $selectedTab) {
+                    ForEach(0..<tabs.count, id: \.self) { index in
+                        Text(tabs[index])
+                            .tag(index)
                     }
-                    .padding()
-    //            } else {
-    //                TabView (selection: $selectedTab) {
-    //                    ForEach(tabs, id: \.self) { tab in
-    //                        StudyProgressForLevel(studyLevel: tab.studyLevel)
-    //                            .tag(tab)
-    //                            .padding(.top)
-    //                            .padding(.bottom, 50)
-    //                    }
-    //                }
-    //                .tabViewStyle(.page)
-    //                .indexViewStyle(.page(backgroundDisplayMode: .always))
-    //            }
+                }
+                .pickerStyle(.segmented)
+                .padding()
+                .background(Color(.systemBackground))
+                
+                TabView(selection: $selectedTab) {
+                    LearningProgressChartView(posts: vm.allPosts)
+                        .tag(0)
+                    StudyProgressDetailsView()
+                        .tag(1)
+                }
+                .tabViewStyle(.page(indexDisplayMode: .never))
             }
         }
     }
@@ -81,10 +53,9 @@ struct StudyProgressView: View {
     let context = ModelContext(container)
     
     let vm = PostsViewModel(modelContext: context)
-    
-    NavigationStack{
-        StudyProgressView()
-            .environmentObject(vm)
-            .environmentObject(AppCoordinator())
-    }
+
+    StudyProgressView()
+        .modelContainer(container)
+        .environmentObject(vm)
+        .environmentObject(AppCoordinator())
 }
