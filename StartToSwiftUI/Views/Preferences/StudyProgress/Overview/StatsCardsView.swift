@@ -13,13 +13,13 @@ struct StatsCardsView: View {
     let stats: ProgressStats
     
     var body: some View {
-        VStack(spacing: 12) {
-            HStack(spacing: 12) {
-                StatCard(title: "Added", value: "\(stats.added)", color: StudyProgress.added.color)
+        VStack(spacing: 6) {
+            HStack(spacing: 6) {
+                StatCard(title: "Added", value: "\(stats.added)", color: StudyProgress.fresh.color)
                 StatCard(title: "Started", value: "\(stats.started)", color: StudyProgress.started.color)
             }
             
-            HStack(spacing: 12) {
+            HStack(spacing: 6) {
                 StatCard(title: "Learnt", value: "\(stats.studied)", color: StudyProgress.studied.color)
                 StatCard(title: "Practiced", value: "\(stats.practiced)", color: StudyProgress.practiced.color)
             }
@@ -28,12 +28,11 @@ struct StatsCardsView: View {
             HStack {
                 Text("Completion:")
                     .font(.subheadline)
-                    .foregroundStyle(Color.mycolor.mySecondary)
                 Spacer()
                 Text(String(format: "%.1f%%", stats.completionRate))
                     .font(.headline)
-                    .foregroundStyle(Color.mycolor.myAccent)
             }
+            .foregroundStyle(Color.mycolor.myAccent)
             .padding()
             .background(Color.mycolor.myBackground)
             .clipShape(
@@ -41,4 +40,21 @@ struct StatsCardsView: View {
             )
         }
     }
+}
+
+#Preview {
+    let mockPosts = [
+        Post(date: Date()),
+        Post(date: Calendar.current.date(byAdding: .day, value: -1, to: Date())!),
+        Post(date: Calendar.current.date(byAdding: .day, value: -2, to: Date())!),
+        Post(date: Calendar.current.date(byAdding: .day, value: -3, to: Date())!, startedDateStamp: Date()),
+        Post(date: Calendar.current.date(byAdding: .day, value: -4, to: Date())!, startedDateStamp: Date()),
+        Post(date: Calendar.current.date(byAdding: .day, value: -5, to: Date())!, startedDateStamp: Date(), studiedDateStamp: Date()),
+        Post(date: Calendar.current.date(byAdding: .day, value: -6, to: Date())!, startedDateStamp: Date(), studiedDateStamp: Date(), practicedDateStamp: Date())
+    ]
+    
+    let stats = ProgressStats(posts: mockPosts, period: .quarter)
+    
+    return StatsCardsView(stats: stats)
+        .padding()
 }

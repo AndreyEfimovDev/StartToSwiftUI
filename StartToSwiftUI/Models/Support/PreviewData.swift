@@ -57,7 +57,7 @@ struct PreviewData {
         postPlatform: .youtube,
         postDate: Date.from(year: 2021, month: 3, day: 26),
         studyLevel: .beginner,
-        progress: .added , // fresh, learning, studied, practiced
+        progress: .fresh , // fresh, learning, studied, practiced
         favoriteChoice: .yes,
         postRating: .good, // good, great, excellent
         notes: "",
@@ -74,7 +74,7 @@ struct PreviewData {
         urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
         postDate: nil,
         studyLevel: .advanced,
-        progress: .added, // fresh, learning, studied, practiced
+        progress: .fresh, // fresh, learning, studied, practiced
         postRating: .great, // good, great, excellent
         origin: .statical
     )

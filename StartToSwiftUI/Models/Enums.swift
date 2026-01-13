@@ -249,13 +249,13 @@ enum TimePeriod: String, CaseIterable, Identifiable {
 
 
 enum StudyProgress: String, CaseIterable, Codable { // progress in mastering educational materials
-    case added, started, studied, practiced
+    case fresh, started, studied, practiced
     
     // 􀐾 chart.bar, 􀓎 hare, 􁗟 bird, 􁝯 tree, 􀑁 chart.line.uptrend.xyaxis
     
     var displayName: String {
         switch self {
-        case .added: return "New"
+        case .fresh: return "Added"
         case .started: return "Started"
         case .studied: return "Learnt"
         case .practiced: return "Practiced"
@@ -264,7 +264,7 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
     
     var icon: Image { // for other options look at TestSFSymbolsForProgress
         switch self {
-        case .added: return Image(systemName: "sparkles") // lightbulb signpost.right
+        case .fresh: return Image(systemName: "sparkles") // lightbulb signpost.right
         case .started: return Image(systemName: "signpost.right")
         case .studied: return Image(systemName: "flag.checkered") // brain.head.profile flag.checkered
         case .practiced: return Image(systemName: "mountain.2.fill") // hand.raised.fingers.spread mountain.2.fill
@@ -273,7 +273,7 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
     
     var color: Color {
         switch self {
-        case .added: return Color.mycolor.myGreen
+        case .fresh: return Color.mycolor.myGreen
         case .started: return Color.mycolor.myPurple
         case .studied: return Color.mycolor.myBlue
         case .practiced: return Color.mycolor.myRed

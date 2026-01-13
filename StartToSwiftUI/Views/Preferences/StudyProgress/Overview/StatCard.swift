@@ -16,14 +16,16 @@ struct StatCard: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.mycolor.myAccent)
             Text(value)
-                .font(.title2.bold())
+                .font(.title3.bold())
                 .foregroundStyle(color)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
+        .padding(8)
         .background(color.opacity(0.3))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .clipShape(
+            RoundedRectangle(cornerRadius: 12)
+        )
     }
 }
