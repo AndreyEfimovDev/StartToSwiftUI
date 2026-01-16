@@ -294,7 +294,7 @@ struct HomeView: View {
         ContentUnavailableView(
             "No Study Materials",
             systemImage: "tray.and.arrow.down",
-            description: Text("Materials will appear here when you create your own or download a curated collection.")
+            description: Text("Materials will appear here when you create your own or download a curated collection")
         )
     }
     
@@ -302,7 +302,7 @@ struct HomeView: View {
         ContentUnavailableView(
             "No Results matching your search criteria",
             systemImage: "magnifyingglass",
-            description: Text("Check the spelling or try a new search.")
+            description: Text("Check the spelling or try a new search")
         )
     }
     

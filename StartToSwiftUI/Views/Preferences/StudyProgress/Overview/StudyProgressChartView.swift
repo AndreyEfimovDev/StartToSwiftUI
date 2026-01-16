@@ -29,7 +29,7 @@ struct LearningProgressChartView: View {
         let maxStudied = stats.studied
         let maxPracticed = stats.practiced
         let maxValue = max(maxStarted, maxStudied, maxPracticed)
-        return max(maxValue, 5) // Минимум 5 для читаемости
+        return max(maxValue, 5) // Minimum 5 for readability
     }
     
     

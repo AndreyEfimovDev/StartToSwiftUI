@@ -51,7 +51,7 @@ struct PreferencesView: View {
                     achievements
                 }
                 Section(header: sectionHeader("Manage materials (\(postsCount))")) {
-                    loadStaticPostsToggle
+//                    loadStaticPostsToggle
                     postDrafts
                     checkForPostsUpdate
                     importFromCloud
