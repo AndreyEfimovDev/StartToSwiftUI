@@ -257,7 +257,7 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
         switch self {
         case .fresh: return "Added"
         case .started: return "Started"
-        case .studied: return "L earnt"
+        case .studied: return "Learnt"
         case .practiced: return "Practiced"
         }
     }
