@@ -197,8 +197,6 @@ struct ImportPostsFromCloudView: View {
     
     /// Downloading from a cloud service
     private func loadFromCloudService() async {
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-
         await vm.importPostsFromCloud() { [self] in
             Task { @MainActor in
                 isInProgress = false

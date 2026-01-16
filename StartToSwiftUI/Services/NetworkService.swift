@@ -15,6 +15,14 @@ class NetworkService: ObservableObject {
         self.baseURL = baseURL
     }
     
+    func fetchDataFromURLAsync<T: Codable>() async throws -> T {
+        return try await withCheckedThrowingContinuation { continuation in
+            fetchDataFromURL { (result: Result<T, Error>) in
+                continuation.resume(with: result)
+            }
+        }
+    }
+    
     func fetchDataFromURL<T: Codable>(
         decoder: JSONDecoder = .appDecoder, //ISO8601 (string) encoding strategy
         completion: @escaping (Result<T, Error>) -> Void
@@ -61,13 +69,6 @@ class NetworkService: ObservableObject {
         task.resume()
     }
     
-    func fetchDataFromURLAsync<T: Codable>() async throws -> T {
-        return try await withCheckedThrowingContinuation { continuation in
-            fetchDataFromURL { (result: Result<T, Error>) in
-                continuation.resume(with: result)
-            }
-        }
-    }
 
 }
 

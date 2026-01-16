@@ -19,7 +19,10 @@ struct ProgressStats {
         let now = Date()
         let startDate = Calendar.current.date(byAdding: .month, value: -period.months, to: now) ?? now
         
-        added = posts.filter { $0.date >= startDate }.count
+        added = posts.filter {
+            guard let date = $0.addedDateStamp else { return false }
+            return date >= startDate
+        }.count
         
         started = posts.filter {
             guard let date = $0.startedDateStamp else { return false }

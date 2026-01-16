@@ -472,18 +472,19 @@ class PostsViewModel: ObservableObject {
             // Checking for new curated posts
             if !newPosts.isEmpty {
                 for post in newPosts {
+                    post.addedDateStamp = .now // set addedDateStamp as 'today' for new curated posts loaded/added
                     self.modelContext.insert(post)
                 }
-                let appStateManager = AppSyncStateManager(modelContext: modelContext)
-
+                self.saveContextAndReload()
+                
                 // Update the date of the last import of curated posts - we take the oldest date of the post creation
+                let appStateManager = AppSyncStateManager(modelContext: modelContext)
                 let latestDateOfCuaratedPosts = getLatestDateFromPosts(posts: allPosts) ?? .now
                 appStateManager.setLastDateOfCuaratedPostsLoaded(latestDateOfCuaratedPosts)
 
                 // As a result of importing curated posts - no new materials -> false
                 appStateManager.setCuratedPostsLoadStatusOff()
 
-                self.saveContextAndReload()
                 self.hapticManager.notification(type: .success)
                 log("✅ Added \(newPosts.count) new posts", level: .info)
             } else {
