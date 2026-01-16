@@ -19,7 +19,7 @@ class PostsViewModel: ObservableObject {
     // Load static posts trigger - tied to AppStateManager, used only in Toggle in Preferences
     @AppStorage("shouldLoadStaticPosts") var shouldLoadStaticPosts: Bool = true {
         didSet {
-            log("🔄 shouldLoadStaticPosts изменился: \(shouldLoadStaticPosts)", level: .info)
+            log("🔄 shouldLoadStaticPosts has changed: \(shouldLoadStaticPosts)", level: .info)
             let appStateManager = AppSyncStateManager(modelContext: modelContext)
             
             switch shouldLoadStaticPosts {
@@ -144,7 +144,7 @@ class PostsViewModel: ObservableObject {
         let globalShouldLoadStaticPostsStatus = appStateManager.getStaticPostsLoadToggleStatus()
         let globalCheckIfStaticPostsHasLoaded = appStateManager.checkIfStaticPostsHasLoaded()
         
-        // Проверяем совпадение локального значения статуса shouldLoadStaticPosts с AppStateManager
+        // check the local status value of shouldLoadStaticPosts with AppStateManager
         // If they don't match, we adjust the local one - the global one takes priority
         if shouldLoadStaticPosts != globalShouldLoadStaticPostsStatus {
             shouldLoadStaticPosts = globalShouldLoadStaticPostsStatus
@@ -181,8 +181,8 @@ class PostsViewModel: ObservableObject {
             
             // STEP 5: If there is already at least one post, DO NOT create new ones.
             if !existingStaticPosts.isEmpty {
-                log("⚠️⚠️ Обнаружены существующие статические посты: \(existingStaticPosts.count) шт.", level: .info)
-                log("⚠️⚠️ Вероятно, они синхронизированы с другого устройства", level: .info)
+                log("⚠️⚠️ Existing static posts detected: \(existingStaticPosts.count) шт.", level: .info)
+                log("⚠️⚠️ Probably synced from another device", level: .info)
                 
                 // Removing duplicates
                 await removeDuplicateStaticPosts()
@@ -226,7 +226,7 @@ class PostsViewModel: ObservableObject {
             loadPostsFromSwiftData()
 
         } catch {
-            log("❌ Ошибка при загрузке статических постов: \(error)", level: .error)
+            log("❌ Error loading static posts: \(error)", level: .error)
         }
     }
 
@@ -249,7 +249,7 @@ class PostsViewModel: ObservableObject {
                 return
             }
             
-            log("🗑️ Обнаружены дубликаты! Всего: \(existingStaticPosts.count), ожидалось: \(StaticPost.staticPosts.count)", level: .info)
+            log("🗑️ Duplicates found! Total: \(existingStaticPosts.count), expected: \(StaticPost.staticPosts.count)", level: .info)
             
             // Group by ID
             let groupedById = Dictionary(grouping: existingStaticPosts, by: { $0.id })
@@ -258,7 +258,7 @@ class PostsViewModel: ObservableObject {
             
             // For each ID, we leave only the first post and delete the rest.
             for (id, posts) in groupedById where posts.count > 1 {
-                log("  🔍 ID \(id): найдено \(posts.count) дубликатов", level: .info)
+                log("  🔍 ID \(id): found \(posts.count) duplicates", level: .info)
                 
                 // Sort by creation date and leave the oldest one
                 let sortedPosts = posts.sorted { $0.date < $1.date }
@@ -267,7 +267,7 @@ class PostsViewModel: ObservableObject {
                 for duplicatePost in sortedPosts.dropFirst() {
                     modelContext.delete(duplicatePost)
                     deletedCount += 1
-                    log("    ✗ Удалён дубликат: \(duplicatePost.title)", level: .info)
+                    log("    ✗ Duplicate removed: \(duplicatePost.title)", level: .info)
                 }
             }
             
@@ -324,13 +324,13 @@ class PostsViewModel: ObservableObject {
         
         do {
             allPosts = try modelContext.fetch(descriptor)
-            // DEBUG: Display all posts with ID
-            log("📊 Loaded \(allPosts.count) posts from SwiftData:", level: .debug)
-//            for (index, post) in allPosts.enumerated() {
-//                log("📊 \(index + 1). ID: \(post.id), Title: \(post.title)", level: .debug)
-//            }
             allYears = getAllYears()
             allCategories = getAllCategories()
+            log("📊 Loaded \(allPosts.count) posts from SwiftData:", level: .debug)
+            // DEBUG: Display all posts with ID
+            //            for (index, post) in allPosts.enumerated() {
+            //                log("📊 \(index + 1). ID: \(post.id), Title: \(post.title)", level: .debug)
+            //            }
         } catch {
             errorMessage = "Error loading data"
             showErrorMessageAlert = true
@@ -705,7 +705,6 @@ class PostsViewModel: ObservableObject {
             return .failure(.fileNotFound)
         }
         
-        // Просто вызываем новый метод экспорта
         switch exportPostsToJSON() {
         case .success(let url):
             log("🍓FM(getFilePath): Successfully got file url: \(url).", level: .info)
@@ -756,13 +755,13 @@ class PostsViewModel: ObservableObject {
     
     func exportPostsToJSON() -> Result<URL, Error> {
         do {
-            // Получаем все посты из SwiftData
+            // Getting all posts from SwiftData
             let descriptor = FetchDescriptor<Post>(sortBy: [SortDescriptor(\.date, order: .reverse)])
             let allPosts = try modelContext.fetch(descriptor)
             
             log("🍓 Exporting \(allPosts.count) posts from SwiftData", level: .info)
             
-            // Конвертируем Post -> CodablePost
+            // Convert Post to CodablePost
             let codablePosts = allPosts.map { post in
                 CodablePost(
                     id: post.id,
@@ -788,14 +787,14 @@ class PostsViewModel: ObservableObject {
                 )
             }
             
-            // Кодируем в JSON
+            // Encoding in JSON
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .iso8601
             encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
             
             let jsonData = try encoder.encode(codablePosts)
             
-            // Создаем уникальное имя файла с датой
+            // Create a unique file name with the date
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd_HH-mm"
             let dateString = dateFormatter.string(from: Date())
