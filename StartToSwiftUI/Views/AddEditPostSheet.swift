@@ -20,10 +20,13 @@ struct AddEditPostSheet: View {
     private var viewTitle: String {
         originalPost == nil ? "Add" : "Edit"
     }
-    
-    @State private var originalPost: Post?
+    private var hasNoChanges: Bool {
+        return editedPost.isEqual(to: copyOfThePost)
+    }
+
     @State private var editedPost: Post
-    @State private var copyOfThePost: Post
+    private var originalPost: Post?
+    private var copyOfThePost: Post
     
     @State private var isPostDraftSaved: Bool = false
     @State private var isShowingExitMenuConfirmation: Bool = false
@@ -55,7 +58,7 @@ struct AddEditPostSheet: View {
     @State var alertTitle: String = ""
     @State var alertMessage: String = ""
     
-    let templateForNewPost: Post = Post(
+    private let templateForNewPost: Post = Post(
         origin: .local,
         draft: true
     )
@@ -68,17 +71,17 @@ struct AddEditPostSheet: View {
     init(post: Post?) {
         
         if let post = post { // post for editing initialising
-            // Link to the original from the context
-            _originalPost = State(initialValue: post)
             // Copy for editing
             _editedPost = State(initialValue: post.copy())
             // Copy for comparison
-            _copyOfThePost = State(initialValue: post.copy())
+            copyOfThePost = post.copy()
+            // Link to the original from the context
+            originalPost = post
             
         } else { // if post is not passed (nil) - add a new post initialising
-            _originalPost = State(initialValue: nil)
             _editedPost = State(initialValue: templateForNewPost.copy())
-            _copyOfThePost = State(initialValue: templateForNewPost.copy())
+            copyOfThePost = templateForNewPost.copy()
+            originalPost = nil
         }
     }
     
@@ -200,10 +203,6 @@ struct AddEditPostSheet: View {
         }
     }
     
-    private var hasNoChanges: Bool {
-        return editedPost.isEqual(to: copyOfThePost)
-    }
-    
     private var exitConfirmation: some View {
         ZStack {
             Color.mycolor.myAccent.opacity(0.001)
@@ -274,6 +273,7 @@ struct AddEditPostSheet: View {
     }
 
     private func validatePost() -> Bool {
+        
         if !isTexLengthAppropriate(
             text: editedPost.title,
             limit: 3

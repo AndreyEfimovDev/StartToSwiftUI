@@ -88,7 +88,7 @@ class JSONFileManager: ObservableObject {
                 log("🍎 FM(loadData): Successfully uploaded \(T.self)", level: .info)
                 completion(.success(decodedData))
             } catch {
-                log("🍎☑️ FM(loadData): Decoding error: \(error)", level: .error)
+                log("🍎 ❌ FM(loadData): Decoding error: \(error)", level: .error)
                 completion(.failure(.decodingFailed(error)))
             }
             

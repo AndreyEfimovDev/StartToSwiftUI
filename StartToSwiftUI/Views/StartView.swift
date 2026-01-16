@@ -184,7 +184,7 @@ struct StartView: View {
         appStateManager.cleanupDuplicateAppStates()
         
         vm.loadPostsFromSwiftData()
-        await vm.loadStaticPostsIfNeeded()
+//        await vm.loadStaticPostsIfNeeded()
         await noticevm.importNoticesFromCloud()
         
         isLoadingData = false
