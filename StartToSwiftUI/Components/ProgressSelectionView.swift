@@ -57,7 +57,7 @@ struct ProgressSelectionView: View {
                                 selection: $vm.selectedStudyProgress,
                                 allItems: StudyProgress.allCases,
                                 titleForCase: { $0.displayName },
-                                selectedFont: .caption2,
+                                selectedFont: .caption,
                                 selectedTextColor: Color.mycolor.myGreen,
                                 unselectedTextColor: Color.mycolor.myAccent
                             )
@@ -73,7 +73,7 @@ struct ProgressSelectionView: View {
                                 .frame(maxWidth: 200)
                                 .padding(.bottom)
                         } // VStack
-                        .padding(20)
+                        .padding(.vertical, 20)
                     } // ZStack
                 } //VStack
                 .onAppear {

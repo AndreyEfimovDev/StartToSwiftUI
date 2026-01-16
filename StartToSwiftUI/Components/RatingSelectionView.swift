@@ -80,6 +80,7 @@ struct RatingSelectionView: View {
                             .padding(.bottom)
                         } // VStack
                         .padding(20)
+                        .border(.red)
                     } // ZStack
                 } //VStack
                 .onAppear {
@@ -113,7 +114,7 @@ struct RatingSelectionView: View {
                             }
                         }
                     Text(rating.displayName)
-                        .font(.caption2)
+                        .font(.caption)
                 }
                 .foregroundColor(Color.mycolor.myAccent)
             }
