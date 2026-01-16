@@ -239,7 +239,7 @@ class SpeechRecogniser: NSObject, ObservableObject {
         do {
             try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
         } catch {
-            log("Error deactivating audio session: \(error)", level: .error)
+            log("❌ Error deactivating audio session: \(error)", level: .error)
         }
     }
     
