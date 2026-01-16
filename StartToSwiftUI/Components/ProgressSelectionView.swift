@@ -57,9 +57,9 @@ struct ProgressSelectionView: View {
                                 selection: $vm.selectedStudyProgress,
                                 allItems: StudyProgress.allCases,
                                 titleForCase: { $0.displayName },
-                                selectedFont: .callout,
+                                selectedFont: .caption2,
                                 selectedTextColor: Color.mycolor.myGreen,
-                                unselectedTextColor: Color.mycolor.mySecondary
+                                unselectedTextColor: Color.mycolor.myAccent
                             )
                             .padding(30)
                             
