@@ -28,6 +28,7 @@ final class Post {
     var originRawValue: String = "cloud"
     var draft: Bool = false
     var date: Date = Date() // Дата создание данной записи
+    var addedDateStamp: Date?
     var startedDateStamp: Date?
     var studiedDateStamp: Date?
     var practicedDateStamp: Date?
@@ -89,6 +90,7 @@ final class Post {
         origin: PostOrigin = .cloud,
         draft: Bool = false,
         date: Date = .now,
+        addedDateStamp: Date? = nil,
         startedDateStamp: Date? = nil,
         studiedDateStamp: Date? = nil,
         practicedDateStamp: Date? = nil
@@ -110,6 +112,7 @@ final class Post {
         self.originRawValue = origin.rawValue
         self.draft = draft
         self.date = date
+        self.addedDateStamp = addedDateStamp
         self.startedDateStamp = startedDateStamp
         self.studiedDateStamp = studiedDateStamp
         self.practicedDateStamp = practicedDateStamp
@@ -136,6 +139,7 @@ struct CodablePost: Codable {
     let origin: PostOrigin
     var draft: Bool
     let date: Date
+    var addedDateStamp: Date?
     var startedDateStamp: Date?
     var studiedDateStamp: Date?
     var practicedDateStamp: Date?
@@ -144,23 +148,24 @@ struct CodablePost: Codable {
 extension Post {
     func isEqual(to other: Post) -> Bool {
         return self.id == other.id &&
-               self.category == other.category &&
-               self.title == other.title &&
-               self.intro == other.intro &&
-               self.author == other.author &&
-               self.postTypeRawValue == other.postTypeRawValue &&
-               self.urlString == other.urlString &&
-               self.postPlatformRawValue == other.postPlatformRawValue &&
-               self.postDate == other.postDate &&
-               self.studyLevelRawValue == other.studyLevelRawValue &&
-               self.progressRawValue == other.progressRawValue &&
-               self.favoriteChoiceRawValue == other.favoriteChoiceRawValue &&
-               self.postRatingRawValue == other.postRatingRawValue &&
-               self.notes == other.notes &&
-               self.draft == other.draft &&
-               self.startedDateStamp == other.startedDateStamp &&
-               self.studiedDateStamp == other.studiedDateStamp &&
-               self.practicedDateStamp == other.practicedDateStamp
+        self.category == other.category &&
+        self.title == other.title &&
+        self.intro == other.intro &&
+        self.author == other.author &&
+        self.postTypeRawValue == other.postTypeRawValue &&
+        self.urlString == other.urlString &&
+        self.postPlatformRawValue == other.postPlatformRawValue &&
+        self.postDate == other.postDate &&
+        self.studyLevelRawValue == other.studyLevelRawValue &&
+        self.progressRawValue == other.progressRawValue &&
+        self.favoriteChoiceRawValue == other.favoriteChoiceRawValue &&
+        self.postRatingRawValue == other.postRatingRawValue &&
+        self.notes == other.notes &&
+        self.draft == other.draft &&
+        self.addedDateStamp == other.addedDateStamp &&
+        self.startedDateStamp == other.startedDateStamp &&
+        self.studiedDateStamp == other.studiedDateStamp &&
+        self.practicedDateStamp == other.practicedDateStamp
     }
 }
 
@@ -185,6 +190,7 @@ extension Post {
             origin: self.origin,
             draft: self.draft,
             date: self.date,
+            addedDateStamp: self.addedDateStamp,
             startedDateStamp: self.startedDateStamp,
             studiedDateStamp: self.studiedDateStamp,
             practicedDateStamp: self.practicedDateStamp
@@ -209,6 +215,7 @@ extension Post {
         self.origin = post.origin
         self.draft = post.draft
         self.date = post.date
+        self.addedDateStamp = post.addedDateStamp
         self.startedDateStamp = post.startedDateStamp
         self.studiedDateStamp = post.studiedDateStamp
         self.practicedDateStamp = post.practicedDateStamp
