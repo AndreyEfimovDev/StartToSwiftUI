@@ -231,23 +231,6 @@ enum TimePeriod: String, CaseIterable, Identifiable {
 }
 
 // MARK: - Type of progress
-//enum ProgressType: String, CaseIterable {
-//    case added = "Added"
-//    case started = "Started"
-//    case studied = "Learnt"
-//    case practiced = "Practiced"
-//    
-//    var color: Color {
-//        switch self {
-//        case .added: return .blue
-//        case .started: return .orange
-//        case .studied: return .green
-//        case .practiced: return .purple
-//        }
-//    }
-//}
-
-
 enum StudyProgress: String, CaseIterable, Codable { // progress in mastering educational materials
     case fresh, started, studied, practiced
     
