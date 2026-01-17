@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftData
 
 @MainActor
-class NoticeViewModel: ObservableObject {
+final class NoticeViewModel: ObservableObject {
     
     private let modelContext: ModelContext
     private let hapticManager = HapticService.shared
