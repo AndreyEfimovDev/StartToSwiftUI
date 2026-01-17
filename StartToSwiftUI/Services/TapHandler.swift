@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class TapHandler {
+final class TapHandler {
     var singleTapAction: () -> Void
     var doubleTapAction: () -> Void
     

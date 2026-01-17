@@ -331,6 +331,15 @@
 			path = Coordinator;
 			sourceTree = "<group>";
 		};
+		4751DB062F1B846700EC9C53 /* Dallocated */ = {
+			isa = PBXGroup;
+			children = (
+				47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */,
+				477C745D2ECF6FB300F77F5B /* StaticPosts.swift */,
+			);
+			path = Dallocated;
+			sourceTree = "<group>";
+		};
 		475997322E5C6901008E20F0 = {
 			isa = PBXGroup;
 			children = (
@@ -351,6 +360,7 @@
 			isa = PBXGroup;
 			children = (
 				4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */,
+				4751DB062F1B846700EC9C53 /* Dallocated */,
 				475997622E5CF0C3008E20F0 /* SupportFrom3rdParties */,
 				475997722E5DA436008E20F0 /* Extensions */,
 				4759976C2E5D931F008E20F0 /* Services */,
@@ -376,7 +386,6 @@
 				477C745F2ECFB0E800F77F5B /* News.swift */,
 				47BAF0F72E64A77A00287F10 /* Enums.swift */,
 				4732FB362EAA63810062269D /* Constants.swift */,
-				477C745D2ECF6FB300F77F5B /* StaticPosts.swift */,
 				471BBFA42EC77C3D0004AC45 /* Support */,
 			);
 			path = Models;
@@ -426,12 +435,11 @@
 			children = (
 				47E439B62EA9290E007001AD /* NetworkService.swift */,
 				4791CDFD2E747AC100687126 /* JSONFileManager.swift */,
+				47EA14302EF530780064583B /* AppSyncStateManager.swift */,
 				4791CDFF2E747B2E00687126 /* HapticService.swift */,
 				47FF42582EE556DA0069D232 /* TapHandler.swift */,
 				4767C9602EF293FF003838BA /* PostMigrationHelper.swift */,
 				4767C9622EF29474003838BA /* NoticeMigrationHelper.swift */,
-				47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */,
-				47EA14302EF530780064583B /* AppSyncStateManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";

@@ -10,12 +10,15 @@ import SwiftData
 import Combine
 
 @MainActor
-class PostsViewModel: ObservableObject {
+final class PostsViewModel: ObservableObject {
     
     // MARK: - Properties
     
     private let modelContext: ModelContext
-
+    private let fileManager = JSONFileManager.shared
+    private let hapticManager = HapticService.shared
+    private let networkService: NetworkService
+    
     // Load static posts trigger - tied to AppStateManager, used only in Toggle in Preferences
     @AppStorage("shouldLoadStaticPosts") var shouldLoadStaticPosts: Bool = true {
         didSet {
@@ -31,10 +34,6 @@ class PostsViewModel: ObservableObject {
         }
     }
 
-    private let fileManager = JSONFileManager.shared
-    private let hapticManager = HapticService.shared
-    private let networkService: NetworkService
-    
     @Published var allPosts: [Post] = []
     @Published var filteredPosts: [Post] = []
     @Published var selectedPostId: String? = nil

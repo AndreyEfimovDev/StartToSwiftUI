@@ -12,20 +12,14 @@ struct StartView: View {
     
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var coordinator: AppCoordinator
-    
-    @StateObject private var vm: PostsViewModel
-    @StateObject private var noticevm: NoticeViewModel
-    
+    @EnvironmentObject private var vm: PostsViewModel
+    @EnvironmentObject private var noticevm: NoticeViewModel
+
     @State private var showLaunchView: Bool = true
     @State private var isLoadingData = true
     
     @State private var visibility: NavigationSplitViewVisibility = .doubleColumn
     
-    // MARK: - Init
-    init(modelContext: ModelContext) {
-        _vm = StateObject(wrappedValue: PostsViewModel(modelContext: modelContext))
-        _noticevm = StateObject(wrappedValue: NoticeViewModel(modelContext: modelContext))
-    }
     
     // MARK: - Body
     var body: some View {
@@ -61,7 +55,7 @@ struct StartView: View {
     private var mainContent: some View {
         Group {
             if UIDevice.isiPad {
-                // iPad - NavigationSplitView - DEBUGGING
+                // iPad - NavigationSplitView
                 NavigationSplitView (columnVisibility: $visibility) {
                     //                if let categories = vm.allCategories {
                     //                    List(categories, id: \.self, selection: $vm.selectedCategory) { category in
@@ -198,10 +192,14 @@ struct StartView: View {
     )
     
     let context = container.mainContext
+    let vm = PostsViewModel(modelContext: context)
+    let noticevm = NoticeViewModel(modelContext: context)
 
     NavigationStack {
-        StartView(modelContext: context)
+        StartView()
             .modelContainer(container)
             .environmentObject(AppCoordinator())
+            .environmentObject(vm)
+            .environmentObject(noticevm)
     }
 }
