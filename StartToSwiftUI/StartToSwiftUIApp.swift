@@ -14,6 +14,9 @@ import CloudKit
 struct StartToSwiftUIApp: App {
     
     @StateObject private var navigationCoordinator = AppCoordinator()
+    @StateObject private var postsViewModel: PostsViewModel
+    @StateObject private var noticeViewModel: NoticeViewModel
+
     private let hapticManager = HapticService.shared
     
     // MARK: - SwiftData Container with sync via iCloud
@@ -40,15 +43,23 @@ struct StartToSwiftUIApp: App {
     }()
     
     init() {
+        
+        let context = modelContainer.mainContext
+        _postsViewModel = StateObject(wrappedValue: PostsViewModel(modelContext: context))
+        _noticeViewModel = StateObject(wrappedValue: NoticeViewModel(modelContext: context))
+
         configureNavigationBarAppearance()
         warmUpKeyboardAndSpeech()
     }
     
     var body: some Scene {
         WindowGroup {
-            StartView(modelContext: modelContainer.mainContext)
+            StartView()
                 .modelContainer(modelContainer)
                 .environmentObject(navigationCoordinator)
+                .environmentObject(postsViewModel)
+                .environmentObject(noticeViewModel)
+
         }
     }
     

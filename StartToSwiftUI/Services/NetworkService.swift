@@ -7,7 +7,7 @@
 
 import Foundation
 
-class NetworkService: ObservableObject {
+final class NetworkService: ObservableObject {
     
     let baseURL: String
     

@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class JSONFileManager: ObservableObject {
+final class JSONFileManager: ObservableObject {
     
     static let shared = JSONFileManager()
     
