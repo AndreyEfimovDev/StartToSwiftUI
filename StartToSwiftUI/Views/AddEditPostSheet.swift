@@ -71,17 +71,17 @@ struct AddEditPostSheet: View {
     init(post: Post?) {
         
         if let post = post { // post for editing initialising
+            // Link to the original from the context
+            originalPost = post
             // Copy for editing
             _editedPost = State(initialValue: post.copy())
             // Copy for comparison
             copyOfThePost = post.copy()
-            // Link to the original from the context
-            originalPost = post
             
         } else { // if post is not passed (nil) - add a new post initialising
+            originalPost = nil
             _editedPost = State(initialValue: templateForNewPost.copy())
             copyOfThePost = templateForNewPost.copy()
-            originalPost = nil
         }
     }
     
