@@ -145,10 +145,10 @@ struct CodablePost: Codable {
     var practicedDateStamp: Date?
 }
 
+    // MARK: For AddEditPostSheet module: compare only those fields that the user can edit
 extension Post {
     func isEqual(to other: Post) -> Bool {
-        return self.id == other.id &&
-        self.category == other.category &&
+        return self.category == other.category &&
         self.title == other.title &&
         self.intro == other.intro &&
         self.author == other.author &&
@@ -157,15 +157,7 @@ extension Post {
         self.postPlatformRawValue == other.postPlatformRawValue &&
         self.postDate == other.postDate &&
         self.studyLevelRawValue == other.studyLevelRawValue &&
-        self.progressRawValue == other.progressRawValue &&
-        self.favoriteChoiceRawValue == other.favoriteChoiceRawValue &&
-        self.postRatingRawValue == other.postRatingRawValue &&
-        self.notes == other.notes &&
-        self.draft == other.draft &&
-        self.addedDateStamp == other.addedDateStamp &&
-        self.startedDateStamp == other.startedDateStamp &&
-        self.studiedDateStamp == other.studiedDateStamp &&
-        self.practicedDateStamp == other.practicedDateStamp
+        self.notes == other.notes
     }
 }
 
@@ -208,17 +200,17 @@ extension Post {
         self.postPlatform = post.postPlatform
         self.postDate = post.postDate
         self.studyLevel = post.studyLevel
-        self.progress = post.progress
-        self.favoriteChoice = post.favoriteChoice
-        self.postRating = post.postRating
+//        self.progress = post.progress
+//        self.favoriteChoice = post.favoriteChoice
+//        self.postRating = post.postRating
         self.notes = post.notes
-        self.origin = post.origin
+//        self.origin = post.origin
         self.draft = post.draft
-        self.date = post.date
-        self.addedDateStamp = post.addedDateStamp
-        self.startedDateStamp = post.startedDateStamp
-        self.studiedDateStamp = post.studiedDateStamp
-        self.practicedDateStamp = post.practicedDateStamp
+//        self.date = post.date
+//        self.addedDateStamp = post.addedDateStamp
+//        self.startedDateStamp = post.startedDateStamp
+//        self.studiedDateStamp = post.studiedDateStamp
+//        self.practicedDateStamp = post.practicedDateStamp
     }
 }
 
