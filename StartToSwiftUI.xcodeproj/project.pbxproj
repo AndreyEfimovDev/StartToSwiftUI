@@ -311,11 +311,11 @@
 			children = (
 				4751DAEB2F1534B800EC9C53 /* StudyProgressChartView.swift */,
 				4751DAF72F16409B00EC9C53 /* StatsCardsView.swift */,
+				4751DAF92F1640C300EC9C53 /* StatCard.swift */,
+				4751DAF12F16402E00EC9C53 /* ProgressStats.swift */,
 				4751DB042F16670E00EC9C53 /* LineMarkLegendView.swift */,
 				4751DAFD2F16410000EC9C53 /* CumulativeLegendView.swift */,
-				4751DAF12F16402E00EC9C53 /* ProgressStats.swift */,
 				4751DAF52F16407200EC9C53 /* ChartDataPoint.swift */,
-				4751DAF92F1640C300EC9C53 /* StatCard.swift */,
 			);
 			path = Overview;
 			sourceTree = "<group>";

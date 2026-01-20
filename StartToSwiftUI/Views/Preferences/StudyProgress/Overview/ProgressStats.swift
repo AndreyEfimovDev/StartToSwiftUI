@@ -21,24 +21,25 @@ struct ProgressStats {
         
         added = posts.filter {
             guard let date = $0.addedDateStamp else { return false }
-            return date >= startDate
+            return $0.progress == .fresh && date >= startDate
         }.count
         
         started = posts.filter {
             guard let date = $0.startedDateStamp else { return false }
-            return date >= startDate
+            return $0.progress == .started && date >= startDate
         }.count
         
         studied = posts.filter {
             guard let date = $0.studiedDateStamp else { return false }
-            return date >= startDate
+            return $0.progress == .studied && date >= startDate
         }.count
         
         practiced = posts.filter {
             guard let date = $0.practicedDateStamp else { return false }
-            return date >= startDate
+            return $0.progress == .practiced && date >= startDate
         }.count
         
-        completionRate = added > 0 ? Double(practiced) / Double(added) * 100 : 0
+        let totalPostsInPeriod = added + started + studied + practiced
+        completionRate = added > 0 ? Double(practiced) / Double(totalPostsInPeriod) * 100 : 0
     }
 }
