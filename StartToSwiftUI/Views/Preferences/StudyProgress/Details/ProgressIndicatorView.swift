@@ -36,10 +36,11 @@ struct ProgressIndicator: View {
                     .animation(.linear(duration: 0.8), value: trim)
             }
             HStack(alignment: .lastTextBaseline, spacing: 0) {
-                Text("\(Int(trim * 100))")
+                Text(String(format: "%.1f", trim * 100))
                     .font(fontForTitle)
                 Text("%")
                     .font(.caption2)
+
             }
             .bold()
             .foregroundStyle(Color.mycolor.myAccent)

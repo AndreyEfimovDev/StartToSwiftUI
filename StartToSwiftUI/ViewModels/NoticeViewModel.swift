@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftData
 
 @MainActor
-class NoticeViewModel: ObservableObject {
+final class NoticeViewModel: ObservableObject {
     
     private let modelContext: ModelContext
     private let hapticManager = HapticService.shared
@@ -51,7 +51,7 @@ class NoticeViewModel: ObservableObject {
 //          log("🍉 ✅ Download completed in \(String(format: "%.2f", duration))s. Notifications: \(fetchedNotices.count)", level: .info)
             
         } catch {
-            log("🍉 ❌ Ошибка загрузки уведомлений: \(error)", level: .error)
+            log("🍉 ❌ Error loading notices: \(error)", level: .error)
         }
     }
     
@@ -75,8 +75,6 @@ class NoticeViewModel: ObservableObject {
     func importNoticesFromCloud() async {
         
         let appStateManager = AppSyncStateManager(modelContext: modelContext)
-        // STEP 1: Wait for iCloud syncing
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
         
         do {
             
@@ -94,7 +92,7 @@ class NoticeViewModel: ObservableObject {
                 return
             }
             
-            // STEP 2: Check and remove local duplicates BEFORE adding new ones
+            // Check and remove local duplicates BEFORE adding new ones
             // Removing duplicate notifications in SwiftUI, leaving only one instance for each ID
             removeDuplicateNotices()
             
@@ -138,7 +136,7 @@ class NoticeViewModel: ObservableObject {
             if isNotificationOn {
                 sendLocalNotification(count: newNoticesByID.count)
             }
-            log("🍉 ✅ Import complete: \(newNoticesByID.count) notices added",  level: .error)
+            log("🍉 ✅ Import complete: \(newNoticesByID.count) notices added",  level: .info)
         } catch {
             self.errorMessage = error.localizedDescription
             self.showErrorMessageAlert = true
@@ -156,11 +154,11 @@ class NoticeViewModel: ObservableObject {
             let allNotices = try modelContext.fetch(descriptor)
             
             if !allNotices.isEmpty {
-                // Группируем по ID
+                // Grouped by Id
                 let groupedById = Dictionary(grouping: allNotices, by: { $0.id })
                 
-                // Находим дубликаты
-                // duplicates - это словарь: [ID: [список дублирующихся уведомлений]]
+                // Find duplicates
+                // duplicates is a dictionary: [ID: [list of duplicate notifications]]
                 let duplicates = groupedById.filter { $0.value.count > 1 }
                 
                 guard !duplicates.isEmpty else {
@@ -172,7 +170,7 @@ class NoticeViewModel: ObservableObject {
                 // id - unique notice identifier (String)
                 // noticesList - array of duplicates with the same ID (notices array)
                 for (id, noticesList) in duplicates {
-                    log("  🔍 ID \(id): найдено \(noticesList.count) дубликатов", level: .info)
+                    log("  🔍 ID \(id): found \(noticesList.count) duplicates", level: .info)
                     
                     // Loop through all duplicates with the same id
                     // Check if there is at least one notice with isRead = true
@@ -182,22 +180,25 @@ class NoticeViewModel: ObservableObject {
                     if let readNotice = noticesList.first(where: { $0.isRead }) {
                         // There is a read version - keep it
                         noticeToKeep = readNotice
-                    } else {
+                    } else if let firstNotice = noticesList.first {
                         // All unread - keep the first one
-                        noticeToKeep = noticesList.first!
+                        noticeToKeep = firstNotice
+                    } else {
+                        log("⚠️ Unexpected situation: empty array noticesList for ID \(id)", level: .warning)
+                        continue // skip the remaining code and move on to the next iteration of the loop
                     }
                     
                     // Delete everything except noticeToKeep
                     for notice in noticesList where notice.persistentModelID != noticeToKeep.persistentModelID {
                         modelContext.delete(notice)
-                        log("    ✗ Удалён дубликат: '\(notice.title)'", level: .info)
+                        log("    ✗ Duplicate removed: '\(notice.title)'", level: .info)
                     }
                 }
                 saveContext()
 
             }
         } catch {
-            log("🍉 ❌ Ошибка при удалении дубликатов: \(error)", level: .error)
+            log("🍉 ❌ Error removing duplicates: \(error)", level: .error)
         }
     }
     

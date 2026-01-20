@@ -9,7 +9,7 @@ import Foundation
 
 struct NoticeMigrationHelper {
     
-    /// Конвертирует старый Codable Notice в SwiftData Notice
+    /// Convert an old encoded notification to a SwiftData notification.
     static func convertFromCodable(_ codableNotice: CodableNotice) -> Notice {
         return Notice(
             id: codableNotice.id,

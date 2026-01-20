@@ -8,7 +8,7 @@
 import SwiftUI
 
 
-class HapticService {
+final class HapticService {
     
     static let shared = HapticService()
 
