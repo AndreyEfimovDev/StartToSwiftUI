@@ -14,16 +14,27 @@ struct CumulativeLegendView: View {
         VStack(spacing: 8) {
             
             Text("Cumulative progress")
-                .font(.caption)
+                .font(.caption2)
                 .bold()
+                .padding(4)
+                .background(.ultraThinMaterial)
+                .clipShape(Capsule())
+                .overlay(
+                    Capsule()
+                        .stroke(Color.mycolor.mySecondary.opacity(0.5), lineWidth: 1)
+                )
+
             HStack(spacing: 20) {
                 ForEach([StudyProgress.started, StudyProgress.studied, StudyProgress.practiced], id: \.self) { type in
-                    HStack(spacing: 6) {
+                    
+                    let layout: AnyLayout = UIDevice.isiPad ? AnyLayout(VStackLayout(spacing: 6)) : AnyLayout(HStackLayout(spacing: 6))
+                    layout {
                         Capsule()
                             .fill(type.color)
                             .frame(width: 12, height: 8)
                         Text(type.displayName)
-                            .font(.caption)
+                            .font(.caption2)
+                        
                     }
                 }
             }

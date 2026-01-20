@@ -80,7 +80,6 @@ struct RatingSelectionView: View {
                             .padding(.bottom)
                         } // VStack
                         .padding(20)
-                        .border(.red)
                     } // ZStack
                 } //VStack
                 .onAppear {
