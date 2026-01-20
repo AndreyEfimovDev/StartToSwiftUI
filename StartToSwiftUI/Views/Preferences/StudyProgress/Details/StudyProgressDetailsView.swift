@@ -48,7 +48,7 @@ struct StudyProgressDetailsView: View {
                 selection: $selectedTab,
                 allItems: StudyLevelTabs.allCases,
                 titleForCase: { $0.displayName },
-                selectedFont: UIDevice.isiPad ? .headline : .subheadline
+                selectedFont: UIDevice.isiPad ? .footnote : .subheadline
             )
             .padding(.horizontal)
             .padding(.top)
