@@ -13,19 +13,19 @@ struct StatCard: View {
     let color: Color
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 4) {
             Text(title)
-                .font(.caption)
+                .font(.caption2)
                 .foregroundStyle(Color.mycolor.myAccent)
             Text(value)
-                .font(.title3.bold())
+                .font(.headline)
                 .foregroundStyle(color)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(8)
         .background(color.opacity(0.3))
         .clipShape(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: 15)
         )
     }
 }

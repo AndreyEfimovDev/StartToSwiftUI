@@ -13,7 +13,6 @@ struct LearningProgressChartView: View {
     
     let posts: [Post]
     @State private var selectedPeriod: TimePeriod = .halfYear
-    @State private var showStats = true
     
     private var chartData: [ChartDataPoint] {
         generateChartData(posts: posts, period: selectedPeriod)
@@ -25,87 +24,119 @@ struct LearningProgressChartView: View {
     
     // Calculate the maximum value for the Y-axis based on all data
     private var chartYAxisMax: Int {
-        let maxStarted = stats.started
-        let maxStudied = stats.studied
-        let maxPracticed = stats.practiced
-        let maxValue = max(maxStarted, maxStudied, maxPracticed)
-        return max(maxValue, 5) // Minimum 5 for readability
+        let calendar = Calendar.current
+        let now = Date()
+        let currentMonthStart = calendar.startOfMonth(for: now)
+        
+        var maxSum = 0
+        
+        // Go through each month and find the maximum amount
+        for i in 0...selectedPeriod.months {
+            guard let monthDate = calendar.date(byAdding: .month, value: -selectedPeriod.months + i, to: currentMonthStart) else { continue }
+            
+            let startedCount = posts.filter { post in
+                guard let date = post.startedDateStamp else { return false }
+                return calendar.isDate(date, equalTo: monthDate, toGranularity: .month)
+            }.count
+            
+            let studiedCount = posts.filter { post in
+                guard let date = post.studiedDateStamp else { return false }
+                return calendar.isDate(date, equalTo: monthDate, toGranularity: .month)
+            }.count
+            
+            let practicedCount = posts.filter { post in
+                guard let date = post.practicedDateStamp else { return false }
+                return calendar.isDate(date, equalTo: monthDate, toGranularity: .month)
+            }.count
+            
+            let sum = startedCount + studiedCount + practicedCount
+            maxSum = max(maxSum, sum)
+        }
+        
+        return max(maxSum, 5) // Minimum 5 for readability
     }
     
     
     var body: some View {
-        VStack(spacing: 20) {
-            HStack {
-                Image(systemName: "hare")
-                Text("Overview")
-                    .font(.title3)
+        VStack(spacing: 10) {
+            // Completion percentage
+            if UIDevice.isiPhone {
+                completionForIPhone
             }
-            .padding(.horizontal)
             
-            // Statistics
-            if showStats {
+            let layout: AnyLayout = UIDevice.isiPad ? AnyLayout(HStackLayout(spacing: 6)) : AnyLayout(VStackLayout(spacing: 6))
+
+            layout {
                 StatsCardsView(stats: stats)
-                    .padding(.horizontal)
-            }
-            
-            // Chart
-            Chart(chartData) { dataPoint in
+                    .frame(maxWidth: UIDevice.isiPad ? 100 : .infinity)
                 
-                /*
-                 Динамика изменения количества материалов по месяцам - сколько материалов было начато/изучено/практически освоено в каждом конкретном месяце.
-                 Линии показывают тренды: растёт ли активность, есть ли спады, в какие месяцы  были наиболее продуктивными.
-                 */
-                
-                LineMark(
-                    x: .value("Month", dataPoint.month, unit: .month),
-                    y: .value("Quantity", dataPoint.count)
-                )
-                .foregroundStyle(by: .value("Type", dataPoint.type.displayName))
-                .symbol(by: .value("Type", dataPoint.type.displayName))
-                .interpolationMethod(.catmullRom)
-                
-                /*
-                 Накопительный объём, визуализация:
-                 * Интенсивность активности - чем больше заливка, тем больше материалов было в изучении
-                 * Соотношение между типами - визуально сравниваются объёмы Started vs Learnt vs Practiced
-                 * Периоды высокой/низкой активности - цветные области делают "впадины" и "пики" более заметными
-                 */
-                AreaMark(
-                    x: .value("Month", dataPoint.month, unit: .month),
-                    y: .value("Quantity", dataPoint.count)
-                )
-                .foregroundStyle(by: .value("Type", dataPoint.type.displayName))
-                .opacity(0.3)
-            }
-            .chartXAxis {
-                AxisMarks(values: .stride(by: .month, count: selectedPeriod.months <= 6 ? 1 : 2)) { value in
-                    AxisGridLine()
-                    AxisValueLabel(format: .dateTime.month(.abbreviated).year(.twoDigits))
+                // Chart
+                Chart(chartData) { dataPoint in
+                    /*
+                     Monthly change in the number of materials covered – how much material was started/learnt/practicied in each specific month.
+                     The lines show trends: whether activity is increasing, whether there are declines, and which months were the most productive.
+                     */
+                    LineMark(
+                        x: .value("Month", dataPoint.month, unit: .month),
+                        y: .value("Quantity", dataPoint.count)
+                    )
+                    .foregroundStyle(by: .value("Type", dataPoint.type.displayName))
+                    .symbol(by: .value("Type", dataPoint.type.displayName))
+                    .interpolationMethod(.catmullRom)
+                    
+                    /*
+                     Cumulative volume, visualisation:
+                     - Activity intensity - the higher the color, the more material was covered
+                     - Correlation between types - visually compares the volumes of Started vs. Learned vs. Practiced
+                     - Periods of high/low activity - colored areas make "dents" and "peaks" more visible
+                     */
+                    AreaMark(
+                        x: .value("Month", dataPoint.month, unit: .month),
+                        y: .value("Quantity", dataPoint.count)
+                    )
+                    .foregroundStyle(by: .value("Type", dataPoint.type.displayName))
+                    .opacity(0.3)
                 }
+                .chartXAxis {
+                    AxisMarks(values: .stride(by: .month, count: selectedPeriod.months <= 6 ? 1 : 2)) { value in
+                        AxisGridLine()
+                        AxisValueLabel(format: .dateTime.month(.abbreviated).year(.twoDigits))
+                    }
+                }
+                .chartYAxis {
+                    AxisMarks(position: .leading)
+                }
+                .chartYScale(domain: 0...chartYAxisMax)
+                .chartForegroundStyleScale([
+                    StudyProgress.started.displayName: StudyProgress.started.color,
+                    StudyProgress.studied.displayName: StudyProgress.studied.color,
+                    StudyProgress.practiced.displayName: StudyProgress.practiced.color
+                ])
+                .chartLegend(.hidden)
+                .frame(maxHeight: .infinity)
             }
-            .chartYAxis {
-                AxisMarks(position: .leading)
+            
+            
+            if UIDevice.isiPad {
+                HStack(spacing: 6) {
+                    // Dynamics of changes in the number of materials by month
+                    LineMarkLegendView()
+                    // Cumulative progress
+                    CumulativeLegendView()
+                }
+
+            } else {
+                // Dynamics of changes in the number of materials by month
+                LineMarkLegendView()
+                // Cumulative progress
+                CumulativeLegendView()
             }
-            .chartYScale(domain: 0...chartYAxisMax)
-            .chartForegroundStyleScale([
-                StudyProgress.started.displayName: StudyProgress.started.color,
-                StudyProgress.studied.displayName: StudyProgress.studied.color,
-                StudyProgress.practiced.displayName: StudyProgress.practiced.color
-            ])
-            .chartLegend(.hidden)
-            .frame(maxHeight: .infinity)
             
-            // Legends
-            // Dynamics of changes in the number of materials by month
-            LineMarkLegendView()
-            // Cumulative progress
-            CumulativeLegendView()
-            
-            SegmentedOneLinePickerNotOptional(
+            UnderlineSermentedPickerNotOptional(
                 selection: $selectedPeriod,
                 allItems: TimePeriod.allCases,
                 titleForCase: { $0.displayName },
-                selectedFont: UIDevice.isiPad ? .headline : .subheadline
+                selectedFont: UIDevice.isiPad ? .footnote : .subheadline
             )
             .padding(.horizontal)
             .padding(.top, 16)
@@ -151,6 +182,21 @@ struct LearningProgressChartView: View {
         }
         
         return dataPoints
+    }
+    
+    private var completionForIPhone: some View {
+        HStack {
+            Text("Completion:")
+            Spacer()
+            Text(String(format: "%.1f%%", stats.completionRate))
+        }
+        .font(.subheadline)
+        .foregroundStyle(Color.mycolor.myAccent)
+        .padding()
+        .background(.ultraThinMaterial)
+        .clipShape(
+            RoundedRectangle(cornerRadius: 15)
+        )
     }
     
 }

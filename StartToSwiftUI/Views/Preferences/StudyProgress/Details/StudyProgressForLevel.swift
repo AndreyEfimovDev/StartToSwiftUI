@@ -15,82 +15,101 @@ struct StudyProgressForLevel: View {
 
     let studyLevel: StudyLevel?
     
-    private var fontForTitle: Font {
-        UIDevice.isiPad ? .body : .headline
+    private var fontForSectionTitle: Font {
+        UIDevice.isiPad ? .subheadline : .headline
     }
     
-    private var postsForStudyLevel: [Post] {
-        if let studyLevel = studyLevel {
-            return vm.allPosts.filter { $0.studyLevel == studyLevel }
-        }
-        return vm.allPosts
+    private var lineWidth: Double {
+        UIDevice.isiPad ? 4.0 : 8.0
     }
+
+    
     
     var titleForStudyLevel: String {
         if let studyLevel = studyLevel {
             studyLevel.displayName
-        } else { "All materials" }
+        } else { "All" }
     }
 
-//    private var postsCountForStudyLevel: Int {
+    private var postsForStudyLevel: [Post] {
+        if let studyLevel = studyLevel {
+            return vm.allPosts.filter { $0.studyLevel == studyLevel}
+        }
+        return vm.allPosts
+    }
+    
+
+//    private var totalPostsCount: Int {
 //        if let studyLevel = studyLevel {
-//            return vm.allPosts.filter({ $0.studyLevel == studyLevel }).count
+//            return vm.allPosts.filter { $0.studyLevel == studyLevel && $0.startedDateStamp != nil}.count
+//        }
+//        return vm.allPosts.filter { $0.startedDateStamp != nil }.count
+////        postsForStudyLevel.count
+//    }
+
+    private var postsCountForStudyLevel: Int {
+//        if let studyLevel = studyLevel {
+//            return vm.allPosts.filter({ $0.studyLevel == studyLevel}).count
 //        }
 //        return vm.allPosts.count
-//    }
+        postsForStudyLevel.count
+    }
 
     
     var body: some View {
         
-            VStack {
-                // TITLE
-                HStack {
-                    Image(systemName: "hare")
-                    Text(titleForStudyLevel + " (\(totalPostsCount))")
-                        .font(.title3)
-                }
-                .foregroundStyle(studyLevel?.color ?? Color.mycolor.myAccent)
-                
-                // PROGRESS VIEWS
-                ForEach(StudyProgress.allCases, id: \.self) { progressLevel in
-                    HStack (spacing: 0) {
-                        VStack(spacing: 8) {
-                            progressLevel.icon
-                            HStack (alignment: .lastTextBaseline, spacing: 0){
-                                Text(progressLevel.displayName)
-                                Text("(\(levelPostsCount(for: progressLevel)))")
-                            }
+        VStack {
+            // TITLE
+            HStack {
+                Image(systemName: "hare")
+                Text(titleForStudyLevel + " (\(postsCountForStudyLevel))")
+            }
+            .font(.caption)
+            .foregroundStyle(studyLevel?.color ?? Color.mycolor.myAccent)
+            
+            // PROGRESS VIEWS
+            // [StudyProgress.fresh, StudyProgress.started, StudyProgress.studied, StudyProgress.practiced]
+            ForEach([StudyProgress.practiced, StudyProgress.studied , StudyProgress.started, StudyProgress.fresh], id: \.self) { progressLevel in
+                HStack (spacing: 0) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack (/*alignment: .lastTextBaseline, spacing: 0*/){
+                            Text(progressLevel.displayName)
+//                            progressLevel.icon
                         }
-                        .foregroundStyle(progressLevel.color)
-                        .font(fontForTitle)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        
-                        Spacer()
-                        
-                        ProgressIndicator(
-                            progress: progressCount(for: progressLevel),
-                            colour: progressLevel.color,
-                            fontForTitle: fontForTitle
-                        )
-                        .padding()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+                        Text("\(levelPostsCount(for: progressLevel))")
                     }
-                    .background(.ultraThinMaterial)
-                    .clipShape(
-                        RoundedRectangle(cornerRadius: 30)
+                    .foregroundStyle(progressLevel.color)
+                    .font(fontForSectionTitle)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.leading)
+                    
+                    Spacer()
+                    
+                    ProgressIndicator(
+                        progress: progressCount(for: progressLevel),
+                        colour: progressLevel.color,
+                        fontForTitle: fontForSectionTitle,
+                        lineWidth: lineWidth
                     )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 30)
-                            .stroke(.blue, lineWidth: 1)
-                    )
-                } // ForEach
-            }
-            .padding(.horizontal, 30)
-            .bold()
-            .id(refreshID)
-            .onAppear {
-                refreshID = UUID()
-            }
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+                }
+                .background(.ultraThinMaterial)
+                .clipShape(
+                    RoundedRectangle(cornerRadius: 15)
+                )
+//                .overlay(
+//                    RoundedRectangle(cornerRadius: 15)
+//                        .stroke(.blue, lineWidth: 1)
+//                )
+            } // ForEach
+        }
+        .padding(.horizontal, 30)
+        .bold()
+        .id(refreshID)
+        .onAppear {
+            refreshID = UUID()
+        }
     }
     
     private func progressCount(for progressLevel: StudyProgress) -> Double {
@@ -105,9 +124,6 @@ struct StudyProgressForLevel: View {
         postsForStudyLevel.filter { $0.progress == progressLevel }.count
     }
 
-    private var totalPostsCount: Int {
-        postsForStudyLevel.count
-    }
 }
 
 #Preview {
