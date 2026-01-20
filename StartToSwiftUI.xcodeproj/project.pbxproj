@@ -38,6 +38,16 @@
 		4732FB332EAA5A9E0062269D /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4732FB322EAA5A9E0062269D /* ActivityView.swift */; };
 		4732FB372EAA63810062269D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4732FB362EAA63810062269D /* Constants.swift */; };
 		47453E042EAB73A9000D2C16 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47453E032EAB73A9000D2C16 /* Date.swift */; };
+		4751DAEC2F1534B800EC9C53 /* StudyProgressChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DAEB2F1534B800EC9C53 /* StudyProgressChartView.swift */; };
+		4751DAEE2F163BA600EC9C53 /* StudyProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DAED2F163BA600EC9C53 /* StudyProgressView.swift */; };
+		4751DAF22F16402E00EC9C53 /* ProgressStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DAF12F16402E00EC9C53 /* ProgressStats.swift */; };
+		4751DAF62F16407200EC9C53 /* ChartDataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DAF52F16407200EC9C53 /* ChartDataPoint.swift */; };
+		4751DAF82F16409B00EC9C53 /* StatsCardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DAF72F16409B00EC9C53 /* StatsCardsView.swift */; };
+		4751DAFA2F1640C300EC9C53 /* StatCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DAF92F1640C300EC9C53 /* StatCard.swift */; };
+		4751DAFE2F16410000EC9C53 /* CumulativeLegendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DAFD2F16410000EC9C53 /* CumulativeLegendView.swift */; };
+		4751DB002F1641A800EC9C53 /* Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DAFF2F1641A800EC9C53 /* Calendar.swift */; };
+		4751DB022F16457E00EC9C53 /* SegmentedOneLinePickerNotOptional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DB012F16457E00EC9C53 /* SegmentedOneLinePickerNotOptional.swift */; };
+		4751DB052F16670E00EC9C53 /* LineMarkLegendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DB042F16670E00EC9C53 /* LineMarkLegendView.swift */; };
 		47542EB42EF2C8E400B0AB79 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47542EB32EF2C8E400B0AB79 /* StartView.swift */; };
 		4759974D2E5C690B008E20F0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 475997492E5C690B008E20F0 /* Assets.xcassets */; };
 		4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */; };
@@ -49,7 +59,7 @@
 		4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997792E5F1A32008E20F0 /* Colors.swift */; };
 		4764A1F82EAD1DAA00D76C3A /* ClearCupsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4764A1F72EAD1DAA00D76C3A /* ClearCupsuleButton.swift */; };
 		47656BFC2EE1EBF000F45AA6 /* ProgressIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47656BFB2EE1EBF000F45AA6 /* ProgressIndicatorView.swift */; };
-		47656BFE2EE1EC4D00F45AA6 /* StudyProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47656BFD2EE1EC4D00F45AA6 /* StudyProgressView.swift */; };
+		47656BFE2EE1EC4D00F45AA6 /* StudyProgressDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47656BFD2EE1EC4D00F45AA6 /* StudyProgressDetailsView.swift */; };
 		47656C002EE1EF9500F45AA6 /* StudyProgressForLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47656BFF2EE1EF9500F45AA6 /* StudyProgressForLevel.swift */; };
 		4765A76D2EAE5F7B00EACDF4 /* PostRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */; };
 		4767C9612EF293FF003838BA /* PostMigrationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4767C9602EF293FF003838BA /* PostMigrationHelper.swift */; };
@@ -138,6 +148,16 @@
 		4732FB322EAA5A9E0062269D /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
 		4732FB362EAA63810062269D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		47453E032EAB73A9000D2C16 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		4751DAEB2F1534B800EC9C53 /* StudyProgressChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressChartView.swift; sourceTree = "<group>"; };
+		4751DAED2F163BA600EC9C53 /* StudyProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressView.swift; sourceTree = "<group>"; };
+		4751DAF12F16402E00EC9C53 /* ProgressStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressStats.swift; sourceTree = "<group>"; };
+		4751DAF52F16407200EC9C53 /* ChartDataPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDataPoint.swift; sourceTree = "<group>"; };
+		4751DAF72F16409B00EC9C53 /* StatsCardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsCardsView.swift; sourceTree = "<group>"; };
+		4751DAF92F1640C300EC9C53 /* StatCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatCard.swift; sourceTree = "<group>"; };
+		4751DAFD2F16410000EC9C53 /* CumulativeLegendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CumulativeLegendView.swift; sourceTree = "<group>"; };
+		4751DAFF2F1641A800EC9C53 /* Calendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Calendar.swift; path = StartToSwiftUI/Views/Preferences/StudyProgress/Overview/Calendar.swift; sourceTree = SOURCE_ROOT; };
+		4751DB012F16457E00EC9C53 /* SegmentedOneLinePickerNotOptional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SegmentedOneLinePickerNotOptional.swift; path = StartToSwiftUI/Views/Preferences/StudyProgress/Overview/SegmentedOneLinePickerNotOptional.swift; sourceTree = SOURCE_ROOT; };
+		4751DB042F16670E00EC9C53 /* LineMarkLegendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineMarkLegendView.swift; sourceTree = "<group>"; };
 		47542EB32EF2C8E400B0AB79 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 		47542EB52EF3171200B0AB79 /* StartToSwiftUIRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StartToSwiftUIRelease.entitlements; sourceTree = "<group>"; };
 		4759973B2E5C6901008E20F0 /* StartToSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StartToSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -151,7 +171,7 @@
 		475997792E5F1A32008E20F0 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		4764A1F72EAD1DAA00D76C3A /* ClearCupsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearCupsuleButton.swift; sourceTree = "<group>"; };
 		47656BFB2EE1EBF000F45AA6 /* ProgressIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressIndicatorView.swift; sourceTree = "<group>"; };
-		47656BFD2EE1EC4D00F45AA6 /* StudyProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressView.swift; sourceTree = "<group>"; };
+		47656BFD2EE1EC4D00F45AA6 /* StudyProgressDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressDetailsView.swift; sourceTree = "<group>"; };
 		47656BFF2EE1EF9500F45AA6 /* StudyProgressForLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressForLevel.swift; sourceTree = "<group>"; };
 		4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRowView.swift; sourceTree = "<group>"; };
 		4767C9602EF293FF003838BA /* PostMigrationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostMigrationHelper.swift; sourceTree = "<group>"; };
@@ -234,6 +254,7 @@
 			children = (
 				4791CE072E75AAAF00687126 /* UnderlineSermentedPickerNotOptional.swift */,
 				47BAF0F92E64CC8700287F10 /* UnderlineSermentedPicker.swift */,
+				4751DB012F16457E00EC9C53 /* SegmentedOneLinePickerNotOptional.swift */,
 				47BAF0F52E6485B000287F10 /* SegmentedOneLinePicker.swift */,
 				4773545A2E65C470001DEDEE /* CapsulesSegmentedPicker.swift */,
 			);
@@ -275,6 +296,50 @@
 			path = AboutApp;
 			sourceTree = "<group>";
 		};
+		4751DAEF2F163FE500EC9C53 /* Details */ = {
+			isa = PBXGroup;
+			children = (
+				47656BFD2EE1EC4D00F45AA6 /* StudyProgressDetailsView.swift */,
+				47656BFF2EE1EF9500F45AA6 /* StudyProgressForLevel.swift */,
+				47656BFB2EE1EBF000F45AA6 /* ProgressIndicatorView.swift */,
+			);
+			path = Details;
+			sourceTree = "<group>";
+		};
+		4751DAF02F163FFA00EC9C53 /* Overview */ = {
+			isa = PBXGroup;
+			children = (
+				4751DAEB2F1534B800EC9C53 /* StudyProgressChartView.swift */,
+				4751DAF72F16409B00EC9C53 /* StatsCardsView.swift */,
+				4751DAF92F1640C300EC9C53 /* StatCard.swift */,
+				4751DAF12F16402E00EC9C53 /* ProgressStats.swift */,
+				4751DB042F16670E00EC9C53 /* LineMarkLegendView.swift */,
+				4751DAFD2F16410000EC9C53 /* CumulativeLegendView.swift */,
+				4751DAF52F16407200EC9C53 /* ChartDataPoint.swift */,
+			);
+			path = Overview;
+			sourceTree = "<group>";
+		};
+		4751DB032F16517100EC9C53 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				47F68A492EFB0232003786D0 /* AppCoordinator.swift */,
+				470E63792EFDE1CF007B75B5 /* ModalNavigationContainer.swift */,
+				47F78A542F02DB12005394BE /* ModalNavigationContainerWrapper.swift */,
+				470E636F2EFB241D007B75B5 /* ViewWrapperWithCustomNavToolbar.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		4751DB062F1B846700EC9C53 /* Dallocated */ = {
+			isa = PBXGroup;
+			children = (
+				47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */,
+				477C745D2ECF6FB300F77F5B /* StaticPosts.swift */,
+			);
+			path = Dallocated;
+			sourceTree = "<group>";
+		};
 		475997322E5C6901008E20F0 = {
 			isa = PBXGroup;
 			children = (
@@ -295,13 +360,15 @@
 			isa = PBXGroup;
 			children = (
 				4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */,
+				4751DB062F1B846700EC9C53 /* Dallocated */,
 				475997622E5CF0C3008E20F0 /* SupportFrom3rdParties */,
 				475997722E5DA436008E20F0 /* Extensions */,
 				4759976C2E5D931F008E20F0 /* Services */,
-				47069EFC2EAFF2E30082AE12 /* Launch */,
+				4751DB032F16517100EC9C53 /* Coordinator */,
 				475997592E5C86C5008E20F0 /* Components */,
 				475997562E5C8671008E20F0 /* Models */,
 				475997572E5C8688008E20F0 /* ViewModels */,
+				47069EFC2EAFF2E30082AE12 /* Launch */,
 				47BAF0EE2E645B0A00287F10 /* Views */,
 				475997492E5C690B008E20F0 /* Assets.xcassets */,
 				471BEF4F2EA793880093F962 /* Info.plist */,
@@ -319,7 +386,6 @@
 				477C745F2ECFB0E800F77F5B /* News.swift */,
 				47BAF0F72E64A77A00287F10 /* Enums.swift */,
 				4732FB362EAA63810062269D /* Constants.swift */,
-				477C745D2ECF6FB300F77F5B /* StaticPosts.swift */,
 				471BBFA42EC77C3D0004AC45 /* Support */,
 			);
 			path = Models;
@@ -338,13 +404,10 @@
 			isa = PBXGroup;
 			children = (
 				47BAF0A32E60613200287F10 /* SearchBarView.swift */,
-				4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */,
 				47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */,
 				47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */,
 				47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */,
 				478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */,
-				470E636F2EFB241D007B75B5 /* ViewWrapperWithCustomNavToolbar.swift */,
-				47F78A542F02DB12005394BE /* ModalNavigationContainerWrapper.swift */,
 				470E63752EFD5044007B75B5 /* CountdownView.swift */,
 				472243772EFFE31F0055461A /* GlobalMethods.swift */,
 				47BAF09E2E5F9C4500287F10 /* Buttons */,
@@ -372,14 +435,11 @@
 			children = (
 				47E439B62EA9290E007001AD /* NetworkService.swift */,
 				4791CDFD2E747AC100687126 /* JSONFileManager.swift */,
+				47EA14302EF530780064583B /* AppSyncStateManager.swift */,
 				4791CDFF2E747B2E00687126 /* HapticService.swift */,
 				47FF42582EE556DA0069D232 /* TapHandler.swift */,
 				4767C9602EF293FF003838BA /* PostMigrationHelper.swift */,
 				4767C9622EF29474003838BA /* NoticeMigrationHelper.swift */,
-				47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */,
-				47EA14302EF530780064583B /* AppSyncStateManager.swift */,
-				47F68A492EFB0232003786D0 /* AppCoordinator.swift */,
-				470E63792EFDE1CF007B75B5 /* ModalNavigationContainer.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -395,6 +455,7 @@
 				4781D72D2ED716AE00B74F85 /* Bundle.swift */,
 				4725A52A2EDD757F00235C40 /* UIDevice.swift */,
 				47AE6C802E7D7FD0006230DA /* Modifiers.swift */,
+				4751DAFF2F1641A800EC9C53 /* Calendar.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -402,9 +463,9 @@
 		47656BFA2EE1EBBD00F45AA6 /* StudyProgress */ = {
 			isa = PBXGroup;
 			children = (
-				47656BFD2EE1EC4D00F45AA6 /* StudyProgressView.swift */,
-				47656BFF2EE1EF9500F45AA6 /* StudyProgressForLevel.swift */,
-				47656BFB2EE1EBF000F45AA6 /* ProgressIndicatorView.swift */,
+				4751DAED2F163BA600EC9C53 /* StudyProgressView.swift */,
+				4751DAF02F163FFA00EC9C53 /* Overview */,
+				4751DAEF2F163FE500EC9C53 /* Details */,
 			);
 			path = StudyProgress;
 			sourceTree = "<group>";
@@ -422,7 +483,6 @@
 			isa = PBXGroup;
 			children = (
 				4791CDAE2E70187E00687126 /* PreferencesView.swift */,
-				47C56FF02EC9CEA300F0796C /* Notices */,
 				47656BFA2EE1EBBD00F45AA6 /* StudyProgress */,
 				47C56FEF2EC9CE8200F0796C /* ManagingPosts */,
 				471DCBDA2EBBC60E00AFA5F4 /* AboutApp */,
@@ -457,6 +517,9 @@
 				4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */,
 				475997602E5CC0F8008E20F0 /* PostDetailsView.swift */,
 				4791CE032E748DA200687126 /* AddEditPostSheet.swift */,
+				4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */,
+				47C56FF02EC9CEA300F0796C /* Notices */,
+				47870FBB2ECCB927004175E4 /* PostDrafts */,
 				4791CDAD2E70186100687126 /* Preferences */,
 			);
 			path = Views;
@@ -470,7 +533,6 @@
 				4732FB302EAA59B00062269D /* SharePostsView.swift */,
 				47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */,
 				4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */,
-				47870FBB2ECCB927004175E4 /* PostDrafts */,
 			);
 			path = ManagingPosts;
 			sourceTree = "<group>";
@@ -561,18 +623,23 @@
 				47C57E7F2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift in Sources */,
 				471DCBD92EBBBF2200AFA5F4 /* JSON.swift in Sources */,
 				4765A76D2EAE5F7B00EACDF4 /* PostRowView.swift in Sources */,
+				4751DAFA2F1640C300EC9C53 /* StatCard.swift in Sources */,
 				47EA142D2EF4603E0064583B /* FirstLaunchManager.swift in Sources */,
+				4751DB022F16457E00EC9C53 /* SegmentedOneLinePickerNotOptional.swift in Sources */,
 				4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */,
+				4751DAF82F16409B00EC9C53 /* StatsCardsView.swift in Sources */,
 				47B465802E6867930059CCB7 /* HomeView.swift in Sources */,
 				47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */,
 				47F68A4A2EFB0232003786D0 /* AppCoordinator.swift in Sources */,
 				471BBF9C2EC620D70004AC45 /* PostDraftsRowView.swift in Sources */,
+				4751DAEE2F163BA600EC9C53 /* StudyProgressView.swift in Sources */,
 				471DCBDE2EBBC68500AFA5F4 /* WhatsNew.swift in Sources */,
-				47656BFE2EE1EC4D00F45AA6 /* StudyProgressView.swift in Sources */,
+				47656BFE2EE1EC4D00F45AA6 /* StudyProgressDetailsView.swift in Sources */,
 				47F38B1F2ED480B0006DEDBE /* DevData.swift in Sources */,
 				47FF424F2EE4C69F0069D232 /* TestSFSymbolsForOrigin.swift in Sources */,
 				47BAF0A42E60613200287F10 /* SearchBarView.swift in Sources */,
 				4791CD862E6ED58B00687126 /* ShrinkIconButtonStyle.swift in Sources */,
+				4751DAEC2F1534B800EC9C53 /* StudyProgressChartView.swift in Sources */,
 				4732FB332EAA5A9E0062269D /* ActivityView.swift in Sources */,
 				47C56FEC2EC9C66700F0796C /* NoticeDetailsView.swift in Sources */,
 				4773545D2E65D03A001DEDEE /* FiltersSheetView.swift in Sources */,
@@ -585,9 +652,11 @@
 				4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */,
 				471DCBDC2EBBC67500AFA5F4 /* Introduction.swift in Sources */,
 				4791CE002E747B2E00687126 /* HapticService.swift in Sources */,
+				4751DB002F1641A800EC9C53 /* Calendar.swift in Sources */,
 				47FF42492EE4572E0069D232 /* TestSFSymbolsForProgress.swift in Sources */,
 				475997532E5C7680008E20F0 /* PostsViewModel.swift in Sources */,
 				4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */,
+				4751DAFE2F16410000EC9C53 /* CumulativeLegendView.swift in Sources */,
 				477C745E2ECF6FB300F77F5B /* StaticPosts.swift in Sources */,
 				47BAF0CA2E635E2800287F10 /* Views.swift in Sources */,
 				47656C002EE1EF9500F45AA6 /* StudyProgressForLevel.swift in Sources */,
@@ -599,6 +668,7 @@
 				47BAF0FA2E64CC8700287F10 /* UnderlineSermentedPicker.swift in Sources */,
 				4764A1F82EAD1DAA00D76C3A /* ClearCupsuleButton.swift in Sources */,
 				47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */,
+				4751DB052F16670E00EC9C53 /* LineMarkLegendView.swift in Sources */,
 				477C74602ECFB0F300F77F5B /* News.swift in Sources */,
 				4791CDF12E7428EE00687126 /* CircleShadowButtonView.swift in Sources */,
 				47542EB42EF2C8E400B0AB79 /* StartView.swift in Sources */,
@@ -613,6 +683,7 @@
 				4732FB2D2EAA2BFC0062269D /* ImportPostsFromCloudView.swift in Sources */,
 				4732FB312EAA59B00062269D /* SharePostsView.swift in Sources */,
 				471BBFA12EC7251D0004AC45 /* NoticeViewModel.swift in Sources */,
+				4751DAF22F16402E00EC9C53 /* ProgressStats.swift in Sources */,
 				4791CE082E75AAB000687126 /* UnderlineSermentedPickerNotOptional.swift in Sources */,
 				47FF425B2EE578DD0069D232 /* ProgressSelectionView.swift in Sources */,
 				47A7339F2ED1C55A006BB8A6 /* VoiceSearchView.swift in Sources */,
@@ -646,6 +717,7 @@
 				471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */,
 				47AA558A2EA9741D000AF4E9 /* RestoreBackupView.swift in Sources */,
 				47FF42472EE454440069D232 /* TestSFSymbolsForRating.swift in Sources */,
+				4751DAF62F16407200EC9C53 /* ChartDataPoint.swift in Sources */,
 				4791CDBB2E702E9700687126 /* EraseAllPostsView.swift in Sources */,
 				4732FB372EAA63810062269D /* Constants.swift in Sources */,
 				4791CDFC2E746FF100687126 /* EmailService.swift in Sources */,

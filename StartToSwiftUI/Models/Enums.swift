@@ -198,6 +198,39 @@ enum StudyLevel: String, CaseIterable, Codable {
     }
 }
 
+// MARK: - Time periods for statistics
+enum TimePeriod: String, CaseIterable, Identifiable {
+    case quarter = "Quarter"
+    case halfYear = "1/2 Year"
+    case year = "Year"
+    case twoYears = "2 Years"
+    case threeYears = "3 Years"
+    
+    var id: String { rawValue }
+    
+    var months: Int {
+        switch self {
+        case .quarter: return 3
+        case .halfYear: return 6
+        case .year: return 12
+        case .twoYears: return 24
+        case .threeYears: return 36
+        }
+    }
+    
+    var displayName: String {
+        switch self {
+        case .quarter: return "Quarter"
+        case .halfYear: return "1/2 Year"
+        case .year: return "Year"
+        case .twoYears: return "2 Years"
+        case .threeYears: return "3 Years"
+        }
+    }
+
+}
+
+// MARK: - Type of progress
 enum StudyProgress: String, CaseIterable, Codable { // progress in mastering educational materials
     case fresh, started, studied, practiced
     
@@ -205,7 +238,7 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
     
     var displayName: String {
         switch self {
-        case .fresh: return "New"
+        case .fresh: return "Added"
         case .started: return "Started"
         case .studied: return "Learnt"
         case .practiced: return "Practiced"

@@ -7,12 +7,20 @@
 
 import Foundation
 
-class NetworkService: ObservableObject {
+final class NetworkService: ObservableObject {
     
     let baseURL: String
     
     init(baseURL: String) {
         self.baseURL = baseURL
+    }
+    
+    func fetchDataFromURLAsync<T: Codable>() async throws -> T {
+        return try await withCheckedThrowingContinuation { continuation in
+            fetchDataFromURL { (result: Result<T, Error>) in
+                continuation.resume(with: result)
+            }
+        }
     }
     
     func fetchDataFromURL<T: Codable>(
@@ -61,13 +69,6 @@ class NetworkService: ObservableObject {
         task.resume()
     }
     
-    func fetchDataFromURLAsync<T: Codable>() async throws -> T {
-        return try await withCheckedThrowingContinuation { continuation in
-            fetchDataFromURL { (result: Result<T, Error>) in
-                continuation.resume(with: result)
-            }
-        }
-    }
 
 }
 

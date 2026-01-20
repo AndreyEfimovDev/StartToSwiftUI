@@ -107,7 +107,6 @@ struct RatingSelectionView: View {
                 VStack(spacing: 8) {
                     rating.icon
                         .font(.largeTitle)
-                        .foregroundColor(Color.mycolor.mySecondary)
                         .onTapGesture {
                             withAnimation(.easeInOut) {
                                 vm.selectedRating = rating
@@ -116,6 +115,7 @@ struct RatingSelectionView: View {
                     Text(rating.displayName)
                         .font(.caption)
                 }
+                .foregroundColor(Color.mycolor.myAccent)
             }
         }
     }
