@@ -7,6 +7,12 @@
 
 import Foundation
 
+// MARK: - Protocol
+protocol NetworkServiceProtocol {
+    func fetchDataFromURLAsync<T: Codable>() async throws -> T
+}
+
+
 final class NetworkService: ObservableObject {
     
     let baseURL: String
@@ -68,10 +74,6 @@ final class NetworkService: ObservableObject {
         }
         task.resume()
     }
-}
-
-protocol NetworkServiceProtocol {
-    func fetchDataFromURLAsync<T: Codable>() async throws -> T
 }
 
 extension NetworkService: NetworkServiceProtocol {}
