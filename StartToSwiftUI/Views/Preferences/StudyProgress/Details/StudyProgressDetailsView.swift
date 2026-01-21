@@ -20,8 +20,6 @@ struct StudyProgressDetailsView: View {
     }
     
     var body: some View {
-        //            Group {
-        //            if UIDevice.isiPad {
         VStack(spacing: 0)  {
             Group {
                 switch selectedTab {
@@ -54,20 +52,6 @@ struct StudyProgressDetailsView: View {
             .padding(.top)
         }
         .padding()
-        //            } else {
-        //                TabView (selection: $selectedTab) {
-        //                    ForEach(tabs, id: \.self) { tab in
-        //                        StudyProgressForLevel(studyLevel: tab.studyLevel)
-        //                            .tag(tab)
-        //                            .padding(.top)
-        //                            .padding(.bottom, 50)
-        //                    }
-        //                }
-        //                .tabViewStyle(.page)
-        //                .indexViewStyle(.page(backgroundDisplayMode: .always))
-        //            }
-        //            }
-        //        }
     }
 }
 
