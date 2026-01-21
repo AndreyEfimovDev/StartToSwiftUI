@@ -66,44 +66,66 @@ struct AdaptiveTabViewStyle: ViewModifier {
 /// └────────────────────────────┘
 ///
 struct AdaptiveModalModifier: ViewModifier {
+    
     @Binding var route: AppRoute?
     @EnvironmentObject private var coordinator: AppCoordinator
     
+    private var isFullScreenModalPresented: Binding<Bool> {
+        Binding(
+            get: { // Result: Determines whether to show the modal View
+                route.map { shouldBeFullScreen($0) } ?? false            },
+            set: {
+                // Set: synchronise modal closing with app logic → when SwiftUI changes its value to false when closing
+                // If the new value is !$0 (i.e., false) → call coordinator.closeModal()
+                if !$0 {
+                    coordinator.closeModal()
+                }
+            }
+        )
+    }
+    
+    private var isSheetModalPresented: Binding<Bool> {
+        Binding(
+            get: { //
+                route.map { UIDevice.isiPad && !shouldBeFullScreen($0) } ?? false
+            },
+            set: {
+                if !$0 {
+                    coordinator.closeModal()
+                }
+            }
+
+        )
+    }
+
+
     func body(content: Content) -> some View {
         content
         // FullScreen for iPhone and for WelcomeAtFirstLaunchView on iPad
-            .fullScreenCover(isPresented: Binding(
-                get: {
-                    route != nil && shouldBeFullScreen(route!)
-                },
-                // action at close the view
-                set: {
-                    if !$0 {
-                        coordinator.closeModal()
-                    }
-                }
-            )) {
-                if let route = route {
-                    ModalNavigationContainerWrapper(initialRoute: route)
+            .fullScreenCover(isPresented: isFullScreenModalPresented) {
+                if let validRoute = route {
+                    ModalNavigationContainerWrapper(initialRoute: validRoute)
+                } else {
+                    // Fallback view if route == nil
+                    EmptyView()
+                        .onAppear {
+                            coordinator.closeModal()
+                        }
                 }
             }
-        // Sheet for iPad only (кроме welcome)
-            .sheet(isPresented: Binding(
-                get: {
-                    route != nil && UIDevice.isiPad && !shouldBeFullScreen(route!)
-                },
-                // action at close the view
-                set: {
-                    if !$0 {
-                        coordinator.closeModal()
-                    }
-                }
-            )) {
-                // case when the iPad device and not fullscreen
-                if let route = route {
-                    ModalNavigationContainerWrapper(initialRoute: route)
+        // Sheet for iPad only (except WelcomeAtFirstLaunchView)
+            .sheet(isPresented: isSheetModalPresented){
+                // Case when the iPad device and not fullscreen
+                if let validRoute = route {
+                    ModalNavigationContainerWrapper(initialRoute: validRoute)
                         .presentationDetents([.large])
                         .presentationDragIndicator(.visible)
+                } else {
+                    // Fallback view if route == nil
+                    EmptyView()
+                        .onAppear {
+                            coordinator.closeModal()
+                        }
                 }
             }
     }

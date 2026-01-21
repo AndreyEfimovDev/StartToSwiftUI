@@ -23,12 +23,10 @@ struct StudyProgressForLevel: View {
         UIDevice.isiPad ? 4.0 : 8.0
     }
 
-    
-    
     var titleForStudyLevel: String {
         if let studyLevel = studyLevel {
-            studyLevel.displayName
-        } else { "All" }
+            "All " + studyLevel.displayName
+        } else { "All Levels" }
     }
 
     private var postsForStudyLevel: [Post] {
@@ -38,45 +36,22 @@ struct StudyProgressForLevel: View {
         return vm.allPosts
     }
     
-
-//    private var totalPostsCount: Int {
-//        if let studyLevel = studyLevel {
-//            return vm.allPosts.filter { $0.studyLevel == studyLevel && $0.startedDateStamp != nil}.count
-//        }
-//        return vm.allPosts.filter { $0.startedDateStamp != nil }.count
-////        postsForStudyLevel.count
-//    }
-
-    private var postsCountForStudyLevel: Int {
-//        if let studyLevel = studyLevel {
-//            return vm.allPosts.filter({ $0.studyLevel == studyLevel}).count
-//        }
-//        return vm.allPosts.count
-        postsForStudyLevel.count
-    }
-
-    
     var body: some View {
         
         VStack {
             // TITLE
-            HStack {
-                Image(systemName: "hare")
-                Text(titleForStudyLevel + " (\(postsCountForStudyLevel))")
-            }
-            .font(.caption)
-            .foregroundStyle(studyLevel?.color ?? Color.mycolor.myAccent)
+            sectionTitle
             
             // PROGRESS VIEWS
-            // [StudyProgress.fresh, StudyProgress.started, StudyProgress.studied, StudyProgress.practiced]
-            ForEach([StudyProgress.practiced, StudyProgress.studied , StudyProgress.started, StudyProgress.fresh], id: \.self) { progressLevel in
+            ForEach([StudyProgress.practiced, StudyProgress.studied , StudyProgress.started], id: \.self) { progressLevel in
                 HStack (spacing: 0) {
                     VStack(alignment: .leading, spacing: 8) {
-                        HStack (/*alignment: .lastTextBaseline, spacing: 0*/){
+                        HStack (spacing: 3){
+                            progressLevel.icon
                             Text(progressLevel.displayName)
-//                            progressLevel.icon
                         }
                         Text("\(levelPostsCount(for: progressLevel))")
+                            .foregroundStyle(Color.mycolor.myAccent)
                     }
                     .foregroundStyle(progressLevel.color)
                     .font(fontForSectionTitle)
@@ -112,16 +87,39 @@ struct StudyProgressForLevel: View {
         }
     }
     
+    private var sectionTitle: some View {
+        HStack {
+            Image(systemName: "hare")
+            Text(titleForStudyLevel + " (\(postsForStudyLevel.count))")
+        }
+        .font(.footnote)
+        .bold()
+        .foregroundStyle(studyLevel?.color ?? Color.mycolor.myAccent)
+    }
+    
     private func progressCount(for progressLevel: StudyProgress) -> Double {
         
         guard !postsForStudyLevel.isEmpty else { return 0 }
         
-        let filteredPostsForProgressLevel = postsForStudyLevel.filter { $0.progress == progressLevel }
-        return Double(filteredPostsForProgressLevel.count) / Double(postsForStudyLevel.count)
+//        let filteredPostsForProgressLevel = postsForStudyLevel.filter { $0.progress == progressLevel }
+//        return Double(filteredPostsForProgressLevel.count) / Double(postsForStudyLevel.count)
+        let count = levelPostsCount(for: progressLevel)
+        return Double(count) / Double(postsForStudyLevel.count)
     }
     
     private func levelPostsCount(for progressLevel: StudyProgress) -> Int {
-        postsForStudyLevel.filter { $0.progress == progressLevel }.count
+        //        postsForStudyLevel.filter { $0.progress == progressLevel }.count
+        switch progressLevel {
+        case .fresh:
+            return postsForStudyLevel.filter { $0.addedDateStamp != nil }.count
+        case .started:
+            return postsForStudyLevel.filter { $0.startedDateStamp != nil }.count
+        case .studied:
+            return postsForStudyLevel.filter { $0.studiedDateStamp != nil }.count
+        case .practiced:
+            return postsForStudyLevel.filter { $0.practicedDateStamp != nil }.count
+        }
+        
     }
 
 }
