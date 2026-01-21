@@ -51,6 +51,9 @@ final class NoticeViewModel: ObservableObject {
 //          log("🍉 ✅ Download completed in \(String(format: "%.2f", duration))s. Notifications: \(fetchedNotices.count)", level: .info)
             
         } catch {
+            self.errorMessage = error.localizedDescription
+            self.showErrorMessageAlert = true
+            self.hapticManager.notification(type: .error)
             log("🍉 ❌ Error loading notices: \(error)", level: .error)
         }
     }
@@ -198,6 +201,9 @@ final class NoticeViewModel: ObservableObject {
 
             }
         } catch {
+            self.errorMessage = error.localizedDescription
+            self.showErrorMessageAlert = true
+            self.hapticManager.notification(type: .error)
             log("🍉 ❌ Error removing duplicates: \(error)", level: .error)
         }
     }
@@ -220,7 +226,10 @@ final class NoticeViewModel: ObservableObject {
     // MARK: - Mark as Read
     func markAsRead(noticeId: String) {
         guard let notice = notices.first(where: { $0.id == noticeId }) else {
-            log("🍉 ⚠️ Notification with ID \(noticeId) not found", level: .info)
+            self.errorMessage = "Notice with ID \(noticeId) not found"
+            self.showErrorMessageAlert = true
+            self.hapticManager.notification(type: .error)
+            log("🍉 ⚠️ markAsRead: notice with ID \(noticeId) not found", level: .info)
             return
         }
         
@@ -233,7 +242,13 @@ final class NoticeViewModel: ObservableObject {
     
     // MARK: - Toggle Read Status
     func isReadToggle(notice: Notice?) {
-        guard let notice = notice else { return }
+        guard let notice = notice else {
+            self.errorMessage = "Notice passed is nil"
+            self.showErrorMessageAlert = true
+            self.hapticManager.notification(type: .error)
+            log("🍉 ⚠️ isReadToggle: notice passed is nil", level: .info)
+            return
+        }
         notice.isRead.toggle()
         saveContext()
         updateUnreadStatus()
@@ -241,14 +256,18 @@ final class NoticeViewModel: ObservableObject {
     
     // MARK: - Delete Notice
     func deleteNotice(notice: Notice?) {
-        guard let notice = notice else { return }
-        
+        guard let notice = notice else {
+            self.errorMessage = "Notice passed to delete is nil"
+            self.showErrorMessageAlert = true
+            self.hapticManager.notification(type: .error)
+            log("🍉 ⚠️ deleteNotice: notice passed is nil", level: .info)
+            return
+        }
         modelContext.delete(notice)
         saveContext()
-        
 
         notices.removeAll { $0.id == notice.id }
-        log("🍉 🗑️ Уведомление удалено, осталось: \(notices.count)", level: .info)
+        log("🍉 🗑️ Notice is removed, remains: \(notices.count)", level: .info)
         
         updateUnreadStatus()
     }
@@ -275,10 +294,10 @@ final class NoticeViewModel: ObservableObject {
         do {
             try modelContext.save()
         } catch {
-            log("🍉 ❌ Error saving context: \(error)", level: .error)
-            errorMessage = "Error saving data"
+            errorMessage = "Error saving notices"
             showErrorMessageAlert = true
             hapticManager.notification(type: .error)
+            log("🍉 ❌ Error saving context: \(error)", level: .error)
         }
     }
     
@@ -291,7 +310,7 @@ final class NoticeViewModel: ObservableObject {
         if isSoundNotificationOn {
             hapticManager.notification(type: .success)
         }
-        log("🍉 🔔 Отправлено локальное уведомление: \(count) новых уведомлений", level: .info)
+        log("🍉 🔔 Local notification sent: \(count) new notifications", level: .info)
     }
     
 }
