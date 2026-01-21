@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PostMigrationHelper {
     
-    /// Конвертирует старый Codable Post в SwiftData Post
+    /// Converts an old Codable Post to a SwiftData Post
     static func convertFromCodable(_ codablePost: CodablePost) -> Post {
         return Post(
             id: codablePost.id,
@@ -29,6 +29,7 @@ struct PostMigrationHelper {
             origin: codablePost.origin,
             draft: codablePost.draft,
             date: codablePost.date,
+            addedDateStamp: codablePost.addedDateStamp,
             startedDateStamp: codablePost.startedDateStamp,
             studiedDateStamp: codablePost.studiedDateStamp,
             practicedDateStamp: codablePost.practicedDateStamp
