@@ -15,6 +15,8 @@ struct ProgressSelectionView: View {
     
     let completion: () -> Void
     
+    private let selectionColor: Color = Color.mycolor.myGreen
+    
     init(completion: @escaping () -> Void) {
         self.completion = completion
     }
@@ -37,11 +39,11 @@ struct ProgressSelectionView: View {
                         VStack {
                             Text("Update Progress")
                                 .font(.title3).bold()
-                                .foregroundStyle(Color.mycolor.myGreen)
+                                .foregroundStyle(selectionColor)
                             VStack (spacing: 8) {
                                 Text(post.title)
                                     .font(.headline)
-                                    .minimumScaleFactor(0.75)
+//                                    .minimumScaleFactor(0.75)
                                     .lineLimit(2)
                                     .multilineTextAlignment(.center)
                                 
@@ -50,17 +52,29 @@ struct ProgressSelectionView: View {
                                     .lineLimit(1)
                             }
                             .foregroundStyle(Color.mycolor.myAccent)
-                            .frame(maxWidth: .infinity, alignment: .center)
+                            .frame(maxWidth: .infinity/*, alignment: .center*/)
                             .padding(.top)
                             
-                            UnderlineSermentedPickerNotOptional(
-                                selection: $vm.selectedStudyProgress,
-                                allItems: StudyProgress.allCases,
-                                titleForCase: { $0.displayName },
-                                selectedFont: .caption,
-                                selectedTextColor: Color.mycolor.myGreen,
-                                unselectedTextColor: Color.mycolor.myAccent
-                            )
+                            VStack {
+                                HStack {
+                                    ForEach(StudyProgress.allCases, id:\.self) { item in
+                                        let isSelected = vm.selectedStudyProgress == item
+                                        item.icon
+                                            .font(.caption)
+                                            .foregroundStyle(isSelected ? selectionColor : Color.mycolor.myAccent)
+                                            .fontWeight(isSelected ? .bold : .regular)
+                                            .frame(maxWidth: .infinity)
+                                    }
+                                }
+                                UnderlineSermentedPickerNotOptional(
+                                    selection: $vm.selectedStudyProgress,
+                                    allItems: StudyProgress.allCases,
+                                    titleForCase: { $0.displayName },
+                                    selectedFont: .caption,
+                                    selectedTextColor: selectionColor,
+                                    unselectedTextColor: Color.mycolor.myAccent
+                                )
+                            }
                             .padding(30)
                             
                             ClearCupsuleButton(

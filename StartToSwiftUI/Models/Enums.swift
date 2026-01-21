@@ -247,10 +247,10 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
     
     var icon: Image { // for other options look at TestSFSymbolsForProgress
         switch self {
-        case .fresh: return Image(systemName: "sparkles") // lightbulb signpost.right
-        case .started: return Image(systemName: "signpost.right")
-        case .studied: return Image(systemName: "flag.checkered") // brain.head.profile flag.checkered
-        case .practiced: return Image(systemName: "mountain.2.fill") // hand.raised.fingers.spread mountain.2.fill
+        case .fresh: return Image(systemName: "square.and.arrow.down") // lightbulb signpost.right sparkles
+        case .started: return Image(systemName: "sunrise") // sunrise signpost.right
+        case .studied: return Image(systemName: "bolt") // brain.head.profile flag.checkered
+        case .practiced: return Image(systemName: "flag.checkered") // hand.raised.fingers.spread mountain.2.fill bolt
         }
     }
     

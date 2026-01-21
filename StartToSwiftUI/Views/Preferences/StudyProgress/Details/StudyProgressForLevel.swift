@@ -23,8 +23,6 @@ struct StudyProgressForLevel: View {
         UIDevice.isiPad ? 4.0 : 8.0
     }
 
-    
-    
     var titleForStudyLevel: String {
         if let studyLevel = studyLevel {
             studyLevel.displayName
@@ -38,45 +36,22 @@ struct StudyProgressForLevel: View {
         return vm.allPosts
     }
     
-
-//    private var totalPostsCount: Int {
-//        if let studyLevel = studyLevel {
-//            return vm.allPosts.filter { $0.studyLevel == studyLevel && $0.startedDateStamp != nil}.count
-//        }
-//        return vm.allPosts.filter { $0.startedDateStamp != nil }.count
-////        postsForStudyLevel.count
-//    }
-
-    private var postsCountForStudyLevel: Int {
-//        if let studyLevel = studyLevel {
-//            return vm.allPosts.filter({ $0.studyLevel == studyLevel}).count
-//        }
-//        return vm.allPosts.count
-        postsForStudyLevel.count
-    }
-
-    
     var body: some View {
         
         VStack {
             // TITLE
-            HStack {
-                Image(systemName: "hare")
-                Text(titleForStudyLevel + " (\(postsCountForStudyLevel))")
-            }
-            .font(.caption)
-            .foregroundStyle(studyLevel?.color ?? Color.mycolor.myAccent)
+            sectionTitle
             
             // PROGRESS VIEWS
-            // [StudyProgress.fresh, StudyProgress.started, StudyProgress.studied, StudyProgress.practiced]
             ForEach([StudyProgress.practiced, StudyProgress.studied , StudyProgress.started, StudyProgress.fresh], id: \.self) { progressLevel in
                 HStack (spacing: 0) {
                     VStack(alignment: .leading, spacing: 8) {
-                        HStack (/*alignment: .lastTextBaseline, spacing: 0*/){
+                        HStack (spacing: 3){
+                            progressLevel.icon
                             Text(progressLevel.displayName)
-//                            progressLevel.icon
                         }
                         Text("\(levelPostsCount(for: progressLevel))")
+                            .foregroundStyle(Color.mycolor.myAccent)
                     }
                     .foregroundStyle(progressLevel.color)
                     .font(fontForSectionTitle)
@@ -110,6 +85,16 @@ struct StudyProgressForLevel: View {
         .onAppear {
             refreshID = UUID()
         }
+    }
+    
+    private var sectionTitle: some View {
+        HStack {
+            Image(systemName: "hare")
+            Text(titleForStudyLevel + " (\(postsForStudyLevel.count))")
+        }
+        .font(.footnote)
+        .bold()
+        .foregroundStyle(studyLevel?.color ?? Color.mycolor.myAccent)
     }
     
     private func progressCount(for progressLevel: StudyProgress) -> Double {

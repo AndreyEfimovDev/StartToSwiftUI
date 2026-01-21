@@ -18,10 +18,30 @@ struct StatsCardsView: View {
             let layout: AnyLayout = UIDevice.isiPad ? AnyLayout(VStackLayout(spacing: 6)) : AnyLayout(HStackLayout(spacing: 6))
             
             layout {
-                StatCard(title: "Practiced", value: "\(stats.practiced)", color: StudyProgress.practiced.color)
-                StatCard(title: "Learnt", value: "\(stats.studied)", color: StudyProgress.studied.color)
-                StatCard(title: "Started", value: "\(stats.started)", color: StudyProgress.started.color)
-                StatCard(title: "Added", value: "\(stats.added)", color: StudyProgress.fresh.color)
+                StatCard(
+                    title: "Practiced",
+                    value: "\(stats.practiced)",
+                    color: StudyProgress.practiced.color,
+                    icon: StudyProgress.practiced.icon
+                )
+                StatCard(
+                    title: "Learnt",
+                    value: "\(stats.studied)",
+                    color: StudyProgress.studied.color ,
+                    icon: StudyProgress.studied.icon
+                )
+                StatCard(
+                    title: "Started",
+                    value: "\(stats.started)",
+                    color: StudyProgress.started.color,
+                    icon: StudyProgress.started.icon
+                )
+                StatCard(
+                    title: "Added",
+                    value: "\(stats.added)",
+                    color: StudyProgress.fresh.color,
+                    icon: StudyProgress.fresh.icon
+                )
             }
         }
     }
