@@ -25,8 +25,8 @@ struct StudyProgressForLevel: View {
 
     var titleForStudyLevel: String {
         if let studyLevel = studyLevel {
-            studyLevel.displayName
-        } else { "All" }
+            "All " + studyLevel.displayName
+        } else { "All Levels" }
     }
 
     private var postsForStudyLevel: [Post] {
@@ -43,7 +43,7 @@ struct StudyProgressForLevel: View {
             sectionTitle
             
             // PROGRESS VIEWS
-            ForEach([StudyProgress.practiced, StudyProgress.studied , StudyProgress.started, StudyProgress.fresh], id: \.self) { progressLevel in
+            ForEach([StudyProgress.practiced, StudyProgress.studied , StudyProgress.started], id: \.self) { progressLevel in
                 HStack (spacing: 0) {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack (spacing: 3){
@@ -101,12 +101,25 @@ struct StudyProgressForLevel: View {
         
         guard !postsForStudyLevel.isEmpty else { return 0 }
         
-        let filteredPostsForProgressLevel = postsForStudyLevel.filter { $0.progress == progressLevel }
-        return Double(filteredPostsForProgressLevel.count) / Double(postsForStudyLevel.count)
+//        let filteredPostsForProgressLevel = postsForStudyLevel.filter { $0.progress == progressLevel }
+//        return Double(filteredPostsForProgressLevel.count) / Double(postsForStudyLevel.count)
+        let count = levelPostsCount(for: progressLevel)
+        return Double(count) / Double(postsForStudyLevel.count)
     }
     
     private func levelPostsCount(for progressLevel: StudyProgress) -> Int {
-        postsForStudyLevel.filter { $0.progress == progressLevel }.count
+        //        postsForStudyLevel.filter { $0.progress == progressLevel }.count
+        switch progressLevel {
+        case .fresh:
+            return postsForStudyLevel.filter { $0.addedDateStamp != nil }.count
+        case .started:
+            return postsForStudyLevel.filter { $0.startedDateStamp != nil }.count
+        case .studied:
+            return postsForStudyLevel.filter { $0.studiedDateStamp != nil }.count
+        case .practiced:
+            return postsForStudyLevel.filter { $0.practicedDateStamp != nil }.count
+        }
+        
     }
 
 }
