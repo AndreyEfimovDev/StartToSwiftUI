@@ -69,7 +69,7 @@ struct HomeView: View {
                 .presentationCornerRadius(30)
             }
             .overlay {
-                if UIDevice.isiPhone {
+                if UIDevice.isiPhone { // only for iPhime version
                     ZStack {
                         // On long press gesture
                         if isLongPressSuccess {

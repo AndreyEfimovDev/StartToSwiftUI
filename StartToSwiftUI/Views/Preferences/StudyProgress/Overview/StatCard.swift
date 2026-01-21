@@ -11,15 +11,20 @@ struct StatCard: View {
     let title: String
     let value: String
     let color: Color
+    let icon: Image
     
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.caption2)
-                .foregroundStyle(Color.mycolor.myAccent)
+            HStack(spacing: 3){
+                icon
+                Text(title)
+            }
+            .font(.caption2)
+            .foregroundStyle(color)
+
             Text(value)
                 .font(.headline)
-                .foregroundStyle(color)
+                .foregroundStyle(Color.mycolor.myAccent)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(8)

@@ -188,7 +188,8 @@ struct StudyProgressChartView: View {
             Text("Completion:")
             Text(String(format: "%.1f%%", stats.completionRate))
         }
-        .font(.caption)
+        .font(.footnote)
+        .bold()
         .foregroundStyle(Color.mycolor.myAccent)
     }
     
