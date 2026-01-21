@@ -9,7 +9,7 @@ import SwiftUI
 import Charts
 
 // MARK: - Main Chart
-struct LearningProgressChartView: View {
+struct StudyProgressChartView: View {
     
     let posts: [Post]
     @State private var selectedPeriod: TimePeriod = .halfYear
@@ -184,15 +184,12 @@ struct LearningProgressChartView: View {
     
     private var completion: some View {
         HStack {
+            Image(systemName: "hare")
             Text("Completion:")
             Text(String(format: "%.1f%%", stats.completionRate))
         }
-        .font(.subheadline)
+        .font(.caption)
         .foregroundStyle(Color.mycolor.myAccent)
-//        .background(.ultraThinMaterial)
-//        .clipShape(
-//            RoundedRectangle(cornerRadius: 15)
-//        )
     }
     
 }
@@ -249,5 +246,5 @@ struct LearningProgressChartView: View {
         samplePosts.append(post)
     }
     
-    return LearningProgressChartView(posts: samplePosts)
+    return StudyProgressChartView(posts: samplePosts)
 }
