@@ -124,10 +124,12 @@ struct StudyProgressChartView: View {
                 }
 
             } else {
-                // Dynamics of changes in the number of materials by month
-                LineMarkLegendView()
-                // Cumulative progress
-                CumulativeLegendView()
+                VStack(spacing: 6) {
+                    // Dynamics of changes in the number of materials by month
+                    LineMarkLegendView()
+                    // Cumulative progress
+                    CumulativeLegendView()
+                }
             }
             
             UnderlineSermentedPickerNotOptional(
@@ -158,7 +160,7 @@ struct StudyProgressChartView: View {
         for i in 0...period.months {
             guard let monthDate = calendar.date(byAdding: .month, value: -period.months + i, to: currentMonthStart) else { continue }
             
-            // Calculate for each type of progress
+            // Calculate for each type of progress based on DateStamp (withoit Added)
             let startedCount = posts.filter { post in
                 guard let date = post.startedDateStamp else { return false }
                 return calendar.isDate(date, equalTo: monthDate, toGranularity: .month)

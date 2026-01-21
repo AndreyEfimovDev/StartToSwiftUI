@@ -36,12 +36,12 @@ struct StatsCardsView: View {
                     color: StudyProgress.started.color,
                     icon: StudyProgress.started.icon
                 )
-                StatCard(
-                    title: "Added",
-                    value: "\(stats.added)",
-                    color: StudyProgress.fresh.color,
-                    icon: StudyProgress.fresh.icon
-                )
+//                StatCard(
+//                    title: "Added",
+//                    value: "\(stats.added)",
+//                    color: StudyProgress.fresh.color,
+//                    icon: StudyProgress.fresh.icon
+//                )
             }
         }
     }

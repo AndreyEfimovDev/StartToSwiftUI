@@ -18,28 +18,28 @@ struct ProgressStats {
     init(posts: [Post], period: TimePeriod) {
         let now = Date()
         let startDate = Calendar.current.date(byAdding: .month, value: -period.months, to: now) ?? now
-        
+        // Added = all posts with addedDateStamp in the period
         added = posts.filter {
             guard let date = $0.addedDateStamp else { return false }
-            return $0.progress == .fresh && date >= startDate
+            return /*$0.progress == .fresh && */date >= startDate
         }.count
-        
+        // Started = all posts with startedDateStamp in the period
         started = posts.filter {
             guard let date = $0.startedDateStamp else { return false }
-            return $0.progress == .started && date >= startDate
+            return /*$0.progress == .started && */date >= startDate
         }.count
-        
+        // Studied = all posts with studiedDateStamp in the period
         studied = posts.filter {
             guard let date = $0.studiedDateStamp else { return false }
-            return $0.progress == .studied && date >= startDate
+            return /*$0.progress == .studied && */date >= startDate
         }.count
-        
+        // Practiced = all posts with practicedDateStamp in the period
         practiced = posts.filter {
             guard let date = $0.practicedDateStamp else { return false }
-            return $0.progress == .practiced && date >= startDate
+            return /*$0.progress == .practiced && */date >= startDate
         }.count
         
-        let totalPostsInPeriod = added + started + studied + practiced
-        completionRate = added > 0 ? Double(practiced) / Double(totalPostsInPeriod) * 100 : 0
+//        let totalPostsInPeriod = added + started + studied + practiced
+        completionRate = added > 0 ? Double(practiced) / Double(added) * 100 : 0
     }
 }
