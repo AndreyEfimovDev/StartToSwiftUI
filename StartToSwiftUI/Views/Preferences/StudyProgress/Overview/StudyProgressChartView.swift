@@ -9,7 +9,7 @@ import SwiftUI
 import Charts
 
 // MARK: - Main Chart
-struct LearningProgressChartView: View {
+struct StudyProgressChartView: View {
     
     let posts: [Post]
     @State private var selectedPeriod: TimePeriod = .halfYear
@@ -60,9 +60,7 @@ struct LearningProgressChartView: View {
     var body: some View {
         VStack(spacing: 10) {
             // Completion percentage
-            if UIDevice.isiPhone {
-                completionForIPhone
-            }
+                completion
             
             let layout: AnyLayout = UIDevice.isiPad ? AnyLayout(HStackLayout(spacing: 6)) : AnyLayout(VStackLayout(spacing: 6))
 
@@ -126,10 +124,12 @@ struct LearningProgressChartView: View {
                 }
 
             } else {
-                // Dynamics of changes in the number of materials by month
-                LineMarkLegendView()
-                // Cumulative progress
-                CumulativeLegendView()
+                VStack(spacing: 6) {
+                    // Dynamics of changes in the number of materials by month
+                    LineMarkLegendView()
+                    // Cumulative progress
+                    CumulativeLegendView()
+                }
             }
             
             UnderlineSermentedPickerNotOptional(
@@ -160,7 +160,7 @@ struct LearningProgressChartView: View {
         for i in 0...period.months {
             guard let monthDate = calendar.date(byAdding: .month, value: -period.months + i, to: currentMonthStart) else { continue }
             
-            // Calculate for each type of progress
+            // Calculate for each type of progress based on DateStamp (withoit Added)
             let startedCount = posts.filter { post in
                 guard let date = post.startedDateStamp else { return false }
                 return calendar.isDate(date, equalTo: monthDate, toGranularity: .month)
@@ -184,19 +184,15 @@ struct LearningProgressChartView: View {
         return dataPoints
     }
     
-    private var completionForIPhone: some View {
+    private var completion: some View {
         HStack {
+            Image(systemName: "hare")
             Text("Completion:")
-            Spacer()
             Text(String(format: "%.1f%%", stats.completionRate))
         }
-        .font(.subheadline)
+        .font(.footnote)
+        .bold()
         .foregroundStyle(Color.mycolor.myAccent)
-        .padding()
-        .background(.ultraThinMaterial)
-        .clipShape(
-            RoundedRectangle(cornerRadius: 15)
-        )
     }
     
 }
@@ -253,5 +249,5 @@ struct LearningProgressChartView: View {
         samplePosts.append(post)
     }
     
-    return LearningProgressChartView(posts: samplePosts)
+    return StudyProgressChartView(posts: samplePosts)
 }
