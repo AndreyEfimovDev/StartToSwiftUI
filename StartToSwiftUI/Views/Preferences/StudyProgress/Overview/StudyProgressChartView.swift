@@ -60,9 +60,7 @@ struct LearningProgressChartView: View {
     var body: some View {
         VStack(spacing: 10) {
             // Completion percentage
-            if UIDevice.isiPhone {
-                completionForIPhone
-            }
+                completion
             
             let layout: AnyLayout = UIDevice.isiPad ? AnyLayout(HStackLayout(spacing: 6)) : AnyLayout(VStackLayout(spacing: 6))
 
@@ -184,19 +182,17 @@ struct LearningProgressChartView: View {
         return dataPoints
     }
     
-    private var completionForIPhone: some View {
+    private var completion: some View {
         HStack {
             Text("Completion:")
-            Spacer()
             Text(String(format: "%.1f%%", stats.completionRate))
         }
         .font(.subheadline)
         .foregroundStyle(Color.mycolor.myAccent)
-        .padding()
-        .background(.ultraThinMaterial)
-        .clipShape(
-            RoundedRectangle(cornerRadius: 15)
-        )
+//        .background(.ultraThinMaterial)
+//        .clipShape(
+//            RoundedRectangle(cornerRadius: 15)
+//        )
     }
     
 }
