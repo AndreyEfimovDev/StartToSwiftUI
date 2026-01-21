@@ -36,8 +36,13 @@ final class NoticeViewModel: ObservableObject {
     
     // MARK: - Load Notices
     func loadNoticesFromSwiftData() {
+        
+        // Check and remove local duplicates BEFORE loading notices from SwiftData
+        // Removing duplicate notices in SwiftUI, leaving only one instance for each ID
+        removeDuplicateNotices()
+        
         do {
-            
+
             let descriptor = FetchDescriptor<Notice>(
                 sortBy: [SortDescriptor(\.noticeDate, order: .reverse)]
             )
@@ -274,19 +279,35 @@ final class NoticeViewModel: ObservableObject {
     
     // MARK: - Add Notice
     func addNotice(_ notice: Notice) {
-        // Let's check if such an ID already exists
-        guard !notices.contains(where: { $0.id == notice.id }) else {
-            log("🍉 ⚠️ Notice with ID \(notice.id) already exists", level: .info)
-            return
-        }
-        
-        modelContext.insert(notice)
-        saveContext()
-        
-        notices.insert(notice, at: 0)
-        log("🍉 ➕ Notice added, total: \(notices.count)", level: .info)
-        
-        updateUnreadStatus()
+        print("🔍 Attempting to add notice: \(notice.id), title: \(notice.title)")
+           print("🔍 Current notices count: \(notices.count)")
+           
+           // Проверяем дубликаты в уже загруженном массиве
+           guard !notices.contains(where: { $0.id == notice.id }) else {
+               log("🍉 ⚠️ Notice with ID \(notice.id) already exists", level: .info)
+               print("🔍 Duplicate found, returning")
+               return
+           }
+           
+           do {
+               print("🔍 Inserting into context...")
+               modelContext.insert(notice)
+               
+               print("🔍 Saving context...")
+               try modelContext.save()
+               
+               print("🔍 Reloading from SwiftData...")
+               loadNoticesFromSwiftData()
+               log("🍉 ➕ Notice added, total: \(notices.count)", level: .info)
+               
+               updateUnreadStatus()
+           } catch {
+               print("🔍 Error: \(error)")
+               errorMessage = "Error adding notice: \(error.localizedDescription)"
+               showErrorMessageAlert = true
+               hapticManager.notification(type: .error)
+               log("🍉 ❌ Error adding notice: \(error)", level: .error)
+           }
     }
     
     // MARK: - Save Context
