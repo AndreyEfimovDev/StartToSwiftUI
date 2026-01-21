@@ -185,21 +185,67 @@ struct StartView: View {
     }
 }
 
-#Preview("Simple Test") {
+//#Preview("Simple Test") {
+//    let container = try! ModelContainer(
+//        for: Post.self, Notice.self, AppSyncState.self,
+//        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+//    )
+//    
+//    let context = container.mainContext
+//    let vm = PostsViewModel(modelContext: context)
+//    let noticevm = NoticeViewModel(modelContext: context)
+//
+//    NavigationStack {
+//        StartView()
+//            .modelContainer(container)
+//            .environmentObject(AppCoordinator())
+//            .environmentObject(vm)
+//            .environmentObject(noticevm)
+//    }
+//}
+
+#Preview("StartView with Mock Data") {
+    let postsVM = PostsViewModel(
+        dataSource: MockPostsDataSource(posts: PreviewData.samplePosts)
+    )
+    let noticesVM = NoticeViewModel(
+        dataSource: MockNoticesDataSource(notices: PreviewData.sampleNotices)
+    )
+    
+    // Container нужен только для Environment
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     
-    let context = container.mainContext
-    let vm = PostsViewModel(modelContext: context)
-    let noticevm = NoticeViewModel(modelContext: context)
-
     NavigationStack {
         StartView()
             .modelContainer(container)
             .environmentObject(AppCoordinator())
-            .environmentObject(vm)
-            .environmentObject(noticevm)
+            .environmentObject(postsVM)
+            .environmentObject(noticesVM)
+    }
+}
+
+#Preview("With Extended Posts") {
+    let extendedPosts = PreviewData.samplePosts + DevData.postsForCloud
+    let postsVM = PostsViewModel(
+        dataSource: MockPostsDataSource(posts: extendedPosts)
+    )
+    let noticesVM = NoticeViewModel(
+        dataSource: MockNoticesDataSource()
+    )
+    
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppSyncState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+    
+    NavigationStack {
+        StartView()
+            .modelContainer(container)
+            .environmentObject(AppCoordinator())
+            .environmentObject(postsVM)
+            .environmentObject(noticesVM)
     }
 }

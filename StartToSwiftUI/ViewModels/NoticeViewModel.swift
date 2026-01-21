@@ -12,7 +12,8 @@ import SwiftData
 @MainActor
 final class NoticeViewModel: ObservableObject {
     
-    private let modelContext: ModelContext
+//    private let modelContext: ModelContext
+    private let dataSource: NoticesDataSourceProtocol
     private let hapticManager = HapticService.shared
     private let networkService: NetworkService
     
@@ -25,30 +26,44 @@ final class NoticeViewModel: ObservableObject {
     @Published var showErrorMessageAlert: Bool = false
     
     init(
-        modelContext: ModelContext,
+//        modelContext: ModelContext,
+        dataSource: NoticesDataSourceProtocol,
         networkService: NetworkService = NetworkService(baseURL: Constants.cloudNoticesURL)
     ) {
-        self.modelContext = modelContext
+        self.dataSource = dataSource
         self.networkService = networkService
         loadNoticesFromSwiftData()
         updateUnreadStatus()
     }
+    
+    /// Convenience инициализатор для обратной совместимости
+      convenience init(
+          modelContext: ModelContext,
+          networkService: NetworkService = NetworkService(baseURL: Constants.cloudNoticesURL)
+      ) {
+          self.init(
+              dataSource: SwiftDataNoticesDataSource(modelContext: modelContext),
+              networkService: networkService
+          )
+      }
     
     // MARK: - Load Notices
     func loadNoticesFromSwiftData() {
         
         // Check and remove local duplicates BEFORE loading notices from SwiftData
         // Removing duplicate notices in SwiftUI, leaving only one instance for each ID
-        removeDuplicateNotices()
-        
+        // Только для SwiftData удаляем дубликаты
+        if dataSource is SwiftDataNoticesDataSource {
+            removeDuplicateNotices()
+        }
+
         do {
 
-            let descriptor = FetchDescriptor<Notice>(
-                sortBy: [SortDescriptor(\.noticeDate, order: .reverse)]
-            )
+//            let descriptor = FetchDescriptor<Notice>(
+//                sortBy: [SortDescriptor(\.noticeDate, order: .reverse)]
+//            )
             
-            let fetchedNotices = try modelContext.fetch(descriptor)
-            
+            let fetchedNotices = try dataSource.fetchNotices()
             self.notices = fetchedNotices
             
             
@@ -81,8 +96,13 @@ final class NoticeViewModel: ObservableObject {
     
     
     func importNoticesFromCloud() async {
-        
-        let appStateManager = AppSyncStateManager(modelContext: modelContext)
+        // Получаем modelContext только если это SwiftData источник
+        guard let swiftDataSource = dataSource as? SwiftDataNoticesDataSource else {
+            log("🍉 ⚠️ importNoticesFromCloud: только для SwiftData", level: .info)
+            return
+        }
+
+        let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
         
         do {
             
@@ -119,7 +139,7 @@ final class NoticeViewModel: ObservableObject {
             log("🍉 ➕ Добавляем \(newNoticesByID.count) новых уведомлений...", level: .info)
             for cloudNotice in newNoticesByID {
                 let newNotice = NoticeMigrationHelper.convertFromCodable(cloudNotice)
-                modelContext.insert(newNotice)
+                dataSource.insert(newNotice)
                 log("  ✓ Добавлено: \(newNotice.title)", level: .info)
             }
             
@@ -156,10 +176,16 @@ final class NoticeViewModel: ObservableObject {
     // MARK: - Remove Duplicates
     /// Remove duplicate notifications in SwiftUI, leaving only one instance of each ID.
     private func removeDuplicateNotices() {
+        
+        // Работает только для SwiftData
+        guard let swiftDataSource = dataSource as? SwiftDataNoticesDataSource else {
+            return
+        }
+
         let descriptor = FetchDescriptor<Notice>()
         
         do {
-            let allNotices = try modelContext.fetch(descriptor)
+            let allNotices = try swiftDataSource.modelContext.fetch(descriptor)
             
             if !allNotices.isEmpty {
                 // Grouped by Id
@@ -198,7 +224,7 @@ final class NoticeViewModel: ObservableObject {
                     
                     // Delete everything except noticeToKeep
                     for notice in noticesList where notice.persistentModelID != noticeToKeep.persistentModelID {
-                        modelContext.delete(notice)
+                        dataSource.delete(notice)
                         log("    ✗ Duplicate removed: '\(notice.title)'", level: .info)
                     }
                 }
@@ -268,7 +294,7 @@ final class NoticeViewModel: ObservableObject {
             log("🍉 ⚠️ deleteNotice: notice passed is nil", level: .info)
             return
         }
-        modelContext.delete(notice)
+        dataSource.delete(notice)
         saveContext()
 
         notices.removeAll { $0.id == notice.id }
@@ -291,10 +317,10 @@ final class NoticeViewModel: ObservableObject {
            
            do {
                print("🔍 Inserting into context...")
-               modelContext.insert(notice)
+               dataSource.insert(notice)
                
                print("🔍 Saving context...")
-               try modelContext.save()
+               try dataSource.save()
                
                print("🔍 Reloading from SwiftData...")
                loadNoticesFromSwiftData()
@@ -313,7 +339,7 @@ final class NoticeViewModel: ObservableObject {
     // MARK: - Save Context
     private func saveContext() {
         do {
-            try modelContext.save()
+            try dataSource.save()
         } catch {
             errorMessage = "Error saving notices"
             showErrorMessageAlert = true

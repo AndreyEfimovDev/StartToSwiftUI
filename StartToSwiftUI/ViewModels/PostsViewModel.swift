@@ -14,16 +14,24 @@ final class PostsViewModel: ObservableObject {
     
     // MARK: - Properties
     
-    private let modelContext: ModelContext
+//    private let modelContext: ModelContext
     private let fileManager = JSONFileManager.shared
     private let hapticManager = HapticService.shared
     private let networkService: NetworkService
+    private let dataSource: PostsDataSourceProtocol
     
     // Load static posts trigger - tied to AppStateManager, used only in Toggle in Preferences
     @AppStorage("shouldLoadStaticPosts") var shouldLoadStaticPosts: Bool = true {
         didSet {
             log("🔄 shouldLoadStaticPosts has changed: \(shouldLoadStaticPosts)", level: .info)
-            let appStateManager = AppSyncStateManager(modelContext: modelContext)
+            
+            // Получаем modelContext только если это SwiftData источник
+            guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else {
+                log("⚠️ shouldLoadStaticPosts: доступно только для SwiftData", level: .warning)
+                return
+            }
+
+            let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
             
             switch shouldLoadStaticPosts {
             case true:
@@ -84,7 +92,13 @@ final class PostsViewModel: ObservableObject {
     
     // Set Terms Of Use accepted
     func acceptTermsOfUse() {
-        let appStateManager = AppSyncStateManager(modelContext: modelContext)
+        // Получаем modelContext только если это SwiftData источник
+        guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else {
+            log("⚠️ shouldLoadStaticPosts: доступно только для SwiftData", level: .warning)
+            return
+        }
+        let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
+
         appStateManager.acceptTermsOfUse()
         isTermsOfUseAccepted = true
         objectWillChange.send()
@@ -92,10 +106,10 @@ final class PostsViewModel: ObservableObject {
 
     // MARK: - Init
     init(
-        modelContext: ModelContext,
+        dataSource: PostsDataSourceProtocol,
         networkService: NetworkService = NetworkService(baseURL: Constants.cloudPostsURL)
     ) {
-        self.modelContext = modelContext
+        self.dataSource = dataSource
         self.networkService = networkService
         
         // Initializing filters
@@ -109,8 +123,33 @@ final class PostsViewModel: ObservableObject {
         
         self.isFiltersEmpty = checkIfAllFiltersAreEmpty()
         
+        loadPostsFromSwiftData()
+
+        if dataSource is SwiftDataPostsDataSource {
+            Task {
+                // Получаем modelContext из SwiftData source
+                guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else { return }
+                let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
+                
+                if appStateManager.getTermsOfUseAcceptedStatus() {
+                    self.isTermsOfUseAccepted = true
+                }
+                
+                let hasUpdates = await checkCloudCuratedPostsForUpdates()
+                if hasUpdates {
+                    appStateManager.setCuratedPostsLoadStatusOn()
+                }
+            }
+        }
+
+        
         Task {
-            let appStateManager = AppSyncStateManager(modelContext: modelContext)
+            guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else {
+                log("⚠️ shouldLoadStaticPosts: доступно только для SwiftData", level: .warning)
+                return
+            }
+            let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
+
             // Checking the TermsOfUseAccepted state
             if appStateManager.getTermsOfUseAcceptedStatus() {
                 self.isTermsOfUseAccepted = true
@@ -131,6 +170,18 @@ final class PostsViewModel: ObservableObject {
         // Subscriptions for filtering
         setupSubscriptions()
     }
+    
+    /// Convenience инициализатор для обратной совместимости
+    convenience init(
+        modelContext: ModelContext,
+        networkService: NetworkService = NetworkService(baseURL: Constants.cloudPostsURL)
+    ) {
+        self.init(
+            dataSource: SwiftDataPostsDataSource(modelContext: modelContext),
+            networkService: networkService
+        )
+    }
+
 
     // MARK: - Private Methods
     
@@ -317,12 +368,12 @@ final class PostsViewModel: ObservableObject {
     /// Loading posts from SwiftData
     func loadPostsFromSwiftData() {
         
-        let descriptor = FetchDescriptor<Post>(
-            sortBy: [SortDescriptor(\.date, order: .reverse)]
-        )
+//        let descriptor = FetchDescriptor<Post>(
+//            sortBy: [SortDescriptor(\.date, order: .reverse)]
+//        )
         
         do {
-            allPosts = try modelContext.fetch(descriptor)
+            allPosts = try dataSource.fetchPosts()
             allYears = getAllYears()
             allCategories = getAllCategories()
             log("📊 Loaded \(allPosts.count) posts from SwiftData:", level: .debug)
@@ -349,14 +400,14 @@ final class PostsViewModel: ObservableObject {
             return false
         }
         
-        modelContext.insert(newPost)
+        dataSource.insert(newPost)
         saveContextAndReload()
         return true
     }
     
     /// Adding a new post
     func addPost(_ newPost: Post) {
-        modelContext.insert(newPost)
+        dataSource.insert(newPost)
         saveContextAndReload()
     }
     
@@ -372,12 +423,16 @@ final class PostsViewModel: ObservableObject {
             return
         }
         
-        modelContext.delete(post)
+        dataSource.delete(post)
         saveContextAndReload()
         
         // All posts have been deleted and the hasLoadedStaticPosts flag has been reset.
         if allPosts.isEmpty {
-            let appStateManager = AppSyncStateManager(modelContext: modelContext)
+            guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else {
+                log("⚠️ shouldLoadStaticPosts: доступно только для SwiftData", level: .warning)
+                return
+            }
+            let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
             appStateManager.markStaticPostsAsNotLoaded()
         }
 
@@ -385,19 +440,26 @@ final class PostsViewModel: ObservableObject {
     
     /// Deleting all posts
     func eraseAllPosts(_ completion: @escaping () -> ()) {
-        do {
-            // Deleting all posts
-            try modelContext.delete(model: Post.self)
-            
-            // We're resetting the flag because ALL posts (including static ones) have been deleted.
-            let appStateManager = AppSyncStateManager(modelContext: modelContext)
-            appStateManager.markStaticPostsAsNotLoaded()
-            
-            saveContextAndReload()
+        if let swiftDataSource = dataSource as? SwiftDataPostsDataSource {
+            do {
+                // Deleting all posts
+                try swiftDataSource.modelContext.delete(model: Post.self)
+                
+                // We're resetting the flag because ALL posts (including static ones) have been deleted.
+                let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
+                appStateManager.markStaticPostsAsNotLoaded()
+                
+                saveContextAndReload()
+                completion()
+            } catch {
+                errorMessage = "Error deleting data"
+                showErrorMessageAlert = true
+            }
+        } else {
+            // Для Mock просто очищаем массив
+            allPosts = []
             completion()
-        } catch {
-            errorMessage = "Error deleting data"
-            showErrorMessageAlert = true
+
         }
     }
     
@@ -439,7 +501,7 @@ final class PostsViewModel: ObservableObject {
     /// Save context and reload UI
     private func saveContextAndReload() {
         do {
-            try modelContext.save()
+            try dataSource.save()
             // Updating data for the UI
             loadPostsFromSwiftData()
         } catch {
@@ -472,12 +534,17 @@ final class PostsViewModel: ObservableObject {
             if !newPosts.isEmpty {
                 for post in newPosts {
                     post.addedDateStamp = .now // set addedDateStamp as 'today' for new curated posts loaded/added
-                    self.modelContext.insert(post)
+                    self.dataSource.insert(post)
                 }
                 self.saveContextAndReload()
                 
                 // Update the date of the last import of curated posts - we take the oldest date of the post creation
-                let appStateManager = AppSyncStateManager(modelContext: modelContext)
+                guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else {
+                    log("⚠️ shouldLoadStaticPosts: доступно только для SwiftData", level: .warning)
+                    return
+                }
+                let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
+
                 let latestDateOfCuaratedPosts = getLatestDateFromPosts(posts: allPosts) ?? .now
                 appStateManager.setLastDateOfCuaratedPostsLoaded(latestDateOfCuaratedPosts)
 
@@ -734,7 +801,7 @@ final class PostsViewModel: ObservableObject {
             if !postsCheckedForUnique.isEmpty {
                 // 5. Save into SwiftData
                 for post in postsCheckedForUnique {
-                    self.modelContext.insert(post)
+                    self.dataSource.insert(post)
                 }
                 // 6. Save the context and update the UI
                 saveContextAndReload()
@@ -754,11 +821,19 @@ final class PostsViewModel: ObservableObject {
     }
     
     func exportPostsToJSON() -> Result<URL, Error> {
+        
+//        // Проверяем, что это SwiftData источник
+//        guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else {
+//            log("🍓 ⚠️ exportPostsToJSON: доступно только для SwiftData", level: .warning)
+//            return .failure(NSError(domain: "PostsViewModel", code: 1, userInfo: [NSLocalizedDescriptionKey: "Export доступен только для SwiftData"]))
+//        }
+
         do {
             // Getting all posts from SwiftData
-            let descriptor = FetchDescriptor<Post>(sortBy: [SortDescriptor(\.date, order: .reverse)])
-            let allPosts = try modelContext.fetch(descriptor)
-            
+//            let descriptor = FetchDescriptor<Post>(sortBy: [SortDescriptor(\.date, order: .reverse)])
+//            let allPosts = try swiftDataSource.modelContext.fetch(descriptor)
+//            
+
             log("🍓 Exporting \(allPosts.count) posts from SwiftData", level: .info)
             
             // Convert Post to CodablePost
