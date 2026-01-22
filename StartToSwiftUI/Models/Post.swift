@@ -119,50 +119,8 @@ final class Post {
     }
 }
 
-// MARK: - Codable версия Post для JSON
-
-struct CodablePost: Codable {
-    let id: String
-    var category: String
-    var title: String
-    var intro: String
-    var author: String
-    var postType: PostType
-    var urlString: String
-    var postPlatform: Platform
-    var postDate: Date?
-    var studyLevel: StudyLevel
-    var progress: StudyProgress
-    var favoriteChoice: FavoriteChoice
-    var postRating: PostRating?
-    var notes: String
-    let origin: PostOrigin
-    var draft: Bool
-    let date: Date
-    var addedDateStamp: Date?
-    var startedDateStamp: Date?
-    var studiedDateStamp: Date?
-    var practicedDateStamp: Date?
-}
-
-    // MARK: For AddEditPostSheet module: compare only those fields that the user can edit
 extension Post {
-    func isEqual(to other: Post) -> Bool {
-        return self.category == other.category &&
-        self.title == other.title &&
-        self.intro == other.intro &&
-        self.author == other.author &&
-        self.postTypeRawValue == other.postTypeRawValue &&
-        self.urlString == other.urlString &&
-        self.postPlatformRawValue == other.postPlatformRawValue &&
-        self.postDate == other.postDate &&
-        self.studyLevelRawValue == other.studyLevelRawValue &&
-        self.notes == other.notes
-    }
-}
-
-
-extension Post {
+    
     func copy() -> Post {
         return Post(
             id: self.id,
@@ -187,6 +145,20 @@ extension Post {
             studiedDateStamp: self.studiedDateStamp,
             practicedDateStamp: self.practicedDateStamp
         )
+    }
+
+    // MARK: For AddEditPostSheet module: compare only those fields that the user can edit
+    func isEqual(to other: Post) -> Bool {
+        return self.category == other.category &&
+        self.title == other.title &&
+        self.intro == other.intro &&
+        self.author == other.author &&
+        self.postTypeRawValue == other.postTypeRawValue &&
+        self.urlString == other.urlString &&
+        self.postPlatformRawValue == other.postPlatformRawValue &&
+        self.postDate == other.postDate &&
+        self.studyLevelRawValue == other.studyLevelRawValue &&
+        self.notes == other.notes
     }
     
     func update(with post: Post) {
@@ -213,5 +185,4 @@ extension Post {
 //        self.practicedDateStamp = post.practicedDateStamp
     }
 }
-
 

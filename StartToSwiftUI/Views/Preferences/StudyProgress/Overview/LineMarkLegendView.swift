@@ -26,9 +26,9 @@ struct LineMarkLegendView: View {
             HStack(spacing: 20) {
                 ForEach([StudyProgress.started, StudyProgress.studied, StudyProgress.practiced], id: \.self) { type in
                     
-                    let layout: AnyLayout = UIDevice.isiPad ? AnyLayout(VStackLayout(spacing: 6)) : AnyLayout(HStackLayout(spacing: 6))
+                    let UIDeviceLayout: AnyLayout = UIDevice.isiPad ? AnyLayout(VStackLayout(spacing: 6)) : AnyLayout(HStackLayout(spacing: 6))
                     
-                    layout {
+                    UIDeviceLayout {
                         HStack(spacing: 6) {
                             // Line as in the graph
                             Rectangle()

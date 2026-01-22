@@ -10,7 +10,8 @@ import SwiftData
 
 struct StudyProgressDetailsView: View {
     
-    //    @EnvironmentObject private var vm: PostsViewModel
+    let posts: [Post]
+
     @EnvironmentObject private var coordinator: AppCoordinator
     
     @State private var selectedTab: StudyLevelTabs = .all
@@ -24,16 +25,16 @@ struct StudyProgressDetailsView: View {
             Group {
                 switch selectedTab {
                 case .all:
-                    StudyProgressForLevel(studyLevel: nil)
+                    StudyProgressForLevel(posts: posts, studyLevel: nil)
                         .opacity(selectedTab == .all ? 1 : 0)
                 case .beginner:
-                    StudyProgressForLevel(studyLevel: .beginner)
+                    StudyProgressForLevel(posts: posts, studyLevel: .beginner)
                         .opacity(selectedTab == .beginner ? 1 : 0)
                 case .middle:
-                    StudyProgressForLevel(studyLevel: .middle)
+                    StudyProgressForLevel(posts: posts, studyLevel: .middle)
                         .opacity(selectedTab == .middle ? 1 : 0)
                 case .advanced:
-                    StudyProgressForLevel(studyLevel: .advanced)
+                    StudyProgressForLevel(posts: posts, studyLevel: .advanced)
                         .opacity(selectedTab == .advanced ? 1 : 0)
                 }
             }
@@ -56,17 +57,44 @@ struct StudyProgressDetailsView: View {
 }
 
 #Preview {
+    let calendar = Calendar.current
+    let now = Date()
+
+    let extendedPosts = [
+        Post(title: "Post 1", intro: "Intro 1", studyLevel: .beginner, progress: .started)
+            .withDateStamp(.started, date: calendar.date(byAdding: .month, value: -2, to: now)!),
+        
+        Post(title: "Post 2", intro: "Intro 2", studyLevel: .middle, progress: .studied)
+            .withDateStamp(.started, date: calendar.date(byAdding: .month, value: -1, to: now)!)
+            .withDateStamp(.studied, date: calendar.date(byAdding: .month, value: -2, to: now)!),
+        
+        Post(title: "Post 3", intro: "Intro 3", studyLevel: .advanced, progress: .practiced)
+            .withDateStamp(.started, date: calendar.date(byAdding: .month, value: -3, to: now)!)
+            .withDateStamp(.studied, date: calendar.date(byAdding: .month, value: -2, to: now)!)
+            .withDateStamp(.practiced, date: calendar.date(byAdding: .month, value: -1, to: now)!),
+        
+        Post(title: "Post 4", intro: "Intro 4", studyLevel: .middle, progress: .fresh),
+        
+        Post(title: "Post 5", intro: "Intro 5", studyLevel: .beginner, progress: .started)
+            .withDateStamp(.started, date: now),
+        
+        Post(title: "Post 6", intro: "Intro 6", studyLevel: .advanced, progress: .studied)
+            .withDateStamp(.started, date: calendar.date(byAdding: .month, value: -4, to: now)!)
+            .withDateStamp(.studied, date: calendar.date(byAdding: .month, value: -3, to: now)!),
+    ]
+    
+    let postsVM = PostsViewModel(
+        dataSource: MockPostsDataSource(posts: extendedPosts)
+    )
+
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
-    let context = ModelContext(container)
-    
-    let vm = PostsViewModel(modelContext: context)
-    
+
     NavigationStack{
-        StudyProgressDetailsView()
-            .environmentObject(vm)
+        StudyProgressDetailsView(posts: postsVM.allPosts)
+            .environmentObject(postsVM)
             .environmentObject(AppCoordinator())
     }
 }
