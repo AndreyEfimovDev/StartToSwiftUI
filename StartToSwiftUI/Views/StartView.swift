@@ -11,9 +11,9 @@ import SwiftData
 struct StartView: View {
     
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject private var coordinator: AppCoordinator
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
+    @EnvironmentObject private var coordinator: AppCoordinator
 
     @State private var showLaunchView: Bool = true
     @State private var isLoadingData = true
@@ -185,21 +185,45 @@ struct StartView: View {
     }
 }
 
-#Preview("Simple Test") {
+#Preview("StartView with Mock Data") {
+    let postsVM = PostsViewModel(
+        dataSource: MockPostsDataSource(posts: PreviewData.samplePosts)
+    )
+    let noticesVM = NoticeViewModel(
+        dataSource: MockNoticesDataSource(notices: PreviewData.sampleNotices)
+    )
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     
-    let context = container.mainContext
-    let vm = PostsViewModel(modelContext: context)
-    let noticevm = NoticeViewModel(modelContext: context)
-
     NavigationStack {
         StartView()
             .modelContainer(container)
             .environmentObject(AppCoordinator())
-            .environmentObject(vm)
-            .environmentObject(noticevm)
+            .environmentObject(postsVM)
+            .environmentObject(noticesVM)
+    }
+}
+
+#Preview("With Extended Posts") {
+    let extendedPosts = PreviewData.samplePosts + DevData.postsForCloud
+    let postsVM = PostsViewModel(
+        dataSource: MockPostsDataSource(posts: extendedPosts)
+    )
+    let noticesVM = NoticeViewModel(
+        dataSource: MockNoticesDataSource()
+    )
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppSyncState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+    
+    NavigationStack {
+        StartView()
+            .modelContainer(container)
+            .environmentObject(AppCoordinator())
+            .environmentObject(postsVM)
+            .environmentObject(noticesVM)
     }
 }

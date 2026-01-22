@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: - Real Implementation
 final class NetworkService: ObservableObject {
     
     let baseURL: String
@@ -69,66 +70,18 @@ final class NetworkService: ObservableObject {
         task.resume()
     }
 }
-
+// MARK: - Protocol
 protocol NetworkServiceProtocol {
     func fetchDataFromURLAsync<T: Codable>() async throws -> T
 }
 
+
 extension NetworkService: NetworkServiceProtocol {}
 
-extension NetworkService {
-    // Переопределяем метод только для тестов
-    func mock_fetchDataFromURLAsync<T: Codable>(_ mockData: T) async throws -> T {
-        return mockData
-    }
-}
+//extension NetworkService {
+//    // Переопределяем метод только для тестов
+//    func mock_fetchDataFromURLAsync<T: Codable>(_ mockData: T) async throws -> T {
+//        return mockData
+//    }
+//}
 
-// MARK: - Mock Network Services
-
-class MockPostsNetworkService {
-    var mockPosts: [CodablePost] = []
-    var fetchCallCount = 0
-    
-    // Создаем реальный NetworkService, но переопределяем его поведение
-//    private let realService = NetworkService(baseURL: "https://mock.com")
-    
-    func fetchDataFromURLAsync<T: Codable>() async throws -> T {
-        fetchCallCount += 1
-        
-        // Проверяем тип T
-        if T.self == [CodablePost].self {
-            return mockPosts as! T
-        }
-
-        // Если другой тип, выбрасываем ошибку
-        throw NSError(
-            domain: "MockError",
-            code: -1,
-            userInfo: [NSLocalizedDescriptionKey: "Unsupported type \(T.self)"]
-        )
-        
-        // Или делегируем реальному сервису
-        // return try await realService.fetchDataFromURLAsync()
-    }
-}
-
-class MockNoticesNetworkService {
-    var mockNotices: [CodableNotice] = []
-    var fetchCallCount = 0
-        
-    func fetchDataFromURLAsync<T: Codable>() async throws -> T {
-        fetchCallCount += 1
-        
-        // Проверяем тип T
-        if T.self == [CodableNotice].self {
-            return mockNotices as! T
-        }
-        
-        // Если  другой тип, выбрасываем ошибку
-        throw NSError(
-            domain: "MockError",
-            code: -1,
-            userInfo: [NSLocalizedDescriptionKey: "Unsupported type \(T.self)"]
-        )
-    }
-}

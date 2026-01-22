@@ -12,18 +12,31 @@ struct DevData {
     
     static let postsForCloud = [
         
-//        Post(
-//            title: "",
-//            intro: """
-//            
-//            """,
-//            author: "",
-//            urlString: "",
-//            postPlatform: .youtube,
-//            postDate: Date.from(year: 2021, month: 10, day: 10),
-//            studyLevel: .advanced,
-//            origin: .cloud,
-//        ),
+        Post(
+            title: "",
+            intro: """
+                
+                """,
+            author: "",
+            postType: .post,
+            urlString: "",
+            postPlatform: .website,
+            postDate: Date.from(year: 2021, month: 10, day: 10),
+            studyLevel: .beginner,
+            progress: .fresh,
+            favoriteChoice: .no,
+            postRating: nil,
+            notes: """
+                
+                """,
+            origin: .cloud,
+            draft: false,
+            date: .now,
+            addedDateStamp: nil,
+            startedDateStamp: nil,
+            studiedDateStamp: nil,
+            practicedDateStamp: nil
+        ),
 
         Post(
             title: "iOS 16",

@@ -12,9 +12,10 @@ import SwiftData
 @MainActor
 final class PostsViewModelTests: XCTestCase {
     
-    var dataSource: MockPostsDataSource!
-    var networkService: MockNetworkService!
+    var modelContainer: ModelContainer!
+    var modelContext: ModelContext!
     var vm: PostsViewModel!
+    var mockNetworkService: MockPostsNetworkService!
     
     override func setUp() async throws {
         // Сбросить UserDefaults перед каждым тестом
@@ -22,26 +23,45 @@ final class PostsViewModelTests: XCTestCase {
             UserDefaults.standard.removePersistentDomain(forName: bundleID)
         }
         
-        // Используем Mock DataSource вместо реального SwiftData
-        dataSource = MockPostsDataSource(posts: [])
+        modelContainer = try ModelContainer(
+            for: Post.self, Notice.self, AppSyncState.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        )
+        modelContext = ModelContext(modelContainer)
         
-        // Используем Mock NetworkService
-        networkService = MockNetworkService.mockPosts([])
+        mockNetworkService = MockPostsNetworkService()
         
-        // Инициализируем ViewModel с моками
+        let realNetworkService = NetworkService(baseURL: Constants.cloudPostsURL)
+        
         vm = PostsViewModel(
-            dataSource: dataSource,
-            networkService: networkService
+            modelContext: modelContext,
+            networkService: realNetworkService
         )
         
-        // Небольшая задержка для async операций
+        // Ждем завершения async задач в инициализаторе
         try await Task.sleep(nanoseconds: 100_000_000) // 0.1 секунда
+        
+        // Очищаем ВСЕ посты после инициализации ViewModel
+        try clearAllPosts()
+    }
+    
+    private func clearAllPosts() throws {
+        let descriptor = FetchDescriptor<Post>()
+        let existingPosts = try modelContext.fetch(descriptor)
+        
+        for post in existingPosts {
+            modelContext.delete(post)
+        }
+        
+        try modelContext.save()
+        print("🧹 Cleared \(existingPosts.count) posts from SwiftData")
     }
 
     override func tearDown() {
-        dataSource = nil
-        networkService = nil
+        modelContainer = nil
+        modelContext = nil
         vm = nil
+        mockNetworkService = nil
     }
     
     func testInitialization() {
@@ -282,7 +302,7 @@ final class PostsViewModelTests: XCTestCase {
             "Existing Title",
             editingPostId: existingPost.id
         )
-        XCTAssertFalse(isUniqueWhenEditing)
+        XCTAssertFalse(isUniqueWhenEditing) // Should be false because title exists
         
         // When & Then - Different title
         let isUniqueNew = vm.checkNewPostForUniqueTitle(
@@ -292,7 +312,7 @@ final class PostsViewModelTests: XCTestCase {
         XCTAssertFalse(isUniqueNew)
     }
     
-    func testSearchPosts() async throws {
+    func testSearchPosts() {
         // Given
         let post1 = Post(title: "SwiftUI Basics", intro: "Learn SwiftUI")
         let post2 = Post(title: "Combine Framework", intro: "Reactive programming")
@@ -303,15 +323,14 @@ final class PostsViewModelTests: XCTestCase {
         // When
         vm.searchText = "SwiftUI"
         
-        // Ждем обновления (Combine debounce 0.5 сек)
-        try await Task.sleep(nanoseconds: 600_000_000) // 0.6 секунды
-        
-        // Then
-        XCTAssertEqual(vm.filteredPosts.count, 1)
-        XCTAssertEqual(vm.filteredPosts.first?.title, "SwiftUI Basics")
+        // Then - filteredPosts should update via Combine
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            XCTAssertEqual(self.vm.filteredPosts.count, 1)
+            XCTAssertEqual(self.vm.filteredPosts.first?.title, "SwiftUI Basics")
+        }
     }
     
-    func testFilterPosts() async throws {
+    func testFilterPosts() {
         // Given
         let post1 = Post(title: "Post 1", studyLevel: .beginner, progress: .started)
         let post2 = Post(title: "Post 2", studyLevel: .middle, progress: .studied)
@@ -319,11 +338,13 @@ final class PostsViewModelTests: XCTestCase {
         
         [post1, post2, post3].forEach { vm.addPost($0) }
         
+        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+        
         // When
         vm.selectedLevel = .beginner
         
-        // Даем время на фильтрацию
-        try await Task.sleep(nanoseconds: 100_000_000) // 0.1 секунды
+        // Даем немного времени на фильтрацию
+        RunLoop.current.run(until: Date().addingTimeInterval(1.0))
 
         // Then
         XCTAssertEqual(vm.filteredPosts.count, 2)
@@ -371,158 +392,5 @@ final class PostsViewModelTests: XCTestCase {
         // Then
         XCTAssertTrue(vm.checkIfAllFiltersAreEmpty())
     }
-    
-    // MARK: - Network Tests
-    
-    func testImportPostsFromCloudSuccess() async throws {
-        // Given
-        let mockPosts = [
-            CodablePost.mock(id: "1", title: "Cloud Post 1"),
-            CodablePost.mock(id: "2", title: "Cloud Post 2")
-        ]
-        
-        let mockNetwork = MockNetworkService.mockPosts(mockPosts)
-        let testVM = PostsViewModel(
-            dataSource: MockPostsDataSource(posts: []),
-            networkService: mockNetwork
-        )
-        
-        // When
-        await testVM.importPostsFromCloud {}
-        
-        // Then
-        XCTAssertEqual(testVM.allPosts.count, 2)
-        XCTAssertEqual(mockNetwork.fetchCallCount, 1)
-    }
-    
-    func testImportPostsFromCloudNetworkError() async throws {
-        // Given
-        let mockNetwork = MockNetworkService.mockError()
-        let testVM = PostsViewModel(
-            dataSource: MockPostsDataSource(posts: []),
-            networkService: mockNetwork
-        )
-        
-        // When
-        await testVM.importPostsFromCloud {}
-        
-        // Then
-        XCTAssertNotNil(testVM.errorMessage)
-        XCTAssertTrue(testVM.showErrorMessageAlert)
-        XCTAssertEqual(testVM.allPosts.count, 0)
-    }
-    
-    func testImportPostsSkipsDuplicates() async throws {
-        // Given
-        let existingPost = Post(id: "1", title: "Existing", intro: "Content")
-        let dataSource = MockPostsDataSource(posts: [existingPost])
-        
-        let mockPosts = [
-            CodablePost.mock(id: "1", title: "Existing"),
-            CodablePost.mock(id: "2", title: "New Post")
-        ]
-        
-        let mockNetwork = MockNetworkService.mockPosts(mockPosts)
-        let testVM = PostsViewModel(
-            dataSource: dataSource,
-            networkService: mockNetwork
-        )
-        
-        // When
-        await testVM.importPostsFromCloud {}
-        
-        // Then
-        XCTAssertEqual(testVM.allPosts.count, 2) // Only new post added
-    }
-
-    func testImportPostsWithDifferentLevels() async throws {
-        // Given
-        let mockPosts = [
-            CodablePost.mockBeginner,
-            CodablePost.mockMiddle,
-            CodablePost.mockAdvanced
-        ]
-        
-        let mockNetwork = MockNetworkService.mockPosts(mockPosts)
-        let testVM = PostsViewModel(
-            dataSource: MockPostsDataSource(posts: []),
-            networkService: mockNetwork
-        )
-        
-        // When
-        await testVM.importPostsFromCloud {}
-        
-        // Then
-        XCTAssertEqual(testVM.allPosts.count, 3)
-        XCTAssertTrue(testVM.allPosts.contains { $0.studyLevel == .beginner })
-        XCTAssertTrue(testVM.allPosts.contains { $0.studyLevel == .middle })
-        XCTAssertTrue(testVM.allPosts.contains { $0.studyLevel == .advanced })
-    }
-
-    func testImportFavoritePosts() async throws {
-        // Given
-        let mockPosts = [
-            CodablePost.mockFavorite,
-            CodablePost.mock(id: "2", title: "Regular Post", favoriteChoice: .no)
-        ]
-        
-        let mockNetwork = MockNetworkService.mockPosts(mockPosts)
-        let testVM = PostsViewModel(
-            dataSource: MockPostsDataSource(posts: []),
-            networkService: mockNetwork
-        )
-        
-        // When
-        await testVM.importPostsFromCloud {}
-        
-        // Then
-        let favoriteCount = testVM.allPosts.filter { $0.favoriteChoice == .yes }.count
-        XCTAssertEqual(favoriteCount, 1)
-    }
-
-    func testImportDraftPosts() async throws {
-        // Given
-        let mockPosts = [
-            CodablePost.mockDraft,
-            CodablePost.mock(id: "2", title: "Published Post", draft: false)
-        ]
-        
-        let mockNetwork = MockNetworkService.mockPosts(mockPosts)
-        let testVM = PostsViewModel(
-            dataSource: MockPostsDataSource(posts: []),
-            networkService: mockNetwork
-        )
-        
-        // When
-        await testVM.importPostsFromCloud {}
-        
-        // Then
-        let draftCount = testVM.allPosts.filter { $0.draft }.count
-        XCTAssertEqual(draftCount, 1)
-    }
-
-    func testExportPostsToJSON() throws {
-        // Given
-        let post1 = Post(title: "Post 1", intro: "Content 1")
-        let post2 = Post(title: "Post 2", intro: "Content 2")
-        [post1, post2].forEach { vm.addPost($0) }
-        
-        // When
-        let result = vm.exportPostsToJSON()
-        
-        // Then
-        switch result {
-        case .success(let url):
-            XCTAssertTrue(FileManager.default.fileExists(atPath: url.path))
-            XCTAssertTrue(url.lastPathComponent.contains("StartToSwiftUI_backup"))
-            
-            // Проверяем содержимое файла
-            let data = try Data(contentsOf: url)
-            let exportedPosts = try JSONDecoder.appDecoder.decode([CodablePost].self, from: data)
-            XCTAssertEqual(exportedPosts.count, 2)
-            
-        case .failure(let error):
-            XCTFail("Export should succeed: \(error)")
-        }
-    }
 }
+

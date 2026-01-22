@@ -27,8 +27,8 @@ struct CumulativeLegendView: View {
             HStack(spacing: 20) {
                 ForEach([StudyProgress.started, StudyProgress.studied, StudyProgress.practiced], id: \.self) { type in
                     
-                    let layout: AnyLayout = UIDevice.isiPad ? AnyLayout(VStackLayout(spacing: 6)) : AnyLayout(HStackLayout(spacing: 6))
-                    layout {
+                    let UIDeviceLayout: AnyLayout = UIDevice.isiPad ? AnyLayout(VStackLayout(spacing: 6)) : AnyLayout(HStackLayout(spacing: 6))
+                    UIDeviceLayout {
                         Capsule()
                             .fill(type.color)
                             .frame(width: 12, height: 8)
