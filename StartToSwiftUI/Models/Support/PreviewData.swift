@@ -133,3 +133,76 @@ struct PreviewData {
 }
 
 
+//extension PreviewData {
+//    
+//    // MARK: - Codable Posts для Network Mock
+//    
+//    static let sampleCodablePosts: [CodablePost] = samplePosts.map { post in
+//        CodablePost(
+//            id: post.id,
+//            category: post.category,
+//            title: post.title,
+//            intro: post.intro,
+//            author: post.author,
+//            postType: post.postType,
+//            urlString: post.urlString,
+//            postPlatform: post.postPlatform,
+//            postDate: post.postDate,
+//            studyLevel: post.studyLevel,
+//            progress: post.progress,
+//            favoriteChoice: post.favoriteChoice,
+//            postRating: post.postRating,
+//            notes: post.notes,
+//            origin: post.origin,
+//            draft: post.draft,
+//            date: post.date,
+//            startedDateStamp: post.startedDateStamp,
+//            studiedDateStamp: post.studiedDateStamp,
+//            practicedDateStamp: post.practicedDateStamp
+//        )
+//    }
+//    
+//    // MARK: - Codable Notices для Network Mock
+//    
+//    static let sampleCodableNotices: [CodableNotice] = sampleNotices.map { notice in
+//        CodableNotice(
+//            id: notice.id,
+//            title: notice.title,
+//            noticeDate: notice.noticeDate,
+//            noticeMessage: notice.noticeMessage,
+//            isRead: notice.isRead
+//        )
+//    }
+//}
+//
+
+extension PreviewData {
+    
+    // MARK: - Codable Posts для Network Mock
+    
+    static let sampleCodablePosts: [CodablePost] = [
+        .mockBeginner,
+        .mockMiddle,
+        .mockAdvanced,
+        .mockFavorite,
+        .mockCourse,
+        .mockDraft
+    ]
+    
+    // MARK: - Codable Notices для Network Mock
+    
+    static let sampleCodableNotices: [CodableNotice] = [
+        .mockUnread,
+        .mockRead,
+        .mock(
+            id: "3",
+            title: "Maintenance Notice",
+            noticeDate: Date().addingTimeInterval(-172800),
+            noticeMessage: "Scheduled maintenance tomorrow",
+            isRead: false
+        )
+    ]
+}
+
+
+

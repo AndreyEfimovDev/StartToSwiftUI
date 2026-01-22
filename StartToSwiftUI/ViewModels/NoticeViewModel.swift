@@ -12,9 +12,10 @@ import SwiftData
 @MainActor
 final class NoticeViewModel: ObservableObject {
     
-    private let modelContext: ModelContext
+//    private let modelContext: ModelContext
+    private let dataSource: NoticesDataSourceProtocol
     private let hapticManager = HapticService.shared
-    private let networkService: NetworkService
+    private let networkService: NetworkServiceProtocol
     
     @Published var notices: [Notice] = []
     @Published var hasUnreadNotices: Bool = false // флаг наличия непрочиатнных уведомлений
@@ -25,56 +26,111 @@ final class NoticeViewModel: ObservableObject {
     @Published var showErrorMessageAlert: Bool = false
     
     init(
-        modelContext: ModelContext,
-        networkService: NetworkService = NetworkService(baseURL: Constants.cloudNoticesURL)
+        dataSource: NoticesDataSourceProtocol,
+        networkService: NetworkServiceProtocol = NetworkService(baseURL: Constants.cloudNoticesURL)
     ) {
-        self.modelContext = modelContext
+        self.dataSource = dataSource
         self.networkService = networkService
         loadNoticesFromSwiftData()
         updateUnreadStatus()
     }
     
+    /// Convenience initializer for backward compatibility
+      convenience init(
+          modelContext: ModelContext,
+          networkService: NetworkServiceProtocol = NetworkService(baseURL: Constants.cloudNoticesURL)
+      ) {
+          self.init(
+              dataSource: SwiftDataNoticesDataSource(modelContext: modelContext),
+              networkService: networkService
+          )
+      }
+    
     // MARK: - Load Notices
     func loadNoticesFromSwiftData() {
+        
+        // Check and remove local duplicates BEFORE loading notices from SwiftData
+        // Removing duplicate notices in SwiftUI, leaving only one instance for each ID
+        // Remove duplicates for SwiftData only
+        if dataSource is SwiftDataNoticesDataSource {
+            removeDuplicateNotices()
+        }
+
         do {
-            
-            let descriptor = FetchDescriptor<Notice>(
-                sortBy: [SortDescriptor(\.noticeDate, order: .reverse)]
-            )
-            
-            let fetchedNotices = try modelContext.fetch(descriptor)
-            
-            self.notices = fetchedNotices
+            let loadedNotices = try dataSource.fetchNotices()
+            self.notices = loadedNotices
             
             
 //          let duration = Date().timeIntervalSince(startTime)
 //          log("🍉 ✅ Download completed in \(String(format: "%.2f", duration))s. Notifications: \(fetchedNotices.count)", level: .info)
             
         } catch {
+            self.errorMessage = error.localizedDescription
+            self.showErrorMessageAlert = true
+            self.hapticManager.notification(type: .error)
             log("🍉 ❌ Error loading notices: \(error)", level: .error)
         }
     }
     
     // MARK: - Import from Cloud
-    /// Вызываем один раз при запуске приложения
+    /// Called once upon application startup
     ///
-    /// 1. Загрузка из облака → получаем cloudResponse
-    /// 2. Фильтрация уведомлений из облака по дате  - берем те, что позднее даты последней загрузки → получаем relevantCloudNotices
-    /// 3. Удаление локальных дубликатов → removeDuplicateNotices()
-    /// 4. Фильтрация по ID → newNoticesByID = только те, которых нет локально
-    /// 5. Добавление только действительно новых newNoticesByID. Если есть новые:
-    /// - Конвертируем через NoticeMigrationHelper
-    /// - Добавляем в контекст modelContext.insert()
-    /// - Сохраняем saveContext()
-    /// - Обновляем UI - загружаем обновлённый список loadNoticesFromSwiftData()
-    /// 7. Уведомляем пользователя:
-    /// - markUserNotNotifiedBySound() - флаг для звукового оповещения
-    /// - sendLocalNotification() - системное уведомление (если включено)
-    
-    
+    /// 1. Download from the cloud → get cloudResponse
+    /// 2. Filter cloud notices by date - select those later than the last download date → get relevantCloudNotices
+    /// 3. Remove local duplicates → removeDuplicateNotices()
+    /// 4. Filter by ID → create newNoticesByID with those that don't exist locally only
+    /// 5. Add only truly new notices → newNoticesByID. If there are new ones:
+    /// - Convert → NoticeMigrationHelper
+    /// - Add to context → modelContext.insert()
+    /// - Save to SwiftData → saveContext()
+    /// - Update UI by load the updated list →  loadNoticesFromSwiftData()
+    /// 7. Notify the user:
+    /// - markUserNotNotifiedBySound() → set the flag for sound notification
+    /// - sendLocalNotification() → system notification (if enabled)
+    /// 
     func importNoticesFromCloud() async {
         
-        let appStateManager = AppSyncStateManager(modelContext: modelContext)
+        // For Mock sources - simplified logic
+        if !(dataSource is SwiftDataNoticesDataSource) {
+            do {
+                let cloudResponse: [CodableNotice] = try await networkService.fetchDataFromURLAsync()
+                
+                // Filter by ID
+                let existingIDs = Set(notices.map { $0.id })
+                let newNoticesByID = cloudResponse.filter { !existingIDs.contains($0.id) }
+                
+                guard !newNoticesByID.isEmpty else {
+                    updateUnreadStatus()
+                    return
+                }
+                
+                // Convert and add
+                for cloudNotice in newNoticesByID {
+                    let newNotice = NoticeMigrationHelper.convertFromCodable(cloudNotice)
+                    dataSource.insert(newNotice)
+                }
+                
+                try dataSource.save()
+                loadNoticesFromSwiftData()
+                updateUnreadStatus()
+                
+                log("🍉 ✅ Import complete (Mock): \(newNoticesByID.count) notices added", level: .info)
+            } catch {
+                self.errorMessage = error.localizedDescription
+                self.showErrorMessageAlert = true
+                log("🍉 ❌ Import error (Mock): \(error.localizedDescription)", level: .error)
+            }
+            return
+        }
+
+        
+        // Get the modelContext only if it is a SwiftData source
+        guard let swiftDataSource = dataSource as? SwiftDataNoticesDataSource else {
+            log("🍉 ⚠️ importNoticesFromCloud: only for SwiftData", level: .info)
+            return
+        }
+
+        let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
         
         do {
             
@@ -105,17 +161,17 @@ final class NoticeViewModel: ObservableObject {
                 updateUnreadStatus()
                 return
             }
-            log("🍉 🆕 Новых уведомлений (по ID): \(newNoticesByID.count)", level: .info)
+            log("🍉 🆕 New notices (by ID): \(newNoticesByID.count)", level: .info)
             
             // Converting and adding new notifications
-            log("🍉 ➕ Добавляем \(newNoticesByID.count) новых уведомлений...", level: .info)
+            log("🍉 ➕ Adding (newNoticesByID.count) new notices...", level: .info)
             for cloudNotice in newNoticesByID {
                 let newNotice = NoticeMigrationHelper.convertFromCodable(cloudNotice)
-                modelContext.insert(newNotice)
-                log("  ✓ Добавлено: \(newNotice.title)", level: .info)
+                dataSource.insert(newNotice)
+                log("  ✓ Added: \(newNotice.title)", level: .info)
             }
             
-            log("🍉 💾 Предыдущая дата обновления уведомлений: \(lastDate)", level: .info)
+            log("🍉 💾 Previous notices update date: \(lastDate)", level: .info)
             if let latestDate = cloudResponse.map({ $0.noticeDate }).max() {
                 appStateManager.updateLatestNoticeDate(latestDate)
                 log("🍉 💾 New notifications update date: \(latestDate)", level: .info)
@@ -148,10 +204,16 @@ final class NoticeViewModel: ObservableObject {
     // MARK: - Remove Duplicates
     /// Remove duplicate notifications in SwiftUI, leaving only one instance of each ID.
     private func removeDuplicateNotices() {
+        
+        // Работает только для SwiftData
+        guard let swiftDataSource = dataSource as? SwiftDataNoticesDataSource else {
+            return
+        }
+
         let descriptor = FetchDescriptor<Notice>()
         
         do {
-            let allNotices = try modelContext.fetch(descriptor)
+            let allNotices = try swiftDataSource.modelContext.fetch(descriptor)
             
             if !allNotices.isEmpty {
                 // Grouped by Id
@@ -190,7 +252,7 @@ final class NoticeViewModel: ObservableObject {
                     
                     // Delete everything except noticeToKeep
                     for notice in noticesList where notice.persistentModelID != noticeToKeep.persistentModelID {
-                        modelContext.delete(notice)
+                        dataSource.delete(notice)
                         log("    ✗ Duplicate removed: '\(notice.title)'", level: .info)
                     }
                 }
@@ -198,6 +260,9 @@ final class NoticeViewModel: ObservableObject {
 
             }
         } catch {
+            self.errorMessage = error.localizedDescription
+            self.showErrorMessageAlert = true
+            self.hapticManager.notification(type: .error)
             log("🍉 ❌ Error removing duplicates: \(error)", level: .error)
         }
     }
@@ -213,14 +278,17 @@ final class NoticeViewModel: ObservableObject {
     
     // MARK: - Update Unread Status
     func updateUnreadStatus() {
-        // We check if there is at least one unread textbook.
+        // We check if there is at least one unread notice
         hasUnreadNotices = notices.contains(where: { !$0.isRead })
     }
     
     // MARK: - Mark as Read
     func markAsRead(noticeId: String) {
         guard let notice = notices.first(where: { $0.id == noticeId }) else {
-            log("🍉 ⚠️ Notification with ID \(noticeId) not found", level: .info)
+            self.errorMessage = "Notice with ID \(noticeId) not found"
+            self.showErrorMessageAlert = true
+            self.hapticManager.notification(type: .error)
+            log("🍉 ⚠️ markAsRead: notice with ID \(noticeId) not found", level: .info)
             return
         }
         
@@ -233,7 +301,13 @@ final class NoticeViewModel: ObservableObject {
     
     // MARK: - Toggle Read Status
     func isReadToggle(notice: Notice?) {
-        guard let notice = notice else { return }
+        guard let notice = notice else {
+            self.errorMessage = "Notice passed is nil"
+            self.showErrorMessageAlert = true
+            self.hapticManager.notification(type: .error)
+            log("🍉 ⚠️ isReadToggle: notice passed is nil", level: .info)
+            return
+        }
         notice.isRead.toggle()
         saveContext()
         updateUnreadStatus()
@@ -241,44 +315,64 @@ final class NoticeViewModel: ObservableObject {
     
     // MARK: - Delete Notice
     func deleteNotice(notice: Notice?) {
-        guard let notice = notice else { return }
-        
-        modelContext.delete(notice)
+        guard let notice = notice else {
+            self.errorMessage = "Notice passed to delete does not exists (nil)"
+            self.showErrorMessageAlert = true
+            self.hapticManager.notification(type: .error)
+            log("🍉 ⚠️ deleteNotice: notice passed is nil", level: .info)
+            return
+        }
+        dataSource.delete(notice)
         saveContext()
-        
 
         notices.removeAll { $0.id == notice.id }
-        log("🍉 🗑️ Уведомление удалено, осталось: \(notices.count)", level: .info)
+        log("🍉 🗑️ deleteNotice: notice is removed, remains: \(notices.count)", level: .info)
         
         updateUnreadStatus()
     }
     
     // MARK: - Add Notice
     func addNotice(_ notice: Notice) {
-        // Let's check if such an ID already exists
-        guard !notices.contains(where: { $0.id == notice.id }) else {
-            log("🍉 ⚠️ Notice with ID \(notice.id) already exists", level: .info)
-            return
-        }
-        
-        modelContext.insert(notice)
-        saveContext()
-        
-        notices.insert(notice, at: 0)
-        log("🍉 ➕ Notice added, total: \(notices.count)", level: .info)
-        
-        updateUnreadStatus()
+        log("🔍 Attempting to add notice: \(notice.id), title: \(notice.title)", level: .info)
+        log("🔍 Current notices count: \(notices.count)", level: .info)
+           
+           // Checking for duplicates in an already loaded array
+           guard !notices.contains(where: { $0.id == notice.id }) else {
+               log("🍉 ⚠️ Notice with ID \(notice.id) already exists", level: .info)
+               print("🔍 Duplicate found, returning")
+               return
+           }
+           
+           do {
+               log("🔍 Inserting into context...", level: .info)
+               dataSource.insert(notice)
+               
+               log("🔍 Saving context...", level: .info)
+               try dataSource.save()
+               
+               log("🔍 Reloading from SwiftData...", level: .info)
+               loadNoticesFromSwiftData()
+               log("🍉 ➕ Notice added, total: \(notices.count)", level: .info)
+               
+               updateUnreadStatus()
+           } catch {
+               log("🔍 Error: \(error)", level: .error)
+               errorMessage = "Error adding notice: \(error.localizedDescription)"
+               showErrorMessageAlert = true
+               hapticManager.notification(type: .error)
+               log("🍉 ❌ Error adding notice: \(error)", level: .error)
+           }
     }
     
     // MARK: - Save Context
     private func saveContext() {
         do {
-            try modelContext.save()
+            try dataSource.save()
         } catch {
-            log("🍉 ❌ Error saving context: \(error)", level: .error)
-            errorMessage = "Error saving data"
+            errorMessage = "Error saving notices"
             showErrorMessageAlert = true
             hapticManager.notification(type: .error)
+            log("🍉 ❌ Error saving context: \(error)", level: .error)
         }
     }
     
@@ -291,59 +385,59 @@ final class NoticeViewModel: ObservableObject {
         if isSoundNotificationOn {
             hapticManager.notification(type: .success)
         }
-        log("🍉 🔔 Отправлено локальное уведомление: \(count) новых уведомлений", level: .info)
+        log("🍉 🔔 Local notification sent: \(count) new notifications", level: .info)
     }
     
 }
 
-
-// MARK: - Preview Helper
-extension NoticeViewModel {
-
-    /// Creating a Mock ViewModel for Preview
-    static func mockViewModel() -> NoticeViewModel {
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try! ModelContainer(
-            for: Notice.self,
-            configurations: config
-        )
-
-        let viewModel = NoticeViewModel(
-            modelContext: container.mainContext,
-            networkService: NetworkService(baseURL: Constants.cloudNoticesURL)
-        )
-
-        let mockNotices = [
-            Notice(
-                id: "1",
-                title: "Обновление приложения",
-                noticeDate: Date().addingTimeInterval(-86400),
-                noticeMessage: "Доступна новая версия приложения с улучшениями",
-                isRead: false
-            ),
-            Notice(
-                id: "2",
-                title: "Новые материалы",
-                noticeDate: Date().addingTimeInterval(-172800),
-                noticeMessage: "Добавлены новые учебные материалы по SwiftUI",
-                isRead: true
-            ),
-            Notice(
-                id: "3",
-                title: "Напоминание",
-                noticeDate: Date().addingTimeInterval(-259200),
-                noticeMessage: "Не забудьте синхронизировать данные",
-                isRead: false
-            )
-        ]
-
-        for notice in mockNotices {
-            container.mainContext.insert(notice)
-        }
-
-        try? container.mainContext.save()
-        viewModel.loadNoticesFromSwiftData()
-
-        return viewModel
-    }
-}
+//
+//// MARK: - Preview Helper
+//extension NoticeViewModel {
+//
+//    /// Creating a Mock ViewModel for Preview
+//    static func mockViewModel() -> NoticeViewModel {
+//        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+//        let container = try! ModelContainer(
+//            for: Notice.self,
+//            configurations: config
+//        )
+//
+//        let viewModel = NoticeViewModel(
+//            modelContext: container.mainContext,
+//            networkService: NetworkService(baseURL: Constants.cloudNoticesURL)
+//        )
+//
+//        let mockNotices = [
+//            Notice(
+//                id: "1",
+//                title: "Updating the application",
+//                noticeDate: Date().addingTimeInterval(-86400),
+//                noticeMessage: "A new version of the app with improvements is available",
+//                isRead: false
+//            ),
+//            Notice(
+//                id: "2",
+//                title: "New study materials",
+//                noticeDate: Date().addingTimeInterval(-172800),
+//                noticeMessage: "New SwiftUI tutorials have been added",
+//                isRead: true
+//            ),
+//            Notice(
+//                id: "3",
+//                title: "Reminder",
+//                noticeDate: Date().addingTimeInterval(-259200),
+//                noticeMessage: "Don't forget to sync your data",
+//                isRead: false
+//            )
+//        ]
+//
+//        for notice in mockNotices {
+//            container.mainContext.insert(notice)
+//        }
+//
+//        try? container.mainContext.save()
+//        viewModel.loadNoticesFromSwiftData()
+//
+//        return viewModel
+//    }
+//}
