@@ -12,7 +12,7 @@ protocol NetworkServiceProtocol {
     func fetchDataFromURLAsync<T: Codable>() async throws -> T
 }
 
-
+// MARK: - Real Implementation
 final class NetworkService: ObservableObject {
     
     let baseURL: String
@@ -86,6 +86,72 @@ extension NetworkService {
 }
 
 // MARK: - Mock Network Services
+
+final class MockNetworkService: NetworkServiceProtocol {
+    
+    private let mockData: Any
+    private let shouldFail: Bool
+    private let delay: TimeInterval
+    
+    var fetchCallCount = 0
+    
+    init(mockData: Any, shouldFail: Bool = false, delay: TimeInterval = 0) {
+        self.mockData = mockData
+        self.shouldFail = shouldFail
+        self.delay = delay
+    }
+    
+    func fetchDataFromURLAsync<T: Codable>() async throws -> T {
+        fetchCallCount += 1
+        
+        // Симулируем задержку сети
+        if delay > 0 {
+            try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+        }
+        
+        // Симулируем ошибку
+        if shouldFail {
+            throw NetworkError.invalidResponse
+        }
+        
+        // Возвращаем mock данные
+        guard let result = mockData as? T else {
+            throw NSError(
+                domain: "MockNetworkService",
+                code: -1,
+                userInfo: [NSLocalizedDescriptionKey: "Type mismatch: expected \(T.self), got \(type(of: mockData))"]
+            )
+        }
+        
+        return result
+    }
+}
+
+// MARK: - Convenience Mock Factories
+
+extension MockNetworkService {
+    
+    /// Mock для успешной загрузки постов
+    static func mockPosts(_ posts: [CodablePost] = PreviewData.sampleCodablePosts) -> MockNetworkService {
+        MockNetworkService(mockData: posts)
+    }
+    
+    /// Mock для успешной загрузки уведомлений
+    static func mockNotices(_ notices: [CodableNotice] = PreviewData.sampleCodableNotices) -> MockNetworkService {
+        MockNetworkService(mockData: notices)
+    }
+    
+    /// Mock для симуляции ошибки сети
+    static func mockError() -> MockNetworkService {
+        MockNetworkService(mockData: [], shouldFail: true)
+    }
+    
+    /// Mock с задержкой (для тестирования loading states)
+    static func mockWithDelay(_ data: Any, delay: TimeInterval = 2.0) -> MockNetworkService {
+        MockNetworkService(mockData: data, delay: delay)
+    }
+}
+
 
 class MockPostsNetworkService {
     var mockPosts: [CodablePost] = []
