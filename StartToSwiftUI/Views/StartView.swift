@@ -11,9 +11,9 @@ import SwiftData
 struct StartView: View {
     
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject private var coordinator: AppCoordinator
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
+    @EnvironmentObject private var coordinator: AppCoordinator
 
     @State private var showLaunchView: Bool = true
     @State private var isLoadingData = true
@@ -185,25 +185,6 @@ struct StartView: View {
     }
 }
 
-//#Preview("Simple Test") {
-//    let container = try! ModelContainer(
-//        for: Post.self, Notice.self, AppSyncState.self,
-//        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-//    )
-//    
-//    let context = container.mainContext
-//    let vm = PostsViewModel(modelContext: context)
-//    let noticevm = NoticeViewModel(modelContext: context)
-//
-//    NavigationStack {
-//        StartView()
-//            .modelContainer(container)
-//            .environmentObject(AppCoordinator())
-//            .environmentObject(vm)
-//            .environmentObject(noticevm)
-//    }
-//}
-
 #Preview("StartView with Mock Data") {
     let postsVM = PostsViewModel(
         dataSource: MockPostsDataSource(posts: PreviewData.samplePosts)
@@ -211,8 +192,6 @@ struct StartView: View {
     let noticesVM = NoticeViewModel(
         dataSource: MockNoticesDataSource(notices: PreviewData.sampleNotices)
     )
-    
-    // Container нужен только для Environment
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
@@ -235,7 +214,6 @@ struct StartView: View {
     let noticesVM = NoticeViewModel(
         dataSource: MockNoticesDataSource()
     )
-    
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)

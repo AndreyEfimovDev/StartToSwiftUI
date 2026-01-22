@@ -163,15 +163,15 @@ struct PreferencesView: View {
         ) // gauge.open.with.lines.needle.67percent.and.arrowtriangle
     }
     
-    private var loadStaticPostsToggle: some View {
-        HStack {
-            Image(systemName: "arrow.2.squarepath")
-                .frame(width: iconWidth)
-                .foregroundStyle(Color.mycolor.myBlue)
-            Toggle("Load static posts", isOn: $vm.shouldLoadStaticPosts)
-                .tint(Color.mycolor.myBlue)
-        }
-    }
+//    private var loadStaticPostsToggle: some View {
+//        HStack {
+//            Image(systemName: "arrow.2.squarepath")
+//                .frame(width: iconWidth)
+//                .foregroundStyle(Color.mycolor.myBlue)
+//            Toggle("Load static posts", isOn: $vm.shouldLoadStaticPosts)
+//                .tint(Color.mycolor.myBlue)
+//        }
+//    }
     
     private var postDrafts: some View {
         Group {
