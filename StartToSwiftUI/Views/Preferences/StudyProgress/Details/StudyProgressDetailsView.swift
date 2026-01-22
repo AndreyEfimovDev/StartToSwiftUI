@@ -87,11 +87,6 @@ struct StudyProgressDetailsView: View {
         dataSource: MockPostsDataSource(posts: extendedPosts)
     )
 
-    let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppSyncState.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-    )
-
     NavigationStack{
         StudyProgressDetailsView(posts: postsVM.allPosts)
             .environmentObject(postsVM)
