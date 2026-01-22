@@ -15,9 +15,9 @@ struct StatsCardsView: View {
     var body: some View {
         VStack(spacing: 6) {
             
-            let layout: AnyLayout = UIDevice.isiPad ? AnyLayout(VStackLayout(spacing: 6)) : AnyLayout(HStackLayout(spacing: 6))
+            let UIDeviceLayout: AnyLayout = UIDevice.isiPad ? AnyLayout(VStackLayout(spacing: 6)) : AnyLayout(HStackLayout(spacing: 6))
             
-            layout {
+            UIDeviceLayout {
                 StatCard(
                     title: "Practiced",
                     value: "\(stats.practiced)",
