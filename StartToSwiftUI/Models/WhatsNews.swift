@@ -7,6 +7,20 @@
 
 import Foundation
 
+struct WhatsNews {
+    static let releases: [Release] = [
+        Release(
+            release: "Release 1.0.1 (4)",
+            news: [
+                News(
+                    title: "Initial deployment",
+                    newsText: ""
+                ),
+            ]
+        )
+    ]
+}
+
 struct News: Identifiable {
     
     let id: String
@@ -22,7 +36,6 @@ struct News: Identifiable {
         self.title = title
         self.newsText = newsText
     }
-    
 }
 
 struct Release: Identifiable {
@@ -42,17 +55,3 @@ struct Release: Identifiable {
     }
 }
 
-
-struct WhatsNews {
-    static let releases: [Release] = [
-        Release(
-            release: "Release 1.0.1 (4)",
-            news: [
-                News(
-                    title: "Initial deployment",
-                    newsText: ""
-                ),
-            ]
-        )
-    ]
-}

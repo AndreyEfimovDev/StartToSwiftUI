@@ -13,34 +13,32 @@ import Combine
 final class PostsViewModel: ObservableObject {
     
     // MARK: - Properties
-    
-//    private let modelContext: ModelContext
     private let dataSource: PostsDataSourceProtocol
     private let fileManager = JSONFileManager.shared
     private let hapticManager = HapticService.shared
     private let networkService: NetworkServiceProtocol
     
     // Load static posts trigger - tied to AppStateManager, used only in Toggle in Preferences
-    @AppStorage("shouldLoadStaticPosts") var shouldLoadStaticPosts: Bool = true {
-        didSet {
-            log("🔄 shouldLoadStaticPosts has changed: \(shouldLoadStaticPosts)", level: .info)
-            
-            // Получаем modelContext только если это SwiftData источник
-            guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else {
-                log("⚠️ shouldLoadStaticPosts: доступно только для SwiftData", level: .warning)
-                return
-            }
-
-            let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
-            
-            switch shouldLoadStaticPosts {
-            case true:
-                appStateManager.setShouldLoadStaticPostsOn()
-            case false:
-                appStateManager.setShouldLoadStaticPostsOff()
-            }
-        }
-    }
+//    @AppStorage("shouldLoadStaticPosts") var shouldLoadStaticPosts: Bool = true {
+//        didSet {
+//            log("🔄 shouldLoadStaticPosts has changed: \(shouldLoadStaticPosts)", level: .info)
+//            
+//            // Получаем modelContext только если это SwiftData источник
+//            guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else {
+//                log("⚠️ shouldLoadStaticPosts: доступно только для SwiftData", level: .warning)
+//                return
+//            }
+//
+//            let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
+//            
+//            switch shouldLoadStaticPosts {
+//            case true:
+//                appStateManager.setShouldLoadStaticPostsOn()
+//            case false:
+//                appStateManager.setShouldLoadStaticPostsOff()
+//            }
+//        }
+//    }
 
     @Published var allPosts: [Post] = []
     @Published var filteredPosts: [Post] = []
@@ -92,9 +90,9 @@ final class PostsViewModel: ObservableObject {
     
     // Set Terms Of Use accepted
     func acceptTermsOfUse() {
-        // Получаем modelContext только если это SwiftData источник
+        // Get the modelContext only if it is a SwiftData source
         guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else {
-            log("⚠️ shouldLoadStaticPosts: доступно только для SwiftData", level: .warning)
+            log("⚠️ acceptTermsOfUse: available only for SwiftData", level: .warning)
             return
         }
         let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
@@ -127,7 +125,7 @@ final class PostsViewModel: ObservableObject {
 
         if dataSource is SwiftDataPostsDataSource {
             Task {
-                // Получаем modelContext из SwiftData source
+                // Get the modelContext from the SwiftData source
                 guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else { return }
                 let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
                 
@@ -145,7 +143,7 @@ final class PostsViewModel: ObservableObject {
         
         Task {
             guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else {
-                log("⚠️ shouldLoadStaticPosts: доступно только для SwiftData", level: .warning)
+                log("⚠️ init PostViewModel: available only for SwiftData", level: .warning)
                 return
             }
             let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
@@ -171,7 +169,7 @@ final class PostsViewModel: ObservableObject {
         setupSubscriptions()
     }
     
-    /// Convenience инициализатор для обратной совместимости
+    /// Convenience initialiser for backward compatibility
     convenience init(
         modelContext: ModelContext,
         networkService: NetworkServiceProtocol = NetworkService(baseURL: Constants.cloudPostsURL)
@@ -182,195 +180,10 @@ final class PostsViewModel: ObservableObject {
         )
     }
 
-
-    // MARK: - Private Methods
-    
-    // MARK: - Funcrtions for Static Posts
-    /// Loads static posts on first launch
-//    func loadStaticPostsIfNeeded() async {
-//        
-//        // Using global values ​​in AppStateManager to check
-//        let appStateManager = AppSyncStateManager(modelContext: modelContext)
-//        let globalShouldLoadStaticPostsStatus = appStateManager.getStaticPostsLoadToggleStatus()
-//        let globalCheckIfStaticPostsHasLoaded = appStateManager.checkIfStaticPostsHasLoaded()
-//        
-//        // check the local status value of shouldLoadStaticPosts with AppStateManager
-//        // If they don't match, we adjust the local one - the global one takes priority
-//        if shouldLoadStaticPosts != globalShouldLoadStaticPostsStatus {
-//            shouldLoadStaticPosts = globalShouldLoadStaticPostsStatus
-//        }
-//        // STEP 0: Check the status of shouldLoadStaticPosts in AppStateManager. If it is disabled, exit.
-//        guard globalShouldLoadStaticPostsStatus else {
-//            return
-//        }
-//        
-//        // STEP 1: Wait for iCloud syncing
-//        // Give time to receive data from another device
-//        try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 секунды
-//
-//        // STEP 2: Check the hasLoadedStaticPosts status in AppStateManager. If they have already been loaded, exit
-//        if globalCheckIfStaticPostsHasLoaded {
-//            // STEP 3: MANDATORY CLEANING of duplicates after synchronization (SwiftUI + CloudKit duplicate identical static and author posts
-//            await removeDuplicateStaticPosts()
-//            return
-//        }
-//        
-//        // STEP 4: Check if there are already posts with the same ID in the static posts database
-//        let allStaticIds = Set(StaticPost.staticPosts.map { $0.id })
-//        
-//        let descriptor = FetchDescriptor<Post>(
-//            predicate: #Predicate { post in
-//                // We filter only those posts whose ID is contained in the set of static IDs
-//                allStaticIds.contains(post.id)
-//            }
-//        )
-//        
-//        do {
-//            // Loading posts whose IDs are contained in a set of static IDs
-//            let existingStaticPosts = try modelContext.fetch(descriptor)
-//            
-//            // STEP 5: If there is already at least one post, DO NOT create new ones.
-//            if !existingStaticPosts.isEmpty {
-//                log("⚠️⚠️ Existing static posts detected: \(existingStaticPosts.count) шт.", level: .info)
-//                log("⚠️⚠️ Probably synced from another device", level: .info)
-//                
-//                // Removing duplicates
-//                await removeDuplicateStaticPosts()
-//
-//                // Mark as downloaded
-//                appStateManager.markStaticPostsAsLoaded()
-//                
-//                loadPostsFromSwiftData()
-//                return
-//            }
-//            
-//            for staticPost in StaticPost.staticPosts {
-//                    let newPost = Post(
-//                        id: staticPost.id,
-//                        category: staticPost.category,
-//                        title: staticPost.title,
-//                        intro: staticPost.intro,
-//                        author: staticPost.author,
-//                        postType: staticPost.postType,
-//                        urlString: staticPost.urlString,
-//                        postPlatform: staticPost.postPlatform,
-//                        postDate: staticPost.postDate,
-//                        studyLevel: staticPost.studyLevel,
-//                        progress: staticPost.progress,
-//                        favoriteChoice: staticPost.favoriteChoice,
-//                        postRating: staticPost.postRating,
-//                        notes: staticPost.notes,
-//                        origin: staticPost.origin,
-//                        draft: staticPost.draft,
-//                        date: staticPost.date,
-//                        startedDateStamp: staticPost.startedDateStamp,
-//                        studiedDateStamp: staticPost.studiedDateStamp,
-//                        practicedDateStamp: staticPost.practicedDateStamp
-//                    )
-//                    modelContext.insert(newPost)
-//            }
-//
-//            try modelContext.save()
-//            // Mark as downloaded
-//            appStateManager.markStaticPostsAsLoaded()
-//            loadPostsFromSwiftData()
-//
-//        } catch {
-//            log("❌ Error loading static posts: \(error)", level: .error)
-//        }
-//    }
-
-    // MARK: - Remove Duplicates
-    /// Removes duplicate static posts, leaving only one instance of each ID
-//    private func removeDuplicateStaticPosts() async {
-//        
-//        let allStaticIds = Set(StaticPost.staticPosts.map { $0.id })
-//        
-//        let descriptor = FetchDescriptor<Post>(
-//            predicate: #Predicate { post in
-//                allStaticIds.contains(post.id)
-//            }
-//        )
-//        
-//        do {
-//            let existingStaticPosts = try modelContext.fetch(descriptor)
-//            
-//            guard existingStaticPosts.count > StaticPost.staticPosts.count else {
-//                return
-//            }
-//            
-//            log("🗑️ Duplicates found! Total: \(existingStaticPosts.count), expected: \(StaticPost.staticPosts.count)", level: .info)
-//            
-//            // Group by ID
-//            let groupedById = Dictionary(grouping: existingStaticPosts, by: { $0.id })
-//            
-//            var deletedCount = 0
-//            
-//            // For each ID, we leave only the first post and delete the rest.
-//            for (id, posts) in groupedById where posts.count > 1 {
-//                log("  🔍 ID \(id): found \(posts.count) duplicates", level: .info)
-//                
-//                // Sort by creation date and leave the oldest one
-//                let sortedPosts = posts.sorted { $0.date < $1.date }
-//                
-//                // We delete everything except the first one.
-//                for duplicatePost in sortedPosts.dropFirst() {
-//                    modelContext.delete(duplicatePost)
-//                    deletedCount += 1
-//                    log("    ✗ Duplicate removed: \(duplicatePost.title)", level: .info)
-//                }
-//            }
-//            
-//            if deletedCount > 0 {
-//                try modelContext.save()
-//                log("✅ Removed \(deletedCount) duplicates", level: .info)
-//                loadPostsFromSwiftData()
-//            }
-//        } catch {
-//            log("❌ Error removing duplicates: \(error)", level: .error)
-//
-//        }
-//    }
-                
-//    private func removeStaticPosts() {
-//        
-//        let staticIds = Set(StaticPost.staticPosts.map { $0.id })
-//        
-//        let descriptor = FetchDescriptor<Post>(
-//            predicate: #Predicate { post in
-//                staticIds.contains(post.id)
-//            }
-//        )
-//        
-//        do {
-//            let staticPosts = try modelContext.fetch(descriptor)
-//            
-//            for post in staticPosts {
-//                modelContext.delete(post)
-//            }
-//            
-//            try modelContext.save()
-//            
-//            // Reset the flaf
-//            let appStateManager = AppSyncStateManager(modelContext: modelContext)
-//            appStateManager.markStaticPostsAsNotLoaded()
-//            
-//            // Update UI
-//            loadPostsFromSwiftData()
-//            
-//        } catch {
-//            log("❌ Error deleting static posts: \(error)", level: .error)
-//        }
-//    }
-    
     // MARK: - SwiftData Operations
     
     /// Loading posts from SwiftData
     func loadPostsFromSwiftData() {
-        
-//        let descriptor = FetchDescriptor<Post>(
-//            sortBy: [SortDescriptor(\.date, order: .reverse)]
-//        )
         
         do {
             allPosts = try dataSource.fetchPosts()
@@ -429,7 +242,7 @@ final class PostsViewModel: ObservableObject {
         // All posts have been deleted and the hasLoadedStaticPosts flag has been reset.
         if allPosts.isEmpty {
             guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else {
-                log("⚠️ shouldLoadStaticPosts: доступно только для SwiftData", level: .warning)
+                log("⚠️ deletePost: available only for SwiftData", level: .warning)
                 return
             }
             let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
@@ -518,6 +331,54 @@ final class PostsViewModel: ObservableObject {
         errorMessage = nil
         showErrorMessageAlert = false
         
+        // For Mock sources - simplified logic
+        if !(dataSource is SwiftDataPostsDataSource) {
+            do {
+                let cloudResponse: [CodablePost] = try await networkService.fetchDataFromURLAsync()
+                log("☁️ Imported \(cloudResponse.count) posts from the cloud (Mock)", level: .info)
+                
+                // Filter unique posts by ID and title
+                let existingTitles = Set(self.allPosts.map { $0.title })
+                let existingIds = Set(self.allPosts.map { $0.id })
+                
+                let newPosts = cloudResponse
+                    .filter { !existingTitles.contains($0.title) && !existingIds.contains($0.id) }
+                    .map { PostMigrationHelper.convertFromCodable($0) }
+                
+                // Add new posts
+                if !newPosts.isEmpty {
+                    for post in newPosts {
+                        post.addedDateStamp = .now
+                        self.dataSource.insert(post)
+                    }
+                    try self.dataSource.save()
+                    self.loadPostsFromSwiftData()
+                    
+                    self.hapticManager.notification(type: .success)
+                    log("✅ Added \(newPosts.count) new posts (Mock)", level: .info)
+                } else {
+                    self.hapticManager.impact(style: .light)
+                    log("ℹ️ No new posts (Mock)", level: .info)
+                }
+                
+            } catch {
+                self.errorMessage = error.localizedDescription
+                self.showErrorMessageAlert = true
+                self.hapticManager.notification(type: .error)
+                log("❌ Import error (Mock): \(error)", level: .error)
+            }
+            
+            completion()
+            return
+        }
+        
+        // For SwiftData - full logic with AppSyncStateManager
+        guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else {
+            log("⚠️ importPostsFromCloud: только для SwiftData", level: .warning)
+            completion()
+            return
+        }
+        
         do {
             let cloudResponse: [CodablePost] = try await networkService.fetchDataFromURLAsync()
             log("☁️ Imported \(cloudResponse.count) posts from the cloud", level: .info)
@@ -537,14 +398,9 @@ final class PostsViewModel: ObservableObject {
                     self.dataSource.insert(post)
                 }
                 self.saveContextAndReload()
-                
-                // Update the date of the last import of curated posts - we take the oldest date of the post creation
-                guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else {
-                    log("⚠️ shouldLoadStaticPosts: доступно только для SwiftData", level: .warning)
-                    return
-                }
-                let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
 
+                // Update the date of the last import of curated posts - we take the oldest date of the post creation/
+                let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
                 let latestDateOfCuaratedPosts = getLatestDateFromPosts(posts: allPosts) ?? .now
                 appStateManager.setLastDateOfCuaratedPostsLoaded(latestDateOfCuaratedPosts)
 
@@ -566,7 +422,6 @@ final class PostsViewModel: ObservableObject {
         }
         
         completion()
-
     }
     
     // MARK: - Filtering & Searching (без изменений)

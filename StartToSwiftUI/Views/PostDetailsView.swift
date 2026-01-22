@@ -385,38 +385,53 @@ struct PostDetailsView: View {
     }
 }
 
-
-fileprivate struct PostDetailsPreView: View {
+#Preview("Post Details with Mock Data") {
+    let extendedPosts = PreviewData.samplePosts + DevData.postsForCloud
+    let postsVM = PostsViewModel(
+        dataSource: MockPostsDataSource(posts: extendedPosts)
+    )
     
-    var body: some View {
-        NavigationStack {
-            PostDetailsView(postId: PreviewData.samplePosts.first!.id)
-                .environmentObject(createPreviewViewModel())
-        }
-    }
-    private func createPreviewViewModel() -> PostsViewModel {
-        let container = try! ModelContainer(for: Post.self, Notice.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
-        let context = ModelContext(container)
-        let viewModel = PostsViewModel(modelContext: context)
-        
-        viewModel.allPosts = PreviewData.samplePosts
-        return viewModel
-    }
-    
-}
-
-#Preview {
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
-    let context = ModelContext(container)
-    
-    let vm = PostsViewModel(modelContext: context)
-    
-    NavigationStack {
-        PostDetailsPreView()
-            .environmentObject(vm)
-            .environmentObject(AppCoordinator())
+
+    if let firstPost = PreviewData.samplePosts.first {
+        NavigationStack {
+            PostDetailsView(postId: firstPost.id)
+                .environmentObject(postsVM)
+                .environmentObject(AppCoordinator())
+                .modelContainer(container)
+        }
+    } else {
+        Text("No posts available")
+            .padding()
     }
 }
+
+//
+//#Preview("Post Details with Mock Data") {
+//    let extendedPosts = PreviewData.samplePosts + DevData.postsForCloud
+//    let postsVM = PostsViewModel(
+//        dataSource: MockPostsDataSource(posts: extendedPosts)
+//    )
+//
+//    let container = try! ModelContainer(
+//        for: Post.self, Notice.self, AppSyncState.self,
+//        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+//    )
+//
+//    if let firstPost = postsVM.allPosts.first {
+//        NavigationStack {
+//            PostDetailsView(postId: firstPost.id)
+//                .environmentObject(postsVM)
+//                .environmentObject(AppCoordinator())
+//                .modelContainer(container)
+//        }
+//    } else {
+//        Text("No posts available")
+//            .padding()
+//    }
+//}
+//
+

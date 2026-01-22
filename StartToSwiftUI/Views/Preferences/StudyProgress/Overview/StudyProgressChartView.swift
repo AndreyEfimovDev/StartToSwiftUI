@@ -62,9 +62,9 @@ struct StudyProgressChartView: View {
             // Completion percentage
                 completion
             
-            let layout: AnyLayout = UIDevice.isiPad ? AnyLayout(HStackLayout(spacing: 6)) : AnyLayout(VStackLayout(spacing: 6))
+            let UIDeviceLayout: AnyLayout = UIDevice.isiPad ? AnyLayout(HStackLayout(spacing: 6)) : AnyLayout(VStackLayout(spacing: 6))
 
-            layout {
+            UIDeviceLayout {
                 StatsCardsView(stats: stats)
                     .frame(maxWidth: UIDevice.isiPad ? 100 : .infinity)
                 
@@ -114,24 +114,14 @@ struct StudyProgressChartView: View {
                 .frame(maxHeight: .infinity)
             }
             
-            
-            if UIDevice.isiPad {
-                HStack(spacing: 6) {
-                    // Dynamics of changes in the number of materials by month
-                    LineMarkLegendView()
-                    // Cumulative progress
-                    CumulativeLegendView()
-                }
+            UIDeviceLayout {
+                // Dynamics of changes in the number of materials by month
+                LineMarkLegendView()
+                // Cumulative progress
+                CumulativeLegendView()
 
-            } else {
-                VStack(spacing: 6) {
-                    // Dynamics of changes in the number of materials by month
-                    LineMarkLegendView()
-                    // Cumulative progress
-                    CumulativeLegendView()
-                }
             }
-            
+
             UnderlineSermentedPickerNotOptional(
                 selection: $selectedPeriod,
                 allItems: TimePeriod.allCases,

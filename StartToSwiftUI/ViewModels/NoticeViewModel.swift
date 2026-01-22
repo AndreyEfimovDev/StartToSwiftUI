@@ -26,7 +26,6 @@ final class NoticeViewModel: ObservableObject {
     @Published var showErrorMessageAlert: Bool = false
     
     init(
-//        modelContext: ModelContext,
         dataSource: NoticesDataSourceProtocol,
         networkService: NetworkServiceProtocol = NetworkService(baseURL: Constants.cloudNoticesURL)
     ) {
@@ -36,7 +35,7 @@ final class NoticeViewModel: ObservableObject {
         updateUnreadStatus()
     }
     
-    /// Convenience инициализатор для обратной совместимости
+    /// Convenience initializer for backward compatibility
       convenience init(
           modelContext: ModelContext,
           networkService: NetworkServiceProtocol = NetworkService(baseURL: Constants.cloudNoticesURL)
@@ -52,19 +51,14 @@ final class NoticeViewModel: ObservableObject {
         
         // Check and remove local duplicates BEFORE loading notices from SwiftData
         // Removing duplicate notices in SwiftUI, leaving only one instance for each ID
-        // Только для SwiftData удаляем дубликаты
+        // Remove duplicates for SwiftData only
         if dataSource is SwiftDataNoticesDataSource {
             removeDuplicateNotices()
         }
 
         do {
-
-//            let descriptor = FetchDescriptor<Notice>(
-//                sortBy: [SortDescriptor(\.noticeDate, order: .reverse)]
-//            )
-            
-            let fetchedNotices = try dataSource.fetchNotices()
-            self.notices = fetchedNotices
+            let loadedNotices = try dataSource.fetchNotices()
+            self.notices = loadedNotices
             
             
 //          let duration = Date().timeIntervalSince(startTime)
@@ -79,30 +73,29 @@ final class NoticeViewModel: ObservableObject {
     }
     
     // MARK: - Import from Cloud
-    /// Вызываем один раз при запуске приложения
+    /// Called once upon application startup
     ///
-    /// 1. Загрузка из облака → получаем cloudResponse
-    /// 2. Фильтрация уведомлений из облака по дате  - берем те, что позднее даты последней загрузки → получаем relevantCloudNotices
-    /// 3. Удаление локальных дубликатов → removeDuplicateNotices()
-    /// 4. Фильтрация по ID → newNoticesByID = только те, которых нет локально
-    /// 5. Добавление только действительно новых newNoticesByID. Если есть новые:
-    /// - Конвертируем через NoticeMigrationHelper
-    /// - Добавляем в контекст modelContext.insert()
-    /// - Сохраняем saveContext()
-    /// - Обновляем UI - загружаем обновлённый список loadNoticesFromSwiftData()
-    /// 7. Уведомляем пользователя:
-    /// - markUserNotNotifiedBySound() - флаг для звукового оповещения
-    /// - sendLocalNotification() - системное уведомление (если включено)
-    
-    
+    /// 1. Download from the cloud → get cloudResponse
+    /// 2. Filter cloud notices by date - select those later than the last download date → get relevantCloudNotices
+    /// 3. Remove local duplicates → removeDuplicateNotices()
+    /// 4. Filter by ID → create newNoticesByID with those that don't exist locally only
+    /// 5. Add only truly new notices → newNoticesByID. If there are new ones:
+    /// - Convert → NoticeMigrationHelper
+    /// - Add to context → modelContext.insert()
+    /// - Save to SwiftData → saveContext()
+    /// - Update UI by load the updated list →  loadNoticesFromSwiftData()
+    /// 7. Notify the user:
+    /// - markUserNotNotifiedBySound() → set the flag for sound notification
+    /// - sendLocalNotification() → system notification (if enabled)
+    /// 
     func importNoticesFromCloud() async {
         
-        // Для Mock источников - упрощенная логика
+        // For Mock sources - simplified logic
         if !(dataSource is SwiftDataNoticesDataSource) {
             do {
                 let cloudResponse: [CodableNotice] = try await networkService.fetchDataFromURLAsync()
                 
-                // Фильтруем по ID
+                // Filter by ID
                 let existingIDs = Set(notices.map { $0.id })
                 let newNoticesByID = cloudResponse.filter { !existingIDs.contains($0.id) }
                 
@@ -111,7 +104,7 @@ final class NoticeViewModel: ObservableObject {
                     return
                 }
                 
-                // Конвертируем и добавляем
+                // Convert and add
                 for cloudNotice in newNoticesByID {
                     let newNotice = NoticeMigrationHelper.convertFromCodable(cloudNotice)
                     dataSource.insert(newNotice)
@@ -131,9 +124,9 @@ final class NoticeViewModel: ObservableObject {
         }
 
         
-        // Получаем modelContext только если это SwiftData источник
+        // Get the modelContext only if it is a SwiftData source
         guard let swiftDataSource = dataSource as? SwiftDataNoticesDataSource else {
-            log("🍉 ⚠️ importNoticesFromCloud: только для SwiftData", level: .info)
+            log("🍉 ⚠️ importNoticesFromCloud: only for SwiftData", level: .info)
             return
         }
 
@@ -168,17 +161,17 @@ final class NoticeViewModel: ObservableObject {
                 updateUnreadStatus()
                 return
             }
-            log("🍉 🆕 Новых уведомлений (по ID): \(newNoticesByID.count)", level: .info)
+            log("🍉 🆕 New notices (by ID): \(newNoticesByID.count)", level: .info)
             
             // Converting and adding new notifications
-            log("🍉 ➕ Добавляем \(newNoticesByID.count) новых уведомлений...", level: .info)
+            log("🍉 ➕ Adding (newNoticesByID.count) new notices...", level: .info)
             for cloudNotice in newNoticesByID {
                 let newNotice = NoticeMigrationHelper.convertFromCodable(cloudNotice)
                 dataSource.insert(newNotice)
-                log("  ✓ Добавлено: \(newNotice.title)", level: .info)
+                log("  ✓ Added: \(newNotice.title)", level: .info)
             }
             
-            log("🍉 💾 Предыдущая дата обновления уведомлений: \(lastDate)", level: .info)
+            log("🍉 💾 Previous notices update date: \(lastDate)", level: .info)
             if let latestDate = cloudResponse.map({ $0.noticeDate }).max() {
                 appStateManager.updateLatestNoticeDate(latestDate)
                 log("🍉 💾 New notifications update date: \(latestDate)", level: .info)
@@ -285,7 +278,7 @@ final class NoticeViewModel: ObservableObject {
     
     // MARK: - Update Unread Status
     func updateUnreadStatus() {
-        // We check if there is at least one unread textbook.
+        // We check if there is at least one unread notice
         hasUnreadNotices = notices.contains(where: { !$0.isRead })
     }
     
@@ -323,7 +316,7 @@ final class NoticeViewModel: ObservableObject {
     // MARK: - Delete Notice
     func deleteNotice(notice: Notice?) {
         guard let notice = notice else {
-            self.errorMessage = "Notice passed to delete is nil"
+            self.errorMessage = "Notice passed to delete does not exists (nil)"
             self.showErrorMessageAlert = true
             self.hapticManager.notification(type: .error)
             log("🍉 ⚠️ deleteNotice: notice passed is nil", level: .info)
@@ -333,17 +326,17 @@ final class NoticeViewModel: ObservableObject {
         saveContext()
 
         notices.removeAll { $0.id == notice.id }
-        log("🍉 🗑️ Notice is removed, remains: \(notices.count)", level: .info)
+        log("🍉 🗑️ deleteNotice: notice is removed, remains: \(notices.count)", level: .info)
         
         updateUnreadStatus()
     }
     
     // MARK: - Add Notice
     func addNotice(_ notice: Notice) {
-        print("🔍 Attempting to add notice: \(notice.id), title: \(notice.title)")
-           print("🔍 Current notices count: \(notices.count)")
+        log("🔍 Attempting to add notice: \(notice.id), title: \(notice.title)", level: .info)
+        log("🔍 Current notices count: \(notices.count)", level: .info)
            
-           // Проверяем дубликаты в уже загруженном массиве
+           // Checking for duplicates in an already loaded array
            guard !notices.contains(where: { $0.id == notice.id }) else {
                log("🍉 ⚠️ Notice with ID \(notice.id) already exists", level: .info)
                print("🔍 Duplicate found, returning")
@@ -351,19 +344,19 @@ final class NoticeViewModel: ObservableObject {
            }
            
            do {
-               print("🔍 Inserting into context...")
+               log("🔍 Inserting into context...", level: .info)
                dataSource.insert(notice)
                
-               print("🔍 Saving context...")
+               log("🔍 Saving context...", level: .info)
                try dataSource.save()
                
-               print("🔍 Reloading from SwiftData...")
+               log("🔍 Reloading from SwiftData...", level: .info)
                loadNoticesFromSwiftData()
                log("🍉 ➕ Notice added, total: \(notices.count)", level: .info)
                
                updateUnreadStatus()
            } catch {
-               print("🔍 Error: \(error)")
+               log("🔍 Error: \(error)", level: .error)
                errorMessage = "Error adding notice: \(error.localizedDescription)"
                showErrorMessageAlert = true
                hapticManager.notification(type: .error)
@@ -397,54 +390,54 @@ final class NoticeViewModel: ObservableObject {
     
 }
 
-
-// MARK: - Preview Helper
-extension NoticeViewModel {
-
-    /// Creating a Mock ViewModel for Preview
-    static func mockViewModel() -> NoticeViewModel {
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try! ModelContainer(
-            for: Notice.self,
-            configurations: config
-        )
-
-        let viewModel = NoticeViewModel(
-            modelContext: container.mainContext,
-            networkService: NetworkService(baseURL: Constants.cloudNoticesURL)
-        )
-
-        let mockNotices = [
-            Notice(
-                id: "1",
-                title: "Обновление приложения",
-                noticeDate: Date().addingTimeInterval(-86400),
-                noticeMessage: "Доступна новая версия приложения с улучшениями",
-                isRead: false
-            ),
-            Notice(
-                id: "2",
-                title: "Новые материалы",
-                noticeDate: Date().addingTimeInterval(-172800),
-                noticeMessage: "Добавлены новые учебные материалы по SwiftUI",
-                isRead: true
-            ),
-            Notice(
-                id: "3",
-                title: "Напоминание",
-                noticeDate: Date().addingTimeInterval(-259200),
-                noticeMessage: "Не забудьте синхронизировать данные",
-                isRead: false
-            )
-        ]
-
-        for notice in mockNotices {
-            container.mainContext.insert(notice)
-        }
-
-        try? container.mainContext.save()
-        viewModel.loadNoticesFromSwiftData()
-
-        return viewModel
-    }
-}
+//
+//// MARK: - Preview Helper
+//extension NoticeViewModel {
+//
+//    /// Creating a Mock ViewModel for Preview
+//    static func mockViewModel() -> NoticeViewModel {
+//        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+//        let container = try! ModelContainer(
+//            for: Notice.self,
+//            configurations: config
+//        )
+//
+//        let viewModel = NoticeViewModel(
+//            modelContext: container.mainContext,
+//            networkService: NetworkService(baseURL: Constants.cloudNoticesURL)
+//        )
+//
+//        let mockNotices = [
+//            Notice(
+//                id: "1",
+//                title: "Updating the application",
+//                noticeDate: Date().addingTimeInterval(-86400),
+//                noticeMessage: "A new version of the app with improvements is available",
+//                isRead: false
+//            ),
+//            Notice(
+//                id: "2",
+//                title: "New study materials",
+//                noticeDate: Date().addingTimeInterval(-172800),
+//                noticeMessage: "New SwiftUI tutorials have been added",
+//                isRead: true
+//            ),
+//            Notice(
+//                id: "3",
+//                title: "Reminder",
+//                noticeDate: Date().addingTimeInterval(-259200),
+//                noticeMessage: "Don't forget to sync your data",
+//                isRead: false
+//            )
+//        ]
+//
+//        for notice in mockNotices {
+//            container.mainContext.insert(notice)
+//        }
+//
+//        try? container.mainContext.save()
+//        viewModel.loadNoticesFromSwiftData()
+//
+//        return viewModel
+//    }
+//}

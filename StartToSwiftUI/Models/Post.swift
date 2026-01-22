@@ -119,50 +119,8 @@ final class Post {
     }
 }
 
-// MARK: - Codable версия Post для JSON
-
-struct CodablePost: Codable {
-    let id: String
-    var category: String
-    var title: String
-    var intro: String
-    var author: String
-    var postType: PostType
-    var urlString: String
-    var postPlatform: Platform
-    var postDate: Date?
-    var studyLevel: StudyLevel
-    var progress: StudyProgress
-    var favoriteChoice: FavoriteChoice
-    var postRating: PostRating?
-    var notes: String
-    let origin: PostOrigin
-    var draft: Bool
-    let date: Date
-    var addedDateStamp: Date?
-    var startedDateStamp: Date?
-    var studiedDateStamp: Date?
-    var practicedDateStamp: Date?
-}
-
-    // MARK: For AddEditPostSheet module: compare only those fields that the user can edit
 extension Post {
-    func isEqual(to other: Post) -> Bool {
-        return self.category == other.category &&
-        self.title == other.title &&
-        self.intro == other.intro &&
-        self.author == other.author &&
-        self.postTypeRawValue == other.postTypeRawValue &&
-        self.urlString == other.urlString &&
-        self.postPlatformRawValue == other.postPlatformRawValue &&
-        self.postDate == other.postDate &&
-        self.studyLevelRawValue == other.studyLevelRawValue &&
-        self.notes == other.notes
-    }
-}
-
-
-extension Post {
+    
     func copy() -> Post {
         return Post(
             id: self.id,
@@ -188,6 +146,20 @@ extension Post {
             practicedDateStamp: self.practicedDateStamp
         )
     }
+
+    // MARK: For AddEditPostSheet module: compare only those fields that the user can edit
+    func isEqual(to other: Post) -> Bool {
+        return self.category == other.category &&
+        self.title == other.title &&
+        self.intro == other.intro &&
+        self.author == other.author &&
+        self.postTypeRawValue == other.postTypeRawValue &&
+        self.urlString == other.urlString &&
+        self.postPlatformRawValue == other.postPlatformRawValue &&
+        self.postDate == other.postDate &&
+        self.studyLevelRawValue == other.studyLevelRawValue &&
+        self.notes == other.notes
+    }
     
     func update(with post: Post) {
 //        self.id = post.id
@@ -211,124 +183,6 @@ extension Post {
 //        self.startedDateStamp = post.startedDateStamp
 //        self.studiedDateStamp = post.studiedDateStamp
 //        self.practicedDateStamp = post.practicedDateStamp
-    }
-}
-
-
-// MARK: - Test Helpers
-
-extension CodablePost {
-    static func mock(
-        id: String = UUID().uuidString,
-        category: String = "SwiftUI",
-        title: String = "Test Post",
-        intro: String = "Test Content",
-        author: String = "Test Author",
-        postType: PostType = .post,
-        urlString: String = "https://example.com",
-        postPlatform: Platform = .youtube,
-        postDate: Date? = nil,
-        studyLevel: StudyLevel = .beginner,
-        progress: StudyProgress = .fresh,
-        favoriteChoice: FavoriteChoice = .no,
-        postRating: PostRating? = nil,
-        notes: String = "",
-        origin: PostOrigin = .cloud,
-        draft: Bool = false,
-        date: Date = Date(),
-        addedDateStamp: Date? = nil,
-        startedDateStamp: Date? = nil,
-        studiedDateStamp: Date? = nil,
-        practicedDateStamp: Date? = nil
-    ) -> CodablePost {
-        CodablePost(
-            id: id,
-            category: category,
-            title: title,
-            intro: intro,
-            author: author,
-            postType: postType,
-            urlString: urlString,
-            postPlatform: postPlatform,
-            postDate: postDate,
-            studyLevel: studyLevel,
-            progress: progress,
-            favoriteChoice: favoriteChoice,
-            postRating: postRating,
-            notes: notes,
-            origin: origin,
-            draft: draft,
-            date: date,
-            addedDateStamp: addedDateStamp,
-            startedDateStamp: startedDateStamp,
-            studiedDateStamp: studiedDateStamp,
-            practicedDateStamp: practicedDateStamp
-        )
-    }
-    
-    // Предустановленные моки для типичных сценариев
-    
-    static var mockBeginner: CodablePost {
-        mock(
-            id: "beginner-1",
-            title: "SwiftUI Basics",
-            intro: "Learn the fundamentals of SwiftUI",
-            studyLevel: .beginner,
-            progress: .fresh
-        )
-    }
-    
-    static var mockMiddle: CodablePost {
-        mock(
-            id: "middle-1",
-            title: "Advanced SwiftUI",
-            intro: "Deep dive into SwiftUI",
-            studyLevel: .middle,
-            progress: .started,
-            startedDateStamp: Date()
-        )
-    }
-    
-    static var mockAdvanced: CodablePost {
-        mock(
-            id: "advanced-1",
-            title: "SwiftUI Architecture",
-            intro: "Master SwiftUI patterns",
-            studyLevel: .advanced,
-            progress: .studied,
-            studiedDateStamp: Date()
-        )
-    }
-    
-    static var mockFavorite: CodablePost {
-        mock(
-            id: "favorite-1",
-            title: "My Favorite Post",
-            intro: "Amazing content",
-            favoriteChoice: .yes,
-            postRating: .excellent
-        )
-    }
-    
-    static var mockCourse: CodablePost {
-        mock(
-            id: "course-1",
-            title: "Complete SwiftUI Course",
-            intro: "Full course on SwiftUI",
-            postType: .course,
-            progress: .practiced,
-            practicedDateStamp: Date()
-        )
-    }
-    
-    static var mockDraft: CodablePost {
-        mock(
-            id: "draft-1",
-            title: "Draft Post",
-            intro: "Work in progress",
-            origin: .local,
-            draft: true
-        )
     }
 }
 
