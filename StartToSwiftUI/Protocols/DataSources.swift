@@ -114,21 +114,31 @@ final class MockNoticesDataSource: NoticesDataSourceProtocol {
     
     init(notices: [Notice] = PreviewData.sampleNotices) {
         self.notices = notices
+        print("🔧 MockNoticesDataSource initialised with \(notices.count) notices")
     }
     
     func fetchNotices() -> [Notice] {
+        print("📥 Mock: fetchNotices() called, returning \(notices.count) notices")
         return notices
     }
     
     func insert(_ notice: Notice) {
+        guard !notices.contains(where: { $0.id == notice.id }) else {
+            print("⚠️ Mock: Notice with ID \(notice.id) already exists, skipping")
+            return
+        }
         notices.append(notice)
+        print("✅ Mock: Inserted notice '\(notice.title)' (id: \(notice.id)), total: \(notices.count)")
     }
     
     func delete(_ notice: Notice) {
+        let beforeCount = notices.count
         notices.removeAll { $0.id == notice.id }
+        print("🗑️ Mock: Deleted notice '\(notice.title)', count: \(beforeCount) → \(notices.count)")
     }
     
     func save() {
         // Mock - ничего не делаем
+        print("💾 Mock: save() called, \(notices.count) notices in memory")
     }
 }

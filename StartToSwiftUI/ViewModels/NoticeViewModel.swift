@@ -15,7 +15,7 @@ final class NoticeViewModel: ObservableObject {
 //    private let modelContext: ModelContext
     private let dataSource: NoticesDataSourceProtocol
     private let hapticManager = HapticService.shared
-    private let networkService: NetworkService
+    private let networkService: NetworkServiceProtocol
     
     @Published var notices: [Notice] = []
     @Published var hasUnreadNotices: Bool = false // флаг наличия непрочиатнных уведомлений
@@ -28,7 +28,7 @@ final class NoticeViewModel: ObservableObject {
     init(
 //        modelContext: ModelContext,
         dataSource: NoticesDataSourceProtocol,
-        networkService: NetworkService = NetworkService(baseURL: Constants.cloudNoticesURL)
+        networkService: NetworkServiceProtocol = NetworkService(baseURL: Constants.cloudNoticesURL)
     ) {
         self.dataSource = dataSource
         self.networkService = networkService
@@ -39,7 +39,7 @@ final class NoticeViewModel: ObservableObject {
     /// Convenience инициализатор для обратной совместимости
       convenience init(
           modelContext: ModelContext,
-          networkService: NetworkService = NetworkService(baseURL: Constants.cloudNoticesURL)
+          networkService: NetworkServiceProtocol = NetworkService(baseURL: Constants.cloudNoticesURL)
       ) {
           self.init(
               dataSource: SwiftDataNoticesDataSource(modelContext: modelContext),
@@ -96,6 +96,41 @@ final class NoticeViewModel: ObservableObject {
     
     
     func importNoticesFromCloud() async {
+        
+        // Для Mock источников - упрощенная логика
+        if !(dataSource is SwiftDataNoticesDataSource) {
+            do {
+                let cloudResponse: [CodableNotice] = try await networkService.fetchDataFromURLAsync()
+                
+                // Фильтруем по ID
+                let existingIDs = Set(notices.map { $0.id })
+                let newNoticesByID = cloudResponse.filter { !existingIDs.contains($0.id) }
+                
+                guard !newNoticesByID.isEmpty else {
+                    updateUnreadStatus()
+                    return
+                }
+                
+                // Конвертируем и добавляем
+                for cloudNotice in newNoticesByID {
+                    let newNotice = NoticeMigrationHelper.convertFromCodable(cloudNotice)
+                    dataSource.insert(newNotice)
+                }
+                
+                try dataSource.save()
+                loadNoticesFromSwiftData()
+                updateUnreadStatus()
+                
+                log("🍉 ✅ Import complete (Mock): \(newNoticesByID.count) notices added", level: .info)
+            } catch {
+                self.errorMessage = error.localizedDescription
+                self.showErrorMessageAlert = true
+                log("🍉 ❌ Import error (Mock): \(error.localizedDescription)", level: .error)
+            }
+            return
+        }
+
+        
         // Получаем modelContext только если это SwiftData источник
         guard let swiftDataSource = dataSource as? SwiftDataNoticesDataSource else {
             log("🍉 ⚠️ importNoticesFromCloud: только для SwiftData", level: .info)

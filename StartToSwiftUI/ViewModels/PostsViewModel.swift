@@ -15,10 +15,10 @@ final class PostsViewModel: ObservableObject {
     // MARK: - Properties
     
 //    private let modelContext: ModelContext
+    private let dataSource: PostsDataSourceProtocol
     private let fileManager = JSONFileManager.shared
     private let hapticManager = HapticService.shared
-    private let networkService: NetworkService
-    private let dataSource: PostsDataSourceProtocol
+    private let networkService: NetworkServiceProtocol
     
     // Load static posts trigger - tied to AppStateManager, used only in Toggle in Preferences
     @AppStorage("shouldLoadStaticPosts") var shouldLoadStaticPosts: Bool = true {
@@ -107,7 +107,7 @@ final class PostsViewModel: ObservableObject {
     // MARK: - Init
     init(
         dataSource: PostsDataSourceProtocol,
-        networkService: NetworkService = NetworkService(baseURL: Constants.cloudPostsURL)
+        networkService: NetworkServiceProtocol = NetworkService(baseURL: Constants.cloudPostsURL)
     ) {
         self.dataSource = dataSource
         self.networkService = networkService
@@ -174,7 +174,7 @@ final class PostsViewModel: ObservableObject {
     /// Convenience инициализатор для обратной совместимости
     convenience init(
         modelContext: ModelContext,
-        networkService: NetworkService = NetworkService(baseURL: Constants.cloudPostsURL)
+        networkService: NetworkServiceProtocol = NetworkService(baseURL: Constants.cloudPostsURL)
     ) {
         self.init(
             dataSource: SwiftDataPostsDataSource(modelContext: modelContext),
