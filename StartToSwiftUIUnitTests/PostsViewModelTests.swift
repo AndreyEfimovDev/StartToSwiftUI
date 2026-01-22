@@ -7,6 +7,7 @@
 
 import XCTest
 import SwiftData
+import Combine
 @testable import StartToSwiftUI
 
 @MainActor
@@ -312,6 +313,10 @@ final class PostsViewModelTests: XCTestCase {
     }
     
     func testFilterPosts() async throws {
+        
+        let expectation = XCTestExpectation(description: "Wait for filteredPosts update")
+        var cancellable: AnyCancellable?
+
         // Given
         let post1 = Post(title: "Post 1", studyLevel: .beginner, progress: .started)
         let post2 = Post(title: "Post 2", studyLevel: .middle, progress: .studied)
@@ -319,15 +324,26 @@ final class PostsViewModelTests: XCTestCase {
         
         [post1, post2, post3].forEach { vm.addPost($0) }
         
+        // Подписываемся на обновление filteredPosts
+        cancellable = vm.$filteredPosts
+            .dropFirst() // Пропускаем начальное значение
+            .sink { filtered in
+                print("filteredPosts updated: \(filtered.count)")
+                expectation.fulfill()
+            }
+
         // When
         vm.selectedLevel = .beginner
         
-        // Даем время на фильтрацию
-        try await Task.sleep(nanoseconds: 100_000_000) // 0.1 секунды
+        // Ждем обновления через Combine
+        await fulfillment(of: [expectation], timeout: 1.0)
 
         // Then
         XCTAssertEqual(vm.filteredPosts.count, 2)
         XCTAssertTrue(vm.filteredPosts.allSatisfy { $0.studyLevel == .beginner })
+        
+        cancellable?.cancel()
+
     }
     
     func testGetPost() {

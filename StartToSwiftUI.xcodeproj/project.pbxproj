@@ -547,11 +547,11 @@
 		475CC68B2F217B890099CAA6 /* StartToSwiftUIUnitTests */ = {
 			isa = PBXGroup;
 			children = (
-				475CC6862F217B890099CAA6 /* NoticesTests.swift */,
-				475CC6872F217B890099CAA6 /* PostsViewModelTests.swift */,
 				475CC6882F217B890099CAA6 /* PostTests.swift */,
-				475CC6892F217B890099CAA6 /* StartToSwiftUIUnitTests.swift */,
+				475CC6872F217B890099CAA6 /* PostsViewModelTests.swift */,
 				475CC68A2F217B890099CAA6 /* UtilityTests.swift */,
+				475CC6862F217B890099CAA6 /* NoticesTests.swift */,
+				475CC6892F217B890099CAA6 /* StartToSwiftUIUnitTests.swift */,
 			);
 			path = StartToSwiftUIUnitTests;
 			sourceTree = "<group>";
