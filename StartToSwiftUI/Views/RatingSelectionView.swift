@@ -115,7 +115,7 @@ struct RatingSelectionView: View {
                     Text(rating.displayName)
                         .font(.caption)
                 }
-                .foregroundColor(Color.mycolor.myAccent)
+                .foregroundStyle(Color.mycolor.myAccent)
             }
         }
     }
@@ -124,9 +124,9 @@ struct RatingSelectionView: View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 Rectangle()
-//                    .foregroundColor(vm.selectedRating?.color ?? .secondary)
-                    .foregroundColor(Color.mycolor.myBlue)
-//                    .fill(LinearGradient(gradient: Gradient(colors: [Color.mycolor.myBlue.opacity(0.5), Color.mycolor.myBlue]), startPoint: .leading, endPoint: .trailing))
+//                    .foregroundColor(vm.selectedRating?.color ?? Color.mycolor.mySecondary)
+//                    .fill(LinearGradient(gradient: Gradient(colors: [Color.mycolor.myBlue.opacity(0.3), Color.mycolor.myBlue]), startPoint: .leading, endPoint: .trailing))
+                    .foregroundStyle(Color.mycolor.myBlue)
                     .frame(width: CGFloat(vm.selectedRating?.value ?? 0) / 3 * geometry.size.width)
             }
         }

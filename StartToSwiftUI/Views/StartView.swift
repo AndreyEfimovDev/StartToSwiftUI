@@ -173,11 +173,11 @@ struct StartView: View {
 
     // MARK: - Data Loading
     private func loadInitialData() async {
-        // Clearing duplicate AppState from previous runs (Xcode)
-        let appStateManager = AppSyncStateManager(modelContext: modelContext)
-        appStateManager.cleanupDuplicateAppStates()
+//        // Clearing duplicate AppState from previous runs (Xcode)
+//        let appStateManager = AppSyncStateManager(modelContext: modelContext)
+//        appStateManager.cleanupDuplicateAppStates()
         
-        vm.loadPostsFromSwiftData()
+//        vm.loadPostsFromSwiftData()
 //        await vm.loadStaticPostsIfNeeded()
         await noticevm.importNoticesFromCloud()
         
