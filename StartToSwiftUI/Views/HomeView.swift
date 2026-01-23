@@ -31,6 +31,9 @@ struct HomeView: View {
     @State private var showProgressSelectionView: Bool = false
     @State private var isFilterButtonPressed: Bool = false
     
+    private var disableHomeView: Bool {
+        isLongPressSuccess || showProgressSelectionView || isShowingDeleteConfirmation
+    }
     private let longPressDuration: Double = 0.5
     private let limitToShortenTitle: Int = 30
     
@@ -49,7 +52,7 @@ struct HomeView: View {
                     }
                 }
             }
-            .disabled(isLongPressSuccess || isShowingDeleteConfirmation)
+            .disabled(disableHomeView)
             .navigationTitle(vm.selectedCategory ?? "SwiftUI")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -86,6 +89,7 @@ struct HomeView: View {
                                 showProgressSelectionView = false
                                 hapticManager.impact(style: .light)
                             }
+                            .allowsHitTesting(true)
                             .frame(maxHeight: max(proxy.size.height / 3, 300))
                             .padding(.horizontal, 30)
                         }

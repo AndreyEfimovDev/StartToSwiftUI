@@ -474,8 +474,6 @@
 			children = (
 				47BAF0A32E60613200287F10 /* SearchBarView.swift */,
 				47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */,
-				47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */,
-				47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */,
 				478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */,
 				470E63752EFD5044007B75B5 /* CountdownView.swift */,
 				472243772EFFE31F0055461A /* GlobalMethods.swift */,
@@ -614,6 +612,8 @@
 				475997602E5CC0F8008E20F0 /* PostDetailsView.swift */,
 				4791CE032E748DA200687126 /* AddEditPostSheet.swift */,
 				4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */,
+				47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */,
+				47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */,
 				47C56FF02EC9CEA300F0796C /* Notices */,
 				47870FBB2ECCB927004175E4 /* PostDrafts */,
 				4791CDAD2E70186100687126 /* Preferences */,

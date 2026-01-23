@@ -33,8 +33,8 @@ struct ProgressSelectionView: View {
                                     completion()
                                 }
                             }
-                        .padding()
-                        .zIndex(1)
+                            .padding()
+                            .zIndex(1)
                         
                         VStack {
                             Text("Update Progress")
@@ -43,7 +43,6 @@ struct ProgressSelectionView: View {
                             VStack (spacing: 8) {
                                 Text(post.title)
                                     .font(.headline)
-//                                    .minimumScaleFactor(0.75)
                                     .lineLimit(2)
                                     .multilineTextAlignment(.center)
                                 
@@ -66,6 +65,7 @@ struct ProgressSelectionView: View {
                                             .frame(maxWidth: .infinity)
                                     }
                                 }
+                                
                                 UnderlineSermentedPickerNotOptional(
                                     selection: $vm.selectedStudyProgress,
                                     allItems: StudyProgress.allCases,
@@ -97,7 +97,7 @@ struct ProgressSelectionView: View {
                 Text("No post found")
             }
         } // Group
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        //            .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             .ultraThinMaterial,
             in: RoundedRectangle(cornerRadius: 30))

@@ -123,42 +123,49 @@ final class PostsViewModel: ObservableObject {
         
         loadPostsFromSwiftData()
 
-        if dataSource is SwiftDataPostsDataSource {
-            Task {
-                // Get the modelContext from the SwiftData source
-                guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else { return }
-                let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
-                
-                if appStateManager.getTermsOfUseAcceptedStatus() {
-                    self.isTermsOfUseAccepted = true
-                }
-                
-                let hasUpdates = await checkCloudCuratedPostsForUpdates()
-                if hasUpdates {
-                    appStateManager.setCuratedPostsLoadStatusOn()
-                }
-            }
-        }
-
-        
+//        if dataSource is SwiftDataPostsDataSource {
         Task {
+            // Get the modelContext from the SwiftData source
             guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else {
-                log("⚠️ init PostViewModel: available only for SwiftData", level: .warning)
+                log("⚠️ init PostViewModel: dataSource does not cast SwiftDataPostsDataSource", level: .info)
                 return
             }
+            
             let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
-
-            // Checking the TermsOfUseAccepted state
+            
+            // Clearing duplicate AppState from previous runs (Xcode)
+            appStateManager.cleanupDuplicateAppStates()
+            
             if appStateManager.getTermsOfUseAcceptedStatus() {
                 self.isTermsOfUseAccepted = true
             }
-            // We check for new materials in the author's collection in the cloud
-            let hasUpdates = await checkCloudCuratedPostsForUpdates()
             
+            let hasUpdates = await checkCloudCuratedPostsForUpdates()
             if hasUpdates {
                 appStateManager.setCuratedPostsLoadStatusOn()
             }
         }
+//        }
+
+        
+//        Task {
+//            guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else {
+//                log("⚠️ init PostViewModel: dataSource does not cast SwiftDataPostsDataSource", level: .info)
+//                return
+//            }
+//            let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
+//
+//            // Checking the TermsOfUseAccepted state
+//            if appStateManager.getTermsOfUseAcceptedStatus() {
+//                self.isTermsOfUseAccepted = true
+//            }
+//            // We check for new materials in the author's collection in the cloud
+//            let hasUpdates = await checkCloudCuratedPostsForUpdates()
+//            
+//            if hasUpdates {
+//                appStateManager.setCuratedPostsLoadStatusOn()
+//            }
+//        }
 
         // Setting the timezone
         if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
@@ -184,6 +191,9 @@ final class PostsViewModel: ObservableObject {
     
     /// Loading posts from SwiftData
     func loadPostsFromSwiftData() {
+        
+//        let callStack = Thread.callStackSymbols.joined(separator: "\n")
+//        log("📊 [CALL STACK] loadPostsFromSwiftData called from:\n\(callStack)", level: .debug)
         
         do {
             allPosts = try dataSource.fetchPosts()
