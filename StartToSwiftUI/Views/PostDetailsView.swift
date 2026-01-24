@@ -18,92 +18,62 @@ struct PostDetailsView: View {
     
     let postId: String
     
-    private var post: Post? {
-        vm.allPosts.first(where: { $0.id == postId })
-    }
+    // MARK: - State
     
-    @State private var showSafariView = false
     @State private var showFullIntro: Bool = false
-    @State private var showFullFreeTextField: Bool = false
-    @State private var showEditPostView: Bool = false
-    @State private var showAddPostView: Bool = false
-    @State private var showRatingSelectionView: Bool = false
-    
+    @State private var showFullNotes: Bool = false
     @State private var lineCountIntro: Int = 0
-    private let introFont: Font = .subheadline
-    private let introLineSpacing: CGFloat = 0
-    private let introLinesCountLimit: Int = 10
-    
-    @State private var lineCountFreeTextField: Int = 0
-    private let fullFreeTextFieldFont: Font = .footnote
-    private let fullFreeTextFieldLineSpacing: CGFloat = 0
-    private let freeTextFieldLinesCountLimit: Int = 2
-    
+
     @State private var showRatingTab: Bool = false
     @State private var showProgressTab: Bool = false
     @State private var zIndexBarRating: Double = 0
     @State private var zIndexBarProgress: Double = 0
-    
-    private var minHeight: CGFloat {
-        if UIDevice.isiPad { 60 }
-        else { 75 }
-    }
+
     @State private var maxHeight: CGFloat = 350
-    private let widthRatio: CGFloat = 0.55
     @State private var tabWidth: CGFloat = 0
     @State private var expandedWidth: CGFloat = 0
+
+    // MARK: - Constants
+
+    private let introFont: Font = .subheadline
+    private let introLineSpacing: CGFloat = 0
+    private let introLinesLimit: Int = 10
+    
+    private let notesFont: Font = .footnote
+    private let widthRatio: CGFloat = 0.55
+
+    // MARK: - Computed Properties
+    
+    private var post: Post? {
+        vm.getPost(id: postId)
+    }
+    
+    private var minHeight: CGFloat {
+        UIDevice.isiPad ? 60 : 75
+    }
+    
+    private var isEditable: Bool {
+        post?.origin == .local
+    }
     
     var body: some View {
         GeometryReader { proxy in
             VStack {
-                if let validPost = post {
-                    ScrollView(showsIndicators: false) {
-                        VStack {
-                            header(for: validPost)
-                                .background(
-                                    .thinMaterial,
-                                    in: RoundedRectangle(cornerRadius: 15)
-                                )
-                                .padding(.top, 30)
-                            
-                            intro(for: validPost)
-                                .background(
-                                    .thinMaterial,
-                                    in: RoundedRectangle(cornerRadius: 15)
-                                )
-                            if validPost.urlString != Constants.urlStart {
-                                goToTheSourceButton(validPost.urlString)
-                                    .padding(.top, 30)
-                                    .frame(maxWidth: 250)
-                            }
-                            
-                            notesToPost(for: validPost)
-                                .background(
-                                    .thinMaterial,
-                                    in: RoundedRectangle(cornerRadius: 15)
-                                ).opacity(validPost.notes.isEmpty ? 0 : 1)
-                        }
-                        .foregroundStyle(Color.mycolor.myAccent)
-                    } // ScrollView
-                    .padding(.horizontal)
-                    .navigationBarBackButtonHidden(true)
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        toolbarForPostDetails(validPost: validPost)
-                    }
-
+                if let post {
+                    postContent(for: post)
+                        .navigationBarBackButtonHidden(true)
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar { toolbar(for: post) }
                 } else {
                     postNotSelectedEmptyView(text: "Post is not found")
                 }
             }
             .onAppear {
-                tabWidth = proxy.size.width * widthRatio
-                expandedWidth = proxy.size.width
+                updateWidths(for: proxy.size.width)
             }
-            .onChange(of: proxy.size.width, { oldValue, newValue in
-                tabWidth = newValue * widthRatio
-                expandedWidth = newValue
-            })
+            .onChange(of: proxy.size.width) { _, newValue in
+                updateWidths(for: newValue)
+            }
             .safeAreaInset(edge: .bottom) {
                 if post != nil {
                     bottomTabsContainer
@@ -113,19 +83,238 @@ struct PostDetailsView: View {
         }
     }
     
+    // MARK: - Content
+    
+    private func postContent(for post: Post) -> some View {
+            ScrollView(showsIndicators: false) {
+                VStack {
+                    header(for: post)
+                        .cardBackground()
+                        .padding(.top, 30)
+                    
+                    intro(for: post)
+                        .cardBackground()
+                    
+                    if post.urlString != Constants.urlStart {
+                        goToTheSourceButton(urlString: post.urlString)
+                            .padding(.top, 30)
+                            .frame(maxWidth: 250)
+                    }
+                    
+                    if !post.notes.isEmpty {
+                        notes(for: post)
+                            .cardBackground()
+                    }
+                }
+                .foregroundStyle(Color.mycolor.myAccent)
+            }
+            .padding(.horizontal)
+        }
+
+    // MARK: - Header
+    
+    private func header(for post: Post) -> some View {
+        VStack(spacing: 8) {
+            Text(post.title)
+                .font(.title2)
+                .fontWeight(.semibold)
+                .minimumScaleFactor(0.75)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+            
+            Text("@" + post.author)
+                .font(.body)
+                .frame(maxWidth: .infinity)
+            
+            HStack {
+                Text("\(post.studyLevel.displayName.capitalized) level")
+                    .font(.body)
+                    .fontWeight(.medium)
+                    .foregroundStyle(post.studyLevel.color)
+                
+                Spacer()
+                
+                statusIcons(for: post)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+//
+//            if vm.selectedCategory == nil {
+//                Text(post.category)
+//                    .font(.body)
+//                    .fontWeight(.medium)
+//                    .foregroundStyle(Color.mycolor.myYellow)
+//                    .frame(maxWidth: .infinity)
+//            }
+//
+
+        }
+        .padding()
+    }
+
+    @ViewBuilder
+    private func statusIcons(for post: Post) -> some View {
+        Group {
+            if post.draft {
+                Image(systemName: "square.stack.3d.up")
+            }
+            if post.favoriteChoice == .yes {
+                Image(systemName: "heart")
+                    .foregroundStyle(Color.mycolor.myRed)
+            }
+            if let rating = post.postRating {
+                rating.icon
+                    .foregroundStyle(Color.mycolor.myBlue)
+            }
+            post.progress.icon
+                .foregroundStyle(Color.mycolor.myGreen)
+            post.origin.icon
+        }
+        .font(.caption)
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+
+    // MARK: - Intro
+    
+    private func intro(for post: Post) -> some View {
+        VStack(spacing: 0) {
+            introHeader(for: post)
+                .font(.caption)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Text (post.intro)
+                .font(introFont)
+                .lineLimit(showFullIntro ? nil : introLinesLimit)
+                .lineSpacing(introLineSpacing)
+                .frame(minHeight: 55, alignment: .topLeading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .onLineCountChanged(font: introFont, lineSpacing: introLineSpacing) { count in
+                    lineCountIntro = count - 1
+                }
+                .padding(.top, 8)
+            
+            if lineCountIntro > introLinesLimit {
+                
+                HStack(alignment: .top) {
+                    Spacer()
+                    MoreLessTextButton(showText: $showFullIntro)
+                }
+                //                    .offset(y: -10)
+            }
+        }
+        .padding()
+    }
+    
+    @ViewBuilder
+    private func introHeader(for post: Post) -> some View {
+        let platform = post.postPlatform.displayName
+        let postType = post.postType.displayName
+        
+        if let date = post.postDate {
+            Text("\(postType) posted \(date.formatted(date: .numeric, time: .omitted)) to \(platform)")
+        } else {
+            Text("\(postType) on \(platform)")
+        }
+    }
+    
+    // MARK: - Notes
+
+    private func notes(for post: Post) -> some View {
+        VStack(spacing: 0) {
+            HStack {
+                Text("Notes")
+                    .font(.headline)
+                    .frame(height: 55)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 8)
+                
+                Spacer()
+                
+                if !showFullNotes { // !post.notes.isEmpty && !showFullNotes
+                    MoreLessTextButton(showText: $showFullNotes)
+                }
+            }
+            
+            if showFullNotes {
+                VStack {
+                    Text(post.notes)
+                        .font(notesFont)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 8)
+                    
+                    HStack(alignment: .top) {
+                        Spacer()
+                        MoreLessTextButton(showText: $showFullNotes)
+                    }
+                    .offset(y: -10)
+                }
+            }
+        }
+    }
+
+    // MARK: - Source Button
+    
+    private func goToTheSourceButton(urlString: String) -> some View {
+        LinkButtonURL(
+            buttonTitle: "Go to the Source",
+            urlString: urlString
+        )
+    }
+
+    // MARK: - Toolbar
+    
+    @ToolbarContentBuilder
+    private func toolbar(for post: Post) -> some ToolbarContent {
+        ToolbarItemGroup(placement: .topBarLeading) {
+            
+            if UIDevice.isiPhone {
+                BackButtonView() { coordinator.pop() }
+            }
+            
+            ShareLink(item: post.urlString) {
+                Image(systemName: "square.and.arrow.up")
+                    .font(.headline)
+                    .foregroundStyle(Color.mycolor.myAccent)
+                    .offset(y: -2)
+                    .frame(width: 30, height: 30)
+                    .background(.black.opacity(0.001))
+            }
+        }
+        
+        ToolbarItemGroup(placement: .topBarTrailing) {
+            
+            CircleStrokeButtonView(
+                iconName: post.favoriteChoice == .yes ? "heart.slash" : "heart",
+                iconFont: .headline,
+                isShownCircle: false
+            ) {
+                vm.favoriteToggle(post)
+            }
+            
+            CircleStrokeButtonView(
+                iconName: isEditable ? "pencil" : "pencil.slash",
+                isShownCircle: false
+            ) {
+                coordinator.push(.editPost(post))
+            }
+            .disabled(!isEditable)
+        }
+    }
+    
+    // MARK: - Bottom Tabs
+    
     private var bottomTabsContainer: some View {
         ZStack {
             // Study Progress Selection Bar
             selectionTabView (
-                icon: "hare", color: .green, alignment: .leading,
+                icon: "hare",
+                color: Color.mycolor.myGreen,
+                alignment: .leading,
                 isExpanded: showProgressTab,
                 otherIsExpanded: showRatingTab,
-                zIndexTab: zIndexBarProgress,
-                content: {
-                    ProgressSelectionView {
-                        showProgressTab = false
-                    }
-                }) {
+                zIndexTab: zIndexBarProgress
+                ){
+                    ProgressSelectionView { showProgressTab = false }
+                } onTap: {
                     maxHeight = 310
                     zIndexBarProgress = 1
                     zIndexBarRating = 0
@@ -133,15 +322,15 @@ struct PostDetailsView: View {
                 }
             // Rating Selection Bar
             selectionTabView (
-                icon: "star", color: .yellow, alignment: .trailing,
+                icon: "star",
+                color: Color.mycolor.myYellow,
+                alignment: .trailing,
                 isExpanded: showRatingTab,
                 otherIsExpanded: showProgressTab,
-                zIndexTab: zIndexBarRating,
-                content: {
-                    RatingSelectionView {
-                        showRatingTab = false
-                    }
-                }) {
+                zIndexTab: zIndexBarRating
+                ){
+                    RatingSelectionView { showRatingTab = false}
+                } onTap: {
                     maxHeight = 350
                     zIndexBarRating = 1
                     zIndexBarProgress = 0
@@ -159,47 +348,37 @@ struct PostDetailsView: View {
         otherIsExpanded: Bool,
         zIndexTab: Double,
         @ViewBuilder content: () -> Content,
-        completion: @escaping () -> Void
+        onTap: @escaping () -> Void
     ) -> some View {
         ZStack (alignment: .top) {
-            RoundedRectangle(cornerRadius: 30)
-//            UnevenRoundedRectangle(
-//                topLeadingRadius: 30,
-//                bottomLeadingRadius: 0,
-//                bottomTrailingRadius: 0,
-//                topTrailingRadius: 30,
-//                style: .continuous
-//            )
-            .fill(.bar)
-            .strokeBorder(
-                (isExpanded ? .clear : Color.mycolor.mySecondary.opacity(0.5)),
-                lineWidth: 1,
-                antialiased: true
-            )
-            
-            Button {
-                completion()
-            } label: {
-                VStack(spacing: 0) {
-                    if !isExpanded {
-                        Image(systemName: "control")
-                            .font(.headline)
-                        Image(systemName: icon)
-                            .imageScale(.small)
-                            .padding(8)
-                    }
-                }
-                .foregroundColor(Color.mycolor.mySecondary)
-                .padding(.top, 4)
-                .padding(.horizontal, 30)
-                .background(.black.opacity(0.001))
+            if UIDevice.isiPad {
+                RoundedRectangle(cornerRadius: 30)
+                    .fill(.bar)
+                    .strokeBorder(
+                        (isExpanded ? .clear : Color.mycolor.mySecondary.opacity(0.5)),
+                        lineWidth: 1,
+                        antialiased: true
+                    )
+            } else {
+                UnevenRoundedRectangle(
+                    topLeadingRadius: 30,
+                    bottomLeadingRadius: 0,
+                    bottomTrailingRadius: 0,
+                    topTrailingRadius: 30,
+                    style: .continuous
+                )
+                .fill(.bar)
+                .strokeBorder(
+                    (isExpanded ? .clear : Color.mycolor.mySecondary.opacity(0.5)),
+                    lineWidth: 1,
+                    antialiased: true
+                )
             }
-            .buttonStyle(.plain)
-            .opacity(isExpanded ? 0 : 1)
-            .disabled(isExpanded)
             
             if isExpanded {
                 content()
+            } else {
+                tabButton(icon: icon, onTap: onTap)
             }
         }
         .frame(height: isExpanded ? maxHeight : minHeight)
@@ -211,177 +390,28 @@ struct PostDetailsView: View {
         .animation(.easeInOut(duration: 0), value: isExpanded)
     }
     
-    // MARK: Subviews
-    
-    @ToolbarContentBuilder
-    private func toolbarForPostDetails(validPost: Post) -> some ToolbarContent {
-        ToolbarItemGroup(placement: .topBarLeading) {
-            
-            if UIDevice.isiPhone {
-                BackButtonView() {
-                    coordinator.pop()
-                }
-            }
-            ShareLink(item: validPost.urlString) {
-                Image(systemName: "square.and.arrow.up")
+    private func tabButton(icon: String, onTap: @escaping () -> Void) -> some View {
+        Button(action: onTap) {
+            VStack(spacing: 0) {
+                Image(systemName: "control")
                     .font(.headline)
-                    .foregroundStyle(Color.mycolor.myAccent)
-                    .offset(y: -2)
-                    .frame(width: 30, height: 30)
-                    .background(.black.opacity(0.001))
+                Image(systemName: icon)
+                    .imageScale(.small)
+                    .padding(8)
             }
+            .foregroundColor(Color.mycolor.mySecondary)
+            .padding(.top, 4)
+            .padding(.horizontal, 30)
+            .background(.black.opacity(0.001))
         }
-        ToolbarItemGroup(placement: .topBarTrailing) {
-            
-            CircleStrokeButtonView(
-                iconName: validPost.favoriteChoice == .yes ? "heart.slash" : "heart",
-                iconFont: .headline,
-                isShownCircle: false)
-            {
-                vm.favoriteToggle(validPost)
-            }
-            
-            CircleStrokeButtonView(
-                iconName: post?.origin == .cloud || post?.origin == .statical ? "pencil.slash" : "pencil",
-                isShownCircle: false)
-            {
-                coordinator.push(.editPost(validPost))
-            }
-            .disabled(post?.origin == .cloud || post?.origin == .statical)
-        }
+        .buttonStyle(.plain)
     }
+
+    // MARK: - Helpers
     
-    private func header(for post: Post) -> some View {
-        
-        VStack(spacing: 8) {
-            Text(post.title)
-                .font(.title2)
-                .fontWeight(.semibold)
-                .minimumScaleFactor(0.75)
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: .infinity, alignment: .center)
-            
-            Text("@" + post.author)
-                .font(.body)
-                .frame(maxWidth: .infinity, alignment: .center)
-            
-            HStack {
-                Text(post.studyLevel.displayName.capitalized + " level")
-                    .font(.body)
-                    .fontWeight(.medium)
-                    .foregroundStyle(post.studyLevel.color)
-                Spacer()
-                
-                Group {
-                    if post.draft {
-                        Image(systemName: "square.stack.3d.up")
-                    }
-                    if post.favoriteChoice == .yes {
-                        Image(systemName: "heart")
-                            .foregroundStyle(Color.mycolor.myRed)
-                    }
-                    if let rating = post.postRating {
-                        rating.icon
-                            .foregroundStyle(Color.mycolor.myBlue)
-                    }
-                    post.progress.icon
-                        .foregroundStyle(Color.mycolor.myGreen)
-                    post.origin.icon
-                }
-                .font(.caption)
-                .foregroundStyle(Color.mycolor.myAccent)
-                
-                //                    Text("\(post.category)")
-                //                        .font(.caption)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            
-            //                if vm.selectedCategory == nil {
-            //                    Text(post.category)
-            //                        .font(.body)
-            //                        .fontWeight(.medium)
-            //                        .foregroundStyle(Color.mycolor.myYellow)
-            //                        .frame(maxWidth: .infinity)
-            //                }
-            //
-        }
-        .padding()
-    }
-    
-    private func intro(for post: Post) -> some View {
-        VStack(spacing: 0) {
-            VStack {
-                let postDate = post.postDate == nil ? "" : (post.postDate?.formatted(date: .numeric, time: .omitted) ?? "")
-                let prefixToDate = post.postDate == nil ? "" : " posted "
-                let platform = post.postPlatform.displayName
-                let postType = post.postType.displayName
-                let titleForIntro = postType + prefixToDate +  postDate + " on " + platform
-                
-                Text(titleForIntro)
-                    .font(.caption)
-                    .multilineTextAlignment(.trailing)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.top, 8)
-                
-                Text (post.intro)
-                    .font(introFont)
-                    .lineLimit(showFullIntro ? nil : introLinesCountLimit)
-                    .lineSpacing(introLineSpacing)
-                    .frame(minHeight: 55, alignment: .topLeading)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .onLineCountChanged(font: introFont, lineSpacing: introLineSpacing) { count in
-                        lineCountIntro = count - 1
-                    }
-                HStack(alignment: .top) {
-                    Spacer()
-                    if lineCountIntro > introLinesCountLimit {
-                        MoreLessTextButton(showText: $showFullIntro)
-                    }
-                }
-                .offset(y: -15)
-            }
-        }
-        .padding()
-    }
-    
-    private func goToTheSourceButton(_ urlString: String) -> some View {
-        LinkButtonURL(
-            buttonTitle: "Go to the Source",
-            urlString: urlString
-        )
-    }
-    
-    private func notesToPost(for post: Post) -> some View {
-        VStack(spacing: 0) {
-            HStack {
-                Text("Notes")
-                    .font(.headline)
-                    .frame(height: 55)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 8)
-                    .padding(.top, 0)
-                
-                Spacer()
-                if !post.notes.isEmpty && !showFullFreeTextField {
-                    MoreLessTextButton(showText: $showFullFreeTextField)
-                }
-            }
-            
-            if showFullFreeTextField {
-                VStack {
-                    Text(post.notes)
-                        .font(fullFreeTextFieldFont)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 8)
-                    
-                    HStack(alignment: .top) {
-                        Spacer()
-                        MoreLessTextButton(showText: $showFullFreeTextField)
-                    }
-                    .offset(y: -15)
-                }
-            }
-        }
+    private func updateWidths(for width: CGFloat) {
+        tabWidth = width * widthRatio
+        expandedWidth = width
     }
 }
 
@@ -395,7 +425,7 @@ struct PostDetailsView: View {
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
-
+    
     if let firstPost = PreviewData.samplePosts.first {
         NavigationStack {
             PostDetailsView(postId: firstPost.id)

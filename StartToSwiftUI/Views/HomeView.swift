@@ -171,7 +171,7 @@ struct HomeView: View {
         }
         .tint(Color.mycolor.myRed)
         
-        Button("Edit", systemImage: post.origin == .cloud || post.origin == .statical ? "pencil.slash" : "pencil") {
+        Button("Edit", systemImage: post.origin == .local ? "pencil" : "pencil.slash") {
             coordinator.push(.editPost(post))
         }
         .tint(Color.mycolor.myBlue)
