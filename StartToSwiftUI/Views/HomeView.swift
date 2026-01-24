@@ -173,7 +173,7 @@ struct HomeView: View {
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: false) {
                         Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: post.favoriteChoice == .yes ?  "heart.slash" : "heart") {
-                            vm.favoriteToggle(post: post)
+                            vm.favoriteToggle(post)
                         }.tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondary : Color.mycolor.myRed.opacity(0.5))
                     }
             } // ForEach
@@ -345,7 +345,7 @@ struct HomeView: View {
                     primaryTitle: "Delete",
                     primaryTitleColor: Color.mycolor.myRed) {
                         withAnimation {
-                            vm.deletePost(post: selectedPostToDelete ?? nil)
+                            vm.deletePost(selectedPostToDelete ?? nil)
                             hapticManager.notification(type: .success)
                             isShowingDeleteConfirmation = false
                         }

@@ -43,7 +43,8 @@ struct StartView: View {
         }
         .preferredColorScheme(vm.selectedTheme.colorScheme)
         .task {
-            await loadInitialData()
+            try? await Task.sleep(for: .milliseconds(100))
+            isLoadingData = false
         }
         .adaptiveModal(item: $coordinator.presentedSheet)
         .environmentObject(vm)
@@ -108,80 +109,13 @@ struct StartView: View {
     private func destinationView(for route: AppRoute) -> some View {
         switch route {
             
-            // Post details View
+        // Post details View
         case .postDetails(let postId):
             PostDetailsView(postId: postId)
-                    
-//            // Preferences
-//        case .preferences:
-//            PreferencesView()
-//
-//            // Managing notices
-//        case .notices:
-//            NoticesView(isRootModal: false)
-//        case .noticeDetails(let noticeId):
-//            NoticeDetailsView(noticeId: noticeId)
-//
-//            // Study progress
-//        case .studyProgress:
-//            StudyProgressView()
-//
-//            // Managing posts (materials)
-//        case .postDrafts:
-//            PostDraftsView()
-//        case .checkForUpdates:
-//            CheckForPostsUpdateView()
-//        case .importFromCloud:
-//            ImportPostsFromCloudView()
-//        case .shareBackup:
-//            SharePostsView()
-//        case .restoreBackup:
-//            RestoreBackupView()
-//        case .erasePosts:
-//            EraseAllPostsView()
-//            
-//            // Gratitude
-//        case .acknowledgements:
-//            Acknowledgements()
-//            
-//            // About App
-//        case .aboutApp:
-//            AboutApp()
-//        case .welcome:
-//            WelcomeMessage()
-//        case .introduction:
-//            Introduction()
-//        case .whatIsNew:
-//            WhatsNewView()
-//            
-//            // Legal information
-//        case .legalInfo:
-//            LegalInformationView()
-//        case .termsOfUse:
-//            TermsOfUse()
-//        case .privacyPolicy:
-//            PrivacyPolicy()
-//        case .copyrightPolicy:
-//            CopyrightPolicy()
-//        case .fairUseNotice:
-//            FairUseNotice()
+ 
         default:
                 EmptyView()
         }
-    }
-
-
-    // MARK: - Data Loading
-    private func loadInitialData() async {
-//        // Clearing duplicate AppState from previous runs (Xcode)
-//        let appStateManager = AppSyncStateManager(modelContext: modelContext)
-//        appStateManager.cleanupDuplicateAppStates()
-        
-//        vm.loadPostsFromSwiftData()
-//        await vm.loadStaticPostsIfNeeded()
-        await noticevm.importNoticesFromCloud()
-        
-        isLoadingData = false
     }
 }
 
@@ -227,3 +161,60 @@ struct StartView: View {
             .environmentObject(noticesVM)
     }
 }
+
+
+
+
+//            // Preferences
+//        case .preferences:
+//            PreferencesView()
+//
+//            // Managing notices
+//        case .notices:
+//            NoticesView(isRootModal: false)
+//        case .noticeDetails(let noticeId):
+//            NoticeDetailsView(noticeId: noticeId)
+//
+//            // Study progress
+//        case .studyProgress:
+//            StudyProgressView()
+//
+//            // Managing posts (materials)
+//        case .postDrafts:
+//            PostDraftsView()
+//        case .checkForUpdates:
+//            CheckForPostsUpdateView()
+//        case .importFromCloud:
+//            ImportPostsFromCloudView()
+//        case .shareBackup:
+//            SharePostsView()
+//        case .restoreBackup:
+//            RestoreBackupView()
+//        case .erasePosts:
+//            EraseAllPostsView()
+//
+//            // Gratitude
+//        case .acknowledgements:
+//            Acknowledgements()
+//
+//            // About App
+//        case .aboutApp:
+//            AboutApp()
+//        case .welcome:
+//            WelcomeMessage()
+//        case .introduction:
+//            Introduction()
+//        case .whatIsNew:
+//            WhatsNewView()
+//
+//            // Legal information
+//        case .legalInfo:
+//            LegalInformationView()
+//        case .termsOfUse:
+//            TermsOfUse()
+//        case .privacyPolicy:
+//            PrivacyPolicy()
+//        case .copyrightPolicy:
+//            CopyrightPolicy()
+//        case .fairUseNotice:
+//            FairUseNotice()

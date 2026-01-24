@@ -80,7 +80,7 @@ struct ProgressSelectionView: View {
                             ClearCupsuleButton(
                                 primaryTitle: "Place",
                                 primaryTitleColor: Color.mycolor.myBlue) {
-                                    vm.updatePostStudyProgress(post: post)
+                                    vm.updatePostStudyProgress(post)
                                     completion()
                                 }
                                 .padding(.horizontal)

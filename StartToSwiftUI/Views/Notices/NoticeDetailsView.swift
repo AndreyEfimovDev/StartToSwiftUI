@@ -61,7 +61,7 @@ struct NoticeDetailsView: View {
             }
         } // ZStack root
         .onAppear {
-            noticevm.markAsRead(noticeId: noticeId)
+            noticevm.markAsRead(noticeId)
         }
         .navigationTitle("Notice message")
         .navigationBarBackButtonHidden(true)
@@ -85,7 +85,7 @@ struct NoticeDetailsView: View {
                 isShownCircle: false
             ) {
                 withAnimation {
-                    noticevm.deleteNotice(notice: notice)
+                    noticevm.deleteNotice(notice)
                     coordinator.popModal()
                 }
             }
