@@ -190,6 +190,17 @@ extension View {
     }
 }
 
+// MARK: - For PostDetails
+
+extension View {
+    func cardBackground() -> some View {
+        self.background(
+            .thinMaterial,
+            in: RoundedRectangle(cornerRadius: 15)
+        )
+    }
+}
+
 
 
 
