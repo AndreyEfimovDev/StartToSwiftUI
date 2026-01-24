@@ -36,7 +36,9 @@ struct PreferencesView: View {
                     themeAppearence
                 }
                 Section(header: sectionHeader("Notifications")) {
-                    noticeMessages
+                    if noticevm.notices.count > 0 {
+                        noticeMessages
+                    }
                     notificationToggle
                     soundNotificationToggle
                 }
@@ -121,6 +123,7 @@ struct PreferencesView: View {
             titleForCase: { $0.displayName },
             selectedFont: .footnote
         )
+        .preferredColorScheme(vm.selectedTheme.colorScheme)
     }
     
     private var noticeMessages: some View {

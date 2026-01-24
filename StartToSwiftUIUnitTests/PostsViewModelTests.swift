@@ -161,7 +161,7 @@ final class PostsViewModelTests: XCTestCase {
         let initialCount = vm.allPosts.count
         
         // When
-        vm.deletePost(post: post)
+        vm.deletePost(post)
         
         // Then
         XCTAssertEqual(vm.allPosts.count, initialCount - 1)
@@ -173,7 +173,7 @@ final class PostsViewModelTests: XCTestCase {
         let initialCount = vm.allPosts.count
         
         // When
-        vm.deletePost(post: nil)
+        vm.deletePost(nil)
         
         // Then - Should not crash and count should remain unchanged
         XCTAssertEqual(vm.allPosts.count, initialCount)
@@ -186,14 +186,14 @@ final class PostsViewModelTests: XCTestCase {
         let initialFavoriteStatus = post.favoriteChoice
         
         // When
-        vm.favoriteToggle(post: post)
+        vm.favoriteToggle(post)
         
         // Then
         XCTAssertNotEqual(post.favoriteChoice, initialFavoriteStatus)
         XCTAssertEqual(post.favoriteChoice, .yes)
         
         // When - toggle back
-        vm.favoriteToggle(post: post)
+        vm.favoriteToggle(post)
         
         // Then
         XCTAssertEqual(post.favoriteChoice, .no)
@@ -206,7 +206,7 @@ final class PostsViewModelTests: XCTestCase {
         vm.selectedRating = .good
         
         // When
-        vm.ratePost(post: post)
+        vm.ratePost(post)
         
         // Then
         XCTAssertEqual(post.postRating, .good)
@@ -219,7 +219,7 @@ final class PostsViewModelTests: XCTestCase {
         vm.selectedStudyProgress = .studied
         
         // When
-        vm.updatePostStudyProgress(post: post)
+        vm.updatePostStudyProgress(post)
         
         // Then
         XCTAssertEqual(post.progress, .studied)
@@ -234,7 +234,7 @@ final class PostsViewModelTests: XCTestCase {
         vm.selectedStudyProgress = .started
         
         // When
-        vm.updatePostStudyProgress(post: post)
+        vm.updatePostStudyProgress(post)
         
         // Then
         XCTAssertEqual(post.progress, .started)
@@ -254,7 +254,7 @@ final class PostsViewModelTests: XCTestCase {
         vm.selectedStudyProgress = .fresh
         
         // When
-        vm.updatePostStudyProgress(post: post)
+        vm.updatePostStudyProgress(post)
         
         // Then
         XCTAssertEqual(post.progress, .fresh)

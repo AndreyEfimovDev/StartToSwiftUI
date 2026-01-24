@@ -238,7 +238,7 @@ struct PostDetailsView: View {
                 iconFont: .headline,
                 isShownCircle: false)
             {
-                vm.favoriteToggle(post: validPost)
+                vm.favoriteToggle(validPost)
             }
             
             CircleStrokeButtonView(

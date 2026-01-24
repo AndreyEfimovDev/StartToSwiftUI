@@ -47,7 +47,7 @@ struct NoticesView: View {
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             Button {
                                 withAnimation {
-                                    noticevm.deleteNotice(notice: notice)
+                                    noticevm.deleteNotice(notice)
                                     hapticManager.notification(type: .success)
                                 }
                             } label: {
@@ -62,7 +62,7 @@ struct NoticesView: View {
                         // left side swipe action buttons
                         .swipeActions(edge: .leading, allowsFullSwipe: false) {
                             Button(notice.isRead ? "Unread" : "Read", systemImage: notice.isRead ?  "eye.slash.circle" : "eye.circle") {
-                                noticevm.isReadToggle(notice: notice)
+                                noticevm.toggleReadStatus(notice)
                             }
                             .tint(notice.isRead ? Color.mycolor.mySecondary : Color.mycolor.myBlue)
                         }

@@ -40,7 +40,7 @@ struct PostDraftsView: View {
                                     Button("Delete", systemImage: "trash") {
                                         selectedPostToDelete = post
                                         withAnimation {
-                                            vm.deletePost(post: selectedPostToDelete ?? nil)
+                                            vm.deletePost(selectedPostToDelete ?? nil)
                                             hapticManager.notification(type: .success)
                                         }
                                     }.tint(Color.mycolor.myRed)

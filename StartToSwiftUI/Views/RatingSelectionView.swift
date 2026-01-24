@@ -72,7 +72,7 @@ struct RatingSelectionView: View {
                                 ClearCupsuleButton(
                                     primaryTitle: "Place",
                                     primaryTitleColor: Color.mycolor.myBlue) {
-                                        vm.ratePost(post: post)
+                                        vm.ratePost(post)
                                         completion()
                                     }
                                     .frame(maxWidth: 200)
