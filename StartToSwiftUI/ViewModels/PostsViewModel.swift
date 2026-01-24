@@ -72,11 +72,11 @@ final class PostsViewModel: ObservableObject {
     @Published var selectedYear: String? = nil {
         didSet { storedYear = selectedYear }}
     @AppStorage("storedSortOption") var storedSortOption: SortOption?
+  
     @Published var selectedSortOption: SortOption? = nil {
         didSet { storedSortOption = selectedSortOption }}
     
     @Published var isTermsOfUseAccepted: Bool = false
-    
     
     // MARK: - Init
     init(

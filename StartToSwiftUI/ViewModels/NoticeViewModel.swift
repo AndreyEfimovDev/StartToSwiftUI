@@ -8,6 +8,7 @@
 
 import SwiftUI
 import SwiftData
+import AudioToolbox
 
 @MainActor
 final class NoticeViewModel: ObservableObject {
@@ -18,6 +19,7 @@ final class NoticeViewModel: ObservableObject {
     
     @Published var notices: [Notice] = []
     @Published var hasUnreadNotices: Bool = false // флаг наличия непрочиатнных уведомлений
+    @Published var shouldAnimateNoticeButton = false
     @AppStorage("isNotificationOn") var isNotificationOn: Bool = true
     @AppStorage("isSoundNotificationOn") var isSoundNotificationOn: Bool = true
     
@@ -30,6 +32,10 @@ final class NoticeViewModel: ObservableObject {
     
     private var appStateManager: AppSyncStateManager? {
         swiftDataSource.map { AppSyncStateManager(modelContext: $0.modelContext) }
+    }
+    
+    var unreadCount: Int {
+        notices.filter { !$0.isRead }.count
     }
 
     
@@ -264,7 +270,7 @@ final class NoticeViewModel: ObservableObject {
     }
 
     
-    // MARK: - Local Notifications
+    // MARK: - Notifications
     /// Send local notification of new notices
     private func sendLocalNotification(count: Int) {
         
@@ -273,6 +279,33 @@ final class NoticeViewModel: ObservableObject {
         log("🍉 🔔 Local notification sent: \(count) new", level: .info)
     }
     
+    
+    /// One-time sound alert to the user when new notifications appear
+    func playSoundNotificationIfNeeded() {
+        guard let appStateManager,
+              hasUnreadNotices,
+              isNotificationOn,
+              appStateManager.getUserNotifiedBySoundStatus() else {
+            return
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
+            guard let self else { return }
+            
+            if self.isSoundNotificationOn {
+                AudioServicesPlaySystemSound(1013)
+                appStateManager.markUserNotifiedBySound()
+            }
+            
+            // Notify View about animation (через Publisher или callback)
+            self.shouldAnimateNoticeButton = true
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self.shouldAnimateNoticeButton = false
+            }
+        }
+    }
+
 }
 
 //
