@@ -175,7 +175,7 @@ struct HomeView: View {
             coordinator.push(.editPost(post))
         }
         .tint(Color.mycolor.myBlue)
-        .disabled(post.origin == .cloud || post.origin == .statical)
+        .disabled(post.origin != .local)
     }
     
     @ViewBuilder
