@@ -14,51 +14,48 @@ struct PostDraftsView: View {
     @EnvironmentObject private var coordinator: AppCoordinator
 
     private let hapticManager = HapticService.shared
-    
-    @State private var selectedPost: Post?
-    @State private var selectedPostToDelete: Post?
-    
-    // MARK: VIEW BODY
+        
     var body: some View {
         FormCoordinatorToolbar(
             title: "Post drafts",
             showHomeButton: true
         ) {
-            ZStack (alignment: .bottomTrailing) {
-                
-                if vm.allPosts.filter({ $0.draft == true }).isEmpty {
-                    postDraftsIsEmpty
+            ZStack(alignment: .bottomTrailing) {
+                if vm.hasDrafts {
+                    draftsList
                 } else {
-                    List {
-                        ForEach(vm.allPosts.filter { $0.draft == true }) { post in
-                            PostDraftsRowView(post: post)
-                                .background(.black.opacity(0.001))
-                                .onTapGesture {
-                                    coordinator.pushModal(.editPost(post))
-                                }
-                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                    Button("Delete", systemImage: "trash") {
-                                        selectedPostToDelete = post
-                                        withAnimation {
-                                            vm.deletePost(selectedPostToDelete ?? nil)
-                                            hapticManager.notification(type: .success)
-                                        }
-                                    }.tint(Color.mycolor.myRed)
-                                }
-                        } // ForEach
-                        .listRowBackground(Color.clear)
-                        .listRowSeparatorTint(Color.mycolor.myAccent.opacity(0.35))
-                        .listRowSeparator(.hidden, edges: [.top])
-                        .listRowInsets(
-                            EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-                        )
-                    } // List
-                    .listStyle(.plain)
+                    postDraftsIsEmpty
                 }
             }
         }
     }
     
+    private var draftsList: some View {
+        List {
+            ForEach(vm.drafts) { post in
+                PostDraftsRowView(post: post)
+                    .background(.black.opacity(0.001))
+                    .onTapGesture {
+                        coordinator.pushModal(.editPost(post))
+                    }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        Button("Delete", systemImage: "trash") {
+                            withAnimation {
+                                vm.deletePost(post)
+                                hapticManager.notification(type: .success)
+                            }
+                        }
+                        .tint(Color.mycolor.myRed)
+                    }
+            }
+            .listRowBackground(Color.clear)
+            .listRowSeparatorTint(Color.mycolor.myAccent.opacity(0.35))
+            .listRowSeparator(.hidden, edges: [.top])
+            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+        }
+        .listStyle(.plain)
+    }
+
     private var postDraftsIsEmpty: some View {
         ContentUnavailableView(
             "No Post Drafts",
@@ -69,18 +66,20 @@ struct PostDraftsView: View {
     
 }
 
-#Preview {
-    let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppSyncState.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-    )
-    let context = ModelContext(container)
+#Preview("With Drafts") {
+    let vm = PostsViewModel(dataSource: MockPostsDataSource())
+    vm.allPosts = PreviewData.samplePostsWithDrafts
     
-    let vm = PostsViewModel(modelContext: context)
+    return PostDraftsView()
+        .environmentObject(vm)
+        .environmentObject(AppCoordinator())
+}
+
+#Preview("Empty Drafts") {
+    let vm = PostsViewModel(dataSource: MockPostsDataSource())
+    vm.allPosts = PreviewData.samplePosts  // Without draft: true
     
-    NavigationStack {
-        PostDraftsView()
-            .environmentObject(vm)
-            .environmentObject(AppCoordinator())
-    }
+    return PostDraftsView()
+        .environmentObject(vm)
+        .environmentObject(AppCoordinator())
 }

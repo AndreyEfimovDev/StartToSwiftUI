@@ -679,6 +679,10 @@ final class PostsViewModel: ObservableObject {
     
     // MARK: - Computed Properties for Preferences
 
+    var drafts: [Post] {
+        allPosts.filter { $0.draft == true }
+    }
+
     var draftsCount: Int {
         allPosts.filter { $0.draft }.count
     }

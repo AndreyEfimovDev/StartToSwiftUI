@@ -212,7 +212,7 @@ struct PostDetailsView: View {
                 
                 Spacer()
                 
-                if !showFullNotes { // !post.notes.isEmpty && !showFullNotes
+                if !showFullNotes {
                     MoreLessTextButton(showText: $showFullNotes)
                 }
             }

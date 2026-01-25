@@ -17,65 +17,61 @@ struct NoticesView: View {
     
     private let hapticManager = HapticService.shared
     
-    @State private var showNoticeDetails: Bool = false
-    
     var body: some View {
-     
-            ZStack {
-                if noticevm.notices.isEmpty {
-                    noticesIsEmpty
-                } else {
-                    noticesContent
-                }
-            } // ZStack
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                navigationToolbar()
+        
+        ZStack {
+            if noticevm.notices.isEmpty {
+                noticesIsEmpty
+            } else {
+                noticesContent
             }
+        }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            navigationToolbar()
+        }
     }
     
     private var noticesContent: some View {
-        ZStack {
-            List {
-                ForEach(noticevm.notices.sorted {$0.noticeDate > $1.noticeDate}) { notice in
-                    NoticeRowView(notice: notice)
-                        .background(.black.opacity(0.001))
-                        .onTapGesture {
-                            coordinator.pushModal(.noticeDetails(noticeId: notice.id))
-                        }
-                        // right side swipe action buttonss
-                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                            Button {
-                                withAnimation {
-                                    noticevm.deleteNotice(notice)
-                                    hapticManager.notification(type: .success)
-                                }
-                            } label: {
-                                VStack {
-                                    Image(systemName: "trash")
-                                    Text("Delete")
-                                        .font(.caption2)
-                                }
+        List {
+            ForEach(noticevm.sortedNotices) { notice in
+                NoticeRowView(notice: notice)
+                    .background(.black.opacity(0.001))
+                    .onTapGesture {
+                        coordinator.pushModal(.noticeDetails(noticeId: notice.id))
+                    }
+                // right side swipe action buttonss
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        Button {
+                            withAnimation {
+                                noticevm.deleteNotice(notice)
+                                hapticManager.notification(type: .success)
                             }
-                            .tint(Color.mycolor.myRed)
-                        }
-                        // left side swipe action buttons
-                        .swipeActions(edge: .leading, allowsFullSwipe: false) {
-                            Button(notice.isRead ? "Unread" : "Read", systemImage: notice.isRead ?  "eye.slash.circle" : "eye.circle") {
-                                noticevm.toggleReadStatus(notice)
+                        } label: {
+                            VStack {
+                                Image(systemName: "trash")
+                                Text("Delete")
+                                    .font(.caption2)
                             }
-                            .tint(notice.isRead ? Color.mycolor.mySecondary : Color.mycolor.myBlue)
                         }
-                } // ForEach
-                .listRowBackground(Color.clear)
-                .listRowSeparatorTint(Color.mycolor.myAccent.opacity(0.35))
-                .listRowSeparator(.hidden, edges: [.top])
-                .listRowInsets(
-                    EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-                )
-            }
-            .listStyle(.plain)
+                        .tint(Color.mycolor.myRed)
+                    }
+                // left side swipe action buttons
+                    .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                        Button(notice.isRead ? "Unread" : "Read", systemImage: notice.isRead ?  "eye.slash.circle" : "eye.circle") {
+                            noticevm.toggleReadStatus(notice)
+                        }
+                        .tint(notice.isRead ? Color.mycolor.mySecondary : Color.mycolor.myBlue)
+                    }
+            } // ForEach
+            .listRowBackground(Color.clear)
+            .listRowSeparatorTint(Color.mycolor.myAccent.opacity(0.35))
+            .listRowSeparator(.hidden, edges: [.top])
+            .listRowInsets(
+                EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+            )
         }
+        .listStyle(.plain)
     }
     
     @ToolbarContentBuilder
@@ -105,7 +101,7 @@ struct NoticesView: View {
                 }
             }
         }
-
+        
     }
     
     private var noticesIsEmpty: some View {
@@ -124,7 +120,7 @@ struct NoticesView: View {
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     let context = ModelContext(container)
-        
+    
     let mockNotices = [
         Notice(
             title: "Notice Title 1",
@@ -151,16 +147,16 @@ struct NoticesView: View {
             isRead: false
         )
     ]
-        
+    
     for notice in mockNotices {
         context.insert(notice)
     }
-
+    
     try? context.save()
-
+    
     let noticevm = NoticeViewModel(modelContext: context)
     let coordinator = AppCoordinator()
-
+    
     return Group {
         NavigationStack {
             NoticesView(isRootModal: true)
@@ -179,7 +175,7 @@ struct NoticesView: View {
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     let context = ModelContext(container)
-        
+    
     let mockNotices = [
         Notice(
             title: "Notice Title 1",
@@ -206,16 +202,16 @@ struct NoticesView: View {
             isRead: false
         )
     ]
-        
+    
     for notice in mockNotices {
         context.insert(notice)
     }
-
+    
     try? context.save()
-
+    
     let noticevm = NoticeViewModel(modelContext: context)
     let coordinator = AppCoordinator()
-
+    
     return Group {
         NavigationStack {
             NoticesView(isRootModal: false)
@@ -231,7 +227,7 @@ struct NoticesView: View {
 #Preview("Empty") {
     
     let coordinator = AppCoordinator()
-
+    
     return Group {
         NavigationStack {
             let emptyContainer = try! ModelContainer(

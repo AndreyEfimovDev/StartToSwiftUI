@@ -18,7 +18,7 @@ final class NoticeViewModel: ObservableObject {
     private let networkService: NetworkServiceProtocol
     
     @Published var notices: [Notice] = []
-    @Published var hasUnreadNotices: Bool = false // флаг наличия непрочиатнных уведомлений
+    @Published var hasUnreadNotices: Bool = false
     @Published var shouldAnimateNoticeButton = false
     @AppStorage("isNotificationOn") var isNotificationOn: Bool = true
     @AppStorage("isSoundNotificationOn") var isSoundNotificationOn: Bool = true
@@ -36,6 +36,10 @@ final class NoticeViewModel: ObservableObject {
     
     var unreadCount: Int {
         notices.filter { !$0.isRead }.count
+    }
+
+    var sortedNotices: [Notice] {
+        notices.sorted { $0.noticeDate > $1.noticeDate }
     }
 
     

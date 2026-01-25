@@ -36,13 +36,11 @@ struct PostDraftsRowView: View {
     
     private var author: some View {
         HStack {
-            if post.draft == true {
-                Image(systemName: "square.stack.3d.up")
-                    .font(.caption2)
-                    .foregroundStyle(Color.mycolor.mySecondary)
-            }
+//            Image(systemName: "square.stack.3d.up")
+//                .font(.caption2)
+//                .foregroundStyle(Color.mycolor.mySecondary)
             Text("@" + post.author + ", ") +
-            Text("\(post.postDate?.formatted(date: .numeric, time: .omitted) ?? "post date missed")") +
+            Text("\(post.postDate?.formatted(date: .numeric, time: .omitted) ?? "date missed")") +
             Text(post.postType == .other ? "" : ", " + post.postType.displayName + " ")
         }
         .font(.footnote)
@@ -51,23 +49,16 @@ struct PostDraftsRowView: View {
     }
 }
 
-fileprivate struct PostDraftsRowPreView: View {
-        
-    var body: some View {
-        ZStack {
-            Color.pink.opacity(0.1)
-                .ignoresSafeArea()
+#Preview {
+    ZStack {
+        Color.pink.opacity(0.1)
+            .ignoresSafeArea()
 
-            List {
-                PostDraftsRowView(post: PreviewData.samplePost1)
-                PostDraftsRowView(post: PreviewData.samplePost2)
-                PostDraftsRowView(post: PreviewData.samplePost3)
-            }
-            .padding()
+        VStack {
+            PostDraftsRowView(post: PreviewData.samplePost1)
+            PostDraftsRowView(post: PreviewData.samplePost2)
+            PostDraftsRowView(post: PreviewData.samplePost3)
         }
     }
 }
 
-#Preview {
-    PostDraftsRowPreView()
-}

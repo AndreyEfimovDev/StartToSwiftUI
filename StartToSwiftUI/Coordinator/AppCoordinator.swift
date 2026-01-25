@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// MARK: - Navigation Coordinator
 @MainActor
 class AppCoordinator: ObservableObject {
     
