@@ -16,7 +16,7 @@ struct StartView: View {
     @EnvironmentObject private var noticevm: NoticeViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
-    // MARK: - State
+    // MARK: - States
     
     @State private var showLaunchView: Bool = true
     @State private var isLoadingData = true
@@ -32,7 +32,7 @@ struct StartView: View {
                 }
                 .transition(.move(edge: .leading))
             } else if isLoadingData {
-                ProgressView("...loading data...")
+                ProgressView("Loading data...")
                     .controlSize(.large)
             } else {
                 mainContent
