@@ -10,30 +10,34 @@ import SwiftData
 
 struct CheckForPostsUpdateView: View {
     
-    @Environment(\.modelContext) private var modelContext
+    // MARK: - Dependencies
+    
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     private let hapticManager = HapticService.shared
     
-    @State private var followingText: String = "Checking for update..."
-    @State private var followingTextColor: Color = Color.mycolor.myAccent
+    // MARK: - State
     
-    @State private var isInProgress: Bool = true
-    @State private var isPostsUpdateAvailable: Bool = false
-    @State private var isPostsUpdated: Bool = false
-    @State private var isImported: Bool = false
-    @State private var postCount: Int = 0
+    @State private var statusText = "Checking for update..."
+    @State private var statusColor = Color.mycolor.myAccent
+    @State private var isInProgress = true
+    @State private var isUpdateAvailable = false
+    @State private var isUpdated = false
+    @State private var isImported = false
+    @State private var importedCount = 0
+    
+    // MARK: - Body
     
     var body: some View {
-        ViewWrapperWithCustomNavToolbar(
+        FormCoordinatorToolbar(
             title: "Check for posts update",
             showHomeButton: true
         ) {
             VStack {
                 Form {
-                    section_1
-                    section_2
+                    statusSection
+                    actionSection
                 }
             }
             .onAppear {
@@ -53,93 +57,147 @@ struct CheckForPostsUpdateView: View {
     
     // MARK: Subviews
     
-    private var section_1: some View {
+    private var statusSection: some View {
         Section {
-            let appStateManager = AppSyncStateManager(modelContext: modelContext)
-            if let lastDateUpdated = appStateManager.getLastDateOfCuaratedPostsLoaded() {
-                HStack {
-                    Text(followingText)
-                        .foregroundStyle(followingTextColor)
-                    Spacer()
-                    if isInProgress {
-                        CustomProgressView(scale: 1, isNoText: true)
-                    }
+            HStack {
+                Text(statusText)
+                    .foregroundStyle(statusColor)
+                Spacer()
+                if isInProgress {
+                    CustomProgressView(scale: 1, isNoText: true)
                 }
+            }
+            if let lastDate = vm.lastCuratedPostsLoadedDate {
                 HStack {
                     Text("Last update from:")
                     Spacer()
-                    Text(lastDateUpdated.formatted(date: .numeric, time: .omitted))
+                    Text(lastDate.formatted(date: .numeric, time: .omitted))
                 }
             }
+            
         }
         .foregroundStyle(Color.mycolor.myAccent)
     }
     
-    private var section_2: some View {
+//    private var actionSection: some View {
+//        Group {
+//            textSection
+//                .textFormater()
+//                .padding(.horizontal, 30)
+//            
+//            if !isPostsUpdated && !isInProgress {
+//                CapsuleButtonView(
+//                    primaryTitle: "Update now",
+//                    secondaryTitle: "Imported \(postCount) posts",
+//                    isToChange: isImported) {
+//                        Task {
+//                            isInProgress = true
+//                            await vm.importPostsFromCloud() {
+//                                isInProgress = false
+//                                isImported = true
+//                                hapticManager.notification(type: .success)
+//                                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+//                                    coordinator.closeModal()
+//                                }
+//                            }
+//                        }
+//                    }
+//                    .onChange(of: vm.allPosts.count) { oldValue, newValue in
+//                        postCount = newValue - oldValue
+//                    }
+//                    .padding(.horizontal, 30)
+//                    .padding(30)
+//                    .disabled(isImported)
+//            }
+//        }
+//        .listRowBackground(Color.clear)
+//    }
+
+//    private var textSection: some View {
+//        Text("""
+//            The curated collection of links to SwiftUI tutorials and articles has been compiled from open sources by the developer for the purpose of learning the SwiftUI functionality.
+//                       
+//            The collection **will be appended** to all current posts in the App, excluding duplicates based on the post title.
+//            """)
+//        .multilineTextAlignment(.center)
+//
+//    }
+    
+    @ViewBuilder
+    private var actionSection: some View {
         Group {
-            textSection
+            descriptionText
                 .textFormater()
                 .padding(.horizontal, 30)
             
-            if !isPostsUpdated && !isInProgress {
-                CapsuleButtonView(
-                    primaryTitle: "Update now",
-                    secondaryTitle: "Imported \(postCount) posts",
-                    isToChange: isImported) {
-                        Task {
-                            isInProgress = true
-                            await vm.importPostsFromCloud() {
-                                isInProgress = false
-                                isImported = true
-                                hapticManager.notification(type: .success)
-                                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                                    coordinator.closeModal()
-                                }
-                            }
-                        }
-                    }
-                    .onChange(of: vm.allPosts.count) { oldValue, newValue in
-                        postCount = newValue - oldValue
-                    }
+            if !isUpdated && !isInProgress {
+                updateButton
                     .padding(.horizontal, 30)
                     .padding(30)
-                    .disabled(isImported)
             }
         }
         .listRowBackground(Color.clear)
     }
-
-    private var textSection: some View {
+    
+    private var descriptionText: some View {
         Text("""
-            The curated collection of links to SwiftUI tutorials and articles has been compiled from open sources by the developer for the purpose of learning the SwiftUI functionality.
-                       
-            The collection **will be appended** to all current posts in the App, excluding duplicates based on the post title.
-            """)
+               The curated collection of links to SwiftUI tutorials and articles has been compiled from open sources by the developer for the purpose of learning the SwiftUI functionality.
+                          
+               The collection **will be appended** to all current posts in the App, excluding duplicates based on the post title.
+               """)
         .multilineTextAlignment(.center)
-
     }
     
-    // MARK: Functions
+    private var updateButton: some View {
+        CapsuleButtonView(
+            primaryTitle: "Update now",
+            secondaryTitle: "Imported \(importedCount) posts",
+            isToChange: isImported
+        ) {
+            performImport()
+        }
+        .onChange(of: vm.allPosts.count) { oldValue, newValue in
+            importedCount = newValue - oldValue
+        }
+        .disabled(isImported)
+    }
+    
+    // MARK: - Actions
+    
     /// Check if updates for curated links to study materials are available
     private func checkForUpdates() {
         Task {
             let hasUpdates = await vm.checkCloudCuratedPostsForUpdates()
-            switch hasUpdates {
-            case true:
-                followingText = "Updates available!"
-                followingTextColor = Color.mycolor.myRed
-                isPostsUpdateAvailable = true
+            
+            if hasUpdates {
+                statusText = "Updates available!"
+                statusColor = Color.mycolor.myRed
+                isUpdateAvailable = true
+                
+            } else {
+                statusColor = Color.mycolor.myGreen
+                isUpdated = true
+            }
+            
+            isInProgress = false
+        }
+    }
+    
+    private func performImport() {
+        Task {
+            isInProgress = true
+            await vm.importPostsFromCloud {
                 isInProgress = false
-
-            case false:
-                followingText = "No update available"
-                followingTextColor = Color.mycolor.myGreen
-                isPostsUpdateAvailable = false
-                isPostsUpdated = true
-                isInProgress = false
+                isImported = true
+                hapticManager.notification(type: .success)
+                
+                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+                    coordinator.closeModal()
+                }
             }
         }
     }
+
 
 }
 

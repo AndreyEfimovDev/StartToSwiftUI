@@ -600,7 +600,6 @@ final class PostsViewModel: ObservableObject {
     
     // MARK: - Helper Methods
     
-    
     func getPost(id: String) -> Post? {
         allPosts.first { $0.id == id }
     }
@@ -676,6 +675,63 @@ final class PostsViewModel: ObservableObject {
         showErrorMessageAlert = true
         hapticManager.notification(type: .error)
         log("❌ \(message): \(description)", level: .error)
+    }
+    
+    // MARK: - Computed Properties for Preferences
+
+    var draftsCount: Int {
+        allPosts.filter { $0.draft }.count
+    }
+
+    var hasDrafts: Bool {
+        allPosts.contains { $0.draft }
+    }
+
+    var cloudPostsCount: Int {
+        allPosts.filter { $0.origin == .cloud }.count
+    }
+
+    var hasCloudPosts: Bool {
+        allPosts.contains { $0.origin == .cloud }
+    }
+
+    var hasAvailableCuratedPostsUpdate: Bool {
+        guard let appStateManager else { return false }
+        return appStateManager.getAvailableNewCuratedPostsStatus() && hasCloudPosts
+    }
+
+    var shouldShowImportFromCloud: Bool {
+        !hasCloudPosts
+    }
+    
+    // MARK: - Curated Posts State
+
+    var lastCuratedPostsLoadedDate: Date? {
+        appStateManager?.getLastDateOfCuaratedPostsLoaded()
+    }
+    
+    // MARK: - DevData Import (creating posts for cloud)
+    /// Loading DevData to generate JSON (for internal use)
+    func loadDevData() async -> Int {
+        let newPosts = filterUniquePosts(DevData.postsForCloud)
+        
+        guard !newPosts.isEmpty else {
+            log("⚠️ DevData: No new unique posts to add", level: .info)
+            return 0
+        }
+        
+        for post in newPosts {
+            dataSource.insert(post)
+        }
+        
+        saveContextAndReload()
+        log("✅ DevData: Loaded \(newPosts.count) posts from \(DevData.postsForCloud.count)", level: .info)
+        
+        return newPosts.count
+    }
+
+    func resetCuratedPostsStatus() {
+        appStateManager?.setCuratedPostsLoadStatusOn()
     }
 }
 

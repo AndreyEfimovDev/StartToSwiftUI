@@ -12,7 +12,7 @@ struct FairUseNotice: View {
     @EnvironmentObject private var coordinator: AppCoordinator
 
     var body: some View {
-        ViewWrapperWithCustomNavToolbar(
+        FormCoordinatorToolbar(
             title: "Fair Use Notice",
             showHomeButton: true
         ) {
