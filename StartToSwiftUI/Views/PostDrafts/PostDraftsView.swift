@@ -20,7 +20,7 @@ struct PostDraftsView: View {
     
     // MARK: VIEW BODY
     var body: some View {
-        ViewWrapperWithCustomNavToolbar(
+        FormCoordinatorToolbar(
             title: "Post drafts",
             showHomeButton: true
         ) {

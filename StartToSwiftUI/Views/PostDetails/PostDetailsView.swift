@@ -10,13 +10,13 @@ import SwiftData
 
 struct PostDetailsView: View {
     
+    // MARK: - Dependencies
+
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     private let hapticManager = HapticService.shared
-    
-    let postId: String
     
     // MARK: - State
     
@@ -34,6 +34,8 @@ struct PostDetailsView: View {
     @State private var expandedWidth: CGFloat = 0
 
     // MARK: - Constants
+    
+    let postId: String
 
     private let introFont: Font = .subheadline
     private let introLineSpacing: CGFloat = 0
@@ -56,6 +58,8 @@ struct PostDetailsView: View {
         post?.origin == .local
     }
     
+    // MARK: - Body
+
     var body: some View {
         GeometryReader { proxy in
             VStack {

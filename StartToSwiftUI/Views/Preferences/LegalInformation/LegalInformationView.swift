@@ -15,7 +15,7 @@ struct LegalInformationView: View {
     let iconWidth: CGFloat = 18
 
     var body: some View {
-        ViewWrapperWithCustomNavToolbar(
+        FormCoordinatorToolbar(
             title: "Legal Information",
             showHomeButton: true
         ) {
