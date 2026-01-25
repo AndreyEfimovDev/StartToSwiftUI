@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-// MARK: - Обертка для ModalNavigationContainer
+// MARK: - Wrapper for ModalNavigationContainer
+
 struct ModalNavigationContainerWrapper: View {
     let initialRoute: AppRoute
     @EnvironmentObject private var coordinator: AppCoordinator

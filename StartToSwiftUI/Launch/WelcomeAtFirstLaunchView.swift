@@ -10,22 +10,13 @@ import SwiftUI
 struct WelcomeAtFirstLaunchView: View {
     
     // MARK: - Dependencies
-    
     @EnvironmentObject private var coordinator: AppCoordinator
-    
     private let hapticManager = HapticService.shared
 
     // MARK: - States
-
-    @State private var showTermsOfUse: Bool = false
     @State private var showTermsButton = false
-    
-    // MARK: - Variables
-
-    private var count: Int = 10
-    
+        
     // MARK: BODY
-
     var body: some View {
         ZStack {
             Color.mycolor.myBackground
@@ -33,7 +24,6 @@ struct WelcomeAtFirstLaunchView: View {
             ScrollView {
                 VStack {
                     descriptionText
-                    
                     buttonTermsOfUse
                         .opacity(showTermsButton ? 1 : 0)
                 }
@@ -81,27 +71,22 @@ struct WelcomeAtFirstLaunchView: View {
     }
     
     private var buttonTermsOfUse: some View {
-        ZStack {
-            if showTermsButton {
-                Button {
-                    coordinator.pushModal(.termsOfUse)
-                } label: {
-                    Text("Terms of Use")
-                        .font(.title)
-                        .padding()
-                        .background(.ultraThinMaterial)
-                        .clipShape(Capsule())
-                        .overlay(
-                            Capsule()
-                                .stroke(Color.mycolor.myBlue, lineWidth: 1)
-                        )
-                }
-                .tint(Color.mycolor.myBlue)
+        Button {
+            coordinator.pushModal(.termsOfUse)
+        } label: {
+            Text("Terms of Use")
+                .font(.title)
                 .padding()
-            }
+                .background(.ultraThinMaterial)
+                .clipShape(Capsule())
+                .overlay(
+                    Capsule()
+                        .stroke(Color.mycolor.myBlue, lineWidth: 1)
+                )
         }
+        .tint(Color.mycolor.myBlue)
+        .padding()
     }
-    
 }
 
 #Preview {

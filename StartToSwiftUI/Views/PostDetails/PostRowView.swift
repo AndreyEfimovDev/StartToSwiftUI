@@ -78,9 +78,8 @@ struct PostRowView: View {
     }
 }
 
-fileprivate struct PostRowPreView: View {
-    
-    var body: some View {
+#Preview {
+    NavigationStack {
         ZStack {
             Color.pink.opacity(0.1)
                 .ignoresSafeArea()
@@ -91,14 +90,6 @@ fileprivate struct PostRowPreView: View {
                 PostRowView(post: PreviewData.samplePost3)
                 PostRowView(post: PreviewData.samplePost4)
             }
-            .padding()
         }
-    }
-}
-
-
-#Preview {
-    NavigationStack {
-        PostRowPreView()
     }
 }

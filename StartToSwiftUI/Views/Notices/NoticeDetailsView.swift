@@ -10,22 +10,17 @@ import SwiftData
 
 struct NoticeDetailsView: View {
     
-    @Environment(\.dismiss) var dismiss
     @EnvironmentObject private var noticevm: NoticeViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     let noticeId: String
     
-    init(noticeId: String) {
-        self.noticeId = noticeId
-    }
+    private let sectionCornerRadius: CGFloat = 15
     
     private var notice: Notice? {
         noticevm.notices.first(where: { $0.id == noticeId })
     }
-    
-    private let sectionCornerRadius: CGFloat = 15
-    
+
     var body: some View {
         ZStack {
             if let validNotice = notice {
@@ -41,7 +36,7 @@ struct NoticeDetailsView: View {
                             .frame(maxWidth: .infinity,  alignment: .leading)
                             .background(
                                 .thinMaterial,
-                                in: RoundedRectangle(cornerRadius: 15)
+                                in: RoundedRectangle(cornerRadius: sectionCornerRadius)
                             )
                         Text(validNotice.noticeMessage)
                             .font(.body)
@@ -50,7 +45,7 @@ struct NoticeDetailsView: View {
                             .frame(maxWidth: .infinity,  alignment: .leading)
                             .background(
                                 .thinMaterial,
-                                in: RoundedRectangle(cornerRadius: 15)
+                                in: RoundedRectangle(cornerRadius: sectionCornerRadius)
                             )
                     } //VStack
                     .foregroundStyle(Color.mycolor.myAccent)
@@ -95,17 +90,15 @@ struct NoticeDetailsView: View {
 }
 
 #Preview {
-    let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppSyncState.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-    )
-    let context = ModelContext(container)
+    let noticeVM = NoticeViewModel(dataSource: MockNoticesDataSource())
     
-    let noticevm = NoticeViewModel(modelContext: context)
+    noticeVM.notices = PreviewData.sampleNotices
     
-    NavigationStack{
-        NoticeDetailsView(noticeId: "001")
+    let sampleNotice = PreviewData.sampleNotices[1]
+    
+    return NavigationStack {
+        NoticeDetailsView(noticeId: sampleNotice.id)
     }
-    .environmentObject(noticevm)
+    .environmentObject(noticeVM)
     .environmentObject(AppCoordinator())
 }

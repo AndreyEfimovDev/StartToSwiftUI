@@ -129,6 +129,37 @@ struct PreviewData {
         """,
         origin: .local
     )
+    
+    static let sampleDraft1 = Post(
+        title: "Draft: Property Wrappers",
+        intro: "Черновик статьи о Property Wrappers в SwiftUI...",
+        author: "Author Name",
+        urlString: "https://example.com",
+        postPlatform: .youtube,
+        postDate: .now,
+        studyLevel: .beginner,
+        progress: .fresh,
+        origin: .local,
+        draft: true,
+    )
+
+    static let sampleDraft2 = Post(
+        title: "Draft: SwiftUI Navigation",
+        intro: "Черновик о навигации в SwiftUI...",
+        author: "Author Name",
+        urlString: "https://example.com",
+        postPlatform: .website,
+        postDate: .now,
+        studyLevel: .middle,
+        progress: .fresh,
+        origin: .local,
+        draft: true,
+    )
+
+    static let samplePostsWithDrafts: [Post] = [
+        samplePost1, samplePost2, samplePost3, sampleDraft1, sampleDraft2
+    ]
+
 
 }
 
