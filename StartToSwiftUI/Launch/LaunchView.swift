@@ -9,27 +9,35 @@ import SwiftUI
 
 struct LaunchView: View {
     
-    let completion: () -> ()
+    // MARK: - Dependencies
     
     private let hapticManager = HapticService.shared
+
+    // MARK: - Constants
+
+    let completion: () -> ()
+    private let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
+    
+    // MARK: - States
 
     @State private var showLoadingProgress: Bool = false
     @State private var counter: Int = 0
     @State private var loadingString: [String] = "............. loading ............".map { String($0) }
     
-    private let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
-    
+    // MARK: BODY
+
     var body: some View {
         ZStack {
             Color.launch.background
                 .ignoresSafeArea()
             
-                Image("A_1024x1024_PhosphateInline_tr_text")
-                    .resizable()
-                    .font(.headline)
-                    .fontWeight(.heavy)
-                    .frame(width: 200, height: 200)
-                    .offset(y: UIDevice.isiPad ? -0 : 8)
+            Image("A_1024x1024_PhosphateInline_tr_text")
+                .resizable()
+                .font(.headline)
+                .fontWeight(.heavy)
+                .frame(width: 200, height: 200)
+                .offset(y: UIDevice.isiPad ? -0 : 8)
+            
             ZStack {
                 if showLoadingProgress {
                     HStack(spacing: 0) {

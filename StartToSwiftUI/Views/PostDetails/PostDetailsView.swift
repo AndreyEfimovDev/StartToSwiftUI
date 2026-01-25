@@ -11,7 +11,7 @@ import SwiftData
 struct PostDetailsView: View {
     
     // MARK: - Dependencies
-
+    
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
@@ -23,27 +23,27 @@ struct PostDetailsView: View {
     @State private var showFullIntro: Bool = false
     @State private var showFullNotes: Bool = false
     @State private var lineCountIntro: Int = 0
-
+    
     @State private var showRatingTab: Bool = false
     @State private var showProgressTab: Bool = false
     @State private var zIndexBarRating: Double = 0
     @State private var zIndexBarProgress: Double = 0
-
+    
     @State private var maxHeight: CGFloat = 350
     @State private var tabWidth: CGFloat = 0
     @State private var expandedWidth: CGFloat = 0
-
+    
     // MARK: - Constants
     
     let postId: String
-
+    
     private let introFont: Font = .subheadline
     private let introLineSpacing: CGFloat = 0
     private let introLinesLimit: Int = 10
     
     private let notesFont: Font = .footnote
     private let widthRatio: CGFloat = 0.55
-
+    
     // MARK: - Computed Properties
     
     private var post: Post? {
@@ -59,7 +59,7 @@ struct PostDetailsView: View {
     }
     
     // MARK: - Body
-
+    
     var body: some View {
         GeometryReader { proxy in
             VStack {
@@ -90,31 +90,31 @@ struct PostDetailsView: View {
     // MARK: - Content
     
     private func postContent(for post: Post) -> some View {
-            ScrollView(showsIndicators: false) {
-                VStack {
-                    header(for: post)
-                        .cardBackground()
+        ScrollView(showsIndicators: false) {
+            VStack {
+                header(for: post)
+                    .cardBackground()
+                    .padding(.top, 30)
+                
+                intro(for: post)
+                    .cardBackground()
+                
+                if post.urlString != Constants.urlStart {
+                    goToTheSourceButton(urlString: post.urlString)
                         .padding(.top, 30)
-                    
-                    intro(for: post)
-                        .cardBackground()
-                    
-                    if post.urlString != Constants.urlStart {
-                        goToTheSourceButton(urlString: post.urlString)
-                            .padding(.top, 30)
-                            .frame(maxWidth: 250)
-                    }
-                    
-                    if !post.notes.isEmpty {
-                        notes(for: post)
-                            .cardBackground()
-                    }
+                        .frame(maxWidth: 250)
                 }
-                .foregroundStyle(Color.mycolor.myAccent)
+                
+                if !post.notes.isEmpty {
+                    notes(for: post)
+                        .cardBackground()
+                }
             }
-            .padding(.horizontal)
+            .foregroundStyle(Color.mycolor.myAccent)
         }
-
+        .padding(.horizontal)
+    }
+    
     // MARK: - Header
     
     private func header(for post: Post) -> some View {
@@ -138,45 +138,24 @@ struct PostDetailsView: View {
                 
                 Spacer()
                 
-                statusIcons(for: post)
+                PostStatusIcons(post: post)
+                
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-//
-//            if vm.selectedCategory == nil {
-//                Text(post.category)
-//                    .font(.body)
-//                    .fontWeight(.medium)
-//                    .foregroundStyle(Color.mycolor.myYellow)
-//                    .frame(maxWidth: .infinity)
-//            }
-//
-
+            //
+            //            if vm.selectedCategory == nil {
+            //                Text(post.category)
+            //                    .font(.body)
+            //                    .fontWeight(.medium)
+            //                    .foregroundStyle(Color.mycolor.myYellow)
+            //                    .frame(maxWidth: .infinity)
+            //            }
+            //
+            
         }
         .padding()
     }
-
-    @ViewBuilder
-    private func statusIcons(for post: Post) -> some View {
-        Group {
-            if post.draft {
-                Image(systemName: "square.stack.3d.up")
-            }
-            if post.favoriteChoice == .yes {
-                Image(systemName: "heart")
-                    .foregroundStyle(Color.mycolor.myRed)
-            }
-            if let rating = post.postRating {
-                rating.icon
-                    .foregroundStyle(Color.mycolor.myBlue)
-            }
-            post.progress.icon
-                .foregroundStyle(Color.mycolor.myGreen)
-            post.origin.icon
-        }
-        .font(.caption)
-        .foregroundStyle(Color.mycolor.myAccent)
-    }
-
+    
     // MARK: - Intro
     
     private func intro(for post: Post) -> some View {
@@ -221,7 +200,7 @@ struct PostDetailsView: View {
     }
     
     // MARK: - Notes
-
+    
     private func notes(for post: Post) -> some View {
         VStack(spacing: 0) {
             HStack {
@@ -254,7 +233,7 @@ struct PostDetailsView: View {
             }
         }
     }
-
+    
     // MARK: - Source Button
     
     private func goToTheSourceButton(urlString: String) -> some View {
@@ -263,7 +242,7 @@ struct PostDetailsView: View {
             urlString: urlString
         )
     }
-
+    
     // MARK: - Toolbar
     
     @ToolbarContentBuilder
@@ -316,14 +295,14 @@ struct PostDetailsView: View {
                 isExpanded: showProgressTab,
                 otherIsExpanded: showRatingTab,
                 zIndexTab: zIndexBarProgress
-                ){
-                    ProgressSelectionView { showProgressTab = false }
-                } onTap: {
-                    maxHeight = 310
-                    zIndexBarProgress = 1
-                    zIndexBarRating = 0
-                    showProgressTab.toggle()
-                }
+            ){
+                ProgressSelectionView { showProgressTab = false }
+            } onTap: {
+                maxHeight = 310
+                zIndexBarProgress = 1
+                zIndexBarRating = 0
+                showProgressTab.toggle()
+            }
             // Rating Selection Bar
             selectionTabView (
                 icon: "star",
@@ -332,14 +311,14 @@ struct PostDetailsView: View {
                 isExpanded: showRatingTab,
                 otherIsExpanded: showProgressTab,
                 zIndexTab: zIndexBarRating
-                ){
-                    RatingSelectionView { showRatingTab = false}
-                } onTap: {
-                    maxHeight = 350
-                    zIndexBarRating = 1
-                    zIndexBarProgress = 0
-                    showRatingTab.toggle()
-                }
+            ){
+                RatingSelectionView { showRatingTab = false}
+            } onTap: {
+                maxHeight = 350
+                zIndexBarRating = 1
+                zIndexBarProgress = 0
+                showRatingTab.toggle()
+            }
         }
     }
     
@@ -410,7 +389,7 @@ struct PostDetailsView: View {
         }
         .buttonStyle(.plain)
     }
-
+    
     // MARK: - Helpers
     
     private func updateWidths(for width: CGFloat) {
@@ -442,30 +421,3 @@ struct PostDetailsView: View {
             .padding()
     }
 }
-
-//
-//#Preview("Post Details with Mock Data") {
-//    let extendedPosts = PreviewData.samplePosts + DevData.postsForCloud
-//    let postsVM = PostsViewModel(
-//        dataSource: MockPostsDataSource(posts: extendedPosts)
-//    )
-//
-//    let container = try! ModelContainer(
-//        for: Post.self, Notice.self, AppSyncState.self,
-//        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-//    )
-//
-//    if let firstPost = postsVM.allPosts.first {
-//        NavigationStack {
-//            PostDetailsView(postId: firstPost.id)
-//                .environmentObject(postsVM)
-//                .environmentObject(AppCoordinator())
-//                .modelContainer(container)
-//        }
-//    } else {
-//        Text("No posts available")
-//            .padding()
-//    }
-//}
-//
-

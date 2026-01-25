@@ -21,6 +21,7 @@ struct HomeView: View {
     // MARK: - Constants
     
     let selectedCategory: String?
+    
     private let longPressDuration: Double = 0.5
 
     // MARK: - States
