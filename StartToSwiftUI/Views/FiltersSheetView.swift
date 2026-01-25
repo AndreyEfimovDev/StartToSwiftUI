@@ -10,8 +10,8 @@ import SwiftData
 
 struct FiltersSheetView: View {
     
-    // MARK: PROPERTIES
-    
+    // MARK: - Dependencies
+
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var vm: PostsViewModel
     
