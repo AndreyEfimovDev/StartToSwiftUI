@@ -10,16 +10,21 @@ import SwiftData
 
 struct HomeView: View {
     
-    // MARK: PROPERTIES
-    
+    // MARK: - Dependencies
+
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     private let hapticManager = HapticService.shared
     
-    let selectedCategory: String?
+    // MARK: - Constants
     
+    let selectedCategory: String?
+    private let longPressDuration: Double = 0.5
+
+    // MARK: - States
+
     @State private var selectedPostToDelete: Post?
     @State private var showOnTopButton: Bool = false
     @State private var isShowingDeleteConfirmation: Bool = false
@@ -28,8 +33,6 @@ struct HomeView: View {
     @State private var showProgressSelectionView: Bool = false
     @State private var isFilterButtonPressed: Bool = false
     
-    private let longPressDuration: Double = 0.5
-
     // MARK: - Computed Properties
     
     private var disableHomeView: Bool {

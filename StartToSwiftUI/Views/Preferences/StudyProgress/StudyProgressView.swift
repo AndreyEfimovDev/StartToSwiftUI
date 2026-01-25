@@ -17,7 +17,7 @@ struct StudyProgressView: View {
     let tabs = ["Overview", "Details"]
     
     var body: some View {
-        ViewWrapperWithCustomNavToolbar(
+        FormCoordinatorToolbar(
             title: "Achievements",
             showHomeButton: true
         ) {

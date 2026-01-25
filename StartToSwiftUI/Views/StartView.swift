@@ -10,21 +10,23 @@ import SwiftData
 
 struct StartView: View {
     
-    @Environment(\.modelContext) private var modelContext
+    // MARK: - Dependencies
+    
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
-
+    
+    // MARK: - State
+    
     @State private var showLaunchView: Bool = true
     @State private var isLoadingData = true
-    
     @State private var visibility: NavigationSplitViewVisibility = .doubleColumn
     
-    
     // MARK: - Body
+    
     var body: some View {
         ZStack {
-           if showLaunchView {
+            if showLaunchView {
                 LaunchView() {
                     showLaunchView = false
                 }
@@ -51,70 +53,129 @@ struct StartView: View {
         .environmentObject(noticevm)
     }
     
-    // MARK: - Subviews
+    // MARK: Main Content
+    
     @ViewBuilder
     private var mainContent: some View {
-        Group {
-            if UIDevice.isiPad {
-                // iPad - NavigationSplitView
-                NavigationSplitView (columnVisibility: $visibility) {
-                    //                if let categories = vm.allCategories {
-                    //                    List(categories, id: \.self, selection: $vm.selectedCategory) { category in
-                    //                        Text(category)
-                    //                    }
-                    //                    .navigationTitle("Categories")
-                    //                    .navigationSplitViewColumnWidth(150)
-                    //                } else {
-                    //                    Text("No categories")
-                    //                }
-                    //            } content: {
-                    if let selectedCategory = vm.selectedCategory {
-                        NavigationStack(path: $coordinator.path) {
-                            HomeView(selectedCategory: selectedCategory)
-                                .navigationDestination(for: AppRoute.self) { route in
-                                    destinationView(for: route)
-                                }
-                        }
-                        .navigationSplitViewColumnWidth(430)
-                    } else {
-                        postNotSelectedEmptyView(text: "Select Category")
-                    }
-                }
-                detail: {
-                    if let selectedPostId = vm.selectedPostId {
-                        PostDetailsView(postId: selectedPostId)
-                            .id(selectedPostId)
-                    } else {
-                        postNotSelectedEmptyView(text: "Select Topic")
-                    }
-                }
-                .onAppear { // Temprorary - only for single SwiftUI mode
-                    vm.selectedCategory = "SwiftUI"
-                }
-                
-            } else {
-                // iPhone - portrait mode only
-                NavigationStack(path: $coordinator.path) {
-                    HomeView(selectedCategory: vm.selectedCategory)
-                        .navigationDestination(for: AppRoute.self) { route in
-                            destinationView(for: route)  // for PostDetails only in fact
-                        }
-                }
-            }
+        if UIDevice.isiPad {
+            iPadContent
+        } else {
+            iPhoneContent
         }
     }
+    
+    private var iPadContent: some View {
+        NavigationSplitView(columnVisibility: $visibility) {
+            
+            //                    //                if let categories = vm.allCategories {
+            //                    //                    List(categories, id: \.self, selection: $vm.selectedCategory) { category in
+            //                    //                        Text(category)
+            //                    //                    }
+            //                    //                    .navigationTitle("Categories")
+            //                    //                    .navigationSplitViewColumnWidth(150)
+            //                    //                } else {
+            //                    //                    Text("No categories")
+            //                    //                }
+            //                    //            } content: {
+
+            
+            if let selectedCategory = vm.selectedCategory {
+                NavigationStack(path: $coordinator.path) {
+                    HomeView(selectedCategory: selectedCategory)
+                        .navigationDestination(for: AppRoute.self) { route in
+                            destinationView(for: route)
+                        }
+                }
+                .navigationSplitViewColumnWidth(430)
+            } else {
+                postNotSelectedEmptyView(text: "Select Category")
+            }
+        } detail: {
+            if let selectedPostId = vm.selectedPostId {
+                PostDetailsView(postId: selectedPostId)
+                    .id(selectedPostId)
+            } else {
+                postNotSelectedEmptyView(text: "Select Topic")
+            }
+        }
+        .onAppear {
+            // Temporary - only for single SwiftUI mode
+            vm.selectedCategory = "SwiftUI"
+        }
+    }
+    
+    private var iPhoneContent: some View {
+        NavigationStack(path: $coordinator.path) {
+            HomeView(selectedCategory: vm.selectedCategory)
+                .navigationDestination(for: AppRoute.self) { route in
+                    destinationView(for: route)
+                }
+        }
+    }
+    
+    //    @ViewBuilder
+    //    private var mainContent: some View {
+    //        Group {
+    //            if UIDevice.isiPad {
+    //                // iPad - NavigationSplitView
+    //                NavigationSplitView (columnVisibility: $visibility) {
+    //                    //                if let categories = vm.allCategories {
+    //                    //                    List(categories, id: \.self, selection: $vm.selectedCategory) { category in
+    //                    //                        Text(category)
+    //                    //                    }
+    //                    //                    .navigationTitle("Categories")
+    //                    //                    .navigationSplitViewColumnWidth(150)
+    //                    //                } else {
+    //                    //                    Text("No categories")
+    //                    //                }
+    //                    //            } content: {
+    //                    if let selectedCategory = vm.selectedCategory {
+    //                        NavigationStack(path: $coordinator.path) {
+    //                            HomeView(selectedCategory: selectedCategory)
+    //                                .navigationDestination(for: AppRoute.self) { route in
+    //                                    destinationView(for: route)
+    //                                }
+    //                        }
+    //                        .navigationSplitViewColumnWidth(430)
+    //                    } else {
+    //                        postNotSelectedEmptyView(text: "Select Category")
+    //                    }
+    //                }
+    //                detail: {
+    //                    if let selectedPostId = vm.selectedPostId {
+    //                        PostDetailsView(postId: selectedPostId)
+    //                            .id(selectedPostId)
+    //                    } else {
+    //                        postNotSelectedEmptyView(text: "Select Topic")
+    //                    }
+    //                }
+    //                .onAppear { // Temprorary - only for single SwiftUI mode
+    //                    vm.selectedCategory = "SwiftUI"
+    //                }
+    //
+    //            } else {
+    //                // iPhone - portrait mode only
+    //                NavigationStack(path: $coordinator.path) {
+    //                    HomeView(selectedCategory: vm.selectedCategory)
+    //                        .navigationDestination(for: AppRoute.self) { route in
+    //                            destinationView(for: route)  // for PostDetails only in fact
+    //                        }
+    //                }
+    //            }
+    //        }
+    //    }
     
     // MARK: - Destination View for routing
     @ViewBuilder
     private func destinationView(for route: AppRoute) -> some View {
         switch route {
             
-        // Post details View
+            // Post details View
         case .postDetails(let postId):
             PostDetailsView(postId: postId)
- 
+            
         default:
-                EmptyView()
+            EmptyView()
         }
     }
 }
@@ -161,9 +222,6 @@ struct StartView: View {
             .environmentObject(noticesVM)
     }
 }
-
-
-
 
 //            // Preferences
 //        case .preferences:

@@ -10,24 +10,29 @@ import SwiftData
 
 struct SharePostsView: View {
     
+    // MARK: - Dependencies
+    
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
 
     private let hapticManager = HapticService.shared
     
+    // MARK: - State
+
     @State private var showActivityView = false
     @State private var isShareCompleted = false
     @State private var isInProgress = false
-    
     @State private var shareURL: URL?
-        
+ 
+    // MARK: - Body
+
     var body: some View {
-        ViewWrapperWithCustomNavToolbar(
+        FormCoordinatorToolbar(
             title: "Share/Store",
             showHomeButton: true
         ) {
             VStack {
-                textSection
+                descriptionText
                     .textFormater()
                 
                 CapsuleButtonView(
@@ -35,9 +40,10 @@ struct SharePostsView: View {
                     secondaryTitle: "Completed",
                     isToChange: isShareCompleted
                 ) {
-                    isInProgress = true
-                    prepareDocumentSharing()
-                    showActivityView = true
+//                    isInProgress = true
+//                    prepareDocumentSharing()
+//                    showActivityView = true
+                    prepareAndShare()
                 }
                 .disabled(isShareCompleted)
                 .padding(.top, 30)
@@ -53,7 +59,7 @@ struct SharePostsView: View {
             .padding(.top, 30)
             .sheet(isPresented: $showActivityView) {
                 if let url = shareURL {
-                    handleDocumentSharing(fileURL: url)
+                    sharingActivityView(for: url)
                 }
             }
             .alert("Sharing Error", isPresented: $vm.showErrorMessageAlert) {
@@ -67,6 +73,19 @@ struct SharePostsView: View {
         }
     }
     
+    // MARK: - Subviews
+
+    private var descriptionText: some View {
+        Text("""
+            You are about to store the materials
+            on your local device (JSON format) 
+            or
+            share them directly via
+            AirDop / Mail / Messenger / etc.            
+            """)
+        .multilineTextAlignment(.center)
+    }
+
     private func prepareDocumentSharing() {
         // Export data from SwiftData
         let exportResult = vm.exportPostsToJSON()
@@ -85,37 +104,84 @@ struct SharePostsView: View {
     }
     
     // MARK: Subviews
+//    @ViewBuilder
+//    private func handleDocumentSharing(fileURL: URL) -> some View {
+//        ActivityView(activityItems: [fileURL], applicationActivities: nil) { result in
+//            if result.completed {
+//                // Successful sharing
+//                hapticManager.notification(type: .success)
+//                isShareCompleted = true // Change Share Button status and disable it
+//                showActivityView = false // Close sheet after sharing completion
+//                
+//                // Clearing the temporary file after sharing
+//                cleanupTempFile(fileURL)
+//                
+//                log("✅ Successfully shared via: \(result.activityName)", level: .info)
+//                
+//                // Automatic closing after 2 seconds
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+//                    coordinator.closeModal()
+//                }
+//
+//            } else {
+//                // Sharing is cancelled
+//                hapticManager.impact(style: .light)
+//                // Clearing the temporary file
+//                cleanupTempFile(fileURL)
+//                log("✅ Shared is cancelled.", level: .info)
+//            }
+//            // Resetting the states
+//            isInProgress = false
+//            shareURL = nil
+//
+//        }
+//    }
+    
     @ViewBuilder
-    private func handleDocumentSharing(fileURL: URL) -> some View {
+    private func sharingActivityView(for fileURL: URL) -> some View {
         ActivityView(activityItems: [fileURL], applicationActivities: nil) { result in
-            if result.completed {
-                // Successful sharing
-                hapticManager.notification(type: .success)
-                isShareCompleted = true // Change Share Button status and disable it
-                showActivityView = false // Close sheet after sharing completion
-                
-                // Clearing the temporary file after sharing
-                cleanupTempFile(fileURL)
-                
-                log("✅ Successfully shared via: \(result.activityName)", level: .info)
-                
-                // Automatic closing after 2 seconds
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                    coordinator.closeModal()
-                }
-
-            } else {
-                // Sharing is cancelled
-                hapticManager.impact(style: .light)
-                // Clearing the temporary file
-                cleanupTempFile(fileURL)
-                log("✅ Shared is cancelled.", level: .info)
-            }
-            // Resetting the states
-            isInProgress = false
-            shareURL = nil
-
+            handleSharingResult(result, fileURL: fileURL)
         }
+    }
+    
+    // MARK: - Actions
+    
+    private func prepareAndShare() {
+        isInProgress = true
+        
+        switch vm.exportPostsToJSON() {
+        case .success(let url):
+            shareURL = url
+            showActivityView = true
+            isInProgress = false
+            
+        case .failure(let error):
+            vm.errorMessage = error.localizedDescription
+            vm.showErrorMessageAlert = true
+            hapticManager.notification(type: .error)
+            isInProgress = false
+        }
+    }
+    
+    private func handleSharingResult(_ result: ActivityResult, fileURL: URL) {
+        cleanupTempFile(fileURL)
+        
+        if result.completed {
+            hapticManager.notification(type: .success)
+            isShareCompleted = true
+            showActivityView = false
+            log("✅ Successfully shared via: \(result.activityName)", level: .info)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                coordinator.closeModal()
+            }
+        } else {
+            hapticManager.impact(style: .light)
+            log("✅ Share cancelled.", level: .info)
+        }
+        
+        isInProgress = false
+        shareURL = nil
     }
     
     /// Clearing temporary file after use
@@ -130,16 +196,6 @@ struct SharePostsView: View {
         }
     }
     
-    private var textSection: some View {
-        Text("""
-            You are about to store the materials
-            on your local device (JSON format) 
-            or
-            share them directly via
-            AirDop / Mail / Messenger / etc.            
-            """)
-        .multilineTextAlignment(.center)
-    }
 }
 
 #Preview {
