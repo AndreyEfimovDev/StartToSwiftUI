@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ViewWrapperWithCustomNavToolbar<Content: View>: View {
+struct FormCoordinatorToolbar<Content: View>: View {
     
     @EnvironmentObject private var coordinator: AppCoordinator
 
