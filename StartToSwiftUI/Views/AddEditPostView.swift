@@ -69,57 +69,6 @@ struct AddEditPostView: View {
         case success
         case error(title: String, message: String, field: PostFields?)
     }
-
-//    private var viewTitle: String {
-//        originalPost == nil ? "Add" : "Edit"
-//    }
-//    private var hasNoChanges: Bool {
-//        return editedPost.isEqual(to: copyOfThePost)
-//    }
-//
-//    @State private var editedPost: Post
-//    private var originalPost: Post?
-//    private var copyOfThePost: Post
-//    
-//    @State private var isPostDraftSaved: Bool = false
-//    @State private var isShowingExitMenuConfirmation: Bool = false
-//    @State private var urlTrigger: Bool = true
-//
-//    @FocusState private var focusedField: PostFields?
-//    @State private var focusedFieldSaved: PostFields?
-//    
-//    private let sectionBackground: Color = Color.mycolor.mySectionBackground
-//    private let sectionCornerRadius: CGFloat = 8
-//    
-//    private let fontSubheader: Font = .caption
-//    private let fontTextInput: Font = .callout
-//    private let colorSubheader: Color = Color.mycolor.myAccent.opacity(0.5)
-//    
-//    // set 2019 as a beginning year for starting in choice
-//    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date.distantPast
-//    
-//    private let endingDate: Date = .now
-//    private var bindingPostDate: Binding<Date> {
-//        Binding<Date>(
-//            get: { editedPost.postDate ?? Date() },
-//            set: { editedPost.postDate = $0 }
-//        )
-//    }
-//    
-//    @State private var showAlert = false
-//    @State var alertType: PostAlerts? = nil
-//    @State var alertTitle: String = ""
-//    @State var alertMessage: String = ""
-//    
-//    private let templateForNewPost: Post = Post(
-//        origin: .local,
-//        draft: true
-//    )
-//    
-//    enum PostAlerts {
-//        case success
-//        case error
-//    }
     
     init(post: Post?) {
         
@@ -195,33 +144,8 @@ struct AddEditPostView: View {
         }
     }
 
-    // MARK: Subviews
-//    @ToolbarContentBuilder
-//    private func toolbarForAddEditView() -> some ToolbarContent {
-//        
-//        ToolbarItem(placement: .topBarLeading) {
-//            // SAVE button
-//            CircleStrokeButtonView(
-//                iconName: "checkmark",
-//                isShownCircle: false)
-//            {
-//                handleSave()
-//            }
-//            .disabled(isShowingExitMenuConfirmation)
-//        }
-//        ToolbarItem(placement: .topBarTrailing) {
-//            // EXIT button
-//            CircleStrokeButtonView(
-//                iconName: "xmark",
-//                imageColorPrimary: Color.mycolor.myRed,
-//                isShownCircle: false)
-//            {
-//                handleCancel()
-//            }
-//            .disabled(isShowingExitMenuConfirmation)
-//        }
-//    }
-
+    // MARK: - Actions
+    
     private func handleSave() {
         if hasNoChanges {
             // If it is draft - save it as not draft -> .draft = false
@@ -242,18 +166,6 @@ struct AddEditPostView: View {
     // MARK: - Actions
 
     private func handleCancel() {
-//        if hasNoChanges {
-//            if editedPost.draft {
-//                editedPost.draft = false
-//                checkAndSave()
-//            } else {
-//                navigateBack()
-//            }
-//        } else {
-//            editedPost.draft = false
-//            checkAndSave()
-//        }
-
         if hasNoChanges {
             navigateBack()
         } else {
@@ -276,24 +188,7 @@ struct AddEditPostView: View {
             coordinator.popModal()
         }
     }
-    
-    
-//    private func checkPostAndSave() {
-//        
-//        guard validatePost() else { return }
-//        
-//        if let originalPost = originalPost {
-//            // If originalPost != nil, then update the post
-//            originalPost.update(with: editedPost)
-//            vm.updatePost()
-//        } else {
-//            // If originalPost == nil, then add a new post
-//            vm.addPost(editedPost)
-//        }
-//        alertType = .success
-//        showAlert.toggle()
-//    }
-    
+        
     private func checkAndSave() {
         guard validatePost() else { return }
         
@@ -310,42 +205,6 @@ struct AddEditPostView: View {
     
     
     private func validatePost() -> Bool {
-        
-//        if !isTexLengthAppropriate(
-//            text: editedPost.title,
-//            limit: 3
-//        ) {
-//            alertType = .error
-//            alertTitle = "The Title must contain at least 3 characters."
-//            alertMessage = "Please correct the Title."
-//            focusedField = .postTitle
-//            showAlert.toggle()
-//            return false
-//        }
-//        
-//        if !isTexLengthAppropriate(
-//            text: editedPost.author,
-//            limit: 2
-//        ) {
-//            alertType = .error
-//            alertTitle = "The Author must contain at least 2 characters."
-//            alertMessage = "Please correct the Author."
-//            focusedField = .author
-//            showAlert.toggle()
-//            return false
-//        }
-//        
-//        if vm.checkNewPostForUniqueTitle(
-//            editedPost.title,
-//            editingPostId: originalPost?.id // nil or valid
-//        ) {
-//            alertType = .error
-//            alertTitle = "The Title must be unique."
-//            alertMessage = "Please correct the Title."
-//            focusedField = .postTitle
-//            showAlert.toggle()
-//            return false
-//        }
         if editedPost.title.count < 3 {
             showError(
                 title: "The Title must contain at least 3 characters.",
@@ -383,49 +242,7 @@ struct AddEditPostView: View {
     }
 
     // MARK: - Alert
-    
-//    private func getAlert(
-//        alertTitle: String,
-//        alertMessage: String
-//    ) -> Alert {
-//        switch alertType {
-//        case .error:
-//            if editedPost.draft == true {
-//                editedPost.draft = false
-//            }
-//            return Alert(
-//                title: Text(alertTitle),
-//                message: Text(alertMessage),
-//                dismissButton: .default(Text("OK")) {
-//                }
-//            )
-//        case .success:
-//            if editedPost.draft {
-//                return Alert(
-//                    title: Text("Draft saved successfully"),
-//                    message: Text("Tap OK to continue"),
-//                    dismissButton: .default(Text("OK")) {
-//                        isPostDraftSaved = true
-//                        navigateBack()
-//                    }
-//                )
-//            }
-//            let title = originalPost == nil
-//                ? "New Post added successfully"
-//                : "Post saved successfully"
-//            return Alert(
-//                title: Text(title),
-//                message: Text("Tap OK to continue"),
-//                dismissButton: .default(Text("OK")) {
-//                    navigateBack()
-//                }
-//            )
-//            
-//        default:
-//            return Alert(title: Text("ERROR"))
-//        }
-//    }
-    
+
     private var alert: Alert {
         switch alertType {
         case .error(let title, let message, let field):
@@ -607,59 +424,6 @@ struct AddEditPostView: View {
         }
     }
 
-//    private var urlSection: some View {
-//        VStack(alignment: .leading, spacing: 0) {
-//            Text("URL")
-//                .sectionSubheaderFormater(
-//                    fontSubheader: fontSubheader,
-//                    colorSubheader: colorSubheader
-//                )
-//            Text(editedPost.urlString)
-//                .font(.caption2)
-//            ZStack {
-//                HStack(spacing: 0) {
-//                    Button(urlTrigger ? "Set url" : "Reset url") {
-//                        if !urlTrigger {
-//                            editedPost.urlString = Constants.urlStart
-//                        }
-//                        urlTrigger.toggle()
-//                    }
-//                    .foregroundColor(urlTrigger ? .blue : .red)
-//                    .padding(8)
-//                    .background(
-//                        .ultraThinMaterial,
-//                        in: .capsule
-//                    )
-//                    .padding(8)
-//                    .zIndex(1)
-//                    
-//                    HStack(spacing: 0) {
-//                        TextField("", text: $editedPost.urlString)
-//                            .font(fontTextInput)
-//                            .padding(.leading, 5)
-//                            .frame(height: 50)
-//                            .padding(.horizontal, 3)
-//                            .textInputAutocapitalization(.none)
-//                            .autocorrectionDisabled(true) // fixing leaking memory
-//                            .keyboardType(.URL)
-//                            .focused($focusedField, equals: .urlString)
-//                            .onSubmit {focusedField = nil }
-//                            .submitLabel(.next)
-//                        
-//                        clearButton(for: editedPost.urlString) {
-//                            editedPost.urlString = Constants.urlStart
-//                        }
-//                    }
-//                    .opacity(urlTrigger ? 0 : 1)
-//                }
-//            }
-//            .background(
-//                sectionBackground,
-//                in: RoundedRectangle(cornerRadius: sectionCornerRadius)
-//            )
-//        }
-//    }
-
     private var urlSection: some View {
         FormSection(title: "URL") {
           
@@ -806,13 +570,6 @@ struct AddEditPostView: View {
         }
     }
     
-
-//    private func isTexLengthAppropriate(text: String, limit: Int) -> Bool {
-//        return text.count >= limit
-//    }
-//    
-
-//
     // MARK: - Helper Views
     
     @ViewBuilder
@@ -844,7 +601,7 @@ struct AddEditPostView: View {
 
 // MARK: - Form Section Component
 
-private struct FormSection<Content: View>: View {
+struct FormSection<Content: View>: View {
     let title: String
     @ViewBuilder let content: Content
     
