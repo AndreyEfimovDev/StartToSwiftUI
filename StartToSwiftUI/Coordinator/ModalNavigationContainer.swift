@@ -36,9 +36,9 @@ struct ModalNavigationContainer: View {
         case .postDetails(let postId): // postId is extracted from enum and available as String
             PostDetailsView(postId: postId)
         case .addPost:
-            AddEditPostSheet(post: nil)
+            AddEditPostView(post: nil)
         case .editPost(let post):
-            AddEditPostSheet(post: post)
+            AddEditPostView(post: post)
             
         case .preferences:
             PreferencesView()
