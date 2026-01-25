@@ -10,85 +10,77 @@ import SwiftData
 
 struct PreferencesView: View {
     
-    @Environment(\.modelContext) private var modelContext
+    // MARK: - Dependencies
+    
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
-
+    
+    // MARK: - Constants
+    
     let iconWidth: CGFloat = 18
     
-    private var postsCount: Int {
-        vm.allPosts.count
-    }
-    
-    private var draftsCount: Int {
-        let postDrafts = vm.allPosts.filter { $0.draft == true }
-        return postDrafts.count
-    }
-    
-    private var newNoticesCount: Int {
-        noticevm.notices.filter { $0.isRead == false }.count
-    }
+    // MARK: - Body
     
     var body: some View {
-            Form {
-                Section(header: sectionHeader("Appearance")) {
-                    themeAppearence
-                }
-                Section(header: sectionHeader("Notifications")) {
+        Form {
+            Section(header: sectionHeader("Appearance")) {
+                themeAppearance
+            }
+            Section(header: sectionHeader("Notifications")) {
+                if noticevm.notices.count > 0 {
                     noticeMessages
-                    notificationToggle
-                    soundNotificationToggle
                 }
-                
-                //                if UIDevice.isiPhone {
-                //                    Section(header: sectionHeader("Selected category")) {
-                //                        selectedCategory
-                //                    }
-                //                }
-                
-                Section(header: sectionHeader("Achievements")) {
-                    achievements
-                }
-                Section(header: sectionHeader("Manage materials (\(postsCount))")) {
-//                    loadStaticPostsToggle
-                    postDrafts
-                    checkForPostsUpdate
-                    importFromCloud
-                    shareBackup
-                    restoreBackup
-                    erasePosts
-                }
-                Section(header: sectionHeader("Сommunication")){
-                    acknowledgements
-                    aboutApplication
-                    legalInformation
-                    contactDeveloperButton
-                }
+                notificationToggle
+                soundNotificationToggle
             }
-            .foregroundStyle(Color.mycolor.myAccent)
-            .listSectionSpacing(0)
-            .navigationTitle("Preferences")
-            .navigationBarBackButtonHidden(true)
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationViewStyle(StackNavigationViewStyle())
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    if UIDevice.isiPad {
-                        BackButtonView(iconName: "xmark") {
-                            coordinator.closeModal()
-                        }
-                    } else {
-                        BackButtonView() {
-                            coordinator.closeModal()
-                        }
-                    }
-                }
+            
+            //                if UIDevice.isiPhone {
+            //                    Section(header: sectionHeader("Selected category")) {
+            //                        selectedCategory
+            //                    }
+            //                }
+            
+            Section(header: sectionHeader("Achievements")) {
+                achievements
             }
-            .preferredColorScheme(vm.selectedTheme.colorScheme)
+            Section(header: sectionHeader("Manage materials (\(vm.allPosts.count))")) {
+                postDrafts
+                checkForPostsUpdate
+                importFromCloud
+                shareBackup
+                restoreBackup
+                erasePosts
+            }
+            Section(header: sectionHeader("Сommunication")){
+                acknowledgements
+                aboutApplication
+                legalInformation
+                contactDeveloperButton
+            }
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+        .listSectionSpacing(0)
+        .navigationTitle("Preferences")
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationViewStyle(StackNavigationViewStyle())
+        .toolbar { toolbar }
+        .preferredColorScheme(vm.selectedTheme.colorScheme)
     }
     
-    // MARK: - Subviews
+    // MARK: - Toolbar
+    
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarLeading) {
+            BackButtonView(iconName: UIDevice.isiPad ? "xmark" : "chevron.left") {
+                coordinator.closeModal()
+            }
+        }
+    }
+    
+    // MARK: - Section Header
     
     private func sectionHeader(_ text: String) -> some View {
         Text(text)
@@ -114,25 +106,30 @@ struct PreferencesView: View {
         }
     }
     
-    private var themeAppearence: some View {
+    // MARK: - Appearance
+    
+    private var themeAppearance: some View {
         UnderlineSermentedPickerNotOptional(
             selection: $vm.selectedTheme,
             allItems: Theme.allCases,
             titleForCase: { $0.displayName },
             selectedFont: .footnote
         )
+        .preferredColorScheme(vm.selectedTheme.colorScheme)
     }
     
+    // MARK: - Notifications
+    
     private var noticeMessages: some View {
-        Button("Messages (\(newNoticesCount)/\(noticevm.notices.count))") {
+        Button("Messages (\(noticevm.unreadCount)/\(noticevm.notices.count))") {
             coordinator.pushModal(.notices)
         }
         .customListRowStyle(
-            iconName: newNoticesCount == 0 ? "message" : "message.badge",
+            iconName: noticevm.unreadCount == 0 ? "message" : "message.badge",
             iconWidth: iconWidth
         )
     }
-
+    
     private var notificationToggle: some View {
         HStack {
             Image(systemName: noticevm.isNotificationOn ? "bell" : "bell.slash")
@@ -153,6 +150,8 @@ struct PreferencesView: View {
         }
     }
     
+    // MARK: - Achievements
+    
     private var achievements: some View {
         Button("Check progress") {
             coordinator.pushModal(.studyProgress)
@@ -163,20 +162,12 @@ struct PreferencesView: View {
         ) // gauge.open.with.lines.needle.67percent.and.arrowtriangle
     }
     
-    private var loadStaticPostsToggle: some View {
-        HStack {
-            Image(systemName: "arrow.2.squarepath")
-                .frame(width: iconWidth)
-                .foregroundStyle(Color.mycolor.myBlue)
-            Toggle("Load static posts", isOn: $vm.shouldLoadStaticPosts)
-                .tint(Color.mycolor.myBlue)
-        }
-    }
+    // MARK: - Materials Management
     
     private var postDrafts: some View {
         Group {
-            if !vm.allPosts.filter({ $0.draft == true }).isEmpty {
-                Button("Post drafts (\(draftsCount))") {
+            if vm.hasDrafts {
+                Button("Post drafts (\(vm.draftsCount))") {
                     coordinator.pushModal(.postDrafts)
                 }
                 .customListRowStyle(
@@ -190,40 +181,62 @@ struct PreferencesView: View {
     /// Checking for new curated links to materials is available if:
     /// - new materials availability status = true, and
     /// - The local array of materials contains author's materials (for posts with origin = .cloud)
+    ///
+    @ViewBuilder
     private var checkForPostsUpdate: some View {
-        Group {
-            let appStateManager = AppSyncStateManager(modelContext: modelContext)
-            let status = appStateManager.getAvailableNewCuratedPostsStatus()
-            let localPostsFromCloud = vm.allPosts.filter { $0.origin == .cloud }
-
-            if status && !localPostsFromCloud.isEmpty {
-                Button("Check for materials update") {
-                    coordinator.pushModal(.checkForUpdates)
-                }
-                .customListRowStyle(
-                    iconName: "arrow.trianglehead.counterclockwise",
-                    iconWidth: iconWidth
-                )
+        if vm.hasAvailableCuratedPostsUpdate {
+            Button("Check for materials update") {
+                coordinator.pushModal(.checkForUpdates)
             }
+            .customListRowStyle(iconName: "arrow.trianglehead.counterclockwise", iconWidth: iconWidth)
         }
     }
     
+    //    private var checkForPostsUpdate: some View {
+    //        Group {
+    //            let appStateManager = AppSyncStateManager(modelContext: modelContext)
+    //            let status = appStateManager.getAvailableNewCuratedPostsStatus()
+    //            let localPostsFromCloud = vm.allPosts.filter { $0.origin == .cloud }
+    //
+    //            if status && !localPostsFromCloud.isEmpty {
+    //                Button("Check for materials update") {
+    //                    coordinator.pushModal(.checkForUpdates)
+    //                }
+    //                .customListRowStyle(
+    //                    iconName: "arrow.trianglehead.counterclockwise",
+    //                    iconWidth: iconWidth
+    //                )
+    //            }
+    //        }
+    //    }
+    
     /// Import is available if there are no curated materials in the local array (for posts with origin = .cloud)
+    @ViewBuilder
     private var importFromCloud: some View {
-        Group {
-            let localPostsFromCloud = vm.allPosts.filter { $0.origin == .cloud }
-
-            if localPostsFromCloud.isEmpty {
-                Button("Download the curated collection") {
-                    coordinator.pushModal(.importFromCloud)
-                }
-                .customListRowStyle(
-                    iconName: "icloud.and.arrow.down",
-                    iconWidth: iconWidth
-                )
+        if vm.shouldShowImportFromCloud {
+            Button("Download the curated collection") {
+                coordinator.pushModal(.importFromCloud)
             }
+            .customListRowStyle(iconName: "icloud.and.arrow.down", iconWidth: iconWidth)
         }
     }
+    
+    
+    //    private var importFromCloud: some View {
+    //        Group {
+    //            let localPostsFromCloud = vm.allPosts.filter { $0.origin == .cloud }
+    //
+    //            if localPostsFromCloud.isEmpty {
+    //                Button("Download the curated collection") {
+    //                    coordinator.pushModal(.importFromCloud)
+    //                }
+    //                .customListRowStyle(
+    //                    iconName: "icloud.and.arrow.down",
+    //                    iconWidth: iconWidth
+    //                )
+    //            }
+    //        }
+    //    }
     
     private var shareBackup: some View {
         Button("Share/Backup") {
@@ -254,6 +267,8 @@ struct PreferencesView: View {
             iconWidth: iconWidth
         )
     }
+    
+    // MARK: - Communication
     
     private var acknowledgements: some View {
         Button("Acknowledgements") {

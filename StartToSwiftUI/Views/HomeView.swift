@@ -7,34 +7,48 @@
 
 import SwiftUI
 import SwiftData
-import AudioToolbox
-
 
 struct HomeView: View {
     
-    // MARK: PROPERTIES
-    @Environment(\.modelContext) private var modelContext
+    // MARK: - Dependencies
+
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     private let hapticManager = HapticService.shared
     
+    // MARK: - Constants
+    
     let selectedCategory: String?
     
+    private let longPressDuration: Double = 0.5
+
+    // MARK: - States
+
     @State private var selectedPostToDelete: Post?
     @State private var showOnTopButton: Bool = false
     @State private var isShowingDeleteConfirmation: Bool = false
-    @State private var noticeButtonAnimation = false
     @State private var isDetectingLongPress: Bool = false
     @State private var isLongPressSuccess: Bool = false
     @State private var showProgressSelectionView: Bool = false
     @State private var isFilterButtonPressed: Bool = false
     
-    private let longPressDuration: Double = 0.5
-    private let limitToShortenTitle: Int = 30
+    // MARK: - Computed Properties
     
-    // MARK: VIEW BODY
+    private var disableHomeView: Bool {
+        isLongPressSuccess || showProgressSelectionView || isShowingDeleteConfirmation
+    }
+    
+    private var postsToDisplay: [Post] {
+        guard let category = selectedCategory else {
+            return vm.filteredPosts
+        }
+        return vm.filteredPosts.filter { $0.category == category }
+    }
+    
+    // MARK: BODY
+    
     var body: some View {
         GeometryReader { proxy in
             ScrollViewReader { scrollProxy in
@@ -49,7 +63,7 @@ struct HomeView: View {
                     }
                 }
             }
-            .disabled(isLongPressSuccess || isShowingDeleteConfirmation)
+            .disabled(disableHomeView)
             .navigationTitle(vm.selectedCategory ?? "SwiftUI")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -60,48 +74,13 @@ struct HomeView: View {
                 SearchBarView()
             }
             .sheet(isPresented: $isFilterButtonPressed) {
-                FiltersSheetView(
-                    isFilterButtonPressed: $isFilterButtonPressed
-                )
-                .presentationBackground(.ultraThinMaterial)
-                .presentationDetents([.height(600)])
-                .presentationDragIndicator(.visible)
-                .presentationCornerRadius(30)
+                filtersSheet
             }
-            .overlay {
-                if UIDevice.isiPhone { // only for iPhime version
-                    ZStack {
-                        // On long press gesture
-                        if isLongPressSuccess {
-                            RatingSelectionView() {
-                                isLongPressSuccess = false
-                                hapticManager.impact(style: .light)
-                            }
-                            .frame(maxHeight: max(proxy.size.height / 3, 300))
-                            .padding(.horizontal, 30)
-                        }
-                        // On double tap gesture
-                        if showProgressSelectionView {
-                            ProgressSelectionView() {
-                                showProgressSelectionView = false
-                                hapticManager.impact(style: .light)
-                            }
-                            .frame(maxHeight: max(proxy.size.height / 3, 300))
-                            .padding(.horizontal, 30)
-                        }
-                    }
-                }
-            }
-            .overlay {
-                if isShowingDeleteConfirmation {
-                    postDeletionConfirmation
-                        .opacity(isShowingDeleteConfirmation ? 1 : 0)
-                        .transition(.move(edge: .bottom))
-                }
-            }
+            .overlay { gestureOverlays(proxy: proxy) }
+            .overlay { deleteConfirmationOverlay }
             .onAppear {
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                soundNotificationIfNeeded()
+                noticevm.playSoundNotificationIfNeeded()
             }
         }
     }
@@ -110,67 +89,26 @@ struct HomeView: View {
 
     private var listPostRowsContent: some View {
         List {
-            ForEach(postsForCategory(selectedCategory)) { post in
+            ForEach(postsToDisplay) { post in
                 PostRowView(post: post)
                     .id(post.id)
-                    .background(trackingFistPostInList(post: post))
+                    .background(trackingFirstPostInList(post: post))
                     .background(.black.opacity(0.001))
                     .onLongPressGesture(
                         minimumDuration: longPressDuration,
                         maximumDistance: 50,
-                        perform: {
-                            vm.selectedRating = post.postRating
-                            vm.selectedPostId = post.id
-                            isLongPressSuccess = true
-                            hapticManager.impact(style: .light)
-                        },
-                        onPressingChanged: { isPressing in
-                            if isPressing {
-                                isDetectingLongPress = true
-                            } else {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                    if !isLongPressSuccess {
-                                        isDetectingLongPress = false
-                                    }
-                                }
-                            }
-                        }
+                        perform: { handleLongPress(on: post) },
+                        onPressingChanged: { handlePressingChanged($0) }
                     )
                     .onTapAndDoubleTap(
-                        singleTap: {
-                            vm.selectedPostId = post.id
-                            if UIDevice.isiPhone {
-                                coordinator.push(.postDetails(postId: post.id))
-                            }
-                            if UIDevice.isiPad {
-                                hapticManager.impact(style: .light)
-                            }
-                        },
-                        doubleTap: {
-                            vm.selectedStudyProgress = post.progress
-                            vm.selectedPostId = post.id
-                            showProgressSelectionView = true
-                            hapticManager.impact(style: .light)
-                        }
+                        singleTap: { handleSingleTap(on: post) },
+                        doubleTap: { handleDoubleTap(on: post) }
                     )
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        Button("Delete", systemImage: "trash") {
-                            selectedPostToDelete = post
-                            hapticManager.notification(type: .warning)
-                            isShowingDeleteConfirmation = true
-                        }
-                        .tint(Color.mycolor.myRed)
-                        
-                        Button("Edit", systemImage: post.origin == .cloud  || post.origin == .statical ? "pencil.slash" : "pencil") {
-                            coordinator.push(.editPost(post))
-                        }
-                        .tint(Color.mycolor.myBlue)
-                        .disabled(post.origin == .cloud || post.origin == .statical)
+                        trailingSwipeActions(for: post)
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: false) {
-                        Button(post.favoriteChoice == .yes ? "Unmark" : "Mark" , systemImage: post.favoriteChoice == .yes ?  "heart.slash" : "heart") {
-                            vm.favoriteToggle(post: post)
-                        }.tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondary : Color.mycolor.myRed.opacity(0.5))
+                        leadingSwipeActions(for: post)
                     }
             } // ForEach
             .listRowBackground(Color.clear)
@@ -180,7 +118,6 @@ struct HomeView: View {
         } // List
         .listStyle(.plain)
         .refreshControl {
-            // Pull to refresh the View
             vm.loadPostsFromSwiftData()
             hapticManager.impact(style: .light)
             Task {
@@ -189,62 +126,90 @@ struct HomeView: View {
         }
     }
     
+    // MARK: - Gesture Handlers
+    
+    private func handleLongPress(on post: Post) {
+        vm.selectedRating = post.postRating
+        vm.selectedPostId = post.id
+        isLongPressSuccess = true
+        hapticManager.impact(style: .light)
+    }
+    
+    private func handlePressingChanged(_ isPressing: Bool) {
+        if isPressing {
+            isDetectingLongPress = true
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                if !isLongPressSuccess {
+                    isDetectingLongPress = false
+                }
+            }
+        }
+    }
+    
+    private func handleSingleTap(on post: Post) {
+        vm.selectedPostId = post.id
+        if UIDevice.isiPhone {
+            coordinator.push(.postDetails(postId: post.id))
+        }
+        if UIDevice.isiPad {
+            hapticManager.impact(style: .light)
+        }
+    }
+    
+    private func handleDoubleTap(on post: Post) {
+        vm.selectedStudyProgress = post.progress
+        vm.selectedPostId = post.id
+        showProgressSelectionView = true
+        hapticManager.impact(style: .light)
+    }
+    
+    // MARK: - Swipe Actions
+    
+    @ViewBuilder
+    private func trailingSwipeActions(for post: Post) -> some View {
+        Button("Delete", systemImage: "trash") {
+            selectedPostToDelete = post
+            hapticManager.notification(type: .warning)
+            isShowingDeleteConfirmation = true
+        }
+        .tint(Color.mycolor.myRed)
+        
+        Button("Edit", systemImage: post.origin == .local ? "pencil" : "pencil.slash") {
+            coordinator.push(.editPost(post))
+        }
+        .tint(Color.mycolor.myBlue)
+        .disabled(post.origin != .local)
+    }
+    
+    @ViewBuilder
+    private func leadingSwipeActions(for post: Post) -> some View {
+        Button(post.favoriteChoice == .yes ? "Unmark" : "Mark",
+               systemImage: post.favoriteChoice == .yes ? "heart.slash" : "heart") {
+            vm.favoriteToggle(post)
+        }
+        .tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondary : Color.mycolor.myRed.opacity(0.5))
+    }
+    
+    // MARK: - Toolbar
+
     @ToolbarContentBuilder
     private func navigationToolbar() -> some ToolbarContent {
         
         ToolbarItem(placement: .navigationBarLeading) {
-            CircleStrokeButtonView(
-                iconName: "gearshape",
-                isShownCircle: false)
-            {
+            CircleStrokeButtonView(iconName: "gearshape", isShownCircle: false) {
                 coordinator.push(.preferences)
             }
         }
         if noticevm.hasUnreadNotices {
             ToolbarItem(placement: .navigationBarLeading) {
-                CircleStrokeButtonView(
-                    iconName: "message",
-                    isShownCircle: false
-                ){
-                    coordinator.push(.notices)
-                }
-                .overlay {
-                    Capsule()
-                        .fill(Color.mycolor.myRed)
-                        .frame(maxWidth: 15, maxHeight: 10)
-                        .overlay {
-                            Text("\(noticevm.notices.filter({ $0.isRead == false }).count)")
-                                .font(.system(size: 8, weight: .bold, design: .default))
-                                .foregroundStyle(Color.mycolor.myButtonTextPrimary)
-                        }
-                        .offset(x: 6, y: -9)
-                }
-                .background(
-                    AnyView(
-                        Circle()
-                            .stroke(
-                                Color.mycolor.myRed,
-                                lineWidth: noticeButtonAnimation ? 3 : 0
-                            )
-                            .scaleEffect(noticeButtonAnimation ? 1.2 : 0.8)
-                            .opacity(noticeButtonAnimation ? 0.0 : 1.0)
-                    )
-                    .animation(
-                        noticeButtonAnimation
-                        ? .easeOut(duration: 1.0)
-                        : .none,
-                        value: noticeButtonAnimation
-                    )
-                )
+                noticeButton
             }
         }
-        
+  
         ToolbarItemGroup(placement: .navigationBarTrailing) {
             // Add a new post
-            CircleStrokeButtonView(
-                iconName: "plus",
-                isShownCircle: false
-            ){
+            CircleStrokeButtonView(iconName: "plus", isShownCircle: false ){
                 coordinator.push(.addPost)
             }
             // Filters sheet
@@ -259,8 +224,86 @@ struct HomeView: View {
         }
     }
     
+    private var noticeButton: some View {
+        CircleStrokeButtonView(iconName: "message", isShownCircle: false) {
+            coordinator.push(.notices)
+        }
+        .overlay {
+            Capsule()
+                .fill(Color.mycolor.myRed)
+                .frame(maxWidth: 15, maxHeight: 10)
+                .overlay {
+                    Text("\(noticevm.unreadCount)")  // ← используем computed property
+                        .font(.system(size: 8, weight: .bold))
+                        .foregroundStyle(Color.mycolor.myButtonTextPrimary)
+                }
+                .offset(x: 6, y: -9)
+        }
+        .background(noticeButtonAnimationBackground)
+    }
+
+    private var noticeButtonAnimationBackground: some View {
+        Circle()
+            .stroke(
+                Color.mycolor.myRed,
+                lineWidth: noticevm.shouldAnimateNoticeButton ? 3 : 0
+            )
+            .scaleEffect(noticevm.shouldAnimateNoticeButton ? 1.2 : 0.8)
+            .opacity(noticevm.shouldAnimateNoticeButton ? 0.0 : 1.0)
+            .animation(
+                noticevm.shouldAnimateNoticeButton ? .easeOut(duration: 1.0) : .none,
+                value: noticevm.shouldAnimateNoticeButton
+            )
+    }
+    
+    // MARK: - Overlays
+    
     @ViewBuilder
-    private func trackingFistPostInList(post: Post) -> some View {
+    private func gestureOverlays(proxy: GeometryProxy) -> some View {
+        if UIDevice.isiPhone {
+            ZStack {
+                if isLongPressSuccess {
+                    RatingSelectionView {
+                        isLongPressSuccess = false
+                        hapticManager.impact(style: .light)
+                    }
+                    .frame(maxHeight: max(proxy.size.height / 3, 300))
+                    .padding(.horizontal, 30)
+                }
+                
+                if showProgressSelectionView {
+                    ProgressSelectionView {
+                        showProgressSelectionView = false
+                        hapticManager.impact(style: .light)
+                    }
+                    .allowsHitTesting(true)
+                    .frame(maxHeight: max(proxy.size.height / 3, 300))
+                    .padding(.horizontal, 30)
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var deleteConfirmationOverlay: some View {
+        if isShowingDeleteConfirmation {
+            postDeletionConfirmation
+                .transition(.move(edge: .bottom))
+        }
+    }
+    
+    private var filtersSheet: some View {
+        FiltersSheetView(isFilterButtonPressed: $isFilterButtonPressed)
+            .presentationBackground(.ultraThinMaterial)
+            .presentationDetents([.height(600)])
+            .presentationDragIndicator(.visible)
+            .presentationCornerRadius(30)
+    }
+
+    // MARK: - Supporting Views
+
+    @ViewBuilder
+    private func trackingFirstPostInList(post: Post) -> some View {
         GeometryReader { geo in
             Color.clear
                 .onChange(of: geo.frame(in: .global).minY) { oldY, newY in
@@ -306,12 +349,12 @@ struct HomeView: View {
         )
     }
     
-    private func postsForCategory(_ category: String?) -> [Post] {
-        guard let category = category else {
-            return vm.filteredPosts
-        }
-        return vm.filteredPosts.filter { $0.category == category }
-    }
+//    private func postsForCategory(_ category: String?) -> [Post] {
+//        guard let category = category else {
+//            return vm.filteredPosts
+//        }
+//        return vm.filteredPosts.filter { $0.category == category }
+//    }
     
     private var postDeletionConfirmation: some View {
         ZStack {
@@ -341,7 +384,7 @@ struct HomeView: View {
                     primaryTitle: "Delete",
                     primaryTitleColor: Color.mycolor.myRed) {
                         withAnimation {
-                            vm.deletePost(post: selectedPostToDelete ?? nil)
+                            vm.deletePost(selectedPostToDelete)
                             hapticManager.notification(type: .success)
                             isShowingDeleteConfirmation = false
                         }
@@ -358,57 +401,56 @@ struct HomeView: View {
             .padding(.horizontal, 40)
         }
     }
-    
-    private func shortenPostTitle(title: String) -> String {
-        if title.count > limitToShortenTitle {
-            return String(title.prefix(limitToShortenTitle - 3)) + "..."
-        }
-        return title
-    }
-    
-    /// One-time sound alert to the user when new notifications appear
-    private func soundNotificationIfNeeded() {
-        
-        let appStateManager = AppSyncStateManager(modelContext: modelContext)
-        let status = appStateManager.getUserNotifiedBySoundStatus()
-        
-        guard noticevm.hasUnreadNotices, noticevm.isNotificationOn, status else {
-            return
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-            if noticevm.isSoundNotificationOn {
-                // Sound played
-                AudioServicesPlaySystemSound(1013)
-                // Setting the user's sound notification status -> user notified
-                appStateManager.markUserNotifiedBySound()
-            }
-            // Animation has started
-            noticeButtonAnimation = true
-            // Animation completed, user notified
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                noticeButtonAnimation = false
-            }
-        }
-    }
-    
 }
 
-#Preview {
+//    private func shortenPostTitle(title: String) -> String {
+//        if title.count > limitToShortenTitle {
+//            return String(title.prefix(limitToShortenTitle - 3)) + "..."
+//        }
+//        return title
+//    }
+    
+
+//
+//#Preview {
+//    let container = try! ModelContainer(
+//        for: Post.self, Notice.self, AppSyncState.self,
+//        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+//    )
+//    let context = ModelContext(container)
+//    
+//    let vm = PostsViewModel(modelContext: context)
+//    let noticevm = NoticeViewModel(modelContext: context)
+//    
+//    return NavigationStack {
+//        HomeView(selectedCategory: "SwiftUI")
+//    }
+//    .modelContainer(container)
+//    .environmentObject(vm)
+//    .environmentObject(noticevm)
+//    .environmentObject(AppCoordinator())
+//}
+
+
+#Preview("With Extended Posts") {
+    let extendedPosts = PreviewData.samplePosts + DevData.postsForCloud
+    let postsVM = PostsViewModel(
+        dataSource: MockPostsDataSource(posts: extendedPosts)
+    )
+    let noticesVM = NoticeViewModel(
+        dataSource: MockNoticesDataSource()
+    )
+    
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
-    let context = ModelContext(container)
     
-    let vm = PostsViewModel(modelContext: context)
-    let noticevm = NoticeViewModel(modelContext: context)
-    
-    return NavigationStack {
+    NavigationStack {
         HomeView(selectedCategory: "SwiftUI")
+            .modelContainer(container)
+            .environmentObject(AppCoordinator())
+            .environmentObject(postsVM)
+            .environmentObject(noticesVM)
     }
-    .modelContainer(container)
-    .environmentObject(vm)
-    .environmentObject(noticevm)
-    .environmentObject(AppCoordinator())
 }

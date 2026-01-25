@@ -13,7 +13,7 @@ struct PrivacyPolicy: View {
     @EnvironmentObject private var coordinator: AppCoordinator
 
     var body: some View {
-        ViewWrapperWithCustomNavToolbar(
+        FormCoordinatorToolbar(
             title: "Privacy Policy",
             showHomeButton: true
         ) {

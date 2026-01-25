@@ -11,52 +11,59 @@ import SwiftData
 
 struct ImportPostsFromCloudView: View {
     
-    @Environment(\.modelContext) private var modelContext
+    // MARK: - Dependencies
+    
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     private let hapticManager = HapticService.shared
     
-    @State private var isInProgress: Bool = false
-    @State private var isLoaded: Bool = false
+    // MARK: - State
     
-    @State private var postCount: Int = 0
-    @State private var initialPostCount: Int = 0
+    @State private var isInProgress = false
+    @State private var isLoaded = false
+    @State private var importedCount = 0
+    @State private var initialPostCount = 0
+    
+    // MARK: - Body
     
     var body: some View {
-        ViewWrapperWithCustomNavToolbar(
+        FormCoordinatorToolbar(
             title: "Import materials from cloud",
             showHomeButton: true
         ) {
             ZStack(alignment: .bottom) {
                 VStack {
-                    textSection
+                    descriptionText
                         .textFormater()
                     
-                    Group {
-                        CapsuleButtonView(
-                            primaryTitle: "Confirm and Download",
-                            secondaryTitle: "\(postCount) New Materials Added",
-                            isToChange: isLoaded) {
-                                isInProgress = true
-                                initialPostCount = vm.allPosts.count
-                                Task {
-                                    await importFromCloud()
-                                }
-                            }
-                            .disabled(isLoaded || isInProgress)
-                            .padding(.top, 30)
-                        
-                        CapsuleButtonView(
-                            primaryTitle: "Don't confirm",
-                            textColorPrimary: Color.mycolor.myButtonTextRed,
-                            buttonColorPrimary: Color.mycolor.myButtonBGRed) {
-                                coordinator.popToRoot()
-                            }
-                            .opacity(isLoaded ? 0 : 1)
-                            .disabled(isInProgress)
-                    }
-                    .padding(.horizontal, 50)
+                    buttonsSection
+                        .padding(.horizontal, 50)
+
+//                    Group {
+//                        CapsuleButtonView(
+//                            primaryTitle: "Confirm and Download",
+//                            secondaryTitle: "\(postCount) New Materials Added",
+//                            isToChange: isLoaded) {
+//                                isInProgress = true
+//                                initialPostCount = vm.allPosts.count
+//                                Task {
+//                                    await importFromCloud()
+//                                }
+//                            }
+//                            .disabled(isLoaded || isInProgress)
+//                            .padding(.top, 30)
+//                        
+//                        CapsuleButtonView(
+//                            primaryTitle: "Don't confirm",
+//                            textColorPrimary: Color.mycolor.myButtonTextRed,
+//                            buttonColorPrimary: Color.mycolor.myButtonBGRed) {
+//                                coordinator.popToRoot()
+//                            }
+//                            .opacity(isLoaded ? 0 : 1)
+//                            .disabled(isInProgress)
+//                    }
+//                    .padding(.horizontal, 50)
                     
                     Spacer()
                     
@@ -78,7 +85,7 @@ struct ImportPostsFromCloudView: View {
     }
     
     // MARK: Subviews
-    private var textSection: some View {
+    private var descriptionText: some View {
         VStack {
             Group {
                 Text("""
@@ -107,7 +114,40 @@ struct ImportPostsFromCloudView: View {
         }
     }
     
-    // MARK: - Import Methods
+    private var buttonsSection: some View {
+        Group {
+            CapsuleButtonView(
+                primaryTitle: "Confirm and Download",
+                secondaryTitle: "\(importedCount) New Materials Added",
+                isToChange: isLoaded
+            ) {
+                performImport()
+            }
+            .disabled(isLoaded || isInProgress)
+            .padding(.top, 30)
+            
+            CapsuleButtonView(
+                primaryTitle: "Don't confirm",
+                textColorPrimary: Color.mycolor.myButtonTextRed,
+                buttonColorPrimary: Color.mycolor.myButtonBGRed
+            ) {
+                coordinator.popToRoot()
+            }
+            .opacity(isLoaded ? 0 : 1)
+            .disabled(isInProgress)
+        }
+    }
+    
+    // MARK: - Actions
+    
+    private func performImport() {
+        isInProgress = true
+        initialPostCount = vm.allPosts.count
+        
+        Task {
+            await importFromCloud()
+        }
+    }
     
     private func importFromCloud() async {
         
@@ -121,100 +161,120 @@ struct ImportPostsFromCloudView: View {
         
     }
     
+    
     /// Loading DevData to generate JSON
     /// For internal use, to generate a JSON file for the cloud
-    private func loadDevData() {
-        Task { @MainActor in
-            do {
-                // Get existing titles to filter duplicates
-                let existingTitles = Set(vm.allPosts.map { $0.title })
-                let existingIds = Set(vm.allPosts.map { $0.id })
-                
-                var addedCount = 0
-                
-                // Filter and add only unique posts
-                for devPost in DevData.postsForCloud {
-                    // We check that the post is unique
-                    guard !existingTitles.contains(devPost.title) && !existingIds.contains(devPost.id) else {
-                        log("⚠️ Post '\(devPost.title)' already exists, skipping", level: .info)
-                        continue
-                    }
-                    
-                    // Create a new Post for SwiftData
-                    let newPost = Post(
-                        id: devPost.id,
-                        category: devPost.category,
-                        title: devPost.title,
-                        intro: devPost.intro,
-                        author: devPost.author,
-                        postType: devPost.postType,
-                        urlString: devPost.urlString,
-                        postPlatform: devPost.postPlatform,
-                        postDate: devPost.postDate,
-                        studyLevel: devPost.studyLevel,
-                        progress: devPost.progress,
-                        favoriteChoice: devPost.favoriteChoice,
-                        postRating: devPost.postRating,
-                        notes: devPost.notes,
-                        origin: devPost.origin,
-                        draft: devPost.draft,
-                        date: devPost.date,
-                        startedDateStamp: devPost.startedDateStamp,
-                        studiedDateStamp: devPost.studiedDateStamp,
-                        practicedDateStamp: devPost.practicedDateStamp
-                    )
-                    
-                    modelContext.insert(newPost)
-                    addedCount += 1
-                }
-                
-                // Save in SwiftData
-                try modelContext.save()
-                log("✅ DevData: Loaded \(addedCount) posts from \(DevData.postsForCloud.count)", level: .info)
-                
-                // Update UI
-                vm.loadPostsFromSwiftData()
-                
-                // Total quantity uploaded
-                postCount = vm.allPosts.count - initialPostCount
-                
-                isInProgress = false
-                isLoaded = true
-                hapticManager.notification(type: .success)
-                
-                // Closing in 1.5 seconds
-                try? await Task.sleep(nanoseconds: 1_500_000_000)
-                coordinator.popToRoot()
-                
-            } catch {
-                vm.errorMessage = "Failed to load DevData: \(error.localizedDescription)"
-                vm.showErrorMessageAlert = true
-                isInProgress = false
-                hapticManager.notification(type: .error)
-            }
-        }
-    }
+//    private func loadDevData() {
+//        Task { @MainActor in
+//            do {
+//                // Get existing titles to filter duplicates
+//                let existingTitles = Set(vm.allPosts.map { $0.title })
+//                let existingIds = Set(vm.allPosts.map { $0.id })
+//                
+//                var addedCount = 0
+//                
+//                // Filter and add only unique posts
+//                for devPost in DevData.postsForCloud {
+//                    // We check that the post is unique
+//                    guard !existingTitles.contains(devPost.title) && !existingIds.contains(devPost.id) else {
+//                        log("⚠️ Post '\(devPost.title)' already exists, skipping", level: .info)
+//                        continue
+//                    }
+//                    
+//                    // Create a new Post for SwiftData
+//                    let newPost = Post(
+//                        id: devPost.id,
+//                        category: devPost.category,
+//                        title: devPost.title,
+//                        intro: devPost.intro,
+//                        author: devPost.author,
+//                        postType: devPost.postType,
+//                        urlString: devPost.urlString,
+//                        postPlatform: devPost.postPlatform,
+//                        postDate: devPost.postDate,
+//                        studyLevel: devPost.studyLevel,
+//                        progress: devPost.progress,
+//                        favoriteChoice: devPost.favoriteChoice,
+//                        postRating: devPost.postRating,
+//                        notes: devPost.notes,
+//                        origin: devPost.origin,
+//                        draft: devPost.draft,
+//                        date: devPost.date,
+//                        startedDateStamp: devPost.startedDateStamp,
+//                        studiedDateStamp: devPost.studiedDateStamp,
+//                        practicedDateStamp: devPost.practicedDateStamp
+//                    )
+//                    
+//                    modelContext.insert(newPost)
+//                    addedCount += 1
+//                }
+//                
+//                // Save in SwiftData
+//                try modelContext.save()
+//                log("✅ DevData: Loaded \(addedCount) posts from \(DevData.postsForCloud.count)", level: .info)
+//                
+//                // Update UI
+//                vm.loadPostsFromSwiftData()
+//                
+//                // Total quantity uploaded
+//                postCount = vm.allPosts.count - initialPostCount
+//                
+//                isInProgress = false
+//                isLoaded = true
+//                hapticManager.notification(type: .success)
+//                
+//                // Closing in 1.5 seconds
+//                try? await Task.sleep(nanoseconds: 1_500_000_000)
+//                coordinator.popToRoot()
+//                
+//            } catch {
+//                vm.errorMessage = "Failed to load DevData: \(error.localizedDescription)"
+//                vm.showErrorMessageAlert = true
+//                isInProgress = false
+//                hapticManager.notification(type: .error)
+//            }
+//        }
+//    }
+    
+    /// Loading DevData (for internal use, to generate JSON file for cloud)
+     private func loadDevData() async {
+         let addedCount = await vm.loadDevData()
+         
+         await MainActor.run {
+             importedCount = addedCount
+             isInProgress = false
+             isLoaded = true
+             hapticManager.notification(type: .success)
+         }
+         
+         try? await Task.sleep(nanoseconds: 1_500_000_000)
+         
+         await MainActor.run {
+             coordinator.popToRoot()
+         }
+     }
     
     /// Downloading from a cloud service
     private func loadFromCloudService() async {
-        await vm.importPostsFromCloud() { [self] in
-            Task { @MainActor in
-                isInProgress = false
+        await vm.importPostsFromCloud() {
+            isInProgress = false
+            
+            if !vm.showErrorMessageAlert {
+                isLoaded = true
                 
-                if !vm.showErrorMessageAlert {
-                    isLoaded = true
-                    
-                    // Updating the counter of downloaded posts
-                    postCount = vm.allPosts.count - initialPostCount
-                    
-                    hapticManager.notification(type: .success)
-                    
-                    // Closing in 1.5 seconds
+                // Updating the counter of downloaded posts
+                importedCount = vm.allPosts.count - initialPostCount
+                hapticManager.notification(type: .success)
+                
+                // Closing in 1.5 seconds
+                Task {
                     try? await Task.sleep(nanoseconds: 1_500_000_000)
-                    coordinator.closeModal()
-                } else {
-                    hapticManager.notification(type: .error)
+                    await MainActor.run {
+                        coordinator.closeModal()
+                    }
                 }
+            } else {
+                hapticManager.notification(type: .error)
             }
         }
     }

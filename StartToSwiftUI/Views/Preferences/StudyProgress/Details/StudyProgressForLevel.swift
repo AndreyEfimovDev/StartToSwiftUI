@@ -10,11 +10,11 @@ import SwiftData
 
 struct StudyProgressForLevel: View {
     
-    @EnvironmentObject private var vm: PostsViewModel
+    let posts: [Post]
+    let studyLevel: StudyLevel?
+
     @State private var refreshID = UUID()
 
-    let studyLevel: StudyLevel?
-    
     private var fontForSectionTitle: Font {
         UIDevice.isiPad ? .subheadline : .headline
     }
@@ -31,9 +31,9 @@ struct StudyProgressForLevel: View {
 
     private var postsForStudyLevel: [Post] {
         if let studyLevel = studyLevel {
-            return vm.allPosts.filter { $0.studyLevel == studyLevel}
+            return posts.filter { $0.studyLevel == studyLevel}
         }
-        return vm.allPosts
+        return posts
     }
     
     var body: some View {
@@ -43,39 +43,68 @@ struct StudyProgressForLevel: View {
             sectionTitle
             
             // PROGRESS VIEWS
-            ForEach([StudyProgress.practiced, StudyProgress.studied , StudyProgress.started], id: \.self) { progressLevel in
-                HStack (spacing: 0) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack (spacing: 3){
-                            progressLevel.icon
-                            Text(progressLevel.displayName)
-                        }
-                        Text("\(levelPostsCount(for: progressLevel))")
-                            .foregroundStyle(Color.mycolor.myAccent)
-                    }
-                    .foregroundStyle(progressLevel.color)
-                    .font(fontForSectionTitle)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.leading)
+            ForEach([StudyProgress.practiced, StudyProgress.studied , StudyProgress.started], id: \.self) { level in
+                HStack {
                     
+                    let count = levelPostsCount(for: level)
+                    
+                    VStack(spacing: 8) {
+                        level.icon
+                        Text(level.displayName)
+                        Text("(\(count))")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .font(fontForSectionTitle)
+                    .foregroundStyle(level.color)
+
                     Spacer()
                     
                     ProgressIndicator(
-                        progress: progressCount(for: progressLevel),
-                        colour: progressLevel.color,
-                        fontForTitle: fontForSectionTitle,
+                        progress: progressCount(for: level),
+                        colour: level.color,
                         lineWidth: lineWidth
                     )
-                    .padding()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                 }
+                .padding(.vertical)
+                .padding(.trailing, 30)
                 .background(.ultraThinMaterial)
                 .clipShape(
-                    RoundedRectangle(cornerRadius: 15)
+                    RoundedRectangle(cornerRadius: 30)
                 )
-//                .overlay(
+                .overlay(
+                    RoundedRectangle(cornerRadius: 30)
+                        .stroke(.blue, lineWidth: 1)
+                )
+                .padding(8)
+//                HStack (spacing: 0) {
+//                    VStack(alignment: .leading, spacing: 8) {
+//                        HStack (spacing: 3){
+//                            progressLevel.icon
+//                            Text(progressLevel.displayName)
+//                        }
+//                        Text("\(levelPostsCount(for: progressLevel))")
+//                            .foregroundStyle(Color.mycolor.myAccent)
+//                    }
+//                    .foregroundStyle(progressLevel.color)
+//                    .font(fontForSectionTitle)
+//                    .frame(maxWidth: .infinity, alignment: .leading)
+//                    .padding(.leading)
+//
+//                    Spacer()
+//
+//                    ProgressIndicator(
+//                        progress: progressCount(for: progressLevel),
+//                        colour: progressLevel.color,
+//                        fontForTitle: fontForSectionTitle,
+//                        lineWidth: lineWidth
+//                    )
+//                    .padding()
+//                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+//                }
+//                .background(.ultraThinMaterial)
+//                .clipShape(
 //                    RoundedRectangle(cornerRadius: 15)
-//                        .stroke(.blue, lineWidth: 1)
 //                )
             } // ForEach
         }
@@ -100,15 +129,11 @@ struct StudyProgressForLevel: View {
     private func progressCount(for progressLevel: StudyProgress) -> Double {
         
         guard !postsForStudyLevel.isEmpty else { return 0 }
-        
-//        let filteredPostsForProgressLevel = postsForStudyLevel.filter { $0.progress == progressLevel }
-//        return Double(filteredPostsForProgressLevel.count) / Double(postsForStudyLevel.count)
         let count = levelPostsCount(for: progressLevel)
         return Double(count) / Double(postsForStudyLevel.count)
     }
     
     private func levelPostsCount(for progressLevel: StudyProgress) -> Int {
-        //        postsForStudyLevel.filter { $0.progress == progressLevel }.count
         switch progressLevel {
         case .fresh:
             return postsForStudyLevel.filter { $0.addedDateStamp != nil }.count
@@ -119,23 +144,43 @@ struct StudyProgressForLevel: View {
         case .practiced:
             return postsForStudyLevel.filter { $0.practicedDateStamp != nil }.count
         }
-        
     }
-
 }
 
 #Preview {
-    let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppSyncState.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-    )
-    let context = ModelContext(container)
+    let calendar = Calendar.current
+    let now = Date()
+
+    let extendedPosts = [
+        Post(title: "Post 1", intro: "Intro 1", studyLevel: .beginner, progress: .started)
+            .withDateStamp(.started, date: calendar.date(byAdding: .month, value: -2, to: now)!),
+        
+        Post(title: "Post 2", intro: "Intro 2", studyLevel: .middle, progress: .studied)
+            .withDateStamp(.started, date: calendar.date(byAdding: .month, value: -1, to: now)!)
+            .withDateStamp(.studied, date: calendar.date(byAdding: .month, value: -2, to: now)!),
+        
+        Post(title: "Post 3", intro: "Intro 3", studyLevel: .advanced, progress: .practiced)
+            .withDateStamp(.started, date: calendar.date(byAdding: .month, value: -3, to: now)!)
+            .withDateStamp(.studied, date: calendar.date(byAdding: .month, value: -2, to: now)!)
+            .withDateStamp(.practiced, date: calendar.date(byAdding: .month, value: -1, to: now)!),
+        
+        Post(title: "Post 4", intro: "Intro 4", studyLevel: .middle, progress: .fresh),
+        
+        Post(title: "Post 5", intro: "Intro 5", studyLevel: .beginner, progress: .started)
+            .withDateStamp(.started, date: now),
+        
+        Post(title: "Post 6", intro: "Intro 6", studyLevel: .advanced, progress: .studied)
+            .withDateStamp(.started, date: calendar.date(byAdding: .month, value: -4, to: now)!)
+            .withDateStamp(.studied, date: calendar.date(byAdding: .month, value: -3, to: now)!),
+    ]
     
-    let vm = PostsViewModel(modelContext: context)
+    let postsVM = PostsViewModel(
+        dataSource: MockPostsDataSource(posts: extendedPosts)
+    )
         
     NavigationStack {
-        StudyProgressForLevel(studyLevel: nil)
+        StudyProgressForLevel(posts: postsVM.allPosts, studyLevel: nil)
     }
-    .environmentObject(vm)
+    .environmentObject(postsVM)
     
 }

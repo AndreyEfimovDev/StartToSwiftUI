@@ -9,9 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct NoticeRowView: View {
-    
-    @EnvironmentObject private var noticevm: NoticeViewModel
-    
+
     let notice: Notice
     
     var body: some View {

@@ -129,7 +129,111 @@ struct PreviewData {
         """,
         origin: .local
     )
+    
+    static let sampleDraft1 = Post(
+        title: "Draft: Property Wrappers",
+        intro: "Черновик статьи о Property Wrappers в SwiftUI...",
+        author: "Author Name",
+        urlString: "https://example.com",
+        postPlatform: .youtube,
+        postDate: .now,
+        studyLevel: .beginner,
+        progress: .fresh,
+        origin: .local,
+        draft: true,
+    )
+
+    static let sampleDraft2 = Post(
+        title: "Draft: SwiftUI Navigation",
+        intro: "Черновик о навигации в SwiftUI...",
+        author: "Author Name",
+        urlString: "https://example.com",
+        postPlatform: .website,
+        postDate: .now,
+        studyLevel: .middle,
+        progress: .fresh,
+        origin: .local,
+        draft: true,
+    )
+
+    static let samplePostsWithDrafts: [Post] = [
+        samplePost1, samplePost2, samplePost3, sampleDraft1, sampleDraft2
+    ]
+
 
 }
+
+
+//extension PreviewData {
+//    
+//    // MARK: - Codable Posts для Network Mock
+//    
+//    static let sampleCodablePosts: [CodablePost] = samplePosts.map { post in
+//        CodablePost(
+//            id: post.id,
+//            category: post.category,
+//            title: post.title,
+//            intro: post.intro,
+//            author: post.author,
+//            postType: post.postType,
+//            urlString: post.urlString,
+//            postPlatform: post.postPlatform,
+//            postDate: post.postDate,
+//            studyLevel: post.studyLevel,
+//            progress: post.progress,
+//            favoriteChoice: post.favoriteChoice,
+//            postRating: post.postRating,
+//            notes: post.notes,
+//            origin: post.origin,
+//            draft: post.draft,
+//            date: post.date,
+//            startedDateStamp: post.startedDateStamp,
+//            studiedDateStamp: post.studiedDateStamp,
+//            practicedDateStamp: post.practicedDateStamp
+//        )
+//    }
+//    
+//    // MARK: - Codable Notices для Network Mock
+//    
+//    static let sampleCodableNotices: [CodableNotice] = sampleNotices.map { notice in
+//        CodableNotice(
+//            id: notice.id,
+//            title: notice.title,
+//            noticeDate: notice.noticeDate,
+//            noticeMessage: notice.noticeMessage,
+//            isRead: notice.isRead
+//        )
+//    }
+//}
+//
+
+extension PreviewData {
+    
+    // MARK: - Codable Posts для Network Mock
+    
+    static let sampleCodablePosts: [CodablePost] = [
+        .mockBeginner,
+        .mockMiddle,
+        .mockAdvanced,
+        .mockFavorite,
+        .mockCourse,
+        .mockDraft
+    ]
+    
+    // MARK: - Codable Notices для Network Mock
+    
+    static let sampleCodableNotices: [CodableNotice] = [
+        .mockUnread,
+        .mockRead,
+        .mock(
+            id: "3",
+            title: "Maintenance Notice",
+            noticeDate: Date().addingTimeInterval(-172800),
+            noticeMessage: "Scheduled maintenance tomorrow",
+            isRead: false
+        )
+    ]
+}
+
 
 

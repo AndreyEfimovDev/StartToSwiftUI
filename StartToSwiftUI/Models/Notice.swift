@@ -31,11 +31,3 @@ final class Notice {
     }
 }
 
-struct CodableNotice: Codable {
-    let id: String
-    let title: String
-    let noticeDate: Date
-    let noticeMessage: String
-    var isRead: Bool
-}
-

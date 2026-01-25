@@ -13,7 +13,7 @@ struct CopyrightPolicy: View {
     
     var body: some View {
         
-        ViewWrapperWithCustomNavToolbar(
+        FormCoordinatorToolbar(
             title: "Copyright/DMCA Policy",
             showHomeButton: true
         ) {
