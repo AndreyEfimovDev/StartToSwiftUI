@@ -10,54 +10,61 @@ import SwiftData
 
 struct EraseAllPostsView: View {
     
-    @Environment(\.modelContext) private var modelContext
+    // MARK: - Dependencies
+    
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
-
+    
     private let hapticManager = HapticService.shared
     
-    @State private var isDeleted: Bool = false
-    @State private var isShowingShareBackupSheet: Bool = false
-    @State private var isInProgress = false
+    // MARK: - State
     
-    @State private var postCount: Int = 0
+    @State private var isDeleted = false
+    @State private var isInProgress = false
+    @State private var erasedCount = 0
+    
+    // MARK: - Body
     
     var body: some View {
-        ViewWrapperWithCustomNavToolbar(
+        FormCoordinatorToolbar(
             title: "Erase all materials",
             showHomeButton: true
         ) {
             VStack {
-                textSection
+                descriptionText
                     .textFormater()
-                
-                CapsuleButtonView(
-                    primaryTitle: "ERASE",
-                    secondaryTitle: "\(postCount) Materials Erased!",
-                    textColorPrimary: Color.mycolor.myButtonTextRed,
-                    buttonColorPrimary: Color.mycolor.myButtonBGRed,
-                    buttonColorSecondary: Color.mycolor.myButtonBGGreen,
-                    isToChange: isDeleted) {
-                        isInProgress = true
-                        vm.eraseAllPosts{
-                            isDeleted = true
-                            isInProgress = false
-                            // Reset the status of the first import of curated links to materials
-                            // To allow directly import curated links to materials again
-                            let appStateManager = AppSyncStateManager(modelContext: modelContext)
-                            appStateManager.setCuratedPostsLoadStatusOn()
-                            
-                            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                                coordinator.closeModal()
-                            }
-                        }
-                    }
+                eraseButton
                     .padding(.top, 30)
                     .padding(.horizontal, 50)
-                    .onChange(of: vm.allPosts.count, { oldValue, _ in
-                        postCount = oldValue
-                    })
-                    .disabled(isDeleted)
+                
+
+//                CapsuleButtonView(
+//                    primaryTitle: "ERASE",
+//                    secondaryTitle: "\(postCount) Materials Erased!",
+//                    textColorPrimary: Color.mycolor.myButtonTextRed,
+//                    buttonColorPrimary: Color.mycolor.myButtonBGRed,
+//                    buttonColorSecondary: Color.mycolor.myButtonBGGreen,
+//                    isToChange: isDeleted) {
+//                        isInProgress = true
+//                        vm.eraseAllPosts{
+//                            isDeleted = true
+//                            isInProgress = false
+//                            // Reset the status of the first import of curated links to materials
+//                            // To allow directly import curated links to materials again
+//                            let appStateManager = AppSyncStateManager(modelContext: modelContext)
+//                            appStateManager.setCuratedPostsLoadStatusOn()
+//                            
+//                            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+//                                coordinator.closeModal()
+//                            }
+//                        }
+//                    }
+//                    .padding(.top, 30)
+//                    .padding(.horizontal, 50)
+//                    .onChange(of: vm.allPosts.count, { oldValue, _ in
+//                        postCount = oldValue
+//                    })
+//                    .disabled(isDeleted)
                 
                 Spacer()
                 
@@ -73,9 +80,26 @@ struct EraseAllPostsView: View {
         }
     }
     
-    // MARK: Subviews
+    // MARK: - Subviews
+    
+    private var eraseButton: some View {
+        CapsuleButtonView(
+            primaryTitle: "ERASE",
+            secondaryTitle: "\(erasedCount) Materials Erased!",
+            textColorPrimary: Color.mycolor.myButtonTextRed,
+            buttonColorPrimary: Color.mycolor.myButtonBGRed,
+            buttonColorSecondary: Color.mycolor.myButtonBGGreen,
+            isToChange: isDeleted
+        ) {
+            performErase()
+        }
+        .onChange(of: vm.allPosts.count) { oldValue, _ in
+            erasedCount = oldValue
+        }
+        .disabled(isDeleted)
+    }
 
-    private var textSection: some View {
+    private var descriptionText: some View {
         VStack(spacing: 0) {
             Text("""
             **You are about
@@ -113,6 +137,23 @@ struct EraseAllPostsView: View {
         .font(.subheadline)
     }
     
+    // MARK: - Actions
+    
+    private func performErase() {
+        isInProgress = true
+        
+        vm.eraseAllPosts {
+            isDeleted = true
+            isInProgress = false
+            
+            // Reset curated posts status to allow re-import
+            vm.resetCuratedPostsStatus()
+            
+            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+                coordinator.closeModal()
+            }
+        }
+    }
 }
 
 #Preview {

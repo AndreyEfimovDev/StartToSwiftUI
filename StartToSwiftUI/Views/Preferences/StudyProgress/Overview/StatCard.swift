@@ -34,3 +34,14 @@ struct StatCard: View {
         )
     }
 }
+
+#Preview {
+    StatCard(
+        title: "Started",
+        value: "12",
+        color: .blue,
+        icon: Image(systemName: "sunrise")
+    )
+    .padding()
+    .frame(width: 150, height: 100)
+}

@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: - Real Implementation
 final class NetworkService: ObservableObject {
     
     let baseURL: String
@@ -68,7 +69,19 @@ final class NetworkService: ObservableObject {
         }
         task.resume()
     }
-    
-
 }
+// MARK: - Protocol
+protocol NetworkServiceProtocol {
+    func fetchDataFromURLAsync<T: Codable>() async throws -> T
+}
+
+
+extension NetworkService: NetworkServiceProtocol {}
+
+//extension NetworkService {
+//    // Переопределяем метод только для тестов
+//    func mock_fetchDataFromURLAsync<T: Codable>(_ mockData: T) async throws -> T {
+//        return mockData
+//    }
+//}
 
