@@ -178,7 +178,8 @@ struct StudyProgressChartView: View {
         HStack {
             Image(systemName: "hare")
             Text("Completion:")
-            Text(String(format: "%.1f%%", stats.completionRate))
+//            Text(String(format: "%.1f%%", stats.completionRate))
+            Text("\(Int(stats.completionRate))%")
             Text("(\(posts.count))")
 
         }

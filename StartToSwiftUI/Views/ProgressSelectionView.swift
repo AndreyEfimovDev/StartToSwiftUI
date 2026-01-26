@@ -99,7 +99,7 @@ struct ProgressSelectionView: View {
         } // Group
         //            .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
-            .ultraThinMaterial,
+            .bar,
             in: RoundedRectangle(cornerRadius: 30))
         .scaleEffect(isShowingView ? 1.0 : 0.5)
         .opacity(isShowingView ? 1.0 : 0)
