@@ -124,6 +124,7 @@ struct PreferencesView: View {
         Button("Messages (\(noticevm.unreadCount)/\(noticevm.notices.count))") {
             coordinator.pushModal(.notices)
         }
+        .accessibilityIdentifier("MessagesButton")
         .customListRowStyle(
             iconName: noticevm.unreadCount == 0 ? "message" : "message.badge",
             iconWidth: iconWidth

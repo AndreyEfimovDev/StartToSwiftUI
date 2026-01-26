@@ -147,20 +147,46 @@ struct AddEditPostView: View {
     // MARK: - Actions
     
     private func handleSave() {
-        if hasNoChanges {
-            // If it is draft - save it as not draft -> .draft = false
-            if editedPost.draft == true {
-                editedPost.draft = false
-                checkAndSave()
-            } else {
-                // If it is not draft - just exit
-                navigateBack()
-            }
-        } else {
-            // Drop draft -> .draft = false and Check&Save the post
-            editedPost.draft = false
-            checkAndSave()
+        
+        if hasNoChanges && editedPost.draft == false {
+            // Если не было изменений и пост уже не черновик - просто выходим
+            navigateBack()
+            return
         }
+        
+        // Для всех остальных случаев:
+        // 1. Сбрасываем флаг черновика
+        editedPost.draft = false
+        
+        // 2. Устанавливаем дату, если она не задана
+        if editedPost.addedDateStamp == nil {
+            editedPost.addedDateStamp = .now
+        }
+        
+        // 3. Сохраняем изменения
+        checkAndSave()
+
+        
+//        if hasNoChanges {
+//            // If it is draft - save it as not draft -> .draft = false
+//            if editedPost.draft == true {
+//                editedPost.draft = false
+//                if editedPost.addedDateStamp == nil {
+//                    editedPost.addedDateStamp = .now
+//                }
+//                checkAndSave()
+//            } else {
+//                // If it is not draft - just exit
+//                navigateBack()
+//            }
+//        } else {
+//            // Drop draft -> .draft = false and Check&Save the post
+//            editedPost.draft = false
+//            if editedPost.addedDateStamp == nil {
+//                editedPost.addedDateStamp = .now
+//            }
+//            checkAndSave()
+//        }
     }
     
     // MARK: - Actions
@@ -427,8 +453,8 @@ struct AddEditPostView: View {
     private var urlSection: some View {
         FormSection(title: "URL") {
           
-            Text(editedPost.urlString)
-                .font(.caption2)
+//            Text(editedPost.urlString)
+//                .font(.caption2)
             ZStack {
                 HStack(spacing: 0) {
                     Button(urlTrigger ? "Set url" : "Reset url") {
