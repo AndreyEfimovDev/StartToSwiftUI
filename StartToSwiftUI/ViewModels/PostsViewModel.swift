@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import Combine
+import WidgetKit
 
 @MainActor
 final class PostsViewModel: ObservableObject {
@@ -90,6 +91,7 @@ final class PostsViewModel: ObservableObject {
         restoreFilters()
         loadPostsFromSwiftData()
         setupSubscriptions()
+        updateWidgetData()
         
         Task {
             await initializeAppState()
@@ -610,6 +612,8 @@ final class PostsViewModel: ObservableObject {
             try dataSource.save()
             // Updating data for the UI
             loadPostsFromSwiftData()
+            // Update widget data
+            updateWidgetData()
         } catch {
             handleError(error, message: "Error saving data")
         }
@@ -737,6 +741,30 @@ final class PostsViewModel: ObservableObject {
     func resetCuratedPostsStatus() {
         appStateManager?.setCuratedPostsLoadStatusOn()
     }
+    
+    // MARK: MARK: - Widget Data Update
+    /// Updates widget with current study progress data
+    /// Call this method when posts are added, deleted, or progress changes
+    func updateWidgetData() {
+        let nonDraftPosts = allPosts.filter { !$0.draft }
+        log("🔄 Widget update: \(nonDraftPosts.count) posts", level: .info)
+        
+        let data = StudyProgressData(
+            totalCount: nonDraftPosts.count,
+            freshCount: nonDraftPosts.filter { $0.progress == .fresh }.count,
+            startedCount: nonDraftPosts.filter { $0.progress == .started }.count,
+            studiedCount: nonDraftPosts.filter { $0.progress == .studied }.count,
+            practicedCount: nonDraftPosts.filter { $0.progress == .practiced }.count,
+            lastUpdated: Date()
+        )
+        
+        WidgetDataManager.shared.saveProgressData(data)
+        log("✅ Widget data saved", level: .info)
+
+        // Request widget refresh
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+
 }
 
 

@@ -411,26 +411,6 @@ struct HomeView: View {
 //    }
     
 
-//
-//#Preview {
-//    let container = try! ModelContainer(
-//        for: Post.self, Notice.self, AppSyncState.self,
-//        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-//    )
-//    let context = ModelContext(container)
-//    
-//    let vm = PostsViewModel(modelContext: context)
-//    let noticevm = NoticeViewModel(modelContext: context)
-//    
-//    return NavigationStack {
-//        HomeView(selectedCategory: "SwiftUI")
-//    }
-//    .modelContainer(container)
-//    .environmentObject(vm)
-//    .environmentObject(noticevm)
-//    .environmentObject(AppCoordinator())
-//}
-
 
 #Preview("With Extended Posts") {
     let extendedPosts = PreviewData.samplePosts + DevData.postsForCloud
