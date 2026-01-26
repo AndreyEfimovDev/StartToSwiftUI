@@ -31,13 +31,13 @@ struct HomeView: View {
     @State private var isShowingDeleteConfirmation: Bool = false
     @State private var isDetectingLongPress: Bool = false
     @State private var isLongPressSuccess: Bool = false
-    @State private var showProgressSelectionView: Bool = false
+    @State private var showViewOnDoubleTap: Bool = false
     @State private var isFilterButtonPressed: Bool = false
     
     // MARK: - Computed Properties
     
     private var disableHomeView: Bool {
-        isLongPressSuccess || showProgressSelectionView || isShowingDeleteConfirmation
+        isLongPressSuccess || showViewOnDoubleTap || isShowingDeleteConfirmation
     }
     
     private var postsToDisplay: [Post] {
@@ -160,7 +160,7 @@ struct HomeView: View {
     private func handleDoubleTap(on post: Post) {
         vm.selectedStudyProgress = post.progress
         vm.selectedPostId = post.id
-        showProgressSelectionView = true
+        showViewOnDoubleTap = true
         hapticManager.impact(style: .light)
     }
     
@@ -263,20 +263,21 @@ struct HomeView: View {
         if UIDevice.isiPhone {
             ZStack {
                 if isLongPressSuccess {
-                    RatingSelectionView {
+                    ProgressSelectionView { // RatingSelectionView
                         isLongPressSuccess = false
                         hapticManager.impact(style: .light)
                     }
+                    .allowsHitTesting(true)
                     .frame(maxHeight: max(proxy.size.height / 3, 300))
                     .padding(.horizontal, 30)
                 }
                 
-                if showProgressSelectionView {
-                    ProgressSelectionView {
-                        showProgressSelectionView = false
+                if showViewOnDoubleTap {
+                    RatingSelectionView { // ProgressSelectionView
+                        showViewOnDoubleTap = false
                         hapticManager.impact(style: .light)
                     }
-                    .allowsHitTesting(true)
+//                    .allowsHitTesting(true)
                     .frame(maxHeight: max(proxy.size.height / 3, 300))
                     .padding(.horizontal, 30)
                 }
