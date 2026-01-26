@@ -177,11 +177,12 @@ struct StudyProgressChartView: View {
     private var completion: some View {
         HStack {
             Image(systemName: "hare")
+            Text("Progress:")
+            Text("\(Int(stats.progressRate))%")
             Text("Completion:")
 //            Text(String(format: "%.1f%%", stats.completionRate))
             Text("\(Int(stats.completionRate))%")
             Text("(\(posts.count))")
-
         }
         .font(.footnote)
         .bold()
