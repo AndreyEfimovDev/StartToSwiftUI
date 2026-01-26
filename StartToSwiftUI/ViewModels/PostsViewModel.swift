@@ -757,18 +757,8 @@ final class PostsViewModel: ObservableObject {
         let started = posts.filter { $0.startedDateStamp != nil }.count
         let studied = posts.filter { $0.studiedDateStamp != nil }.count
         let practiced = posts.filter { $0.practicedDateStamp != nil }.count
-//        
-//        let data = StudyProgressData(
-//            totalCount: added,
-//            freshCount: added - started,
-//            startedCount: started - studied,
-//            studiedCount: studied - practiced,
-//            practicedCount: practiced,
-//            lastUpdated: Date()
-//        )
         
         let data = StudyProgressData(
-            totalCount: added,
             freshCount: added,
             startedCount: started,
             studiedCount: studied,
@@ -776,7 +766,6 @@ final class PostsViewModel: ObservableObject {
             lastUpdated: Date()
         )
 
-        
         WidgetDataManager.shared.saveProgressData(data)
         WidgetCenter.shared.reloadAllTimelines()
     }
