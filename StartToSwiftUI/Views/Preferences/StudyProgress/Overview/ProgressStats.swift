@@ -39,7 +39,7 @@ struct ProgressStats {
             return /*$0.progress == .practiced && */date >= startDate
         }.count
         
-//        let totalPostsInPeriod = added + started + studied + practiced
-        completionRate = added > 0 ? Double(practiced) / Double(added) * 100 : 0
+        let totalPostsInPeriod = started + studied + practiced
+        completionRate = added > 0 ? Double(totalPostsInPeriod) / Double(added) * 100 : 0
     }
 }
