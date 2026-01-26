@@ -10,20 +10,24 @@ import Foundation
 /// Shared data structure for widget
 /// Used to pass study progress from main app to widget
 struct StudyProgressData: Codable {
-    let totalCount: Int
+  
     let freshCount: Int
     let startedCount: Int
     let studiedCount: Int
     let practicedCount: Int
     let lastUpdated: Date
     
-    var completedCount: Int {
-        practicedCount
-    }
+    var totalCount: Int {
+            freshCount
+        }
     
-    var inProgressCount: Int {
-        startedCount + studiedCount
-    }
+//    var completedCount: Int {
+//        practicedCount
+//    }
+    
+//    var inProgressCount: Int {
+//        startedCount + studiedCount
+//    }
     
     var completionPercentage: Double {
         guard totalCount > 0 else { return 0 }
@@ -36,7 +40,7 @@ struct StudyProgressData: Codable {
     }
     
     static let empty = StudyProgressData(
-        totalCount: 0,
+        
         freshCount: 0,
         startedCount: 0,
         studiedCount: 0,
@@ -45,7 +49,7 @@ struct StudyProgressData: Codable {
     )
     
     static let preview = StudyProgressData(
-        totalCount: 25,
+        
         freshCount: 25,
         startedCount: 7,
         studiedCount: 5,
