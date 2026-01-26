@@ -33,9 +33,9 @@ struct StudyProgressView: View {
                 .background(Color.mycolor.myBackground)
                 
                 TabView(selection: $selectedTab) {
-                    StudyProgressChartView(posts: vm.filteredPosts)
+                    StudyProgressChartView(posts: vm.filteredPosts.filter { !$0.draft })
                         .tag(0)
-                    StudyProgressDetailsView(posts: vm.filteredPosts)
+                    StudyProgressDetailsView(posts: vm.filteredPosts.filter { !$0.draft })
                         .tag(1)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
