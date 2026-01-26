@@ -40,6 +40,8 @@ struct StartView: View {
                         if !vm.isTermsOfUseAccepted {
                             coordinator.push(.welcomeAtFirstLaunch)
                         }
+                        // Temporary - only for single SwiftUI mode
+                        vm.selectedCategory = vm.mainCategory
                     }
             }
         }
@@ -97,10 +99,6 @@ struct StartView: View {
             } else {
                 postNotSelectedEmptyView(text: "Select Topic")
             }
-        }
-        .onAppear {
-            // Temporary - only for single SwiftUI mode
-            vm.selectedCategory = "SwiftUI"
         }
     }
     

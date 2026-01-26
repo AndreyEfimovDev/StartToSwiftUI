@@ -57,23 +57,28 @@ final class PostsViewModel: ObservableObject {
     @AppStorage("storedCategory") var storedCategory: String?
     @Published var selectedCategory: String? = nil {
         didSet { storedCategory = selectedCategory }}
+    
     @AppStorage("storedLevel") var storedLevel: StudyLevel?
     @Published var selectedLevel: StudyLevel? = nil {
         didSet { storedLevel = selectedLevel }}
+    
     @AppStorage("storedFavorite") var storedFavorite: FavoriteChoice?
     @Published var selectedFavorite: FavoriteChoice? = nil {
         didSet { storedFavorite = selectedFavorite }}
+    
     @AppStorage("storedType") var storedType: PostType?
     @Published var selectedType: PostType? = nil {
         didSet { storedType = selectedType }}
+    
     @AppStorage("storedPlatform") var storedPlatform: Platform?
     @Published var selectedPlatform: Platform? = nil {
         didSet { storedPlatform = selectedPlatform }}
+    
     @AppStorage("storedYear") var storedYear: String?
     @Published var selectedYear: String? = nil {
         didSet { storedYear = selectedYear }}
+    
     @AppStorage("storedSortOption") var storedSortOption: SortOption?
-  
     @Published var selectedSortOption: SortOption? = nil {
         didSet { storedSortOption = selectedSortOption }}
     
@@ -556,8 +561,8 @@ final class PostsViewModel: ObservableObject {
         selectedType == nil &&
         selectedPlatform == nil &&
         selectedYear == nil &&
-        selectedSortOption == nil &&
-        selectedCategory == nil
+        selectedSortOption == nil
+//        selectedCategory == nil
     }
     
     private func searchPosts(posts: [Post]) -> [Post] {
