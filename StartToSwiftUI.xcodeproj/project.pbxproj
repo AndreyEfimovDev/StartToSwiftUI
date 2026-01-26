@@ -117,6 +117,8 @@
 		47A7339D2ED1C355006BB8A6 /* SpeechRecogniser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A7339C2ED1C355006BB8A6 /* SpeechRecogniser.swift */; };
 		47A7339F2ED1C55A006BB8A6 /* VoiceSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A7339E2ED1C55A006BB8A6 /* VoiceSearchView.swift */; };
 		47AA558A2EA9741D000AF4E9 /* RestoreBackupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */; };
+		47AC343D2F27F7D30023C7AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 475997492E5C690B008E20F0 /* Assets.xcassets */; };
+		47AC343F2F27F9350023C7AF /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997792E5F1A32008E20F0 /* Colors.swift */; };
 		47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AE6C802E7D7FD0006230DA /* Modifiers.swift */; };
 		47B465802E6867930059CCB7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B4657F2E6867930059CCB7 /* HomeView.swift */; };
 		47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */; };
@@ -930,6 +932,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				47AC343D2F27F7D30023C7AF /* Assets.xcassets in Resources */,
 				47A3319E2F276A53002883DD /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1091,6 +1094,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				47A331A02F276CC6002883DD /* StudyProgressWidget.swift in Sources */,
+				47AC343F2F27F9350023C7AF /* Colors.swift in Sources */,
 				47A3319F2F276B62002883DD /* WidgetData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
