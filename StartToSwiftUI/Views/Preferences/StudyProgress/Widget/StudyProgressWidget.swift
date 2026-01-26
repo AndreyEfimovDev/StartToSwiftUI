@@ -73,17 +73,17 @@ struct SmallWidgetView: View {
     let data: StudyProgressData
     
     var body: some View {
-        VStack(/*alignment: .leading, */spacing: 8) {
+        VStack(spacing: 8) {
             HStack {
                 Image(systemName: "hare")
                     .foregroundStyle(.blue)
-                Text("Study Progress")
+                Text("Progress")
                     .fontWeight(.bold)
+                    .lineLimit(1)
             }
-            .font(.caption2)
+            .font(.caption)
             
             Spacer()
-            
             // Progress ring
             ZStack {
                 Circle()
@@ -103,8 +103,9 @@ struct SmallWidgetView: View {
                 
                 VStack(spacing: 0) {
                     Text("\(Int(data.progressPercentage))%")
-                        .font(.system(.title2, design: .rounded))
+                        .font(.system(.title3, design: .rounded))
                         .fontWeight(.bold)
+                        .minimumScaleFactor(0.7)
                 }
             }
             .frame(width: 70, height: 70)
@@ -127,13 +128,13 @@ struct MediumWidgetView: View {
     let data: StudyProgressData
     
     var body: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: 8) {
             // Left side - Progress ring
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Image(systemName: "hare")
                         .foregroundStyle(.blue)
-                    Text("Study Progress")
+                    Text("Progress")
                         .fontWeight(.bold)
                 }
                 .font(.footnote)
@@ -158,9 +159,9 @@ struct MediumWidgetView: View {
                     
                     VStack(spacing: 0) {
                         Text("\(Int(data.progressPercentage))%")
-                            .font(.system(.title, design: .rounded))
+                            .font(.system(.title3, design: .rounded))
                             .fontWeight(.bold)
-                        Text("progress")
+                        Text("overall")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                     }
@@ -179,7 +180,7 @@ struct MediumWidgetView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding()
+        .padding(8)
         .containerBackground(.fill.tertiary, for: .widget)
     }
 }
@@ -200,6 +201,8 @@ struct StatRow: View {
             Text(label)
                 .font(.caption)
                 .foregroundStyle(.secondary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
             
             Spacer()
             
@@ -216,7 +219,7 @@ struct LargeWidgetView: View {
     let data: StudyProgressData
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 6) {
             // Header
             HStack {
                 Image(systemName: "hare")
@@ -231,8 +234,7 @@ struct LargeWidgetView: View {
                     .foregroundStyle(.secondary)
             }
             
-            Divider()
-            
+            Spacer()
             // Progress ring centered
             HStack {
                 Spacer()
@@ -252,23 +254,21 @@ struct LargeWidgetView: View {
                         )
                         .rotationEffect(.degrees(-90))
                     
-                    VStack(spacing: 2) {
+                    VStack(spacing: 0) {
                         Text("\(Int(data.progressPercentage))%")
-                            .font(.system(.largeTitle, design: .rounded))
+                            .font(.system(.title3, design: .rounded))
                             .fontWeight(.bold)
-                        Text("overall progress")
-                            .font(.caption)
+                        Text("overall")
+                            .font(.caption2)
                             .foregroundStyle(.secondary)
                     }
                 }
-                .frame(width: 120, height: 120)
+                .frame(width: 110, height: 110)
                 Spacer()
             }
-            
-            Divider()
-            
+            Spacer()
             // Stats grid
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 6) {
                 LargeStatCard(icon: "square.and.arrow.down", label: "Added", count: data.freshCount, color: .green)
                 LargeStatCard(icon: "sunrise", label: "Started", count: data.startedCount, color: .purple)
                 LargeStatCard(icon: "bolt", label: "Learnt", count: data.studiedCount, color: .blue)
@@ -276,14 +276,13 @@ struct LargeWidgetView: View {
             }
             
             Spacer()
-            
             // Footer
             Text("Updated: \(data.lastUpdated.formatted(date: .abbreviated, time: .shortened))")
                 .font(.caption2)
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(.secondary)
                 .frame(maxWidth: .infinity, alignment: .center)
         }
-        .padding()
+        .padding(8)
         .containerBackground(.fill.tertiary, for: .widget)
     }
 }
@@ -305,15 +304,18 @@ struct LargeStatCard: View {
                 Text(label)
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
                 Text("\(count)")
                     .font(.title3)
                     .fontWeight(.semibold)
+                    .minimumScaleFactor(0.7)
             }
             
             Spacer()
         }
-        .padding(10)
-        .background(color.opacity(0.1))
+        .padding(4)
+        .background(color.opacity(0.3))
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }
@@ -331,6 +333,7 @@ struct AccessoryCircularView: View {
                 .font(.system(.body, design: .rounded))
         }
         .gaugeStyle(.accessoryCircular)
+        .containerBackground(.fill.tertiary, for: .widget)
     }
 }
 
@@ -353,6 +356,7 @@ struct AccessoryRectangularView: View {
                 .gaugeStyle(.accessoryLinear)
             }
         }
+        .containerBackground(.fill.tertiary, for: .widget)
     }
 }
 
@@ -361,6 +365,7 @@ struct AccessoryInlineView: View {
     
     var body: some View {
         Text("📚 \(Int(data.progressPercentage))% • \(data.practicedCount)/\(data.totalCount)")
+            .containerBackground(.fill.tertiary, for: .widget)
     }
 }
 
