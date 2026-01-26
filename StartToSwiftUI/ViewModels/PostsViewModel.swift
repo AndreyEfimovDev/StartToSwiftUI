@@ -539,20 +539,20 @@ final class PostsViewModel: ObservableObject {
         else {
             return allPosts
         }
-
+        
         return allPosts.filter { post in
-             let matchesLevel = level == nil || post.studyLevel == level
-             let matchesFavorite = favorite == nil || post.favoriteChoice == favorite
-             let matchesType = type == nil || post.postType == type
-             let matchesPlatform = platform == nil || post.postPlatform == platform
-             
-             let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date.distantPast))
-             let matchesYear = year == nil || postYear == year
-             
-             let matchesCategory = category == nil || post.category == category
-             
-             return matchesLevel && matchesFavorite && matchesType && matchesPlatform && matchesYear && matchesCategory
-         }
+            let matchesLevel = level == nil || post.studyLevel == level
+            let matchesFavorite = favorite == nil || post.favoriteChoice == favorite
+            let matchesType = type == nil || post.postType == type
+            let matchesPlatform = platform == nil || post.postPlatform == platform
+            
+            let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date.distantPast))
+            let matchesYear = year == nil || postYear == year
+            
+            let matchesCategory = category == nil || post.category == category
+            
+            return matchesLevel && matchesFavorite && matchesType && matchesPlatform && matchesYear && matchesCategory
+        }
     }
     
     func checkIfAllFiltersAreEmpty() -> Bool {
@@ -562,7 +562,7 @@ final class PostsViewModel: ObservableObject {
         selectedPlatform == nil &&
         selectedYear == nil &&
         selectedSortOption == nil
-//        selectedCategory == nil
+        //        selectedCategory == nil
     }
     
     private func searchPosts(posts: [Post]) -> [Post] {
@@ -687,38 +687,38 @@ final class PostsViewModel: ObservableObject {
     }
     
     // MARK: - Computed Properties for Preferences
-
+    
     var drafts: [Post] {
         allPosts.filter { $0.draft == true }
     }
-
+    
     var draftsCount: Int {
         allPosts.filter { $0.draft }.count
     }
-
+    
     var hasDrafts: Bool {
         allPosts.contains { $0.draft }
     }
-
+    
     var cloudPostsCount: Int {
         allPosts.filter { $0.origin == .cloud }.count
     }
-
+    
     var hasCloudPosts: Bool {
         allPosts.contains { $0.origin == .cloud }
     }
-
+    
     var hasAvailableCuratedPostsUpdate: Bool {
         guard let appStateManager else { return false }
         return appStateManager.getAvailableNewCuratedPostsStatus() && hasCloudPosts
     }
-
+    
     var shouldShowImportFromCloud: Bool {
         !hasCloudPosts
     }
     
     // MARK: - Curated Posts State
-
+    
     var lastCuratedPostsLoadedDate: Date? {
         appStateManager?.getLastDateOfCuaratedPostsLoaded()
     }
@@ -742,7 +742,7 @@ final class PostsViewModel: ObservableObject {
         
         return newPosts.count
     }
-
+    
     func resetCuratedPostsStatus() {
         appStateManager?.setCuratedPostsLoadStatusOn()
     }
@@ -751,25 +751,35 @@ final class PostsViewModel: ObservableObject {
     /// Updates widget with current study progress data
     /// Call this method when posts are added, deleted, or progress changes
     func updateWidgetData() {
-        let nonDraftPosts = allPosts.filter { !$0.draft }
-        log("🔄 Widget update: \(nonDraftPosts.count) posts", level: .info)
+        let posts = allPosts.filter { !$0.draft }
+        
+        let added = posts.filter { $0.addedDateStamp != nil }.count
+        let started = posts.filter { $0.startedDateStamp != nil }.count
+        let studied = posts.filter { $0.studiedDateStamp != nil }.count
+        let practiced = posts.filter { $0.practicedDateStamp != nil }.count
+//        
+//        let data = StudyProgressData(
+//            totalCount: added,
+//            freshCount: added - started,
+//            startedCount: started - studied,
+//            studiedCount: studied - practiced,
+//            practicedCount: practiced,
+//            lastUpdated: Date()
+//        )
         
         let data = StudyProgressData(
-            totalCount: nonDraftPosts.count,
-            freshCount: nonDraftPosts.filter { $0.progress == .fresh }.count,
-            startedCount: nonDraftPosts.filter { $0.progress == .started }.count,
-            studiedCount: nonDraftPosts.filter { $0.progress == .studied }.count,
-            practicedCount: nonDraftPosts.filter { $0.progress == .practiced }.count,
+            totalCount: added,
+            freshCount: added,
+            startedCount: started,
+            studiedCount: studied,
+            practicedCount: practiced,
             lastUpdated: Date()
         )
+
         
         WidgetDataManager.shared.saveProgressData(data)
-        log("✅ Widget data saved", level: .info)
-
-        // Request widget refresh
         WidgetCenter.shared.reloadAllTimelines()
     }
-
 }
 
 

@@ -101,7 +101,6 @@
 		4791CE002E747B2E00687126 /* HapticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDFF2E747B2E00687126 /* HapticService.swift */; };
 		4791CE042E748DA200687126 /* AddEditPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE032E748DA200687126 /* AddEditPostView.swift */; };
 		4791CE082E75AAB000687126 /* UnderlineSermentedPickerNotOptional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE072E75AAAF00687126 /* UnderlineSermentedPickerNotOptional.swift */; };
-		47A331712F2761C8002883DD /* PostsViewModelWithWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A331702F2761C8002883DD /* PostsViewModelWithWidget.swift */; };
 		47A331732F2761F9002883DD /* WidgetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A331722F2761F9002883DD /* WidgetData.swift */; };
 		47A3317B2F27672F002883DD /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47A3317A2F27672D002883DD /* WidgetKit.framework */; };
 		47A3317D2F27672F002883DD /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47A3317C2F27672F002883DD /* SwiftUI.framework */; };
@@ -285,7 +284,6 @@
 		4791CE072E75AAAF00687126 /* UnderlineSermentedPickerNotOptional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineSermentedPickerNotOptional.swift; sourceTree = "<group>"; };
 		47A3313C2F26B256002883DD /* StartToSwiftUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StartToSwiftUIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		47A3316C2F276123002883DD /* StudyProgressWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressWidget.swift; sourceTree = "<group>"; };
-		47A331702F2761C8002883DD /* PostsViewModelWithWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsViewModelWithWidget.swift; sourceTree = "<group>"; };
 		47A331722F2761F9002883DD /* WidgetData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetData.swift; sourceTree = "<group>"; };
 		47A331782F27672D002883DD /* StudyProgressWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = StudyProgressWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		47A3317A2F27672D002883DD /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -299,6 +297,7 @@
 		47A331942F276A4A002883DD /* StartToSwiftUIUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartToSwiftUIUITests.swift; sourceTree = "<group>"; };
 		47A3319C2F276A53002883DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		47A331A12F276D44002883DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		47A331A42F27A33C002883DD /* StudyProgressWidgetExtensionDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StudyProgressWidgetExtensionDebug.entitlements; sourceTree = "<group>"; };
 		47A7339C2ED1C355006BB8A6 /* SpeechRecogniser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecogniser.swift; sourceTree = "<group>"; };
 		47A7339E2ED1C55A006BB8A6 /* VoiceSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceSearchView.swift; sourceTree = "<group>"; };
 		47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreBackupView.swift; sourceTree = "<group>"; };
@@ -487,6 +486,7 @@
 		475997322E5C6901008E20F0 = {
 			isa = PBXGroup;
 			children = (
+				47A331A42F27A33C002883DD /* StudyProgressWidgetExtensionDebug.entitlements */,
 				47A3318E2F2767B2002883DD /* StudyProgressWidgetExtensionRelease.entitlements */,
 				4759974C2E5C690B008E20F0 /* StartToSwiftUI */,
 				475CC68B2F217B890099CAA6 /* StartToSwiftUIUnitTests */,
@@ -538,7 +538,6 @@
 				475CC69F2F22B0790099CAA6 /* CodablePost.swift */,
 				471BBF9E2EC721480004AC45 /* Notice.swift */,
 				475CC6A12F22B0A90099CAA6 /* CodableNotice.swift */,
-				47A331722F2761F9002883DD /* WidgetData.swift */,
 				47BAF0F72E64A77A00287F10 /* Enums.swift */,
 				4732FB362EAA63810062269D /* Constants.swift */,
 				477C745F2ECFB0E800F77F5B /* WhatsNews.swift */,
@@ -611,7 +610,6 @@
 				4725A52A2EDD757F00235C40 /* UIDevice.swift */,
 				47AE6C802E7D7FD0006230DA /* Modifiers.swift */,
 				4751DAFF2F1641A800EC9C53 /* Calendar.swift */,
-				47A331702F2761C8002883DD /* PostsViewModelWithWidget.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -679,6 +677,7 @@
 		47A3316B2F2760E4002883DD /* Widget */ = {
 			isa = PBXGroup;
 			children = (
+				47A331722F2761F9002883DD /* WidgetData.swift */,
 				47A3316C2F276123002883DD /* StudyProgressWidget.swift */,
 			);
 			path = Widget;
@@ -975,7 +974,6 @@
 				475997552E5C7F81008E20F0 /* PreviewData.swift in Sources */,
 				4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */,
 				471DCBDC2EBBC67500AFA5F4 /* Introduction.swift in Sources */,
-				47A331712F2761C8002883DD /* PostsViewModelWithWidget.swift in Sources */,
 				4791CE002E747B2E00687126 /* HapticService.swift in Sources */,
 				4751DB002F1641A800EC9C53 /* Calendar.swift in Sources */,
 				47FF42492EE4572E0069D232 /* TestSFSymbolsForProgress.swift in Sources */,
@@ -1453,6 +1451,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = StudyProgressWidgetExtensionDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

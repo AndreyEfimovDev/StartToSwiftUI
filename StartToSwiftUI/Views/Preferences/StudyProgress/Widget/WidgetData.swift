@@ -30,7 +30,7 @@ struct StudyProgressData: Codable {
         return Double(practicedCount) / Double(totalCount) * 100
     }
     
-    var progressPercentage: Double {
+    var progressPercentage: Double { // startedCount + studiedCount + practicedCount
         guard totalCount > 0 else { return 0 }
         return Double(startedCount + studiedCount + practicedCount) / Double(totalCount) * 100
     }
@@ -46,7 +46,7 @@ struct StudyProgressData: Codable {
     
     static let preview = StudyProgressData(
         totalCount: 25,
-        freshCount: 8,
+        freshCount: 25,
         startedCount: 7,
         studiedCount: 5,
         practicedCount: 5,
@@ -71,16 +71,15 @@ final class WidgetDataManager {
         userDefaults = UserDefaults(suiteName: AppGroupConfig.suiteName)
     }
     
-    /// Save study progress data (called from main app)
     func saveProgressData(_ data: StudyProgressData) {
         guard let userDefaults = userDefaults else { return }
         
         if let encoded = try? JSONEncoder().encode(data) {
             userDefaults.set(encoded, forKey: AppGroupConfig.widgetDataKey)
+            userDefaults.synchronize()
         }
     }
     
-    /// Load study progress data (called from widget)
     func loadProgressData() -> StudyProgressData {
         guard let userDefaults = userDefaults,
               let data = userDefaults.data(forKey: AppGroupConfig.widgetDataKey),
