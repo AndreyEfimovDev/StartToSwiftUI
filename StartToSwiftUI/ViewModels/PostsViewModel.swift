@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import Combine
+import WidgetKit
 
 @MainActor
 final class PostsViewModel: ObservableObject {
@@ -56,23 +57,28 @@ final class PostsViewModel: ObservableObject {
     @AppStorage("storedCategory") var storedCategory: String?
     @Published var selectedCategory: String? = nil {
         didSet { storedCategory = selectedCategory }}
+    
     @AppStorage("storedLevel") var storedLevel: StudyLevel?
     @Published var selectedLevel: StudyLevel? = nil {
         didSet { storedLevel = selectedLevel }}
+    
     @AppStorage("storedFavorite") var storedFavorite: FavoriteChoice?
     @Published var selectedFavorite: FavoriteChoice? = nil {
         didSet { storedFavorite = selectedFavorite }}
+    
     @AppStorage("storedType") var storedType: PostType?
     @Published var selectedType: PostType? = nil {
         didSet { storedType = selectedType }}
+    
     @AppStorage("storedPlatform") var storedPlatform: Platform?
     @Published var selectedPlatform: Platform? = nil {
         didSet { storedPlatform = selectedPlatform }}
+    
     @AppStorage("storedYear") var storedYear: String?
     @Published var selectedYear: String? = nil {
         didSet { storedYear = selectedYear }}
+    
     @AppStorage("storedSortOption") var storedSortOption: SortOption?
-  
     @Published var selectedSortOption: SortOption? = nil {
         didSet { storedSortOption = selectedSortOption }}
     
@@ -90,6 +96,7 @@ final class PostsViewModel: ObservableObject {
         restoreFilters()
         loadPostsFromSwiftData()
         setupSubscriptions()
+        updateWidgetData()
         
         Task {
             await initializeAppState()
@@ -532,20 +539,20 @@ final class PostsViewModel: ObservableObject {
         else {
             return allPosts
         }
-
+        
         return allPosts.filter { post in
-             let matchesLevel = level == nil || post.studyLevel == level
-             let matchesFavorite = favorite == nil || post.favoriteChoice == favorite
-             let matchesType = type == nil || post.postType == type
-             let matchesPlatform = platform == nil || post.postPlatform == platform
-             
-             let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date.distantPast))
-             let matchesYear = year == nil || postYear == year
-             
-             let matchesCategory = category == nil || post.category == category
-             
-             return matchesLevel && matchesFavorite && matchesType && matchesPlatform && matchesYear && matchesCategory
-         }
+            let matchesLevel = level == nil || post.studyLevel == level
+            let matchesFavorite = favorite == nil || post.favoriteChoice == favorite
+            let matchesType = type == nil || post.postType == type
+            let matchesPlatform = platform == nil || post.postPlatform == platform
+            
+            let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date.distantPast))
+            let matchesYear = year == nil || postYear == year
+            
+            let matchesCategory = category == nil || post.category == category
+            
+            return matchesLevel && matchesFavorite && matchesType && matchesPlatform && matchesYear && matchesCategory
+        }
     }
     
     func checkIfAllFiltersAreEmpty() -> Bool {
@@ -554,8 +561,8 @@ final class PostsViewModel: ObservableObject {
         selectedType == nil &&
         selectedPlatform == nil &&
         selectedYear == nil &&
-        selectedSortOption == nil &&
-        selectedCategory == nil
+        selectedSortOption == nil
+        //        selectedCategory == nil
     }
     
     private func searchPosts(posts: [Post]) -> [Post] {
@@ -610,6 +617,8 @@ final class PostsViewModel: ObservableObject {
             try dataSource.save()
             // Updating data for the UI
             loadPostsFromSwiftData()
+            // Update widget data
+            updateWidgetData()
         } catch {
             handleError(error, message: "Error saving data")
         }
@@ -678,38 +687,38 @@ final class PostsViewModel: ObservableObject {
     }
     
     // MARK: - Computed Properties for Preferences
-
+    
     var drafts: [Post] {
         allPosts.filter { $0.draft == true }
     }
-
+    
     var draftsCount: Int {
         allPosts.filter { $0.draft }.count
     }
-
+    
     var hasDrafts: Bool {
         allPosts.contains { $0.draft }
     }
-
+    
     var cloudPostsCount: Int {
         allPosts.filter { $0.origin == .cloud }.count
     }
-
+    
     var hasCloudPosts: Bool {
         allPosts.contains { $0.origin == .cloud }
     }
-
+    
     var hasAvailableCuratedPostsUpdate: Bool {
         guard let appStateManager else { return false }
         return appStateManager.getAvailableNewCuratedPostsStatus() && hasCloudPosts
     }
-
+    
     var shouldShowImportFromCloud: Bool {
         !hasCloudPosts
     }
     
     // MARK: - Curated Posts State
-
+    
     var lastCuratedPostsLoadedDate: Date? {
         appStateManager?.getLastDateOfCuaratedPostsLoaded()
     }
@@ -733,9 +742,43 @@ final class PostsViewModel: ObservableObject {
         
         return newPosts.count
     }
-
+    
     func resetCuratedPostsStatus() {
         appStateManager?.setCuratedPostsLoadStatusOn()
+    }
+    
+    // MARK: MARK: - Widget Data Update
+    /// Updates widget with current study progress data
+    /// Call this method when posts are added, deleted, or progress changes
+    func updateWidgetData() {
+        let posts = allPosts.filter { !$0.draft }
+        
+        let added = posts.filter { $0.addedDateStamp != nil }.count
+        let started = posts.filter { $0.startedDateStamp != nil }.count
+        let studied = posts.filter { $0.studiedDateStamp != nil }.count
+        let practiced = posts.filter { $0.practicedDateStamp != nil }.count
+//        
+//        let data = StudyProgressData(
+//            totalCount: added,
+//            freshCount: added - started,
+//            startedCount: started - studied,
+//            studiedCount: studied - practiced,
+//            practicedCount: practiced,
+//            lastUpdated: Date()
+//        )
+        
+        let data = StudyProgressData(
+            totalCount: added,
+            freshCount: added,
+            startedCount: started,
+            studiedCount: studied,
+            practicedCount: practiced,
+            lastUpdated: Date()
+        )
+
+        
+        WidgetDataManager.shared.saveProgressData(data)
+        WidgetCenter.shared.reloadAllTimelines()
     }
 }
 

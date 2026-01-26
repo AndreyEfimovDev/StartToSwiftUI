@@ -120,7 +120,7 @@ final class NoticeViewModelTests: XCTestCase {
         XCTAssertEqual(noticeVM.notices.count, 1)
         
         // When
-        noticeVM.deleteNotice(notice: notice)
+        noticeVM.deleteNotice(notice)
         
         // Then
         XCTAssertTrue(noticeVM.notices.isEmpty, "Notice should be deleted")
@@ -128,7 +128,7 @@ final class NoticeViewModelTests: XCTestCase {
     
     func testDeleteNotice_WhenNilNotice_ShowsError() {
         // When
-        noticeVM.deleteNotice(notice: nil)
+        noticeVM.deleteNotice(nil)
         
         // Then
         XCTAssertNotNil(noticeVM.errorMessage, "Should set error message")
@@ -144,7 +144,7 @@ final class NoticeViewModelTests: XCTestCase {
         XCTAssertTrue(noticeVM.hasUnreadNotices)
         
         // When
-        noticeVM.markAsRead(noticeId: "unread")
+        noticeVM.markAsRead("unread")
         
         // Then
         XCTAssertTrue(notice.isRead, "Notice should be marked as read")
@@ -153,7 +153,7 @@ final class NoticeViewModelTests: XCTestCase {
     
     func testMarkAsRead_WhenInvalidID_ShowsError() {
         // When
-        noticeVM.markAsRead(noticeId: "non-existent")
+        noticeVM.markAsRead("non-existent")
         
         // Then
         XCTAssertNotNil(noticeVM.errorMessage, "Should set error message")
@@ -166,7 +166,7 @@ final class NoticeViewModelTests: XCTestCase {
         noticeVM.addNotice(notice)
         
         // When
-        noticeVM.markAsRead(noticeId: "read")
+        noticeVM.markAsRead("read")
         
         // Then
         XCTAssertTrue(notice.isRead, "Should remain read")
@@ -180,13 +180,13 @@ final class NoticeViewModelTests: XCTestCase {
         noticeVM.addNotice(notice)
         
         // When
-        noticeVM.isReadToggle(notice: notice)
+        noticeVM.toggleReadStatus(notice)
         
         // Then
         XCTAssertTrue(notice.isRead, "Should toggle to read")
         
         // When (toggle again)
-        noticeVM.isReadToggle(notice: notice)
+        noticeVM.toggleReadStatus(notice)
         
         // Then
         XCTAssertFalse(notice.isRead, "Should toggle back to unread")
@@ -194,7 +194,7 @@ final class NoticeViewModelTests: XCTestCase {
     
     func testIsReadToggle_WhenNilNotice_ShowsError() {
         // When
-        noticeVM.isReadToggle(notice: nil)
+        noticeVM.toggleReadStatus(nil)
         
         // Then
         XCTAssertNotNil(noticeVM.errorMessage, "Should set error message")
@@ -434,7 +434,7 @@ final class NoticeViewModelTests: XCTestCase {
         XCTAssertTrue(noticeVM.hasUnreadNotices)
         
         // When
-        noticeVM.deleteNotice(notice: notice)
+        noticeVM.deleteNotice(notice)
         
         // Then
         XCTAssertFalse(noticeVM.hasUnreadNotices)
