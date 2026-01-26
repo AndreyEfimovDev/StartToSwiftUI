@@ -427,8 +427,8 @@ struct AddEditPostView: View {
     private var urlSection: some View {
         FormSection(title: "URL") {
           
-            Text(editedPost.urlString)
-                .font(.caption2)
+//            Text(editedPost.urlString)
+//                .font(.caption2)
             ZStack {
                 HStack(spacing: 0) {
                     Button(urlTrigger ? "Set url" : "Reset url") {

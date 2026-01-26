@@ -179,6 +179,8 @@ struct StudyProgressChartView: View {
             Image(systemName: "hare")
             Text("Completion:")
             Text(String(format: "%.1f%%", stats.completionRate))
+            Text("(\(posts.count))")
+
         }
         .font(.footnote)
         .bold()
