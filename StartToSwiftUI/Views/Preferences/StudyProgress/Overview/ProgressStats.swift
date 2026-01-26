@@ -13,6 +13,7 @@ struct ProgressStats {
     let started: Int
     let studied: Int
     let practiced: Int
+    let progressRate: Double
     let completionRate: Double
     
     init(posts: [Post], period: TimePeriod) {
@@ -40,6 +41,8 @@ struct ProgressStats {
         }.count
         
         let totalPostsInPeriod = started + studied + practiced
-        completionRate = added > 0 ? Double(totalPostsInPeriod) / Double(added) * 100 : 0
+
+        progressRate = added > 0 ? Double(totalPostsInPeriod) / Double(added) * 100 : 0
+        completionRate = added > 0 ? Double(practiced) / Double(added) * 100 : 0
     }
 }
