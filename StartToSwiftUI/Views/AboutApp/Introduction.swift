@@ -36,12 +36,12 @@ struct Introduction: View {
             Text("""
                First of all, thank you for choosing this app.
                
-               **StartToSwiftUI** is a personal learning management app for self-directed learners to help you organise study materials for SwiftUI.
+               **StartToSwiftUI** is a personal learning management app for self-directed learners for SwiftUI.
                
                The app offers the following features:
                         
                **CONTENT CREATION**:
-               - Users create their own study materials with full editing
+               - Create your own study materials with full editing
                - Save drafts for later completion
                - Add personal notes to any material
                

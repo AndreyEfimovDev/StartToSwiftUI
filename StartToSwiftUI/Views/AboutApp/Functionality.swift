@@ -33,19 +33,19 @@ struct Functionality: View {
                
                **Home View**
                In the app:
-               - tap on the material -> material detrails
-               - swip right -> mark/umark the material as favourite
-               - swip left -> edit or delete the material
-               - long-press -> update the study progress
-               - double-tap -> rate the material
+               - Tap a material -> Material Details
+               - Swipe right -> Mark/Unmark a material as a Favorite
+               - Swipe left -> Edit or Delete a material
+               - Press and hold -> Update your study progress
+               - Double-tap -> Rate a material
                
                **Widget**
-               On iPhone/iPad device:
-               - long-press on the Home Screen
-               - click the +/Edit in the upper left corner
-               - find 'SwiftUI Study'
-               - select the size (Small / Medium / Large)
-               - click Add Widget
+               On iPhone/iPad devices:
+               - Press and hold on the Home Screen
+               - Tap +/Edit in the upper left corner
+               - Find "SwiftUI Study"
+               - Select a size (Small / Medium / Large)
+               - Tap Add Widget
 
                The rest should be self-explanatory.
                
