@@ -10,11 +10,11 @@ import Foundation
 struct WhatsNews {
     static let releases: [Release] = [
         Release(
-            release: "Release 1.0.1 (4)",
+            release: "Release 1.1.1(1)",
             news: [
                 News(
                     title: "Initial deployment",
-                    newsText: ""
+                    newsText: "newsText"
                 ),
             ]
         )

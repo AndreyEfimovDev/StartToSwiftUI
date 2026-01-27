@@ -9,8 +9,12 @@ import SwiftUI
 
 struct WhatsNewView: View {
     
+    // MARK: - Dependencies
+
     @EnvironmentObject private var coordinator: AppCoordinator
     
+    // MARK: BODY
+
     var body: some View {
         FormCoordinatorToolbar(
             title: "What's New",
