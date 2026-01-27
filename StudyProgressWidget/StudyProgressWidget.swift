@@ -355,7 +355,7 @@ struct AccessoryRectangularView: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Study Progress")
+                Text("Progress")
                     .font(.headline)
                     .widgetAccentable()
                 

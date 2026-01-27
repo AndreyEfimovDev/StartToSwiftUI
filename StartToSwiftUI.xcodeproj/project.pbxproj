@@ -494,9 +494,9 @@
 				47A331A42F27A33C002883DD /* StudyProgressWidgetExtensionDebug.entitlements */,
 				47A3318E2F2767B2002883DD /* StudyProgressWidgetExtensionRelease.entitlements */,
 				4759974C2E5C690B008E20F0 /* StartToSwiftUI */,
+				47A3319D2F276A53002883DD /* StudyProgressWidget */,
 				475CC68B2F217B890099CAA6 /* StartToSwiftUIUnitTests */,
 				47A331952F276A4A002883DD /* StartToSwiftUIUITests */,
-				47A3319D2F276A53002883DD /* StudyProgressWidget */,
 				47A331792F27672D002883DD /* Frameworks */,
 				4759973C2E5C6901008E20F0 /* Products */,
 			);
