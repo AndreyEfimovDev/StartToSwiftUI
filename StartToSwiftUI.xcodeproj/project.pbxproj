@@ -665,13 +665,6 @@
 			path = PostDrafts;
 			sourceTree = "<group>";
 		};
-		47A3316B2F2760E4002883DD /* Widget */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Widget;
-			sourceTree = "<group>";
-		};
 		47A331792F27672D002883DD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -699,7 +692,6 @@
 			children = (
 				47A331722F2761F9002883DD /* WidgetData.swift */,
 				47A3316C2F276123002883DD /* StudyProgressWidget.swift */,
-				47A3316B2F2760E4002883DD /* Widget */,
 				47A3319C2F276A53002883DD /* Assets.xcassets */,
 				47A331A12F276D44002883DD /* Info.plist */,
 			);
