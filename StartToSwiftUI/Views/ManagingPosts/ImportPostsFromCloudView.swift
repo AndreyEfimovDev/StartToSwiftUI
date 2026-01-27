@@ -39,32 +39,6 @@ struct ImportPostsFromCloudView: View {
                     
                     buttonsSection
                         .padding(.horizontal, 50)
-
-//                    Group {
-//                        CapsuleButtonView(
-//                            primaryTitle: "Confirm and Download",
-//                            secondaryTitle: "\(postCount) New Materials Added",
-//                            isToChange: isLoaded) {
-//                                isInProgress = true
-//                                initialPostCount = vm.allPosts.count
-//                                Task {
-//                                    await importFromCloud()
-//                                }
-//                            }
-//                            .disabled(isLoaded || isInProgress)
-//                            .padding(.top, 30)
-//                        
-//                        CapsuleButtonView(
-//                            primaryTitle: "Don't confirm",
-//                            textColorPrimary: Color.mycolor.myButtonTextRed,
-//                            buttonColorPrimary: Color.mycolor.myButtonBGRed) {
-//                                coordinator.popToRoot()
-//                            }
-//                            .opacity(isLoaded ? 0 : 1)
-//                            .disabled(isInProgress)
-//                    }
-//                    .padding(.horizontal, 50)
-                    
                     Spacer()
                     
                 }
@@ -153,89 +127,14 @@ struct ImportPostsFromCloudView: View {
         
         // Download local DevData (for internal use)
         // Uncomment this part when you need to load DevData
-//        loadDevData()
+//        await loadDevData()
        
         // Download from the cloud (main stream)
         // Comment out this part when using DevData
         await loadFromCloudService()
         
     }
-    
-    
-    /// Loading DevData to generate JSON
-    /// For internal use, to generate a JSON file for the cloud
-//    private func loadDevData() {
-//        Task { @MainActor in
-//            do {
-//                // Get existing titles to filter duplicates
-//                let existingTitles = Set(vm.allPosts.map { $0.title })
-//                let existingIds = Set(vm.allPosts.map { $0.id })
-//                
-//                var addedCount = 0
-//                
-//                // Filter and add only unique posts
-//                for devPost in DevData.postsForCloud {
-//                    // We check that the post is unique
-//                    guard !existingTitles.contains(devPost.title) && !existingIds.contains(devPost.id) else {
-//                        log("⚠️ Post '\(devPost.title)' already exists, skipping", level: .info)
-//                        continue
-//                    }
-//                    
-//                    // Create a new Post for SwiftData
-//                    let newPost = Post(
-//                        id: devPost.id,
-//                        category: devPost.category,
-//                        title: devPost.title,
-//                        intro: devPost.intro,
-//                        author: devPost.author,
-//                        postType: devPost.postType,
-//                        urlString: devPost.urlString,
-//                        postPlatform: devPost.postPlatform,
-//                        postDate: devPost.postDate,
-//                        studyLevel: devPost.studyLevel,
-//                        progress: devPost.progress,
-//                        favoriteChoice: devPost.favoriteChoice,
-//                        postRating: devPost.postRating,
-//                        notes: devPost.notes,
-//                        origin: devPost.origin,
-//                        draft: devPost.draft,
-//                        date: devPost.date,
-//                        startedDateStamp: devPost.startedDateStamp,
-//                        studiedDateStamp: devPost.studiedDateStamp,
-//                        practicedDateStamp: devPost.practicedDateStamp
-//                    )
-//                    
-//                    modelContext.insert(newPost)
-//                    addedCount += 1
-//                }
-//                
-//                // Save in SwiftData
-//                try modelContext.save()
-//                log("✅ DevData: Loaded \(addedCount) posts from \(DevData.postsForCloud.count)", level: .info)
-//                
-//                // Update UI
-//                vm.loadPostsFromSwiftData()
-//                
-//                // Total quantity uploaded
-//                postCount = vm.allPosts.count - initialPostCount
-//                
-//                isInProgress = false
-//                isLoaded = true
-//                hapticManager.notification(type: .success)
-//                
-//                // Closing in 1.5 seconds
-//                try? await Task.sleep(nanoseconds: 1_500_000_000)
-//                coordinator.popToRoot()
-//                
-//            } catch {
-//                vm.errorMessage = "Failed to load DevData: \(error.localizedDescription)"
-//                vm.showErrorMessageAlert = true
-//                isInProgress = false
-//                hapticManager.notification(type: .error)
-//            }
-//        }
-//    }
-    
+
     /// Loading DevData (for internal use, to generate JSON file for cloud)
      private func loadDevData() async {
          let addedCount = await vm.loadDevData()
@@ -250,7 +149,7 @@ struct ImportPostsFromCloudView: View {
          try? await Task.sleep(nanoseconds: 1_500_000_000)
          
          await MainActor.run {
-             coordinator.popToRoot()
+             coordinator.closeModal()
          }
      }
     
