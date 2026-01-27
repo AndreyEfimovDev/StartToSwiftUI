@@ -251,7 +251,7 @@
 		475CC6952F22472E0099CAA6 /* SwiftDataNoticesDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataNoticesDataSource.swift; sourceTree = "<group>"; };
 		475CC6972F22476D0099CAA6 /* SwiftDataPostsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataPostsDataSource.swift; sourceTree = "<group>"; };
 		475CC6992F22900A0099CAA6 /* MockPostsNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPostsNetworkService.swift; sourceTree = "<group>"; };
-		475CC69B2F22904A0099CAA6 /* MockNoticesNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MockNoticesNetworkService.swift; path = StartToSwiftUI/MockDataServices/MockNoticesNetworkService.swift; sourceTree = SOURCE_ROOT; };
+		475CC69B2F22904A0099CAA6 /* MockNoticesNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MockNoticesNetworkService.swift; path = StartToSwiftUI/Services/MockDataServices/MockNoticesNetworkService.swift; sourceTree = SOURCE_ROOT; };
 		475CC69D2F2290910099CAA6 /* MockNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkService.swift; sourceTree = "<group>"; };
 		475CC69F2F22B0790099CAA6 /* CodablePost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodablePost.swift; sourceTree = "<group>"; };
 		475CC6A12F22B0A90099CAA6 /* CodableNotice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableNotice.swift; sourceTree = "<group>"; };
@@ -521,13 +521,11 @@
 				475997622E5CF0C3008E20F0 /* SupportFrom3rdParties */,
 				475997722E5DA436008E20F0 /* Extensions */,
 				4759976C2E5D931F008E20F0 /* Services */,
-				475CC64B2F216B480099CAA6 /* MockDataServices */,
 				4751DB032F16517100EC9C53 /* Coordinator */,
 				475997592E5C86C5008E20F0 /* Components */,
 				475997562E5C8671008E20F0 /* Models */,
 				475997572E5C8688008E20F0 /* ViewModels */,
 				47069EFC2EAFF2E30082AE12 /* Launch */,
-				47A3316B2F2760E4002883DD /* Widget */,
 				47BAF0EE2E645B0A00287F10 /* Views */,
 				475997492E5C690B008E20F0 /* Assets.xcassets */,
 				471BEF4F2EA793880093F962 /* Info.plist */,
@@ -593,6 +591,7 @@
 		4759976C2E5D931F008E20F0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				475CC64B2F216B480099CAA6 /* MockDataServices */,
 				47E439B62EA9290E007001AD /* NetworkService.swift */,
 				4791CDFD2E747AC100687126 /* JSONFileManager.swift */,
 				47EA14302EF530780064583B /* AppSyncStateManager.swift */,
@@ -669,8 +668,6 @@
 		47A3316B2F2760E4002883DD /* Widget */ = {
 			isa = PBXGroup;
 			children = (
-				47A331722F2761F9002883DD /* WidgetData.swift */,
-				47A3316C2F276123002883DD /* StudyProgressWidget.swift */,
 			);
 			path = Widget;
 			sourceTree = "<group>";
@@ -700,6 +697,9 @@
 		47A3319D2F276A53002883DD /* StudyProgressWidget */ = {
 			isa = PBXGroup;
 			children = (
+				47A331722F2761F9002883DD /* WidgetData.swift */,
+				47A3316C2F276123002883DD /* StudyProgressWidget.swift */,
+				47A3316B2F2760E4002883DD /* Widget */,
 				47A3319C2F276A53002883DD /* Assets.xcassets */,
 				47A331A12F276D44002883DD /* Info.plist */,
 			);
