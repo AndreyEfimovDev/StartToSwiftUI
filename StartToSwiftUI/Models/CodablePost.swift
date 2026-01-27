@@ -33,6 +33,33 @@ struct CodablePost: Codable {
     var practicedDateStamp: Date?
 }
 
+extension CodablePost {
+    init(from post: Post) {
+        self.init(
+            id: post.id,
+            category: post.category,
+            title: post.title,
+            intro: post.intro,
+            author: post.author,
+            postType: post.postType,
+            urlString: post.urlString,
+            postPlatform: post.postPlatform,
+            postDate: post.postDate,
+            studyLevel: post.studyLevel,
+            progress: post.progress,
+            favoriteChoice: post.favoriteChoice,
+            postRating: post.postRating,
+            notes: post.notes,
+            origin: post.origin,
+            draft: post.draft,
+            date: post.date,
+            addedDateStamp: post.addedDateStamp,
+            startedDateStamp: post.startedDateStamp,
+            studiedDateStamp: post.studiedDateStamp,
+            practicedDateStamp: post.practicedDateStamp
+        )
+    }
+}
 
 // MARK: - Test Helpers
 

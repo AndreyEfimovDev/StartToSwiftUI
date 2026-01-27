@@ -24,14 +24,7 @@ struct RatingSelectionView: View {
             if let post = vm.allPosts.first(where: { $0.id == vm.selectedPostId}) {
                 VStack {
                     ZStack(alignment: .topTrailing) {
-                        CircleStrokeButtonView(
-                            iconName: "xmark",
-                            isShownCircle: false)
-                        {
-                            withAnimation {
-                                completion()
-                            }
-                        }
+                        xmarkButton
                         .padding()
                         .zIndex(1)
                         
@@ -98,6 +91,16 @@ struct RatingSelectionView: View {
         .animation(.bouncy(duration: 0.3), value: isShowingView)
         .onAppear {
             isShowingView = true
+        }
+    }
+    private var xmarkButton: some View {
+        CircleStrokeButtonView(
+            iconName: "xmark",
+            isShownCircle: false
+        ){
+            withAnimation {
+                completion()
+            }
         }
     }
     
