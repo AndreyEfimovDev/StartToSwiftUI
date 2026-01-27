@@ -12,42 +12,183 @@ struct DevData {
     
     static let postsForCloud = [
         
+//        Post(
+//            title: "",
+//            intro: """
+//                
+//                """,
+//            author: "",
+//            postType: .post,
+//            urlString: "",
+//            postPlatform: .website,
+//            postDate: Date.from(year: 2021, month: 10, day: 10),
+//            studyLevel: .beginner,
+//            progress: .fresh,
+//            favoriteChoice: .no,
+//            postRating: nil,
+//            notes: """
+//                
+//                """,
+//            origin: .cloud,
+//            draft: false,
+//            date: .now,
+//            addedDateStamp: nil,
+//            startedDateStamp: nil,
+//            studiedDateStamp: nil,
+//            practicedDateStamp: nil
+//        ),
         Post(
-            title: "",
+            title: "Swift Basics",
             intro: """
-                
+                Get started with the Swift programming language. Write your first line of code and learn the fundamentals.
                 """,
-            author: "",
-            postType: .post,
-            urlString: "",
-            postPlatform: .website,
-            postDate: Date.from(year: 2021, month: 10, day: 10),
-            studyLevel: .beginner,
-            progress: .fresh,
-            favoriteChoice: .no,
-            postRating: nil,
-            notes: """
-                
+            author: "Nick Sarno",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiLvzZFJI6rVIBtdolrJBVB",
+            postPlatform: .youtube,
+            origin: .cloud
+        ),
+        Post(
+            title: "iOS Dev Beginner Course FREE Preview",
+            intro: """
+                The first 7 videos from my iOS dev beginner course.
                 """,
-            origin: .cloud,
-            draft: false,
-            date: .now,
-            addedDateStamp: nil,
-            startedDateStamp: nil,
-            studiedDateStamp: nil,
-            practicedDateStamp: nil
+            author: "Sean Allen",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgHtditjG_y2DuYuj9FJommY",
+            postPlatform: .youtube,
+            origin: .cloud
+        ),
+        Post(
+            title: "Swift for Complete Beginners",
+            intro: """
+                Swift for Complete Beginners teaches you all the core concepts required to get started building apps with Swift and SwiftUI.
+                """,
+            author: "Paul Hudson",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PLuoeXyslFTuaYpVr3S9wG6PkIvYn_yHbg",
+            postPlatform: .youtube,
+            origin: .cloud
         ),
 
         Post(
-            title: "iOS 16",
+            title: "Mastering Xcode",
             intro: """
-                A series if videos going through a lot of the new features presented in iOS 16.
+                9 part series on learning how to decode and encode JSON using the Swift Codable protocol.
                 """,
             author: "Stewart Lynch",
             postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4DJyxwFZEM4-AIs7jzHrb60",
+            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4CUCcA3fqvsRtx153akAJU1",
+            postPlatform: .website,
+            postDate: nil,
+            studyLevel: .beginner,
+            origin: .cloud
+        ),
+        Post(
+            title: "SwiftUI Bootcamp",
+            intro: """
+                The fastest way to learn SwiftUI. Learn how to build beautiful screens and other UI components.
+                """,
+            author: "Nick Sarno",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO",
+            postPlatform: .youtube,
+            origin: .cloud
+        ),
+        Post(
+            title: "SwiftUI Todo List",
+            intro: """
+                Build your first app in SwiftUI! Learn how to build a real application with MVVM app architecture.
+                """,
+            author: "Nick Sarno",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpheGqemblOIA7v3oq0MS30i",
             postPlatform: .youtube,
             postDate: nil,
+            origin: .cloud
+        ),
+        Post(
+            title: "Swift Keywords",
+            intro: """
+                The Swift Language has many keywords. This playlist will explain a lot of them.
+                """,
+            author: "Sean Allen",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgHx8DgGsHB4Dh_H_78x8oQE",
+            postPlatform: .youtube,
+            postDate: nil,
+            origin: .cloud
+        ),
+        Post(
+            title: "Swift Tutorials & Code Snippets",
+            intro: """
+                Quick Swift tutorials for common tasks in iOS Development.
+                """,
+            author: "Sean Allen",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgG3822Pbf_H9xldrODNV3XI",
+            postPlatform: .youtube,
+            postDate: nil,
+            origin: .cloud
+        ),
+        Post(
+            title: "Swift Programming Tutorial",
+            intro: """
+                FULL COURSE | Absolute Beginner.
+                """,
+            author: "Sean Allen",
+            postType: .course,
+            urlString: "https://www.youtube.com/watch?v=CwA1VWP0Ldw",
+            postPlatform: .youtube,
+            postDate: nil,
+            origin: .cloud
+        ),
+        Post(
+            title: "SwiftUI Fundamentals",
+            intro: """
+                FULL COURSE | Beginner Friendly.
+                """,
+            author: "Sean Allen",
+            postType: .course,
+            urlString: "https://www.youtube.com/watch?v=b1oC7sLIgpI",
+            postPlatform: .youtube,
+            postDate: nil,
+            origin: .cloud
+        ),
+        Post(
+            title: "Git & Source Control",
+            intro: """
+                A complete guide for learning how to use git. Practice using Source Control within Xcode, GitKraken, and Github. Get familiar with Git Flow.
+                """,
+            author: "Nick Sarno",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiALKk34l9mUS2f4mdJPvXq",
+            postPlatform: .youtube,
+            origin: .cloud
+        ),
+        Post(
+            title: "SwiftUI Map App",
+            intro: """
+                Build a map app to showcase real destinations around the world. Get familiar with data management and transitions.
+                """,
+            author: "Nick Sarno",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdpha5eVTjLM0eRlJ7-yDDwBk",
+            postPlatform: .youtube,
+            postDate: nil,
+            origin: .cloud
+        ),
+        Post(
+            title: "SwiftData",
+            intro: """
+                A series on learning how to build an application using SwiftData as your persistence layer.
+                """,
+            author: "Stewart Lynch",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4Ck-JEF2nkcFTF_2rhGBMKX",
+            postPlatform: .website,
+            postDate: nil,
+            studyLevel: .beginner,
             origin: .cloud
         ),
 
@@ -64,84 +205,27 @@ struct DevData {
             origin: .cloud,
         ),
         Post(
-            title: "Xcode and Git",
-            intro: """
-                9 part series on learning how to decode and encode JSON using the Swift Codable protocol.
-                """,
-            author: "Stewart Lynch",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4DKrm1gwIr_a-0B7yvlTZP6",
-            postPlatform: .youtube,
-            postDate: nil,
-            origin: .cloud,
-        ),
-
-        Post(
-            title: "Swift Basics",
-            intro: """
-                Get started with the Swift programming language. Write your first line of code and learn the fundamentals.
-                """,
-            author: "Nick Sarno/Swiftful Thinking",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiLvzZFJI6rVIBtdolrJBVB",
-            postPlatform: .youtube,
-            origin: .cloud
-        ),
-        Post(
-            title: "SwiftUI Bootcamp",
-            intro: """
-                The fastest way to learn SwiftUI. Learn how to build beautiful screens and other UI components.
-                """,
-            author: "Nick Sarno/Swiftful Thinking",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO",
-            postPlatform: .youtube,
-            origin: .cloud
-        ),
-        Post(
-            title: "SwiftUI Todo List",
-            intro: """
-                Build your first app in SwiftUI! Learn how to build a real application with MVVM app architecture.
-                """,
-            author: "Nick Sarno/Swiftful Thinking",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpheGqemblOIA7v3oq0MS30i",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 3, day: 14),
-            origin: .cloud
-        ),
-        Post(
-            title: "Git & Source Control",
-            intro: """
-                A complete guide for learning how to use git. Practice using Source Control within Xcode, GitKraken, and Github. Get familiar with Git Flow.
-                """,
-            author: "Nick Sarno/Swiftful Thinking",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiALKk34l9mUS2f4mdJPvXq",
-            postPlatform: .youtube,
-            origin: .cloud
-        ),
-        Post(
-            title: "SwiftUI Map App",
-            intro: """
-                Build a map app to showcase real destinations around the world. Get familiar with data management and transitions.
-                """,
-            author: "Nick Sarno/Swiftful Thinking",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdpha5eVTjLM0eRlJ7-yDDwBk",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 12, day: 20),
-            origin: .cloud
-        ),
-        Post(
             title: "SwiftUI Continued Learning",
             intro: """
                 Building professional apps requires knowledge of data persistence and networking. This bootcamp builds on your existing knowledge of SwiftUI.
                 """,
-            author: "Nick Sarno/Swiftful Thinking",
+            author: "Nick Sarno",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar",
-            postDate: Date.from(year: 2024, month: 8, day: 8),
+            postDate: nil,
+            studyLevel: .middle,
+            origin: .cloud
+        ),
+        Post(
+            title: "SwiftUI Crypto App",
+            intro: """
+                Build a cryptocurrency app that downloads live price data from an API and saves the current user's portfolio. Get comfortable with Combine, Core Data, and MVVM.
+                """,
+            author: "Nick Sarno",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
+            postPlatform: .youtube,
+            postDate: nil,
             studyLevel: .middle,
             origin: .cloud
         ),
@@ -152,11 +236,11 @@ struct DevData {
             
             Learn how to integrate Firebase into your iOS app with Swift code in our comprehensive tutorial series. Our step-by-step guide will teach you everything you need to know about using Firebase in your mobile app development, perfect for developers of all levels.
             """,
-            author: "Nick Sarno/Swiftful Thinking",
+            author: "Nick Sarno",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphl8ly0oi0aHx0v2B7UvDK0",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2023, month: 4, day: 28),
+            postDate: nil,
             studyLevel: .middle,
             origin: .cloud,
         ),
@@ -165,10 +249,10 @@ struct DevData {
             intro: """
                 Swift Concurrency is a major upgrade to the Swift language that completely changes how to write asynchronous code in Swift. Learn everything that you need to know.
                 """,
-            author: "Nick Sarno/Swiftful Thinking",
+            author: "Nick Sarno",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphr2Dl4sY4rS9PLzPdyi8PM",
-            postDate: Date.from(year: 2024, month: 8, day: 8),
+            postDate: nil,
             studyLevel: .middle,
             origin: .cloud
         ),
@@ -178,28 +262,12 @@ struct DevData {
             intro: """
                 Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
                 """,
-            author: "Nick Sarno/Swiftful Thinking",
+            author: "Nick Sarno",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
             studyLevel: .advanced,
             origin: .cloud
         ),
-// 2025-10-26 DONE
-
-        Post(
-            title: "SwiftUI Crypto App",
-            intro: """
-                Build a cryptocurrency app that downloads live price data from an API and saves the current user's portfolio. Get comfortable with Combine, Core Data, and MVVM.
-                """,
-            author: "Nick Sarno/Swiftful Thinking",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2024, month: 8, day: 8),
-            studyLevel: .middle,
-            origin: .cloud
-        ),
-
     ]
         
     
@@ -211,6 +279,44 @@ struct DevData {
     
     
     static let myPrivatePosts = [
+        Post(
+            title: "iOS Dev Interview Prep - Take Home Project - UIKit - Programmatic UI - FULL COURSE",
+            intro: """
+                In this course I walk you through a mock take home project that is very common in the iOS dev job interview process. We start from the project brief, design, and we build the entire thing together so you can practice for the real thing.
+                """,
+            author: "Sean Allen",
+            postType: .course,
+            urlString: "https://www.youtube.com/watch?v=JzngncpZLuw",
+            studyLevel: .advanced,
+            origin: .cloud
+        ),
+        Post(
+            title: "Swift Concurrency",
+            intro: """
+                6 part series on iOS Concurrency.
+                """,
+            author: "Stewart Lynch",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4BKxvt7d4kyIr1ZUNlOdYTe",
+            studyLevel: .advanced,
+            origin: .cloud
+        ),
+
+        Post(
+            title: "Realm",
+            intro: """
+                A Series of videos demonstrating how to incorporate Realm into as SwiftUI Project.
+                """,
+            author: "Stewart Lynch",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4B8xgS_iEEuJtM_3BuZ7fiV",
+            studyLevel: .advanced,
+            origin: .cloud
+        ),
+
+
+        
+        
 // 2025-10-30
         Post(
             title: "Property Wrappers",
