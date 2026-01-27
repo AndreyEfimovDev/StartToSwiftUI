@@ -88,7 +88,7 @@ struct AboutApp: View {
                 .font(.title2)
                 .fontWeight(.semibold)
             
-            Text("SwiftUI Study Hub")
+            Text("SwiftUI Study")
                 .font(.body)
             
             Group {
