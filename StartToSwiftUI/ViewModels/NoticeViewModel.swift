@@ -76,7 +76,7 @@ final class NoticeViewModel: ObservableObject {
 
         do {
             self.notices = try dataSource.fetchNotices()
-            updateUnreadStatus()  // ← всегда обновляем после загрузки
+            updateUnreadStatus()  // ← always update status when fetch notices
 //          let duration = Date().timeIntervalSince(startTime)
 //          log("🍉 ✅ Download completed in \(String(format: "%.2f", duration))s. Notifications: \(fetchedNotices.count)", level: .info)
         } catch {
@@ -105,36 +105,37 @@ final class NoticeViewModel: ObservableObject {
         do {
             let cloudResponse: [CodableNotice] = try await networkService.fetchDataFromURLAsync()
             
-            // Фильтруем по дате (только для SwiftData)
+            // Filter by date (SwiftData only)
             let relevantNotices: [CodableNotice]
             if let appStateManager, let swiftDataSource {
                 let lastDate = appStateManager.getLastNoticeDate() ?? Date.distantPast
                 relevantNotices = cloudResponse.filter { $0.noticeDate > lastDate }
                 log("🍉 📦 Received \(cloudResponse.count), selected \(relevantNotices.count) notices", level: .info)
-                removeDuplicateNotices(from: swiftDataSource)  // ← передаём источник
+                removeDuplicateNotices(from: swiftDataSource)
             } else {
                 relevantNotices = cloudResponse
             }
             
             
-            // Фильтруем по ID (общая логика)
+            // Filter by ID (general logic)
             let existingIDs = Set(notices.map { $0.id })
             let newNotices = relevantNotices.filter { !existingIDs.contains($0.id) }
             
             guard !newNotices.isEmpty else { return }
             
-            // Добавляем новые notices
+            // Adding new notices
             for cloudNotice in newNotices {
                 dataSource.insert(NoticeMigrationHelper.convertFromCodable(cloudNotice))
             }
             
-            // Сохраняем и обновляем состояние
+            // Updating and saving the state
             if let appStateManager {
                 if let latestDate = cloudResponse.map({ $0.noticeDate }).max() {
                     appStateManager.updateLatestNoticeDate(latestDate)
                 }
-                saveContext()
                 appStateManager.markUserNotNotifiedBySound()
+                
+                saveContext()
                 
                 if isNotificationOn {
                     sendLocalNotification(count: newNotices.count)
@@ -154,12 +155,12 @@ final class NoticeViewModel: ObservableObject {
     
     // MARK: - Remove Duplicates
     /// Remove duplicate notifications in SwiftUI, leaving only one instance of each ID
-    // Передаём swiftDataSource как параметр — избегаем повторной проверки
+    /// Passing Swift DataSource as a parameter avoids double-checking
     private func removeDuplicateNotices(from swiftDataSource: SwiftDataNoticesDataSource) {
         do {
             let allNotices = try swiftDataSource.modelContext.fetch(FetchDescriptor<Notice>())
             
-            // Находим только группы с дубликатами
+            // Find only groups with duplicates
             let duplicateGroups = Dictionary(grouping: allNotices, by: \.id)
                 .filter { $0.value.count > 1 }
             
@@ -170,10 +171,10 @@ final class NoticeViewModel: ObservableObject {
             for (id, noticesList) in duplicateGroups {
                 log("  🔍 ID \(id): \(noticesList.count) duplicates", level: .info)
                 
-                // Приоритет: прочитанное > первое
+                // Priority: Read > First
                 let noticeToKeep = noticesList.first { $0.isRead } ?? noticesList[0]
                 
-                // Удаляем остальные
+                // Delete the rest
                 for notice in noticesList where notice.persistentModelID != noticeToKeep.persistentModelID {
                     dataSource.delete(notice)
                     log("    ✗ Removed: '\(notice.title)'", level: .info)
@@ -196,7 +197,7 @@ final class NoticeViewModel: ObservableObject {
     
     // MARK: - Update Unread Status
     func updateUnreadStatus() {
-        // We check if there is at least one unread notice
+        // Check if there is at least one unread notice
         hasUnreadNotices = notices.contains(where: { !$0.isRead })
     }
     
@@ -222,7 +223,7 @@ final class NoticeViewModel: ObservableObject {
         guard notice.isRead != isRead else { return }
         notice.isRead = isRead
         saveContext()
-        updateUnreadStatus()
+        loadNoticesFromSwiftData()
     }
     
     // MARK: - Delete Notice
@@ -233,7 +234,7 @@ final class NoticeViewModel: ObservableObject {
         }
         dataSource.delete(notice)
         saveContext()
-        loadNoticesFromSwiftData()  // ← синхронизируем массив с БД
+        loadNoticesFromSwiftData()  // ← synchronize the array with the datasource
         log("🍉 🗑️ Notice removed, remains: \(notices.count)", level: .info)
     }
     
