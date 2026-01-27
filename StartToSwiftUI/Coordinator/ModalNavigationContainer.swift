@@ -72,6 +72,8 @@ struct ModalNavigationContainer: View {
             WelcomeMessage()
         case .introduction:
             Introduction()
+        case .functionality:
+            Functionality()
         case .whatIsNew:
             WhatsNewView()
             

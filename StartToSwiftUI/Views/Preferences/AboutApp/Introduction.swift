@@ -9,14 +9,23 @@ import SwiftUI
 
 struct Introduction: View {
     
+    // MARK: - Dependencies
+
     @EnvironmentObject private var coordinator: AppCoordinator
     
+    // MARK: BODY
+
     var body: some View {
         FormCoordinatorToolbar(
             title: "Introduction",
             showHomeButton: true
         ) {
-            descriptionText
+            ScrollView {
+                VStack {
+                    descriptionText
+                    buttonFunctionality
+                }
+            }
         }
     }
     
@@ -25,27 +34,62 @@ struct Introduction: View {
     private var descriptionText: some View {
         ScrollView {
             Text("""
-               **StartToSwiftUI** is a specialised learning environment for iOS developers designed to help you organise learning materials for SwiftUI.
+               First of all, thank you for choosing this app.
+               
+               **StartToSwiftUI** is a personal learning management app for self-directed learners to help you organise study materials for SwiftUI.
                
                The app offers the following features:
                         
-               **Curated Collection**: Jumpstart your learning with a curated collection of SwiftUI tutorials and articles compiled from open sources. You'll receive a notification when a new version of the collection is available for download. The developer strives to keep this collection up to date, though this cannot be guaranteed at all times.
+               **CONTENT CREATION**:
+               - Users create their own study materials with full editing
+               - Save drafts for later completion
+               - Add personal notes to any material
                
-               **Personal Library**: Create and manage your own collection of links to learning materials.
+               **LEARNING MANAGEMENT**:
+               - Track progress: Added → Started → Learnt → Practiced
+               - Rate materials: Good / Great / Excellent
+               - Organise by difficulty level: Beginner / Middle / Advanced
+               - Mark favourites for quick access
+               - Voice Search
                
-               **Smart Organisation**: Organise learning resources by category such as level of study, year of materials, type of source/media, etc, create a collection of favourite materials.
+               **ANALYTICS & PROGRESS**:
+               - Visual study progress dashboard
+               - Statistics by difficulty level
+               - Learning history with timestamps
+               - Retrospective analysis in different time periods
+               - Selection filtering for study progress review
+
+               **CROSS-DEVICE**:
+               - Full iCloud sync between iPhone and iPad devices
+               - SwiftData + CloudKit integration
+
+               **WIDGET SUPPORT**:
+               - Home Screen widgets: Small, Medium, Large sizes
+               - Lock Screen widgets: Circular, Rectangular, Inline
+               - Real-time sync with main app
                
-               **Full Control**: Edit and delete your materials as needed, save drafts for further processing.
+               **DATA MANAGEMENT**:
+               - Share, backup, restore and delete materials as needed
                
-               **Efficient Search & Filter**: Quickly find what you need using search and filtering tools.
+               For detailed functionality information, please visit the Functionality section. 
                
-               **Data Management**: Backup, restore, share, or delete materials as needed.
                """)
             
             .multilineTextAlignment(.leading)
             .textFormater()
             .padding()
         }
+    }
+    
+    private var buttonFunctionality: some View {
+        
+        CapsuleButtonView(
+            primaryTitle: "Functionality"
+        ){
+            coordinator.pushModal(.functionality)
+        }
+        .padding(.horizontal, 60)
+        .padding(15)
     }
 
 }

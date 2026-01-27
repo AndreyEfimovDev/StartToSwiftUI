@@ -60,6 +60,11 @@ struct AboutApp: View {
             }
             .customListRowStyle(iconName: "textformat.size.larger", iconWidth: iconWidth)
             
+            Button("Functionality") {                coordinator.pushModal(.functionality)
+            }
+            .customListRowStyle(iconName: "f.cursive", iconWidth: iconWidth)
+
+            
             Button("What's New") {
                 coordinator.pushModal(.whatIsNew)
             }

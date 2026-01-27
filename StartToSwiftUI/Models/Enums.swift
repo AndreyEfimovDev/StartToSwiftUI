@@ -382,6 +382,7 @@ enum AppRoute: Hashable, Identifiable {
     case aboutApp
     case welcome
     case introduction
+    case functionality
     case whatIsNew
     
     // Legal information
@@ -439,6 +440,8 @@ enum AppRoute: Hashable, Identifiable {
             return "welcome"
         case .introduction:
             return "introduction"
+        case .functionality:
+            return "functionality"
         case .whatIsNew:
             return "whatIsNew"
         case .legalInfo:
