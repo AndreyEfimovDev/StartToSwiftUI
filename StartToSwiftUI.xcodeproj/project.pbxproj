@@ -46,8 +46,6 @@
 		4751DAF82F16409B00EC9C53 /* StatsCardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DAF72F16409B00EC9C53 /* StatsCardsView.swift */; };
 		4751DAFA2F1640C300EC9C53 /* StatCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DAF92F1640C300EC9C53 /* StatCard.swift */; };
 		4751DAFE2F16410000EC9C53 /* CumulativeLegendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DAFD2F16410000EC9C53 /* CumulativeLegendView.swift */; };
-		4751DB002F1641A800EC9C53 /* Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DAFF2F1641A800EC9C53 /* Calendar.swift */; };
-		4751DB022F16457E00EC9C53 /* SegmentedOneLinePickerNotOptional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DB012F16457E00EC9C53 /* SegmentedOneLinePickerNotOptional.swift */; };
 		4751DB052F16670E00EC9C53 /* LineMarkLegendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DB042F16670E00EC9C53 /* LineMarkLegendView.swift */; };
 		47542EB42EF2C8E400B0AB79 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47542EB32EF2C8E400B0AB79 /* StartView.swift */; };
 		4759974D2E5C690B008E20F0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 475997492E5C690B008E20F0 /* Assets.xcassets */; };
@@ -120,6 +118,8 @@
 		47AC343D2F27F7D30023C7AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 475997492E5C690B008E20F0 /* Assets.xcassets */; };
 		47AC343F2F27F9350023C7AF /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997792E5F1A32008E20F0 /* Colors.swift */; };
 		47AC34412F28D9F40023C7AF /* Functionality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AC34402F28D9F40023C7AF /* Functionality.swift */; };
+		47AC34432F28F2360023C7AF /* Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AC34422F28F2360023C7AF /* Calendar.swift */; };
+		47AC34452F28F39C0023C7AF /* SegmentedOneLinePickerNotOptional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AC34442F28F39C0023C7AF /* SegmentedOneLinePickerNotOptional.swift */; };
 		47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AE6C802E7D7FD0006230DA /* Modifiers.swift */; };
 		47B465802E6867930059CCB7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B4657F2E6867930059CCB7 /* HomeView.swift */; };
 		47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */; };
@@ -227,8 +227,6 @@
 		4751DAF72F16409B00EC9C53 /* StatsCardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsCardsView.swift; sourceTree = "<group>"; };
 		4751DAF92F1640C300EC9C53 /* StatCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatCard.swift; sourceTree = "<group>"; };
 		4751DAFD2F16410000EC9C53 /* CumulativeLegendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CumulativeLegendView.swift; sourceTree = "<group>"; };
-		4751DAFF2F1641A800EC9C53 /* Calendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Calendar.swift; path = StartToSwiftUI/Views/Preferences/StudyProgress/Overview/Calendar.swift; sourceTree = SOURCE_ROOT; };
-		4751DB012F16457E00EC9C53 /* SegmentedOneLinePickerNotOptional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SegmentedOneLinePickerNotOptional.swift; path = StartToSwiftUI/Views/Preferences/StudyProgress/Overview/SegmentedOneLinePickerNotOptional.swift; sourceTree = SOURCE_ROOT; };
 		4751DB042F16670E00EC9C53 /* LineMarkLegendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineMarkLegendView.swift; sourceTree = "<group>"; };
 		47542EB32EF2C8E400B0AB79 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 		47542EB52EF3171200B0AB79 /* StartToSwiftUIRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StartToSwiftUIRelease.entitlements; sourceTree = "<group>"; };
@@ -305,6 +303,8 @@
 		47A7339E2ED1C55A006BB8A6 /* VoiceSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceSearchView.swift; sourceTree = "<group>"; };
 		47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreBackupView.swift; sourceTree = "<group>"; };
 		47AC34402F28D9F40023C7AF /* Functionality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functionality.swift; sourceTree = "<group>"; };
+		47AC34422F28F2360023C7AF /* Calendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calendar.swift; sourceTree = "<group>"; };
+		47AC34442F28F39C0023C7AF /* SegmentedOneLinePickerNotOptional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedOneLinePickerNotOptional.swift; sourceTree = "<group>"; };
 		47AE6C802E7D7FD0006230DA /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
 		47B4657F2E6867930059CCB7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedCupsuleButton.swift; sourceTree = "<group>"; };
@@ -383,7 +383,7 @@
 			children = (
 				4791CE072E75AAAF00687126 /* UnderlineSermentedPickerNotOptional.swift */,
 				47BAF0F92E64CC8700287F10 /* UnderlineSermentedPicker.swift */,
-				4751DB012F16457E00EC9C53 /* SegmentedOneLinePickerNotOptional.swift */,
+				47AC34442F28F39C0023C7AF /* SegmentedOneLinePickerNotOptional.swift */,
 				47BAF0F52E6485B000287F10 /* SegmentedOneLinePicker.swift */,
 				4773545A2E65C470001DEDEE /* CapsulesSegmentedPicker.swift */,
 			);
@@ -527,6 +527,7 @@
 				475997562E5C8671008E20F0 /* Models */,
 				475997572E5C8688008E20F0 /* ViewModels */,
 				47069EFC2EAFF2E30082AE12 /* Launch */,
+				47A3316B2F2760E4002883DD /* Widget */,
 				47BAF0EE2E645B0A00287F10 /* Views */,
 				475997492E5C690B008E20F0 /* Assets.xcassets */,
 				471BEF4F2EA793880093F962 /* Info.plist */,
@@ -614,7 +615,7 @@
 				4781D72D2ED716AE00B74F85 /* Bundle.swift */,
 				4725A52A2EDD757F00235C40 /* UIDevice.swift */,
 				47AE6C802E7D7FD0006230DA /* Modifiers.swift */,
-				4751DAFF2F1641A800EC9C53 /* Calendar.swift */,
+				47AC34422F28F2360023C7AF /* Calendar.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -652,7 +653,6 @@
 				4751DAED2F163BA600EC9C53 /* StudyProgressView.swift */,
 				4751DAF02F163FFA00EC9C53 /* Overview */,
 				4751DAEF2F163FE500EC9C53 /* Details */,
-				47A3316B2F2760E4002883DD /* Widget */,
 			);
 			path = StudyProgress;
 			sourceTree = "<group>";
@@ -664,19 +664,6 @@
 				471BBF9B2EC620D70004AC45 /* PostDraftsRowView.swift */,
 			);
 			path = PostDrafts;
-			sourceTree = "<group>";
-		};
-		4791CDAD2E70186100687126 /* Preferences */ = {
-			isa = PBXGroup;
-			children = (
-				4791CDAE2E70187E00687126 /* PreferencesView.swift */,
-				47656BFA2EE1EBBD00F45AA6 /* StudyProgress */,
-				47C56FEF2EC9CE8200F0796C /* ManagingPosts */,
-				471DCBDA2EBBC60E00AFA5F4 /* AboutApp */,
-				471DCBD72EBBB97000AFA5F4 /* LegalInformation */,
-				47870FB92ECC8628004175E4 /* Acknowledgements.swift */,
-			);
-			path = Preferences;
 			sourceTree = "<group>";
 		};
 		47A3316B2F2760E4002883DD /* Widget */ = {
@@ -742,13 +729,18 @@
 				47542EB32EF2C8E400B0AB79 /* StartView.swift */,
 				47B4657F2E6867930059CCB7 /* HomeView.swift */,
 				4791CE032E748DA200687126 /* AddEditPostView.swift */,
+				4791CDAE2E70187E00687126 /* PreferencesView.swift */,
 				4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */,
 				47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */,
 				47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */,
 				4715FA2F2F263BE800ED732A /* PostDetails */,
 				47C56FF02EC9CEA300F0796C /* Notices */,
+				47656BFA2EE1EBBD00F45AA6 /* StudyProgress */,
+				47C56FEF2EC9CE8200F0796C /* ManagingPosts */,
 				47870FBB2ECCB927004175E4 /* PostDrafts */,
-				4791CDAD2E70186100687126 /* Preferences */,
+				471DCBDA2EBBC60E00AFA5F4 /* AboutApp */,
+				471DCBD72EBBB97000AFA5F4 /* LegalInformation */,
+				47870FB92ECC8628004175E4 /* Acknowledgements.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -952,7 +944,6 @@
 				4765A76D2EAE5F7B00EACDF4 /* PostRowView.swift in Sources */,
 				4751DAFA2F1640C300EC9C53 /* StatCard.swift in Sources */,
 				47EA142D2EF4603E0064583B /* FirstLaunchManager.swift in Sources */,
-				4751DB022F16457E00EC9C53 /* SegmentedOneLinePickerNotOptional.swift in Sources */,
 				4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */,
 				4751DAF82F16409B00EC9C53 /* StatsCardsView.swift in Sources */,
 				475CC69E2F2290910099CAA6 /* MockNetworkService.swift in Sources */,
@@ -982,7 +973,6 @@
 				4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */,
 				471DCBDC2EBBC67500AFA5F4 /* Introduction.swift in Sources */,
 				4791CE002E747B2E00687126 /* HapticService.swift in Sources */,
-				4751DB002F1641A800EC9C53 /* Calendar.swift in Sources */,
 				47FF42492EE4572E0069D232 /* TestSFSymbolsForProgress.swift in Sources */,
 				475997532E5C7680008E20F0 /* PostsViewModel.swift in Sources */,
 				475CC6A02F22B0790099CAA6 /* CodablePost.swift in Sources */,
@@ -995,6 +985,7 @@
 				47656C002EE1EF9500F45AA6 /* StudyProgressForLevel.swift in Sources */,
 				4725A52B2EDD757F00235C40 /* UIDevice.swift in Sources */,
 				475CC6942F2246FB0099CAA6 /* MockPostsDataSource.swift in Sources */,
+				47AC34432F28F2360023C7AF /* Calendar.swift in Sources */,
 				47656BFC2EE1EBF000F45AA6 /* ProgressIndicatorView.swift in Sources */,
 				471DCBCE2EBB83D200AFA5F4 /* LegalInformationView.swift in Sources */,
 				475CC69C2F22904A0099CAA6 /* MockNoticesNetworkService.swift in Sources */,
@@ -1010,6 +1001,7 @@
 				4791CDF12E7428EE00687126 /* CircleShadowButtonView.swift in Sources */,
 				475CC6982F22476D0099CAA6 /* SwiftDataPostsDataSource.swift in Sources */,
 				47542EB42EF2C8E400B0AB79 /* StartView.swift in Sources */,
+				47AC34452F28F39C0023C7AF /* SegmentedOneLinePickerNotOptional.swift in Sources */,
 				47E2AF4F2EBCD86000B0214F /* CategoryFilterView.swift in Sources */,
 				478116462EBFF9DD00EF25F8 /* CustomProgressView.swift in Sources */,
 				4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */,

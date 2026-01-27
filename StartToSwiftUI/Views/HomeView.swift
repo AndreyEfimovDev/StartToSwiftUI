@@ -201,7 +201,7 @@ struct HomeView: View {
                 coordinator.push(.preferences)
             }
         }
-        if noticevm.unreadCount != 0  { // noticevm.hasUnreadNotices
+        if noticevm.unreadCount != 0  {
             ToolbarItem(placement: .navigationBarLeading) {
                 noticeButton
             }
@@ -233,7 +233,7 @@ struct HomeView: View {
                 .fill(Color.mycolor.myRed)
                 .frame(maxWidth: 15, maxHeight: 10)
                 .overlay {
-                    Text("\(noticevm.unreadCount)")  // ← используем computed property
+                    Text("\(noticevm.unreadCount)")
                         .font(.system(size: 8, weight: .bold))
                         .foregroundStyle(Color.mycolor.myButtonTextPrimary)
                 }
@@ -277,7 +277,6 @@ struct HomeView: View {
                         showViewOnDoubleTap = false
                         hapticManager.impact(style: .light)
                     }
-//                    .allowsHitTesting(true)
                     .frame(maxHeight: max(proxy.size.height / 3, 300))
                     .padding(.horizontal, 30)
                 }

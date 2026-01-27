@@ -10,18 +10,22 @@ import SwiftData
 
 struct FiltersSheetView: View {
     
-    // MARK: - Dependencies
-
+    // MARK: Dependencies
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var vm: PostsViewModel
     
-    @Binding var isFilterButtonPressed: Bool
+    // MARK: States
     @State private var updateFiltersSheetView: Bool = false
     
+    // MARK: Constants
+
     let selectedFont: Font = .caption.bold()
     let opacityBackground: Double = 0.10
     
-    // MARK: MAIN VIEW
+    // MARK: Variables
+    @Binding var isFilterButtonPressed: Bool
+
+    // MARK: Body
     
     var body: some View {
         VStack (alignment: .leading) {
@@ -51,7 +55,7 @@ struct FiltersSheetView: View {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
             isFilterButtonPressed = false
         }
-    } // VStack
+    }
     
     // MARK: Subviews
     
@@ -262,21 +266,6 @@ struct FiltersSheetView: View {
     
 }
 
-
-
-//fileprivate struct FiltersSheetPreview: View {
-//    
-//    var body: some View {
-//        
-//        ZStack {
-//            Color.mycolor.myAccent
-//                .ignoresSafeArea()
-//            FiltersSheetView(
-//                isFilterButtonPressed: .constant(true)
-//            )
-//        }
-//    }
-//}
 #Preview {
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
