@@ -201,7 +201,7 @@ struct HomeView: View {
                 coordinator.push(.preferences)
             }
         }
-        if noticevm.hasUnreadNotices {
+        if noticevm.unreadCount != 0  { // noticevm.hasUnreadNotices
             ToolbarItem(placement: .navigationBarLeading) {
                 noticeButton
             }

@@ -424,61 +424,29 @@ final class PostsViewModel: ObservableObject {
     }
     
     func exportPostsToJSON() -> Result<URL, Error> {
-        do {
-            log("🍓 Exporting \(allPosts.count) posts from SwiftData", level: .info)
-            
-            // Convert Post to CodablePost
-            let codablePosts = allPosts.map { post in
-                CodablePost(
-                    id: post.id,
-                    category: post.category,
-                    title: post.title,
-                    intro: post.intro,
-                    author: post.author,
-                    postType: post.postType,
-                    urlString: post.urlString,
-                    postPlatform: post.postPlatform,
-                    postDate: post.postDate,
-                    studyLevel: post.studyLevel,
-                    progress: post.progress,
-                    favoriteChoice: post.favoriteChoice,
-                    postRating: post.postRating,
-                    notes: post.notes,
-                    origin: post.origin,
-                    draft: post.draft,
-                    date: post.date,
-                    startedDateStamp: post.startedDateStamp,
-                    studiedDateStamp: post.studiedDateStamp,
-                    practicedDateStamp: post.practicedDateStamp
-                )
-            }
-            
-            // Encoding in JSON
-            let encoder = JSONEncoder()
-            encoder.dateEncodingStrategy = .iso8601
-            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-            
-            let jsonData = try encoder.encode(codablePosts)
-            
-            // Create a unique file name with the date
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd_HH-mm"
-            
-            let fileName = "StartToSwiftUI_backup_\(dateFormatter.string(from: Date())).json"
-            let tempFileURL = FileManager.default.temporaryDirectory
-                .appendingPathComponent(fileName)
-            
-            try jsonData.write(to: tempFileURL)
-            
-            log("🍓✅ Exported to: \(tempFileURL.lastPathComponent)", level: .info)
-            return .success(tempFileURL)
-            
-        } catch {
+        log("🍓 Exporting \(allPosts.count) posts from SwiftData", level: .info)
+        
+        // Convert Post to CodablePost
+        let codablePosts = allPosts.map { CodablePost(from: $0) }
+        
+        // Create a unique file name with the date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd_HH-mm"
+        let fileName = "StartToSwiftUI_backup_\(dateFormatter.string(from: Date())).json"
+        
+        // Use fileManager to export
+        let result = fileManager.exportToTemporary(codablePosts, fileName: fileName)
+        
+        switch result {
+        case .success(let url):
+            log("🍓✅ Exported to: \(url.lastPathComponent)", level: .info)
+            return .success(url)
+        case .failure(let error):
             handleError(error, message: "Export failed")
             return .failure(error)
         }
     }
-    
+
     // MARK: - Filtering & Searching
     
     private func setupSubscriptions() {
