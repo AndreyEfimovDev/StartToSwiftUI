@@ -37,6 +37,9 @@ struct DevData {
 //            studiedDateStamp: nil,
 //            practicedDateStamp: nil
 //        ),
+        
+        
+// 2026-01-27
         Post(
             title: "Swift Basics",
             intro: """
@@ -188,7 +191,7 @@ struct DevData {
             urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4Ck-JEF2nkcFTF_2rhGBMKX",
             postPlatform: .website,
             postDate: nil,
-            studyLevel: .beginner,
+            studyLevel: .middle,
             origin: .cloud
         ),
 
@@ -202,6 +205,7 @@ struct DevData {
             urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4DADQtPjCfXrBHuPHLO80oU",
             postPlatform: .youtube,
             postDate: nil,
+            studyLevel: .middle,
             origin: .cloud,
         ),
         Post(
