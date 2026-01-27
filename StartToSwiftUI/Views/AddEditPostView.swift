@@ -149,21 +149,19 @@ struct AddEditPostView: View {
     private func handleSave() {
         
         if hasNoChanges && editedPost.draft == false {
-            // Если не было изменений и пост уже не черновик - просто выходим
+            // If there were no changes and the post is not a draft, just exit
             navigateBack()
             return
         }
         
-        // Для всех остальных случаев:
-        // 1. Сбрасываем флаг черновика
+        // For all other cases:
+        // Resetting the draft flag
         editedPost.draft = false
-        
-        // 2. Устанавливаем дату, если она не задана
+        // Set the added date if it is not set
         if editedPost.addedDateStamp == nil {
             editedPost.addedDateStamp = .now
         }
         
-        // 3. Сохраняем изменения
         checkAndSave()
 
         
@@ -452,9 +450,6 @@ struct AddEditPostView: View {
 
     private var urlSection: some View {
         FormSection(title: "URL") {
-          
-//            Text(editedPost.urlString)
-//                .font(.caption2)
             ZStack {
                 HStack(spacing: 0) {
                     Button(urlTrigger ? "Set url" : "Reset url") {
