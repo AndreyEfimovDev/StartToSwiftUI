@@ -45,23 +45,27 @@ struct WelcomeAtFirstLaunchView: View {
     
     private var descriptionText: some View {
         Text("""
-        This application is created for educational purposes and helps organise links to learning SwiftUI materials.
+        This app is designed for educational purposes and helps self-paced learners effectively manage their SwiftUI learning materials.
          
         **It is important to understand:**
          
-        - The app stores only links to materials available from public sources.
-        - All content belongs to its respective authors.
-        - The app is free and intended for non-commercial use.
-        - Users are responsible for respecting copyright when using materials.
+        - The app may store links to materials available from public sources
+        - All content belongs to its respective authors
+        - The app is free and intended for non-commercial use
+        - Users are responsible for respecting copyright when using materials
          
-        **For each material, you have ability to save:**
+        **For each material, you have the ability to save:**
         
-        - Direct link to the original source.
-        - Author's name.
-        - Source (website, YouTube, etc.).
-        - Publication date (if known).
+        - Title and a preview information
+        - The author's name
+        - A direct link to the original source
+        - The source (Website, YouTube)
+        - The publication date (if known)
+        - The type of material (single tutorial, course, solution, etc.)
+        - The difficulty level (Beginner, Intermediate, Advanced)
+        - Your personal notes on the material
                              
-        To use this application, you need to agree to **Terms of Use**.
+        To use this app, you need to agree to the **Terms of Use**.
         """
         )
         .multilineTextAlignment(.leading)

@@ -184,7 +184,7 @@ enum StudyLevel: String, CaseIterable, Codable {
     var displayName: String {
         switch self {
         case .beginner: return "Beginner"
-        case .middle: return "Middle"
+        case .middle: return "Intermediate"
         case .advanced: return "Advanced"
         }
     }
