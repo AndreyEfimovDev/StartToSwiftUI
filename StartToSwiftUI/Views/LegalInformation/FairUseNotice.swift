@@ -32,15 +32,15 @@ struct FairUseNotice: View {
                     
                     **Why the Application is Legitimate:**
                     
-                    **Educational Purpose**: The app serves exclusively for non-commercial educational use, helping users organise learning materials.
+                    **Educational Purpose**: The app is designed exclusively for non-commercial educational use, serving as a personal tool to help users organise and manage their learning materials.
                     
-                    **Links, Not Content**: We store only references to materials through links, never copying, hosting, or distributing the actual content.
+                    **Links, Not Content**: We store only references to materials via links and metadata. The application does not copy, host, or distribute the actual content of the linked resources.
                     
-                    **Author Attribution**: Complete authorship information is preserved and displayed for each resource (author name, source, publication date).
+                    **Author Attribution**: Complete authorship information—including the author's name, original source, and publication date where available—is preserved and displayed for every resource.
                     
-                    **Direct Source Access**: All links lead directly to original sources, ensuring content creators receive proper traffic and recognition.
+                    **Direct Source Access**: All links lead directly to the original sources. This ensures that content creators receive the proper traffic, recognition, and any associated benefits from user visits.
                     
-                    The application acts as an organisational tool that respects intellectual property rights while supporting the educational community. We encourage users to always access materials through the original sources and respect creators' rights.
+                    In essence, the application functions as an organisational tool that respects intellectual property rights while supporting the educational community. We actively encourage users to access all materials through the original sources and to always respect the rights of creators.
                     """)
             .multilineTextAlignment(.leading)
             .textFormater()

@@ -28,31 +28,31 @@ struct CopyrightPolicy: View {
     private var descriptionText: some View {
         ScrollView {
             Text("""
-                **StartToSwiftUI** respects intellectual property rights and complies with copyright legislation.
+                **StartToSwiftUI** respects intellectual property rights and operates in compliance with applicable copyright legislation.
                 
                 **WHAT THE APPLICATION STORES**
                 
-                The application allows users to download a curated collection of SwiftUI learning links. It stores only metadata such as titles, author names, direct URLs, etc. and does not copy, host, or distribute the actual content.
+                The application enables users to download a curated collection of SwiftUI learning links. It stores only metadata (such as titles, author names, and direct URLs) and does not copy, host, or distribute the actual content of the linked materials.
                 
                 **FOR CONTENT AUTHORS**
                 
-                If you are the author of material linked within the application's curated collection and would like the link removed, please contact me at: andrey.efimov.dev@gmail.com.
+                If you are the author of material linked within the application's curated collection and wish to have the link removed, please contact us at: andrey.efimov.dev@gmail.com.
                 
-                We are committed to the following:
+                We are committed to:
                 - Reviewing your request within 24–48 hours
                 - Removing the link from the curated collection upon confirmation of authorship
-                - Sending you confirmation of the removal via email
+                - Sending you email confirmation once the link has been removed
                 
                 **REQUEST PROCEDURE**
                 
-                Please include the following in your email:
-                - The link to the material on the original source
-                - Proof of authorship (e.g., a link to your author profile or website)
+                To facilitate a swift resolution, please include the following in your email:
+                - The specific URL of the material in the original source
+                - Proof of authorship (e.g., a link to your verified author profile or official website)
                 - Reason for the removal request
                 
                 **FAIR USE:**
                 
-                The application has been developed in accordance with Fair Use principles for educational, non-commercial purposes. It is designed to direct users to original sources and does not replace or replicate them.
+                This application has been developed in accordance with fair use principles for educational, non-commercial purposes. Its function is to direct learners to original sources for study and does not aim to replace or replicate those sources.
                 """)
             
             .multilineTextAlignment(.leading)

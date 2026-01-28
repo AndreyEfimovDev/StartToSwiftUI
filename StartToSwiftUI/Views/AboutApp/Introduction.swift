@@ -36,43 +36,41 @@ struct Introduction: View {
             Text("""
                First of all, thank you for choosing this app.
                
-               **StartToSwiftUI** is a personal learning management app for self-directed learners for SwiftUI.
+               **StartToSwiftUI** is a personal learning management app for self-directed SwiftUI learners.
                
                The app offers the following features:
                         
                **CONTENT CREATION**:
-               - Create your own study materials with full editing
+               - Create your own study materials with full editing capabilities
                - Save drafts for later completion
                - Add personal notes to any material
                
                **LEARNING MANAGEMENT**:
-               - Track progress: Added → Started → Learnt → Practiced
+               - Track progress: 'Added' → 'Started' → 'Learnt' → 'Practiced'
                - Rate materials: Good / Great / Excellent
-               - Organise by difficulty level: Beginner / Middle / Advanced
+               - Organise by difficulty level: Beginner / Intermediate / Advanced
                - Mark favourites for quick access
-               - Voice Search
+               - Voice search
                
                **ANALYTICS & PROGRESS**:
                - Visual study progress dashboard
                - Statistics by difficulty level
                - Learning history with timestamps
-               - Retrospective analysis in different time periods
-               - Selection filtering for study progress review
-
+               - Retrospective analysis across different time periods
+               - Selective filtering for study progress review
+               
                **CROSS-DEVICE**:
                - Full iCloud sync between iPhone and iPad devices
-               - SwiftData + CloudKit integration
-
-               **WIDGET SUPPORT**:
-               - Home Screen widgets: Small, Medium, Large sizes
-               - Lock Screen widgets: Circular, Rectangular, Inline
-               - Real-time sync with main app
                
+               **WIDGET SUPPORT**:
+               - Home Screen widgets: Small, Medium, and Large
+               - Lock Screen widgets: Circular, Rectangular, and Inline
+               - Real-time sync with main app
+
                **DATA MANAGEMENT**:
                - Share, backup, restore and delete materials as needed
-               
-               For detailed functionality information, please visit the Functionality section. 
-               
+
+               For detailed functionality information, please visit the 'Functionality' section. 
                """)
             
             .multilineTextAlignment(.leading)
