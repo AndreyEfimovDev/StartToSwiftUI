@@ -45,7 +45,7 @@ struct WelcomeAtFirstLaunchView: View {
     
     private var descriptionText: some View {
         Text("""
-        This app is designed for educational purposes and helps self-paced learners effectively manage their SwiftUI learning materials.
+        This app is designed for educational purposes and helps self-paced learners effectively manage SwiftUI learning materials.
          
         **It is important to understand:**
          
