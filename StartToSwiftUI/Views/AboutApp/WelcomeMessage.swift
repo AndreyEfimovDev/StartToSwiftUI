@@ -33,7 +33,7 @@ struct WelcomeMessage: View {
 
             Welcome to **StartToSwiftUI**!
             
-            This app is designed to help beginners master SwiftUI quickly and with confidence from the ground up.
+            This app is designed to help master SwiftUI quickly and with confidence from the ground up.
 
             When I first began learning SwiftUI, I was overwhelmed by the sheer variety of self-study options available. I gradually started collecting tutorials and articles from open sources that explained SwiftUI's functionality in a way that matched how I think.
             
