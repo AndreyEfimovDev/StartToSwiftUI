@@ -41,9 +41,9 @@ struct Introduction: View {
                The app offers the following features:
                         
                **CONTENT CREATION**:
-               - Create your own study materials with full editing capabilities
+               - Create your own study content with full editing capabilities
                - Save drafts for later completion
-               - Add personal notes to any material
+               - Add personal notes to the content
                
                **LEARNING MANAGEMENT**:
                - Track progress: 'Added' → 'Started' → 'Learnt' → 'Practiced'

@@ -66,7 +66,7 @@ struct PostRowView: View {
     
     private var statusRow: some View {
         HStack {
-            Text("\(post.studyLevel.displayName.capitalized) level")
+            Text("\(post.studyLevel.displayName.capitalized)")
                 .font(.body)
                 .fontWeight(.medium)
                 .foregroundStyle(post.studyLevel.color)
