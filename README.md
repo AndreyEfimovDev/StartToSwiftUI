@@ -7,40 +7,35 @@
   <img src="https://img.shields.io/badge/price-Free-success.svg" alt="Free">
 </p>
 
-## 📖 Overview
+## Overview
 
-**StartToSwiftUI** is a specialised learning environment for iOS developers designed to help you organise and manage learning materials for SwiftUI and related technologies. Created from personal learning experience, it provides a structured approach to collecting and accessing programming resources.
+**StartToSwiftUI** is a specialised learning environment for iOS developers designed to help you organise and manage SwiftUI learning materials and related technologies. Created from personal learning experience, it provides a personal learning system for mastering SwiftUI at your own pace.
 
-> **The Story Behind the App**  
-> When I first began learning SwiftUI, I was overwhelmed by the sheer variety of learning resources. I created StartToSwiftUI to solve this—offering both a curated collection of quality materials and a personal space to build your own learning library.
+## Key Features
 
-## ✨ Key Features
+### Create Your Own Content
+- Create and manage your personal study library of SwiftUI materials matching your learning style
+- Categorise resources by topics, difficulty levels of study, etc.
+- Put intro info and personal notes, save drafts, and organise everything exactly how you want
 
-### 🗂️ Personal Library
-- Create and manage your own collection of educational links
-- Add custom notes and categorise resources
-- Edit and organise materials matching your learning style
-
-### 🎯 Curated Collection
-- Access a pre-prepared collection of quality SwiftUI resources
-- Regular updates with new learning materials
-- Resources carefully selected for clarity and educational value
-
-### 🔍 Smart Organisation
-- Categorise resources by topic, level of study, post dates, etc.
-- Advanced search and filtering capabilities
+### Smart Organisation
+- Follow your study from Added → Started → Learnt → Practiced
+- Visual dashboard shows your growth over time
+- Analyse your learning history, review statistics by difficulty
 - Quick access to your frequently used favourite materials
+- Advanced search and filtering capabilities
+- Home and Lock Screen widgets keep your progress visible — no need to open the app
 
-### ☁️ Sync & Backup
-- Cloud-synchronised curated collection
+### Sync & Backup
+- Full iCloud sync between iPhone and iPad
 - Backup and restore your personal library
 - Share collections with other learners
 
-## 🚀 Installation
+## Installation
 
 ### Requirements
-- **iOS 18.0+ / iPadOS 18.0+**
-- **Xcode 16.0+** (for development)
+- **iOS 18.0+**
+- **iPhone / iPad**
 - **Swift 6.0** (language)
 - **SwiftUI 6.0** (framework)
 
