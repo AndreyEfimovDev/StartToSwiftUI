@@ -81,7 +81,6 @@
 		4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773545A2E65C470001DEDEE /* CapsulesSegmentedPicker.swift */; };
 		4773545D2E65D03A001DEDEE /* FiltersSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */; };
 		4773AC902F269D4B00A713EF /* PostStatusIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773AC8F2F269D4B00A713EF /* PostStatusIcons.swift */; };
-		477C745E2ECF6FB300F77F5B /* StaticPosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477C745D2ECF6FB300F77F5B /* StaticPosts.swift */; };
 		477C74602ECFB0F300F77F5B /* WhatsNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477C745F2ECFB0E800F77F5B /* WhatsNews.swift */; };
 		478116462EBFF9DD00EF25F8 /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */; };
 		4781D72E2ED716AE00B74F85 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4781D72D2ED716AE00B74F85 /* Bundle.swift */; };
@@ -135,15 +134,11 @@
 		47C57E7F2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */; };
 		47E2AF4F2EBCD86000B0214F /* CategoryFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */; };
 		47E439B72EA9290E007001AD /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E439B62EA9290E007001AD /* NetworkService.swift */; };
-		47EA142D2EF4603E0064583B /* FirstLaunchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */; };
 		47EA14312EF530780064583B /* AppSyncStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EA14302EF530780064583B /* AppSyncStateManager.swift */; };
 		47F38B1F2ED480B0006DEDBE /* DevData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F38B1E2ED480B0006DEDBE /* DevData.swift */; };
 		47F68A4A2EFB0232003786D0 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F68A492EFB0232003786D0 /* AppCoordinator.swift */; };
 		47F78A552F02DB12005394BE /* ModalNavigationContainerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F78A542F02DB12005394BE /* ModalNavigationContainerWrapper.swift */; };
-		47FF42472EE454440069D232 /* TestSFSymbolsForRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF42462EE454440069D232 /* TestSFSymbolsForRating.swift */; };
-		47FF42492EE4572E0069D232 /* TestSFSymbolsForProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF42482EE4572E0069D232 /* TestSFSymbolsForProgress.swift */; };
 		47FF424B2EE4B5960069D232 /* RatingSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */; };
-		47FF424F2EE4C69F0069D232 /* TestSFSymbolsForOrigin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF424E2EE4C69F0069D232 /* TestSFSymbolsForOrigin.swift */; };
 		47FF42592EE556DB0069D232 /* TapHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF42582EE556DA0069D232 /* TapHandler.swift */; };
 		47FF425B2EE578DD0069D232 /* ProgressSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */; };
 /* End PBXBuildFile section */
@@ -265,7 +260,6 @@
 		4773545A2E65C470001DEDEE /* CapsulesSegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsulesSegmentedPicker.swift; sourceTree = "<group>"; };
 		4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersSheetView.swift; sourceTree = "<group>"; };
 		4773AC8F2F269D4B00A713EF /* PostStatusIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostStatusIcons.swift; sourceTree = "<group>"; };
-		477C745D2ECF6FB300F77F5B /* StaticPosts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticPosts.swift; sourceTree = "<group>"; };
 		477C745F2ECFB0E800F77F5B /* WhatsNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNews.swift; sourceTree = "<group>"; };
 		478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
 		4781D72D2ED716AE00B74F85 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
@@ -321,15 +315,11 @@
 		47E229FE2EF42B9400341DD2 /* StartToSwiftUIDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StartToSwiftUIDebug.entitlements; sourceTree = "<group>"; };
 		47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilterView.swift; sourceTree = "<group>"; };
 		47E439B62EA9290E007001AD /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
-		47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchManager.swift; sourceTree = "<group>"; };
 		47EA14302EF530780064583B /* AppSyncStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSyncStateManager.swift; sourceTree = "<group>"; };
 		47F38B1E2ED480B0006DEDBE /* DevData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevData.swift; sourceTree = "<group>"; };
 		47F68A492EFB0232003786D0 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		47F78A542F02DB12005394BE /* ModalNavigationContainerWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalNavigationContainerWrapper.swift; sourceTree = "<group>"; };
-		47FF42462EE454440069D232 /* TestSFSymbolsForRating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSFSymbolsForRating.swift; sourceTree = "<group>"; };
-		47FF42482EE4572E0069D232 /* TestSFSymbolsForProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSFSymbolsForProgress.swift; sourceTree = "<group>"; };
 		47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingSelectionView.swift; sourceTree = "<group>"; };
-		47FF424E2EE4C69F0069D232 /* TestSFSymbolsForOrigin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSFSymbolsForOrigin.swift; sourceTree = "<group>"; };
 		47FF42582EE556DA0069D232 /* TapHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapHandler.swift; sourceTree = "<group>"; };
 		47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressSelectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -476,18 +466,6 @@
 			path = Coordinator;
 			sourceTree = "<group>";
 		};
-		4751DB062F1B846700EC9C53 /* Dallocated */ = {
-			isa = PBXGroup;
-			children = (
-				47EA142C2EF4603E0064583B /* FirstLaunchManager.swift */,
-				477C745D2ECF6FB300F77F5B /* StaticPosts.swift */,
-				47FF42462EE454440069D232 /* TestSFSymbolsForRating.swift */,
-				47FF42482EE4572E0069D232 /* TestSFSymbolsForProgress.swift */,
-				47FF424E2EE4C69F0069D232 /* TestSFSymbolsForOrigin.swift */,
-			);
-			path = Dallocated;
-			sourceTree = "<group>";
-		};
 		475997322E5C6901008E20F0 = {
 			isa = PBXGroup;
 			children = (
@@ -517,7 +495,6 @@
 			isa = PBXGroup;
 			children = (
 				4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */,
-				4751DB062F1B846700EC9C53 /* Dallocated */,
 				475997622E5CF0C3008E20F0 /* SupportFrom3rdParties */,
 				475997722E5DA436008E20F0 /* Extensions */,
 				4759976C2E5D931F008E20F0 /* Services */,
@@ -935,7 +912,6 @@
 				471DCBD92EBBBF2200AFA5F4 /* JSON.swift in Sources */,
 				4765A76D2EAE5F7B00EACDF4 /* PostRowView.swift in Sources */,
 				4751DAFA2F1640C300EC9C53 /* StatCard.swift in Sources */,
-				47EA142D2EF4603E0064583B /* FirstLaunchManager.swift in Sources */,
 				4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */,
 				4751DAF82F16409B00EC9C53 /* StatsCardsView.swift in Sources */,
 				475CC69E2F2290910099CAA6 /* MockNetworkService.swift in Sources */,
@@ -947,7 +923,6 @@
 				471DCBDE2EBBC68500AFA5F4 /* WhatsNew.swift in Sources */,
 				47656BFE2EE1EC4D00F45AA6 /* StudyProgressDetailsView.swift in Sources */,
 				47F38B1F2ED480B0006DEDBE /* DevData.swift in Sources */,
-				47FF424F2EE4C69F0069D232 /* TestSFSymbolsForOrigin.swift in Sources */,
 				47BAF0A42E60613200287F10 /* SearchBarView.swift in Sources */,
 				4791CD862E6ED58B00687126 /* ShrinkIconButtonStyle.swift in Sources */,
 				4751DAEC2F1534B800EC9C53 /* StudyProgressChartView.swift in Sources */,
@@ -965,13 +940,11 @@
 				4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */,
 				471DCBDC2EBBC67500AFA5F4 /* Introduction.swift in Sources */,
 				4791CE002E747B2E00687126 /* HapticService.swift in Sources */,
-				47FF42492EE4572E0069D232 /* TestSFSymbolsForProgress.swift in Sources */,
 				475997532E5C7680008E20F0 /* PostsViewModel.swift in Sources */,
 				475CC6A02F22B0790099CAA6 /* CodablePost.swift in Sources */,
 				475CC6922F2246E00099CAA6 /* MockNoticesDataSource.swift in Sources */,
 				4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */,
 				4751DAFE2F16410000EC9C53 /* CumulativeLegendView.swift in Sources */,
-				477C745E2ECF6FB300F77F5B /* StaticPosts.swift in Sources */,
 				475CC6A22F22B0A90099CAA6 /* CodableNotice.swift in Sources */,
 				47BAF0CA2E635E2800287F10 /* Views.swift in Sources */,
 				47656C002EE1EF9500F45AA6 /* StudyProgressForLevel.swift in Sources */,
@@ -1039,7 +1012,6 @@
 				470E637A2EFDE1CF007B75B5 /* ModalNavigationContainer.swift in Sources */,
 				471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */,
 				47AA558A2EA9741D000AF4E9 /* RestoreBackupView.swift in Sources */,
-				47FF42472EE454440069D232 /* TestSFSymbolsForRating.swift in Sources */,
 				4751DAF62F16407200EC9C53 /* ChartDataPoint.swift in Sources */,
 				4791CDBB2E702E9700687126 /* EraseAllPostsView.swift in Sources */,
 				4732FB372EAA63810062269D /* Constants.swift in Sources */,

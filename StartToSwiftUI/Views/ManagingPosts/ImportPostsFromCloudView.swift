@@ -123,15 +123,7 @@ struct ImportPostsFromCloudView: View {
     }
     
     private func importFromCloud() async {
-        
-        // Download local DevData (for internal use)
-        // Uncomment this part when you need to load DevData
-//        await loadDevData()
-       
-        // Download from the cloud (main stream)
-        // Comment out this part when using DevData
-        await loadFromCloudService()
-        
+        await loadFromCloudService()        
     }
 
     /// Loading DevData (for internal use, to generate JSON file for cloud)
