@@ -80,7 +80,9 @@ struct HomeView: View {
             .overlay { deleteConfirmationOverlay }
             .onAppear {
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                noticevm.playSoundNotificationIfNeeded()
+                if vm.isTermsOfUseAccepted {
+                    noticevm.playSoundNotificationIfNeeded()
+                }
             }
         }
     }
@@ -149,11 +151,13 @@ struct HomeView: View {
     
     private func handleSingleTap(on post: Post) {
         vm.selectedPostId = post.id
+        
+        if post.origin == .cloudNew {
+            post.origin = .cloud
+        }
+        
         if UIDevice.isiPhone {
             coordinator.push(.postDetails(postId: post.id))
-        }
-        if UIDevice.isiPad {
-            hapticManager.impact(style: .light)
         }
     }
     
@@ -201,7 +205,7 @@ struct HomeView: View {
                 coordinator.push(.preferences)
             }
         }
-        if noticevm.hasUnreadNotices {
+        if noticevm.unreadCount != 0  {
             ToolbarItem(placement: .navigationBarLeading) {
                 noticeButton
             }
@@ -233,7 +237,7 @@ struct HomeView: View {
                 .fill(Color.mycolor.myRed)
                 .frame(maxWidth: 15, maxHeight: 10)
                 .overlay {
-                    Text("\(noticevm.unreadCount)")  // ← используем computed property
+                    Text("\(noticevm.unreadCount)")
                         .font(.system(size: 8, weight: .bold))
                         .foregroundStyle(Color.mycolor.myButtonTextPrimary)
                 }
@@ -277,7 +281,6 @@ struct HomeView: View {
                         showViewOnDoubleTap = false
                         hapticManager.impact(style: .light)
                     }
-//                    .allowsHitTesting(true)
                     .frame(maxHeight: max(proxy.size.height / 3, 300))
                     .padding(.horizontal, 30)
                 }
@@ -338,7 +341,7 @@ struct HomeView: View {
         ContentUnavailableView(
             "No Study Materials",
             systemImage: "tray.and.arrow.down",
-            description: Text("Materials will appear here when you create your own or download a curated collection")
+            description: Text("Materials will appear here once you create them yourself.")
         )
     }
     
@@ -346,7 +349,7 @@ struct HomeView: View {
         ContentUnavailableView(
             "No Results matching your search criteria",
             systemImage: "magnifyingglass",
-            description: Text("Check the spelling or try a new search")
+            description: Text("Check the spelling or try a new search.")
         )
     }
     

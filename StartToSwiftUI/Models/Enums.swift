@@ -86,9 +86,6 @@ enum PostFields: Hashable {
 //    case postDate
 }
 
-
-// MARK: - DataModel Errors
-
 enum PostType: String, CaseIterable, Codable {
     case post
     case course
@@ -107,16 +104,23 @@ enum PostType: String, CaseIterable, Codable {
     }
 }
 
+
+enum PostStatus: String, CaseIterable, Codable {
+    case active
+    case hidden
+    case deleted
+}
+
 enum PostOrigin: String, CaseIterable, Codable {
     case local
     case cloud
-    case statical
+    case cloudNew
     
     var icon: Image {
         switch self {
         case .local: return Image(systemName: "archivebox") // tray cube  archivebox folder arrow.up.folder text.document
         case .cloud: return Image(systemName: "cloud")
-        case .statical: return Image(systemName: "arrow.2.squarepath") // line.3.horizontal square.grid.2x2 s.circle arrow.2.squarepath
+        case .cloudNew: return Image(systemName: "cloud.fill")
         }
     }
 }
@@ -184,7 +188,7 @@ enum StudyLevel: String, CaseIterable, Codable {
     var displayName: String {
         switch self {
         case .beginner: return "Beginner"
-        case .middle: return "Middle"
+        case .middle: return "Intermediate"
         case .advanced: return "Advanced"
         }
     }
@@ -263,7 +267,6 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
         }
     }
 }
-
 
 
 enum Platform: String, CaseIterable, Codable {
@@ -382,6 +385,7 @@ enum AppRoute: Hashable, Identifiable {
     case aboutApp
     case welcome
     case introduction
+    case functionality
     case whatIsNew
     
     // Legal information
@@ -439,6 +443,8 @@ enum AppRoute: Hashable, Identifiable {
             return "welcome"
         case .introduction:
             return "introduction"
+        case .functionality:
+            return "functionality"
         case .whatIsNew:
             return "whatIsNew"
         case .legalInfo:

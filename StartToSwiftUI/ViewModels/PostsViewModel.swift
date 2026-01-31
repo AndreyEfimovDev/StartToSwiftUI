@@ -52,6 +52,7 @@ final class PostsViewModel: ObservableObject {
     
     // MARK: - AppStorage
     @AppStorage("selectedTheme") var selectedTheme: Theme = .system
+    @AppStorage("isFirstLaunch") var isFirstLaunch: Bool = true
     
     // Filters
     @AppStorage("storedCategory") var storedCategory: String?
@@ -123,6 +124,9 @@ final class PostsViewModel: ObservableObject {
     }
     
     private func restoreFilters() {
+        
+        setupFirstLaunchDefaults()
+        
         selectedCategory = storedCategory
         selectedLevel = storedLevel
         selectedFavorite = storedFavorite
@@ -131,6 +135,15 @@ final class PostsViewModel: ObservableObject {
         selectedYear = storedYear
         selectedSortOption = storedSortOption
         isFiltersEmpty = checkIfAllFiltersAreEmpty()
+    }
+    
+    private func setupFirstLaunchDefaults() {
+        
+        if isFirstLaunch {
+            storedLevel = .beginner
+            storedType = .course
+            isFirstLaunch = false
+        }
     }
     
     private func initializeAppState() async {
@@ -424,61 +437,29 @@ final class PostsViewModel: ObservableObject {
     }
     
     func exportPostsToJSON() -> Result<URL, Error> {
-        do {
-            log("🍓 Exporting \(allPosts.count) posts from SwiftData", level: .info)
-            
-            // Convert Post to CodablePost
-            let codablePosts = allPosts.map { post in
-                CodablePost(
-                    id: post.id,
-                    category: post.category,
-                    title: post.title,
-                    intro: post.intro,
-                    author: post.author,
-                    postType: post.postType,
-                    urlString: post.urlString,
-                    postPlatform: post.postPlatform,
-                    postDate: post.postDate,
-                    studyLevel: post.studyLevel,
-                    progress: post.progress,
-                    favoriteChoice: post.favoriteChoice,
-                    postRating: post.postRating,
-                    notes: post.notes,
-                    origin: post.origin,
-                    draft: post.draft,
-                    date: post.date,
-                    startedDateStamp: post.startedDateStamp,
-                    studiedDateStamp: post.studiedDateStamp,
-                    practicedDateStamp: post.practicedDateStamp
-                )
-            }
-            
-            // Encoding in JSON
-            let encoder = JSONEncoder()
-            encoder.dateEncodingStrategy = .iso8601
-            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-            
-            let jsonData = try encoder.encode(codablePosts)
-            
-            // Create a unique file name with the date
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd_HH-mm"
-            
-            let fileName = "StartToSwiftUI_backup_\(dateFormatter.string(from: Date())).json"
-            let tempFileURL = FileManager.default.temporaryDirectory
-                .appendingPathComponent(fileName)
-            
-            try jsonData.write(to: tempFileURL)
-            
-            log("🍓✅ Exported to: \(tempFileURL.lastPathComponent)", level: .info)
-            return .success(tempFileURL)
-            
-        } catch {
+        log("🍓 Exporting \(allPosts.count) posts from SwiftData", level: .info)
+        
+        // Convert Post to CodablePost
+        let codablePosts = allPosts.map { CodablePost(from: $0) }
+        
+        // Create a unique file name with the date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd_HH-mm"
+        let fileName = "StartToSwiftUI_backup_\(dateFormatter.string(from: Date())).json"
+        
+        // Use fileManager to export
+        let result = fileManager.exportToTemporary(codablePosts, fileName: fileName)
+        
+        switch result {
+        case .success(let url):
+            log("🍓✅ Exported to: \(url.lastPathComponent)", level: .info)
+            return .success(url)
+        case .failure(let error):
             handleError(error, message: "Export failed")
             return .failure(error)
         }
     }
-    
+
     // MARK: - Filtering & Searching
     
     private func setupSubscriptions() {
@@ -770,112 +751,3 @@ final class PostsViewModel: ObservableObject {
         WidgetCenter.shared.reloadAllTimelines()
     }
 }
-
-
-
-//    private func handleNewPosts(_ newPosts: [Post], sourceName: String) async {
-//        // Insert new posts
-//        for post in newPosts {
-//            post.addedDateStamp = .now
-//            dataSource.insert(post)
-//        }
-//        saveContextAndReload()
-//
-//        // SwiftData-specific logic (только для SwiftData)
-//        if let swiftDataSource = dataSource as? SwiftDataPostsDataSource {
-//            updateAppSyncState(swiftDataSource.modelContext)
-//        }
-//
-//        hapticManager.notification(type: .success)
-//        log("✅ Added \(newPosts.count) new posts from \(sourceName)", level: .info)
-//    }
-//
-//    private func updateAppSyncState(_ modelContext: ModelContext) {
-//        // Update the date of the last import of curated posts
-//        let appStateManager = AppSyncStateManager(modelContext: modelContext)
-//        let latestDate = getLatestDateFromPosts(posts: allPosts) ?? .now
-//        appStateManager.setLastDateOfCuaratedPostsLoaded(latestDate)
-//        // As a result of importing curated posts - no new materials -> false
-//        appStateManager.setCuratedPostsLoadStatusOff()
-//    }
-//
-
-//
-//    private func checkAndReturnUniquePosts(posts: [Post]) -> [Post] {
-//
-//        // Checking posts with the same Title to local posts - do not append such posts from BackUp
-//        let existingTitlesInLocalPosts = Set(allPosts.map { $0.title })
-//        let postsAfterCheckForUniqueTitle = posts.filter { !existingTitlesInLocalPosts.contains($0.title) }
-//
-//        // Checking posts with the same ID to local posts - do not append such posts from BackUp
-//        let existingIdInLocalPosts = Set(allPosts.map { $0.id })
-//        let postsAfterCheckForUniqueID = postsAfterCheckForUniqueTitle.filter { !existingIdInLocalPosts.contains($0.id) }
-//
-//        return postsAfterCheckForUniqueID
-//    }
-
-    
-// Load static posts trigger - tied to AppStateManager, used only in Toggle in Preferences
-//    @AppStorage("shouldLoadStaticPosts") var shouldLoadStaticPosts: Bool = true {
-//        didSet {
-//            log("🔄 shouldLoadStaticPosts has changed: \(shouldLoadStaticPosts)", level: .info)
-//
-//            // Получаем modelContext только если это SwiftData источник
-//            guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else {
-//                log("⚠️ shouldLoadStaticPosts: доступно только для SwiftData", level: .warning)
-//                return
-//            }
-//
-//            let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
-//
-//            switch shouldLoadStaticPosts {
-//            case true:
-//                appStateManager.setShouldLoadStaticPostsOn()
-//            case false:
-//                appStateManager.setShouldLoadStaticPostsOff()
-//            }
-//        }
-//    }
-
-//        // Initializing filters
-//        self.selectedCategory = self.storedCategory
-//        self.selectedLevel = self.storedLevel
-//        self.selectedFavorite = self.storedFavorite
-//        self.selectedType = self.storedType
-//        self.selectedPlatform = self.storedPlatform
-//        self.selectedYear = self.storedYear
-//        self.selectedSortOption = self.storedSortOption
-//
-//        self.isFiltersEmpty = checkIfAllFiltersAreEmpty()
-//
-//        loadPostsFromSwiftData()
-//
-//        Task {
-//            // Get the modelContext from the SwiftData source
-//            guard let swiftDataSource = dataSource as? SwiftDataPostsDataSource else {
-//                log("⚠️ init PostViewModel: dataSource does not cast SwiftDataPostsDataSource", level: .info)
-//                return
-//            }
-//
-//            let appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
-//
-//            // Clearing duplicate AppState from previous runs (Xcode)
-//            appStateManager.cleanupDuplicateAppStates()
-//
-//            if appStateManager.getTermsOfUseAcceptedStatus() {
-//                self.isTermsOfUseAccepted = true
-//            }
-//
-//            let hasUpdates = await checkCloudCuratedPostsForUpdates()
-//            if hasUpdates {
-//                appStateManager.setCuratedPostsLoadStatusOn()
-//            }
-//        }
-//
-//        // Setting the timezone
-//        if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
-//            utcCalendar.timeZone = utcTimeZone
-//        }
-//
-//        // Subscriptions for filtering
-//        setupSubscriptions()
