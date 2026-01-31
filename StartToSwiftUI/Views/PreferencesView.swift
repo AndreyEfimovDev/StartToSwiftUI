@@ -179,7 +179,7 @@ struct PreferencesView: View {
         }
     }
     
-    /// Checking for new curated links to materials is available if:
+    /// Checking for new curated references to materials is available if:
     /// - new materials availability status = true, and
     /// - The local array of materials contains author's materials (for posts with origin = .cloud)
     ///
@@ -197,7 +197,7 @@ struct PreferencesView: View {
     @ViewBuilder
     private var importFromCloud: some View {
         if vm.shouldShowImportFromCloud {
-            Button("Download the curated collection") {
+            Button("Download curated collection") {
                 coordinator.pushModal(.importFromCloud)
             }
             .customListRowStyle(iconName: "icloud.and.arrow.down", iconWidth: iconWidth)

@@ -37,35 +37,6 @@ struct EraseAllPostsView: View {
                     .padding(.top, 30)
                     .padding(.horizontal, 50)
                 
-
-//                CapsuleButtonView(
-//                    primaryTitle: "ERASE",
-//                    secondaryTitle: "\(postCount) Materials Erased!",
-//                    textColorPrimary: Color.mycolor.myButtonTextRed,
-//                    buttonColorPrimary: Color.mycolor.myButtonBGRed,
-//                    buttonColorSecondary: Color.mycolor.myButtonBGGreen,
-//                    isToChange: isDeleted) {
-//                        isInProgress = true
-//                        vm.eraseAllPosts{
-//                            isDeleted = true
-//                            isInProgress = false
-//                            // Reset the status of the first import of curated links to materials
-//                            // To allow directly import curated links to materials again
-//                            let appStateManager = AppSyncStateManager(modelContext: modelContext)
-//                            appStateManager.setCuratedPostsLoadStatusOn()
-//                            
-//                            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-//                                coordinator.closeModal()
-//                            }
-//                        }
-//                    }
-//                    .padding(.top, 30)
-//                    .padding(.horizontal, 50)
-//                    .onChange(of: vm.allPosts.count, { oldValue, _ in
-//                        postCount = oldValue
-//                    })
-//                    .disabled(isDeleted)
-                
                 Spacer()
                 
                 if isInProgress {
@@ -85,7 +56,7 @@ struct EraseAllPostsView: View {
     private var eraseButton: some View {
         CapsuleButtonView(
             primaryTitle: "ERASE",
-            secondaryTitle: "\(erasedCount) Materials Erased!",
+            secondaryTitle: "\(erasedCount) Content Erased!",
             textColorPrimary: Color.mycolor.myButtonTextRed,
             buttonColorPrimary: Color.mycolor.myButtonBGRed,
             buttonColorSecondary: Color.mycolor.myButtonBGGreen,
@@ -103,7 +74,7 @@ struct EraseAllPostsView: View {
         VStack(spacing: 0) {
             Text("""
             **You are about
-            to delete all the materials.**
+            to delete all the study content.**
             
             What you can do after:
             
@@ -115,7 +86,7 @@ struct EraseAllPostsView: View {
 
             Text("""
             - download the curated collection, 
-            - create own materials, or
+            - create own content, or
             - restore backup.
             
             """
@@ -126,8 +97,8 @@ struct EraseAllPostsView: View {
             
             Text("""
             It is recommended
-            to backup мaterials before
-            deleting them.
+            to backup content before
+            deleting it.
             """)
             .foregroundStyle(Color.mycolor.myRed)
             .bold()

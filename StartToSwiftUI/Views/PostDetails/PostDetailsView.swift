@@ -78,6 +78,9 @@ struct PostDetailsView: View {
             .onChange(of: proxy.size.width) { _, newValue in
                 updateWidths(for: newValue)
             }
+            .onDisappear {
+
+            }
             .safeAreaInset(edge: .bottom) {
                 if post != nil {
                     bottomTabsContainer

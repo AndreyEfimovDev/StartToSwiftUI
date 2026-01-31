@@ -63,8 +63,7 @@ struct ImportPostsFromCloudView: View {
         VStack {
             Group {
                 Text("""
-                    The curated collection of links
-                    to SwiftUI tutorials and articles are compiled by the developer from open sources for the purpose of learning the SwiftUI functionality.
+                    The collection of SwiftUI tutorials and articles compiled by the developer using open sources to make it easy for complete beginners to get started.
 
                     """)
                 

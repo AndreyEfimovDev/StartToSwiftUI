@@ -49,7 +49,7 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiLvzZFJI6rVIBtdolrJBVB",
             postPlatform: .youtube,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "iOS Dev Beginner Course FREE Preview",
@@ -60,7 +60,7 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgHtditjG_y2DuYuj9FJommY",
             postPlatform: .youtube,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Swift for Complete Beginners",
@@ -71,7 +71,7 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLuoeXyslFTuaYpVr3S9wG6PkIvYn_yHbg",
             postPlatform: .youtube,
-            origin: .cloud
+            origin: .cloudNew
         ),
 
         Post(
@@ -85,7 +85,7 @@ struct DevData {
             postPlatform: .website,
             postDate: nil,
             studyLevel: .beginner,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "SwiftUI Bootcamp",
@@ -96,7 +96,7 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO",
             postPlatform: .youtube,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "SwiftUI Todo List",
@@ -108,7 +108,7 @@ struct DevData {
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpheGqemblOIA7v3oq0MS30i",
             postPlatform: .youtube,
             postDate: nil,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Swift Keywords",
@@ -120,7 +120,7 @@ struct DevData {
             urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgHx8DgGsHB4Dh_H_78x8oQE",
             postPlatform: .youtube,
             postDate: nil,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Swift Tutorials & Code Snippets",
@@ -132,7 +132,7 @@ struct DevData {
             urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgG3822Pbf_H9xldrODNV3XI",
             postPlatform: .youtube,
             postDate: nil,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Swift Programming Tutorial",
@@ -144,7 +144,7 @@ struct DevData {
             urlString: "https://www.youtube.com/watch?v=CwA1VWP0Ldw",
             postPlatform: .youtube,
             postDate: nil,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "SwiftUI Fundamentals",
@@ -156,7 +156,7 @@ struct DevData {
             urlString: "https://www.youtube.com/watch?v=b1oC7sLIgpI",
             postPlatform: .youtube,
             postDate: nil,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Git & Source Control",
@@ -167,7 +167,7 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiALKk34l9mUS2f4mdJPvXq",
             postPlatform: .youtube,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "SwiftUI Map App",
@@ -179,99 +179,99 @@ struct DevData {
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdpha5eVTjLM0eRlJ7-yDDwBk",
             postPlatform: .youtube,
             postDate: nil,
-            origin: .cloud
+            origin: .cloudNew
         ),
-        Post(
-            title: "SwiftData",
-            intro: """
-                A series on learning how to build an application using SwiftData as your persistence layer.
-                """,
-            author: "Stewart Lynch",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4Ck-JEF2nkcFTF_2rhGBMKX",
-            postPlatform: .website,
-            postDate: nil,
-            studyLevel: .middle,
-            origin: .cloud
-        ),
-
-        Post(
-            title: "JSON and Codable Protocol - Swift",
-            intro: """
-                7 part series on learning how to use Xcode to manage Git version control.
-                """,
-            author: "Stewart Lynch",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4DADQtPjCfXrBHuPHLO80oU",
-            postPlatform: .youtube,
-            postDate: nil,
-            studyLevel: .middle,
-            origin: .cloud,
-        ),
-        Post(
-            title: "SwiftUI Continued Learning",
-            intro: """
-                Building professional apps requires knowledge of data persistence and networking. This bootcamp builds on your existing knowledge of SwiftUI.
-                """,
-            author: "Nick Sarno",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar",
-            postDate: nil,
-            studyLevel: .middle,
-            origin: .cloud
-        ),
-        Post(
-            title: "SwiftUI Crypto App",
-            intro: """
-                Build a cryptocurrency app that downloads live price data from an API and saves the current user's portfolio. Get comfortable with Combine, Core Data, and MVVM.
-                """,
-            author: "Nick Sarno",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
-            postPlatform: .youtube,
-            postDate: nil,
-            studyLevel: .middle,
-            origin: .cloud
-        ),
-        Post(
-            title: "SwiftUI + Firebase",
-            intro: """
-            Become an expert at using Google Firebase. Set up user authentication, connect to a remote database, and track your app's performance in real-time.
-            
-            Learn how to integrate Firebase into your iOS app with Swift code in our comprehensive tutorial series. Our step-by-step guide will teach you everything you need to know about using Firebase in your mobile app development, perfect for developers of all levels.
-            """,
-            author: "Nick Sarno",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphl8ly0oi0aHx0v2B7UvDK0",
-            postPlatform: .youtube,
-            postDate: nil,
-            studyLevel: .middle,
-            origin: .cloud,
-        ),
-        Post(
-            title: "Swift Concurrency",
-            intro: """
-                Swift Concurrency is a major upgrade to the Swift language that completely changes how to write asynchronous code in Swift. Learn everything that you need to know.
-                """,
-            author: "Nick Sarno",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphr2Dl4sY4rS9PLzPdyi8PM",
-            postDate: nil,
-            studyLevel: .middle,
-            origin: .cloud
-        ),
-
-        Post(
-            title: "SwiftUI Advanced Learning",
-            intro: """
-                Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
-                """,
-            author: "Nick Sarno",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
-            studyLevel: .advanced,
-            origin: .cloud
-        ),
+//        Post(
+//            title: "SwiftData",
+//            intro: """
+//                A series on learning how to build an application using SwiftData as your persistence layer.
+//                """,
+//            author: "Stewart Lynch",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4Ck-JEF2nkcFTF_2rhGBMKX",
+//            postPlatform: .website,
+//            postDate: nil,
+//            studyLevel: .middle,
+//            origin: .cloudNew
+//        ),
+//
+//        Post(
+//            title: "JSON and Codable Protocol - Swift",
+//            intro: """
+//                7 part series on learning how to use Xcode to manage Git version control.
+//                """,
+//            author: "Stewart Lynch",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4DADQtPjCfXrBHuPHLO80oU",
+//            postPlatform: .youtube,
+//            postDate: nil,
+//            studyLevel: .middle,
+//            origin: .cloudNew,
+//        ),
+//        Post(
+//            title: "SwiftUI Continued Learning",
+//            intro: """
+//                Building professional apps requires knowledge of data persistence and networking. This bootcamp builds on your existing knowledge of SwiftUI.
+//                """,
+//            author: "Nick Sarno",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar",
+//            postDate: nil,
+//            studyLevel: .middle,
+//            origin: .cloudNew
+//        ),
+//        Post(
+//            title: "SwiftUI Crypto App",
+//            intro: """
+//                Build a cryptocurrency app that downloads live price data from an API and saves the current user's portfolio. Get comfortable with Combine, Core Data, and MVVM.
+//                """,
+//            author: "Nick Sarno",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
+//            postPlatform: .youtube,
+//            postDate: nil,
+//            studyLevel: .middle,
+//            origin: .cloudNew
+//        ),
+//        Post(
+//            title: "SwiftUI + Firebase",
+//            intro: """
+//            Become an expert at using Google Firebase. Set up user authentication, connect to a remote database, and track your app's performance in real-time.
+//            
+//            Learn how to integrate Firebase into your iOS app with Swift code in our comprehensive tutorial series. Our step-by-step guide will teach you everything you need to know about using Firebase in your mobile app development, perfect for developers of all levels.
+//            """,
+//            author: "Nick Sarno",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphl8ly0oi0aHx0v2B7UvDK0",
+//            postPlatform: .youtube,
+//            postDate: nil,
+//            studyLevel: .middle,
+//            origin: .cloudNew,
+//        ),
+//        Post(
+//            title: "Swift Concurrency",
+//            intro: """
+//                Swift Concurrency is a major upgrade to the Swift language that completely changes how to write asynchronous code in Swift. Learn everything that you need to know.
+//                """,
+//            author: "Nick Sarno",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphr2Dl4sY4rS9PLzPdyi8PM",
+//            postDate: nil,
+//            studyLevel: .middle,
+//            origin: .cloudNew
+//        ),
+//
+//        Post(
+//            title: "SwiftUI Advanced Learning",
+//            intro: """
+//                Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
+//                """,
+//            author: "Nick Sarno",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
+//            studyLevel: .advanced,
+//            origin: .cloudNew
+//        ),
     ]
         
     
