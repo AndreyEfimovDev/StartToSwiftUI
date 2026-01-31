@@ -47,11 +47,11 @@ struct PrivacyPolicy: View {
                     The App does not collect, store, or transmit any user personal data to external servers.
                     
                     **Data you create within the App:**
-                    - Collections of links to educational materials
-                    - Collection titles and short descriptions (preview information)
-                    - Link metadata (e.g., author, source, date)
+                    - Your own content for SwiftUI mastering
+                    - Titles, introductory information and personal notes
+                    - Metadata (e.g., author, source, date)
                     
-                    All this data is stored exclusively on your device using built-in iOS data persistence mechanisms (SwiftData, CloudKit, FileManager and UserDefaults).
+                    All this data is stored exclusively on your device using built-in iOS data persistence mechanisms (SwiftData + CloudKit, FileManager and UserDefaults).
                     
                     
                     **2. WHERE DATA IS STORED**
@@ -63,18 +63,18 @@ struct PrivacyPolicy: View {
                     
                     **3. CURATED COLLECTION DOWNLOAD**
                     
-                    When downloading the pre-built collection of SwiftUI links:
+                    When downloading the pre-built collection of SwiftUI materials:
                     - The collection is downloaded into the App from a cloud service only at your explicit request
                     - The data then resides solely on your device
                     - We do not track which collections you download
-                    - We do not know which links you view
+                    - We do not know which content you view
                     
                     
-                    **4. EXTERNAL LINKS**
+                    **4. EXTERNAL REFERENCES**
                     
-                    The App may contain links to external educational resources (e.g., YouTube, developer blogs).
+                    The App may contain references to external educational resources (e.g., learning video, articles).
                     
-                    **Important:** When following links, you leave our App. External sites have their own privacy policies and practices, over which we have no control and for which we accept no responsibility. We recommend reviewing the privacy policy of any external site you visit.
+                    **Important:** When following references, you leave our App. External sites have their own privacy policies and practices, over which we have no control and for which we accept no responsibility. We recommend reviewing the privacy policy of any external site you visit.
                     
                     
                     **5. YOUR RIGHTS AND MANAGEMENT**
