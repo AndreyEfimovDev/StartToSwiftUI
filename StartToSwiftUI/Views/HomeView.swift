@@ -151,11 +151,13 @@ struct HomeView: View {
     
     private func handleSingleTap(on post: Post) {
         vm.selectedPostId = post.id
+        
+        if post.origin == .cloudNew {
+            post.origin = .cloud
+        }
+        
         if UIDevice.isiPhone {
             coordinator.push(.postDetails(postId: post.id))
-        }
-        if UIDevice.isiPad {
-            hapticManager.impact(style: .light)
         }
     }
     

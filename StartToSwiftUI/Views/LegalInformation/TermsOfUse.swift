@@ -90,8 +90,6 @@ struct TermsOfUse: View {
                         - Learning management
                         - Analytics and study progress
                         
-                        **IMPORTANT:** The App may store only links to materials, not the content itself.
-                        
                         
                         **3. LICENSE TO USE**
                         
@@ -116,7 +114,7 @@ struct TermsOfUse: View {
                         - You are solely responsible for any content you add to the App
                         - You agree to add content related only to legal, publicly available materials
                         - You agree to respect copyright and attribute authorship
-                        - You must not use the App to store links to illegal or malicious content
+                        - You must not use the App to store references to illegal or malicious content
                         
                         **4.2. Local Storage:**
                         - All user content is stored locally on your device
@@ -136,7 +134,7 @@ struct TermsOfUse: View {
                         - To use it only for non-commercial educational purposes
                         - Not to distribute the collection publicly or commercially
                         - To respect the copyright of all linked materials
-                        - To access original sources via the provided links
+                        - To access original sources via the provided references
                         
                         
                         **6. INTELLECTUAL PROPERTY**
@@ -163,13 +161,13 @@ struct TermsOfUse: View {
                         
                         The App is provided "as is" without any warranties:
                         - We do not guarantee uninterrupted operation of the App
-                        - We do not guarantee the ongoing validity of links (external sites may change)
-                        - We do not guarantee the quality or accuracy of the materials accessed via links
+                        - We do not guarantee the ongoing validity of references (external sites may change)
+                        - We do not guarantee the quality or accuracy of the materials accessed via references
                         
                         **7.2. External Content:**
                         - We do not control the content of external websites
-                        - We are not responsible for the content of materials accessed via links
-                        - Users follow links at their own risk
+                        - We are not responsible for the content of materials accessed via references
+                        - Users follow references at their own risk
                         
                         **7.3. Educational Purpose:**
                         - The App is created solely for educational purposes

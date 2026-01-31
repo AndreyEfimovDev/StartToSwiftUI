@@ -34,11 +34,11 @@ struct FairUseNotice: View {
                     
                     **Educational Purpose**: The app is designed exclusively for non-commercial educational use, serving as a personal tool to help users organise and manage their learning materials.
                     
-                    **Links, Not Content**: We store only references to materials via links and metadata. The application does not copy, host, or distribute the actual content of the linked resources.
+                    **References, Not Content**: Users may save only references to materials via references and metadata. The application does not copy, host, or distribute the actual content of the linked resources.
                     
-                    **Author Attribution**: Complete authorship information—including the author's name, original source, and publication date where available—is preserved and displayed for every resource.
+                    **Author Attribution**: Complete authorship information, including author name, original source, and publication date (if available), may be stored and displayed for each resource.
                     
-                    **Direct Source Access**: All links lead directly to the original sources. This ensures that content creators receive the proper traffic, recognition, and any associated benefits from user visits.
+                    **Direct Source Access**: All references lead directly to the original sources. This ensures that content creators receive the proper traffic, recognition, and any associated benefits from user visits.
                     
                     In essence, the application functions as an organisational tool that respects intellectual property rights while supporting the educational community. We actively encourage users to access all materials through the original sources and to always respect the rights of creators.
                     """)

@@ -46,18 +46,7 @@ struct WelcomeAtFirstLaunchView: View {
     private var descriptionText: some View {
         Text("""
         This app is designed for educational purposes and helps self-paced learners effectively manage SwiftUI learning materials.
-                  
-        **For each material, you have the ability to create and save:**
-        
-        - Title and a preview information
-        - The author's name
-        - A direct link to a respective original source
-        - The type of the source (Website, YouTube)
-        - The publication date (if known)
-        - The type of material (single tutorial, course, solution, etc.)
-        - The difficulty level (Beginner, Intermediate, Advanced)
-        - Your personal notes on the material
-                             
+                                               
         To use this app, you need to agree to the **Terms of Use**.
         """
         )
