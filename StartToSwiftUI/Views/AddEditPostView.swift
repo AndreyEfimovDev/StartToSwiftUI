@@ -450,44 +450,23 @@ struct AddEditPostView: View {
 
     private var urlSection: some View {
         FormSection(title: "URL") {
-            ZStack {
-                HStack(spacing: 0) {
-                    Button(urlTrigger ? "Set url" : "Reset url") {
-                        if !urlTrigger {
-                            editedPost.urlString = Constants.urlStart
-                        }
-                        urlTrigger.toggle()
-                    }
-                    .foregroundColor(urlTrigger ? .blue : .red)
-                    .padding(8)
-                    .background(
-                        .ultraThinMaterial,
-                        in: .capsule
-                    )
-                    .padding(8)
-                    .zIndex(1)
-                    
-                    HStack(spacing: 0) {
-                        TextField("", text: $editedPost.urlString)
-                            .font(fontTextInput)
-                            .padding(.leading, 5)
-                            .frame(height: 50)
-                            .padding(.horizontal, 3)
-                            .textInputAutocapitalization(.none)
-                            .autocorrectionDisabled(true) // fixing leaking memory
-                            .keyboardType(.URL)
-                            .focused($focusedField, equals: .urlString)
-                            .onSubmit {focusedField = nil }
-                            .submitLabel(.next)
-                        
-                        clearButton(for: editedPost.urlString) {
-                            editedPost.urlString = Constants.urlStart
-                        }
-                    }
-                    .opacity(urlTrigger ? 0 : 1)
+            HStack(spacing: 0) {
+                TextField("", text: $editedPost.urlString)
+                    .font(fontTextInput)
+                    .padding(.leading, 5)
+                    .frame(height: 50)
+                    .padding(.horizontal, 3)
+                    .textInputAutocapitalization(.none)
+                    .autocorrectionDisabled(true) // fixing leaking memory
+                    .keyboardType(.URL)
+                    .focused($focusedField, equals: .urlString)
+                    .onSubmit {focusedField = nil }
+                    .submitLabel(.next)
+                
+                clearButton(for: editedPost.urlString) {
+                    editedPost.urlString = ""
                 }
             }
-           
         }
     }
 
