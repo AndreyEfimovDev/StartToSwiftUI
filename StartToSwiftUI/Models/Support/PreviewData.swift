@@ -76,7 +76,7 @@ struct PreviewData {
         studyLevel: .advanced,
         progress: .fresh, // fresh, learning, studied, practiced
         postRating: .great, // good, great, excellent
-        origin: .statical
+        origin: .local
     )
     
     static let samplePost3 = Post(
@@ -92,7 +92,7 @@ struct PreviewData {
         studyLevel: .advanced,
         progress: .studied, // fresh, learning, studied, practiced
         postRating: .excellent, // good, great, excellent
-        origin: .statical
+        origin: .local
     )
     
     static let samplePost4 = Post(

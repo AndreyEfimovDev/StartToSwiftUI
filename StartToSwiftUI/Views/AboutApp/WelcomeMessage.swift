@@ -9,7 +9,11 @@ import SwiftUI
 
 struct WelcomeMessage: View {
 
+    // MARK: - Dependencies
+
     @EnvironmentObject private var coordinator: AppCoordinator
+
+    // MARK: BODY
 
     var body: some View {
         FormCoordinatorToolbar(
@@ -29,7 +33,7 @@ struct WelcomeMessage: View {
 
             Welcome to **StartToSwiftUI**!
             
-            This app is designed to help beginners learn SwiftUI from the ground up.
+            This app is designed to help master SwiftUI quickly and with confidence from the ground up.
 
             When I first began learning SwiftUI, I was overwhelmed by the sheer variety of self-study options available. I gradually started collecting tutorials and articles from open sources that explained SwiftUI's functionality in a way that matched how I think.
             
@@ -37,7 +41,7 @@ struct WelcomeMessage: View {
             
             As a result, I decided to create an app for this purpose. Creating my own app also helped me to put my theoretical knowledge into practice, moving it from my head to my heart.
 
-             If you find this app useful, I would be very happy to hear from you.
+            If you find this app useful, I would be very happy to hear from you.
 
             Good luck with mastering SwiftUI!
 

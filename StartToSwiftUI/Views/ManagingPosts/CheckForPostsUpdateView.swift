@@ -115,7 +115,7 @@ struct CheckForPostsUpdateView: View {
 
 //    private var textSection: some View {
 //        Text("""
-//            The curated collection of links to SwiftUI tutorials and articles has been compiled from open sources by the developer for the purpose of learning the SwiftUI functionality.
+//            The curated collection of SwiftUI tutorials and articles has been compiled from open sources by the developer for the purpose of learning the SwiftUI functionality.
 //                       
 //            The collection **will be appended** to all current posts in the App, excluding duplicates based on the post title.
 //            """)
@@ -141,7 +141,7 @@ struct CheckForPostsUpdateView: View {
     
     private var descriptionText: some View {
         Text("""
-               The curated collection of links to SwiftUI tutorials and articles has been compiled from open sources by the developer for the purpose of learning the SwiftUI functionality.
+               The curated collection of SwiftUI tutorials and articles has been compiled from open sources by the developer for the purpose of learning the SwiftUI functionality.
                           
                The collection **will be appended** to all current posts in the App, excluding duplicates based on the post title.
                """)
@@ -164,7 +164,7 @@ struct CheckForPostsUpdateView: View {
     
     // MARK: - Actions
     
-    /// Check if updates for curated links to study materials are available
+    /// Check if updates for curated study materials are available
     private func checkForUpdates() {
         Task {
             let hasUpdates = await vm.checkCloudCuratedPostsForUpdates()

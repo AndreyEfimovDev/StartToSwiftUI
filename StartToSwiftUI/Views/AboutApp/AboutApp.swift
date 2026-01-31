@@ -60,6 +60,11 @@ struct AboutApp: View {
             }
             .customListRowStyle(iconName: "textformat.size.larger", iconWidth: iconWidth)
             
+            Button("Functionality") {                coordinator.pushModal(.functionality)
+            }
+            .customListRowStyle(iconName: "f.cursive", iconWidth: iconWidth)
+
+            
             Button("What's New") {
                 coordinator.pushModal(.whatIsNew)
             }
@@ -83,7 +88,7 @@ struct AboutApp: View {
                 .font(.title2)
                 .fontWeight(.semibold)
             
-            Text("SwiftUI Study Hub")
+            Text("SwiftUI Study")
                 .font(.body)
             
             Group {

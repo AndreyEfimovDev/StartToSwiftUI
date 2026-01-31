@@ -27,7 +27,7 @@ struct PreferencesView: View {
             Section(header: sectionHeader("Appearance")) {
                 themeAppearance
             }
-            Section(header: sectionHeader("Notifications")) {
+            Section(header: sectionHeader("Notices")) {
                 if noticevm.notices.count > 0 {
                     noticeMessages
                 }
@@ -179,7 +179,7 @@ struct PreferencesView: View {
         }
     }
     
-    /// Checking for new curated links to materials is available if:
+    /// Checking for new curated references to materials is available if:
     /// - new materials availability status = true, and
     /// - The local array of materials contains author's materials (for posts with origin = .cloud)
     ///
@@ -192,53 +192,18 @@ struct PreferencesView: View {
             .customListRowStyle(iconName: "arrow.trianglehead.counterclockwise", iconWidth: iconWidth)
         }
     }
-    
-    //    private var checkForPostsUpdate: some View {
-    //        Group {
-    //            let appStateManager = AppSyncStateManager(modelContext: modelContext)
-    //            let status = appStateManager.getAvailableNewCuratedPostsStatus()
-    //            let localPostsFromCloud = vm.allPosts.filter { $0.origin == .cloud }
-    //
-    //            if status && !localPostsFromCloud.isEmpty {
-    //                Button("Check for materials update") {
-    //                    coordinator.pushModal(.checkForUpdates)
-    //                }
-    //                .customListRowStyle(
-    //                    iconName: "arrow.trianglehead.counterclockwise",
-    //                    iconWidth: iconWidth
-    //                )
-    //            }
-    //        }
-    //    }
-    
+        
     /// Import is available if there are no curated materials in the local array (for posts with origin = .cloud)
     @ViewBuilder
     private var importFromCloud: some View {
         if vm.shouldShowImportFromCloud {
-            Button("Download the curated collection") {
+            Button("Download curated collection") {
                 coordinator.pushModal(.importFromCloud)
             }
             .customListRowStyle(iconName: "icloud.and.arrow.down", iconWidth: iconWidth)
         }
     }
-    
-    
-    //    private var importFromCloud: some View {
-    //        Group {
-    //            let localPostsFromCloud = vm.allPosts.filter { $0.origin == .cloud }
-    //
-    //            if localPostsFromCloud.isEmpty {
-    //                Button("Download the curated collection") {
-    //                    coordinator.pushModal(.importFromCloud)
-    //                }
-    //                .customListRowStyle(
-    //                    iconName: "icloud.and.arrow.down",
-    //                    iconWidth: iconWidth
-    //                )
-    //            }
-    //        }
-    //    }
-    
+        
     private var shareBackup: some View {
         Button("Share/Backup") {
             coordinator.pushModal(.shareBackup)

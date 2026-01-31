@@ -11,7 +11,7 @@ struct PostDraftsRowView: View {
         
     let post: Post
     
-    // MARK: MAIN BODY
+    // MARK: BODY
     var body: some View {
         VStack(spacing: 5){
             Group {
@@ -36,9 +36,6 @@ struct PostDraftsRowView: View {
     
     private var author: some View {
         HStack {
-//            Image(systemName: "square.stack.3d.up")
-//                .font(.caption2)
-//                .foregroundStyle(Color.mycolor.mySecondary)
             Text("@" + post.author + ", ") +
             Text("\(post.postDate?.formatted(date: .numeric, time: .omitted) ?? "date missed")") +
             Text(post.postType == .other ? "" : ", " + post.postType.displayName + " ")
@@ -55,9 +52,13 @@ struct PostDraftsRowView: View {
             .ignoresSafeArea()
 
         VStack {
+            Divider()
             PostDraftsRowView(post: PreviewData.samplePost1)
+            Divider()
             PostDraftsRowView(post: PreviewData.samplePost2)
+            Divider()
             PostDraftsRowView(post: PreviewData.samplePost3)
+            Divider()
         }
     }
 }

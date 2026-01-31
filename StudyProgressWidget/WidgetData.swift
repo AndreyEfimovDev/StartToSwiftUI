@@ -21,13 +21,13 @@ struct StudyProgressData: Codable {
             freshCount
         }
     
-//    var completedCount: Int {
-//        practicedCount
-//    }
+    var completedCount: Int {
+        practicedCount
+    }
     
-//    var inProgressCount: Int {
-//        startedCount + studiedCount
-//    }
+    var inProgressCount: Int {
+        startedCount + studiedCount
+    }
     
     var completionPercentage: Double {
         guard totalCount > 0 else { return 0 }

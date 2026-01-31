@@ -78,6 +78,9 @@ struct PostDetailsView: View {
             .onChange(of: proxy.size.width) { _, newValue in
                 updateWidths(for: newValue)
             }
+            .onDisappear {
+
+            }
             .safeAreaInset(edge: .bottom) {
                 if post != nil {
                     bottomTabsContainer
@@ -131,7 +134,7 @@ struct PostDetailsView: View {
                 .frame(maxWidth: .infinity)
             
             HStack {
-                Text("\(post.studyLevel.displayName.capitalized) level")
+                Text("\(post.studyLevel.displayName.capitalized)")
                     .font(.body)
                     .fontWeight(.medium)
                     .foregroundStyle(post.studyLevel.color)

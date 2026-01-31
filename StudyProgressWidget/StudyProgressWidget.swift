@@ -8,6 +8,67 @@
 import WidgetKit
 import SwiftUI
 
+// MARK: - Widget Bundle
+
+@main
+struct StudyProgressWidgetBundle: WidgetBundle {
+    var body: some Widget {
+        StudyProgressWidget()
+    }
+}
+
+
+// MARK: - Widget Configuration
+
+struct StudyProgressWidget: Widget {
+    let kind: String = "StudyProgressWidget"
+    
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: kind, provider: StudyProgressProvider()) { entry in
+            StudyProgressWidgetEntryView(entry: entry)
+        }
+        .configurationDisplayName("Study Progress")
+        .description("Track your learning progress at a glance.")
+        .supportedFamilies([
+            .systemSmall,
+            .systemMedium,
+            .systemLarge,
+            .accessoryCircular,
+            .accessoryRectangular,
+            .accessoryInline
+        ])
+    }
+}
+
+// MARK: - Widget Views
+
+struct StudyProgressWidgetEntryView: View {
+    
+    @Environment(\.widgetFamily) var widgetFamily
+    var entry: StudyProgressProvider.Entry
+    
+    var body: some View {
+        switch widgetFamily {
+        case .systemSmall:
+            SmallWidgetView(data: entry.data)
+        case .systemMedium:
+            MediumWidgetView(data: entry.data)
+        case .systemLarge:
+            LargeWidgetView(data: entry.data)
+        case .accessoryCircular:
+            AccessoryCircularView(data: entry.data)
+        case .accessoryRectangular:
+            AccessoryRectangularView(data: entry.data)
+        case .accessoryInline:
+            AccessoryInlineView(data: entry.data)
+        default:
+            SmallWidgetView(data: entry.data)
+        }
+    }
+}
+
+
+
 // MARK: - Timeline Entry
 
 struct StudyProgressEntry: TimelineEntry {
@@ -39,34 +100,6 @@ struct StudyProgressProvider: TimelineProvider {
         completion(timeline)
     }
 }
-
-// MARK: - Widget Views
-
-struct StudyProgressWidgetEntryView: View {
-    
-    @Environment(\.widgetFamily) var widgetFamily
-    var entry: StudyProgressProvider.Entry
-    
-    var body: some View {
-        switch widgetFamily {
-        case .systemSmall:
-            SmallWidgetView(data: entry.data)
-        case .systemMedium:
-            MediumWidgetView(data: entry.data)
-        case .systemLarge:
-            LargeWidgetView(data: entry.data)
-        case .accessoryCircular:
-            AccessoryCircularView(data: entry.data)
-        case .accessoryRectangular:
-            AccessoryRectangularView(data: entry.data)
-        case .accessoryInline:
-            AccessoryInlineView(data: entry.data)
-        default:
-            SmallWidgetView(data: entry.data)
-        }
-    }
-}
-
 // MARK: - Small Widget
 
 struct SmallWidgetView: View {
@@ -76,10 +109,10 @@ struct SmallWidgetView: View {
         VStack(spacing: 8) {
             HStack {
                 Image(systemName: "hare")
-                    .foregroundStyle(.blue)
-                Text("Progress")
+                    .foregroundStyle(Color.mycolor.myBlue)
+                Text("Completion")
                     .fontWeight(.bold)
-                    .lineLimit(1)
+                    .foregroundStyle(Color.mycolor.myAccent)
             }
             .font(.caption)
             
@@ -87,13 +120,13 @@ struct SmallWidgetView: View {
             // Progress ring
             ZStack {
                 Circle()
-                    .stroke(Color.gray.opacity(0.3), lineWidth: 8)
+                    .stroke(Color.mycolor.mySecondary.opacity(0.3), lineWidth: 8)
                 
                 Circle()
-                    .trim(from: 0, to: data.progressPercentage / 100)
+                    .trim(from: 0, to: data.completionPercentage / 100)
                     .stroke(
                         LinearGradient(
-                            colors: [.blue, .purple],
+                            colors: [Color.mycolor.myBlue, Color.mycolor.myPurple],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         ),
@@ -102,10 +135,11 @@ struct SmallWidgetView: View {
                     .rotationEffect(.degrees(-90))
                 
                 VStack(spacing: 0) {
-                    Text("\(Int(data.progressPercentage))%")
+                    Text("\(Int(data.completionPercentage))%")
                         .font(.system(.title3, design: .rounded))
                         .fontWeight(.bold)
                         .minimumScaleFactor(0.7)
+                        .foregroundStyle(Color.mycolor.myAccent)
                 }
             }
             .frame(width: 70, height: 70)
@@ -115,7 +149,7 @@ struct SmallWidgetView: View {
             
             Text("\(data.practicedCount)/\(data.totalCount) completed")
                 .font(.caption2)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.mycolor.myAccent).opacity(0.7)
         }
         .padding(.vertical)
         .containerBackground(.fill.tertiary, for: .widget)
@@ -128,57 +162,64 @@ struct MediumWidgetView: View {
     let data: StudyProgressData
     
     var body: some View {
-        HStack(spacing: 8) {
+        VStack(/*spacing: 16*/) {
+            HStack {
+                Image(systemName: "hare")
+                    .foregroundStyle(Color.mycolor.myBlue)
+                Text("Completion")
+                    .foregroundStyle(Color.mycolor.myAccent)
+            }
+            .font(.headline)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Spacer()
             // Left side - Progress ring
-            VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    Image(systemName: "hare")
-                        .foregroundStyle(.blue)
-                    Text("Progress")
-                        .fontWeight(.bold)
-                }
-                .font(.footnote)
+            HStack(spacing: 4) {
                 
                 Spacer()
                 
                 ZStack {
                     Circle()
-                        .stroke(Color.gray.opacity(0.3), lineWidth: 10)
+                        .stroke(Color.mycolor.mySecondary.opacity(0.3), lineWidth: 8)
                     
                     Circle()
-                        .trim(from: 0, to: data.progressPercentage / 100)
+                        .trim(from: 0, to: data.completionPercentage / 100)
                         .stroke(
                             LinearGradient(
-                                colors: [.blue, .purple],
+                                colors: [Color.mycolor.myBlue, Color.mycolor.myPurple],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             ),
-                            style: StrokeStyle(lineWidth: 10, lineCap: .round)
+                            style: StrokeStyle(lineWidth: 8, lineCap: .round)
                         )
                         .rotationEffect(.degrees(-90))
                     
                     VStack(spacing: 0) {
-                        Text("\(Int(data.progressPercentage))%")
-                            .font(.system(.title3, design: .rounded))
+                        Text("\(Int(data.completionPercentage))%")
+                            .font(.system(.body, design: .rounded))
                             .fontWeight(.bold)
-                        Text("overall")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.mycolor.myAccent)
+                        
+//                        Text("overall")
+//                            .font(.caption2)
+//                            .foregroundStyle(Color.mycolor.mySecondary)
                     }
                 }
                 .frame(width: 80, height: 80)
                 
                 Spacer()
+                Spacer()
+                // Right side - Stats
+                VStack(alignment: .leading, spacing: 6) {
+                    StatRow(icon: "square.and.arrow.down", label: "Added", count: data.freshCount, color: Color.mycolor.myGreen)
+                    StatRow(icon: "sunrise", label: "Started", count: data.startedCount, color: Color.mycolor.myPurple)
+                    StatRow(icon: "bolt", label: "Learnt", count: data.studiedCount, color: Color.mycolor.myBlue)
+                    StatRow(icon: "flag.checkered", label: "Practiced", count: data.practicedCount, color: Color.mycolor.myRed)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
+                Spacer()
             }
-            
-            // Right side - Stats
-            VStack(alignment: .leading, spacing: 6) {
-                StatRow(icon: "square.and.arrow.down", label: "Added", count: data.freshCount, color: .green)
-                StatRow(icon: "sunrise", label: "Started", count: data.startedCount, color: .purple)
-                StatRow(icon: "bolt", label: "Learnt", count: data.studiedCount, color: .blue)
-                StatRow(icon: "flag.checkered", label: "Practiced", count: data.practicedCount, color: .red)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(8)
         .containerBackground(.fill.tertiary, for: .widget)
@@ -200,7 +241,7 @@ struct StatRow: View {
             
             Text(label)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.mycolor.myAccent)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
             
@@ -209,6 +250,7 @@ struct StatRow: View {
             Text("\(count)")
                 .font(.caption)
                 .fontWeight(.semibold)
+                .foregroundStyle(Color.mycolor.myAccent)
         }
     }
 }
@@ -223,15 +265,16 @@ struct LargeWidgetView: View {
             // Header
             HStack {
                 Image(systemName: "hare")
-                    .foregroundStyle(.blue)
-                Text("Study Progress")
+                    .foregroundStyle(Color.mycolor.myBlue)
+                Text("Study Completion")
                     .font(.headline)
+                    .foregroundStyle(Color.mycolor.myAccent)
                 
                 Spacer()
                 
                 Text("\(data.totalCount) materials")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.mycolor.myAccent).opacity(0.7)
             }
             
             Spacer()
@@ -240,27 +283,28 @@ struct LargeWidgetView: View {
                 Spacer()
                 ZStack {
                     Circle()
-                        .stroke(Color.gray.opacity(0.3), lineWidth: 15)
+                        .stroke(Color.mycolor.mySecondary.opacity(0.3), lineWidth: 11)
                     
                     Circle()
-                        .trim(from: 0, to: data.progressPercentage / 100)
+                        .trim(from: 0, to: data.completionPercentage / 100)
                         .stroke(
                             LinearGradient(
-                                colors: [.blue, .purple],
+                                colors: [Color.mycolor.myBlue, Color.mycolor.myPurple],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             ),
-                            style: StrokeStyle(lineWidth: 15, lineCap: .round)
+                            style: StrokeStyle(lineWidth: 11, lineCap: .round)
                         )
                         .rotationEffect(.degrees(-90))
                     
                     VStack(spacing: 0) {
-                        Text("\(Int(data.progressPercentage))%")
+                        Text("\(Int(data.completionPercentage))%")
                             .font(.system(.title3, design: .rounded))
                             .fontWeight(.bold)
-                        Text("overall")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.mycolor.myAccent)
+//                        Text("overall")
+//                            .font(.caption2)
+//                            .foregroundStyle(Color.mycolor.mySecondary)
                     }
                 }
                 .frame(width: 110, height: 110)
@@ -269,17 +313,17 @@ struct LargeWidgetView: View {
             Spacer()
             // Stats grid
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 6) {
-                LargeStatCard(icon: "square.and.arrow.down", label: "Added", count: data.freshCount, color: .green)
-                LargeStatCard(icon: "sunrise", label: "Started", count: data.startedCount, color: .purple)
-                LargeStatCard(icon: "bolt", label: "Learnt", count: data.studiedCount, color: .blue)
-                LargeStatCard(icon: "flag.checkered", label: "Practiced", count: data.practicedCount, color: .red)
+                LargeStatCard(icon: "square.and.arrow.down", label: "Added", count: data.freshCount, color: Color.mycolor.myGreen)
+                LargeStatCard(icon: "sunrise", label: "Started", count: data.startedCount, color: Color.mycolor.myPurple)
+                LargeStatCard(icon: "bolt", label: "Learnt", count: data.studiedCount, color: Color.mycolor.myBlue)
+                LargeStatCard(icon: "flag.checkered", label: "Practiced", count: data.practicedCount, color: Color.mycolor.myRed)
             }
             
             Spacer()
             // Footer
             Text("Updated: \(data.lastUpdated.formatted(date: .abbreviated, time: .shortened))")
                 .font(.caption2)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.mycolor.myAccent).opacity(0.7)
                 .frame(maxWidth: .infinity, alignment: .center)
         }
         .padding(8)
@@ -303,13 +347,14 @@ struct LargeStatCard: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(label)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.mycolor.myAccent).opacity(0.7)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
                 Text("\(count)")
                     .font(.title3)
                     .fontWeight(.semibold)
                     .minimumScaleFactor(0.7)
+                    .foregroundStyle(Color.mycolor.myAccent)
             }
             
             Spacer()
@@ -326,10 +371,10 @@ struct AccessoryCircularView: View {
     let data: StudyProgressData
     
     var body: some View {
-        Gauge(value: data.progressPercentage, in: 0...100) {
+        Gauge(value: data.completionPercentage, in: 0...100) {
             Image(systemName: "hare")
         } currentValueLabel: {
-            Text("\(Int(data.progressPercentage))")
+            Text("\(Int(data.completionPercentage))")
                 .font(.system(.body, design: .rounded))
         }
         .gaugeStyle(.accessoryCircular)
@@ -343,14 +388,14 @@ struct AccessoryRectangularView: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Study Progress")
+                Text("Completion")
                     .font(.headline)
                     .widgetAccentable()
                 
                 Text("\(data.practicedCount)/\(data.totalCount) completed")
                     .font(.caption)
                 
-                Gauge(value: data.progressPercentage, in: 0...100) {
+                Gauge(value: data.completionPercentage, in: 0...100) {
                     EmptyView()
                 }
                 .gaugeStyle(.accessoryLinear)
@@ -364,41 +409,11 @@ struct AccessoryInlineView: View {
     let data: StudyProgressData
     
     var body: some View {
-        Text("📚 \(Int(data.progressPercentage))% • \(data.practicedCount)/\(data.totalCount)")
+        Text("📚 \(Int(data.completionPercentage))% • \(data.practicedCount)/\(data.totalCount)")
             .containerBackground(.fill.tertiary, for: .widget)
     }
 }
 
-// MARK: - Widget Configuration
-
-struct StudyProgressWidget: Widget {
-    let kind: String = "StudyProgressWidget"
-    
-    var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: StudyProgressProvider()) { entry in
-            StudyProgressWidgetEntryView(entry: entry)
-        }
-        .configurationDisplayName("Study Progress")
-        .description("Track your learning progress at a glance.")
-        .supportedFamilies([
-            .systemSmall,
-            .systemMedium,
-            .systemLarge,
-            .accessoryCircular,
-            .accessoryRectangular,
-            .accessoryInline
-        ])
-    }
-}
-
-// MARK: - Widget Bundle
-
-@main
-struct StudyProgressWidgetBundle: WidgetBundle {
-    var body: some Widget {
-        StudyProgressWidget()
-    }
-}
 
 // MARK: - Previews
 
@@ -427,6 +442,12 @@ struct StudyProgressWidgetBundle: WidgetBundle {
 }
 
 #Preview("Rectangular", as: .accessoryRectangular) {
+    StudyProgressWidget()
+} timeline: {
+    StudyProgressEntry(date: Date(), data: .preview)
+}
+
+#Preview("Inline", as: .accessoryInline) {
     StudyProgressWidget()
 } timeline: {
     StudyProgressEntry(date: Date(), data: .preview)

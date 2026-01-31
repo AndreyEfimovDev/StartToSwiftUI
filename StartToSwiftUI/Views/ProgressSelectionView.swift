@@ -97,7 +97,6 @@ struct ProgressSelectionView: View {
                 Text("No post found")
             }
         } // Group
-        //            .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             .bar,
             in: RoundedRectangle(cornerRadius: 30))
