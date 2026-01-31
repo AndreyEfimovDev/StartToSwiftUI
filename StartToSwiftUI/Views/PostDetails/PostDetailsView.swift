@@ -102,11 +102,9 @@ struct PostDetailsView: View {
                 intro(for: post)
                     .cardBackground()
                 
-                if post.urlString != Constants.urlStart {
-                    goToTheSourceButton(urlString: post.urlString)
-                        .padding(.top, 30)
-                        .frame(maxWidth: 250)
-                }
+                goToTheSourceButton(urlString: post.urlString)
+                    .padding(.top, 30)
+                    .frame(maxWidth: 250)
                 
                 if !post.notes.isEmpty {
                     notes(for: post)
