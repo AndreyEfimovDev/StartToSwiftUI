@@ -155,14 +155,10 @@ struct HomeView: View {
         if post.origin == .cloudNew {
             post.origin = .cloud
         }
-        hapticManager.impact(style: .light)
         
         if UIDevice.isiPhone {
             coordinator.push(.postDetails(postId: post.id))
         }
-//        if UIDevice.isiPad {
-//            hapticManager.impact(style: .light)
-//        }
     }
     
     private func handleDoubleTap(on post: Post) {
