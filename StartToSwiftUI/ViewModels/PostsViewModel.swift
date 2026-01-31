@@ -52,6 +52,7 @@ final class PostsViewModel: ObservableObject {
     
     // MARK: - AppStorage
     @AppStorage("selectedTheme") var selectedTheme: Theme = .system
+    @AppStorage("isFirstLaunch") var isFirstLaunch: Bool = true
     
     // Filters
     @AppStorage("storedCategory") var storedCategory: String?
@@ -123,6 +124,9 @@ final class PostsViewModel: ObservableObject {
     }
     
     private func restoreFilters() {
+        
+        setupFirstLaunchDefaults()
+        
         selectedCategory = storedCategory
         selectedLevel = storedLevel
         selectedFavorite = storedFavorite
@@ -131,6 +135,15 @@ final class PostsViewModel: ObservableObject {
         selectedYear = storedYear
         selectedSortOption = storedSortOption
         isFiltersEmpty = checkIfAllFiltersAreEmpty()
+    }
+    
+    private func setupFirstLaunchDefaults() {
+        
+        if isFirstLaunch {
+            storedLevel = .beginner
+            storedType = .course
+            isFirstLaunch = false
+        }
     }
     
     private func initializeAppState() async {
