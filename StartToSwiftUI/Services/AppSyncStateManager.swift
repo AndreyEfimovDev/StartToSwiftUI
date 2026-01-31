@@ -355,7 +355,7 @@ class AppSyncStateManager {
         saveContext()
     }
         
-    /// Reset the flag for the presence of new materials with author links in the cloud
+    /// Reset the flag for the presence of new materials in the cloud
     func setCuratedPostsLoadStatusOff() {
         let appState = getOrCreateAppState()
         appState.isNewCuratedPostsAvailable = false
@@ -363,13 +363,13 @@ class AppSyncStateManager {
         saveContext()
     }
     
-    /// Update the latest date of downloaded materials and author links from the cloud
+    /// Update the latest date of downloaded materials from the cloud
     func setLastDateOfCuaratedPostsLoaded(_ date: Date) {
         let appState = getOrCreateAppState()
         appState.latestDateOfCuaratedPostsLoaded = date
     }
 
-    /// Get the latest date of downloaded materials and author links from the cloud
+    /// Get the latest date of downloaded materials from the cloud
     func getLastDateOfCuaratedPostsLoaded() -> Date? {
         let appState = getOrCreateAppState()
         return appState.latestDateOfCuaratedPostsLoaded

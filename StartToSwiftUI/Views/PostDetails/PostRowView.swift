@@ -16,7 +16,7 @@ struct PostRowView: View {
     // MARK: - Computed Properties
     
     private var subtitleText: String {
-        var parts = ["@\(post.author)", post.category]
+        var parts = ["@\(post.author)"/*, post.category*/]
         
         if let postDate = post.postDate {
             parts.append(postDate.formatted(date: .numeric, time: .omitted))

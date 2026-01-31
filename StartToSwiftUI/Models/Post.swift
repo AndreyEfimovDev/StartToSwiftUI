@@ -11,7 +11,7 @@ import SwiftData
 
 @Model
 final class Post {
-    var id: String = UUID().uuidString // CloudKit НЕ поддерживает @Attribute(.unique)
+    var id: String = UUID().uuidString // CloudKit DO NOT support @Attribute(.unique)
     var category: String = "SwiftUI"
     var title: String = ""
     var intro: String = ""
@@ -27,7 +27,8 @@ final class Post {
     var notes: String = ""
     var originRawValue: String = "cloud"
     var draft: Bool = false
-    var date: Date = Date() // Дата создание данной записи
+    var statusRawValue: String = "active"
+    var date: Date = Date() // Date this entry was created
     var addedDateStamp: Date?
     var startedDateStamp: Date?
     var studiedDateStamp: Date?
@@ -72,6 +73,11 @@ final class Post {
         set { originRawValue = newValue.rawValue }
     }
     
+    var status: PostStatus {
+        get { PostStatus(rawValue: statusRawValue) ?? .active }
+        set { statusRawValue = newValue.rawValue }
+    }
+
     init(
         id: String = UUID().uuidString,
         category: String = "SwiftUI",
@@ -89,6 +95,7 @@ final class Post {
         notes: String = "",
         origin: PostOrigin = .cloud,
         draft: Bool = false,
+        status: PostStatus = .active,
         date: Date = .now,
         addedDateStamp: Date? = nil,
         startedDateStamp: Date? = nil,
@@ -111,6 +118,7 @@ final class Post {
         self.notes = notes
         self.originRawValue = origin.rawValue
         self.draft = draft
+        self.statusRawValue = status.rawValue
         self.date = date
         self.addedDateStamp = addedDateStamp
         self.startedDateStamp = startedDateStamp
@@ -139,6 +147,7 @@ extension Post {
             notes: self.notes,
             origin: self.origin,
             draft: self.draft,
+            status: self.status,
             date: self.date,
             addedDateStamp: self.addedDateStamp,
             startedDateStamp: self.startedDateStamp,
@@ -161,6 +170,7 @@ extension Post {
         self.notes == other.notes
     }
     
+    // MARK: For AddEditPostSheet module: update only those fields that the user can edit
     func update(with post: Post) {
 //        self.id = post.id
         self.category = post.category

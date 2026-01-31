@@ -86,9 +86,6 @@ enum PostFields: Hashable {
 //    case postDate
 }
 
-
-// MARK: - DataModel Errors
-
 enum PostType: String, CaseIterable, Codable {
     case post
     case course
@@ -107,16 +104,23 @@ enum PostType: String, CaseIterable, Codable {
     }
 }
 
+
+enum PostStatus: String, CaseIterable, Codable {
+    case active
+    case hidden
+    case deleted
+}
+
 enum PostOrigin: String, CaseIterable, Codable {
     case local
     case cloud
-    case statical
+    case cloudNew
     
     var icon: Image {
         switch self {
         case .local: return Image(systemName: "archivebox") // tray cube  archivebox folder arrow.up.folder text.document
         case .cloud: return Image(systemName: "cloud")
-        case .statical: return Image(systemName: "arrow.2.squarepath") // line.3.horizontal square.grid.2x2 s.circle arrow.2.squarepath
+        case .cloudNew: return Image(systemName: "cloud.fill")
         }
     }
 }
@@ -263,7 +267,6 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
         }
     }
 }
-
 
 
 enum Platform: String, CaseIterable, Codable {
