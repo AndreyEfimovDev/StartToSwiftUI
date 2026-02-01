@@ -16,7 +16,7 @@
 ### Create Your Own Content
 - Create and manage your personal study library of SwiftUI materials matching your learning style
 - Categorise resources by topics, difficulty levels of study, etc.
-- Put intro info and personal notes, save drafts, and organise everything exactly how you want
+- Add personal notes to materials, save drafts, and organise everything exactly how you want
 
 ### Smart Organisation
 - Follow your study from Added → Started → Learnt → Practiced
