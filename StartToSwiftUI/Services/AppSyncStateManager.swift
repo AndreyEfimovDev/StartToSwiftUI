@@ -13,12 +13,12 @@ import SwiftData
 @Model
 final class AppSyncState {
     var id: String = "app_state_singleton" // Always one copy
-    var isTermsOfUseAccepted: Bool = false
+//    var isTermsOfUseAccepted: Bool = false
     
     // Flag for the need to load static posts, set by the user in Preferences: true - load
-    var shouldLoadStaticPosts: Bool = true
+//    var shouldLoadStaticPosts: Bool = true
     // Flag indicating load static posts status: true - already loaded
-    var hasLoadedStaticPosts: Bool = false
+//    var hasLoadedStaticPosts: Bool = false
     
     // Set the flag to true to notify the user with a sound once about new notices if they appear
     var isUserNotNotifiedBySound: Bool = true
@@ -38,10 +38,10 @@ final class AppSyncState {
     
     init(
         id: String = "app_state_singleton",
-        isTermsOfUseAccepted: Bool = false,
+//        isTermsOfUseAccepted: Bool = false,
         
-        shouldLoadStaticPosts: Bool = true,
-        hasLoadedStaticPosts: Bool = false,
+//        shouldLoadStaticPosts: Bool = true,
+//        hasLoadedStaticPosts: Bool = false,
         
         lastNoticeDate: Date? = nil,
         isUserNotNotifiedBySound: Bool = true,
@@ -54,10 +54,10 @@ final class AppSyncState {
         
     ) {
         self.id = id
-        self.isTermsOfUseAccepted = isTermsOfUseAccepted
+//        self.isTermsOfUseAccepted = isTermsOfUseAccepted
         
-        self.shouldLoadStaticPosts = shouldLoadStaticPosts
-        self.hasLoadedStaticPosts = hasLoadedStaticPosts
+//        self.shouldLoadStaticPosts = shouldLoadStaticPosts
+//        self.hasLoadedStaticPosts = hasLoadedStaticPosts
         
         self.isUserNotNotifiedBySound = isUserNotNotifiedBySound
         self.latestNoticeDate = lastNoticeDate
@@ -170,16 +170,16 @@ class AppSyncStateManager {
         log("  📌 Main AppState: \(primaryState.id)", level: .info)
         
         // Merge the flags: if at least one is true, we take true
-        var mergedHasLoadedStatic = false
+//        var mergedHasLoadedStatic = false
         var mergedIsUserNotNotified = true
         var earliestDate: Date?
         var latestSyncDate: Date?
         
         for state in sortedStates {
             // OR logic for hasLoadedStaticPosts
-            if state.hasLoadedStaticPosts {
-                mergedHasLoadedStatic = true
-            }
+//            if state.hasLoadedStaticPosts {
+//                mergedHasLoadedStatic = true
+//            }
             
             // AND logic for isUserNotNotifiedBySound (if at least one is already notified, we take false)
             if !state.isUserNotNotifiedBySound {
@@ -202,13 +202,13 @@ class AppSyncStateManager {
         }
         
         // Updating the main object with the merged data
-        primaryState.hasLoadedStaticPosts = mergedHasLoadedStatic
+//        primaryState.hasLoadedStaticPosts = mergedHasLoadedStatic
         primaryState.isUserNotNotifiedBySound = mergedIsUserNotNotified
         primaryState.appFirstLaunchDate = earliestDate
         primaryState.lastCloudSyncDate = latestSyncDate
         
         log("  ✅ Combined data:", level: .info)
-        log("     hasLoadedStaticPosts: \(mergedHasLoadedStatic)", level: .info)
+//        log("     hasLoadedStaticPosts: \(mergedHasLoadedStatic)", level: .info)
         log("     isUserNotNotifiedBySound: \(mergedIsUserNotNotified)", level: .info)
         
         // Remove duplicates
@@ -225,69 +225,69 @@ class AppSyncStateManager {
     
     // MARK: - Method for isTermsOfUseAccepted
     
-    func getTermsOfUseAcceptedStatus() -> Bool {
-        let appState = getOrCreateAppState()
-        return appState.isTermsOfUseAccepted
-    }
+//    func getTermsOfUseAcceptedStatus() -> Bool {
+//        let appState = getOrCreateAppState()
+//        return appState.isTermsOfUseAccepted
+//    }
 
-    func setTermsOfUseAccepted(_ accepted: Bool) {
-        let appState = getOrCreateAppState()
-        appState.isTermsOfUseAccepted = accepted
+//    func setTermsOfUseAccepted(_ accepted: Bool) {
+//        let appState = getOrCreateAppState()
+//        appState.isTermsOfUseAccepted = accepted
+//        
+//        saveContext()
+//    }
         
-        saveContext()
-    }
-        
-    // Accept Terms of Use
-    func acceptTermsOfUse() {
-        setTermsOfUseAccepted(true)
-    }
+//    // Accept Terms of Use
+//    func acceptTermsOfUse() {
+//        setTermsOfUseAccepted(true)
+//    }
         
     // MARK: - Methods for Static posts
     /// Check if static posts were loaded
-    func getStaticPostsLoadToggleStatus() -> Bool {
-        let appState = getOrCreateAppState()
-        let result = appState.shouldLoadStaticPosts
-        return result
-    }
+//    func getStaticPostsLoadToggleStatus() -> Bool {
+//        let appState = getOrCreateAppState()
+//        let result = appState.shouldLoadStaticPosts
+//        return result
+//    }
     
     /// Enable loading of static posts, set by the user in Preferences: true - load
-    func setShouldLoadStaticPostsOn() {
-        let appState = getOrCreateAppState()
-        appState.shouldLoadStaticPosts = true
-        
-        saveContext()
-    }
+//    func setShouldLoadStaticPostsOn() {
+//        let appState = getOrCreateAppState()
+//        appState.shouldLoadStaticPosts = true
+//        
+//        saveContext()
+//    }
         
     /// Enable loading of static posts, set by the user in Preferences: false - do not load
-    func setShouldLoadStaticPostsOff() {
-        let appState = getOrCreateAppState()
-        appState.shouldLoadStaticPosts = false
-        
-        saveContext()
-    }
+//    func setShouldLoadStaticPostsOff() {
+//        let appState = getOrCreateAppState()
+//        appState.shouldLoadStaticPosts = false
+//        
+//        saveContext()
+//    }
     
-    /// Check if static posts are loaded
-    func checkIfStaticPostsHasLoaded() -> Bool {
-        let appState = getOrCreateAppState()
-        let result = appState.hasLoadedStaticPosts
-        return result
-    }
+//    /// Check if static posts are loaded
+//    func checkIfStaticPostsHasLoaded() -> Bool {
+//        let appState = getOrCreateAppState()
+//        let result = appState.hasLoadedStaticPosts
+//        return result
+//    }
     
     /// Mark static posts loaded
-    func markStaticPostsAsLoaded() {
-        let appState = getOrCreateAppState()
-        appState.hasLoadedStaticPosts = true
-        
-        saveContext()
-    }
+//    func markStaticPostsAsLoaded() {
+//        let appState = getOrCreateAppState()
+//        appState.hasLoadedStaticPosts = true
+//        
+//        saveContext()
+//    }
     
     /// Mark static posts as not loaded
-    func markStaticPostsAsNotLoaded() {
-        let appState = getOrCreateAppState()
-        appState.hasLoadedStaticPosts = false
-        
-        saveContext()
-    }
+//    func markStaticPostsAsNotLoaded() {
+//        let appState = getOrCreateAppState()
+//        appState.hasLoadedStaticPosts = false
+//        
+//        saveContext()
+//    }
 
     // MARK: - Methods for Notices
     /// Check whether the user should be notified with a sound

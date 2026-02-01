@@ -357,8 +357,8 @@ enum AppRoute: Hashable, Identifiable {
     case addPost
     case editPost(Post)
     
-    // Welcome at first launch to accept Terms of Use
-    case welcomeAtFirstLaunch
+//    // Welcome at first launch to accept Terms of Use
+//    case welcomeAtFirstLaunch
     
     // Preferences
     case preferences
@@ -413,8 +413,8 @@ enum AppRoute: Hashable, Identifiable {
             return "addPost"
         case .editPost(let post):
             return "editPost_\(post.id)"
-        case .welcomeAtFirstLaunch:
-            return "welcomeAtFirstLaunch"
+//        case .welcomeAtFirstLaunch:
+//            return "welcomeAtFirstLaunch"
         case .preferences:
             return "preferences"
         case .notices:

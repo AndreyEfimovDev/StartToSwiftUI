@@ -62,9 +62,7 @@ struct WhatsNewView: View {
                 .padding(.horizontal)
             }
         }
-
     }
-
 }
 
 #Preview {

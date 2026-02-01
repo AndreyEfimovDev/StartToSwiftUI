@@ -83,7 +83,7 @@ final class PostsViewModel: ObservableObject {
     @Published var selectedSortOption: SortOption? = nil {
         didSet { storedSortOption = selectedSortOption }}
     
-    @Published var isTermsOfUseAccepted: Bool = false
+//    @Published var isTermsOfUseAccepted: Bool = false
     
     // MARK: - Init
     init(
@@ -154,9 +154,9 @@ final class PostsViewModel: ObservableObject {
         
         appStateManager.cleanupDuplicateAppStates()
         
-        if appStateManager.getTermsOfUseAcceptedStatus() {
-            isTermsOfUseAccepted = true
-        }
+//        if appStateManager.getTermsOfUseAcceptedStatus() {
+//            isTermsOfUseAccepted = true
+//        }
         
         if await checkCloudCuratedPostsForUpdates() {
             appStateManager.setCuratedPostsLoadStatusOn()
@@ -165,15 +165,15 @@ final class PostsViewModel: ObservableObject {
     
     // MARK: - Terms of Use
     
-    func acceptTermsOfUse() {
-        guard let appStateManager else {
-            log("⚠️ acceptTermsOfUse: available only for SwiftData", level: .warning)
-            return
-        }
-        appStateManager.acceptTermsOfUse()
-        isTermsOfUseAccepted = true
-        objectWillChange.send()
-    }
+//    func acceptTermsOfUse() {
+//        guard let appStateManager else {
+//            log("⚠️ acceptTermsOfUse: available only for SwiftData", level: .warning)
+//            return
+//        }
+//        appStateManager.acceptTermsOfUse()
+//        isTermsOfUseAccepted = true
+//        objectWillChange.send()
+//    }
     
     // MARK: - SwiftData Operations
     
@@ -231,10 +231,10 @@ final class PostsViewModel: ObservableObject {
         dataSource.delete(post)
         saveContextAndReload()
         
-        // All posts have been deleted and the hasLoadedStaticPosts flag has been reset.
-        if allPosts.isEmpty {
-            appStateManager?.markStaticPostsAsNotLoaded()
-        }
+//        // All posts have been deleted and the hasLoadedStaticPosts flag has been reset.
+//        if allPosts.isEmpty {
+//            appStateManager?.markStaticPostsAsNotLoaded()
+//        }
     }
     
     /// Deleting all posts
@@ -244,8 +244,8 @@ final class PostsViewModel: ObservableObject {
                 // Deleting all posts
                 try swiftDataSource.modelContext.delete(model: Post.self)
                 
-                //  Resetting the flag because ALL posts (including static ones) have been deleted.
-                appStateManager?.markStaticPostsAsNotLoaded()
+//                //  Resetting the flag because ALL posts (including static ones) have been deleted.
+//                appStateManager?.markStaticPostsAsNotLoaded()
                 saveContextAndReload()
             } catch {
                 handleError(error, message: "Error deleting data")
@@ -353,16 +353,15 @@ final class PostsViewModel: ObservableObject {
     /// - Warning: This application is intended for self-study.
     /// - Returns: Returns a boolean result or error within completion handler.
     ///
-    
     func checkCloudCuratedPostsForUpdates() async -> Bool {
         
         clearError()
         
         do {
             let cloudResponse: [CodablePost] = try await networkService.fetchDataFromURLAsync()
-            let localPosts = self.allPosts.filter { $0.origin == .cloud }
+            let localPosts = self.allPosts.filter { $0.origin == .cloud || $0.origin == .cloudNew }
             let cloudPosts = cloudResponse
-                .filter { $0.origin == .cloud }
+                .filter { $0.origin == .cloudNew }
                 .map { PostMigrationHelper.convertFromCodable($0) }
             
             var hasUpdates: Bool

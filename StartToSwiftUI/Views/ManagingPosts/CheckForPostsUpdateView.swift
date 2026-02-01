@@ -78,51 +78,7 @@ struct CheckForPostsUpdateView: View {
         }
         .foregroundStyle(Color.mycolor.myAccent)
     }
-    
-//    private var actionSection: some View {
-//        Group {
-//            textSection
-//                .textFormater()
-//                .padding(.horizontal, 30)
-//            
-//            if !isPostsUpdated && !isInProgress {
-//                CapsuleButtonView(
-//                    primaryTitle: "Update now",
-//                    secondaryTitle: "Imported \(postCount) posts",
-//                    isToChange: isImported) {
-//                        Task {
-//                            isInProgress = true
-//                            await vm.importPostsFromCloud() {
-//                                isInProgress = false
-//                                isImported = true
-//                                hapticManager.notification(type: .success)
-//                                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-//                                    coordinator.closeModal()
-//                                }
-//                            }
-//                        }
-//                    }
-//                    .onChange(of: vm.allPosts.count) { oldValue, newValue in
-//                        postCount = newValue - oldValue
-//                    }
-//                    .padding(.horizontal, 30)
-//                    .padding(30)
-//                    .disabled(isImported)
-//            }
-//        }
-//        .listRowBackground(Color.clear)
-//    }
-
-//    private var textSection: some View {
-//        Text("""
-//            The curated collection of SwiftUI tutorials and articles has been compiled from open sources by the developer for the purpose of learning the SwiftUI functionality.
-//                       
-//            The collection **will be appended** to all current posts in the App, excluding duplicates based on the post title.
-//            """)
-//        .multilineTextAlignment(.center)
-//
-//    }
-    
+        
     @ViewBuilder
     private var actionSection: some View {
         Group {

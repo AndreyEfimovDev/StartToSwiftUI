@@ -80,9 +80,9 @@ struct HomeView: View {
             .overlay { deleteConfirmationOverlay }
             .onAppear {
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                if vm.isTermsOfUseAccepted {
+//                if vm.isTermsOfUseAccepted {
                     noticevm.playSoundNotificationIfNeeded()
-                }
+//                }
             }
         }
     }

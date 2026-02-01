@@ -37,9 +37,9 @@ struct StartView: View {
             } else {
                 mainContent
                     .onAppear {
-                        if !vm.isTermsOfUseAccepted {
-                            coordinator.push(.welcomeAtFirstLaunch)
-                        }
+//                        if !vm.isTermsOfUseAccepted {
+//                            coordinator.push(.welcomeAtFirstLaunch)
+//                        }
                         // Temporary - only for single SwiftUI mode
                         vm.selectedCategory = vm.mainCategory
                     }

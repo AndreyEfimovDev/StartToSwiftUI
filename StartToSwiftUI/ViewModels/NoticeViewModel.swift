@@ -312,3 +312,18 @@ final class NoticeViewModel: ObservableObject {
     }
 
 }
+
+
+struct NoticeMigrationHelper {
+    
+    /// Convert an old encoded notification to a SwiftData notification.
+    static func convertFromCodable(_ codableNotice: CodableNotice) -> Notice {
+        return Notice(
+            id: codableNotice.id,
+            title: codableNotice.title,
+            noticeDate: codableNotice.noticeDate,
+            noticeMessage: codableNotice.noticeMessage,
+            isRead: codableNotice.isRead
+        )
+    }
+}

@@ -156,7 +156,7 @@ extension Post {
         )
     }
 
-    // MARK: For AddEditPostSheet module: compare only those fields that the user can edit
+    // MARK: For AddEditPostView module: compare only those fields that the user can edit
     func isEqual(to other: Post) -> Bool {
         return self.category == other.category &&
         self.title == other.title &&
@@ -170,7 +170,7 @@ extension Post {
         self.notes == other.notes
     }
     
-    // MARK: For AddEditPostSheet module: update only those fields that the user can edit
+    // MARK: For AddEditPostView module: update only those fields that the user can edit
     func update(with post: Post) {
 //        self.id = post.id
         self.category = post.category
@@ -195,4 +195,36 @@ extension Post {
 //        self.practicedDateStamp = post.practicedDateStamp
     }
 }
+
+struct PostMigrationHelper {
+    
+    /// Converts JSON codable post to a SwiftData post
+    static func convertFromCodable(_ codablePost: CodablePost) -> Post {
+        return Post(
+            id: codablePost.id,
+            category: codablePost.category,
+            title: codablePost.title,
+            intro: codablePost.intro,
+            author: codablePost.author,
+            postType: codablePost.postType,
+            urlString: codablePost.urlString,
+            postPlatform: codablePost.postPlatform,
+            postDate: codablePost.postDate,
+            studyLevel: codablePost.studyLevel,
+            progress: codablePost.progress,
+            favoriteChoice: codablePost.favoriteChoice,
+            postRating: codablePost.postRating,
+            notes: codablePost.notes,
+            origin: codablePost.origin,
+            draft: codablePost.draft,
+            status: codablePost.status,
+            date: codablePost.date,
+            addedDateStamp: codablePost.addedDateStamp,
+            startedDateStamp: codablePost.startedDateStamp,
+            studiedDateStamp: codablePost.studiedDateStamp,
+            practicedDateStamp: codablePost.practicedDateStamp
+        )
+    }
+}
+
 

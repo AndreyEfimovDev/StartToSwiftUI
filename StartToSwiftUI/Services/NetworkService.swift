@@ -78,10 +78,4 @@ protocol NetworkServiceProtocol {
 
 extension NetworkService: NetworkServiceProtocol {}
 
-//extension NetworkService {
-//    // Переопределяем метод только для тестов
-//    func mock_fetchDataFromURLAsync<T: Codable>(_ mockData: T) async throws -> T {
-//        return mockData
-//    }
-//}
 

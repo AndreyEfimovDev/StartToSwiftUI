@@ -32,7 +32,7 @@ struct LaunchView: View {
                 .font(.headline)
                 .fontWeight(.heavy)
                 .frame(width: 200, height: 200)
-                .offset(y: UIDevice.isiPad ? -16 : 8)
+                .offset(y: UIDevice.isiPad ? 0 : 8)
             
             if showLoadingProgress {
                 HStack(spacing: 0) {

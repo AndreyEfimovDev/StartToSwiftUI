@@ -40,9 +40,6 @@ struct SharePostsView: View {
                     secondaryTitle: "Completed",
                     isToChange: isShareCompleted
                 ) {
-//                    isInProgress = true
-//                    prepareDocumentSharing()
-//                    showActivityView = true
                     prepareAndShare()
                 }
                 .disabled(isShareCompleted)
@@ -102,40 +99,6 @@ struct SharePostsView: View {
             vm.showErrorMessageAlert = true
         }
     }
-    
-    // MARK: Subviews
-//    @ViewBuilder
-//    private func handleDocumentSharing(fileURL: URL) -> some View {
-//        ActivityView(activityItems: [fileURL], applicationActivities: nil) { result in
-//            if result.completed {
-//                // Successful sharing
-//                hapticManager.notification(type: .success)
-//                isShareCompleted = true // Change Share Button status and disable it
-//                showActivityView = false // Close sheet after sharing completion
-//                
-//                // Clearing the temporary file after sharing
-//                cleanupTempFile(fileURL)
-//                
-//                log("✅ Successfully shared via: \(result.activityName)", level: .info)
-//                
-//                // Automatic closing after 2 seconds
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-//                    coordinator.closeModal()
-//                }
-//
-//            } else {
-//                // Sharing is cancelled
-//                hapticManager.impact(style: .light)
-//                // Clearing the temporary file
-//                cleanupTempFile(fileURL)
-//                log("✅ Shared is cancelled.", level: .info)
-//            }
-//            // Resetting the states
-//            isInProgress = false
-//            shareURL = nil
-//
-//        }
-//    }
     
     @ViewBuilder
     private func sharingActivityView(for fileURL: URL) -> some View {

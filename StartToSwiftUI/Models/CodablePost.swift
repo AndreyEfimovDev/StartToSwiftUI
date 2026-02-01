@@ -26,6 +26,7 @@ struct CodablePost: Codable {
     var notes: String
     let origin: PostOrigin
     var draft: Bool
+    var status: PostStatus
     let date: Date
     var addedDateStamp: Date?
     var startedDateStamp: Date?
@@ -52,6 +53,7 @@ extension CodablePost {
             notes: post.notes,
             origin: post.origin,
             draft: post.draft,
+            status: post.status,
             date: post.date,
             addedDateStamp: post.addedDateStamp,
             startedDateStamp: post.startedDateStamp,
@@ -81,6 +83,7 @@ extension CodablePost {
         notes: String = "",
         origin: PostOrigin = .cloud,
         draft: Bool = false,
+        status: PostStatus = .active,
         date: Date = Date(),
         addedDateStamp: Date? = nil,
         startedDateStamp: Date? = nil,
@@ -104,6 +107,7 @@ extension CodablePost {
             notes: notes,
             origin: origin,
             draft: draft,
+            status: status,
             date: date,
             addedDateStamp: addedDateStamp,
             startedDateStamp: startedDateStamp,
