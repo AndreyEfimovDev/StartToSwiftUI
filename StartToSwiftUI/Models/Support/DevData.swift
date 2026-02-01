@@ -29,7 +29,7 @@ struct DevData {
 //            notes: """
 //                
 //                """,
-//            origin: .cloud,
+//            origin: .cloudNew,
 //            draft: false,
 //            date: .now,
 //            addedDateStamp: nil,
@@ -292,7 +292,7 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/watch?v=JzngncpZLuw",
             studyLevel: .advanced,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Swift Concurrency",
@@ -303,7 +303,7 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4BKxvt7d4kyIr1ZUNlOdYTe",
             studyLevel: .advanced,
-            origin: .cloud
+            origin: .cloudNew
         ),
 
         Post(
@@ -315,7 +315,7 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4B8xgS_iEEuJtM_3BuZ7fiV",
             studyLevel: .advanced,
-            origin: .cloud
+            origin: .cloudNew
         ),
 
 
@@ -329,7 +329,7 @@ struct DevData {
             urlString: "https://youtu.be/ExwwrvOT8mI?si=SU__YwU8UlR461Zb",
             postPlatform: .youtube,
             postDate: Date.from(year: 2021, month: 3, day: 26),
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Combine – швейцарский нож iOS-разработчика. Или нет?",
@@ -342,7 +342,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 22),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Xcode: ключевые инструменты для ручного тестирования мобильных приложений",
@@ -355,7 +355,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 14),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         
  // Create With Swift: www.createwithswift.com
@@ -369,7 +369,7 @@ struct DevData {
             urlString: "https://www.createwithswift.com/tag/swiftui/",
             postPlatform: .website,
             studyLevel: .beginner,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Swift 6.2: Расширяем границы производительности и безопасности",
@@ -384,7 +384,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 17),
             studyLevel: .advanced,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Combine",
@@ -396,7 +396,7 @@ struct DevData {
             urlString: "https://www.createwithswift.com/tag/combine/",
             postPlatform: .website,
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "@propertyWrapper: Encoding Strings to Valid URL Characters",
@@ -418,7 +418,7 @@ struct DevData {
                 Properties
                 https://docs.swift.org/swift-book/documentation/the-swift-programming-language/properties/
                 """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Combine: Combining Operators",
@@ -435,7 +435,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2021, month: 9, day: 1),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Combine: switchToLatest",
@@ -452,7 +452,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2022, month: 1, day: 27),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Publishing DocC Documentation as a Static Website on GitHub Pages",
@@ -469,7 +469,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2022, month: 2, day: 22),
             studyLevel: .beginner,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Using SF Symbols in SwiftUI",
@@ -491,7 +491,7 @@ struct DevData {
 
                 https://developer.apple.com/design/human-interface-guidelines/sf-symbols/overview/?ref=createwithswift.com
                 """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Using ViewThatFits to replace GeometryReader in SwiftUI",
@@ -504,7 +504,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2022, month: 6, day: 16),
             studyLevel: .beginner,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Adaptive layouts with ViewThatFits",
@@ -519,7 +519,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2022, month: 7, day: 11),
             studyLevel: .beginner,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "How to check if Text is truncated in SwiftUI?",
@@ -536,7 +536,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2021, month: 1, day: 12),
             studyLevel: .beginner,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Prototyping SwiftUI interfaces with OpenAI's ChatGPT",
@@ -551,7 +551,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2022, month: 12, day: 3),
             studyLevel: .advanced,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Creating a SwiftUI App to interact with the OpenAI ChatGPT API",
@@ -566,7 +566,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 2, day: 14),
             studyLevel: .advanced,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Creating a SwiftUI App to generate Text Completions with GPT-3.5 through the OpenAI API",
@@ -585,7 +585,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 5, day: 23),
             studyLevel: .advanced,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Updating the User’s Location with Core Location and Swift Concurrency in SwiftUI",
@@ -602,7 +602,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 10, day: 10),
             studyLevel: .advanced,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Animating numeric text in SwiftUI with the Content Transition modifier",
@@ -617,7 +617,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 11, day: 17),
             studyLevel: .beginner,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Accessing the app life cycle within a SwiftUI app",
@@ -636,7 +636,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2023, month: 11, day: 28),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Picking an Image from the Photos Library in a SwiftUI App",
@@ -651,7 +651,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 1, day: 16),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Create an animated transition with Matched Geometry Effect in SwiftUI",
@@ -666,7 +666,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 2, day: 9),
             studyLevel: .advanced,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Using Swift Charts on a SwiftUI app",
@@ -682,7 +682,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 3, day: 1),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Sign in with Apple on a SwiftUI application",
@@ -699,7 +699,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 3, day: 5),
             studyLevel: .advanced,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Creating a custom view modifier in SwiftUI",
@@ -718,7 +718,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 3, day: 21),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Camera capture setup in a SwiftUI app",
@@ -737,7 +737,7 @@ struct DevData {
             notes: """
                 AVFoundation
                 """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Display empty states with ContentUnavailableView in SwiftUI",
@@ -762,7 +762,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 4, day: 9),
             studyLevel: .beginner,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Making your lists searchable in a SwiftUI app",
@@ -786,7 +786,7 @@ struct DevData {
 
                 https://developer.apple.com/documentation/swiftui/search?ref=createwithswift.com
                 """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Using gradients in SwiftUI",
@@ -808,7 +808,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 5, day: 7),
             studyLevel: .beginner,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Using materials with SwiftUI",
@@ -827,7 +827,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 5, day: 14),
             studyLevel: .beginner,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Providing feedback with the sensory feedback modifier",
@@ -846,7 +846,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 5, day: 21),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Using App Intents in a SwiftUI app",
@@ -865,7 +865,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 6, day: 4),
             studyLevel: .advanced,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Using multi-step animations in SwiftUI",
@@ -882,7 +882,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 6, day: 25),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Formatting time in a Text view in SwiftUI",
@@ -911,7 +911,7 @@ struct DevData {
                 SystemFormatStyle.Timer
                 .addingTimeInterval
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Formatting data in a Text view in SwiftUI",
@@ -935,7 +935,7 @@ struct DevData {
                 PersonNameComponents
                 inflect
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Converting between image formats",
@@ -952,7 +952,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 6, day: 17),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Preparing your App Icon for dark and tinted appearance",
@@ -967,7 +967,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 6, day: 20),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Animating SF Symbols with the symbol effect modifier",
@@ -1003,7 +1003,7 @@ struct DevData {
                 TransitionSymbolEffect
                 ContentTransitionSymbolEffect
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Translating text in your SwiftUI app with the Translation framework",
@@ -1023,7 +1023,7 @@ struct DevData {
             notes: """
                 translationPresentation
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Using the Translation framework for language-to-language translation",
@@ -1046,7 +1046,7 @@ struct DevData {
                 translate
                 prepareTranslation
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Text Effects using TextRenderer in SwiftUI",
@@ -1076,7 +1076,7 @@ struct DevData {
                 BounceAttribute
                 BounceRenderer
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Using the zoom navigation transition in SwiftUI",
@@ -1098,7 +1098,7 @@ struct DevData {
                 .zoom
                 .matchedTransitionSource
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Giving depth to your App Icons",
@@ -1118,7 +1118,7 @@ struct DevData {
                 .zoom
                 .matchedTransitionSource
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Applying visual effects combined with scrolling in SwiftUI",
@@ -1147,7 +1147,7 @@ struct DevData {
                 visualEffect
                 .hueRotation
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Plotting math equations using Swift Charts",
@@ -1162,7 +1162,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 10, day: 11),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Creating view transitions in SwiftUI",
@@ -1192,7 +1192,7 @@ struct DevData {
                 move, slide, push, scale
                 combined
                 """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Implement blurring when multitasking in SwiftUI",
@@ -1212,7 +1212,7 @@ struct DevData {
             notes: """
                 blur
                 """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Prevent screenshot capture of sensitive SwiftUI views",
@@ -1227,7 +1227,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 11, day: 5),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Exploring Interactive Bottom Sheets in SwiftUI",
@@ -1242,7 +1242,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 11, day: 19),
             studyLevel: .beginner,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Implementing search suggestions in SwiftUI",
@@ -1265,7 +1265,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 11, day: 26),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Mastering Forms in SwiftUI: Creating and Styling",
@@ -1286,7 +1286,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 12, day: 8),
             studyLevel: .beginner,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Mastering Forms in SwiftUI: Selecting Information",
@@ -1306,7 +1306,7 @@ struct DevData {
             notes: """
                 TextField
                 """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Mastering Forms in SwiftUI: Creating and Styling",
@@ -1323,7 +1323,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2024, month: 12, day: 17),
             studyLevel: .beginner,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Enhance UI/UX with the confirmation dialog component",
@@ -1377,7 +1377,7 @@ struct DevData {
                         }
                     }
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Keyboard-driven actions in SwiftUI with onKeyPress",
@@ -1400,7 +1400,7 @@ struct DevData {
                 .focused
                 .onKeyPress
                 """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Controlling keyboard events with keys and phases",
@@ -1430,7 +1430,7 @@ struct DevData {
                 KeyPress.Phases
                 CharacterSet
                 """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Implementing tab bar in a SwiftUI app",
@@ -1456,7 +1456,7 @@ struct DevData {
 
                 Additionally to automatically enable the accent color for your custom symbol set the"Render As" option as "Template Image, you can find this option in the Attribute Inspector section.
                 """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Grouping Controls with ControlGroup",
@@ -1480,7 +1480,7 @@ struct DevData {
             ImageResource
             .controlGroupStyle
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Enabling Interaction with Table View in SwiftUI",
@@ -1502,7 +1502,7 @@ struct DevData {
                 .contextMenu
                 DisclosureTableRow
                 """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Creating Custom SF Symbols",
@@ -1529,7 +1529,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 2, day: 20),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Grouping Controls with ControlGroup",
@@ -1553,7 +1553,7 @@ struct DevData {
                 ImageResource
                 .controlGroupStyle
                 """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Enabling Interaction with Table View in SwiftUI",
@@ -1575,7 +1575,7 @@ struct DevData {
                 .contextMenu
                 DisclosureTableRow
                 """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Generating images programmatically with Image Playground",
@@ -1599,7 +1599,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 2, day: 26),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Generating images programmatically with Image Playground",
@@ -1623,7 +1623,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 2, day: 26),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Symmetrical and asymmetrical transitions in SwiftUI with the Scroll Transition modifier",
@@ -1641,7 +1641,7 @@ struct DevData {
             ScrollTransitionConfiguration
             ScrollTransitionPhase
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Placing UI components within the Safe Area Inset",
@@ -1654,7 +1654,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 3, day: 13),
             studyLevel: .beginner,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Dynamically adapting to available space with ViewThatFits",
@@ -1677,7 +1677,7 @@ struct DevData {
                 ViewThatFits
                 @ViewBuilder 
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Presenting an Inspector with SwiftUI",
@@ -1698,7 +1698,7 @@ struct DevData {
                 NavigationSplitView
                 navigationBar 
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Mastering Forms in SwiftUI: Toggles",
@@ -1723,7 +1723,7 @@ struct DevData {
                 toggleStyle(.button)
                 toggleStyle(.checkbox)
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Create flexible interfaces in SwiftUI",
@@ -1741,7 +1741,7 @@ struct DevData {
             notes: """
                 containerRelativeFrame
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Integrating TimelineView in a SwiftUI app",
@@ -1756,7 +1756,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 4, day: 10),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Donate content to Spotlight and open it using NSUserActivity",
@@ -1785,7 +1785,7 @@ struct DevData {
                 IndexedEntity
                 CSSearchableItemAttributeSet 
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Creating valid dates using the Swift language",
@@ -1804,7 +1804,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 6, day: 19),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Triggering actions after a time interval with Timers",
@@ -1819,7 +1819,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 6, day: 17),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Implementing advanced speech-to-text in your SwiftUI app",
@@ -1847,7 +1847,7 @@ struct DevData {
                 SFSpeechRecognizer
                SpeechTranscriber
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Making the tab bar collapse while scrolling",
@@ -1864,7 +1864,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 8, day: 28),
             studyLevel: .middle,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Exploring Concentricity in SwiftUI",
@@ -1879,7 +1879,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 9, day: 5),
             studyLevel: .beginner,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Displaying web content in SwiftUI",
@@ -1896,7 +1896,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 9, day: 11),
             studyLevel: .beginner,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Creating custom layouts with SwiftUI",
@@ -1921,7 +1921,7 @@ struct DevData {
                 authorizationStatus
                 CNAuthorizationStatus
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Presenting critical information in SwiftUI with alerts",
@@ -1940,7 +1940,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 9, day: 30),
             studyLevel: .beginner,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Getting started with the Contacts framework",
@@ -1961,7 +1961,7 @@ struct DevData {
                 authorizationStatus
                 CNAuthorizationStatus
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Listing contacts with the Contacts framework",
@@ -1982,7 +1982,7 @@ struct DevData {
                 authorizationStatus
                 CNAuthorizationStatus
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Implementing draw animations for SF Symbols in SwiftUI",
@@ -1997,7 +1997,7 @@ struct DevData {
             postPlatform: .website,
             postDate: Date.from(year: 2025, month: 10, day: 30),
             studyLevel: .beginner,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Programmatic navigation with navigation destination in SwiftUI",
@@ -2016,7 +2016,7 @@ struct DevData {
                 navigationDestination
                 NavigationPath
             """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Taking control of your navigation in SwiftUI with NavigationPath",
@@ -2037,7 +2037,7 @@ struct DevData {
                 navigationDestination
                 NavigationPath
                 """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Using rich text in the TextEditor with SwiftUI",
@@ -2061,7 +2061,7 @@ struct DevData {
                 typingAttributes
                 transformAttributes
                 """,
-            origin: .cloud
+            origin: .cloudNew
         ),
 // 2025-10-31
         Post(
@@ -2090,7 +2090,7 @@ struct DevData {
                 https://fuckingformatstyle.com/
                 https://github.com/brettohland/fuckingformatstyle
                 """,
-            origin: .cloud
+            origin: .cloudNew
         ),
         Post(
             title: "Format Styles In Excruciating Detail",
@@ -2105,7 +2105,7 @@ struct DevData {
             postPlatform: .website,
             postDate: nil,
             studyLevel: .beginner,
-            origin: .cloud
+            origin: .cloudNew
         ),
         
         
