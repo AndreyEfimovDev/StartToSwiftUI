@@ -190,13 +190,12 @@ struct PostDetailsView: View {
     
     @ViewBuilder
     private func introHeader(for post: Post) -> some View {
-        let platform = post.postPlatform.displayName
         let postType = post.postType.displayName
         
         if let date = post.postDate {
-            Text("\(postType) posted \(date.formatted(date: .numeric, time: .omitted)) to \(platform)")
+            Text("\(postType) posted \(date.formatted(date: .numeric, time: .omitted))")
         } else {
-            Text("\(postType) on \(platform)")
+            Text("\(postType)")
         }
     }
     
