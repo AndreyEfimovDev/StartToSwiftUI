@@ -363,13 +363,6 @@ struct HomeView: View {
         )
     }
     
-//    private func postsForCategory(_ category: String?) -> [Post] {
-//        guard let category = category else {
-//            return vm.filteredPosts
-//        }
-//        return vm.filteredPosts.filter { $0.category == category }
-//    }
-    
     private var postDeletionConfirmation: some View {
         ZStack {
             Color.mycolor.myAccent.opacity(0.001)
@@ -416,14 +409,6 @@ struct HomeView: View {
         }
     }
 }
-
-//    private func shortenPostTitle(title: String) -> String {
-//        if title.count > limitToShortenTitle {
-//            return String(title.prefix(limitToShortenTitle - 3)) + "..."
-//        }
-//        return title
-//    }
-    
 
 
 #Preview("With Extended Posts") {

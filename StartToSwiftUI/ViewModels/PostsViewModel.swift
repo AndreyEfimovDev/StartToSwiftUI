@@ -161,10 +161,6 @@ final class PostsViewModel: ObservableObject {
     
     /// Loading posts from SwiftData
     func loadPostsFromSwiftData() {
-        
-        //        let callStack = Thread.callStackSymbols.joined(separator: "\n")
-        //        log("📊 [CALL STACK] loadPostsFromSwiftData called from:\n\(callStack)", level: .debug)
-        
         do {
             allPosts = try dataSource.fetchPosts()
             allYears = getAllYears()
@@ -293,7 +289,7 @@ final class PostsViewModel: ObservableObject {
             }
             saveContextAndReload()
             
-            // SwiftData-specific logic (только для SwiftData)
+            // SwiftData-specific logic (for SwiftData only)
             if let appStateManager {
                 // Update the date of the last import of curated posts
                 let latestDate = getLatestDateFromPosts(posts: allPosts) ?? .now
