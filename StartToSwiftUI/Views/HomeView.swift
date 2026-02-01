@@ -118,11 +118,17 @@ struct HomeView: View {
         } // List
         .listStyle(.plain)
         .refreshControl {
-            vm.loadPostsFromSwiftData()
-            hapticManager.impact(style: .light)
-            Task {
-                await noticevm.importNoticesFromCloud()
-            }
+            refresh()
+        }
+    }
+    
+    // MARK: - Refresh
+
+    private func refresh() {
+        vm.loadPostsFromSwiftData()
+        hapticManager.impact(style: .light)
+        Task {
+            await noticevm.importNoticesFromCloud()
         }
     }
     
@@ -214,14 +220,19 @@ struct HomeView: View {
             CircleStrokeButtonView(iconName: "plus", isShownCircle: false ){
                 coordinator.push(.addPost)
             }
-            // Filters sheet
-            CircleStrokeButtonView(
-                iconName: "line.3.horizontal.decrease",
-                isIconColorToChange: !vm.isFiltersEmpty,
-                isShownCircle: false
-            ){
-                isFilterButtonPressed.toggle()
-                hapticManager.impact(style: .light)
+            // Filters button or Refresh button
+            if vm.allPosts.isEmpty {
+                // arrow.trianglehead.2.clockwise
+                CircleStrokeButtonView(
+                    iconName: "arrow.trianglehead.2.clockwise",
+                    isShownCircle: false
+                ){ refresh() }
+            } else {
+                CircleStrokeButtonView(
+                    iconName: "line.3.horizontal.decrease",
+                    isIconColorToChange: !vm.isFiltersEmpty,
+                    isShownCircle: false
+                ) { isFilterButtonPressed.toggle() }
             }
         }
     }
