@@ -43,7 +43,7 @@ struct Introduction: View {
                **CONTENT CREATION**:
                - Create your own study content with full editing capabilities
                - Save drafts for later completion
-               - Add personal notes to the content
+               - Add personal notes to the materials
                
                **LEARNING MANAGEMENT**:
                - Track progress: 'Added' → 'Started' → 'Learnt' → 'Practiced'
