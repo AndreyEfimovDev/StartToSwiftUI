@@ -123,35 +123,11 @@ struct ImportPostsFromCloudView: View {
     }
     
     private func importFromCloud() async {
-        
-        // Download local DevData (for internal use)
-        // Uncomment this part when you need to load DevData
-//        await loadDevData()
-       
-        // Download from the cloud (main stream)
-        // Comment out this part when using DevData
+ 
         await loadFromCloudService()
         
     }
 
-    /// Loading DevData (for internal use, to generate JSON file for cloud)
-     private func loadDevData() async {
-         let addedCount = await vm.loadDevData()
-         
-         await MainActor.run {
-             importedCount = addedCount
-             isInProgress = false
-             isLoaded = true
-             hapticManager.notification(type: .success)
-         }
-         
-         try? await Task.sleep(nanoseconds: 1_500_000_000)
-         
-         await MainActor.run {
-             coordinator.closeModal()
-         }
-     }
-    
     /// Downloading from a cloud service
     private func loadFromCloudService() async {
         await vm.importPostsFromCloud() {
