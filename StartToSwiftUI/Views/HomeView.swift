@@ -126,7 +126,6 @@ struct HomeView: View {
 
     private func refresh() {
         vm.loadPostsFromSwiftData()
-        hapticManager.impact(style: .light)
         Task {
             await noticevm.importNoticesFromCloud()
         }

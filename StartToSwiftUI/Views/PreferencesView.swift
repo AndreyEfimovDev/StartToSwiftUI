@@ -18,7 +18,7 @@ struct PreferencesView: View {
     
     // MARK: - Constants
     
-    let iconWidth: CGFloat = 18
+    let iconSize: CGFloat = 18
     
     // MARK: - Body
     
@@ -83,7 +83,8 @@ struct PreferencesView: View {
     // MARK: - Section Header
     
     private func sectionHeader(_ text: String) -> some View {
-        Text(text)
+                
+        return Text(text)
             .foregroundStyle(Color.mycolor.myAccent)
     }
     
@@ -127,14 +128,14 @@ struct PreferencesView: View {
         .accessibilityIdentifier("MessagesButton")
         .customListRowStyle(
             iconName: noticevm.unreadCount == 0 ? "message" : "message.badge",
-            iconWidth: iconWidth
+            iconWidth: iconSize
         )
     }
     
     private var notificationToggle: some View {
         HStack {
             Image(systemName: noticevm.isNotificationOn ? "bell" : "bell.slash")
-                .frame(width: iconWidth)
+                .frame(width: iconSize)
                 .foregroundStyle(Color.mycolor.myBlue)
             Toggle(noticevm.isNotificationOn ? "On" : "Off", isOn: $noticevm.isNotificationOn)
                 .tint(Color.mycolor.myBlue)
@@ -144,7 +145,7 @@ struct PreferencesView: View {
     private var soundNotificationToggle: some View {
         HStack {
             Image(systemName: noticevm.isSoundNotificationOn ? "speaker.wave.2" : "speaker.slash")
-                .frame(width: iconWidth)
+                .frame(width: iconSize)
                 .foregroundStyle(Color.mycolor.myBlue)
             Toggle(noticevm.isSoundNotificationOn ? "Sound On" : "Sound Off", isOn: $noticevm.isSoundNotificationOn)
                 .tint(Color.mycolor.myBlue)
@@ -159,7 +160,7 @@ struct PreferencesView: View {
         }
         .customListRowStyle(
             iconName: "hare",
-            iconWidth: iconWidth
+            iconWidth: iconSize
         ) // gauge.open.with.lines.needle.67percent.and.arrowtriangle
     }
     
@@ -173,7 +174,7 @@ struct PreferencesView: View {
                 }
                 .customListRowStyle(
                     iconName: "square.stack.3d.up",
-                    iconWidth: iconWidth
+                    iconWidth: iconSize
                 )
             }
         }
@@ -189,7 +190,7 @@ struct PreferencesView: View {
             Button("Check for materials update") {
                 coordinator.pushModal(.checkForUpdates)
             }
-            .customListRowStyle(iconName: "arrow.trianglehead.counterclockwise", iconWidth: iconWidth)
+            .customListRowStyle(iconName: "arrow.trianglehead.counterclockwise", iconWidth: iconSize)
         }
     }
         
@@ -200,7 +201,7 @@ struct PreferencesView: View {
             Button("Download curated collection") {
                 coordinator.pushModal(.importFromCloud)
             }
-            .customListRowStyle(iconName: "icloud.and.arrow.down", iconWidth: iconWidth)
+            .customListRowStyle(iconName: "icloud.and.arrow.down", iconWidth: iconSize)
         }
     }
         
@@ -210,7 +211,7 @@ struct PreferencesView: View {
         }
         .customListRowStyle(
             iconName: "square.and.arrow.up",
-            iconWidth: iconWidth
+            iconWidth: iconSize
         )
     }
     
@@ -220,7 +221,7 @@ struct PreferencesView: View {
         }
         .customListRowStyle(
             iconName: "tray.and.arrow.up",
-            iconWidth: iconWidth
+            iconWidth: iconSize
         )
     }
     
@@ -230,7 +231,7 @@ struct PreferencesView: View {
         }
         .customListRowStyle(
             iconName: "trash",
-            iconWidth: iconWidth
+            iconWidth: iconSize
         )
     }
     
@@ -242,7 +243,7 @@ struct PreferencesView: View {
         }
         .customListRowStyle(
             iconName: "hand.thumbsup",
-            iconWidth: iconWidth
+            iconWidth: iconSize
         )
     }
     
@@ -252,7 +253,7 @@ struct PreferencesView: View {
         }
         .customListRowStyle(
             iconName: "info.circle",
-            iconWidth: iconWidth
+            iconWidth: iconSize
         )
     }
     
@@ -262,7 +263,7 @@ struct PreferencesView: View {
         }
         .customListRowStyle(
             iconName: "long.text.page.and.pencil",
-            iconWidth: iconWidth
+            iconWidth: iconSize
         )
     }
     
@@ -276,7 +277,7 @@ struct PreferencesView: View {
         }
         .customListRowStyle(
             iconName: "envelope",
-            iconWidth: iconWidth
+            iconWidth: iconSize
         )
     }
 }
