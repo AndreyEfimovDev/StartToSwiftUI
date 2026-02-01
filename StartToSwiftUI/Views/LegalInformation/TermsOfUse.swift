@@ -27,17 +27,17 @@ struct TermsOfUse: View {
             VStack {
                 descriptionText
                 
-                CapsuleButtonView(
-                    primaryTitle: "I have read and accept",
-                    secondaryTitle: "Accepted",
-                    isToChange: isAccepted || vm.isTermsOfUseAccepted) {
-                        isAccepted = true
-                        vm.acceptTermsOfUse()
-                        coordinator.closeModal()
-                    }
-                    .padding(.horizontal, 30)
-                    .padding(15)
-                    .disabled(isAccepted)
+//                CapsuleButtonView(
+//                    primaryTitle: "I have read and accept",
+//                    secondaryTitle: "Accepted",
+//                    isToChange: isAccepted || vm.isTermsOfUseAccepted) {
+//                        isAccepted = true
+//                        vm.acceptTermsOfUse()
+//                        coordinator.closeModal()
+//                    }
+//                    .padding(.horizontal, 30)
+//                    .padding(15)
+//                    .disabled(isAccepted)
             }
         }
         .navigationTitle("Terms of Use")
@@ -55,18 +55,18 @@ struct TermsOfUse: View {
                     }
                 }
             }
-            if vm.isTermsOfUseAccepted {
+//            if vm.isTermsOfUseAccepted {
                 ToolbarItem(placement: .topBarTrailing) {
-                    if vm.isTermsOfUseAccepted {
+//                    if vm.isTermsOfUseAccepted {
                         Button {
                             coordinator.closeModal()
                         } label: {
                             Image(systemName: "house")
                                 .foregroundStyle(Color.mycolor.myAccent)
                         }
-                    }
+//                    }
                 }
-            }
+//            }
         }
     }
     

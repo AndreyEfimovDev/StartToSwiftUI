@@ -77,35 +77,6 @@ struct StudyProgressForLevel: View {
                         .stroke(.blue, lineWidth: 1)
                 )
                 .padding(8)
-//                HStack (spacing: 0) {
-//                    VStack(alignment: .leading, spacing: 8) {
-//                        HStack (spacing: 3){
-//                            progressLevel.icon
-//                            Text(progressLevel.displayName)
-//                        }
-//                        Text("\(levelPostsCount(for: progressLevel))")
-//                            .foregroundStyle(Color.mycolor.myAccent)
-//                    }
-//                    .foregroundStyle(progressLevel.color)
-//                    .font(fontForSectionTitle)
-//                    .frame(maxWidth: .infinity, alignment: .leading)
-//                    .padding(.leading)
-//
-//                    Spacer()
-//
-//                    ProgressIndicator(
-//                        progress: progressCount(for: progressLevel),
-//                        colour: progressLevel.color,
-//                        fontForTitle: fontForSectionTitle,
-//                        lineWidth: lineWidth
-//                    )
-//                    .padding()
-//                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
-//                }
-//                .background(.ultraThinMaterial)
-//                .clipShape(
-//                    RoundedRectangle(cornerRadius: 15)
-//                )
             } // ForEach
         }
         .padding(.horizontal, 30)
