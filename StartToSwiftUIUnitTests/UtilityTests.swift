@@ -33,6 +33,7 @@ final class UtilityTests: XCTestCase {
             notes: "Test notes",
             origin: .cloud,
             draft: false,
+            status: .active,
             date: Date(),
             addedDateStamp: nil,
             startedDateStamp: nil,
@@ -76,6 +77,7 @@ final class UtilityTests: XCTestCase {
             notes: "", // Empty string
             origin: .local,
             draft: true,
+            status: .active,
             date: testDate, // Основная дата
             addedDateStamp: testDate.addingTimeInterval(3600),
             startedDateStamp: testDate.addingTimeInterval(4800),
@@ -132,6 +134,7 @@ final class UtilityTests: XCTestCase {
             notes: "Notes",
             origin: .local,
             draft: false,
+            status: .active,
             date: testDate,
             addedDateStamp: nil,
             startedDateStamp: nil,
@@ -171,6 +174,7 @@ final class UtilityTests: XCTestCase {
             notes: "Notes with URL",
             origin: .cloud,
             draft: false,
+            status: .active,
             date: Date(),
             addedDateStamp: nil,
             startedDateStamp: nil,
@@ -207,6 +211,7 @@ final class UtilityTests: XCTestCase {
             notes: "Date test notes",
             origin: .local,
             draft: false,
+            status: .active,
             date: testDate,
             addedDateStamp: testDate.addingTimeInterval(86400), // +1 day
             startedDateStamp: testDate.addingTimeInterval(172800), // +2 days
@@ -397,7 +402,7 @@ final class UtilityTests: XCTestCase {
         let testCases: [(String, PostType, Platform, StudyLevel, StudyProgress, FavoriteChoice, PostOrigin)] = [
             ("post-youtube-beginner", .post, .youtube, .beginner, .fresh, .no, .cloud),
             ("article-website-middle", .post, .website, .middle, .started, .yes, .local),
-            ("course-medium-advanced", .course, .website, .advanced, .studied, .yes, .statical)
+            ("course-medium-advanced", .course, .website, .advanced, .studied, .yes, .cloudNew)
         ]
         
         for (description, postType, platform, level, progress, favorite, origin) in testCases {
@@ -739,7 +744,7 @@ final class UtilityTests: XCTestCase {
                 postRating = nil
             }
             
-            let origins: [PostOrigin] = [.local, .cloud, .statical]
+            let origins: [PostOrigin] = [.local, .cloud, .cloudNew]
             let post = CodablePost(
                 id: "test-\(i)",
                 category: "Category \(i % 5)",
@@ -757,6 +762,7 @@ final class UtilityTests: XCTestCase {
                 notes: i % 10 == 0 ? "Notes \(i)" : "",
                 origin: origins[i % origins.count],
                 draft: i % 7 == 0,
+                status: .active,
                 date: Date(),
                 addedDateStamp: Date().addingTimeInterval(Double(i) * -3600),
                 startedDateStamp: i % 3 == 0 ? Date().addingTimeInterval(Double(i) * -7200) : nil,
