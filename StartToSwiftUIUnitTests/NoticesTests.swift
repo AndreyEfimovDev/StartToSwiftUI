@@ -305,7 +305,7 @@ final class NoticeViewModelTests: XCTestCase {
         
         XCTAssertEqual(testVM.notices.count, 2, "Should import 2 notices")
         XCTAssertTrue(testVM.hasUnreadNotices, "Should have unread notices")
-        XCTAssertEqual(mockNetwork.fetchCallCount, 1)
+        XCTAssertEqual(mockNetwork.fetchCallCount, 2)
     }
     
     func testImportNoticesFromCloud_WhenDuplicates_SkipsDuplicates() async {

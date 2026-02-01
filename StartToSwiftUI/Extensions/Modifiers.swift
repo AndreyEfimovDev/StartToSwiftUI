@@ -138,13 +138,13 @@ struct AdaptiveModalModifier: ViewModifier {
             return true
         }
         
-        // On iPad, only welcomeAtFirstLaunch is full-screen
-        switch route {
-        case .welcomeAtFirstLaunch:
-            return true
-        default:
+//        // On iPad, only welcomeAtFirstLaunch is full-screen
+//        switch route {
+//        case .welcomeAtFirstLaunch:
+//            return true
+//        default:
             return false
-        }
+//        }
     }
 }
 

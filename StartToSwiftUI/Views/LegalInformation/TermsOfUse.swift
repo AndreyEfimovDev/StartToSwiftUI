@@ -11,33 +11,21 @@ import SwiftData
 struct TermsOfUse: View {
     
     // MARK: - Dependencies
-        
+    
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     private let hapticManager = HapticService.shared
     
     // MARK: - States
-
+    
     @State private var isAccepted: Bool = false
     
     // MARK: - Body
-
+    
     var body: some View {
         ScrollView {
             VStack {
                 descriptionText
-                
-                CapsuleButtonView(
-                    primaryTitle: "I have read and accept",
-                    secondaryTitle: "Accepted",
-                    isToChange: isAccepted || vm.isTermsOfUseAccepted) {
-                        isAccepted = true
-                        vm.acceptTermsOfUse()
-                        coordinator.closeModal()
-                    }
-                    .padding(.horizontal, 30)
-                    .padding(15)
-                    .disabled(isAccepted)
             }
         }
         .navigationTitle("Terms of Use")
@@ -55,16 +43,12 @@ struct TermsOfUse: View {
                     }
                 }
             }
-            if vm.isTermsOfUseAccepted {
-                ToolbarItem(placement: .topBarTrailing) {
-                    if vm.isTermsOfUseAccepted {
-                        Button {
-                            coordinator.closeModal()
-                        } label: {
-                            Image(systemName: "house")
-                                .foregroundStyle(Color.mycolor.myAccent)
-                        }
-                    }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    coordinator.closeModal()
+                } label: {
+                    Image(systemName: "house")
+                        .foregroundStyle(Color.mycolor.myAccent)
                 }
             }
         }

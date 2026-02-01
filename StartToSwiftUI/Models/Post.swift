@@ -25,7 +25,7 @@ final class Post {
     var favoriteChoiceRawValue: String = "no"
     var postRatingRawValue: String?
     var notes: String = ""
-    var originRawValue: String = "cloud"
+    var originRawValue: String = "cloudNew"
     var draft: Bool = false
     var statusRawValue: String = "active"
     var date: Date = Date() // Date this entry was created
@@ -69,7 +69,7 @@ final class Post {
     }
     
     var origin: PostOrigin {
-        get { PostOrigin(rawValue: originRawValue) ?? .cloud }
+        get { PostOrigin(rawValue: originRawValue) ?? .cloudNew }
         set { originRawValue = newValue.rawValue }
     }
     
@@ -93,7 +93,7 @@ final class Post {
         favoriteChoice: FavoriteChoice = .no,
         postRating: PostRating? = nil,
         notes: String = "",
-        origin: PostOrigin = .cloud,
+        origin: PostOrigin = .cloudNew,
         draft: Bool = false,
         status: PostStatus = .active,
         date: Date = .now,
@@ -156,7 +156,7 @@ extension Post {
         )
     }
 
-    // MARK: For AddEditPostSheet module: compare only those fields that the user can edit
+    // MARK: For AddEditPostView module: compare only those fields that the user can edit
     func isEqual(to other: Post) -> Bool {
         return self.category == other.category &&
         self.title == other.title &&
@@ -170,9 +170,8 @@ extension Post {
         self.notes == other.notes
     }
     
-    // MARK: For AddEditPostSheet module: update only those fields that the user can edit
+    // MARK: For AddEditPostView module: update only those fields that the user can edit
     func update(with post: Post) {
-//        self.id = post.id
         self.category = post.category
         self.title = post.title
         self.intro = post.intro
@@ -182,17 +181,40 @@ extension Post {
         self.postPlatform = post.postPlatform
         self.postDate = post.postDate
         self.studyLevel = post.studyLevel
-//        self.progress = post.progress
-//        self.favoriteChoice = post.favoriteChoice
-//        self.postRating = post.postRating
         self.notes = post.notes
-//        self.origin = post.origin
         self.draft = post.draft
-//        self.date = post.date
-//        self.addedDateStamp = post.addedDateStamp
-//        self.startedDateStamp = post.startedDateStamp
-//        self.studiedDateStamp = post.studiedDateStamp
-//        self.practicedDateStamp = post.practicedDateStamp
     }
 }
+
+// MARK: Converts JSON codable post to a SwiftData post
+
+struct PostMigrationHelper {
+    static func convertFromCodable(_ codablePost: CodablePost) -> Post {
+        return Post(
+            id: codablePost.id,
+            category: codablePost.category,
+            title: codablePost.title,
+            intro: codablePost.intro,
+            author: codablePost.author,
+            postType: codablePost.postType,
+            urlString: codablePost.urlString,
+            postPlatform: codablePost.postPlatform,
+            postDate: codablePost.postDate,
+            studyLevel: codablePost.studyLevel,
+            progress: codablePost.progress,
+            favoriteChoice: codablePost.favoriteChoice,
+            postRating: codablePost.postRating,
+            notes: codablePost.notes,
+            origin: codablePost.origin,
+            draft: codablePost.draft,
+            status: codablePost.status,
+            date: codablePost.date,
+            addedDateStamp: codablePost.addedDateStamp,
+            startedDateStamp: codablePost.startedDateStamp,
+            studiedDateStamp: codablePost.studiedDateStamp,
+            practicedDateStamp: codablePost.practicedDateStamp
+        )
+    }
+}
+
 

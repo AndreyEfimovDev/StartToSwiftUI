@@ -40,7 +40,6 @@ struct ProgressIndicator: View {
                     .font(fontForTitle)
                 Text("%")
                     .font(.caption2)
-
             }
             .bold()
             .foregroundStyle(Color.mycolor.myAccent)
