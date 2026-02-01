@@ -197,6 +197,12 @@ final class NoticeViewModel: ObservableObject {
     
     // MARK: - Update Unread Status
     func updateUnreadStatus() {
+        
+        guard !notices.isEmpty else {
+                hasUnreadNotices = false
+                return
+            }
+
         // Check if there is at least one unread notice
         hasUnreadNotices = notices.contains(where: { !$0.isRead })
     }
