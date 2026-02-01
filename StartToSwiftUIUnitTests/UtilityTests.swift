@@ -105,6 +105,7 @@ final class UtilityTests: XCTestCase {
         XCTAssertEqual(post.notes, "") // Should be empty string
         XCTAssertEqual(post.origin, .local)
         XCTAssertEqual(post.draft, true)
+        XCTAssertEqual(post.status, .active)
         XCTAssertEqual(post.date, testDate) // Основная дата должна быть скопирована
         XCTAssertEqual(post.addedDateStamp, testDate.addingTimeInterval(3600))
         XCTAssertEqual(post.startedDateStamp, testDate.addingTimeInterval(4800))
@@ -268,6 +269,7 @@ final class UtilityTests: XCTestCase {
             "notes": "",
             "origin": "cloud",
             "draft": false,
+            "status": "active",
             "date": "2024-01-20T10:30:00Z",
             "addedDateStamp": null,
             "startedDateStamp": null,
@@ -298,6 +300,7 @@ final class UtilityTests: XCTestCase {
             XCTAssertEqual(codablePost.intro, "Test Intro")
             XCTAssertEqual(codablePost.author, "Test Author")
             XCTAssertEqual(codablePost.draft, false)
+            XCTAssertEqual(codablePost.status, .active)
             
             print("✅ Successfully decoded CodablePost")
             print("  Title: \(codablePost.title)")
@@ -330,6 +333,7 @@ final class UtilityTests: XCTestCase {
             "notes": "",
             "origin": "cloud",
             "draft": false,
+            "status": "active",
             "date": "2026-01-16T16:16:08Z",
             "addedDateStamp": null,
             "startedDateStamp": null,
@@ -426,6 +430,7 @@ final class UtilityTests: XCTestCase {
                 "notes": "Notes",
                 "origin": "\(origin.rawValue)",
                 "draft": false,
+                "status": "active",
                 "date": "2024-01-20T10:30:00Z"
             }
             """.data(using: .utf8)!
@@ -541,6 +546,7 @@ final class UtilityTests: XCTestCase {
             "notes": "",
             "origin": "local",
             "draft": true,
+            "status": "active",
             "date": "2024-01-20T10:30:00Z"
         }
         """.data(using: .utf8)!
@@ -618,6 +624,7 @@ final class UtilityTests: XCTestCase {
             "notes": "",
             "origin": "cloud",
             "draft": false,
+            "status": "active",
             "date": "2024-01-20T10:30:00Z",
             "addedDateStamp": "2024-01-21T08:15:30Z",
             "startedDateStamp": null,
@@ -707,6 +714,7 @@ final class UtilityTests: XCTestCase {
             "notes": "",
             "origin": "cloud",
             "draft": false,
+            "status": "active",
             "date": "2024-01-20T10:30:00Z",
             "addedDateStamp": "2024-01-21T08:15:30Z",
             "startedDateStamp": null,
@@ -799,6 +807,7 @@ final class UtilityTests: XCTestCase {
                 "notes": "Notes for test \(i)",
                 "origin": "cloud",
                 "draft": false,
+                "status": "active",
                 "date": "2024-01-20T10:30:00Z",
                 "addedDateStamp": null,
                 "startedDateStamp": null,

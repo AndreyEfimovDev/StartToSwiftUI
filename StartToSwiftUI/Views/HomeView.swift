@@ -351,7 +351,7 @@ struct HomeView: View {
     private var allPostsIsEmpty: some View {
         ContentUnavailableView(
             "No Study Materials",
-            systemImage: "tray.and.arrow.down",
+            systemImage: "tray",
             description: Text("Materials will appear here once you create them yourself.")
         )
     }
