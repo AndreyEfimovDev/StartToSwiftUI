@@ -22,7 +22,6 @@ struct LineMarkLegendView: View {
                         .stroke(Color.mycolor.mySecondary.opacity(0.5), lineWidth: 1)
                 )
 
-
             HStack(spacing: 20) {
                 ForEach([StudyProgress.started, StudyProgress.studied, StudyProgress.practiced], id: \.self) { type in
                     
@@ -64,7 +63,6 @@ struct LineMarkLegendView: View {
                 }
             }
         }
-        
         .foregroundStyle(Color.mycolor.myAccent)
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 8)

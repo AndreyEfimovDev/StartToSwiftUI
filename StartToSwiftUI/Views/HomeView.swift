@@ -80,9 +80,7 @@ struct HomeView: View {
             .overlay { deleteConfirmationOverlay }
             .onAppear {
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                if vm.isTermsOfUseAccepted {
-                    noticevm.playSoundNotificationIfNeeded()
-                }
+                noticevm.playSoundNotificationIfNeeded()
             }
         }
     }
@@ -120,11 +118,16 @@ struct HomeView: View {
         } // List
         .listStyle(.plain)
         .refreshControl {
-            vm.loadPostsFromSwiftData()
-            hapticManager.impact(style: .light)
-            Task {
-                await noticevm.importNoticesFromCloud()
-            }
+            refresh()
+        }
+    }
+    
+    // MARK: - Refresh
+
+    private func refresh() {
+        vm.loadPostsFromSwiftData()
+        Task {
+            await noticevm.importNoticesFromCloud()
         }
     }
     
@@ -216,14 +219,19 @@ struct HomeView: View {
             CircleStrokeButtonView(iconName: "plus", isShownCircle: false ){
                 coordinator.push(.addPost)
             }
-            // Filters sheet
-            CircleStrokeButtonView(
-                iconName: "line.3.horizontal.decrease",
-                isIconColorToChange: !vm.isFiltersEmpty,
-                isShownCircle: false
-            ){
-                isFilterButtonPressed.toggle()
-                hapticManager.impact(style: .light)
+            // Filters button or Refresh button
+            if vm.allPosts.isEmpty {
+                // arrow.trianglehead.2.clockwise
+                CircleStrokeButtonView(
+                    iconName: "arrow.trianglehead.2.clockwise",
+                    isShownCircle: false
+                ){ refresh() }
+            } else {
+                CircleStrokeButtonView(
+                    iconName: "line.3.horizontal.decrease",
+                    isIconColorToChange: !vm.isFiltersEmpty,
+                    isShownCircle: false
+                ) { isFilterButtonPressed.toggle() }
             }
         }
     }
@@ -296,6 +304,8 @@ struct HomeView: View {
         }
     }
     
+    // MARK: - Filters View
+
     private var filtersSheet: some View {
         FiltersSheetView(isFilterButtonPressed: $isFilterButtonPressed)
             .presentationBackground(.ultraThinMaterial)
@@ -340,7 +350,7 @@ struct HomeView: View {
     private var allPostsIsEmpty: some View {
         ContentUnavailableView(
             "No Study Materials",
-            systemImage: "tray.and.arrow.down",
+            systemImage: "tray",
             description: Text("Materials will appear here once you create them yourself.")
         )
     }

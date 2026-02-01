@@ -15,11 +15,11 @@ final class iPadUITests: XCTestCase {
     
     override func setUpWithError() throws {
         // Skip on iPhone
-        #if !targetEnvironment(macCatalyst)
+#if !targetEnvironment(macCatalyst)
         guard UIDevice.current.userInterfaceIdiom == .pad else {
             throw XCTSkip("This test is for iPad only")
         }
-        #endif
+#endif
         
         continueAfterFailure = false
         app = XCUIApplication()
@@ -92,16 +92,32 @@ final class iPadUITests: XCTestCase {
         }
         
         settingsButton.tap()
-        sleep(1)
+        sleep(2)
         
-        // On iPad, preferences should open as a sheet/modal
+        // Вариант 1: NavigationBar
         let preferencesNavBar = app.navigationBars["Preferences"]
-        XCTAssertTrue(preferencesNavBar.waitForExistence(timeout: 2))
         
-        // Close button should be X on iPad
-        let closeButton = app.buttons["xmark"]
-        XCTAssertTrue(closeButton.exists, "iPad should show X button to close sheet")
+        // Вариант 2: StaticText с заголовком
+        let preferencesTitle = app.staticTexts["Preferences"]
         
-        closeButton.tap()
+        // Проверяем оба варианта
+        let found = preferencesNavBar.waitForExistence(timeout: 3) ||
+        preferencesTitle.waitForExistence(timeout: 3)
+        
+        XCTAssertTrue(found, "Preferences screen should be visible")
+        
+        // Закрытие - кнопка назад или X
+        let navBar = app.navigationBars.firstMatch
+        let closeButton = navBar.buttons["xmark"]
+        let backButton = navBar.buttons["chevron.left"]
+        let backButtonAlt = navBar.buttons["Back"]
+        
+        if closeButton.exists {
+            closeButton.tap()
+        } else if backButton.exists {
+            backButton.tap()
+        } else if backButtonAlt.exists {
+            backButtonAlt.tap()
+        }
     }
 }

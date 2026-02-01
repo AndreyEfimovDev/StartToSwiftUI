@@ -32,7 +32,8 @@ struct Functionality: View {
                Here are some tips to help you easily navigate the app and explore its functionality.
                
                **Home View Navigation**
-               From the main list of materials:
+               From the main list of study materials:
+               - Pull down to refresh the list of items
                - Tap on a material to open its Details view
                - Swipe right on an item to mark or unmark it as a Favourite
                - Swipe left on an item to Edit or Delete it
@@ -40,14 +41,15 @@ struct Functionality: View {
                - Double-tap on an item to Rate the material
                
                **Add Materials**
-               You have the ability to save:
-               - Title and a preview information
-               - The author's name
-               - A direct link to the original source
-               - The source (Website, YouTube)
-               - The publication date (if known)
-               - The type of material (single tutorial, course, solution, etc.)
-               - The difficulty level (Beginner, Intermediate, Advanced)
+               You have the ability to create your own study content:
+               - Title
+               - Intro description
+               - Author's name of the material
+               - Reference to the original source
+               - Type of the source (Website, YouTube)
+               - Publication date (if known)
+               - Type of material (lesson, course, solution, etc.)
+               - Difficulty level (Beginner, Intermediate, Advanced)
                - Your personal notes on the material
                
                **Widget**

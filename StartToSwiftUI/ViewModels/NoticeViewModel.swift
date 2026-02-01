@@ -116,7 +116,6 @@ final class NoticeViewModel: ObservableObject {
                 relevantNotices = cloudResponse
             }
             
-            
             // Filter by ID (general logic)
             let existingIDs = Set(notices.map { $0.id })
             let newNotices = relevantNotices.filter { !existingIDs.contains($0.id) }
@@ -180,9 +179,7 @@ final class NoticeViewModel: ObservableObject {
                     log("    ✗ Removed: '\(notice.title)'", level: .info)
                 }
             }
-            
             saveContext()
-            
         } catch {
             handleError(error, message: "Error removing duplicates")
         }
@@ -197,6 +194,11 @@ final class NoticeViewModel: ObservableObject {
     
     // MARK: - Update Unread Status
     func updateUnreadStatus() {
+        guard !notices.isEmpty else {
+                hasUnreadNotices = false
+                return
+            }
+
         // Check if there is at least one unread notice
         hasUnreadNotices = notices.contains(where: { !$0.isRead })
     }
@@ -278,7 +280,6 @@ final class NoticeViewModel: ObservableObject {
     // MARK: - Notifications
     /// Send local notification of new notices
     private func sendLocalNotification(count: Int) {
-        
         guard isNotificationOn, isSoundNotificationOn else { return }
         hapticManager.notification(type: .success)
         log("🍉 🔔 Local notification sent: \(count) new", level: .info)
@@ -311,4 +312,17 @@ final class NoticeViewModel: ObservableObject {
         }
     }
 
+}
+
+// MARK: Convert an old encoded JSON notice to a SwiftData one
+struct NoticeMigrationHelper {
+    static func convertFromCodable(_ codableNotice: CodableNotice) -> Notice {
+        return Notice(
+            id: codableNotice.id,
+            title: codableNotice.title,
+            noticeDate: codableNotice.noticeDate,
+            noticeMessage: codableNotice.noticeMessage,
+            isRead: codableNotice.isRead
+        )
+    }
 }

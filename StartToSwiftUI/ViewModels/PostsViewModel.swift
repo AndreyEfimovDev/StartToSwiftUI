@@ -82,9 +82,7 @@ final class PostsViewModel: ObservableObject {
     @AppStorage("storedSortOption") var storedSortOption: SortOption?
     @Published var selectedSortOption: SortOption? = nil {
         didSet { storedSortOption = selectedSortOption }}
-    
-    @Published var isTermsOfUseAccepted: Bool = false
-    
+        
     // MARK: - Init
     init(
         dataSource: PostsDataSourceProtocol,
@@ -154,27 +152,11 @@ final class PostsViewModel: ObservableObject {
         
         appStateManager.cleanupDuplicateAppStates()
         
-        if appStateManager.getTermsOfUseAcceptedStatus() {
-            isTermsOfUseAccepted = true
-        }
-        
         if await checkCloudCuratedPostsForUpdates() {
             appStateManager.setCuratedPostsLoadStatusOn()
         }
     }
-    
-    // MARK: - Terms of Use
-    
-    func acceptTermsOfUse() {
-        guard let appStateManager else {
-            log("⚠️ acceptTermsOfUse: available only for SwiftData", level: .warning)
-            return
-        }
-        appStateManager.acceptTermsOfUse()
-        isTermsOfUseAccepted = true
-        objectWillChange.send()
-    }
-    
+        
     // MARK: - SwiftData Operations
     
     /// Loading posts from SwiftData
@@ -215,7 +197,6 @@ final class PostsViewModel: ObservableObject {
         return true
     }
     
-    
     /// Post update
     func updatePost() {
         saveContextAndReload()
@@ -227,14 +208,8 @@ final class PostsViewModel: ObservableObject {
             log("❌ Attempt to delete a nil post", level: .error)
             return
         }
-        
         dataSource.delete(post)
         saveContextAndReload()
-        
-        // All posts have been deleted and the hasLoadedStaticPosts flag has been reset.
-        if allPosts.isEmpty {
-            appStateManager?.markStaticPostsAsNotLoaded()
-        }
     }
     
     /// Deleting all posts
@@ -243,9 +218,6 @@ final class PostsViewModel: ObservableObject {
             do {
                 // Deleting all posts
                 try swiftDataSource.modelContext.delete(model: Post.self)
-                
-                //  Resetting the flag because ALL posts (including static ones) have been deleted.
-                appStateManager?.markStaticPostsAsNotLoaded()
                 saveContextAndReload()
             } catch {
                 handleError(error, message: "Error deleting data")
@@ -254,7 +226,6 @@ final class PostsViewModel: ObservableObject {
             // For Mock simply clear the array
             allPosts = []
         }
-        
         completion()
     }
     
@@ -289,7 +260,6 @@ final class PostsViewModel: ObservableObject {
         case .practiced:
             post.practicedDateStamp = .now
         }
-        
         saveContextAndReload()
     }
     
@@ -338,7 +308,6 @@ final class PostsViewModel: ObservableObject {
         } catch {
             handleError(error, message: "Import error from \(sourceName)")
         }
-        
         completion()
     }
     
@@ -353,16 +322,15 @@ final class PostsViewModel: ObservableObject {
     /// - Warning: This application is intended for self-study.
     /// - Returns: Returns a boolean result or error within completion handler.
     ///
-    
     func checkCloudCuratedPostsForUpdates() async -> Bool {
         
         clearError()
         
         do {
             let cloudResponse: [CodablePost] = try await networkService.fetchDataFromURLAsync()
-            let localPosts = self.allPosts.filter { $0.origin == .cloud }
+            let localPosts = self.allPosts.filter { $0.origin == .cloud || $0.origin == .cloudNew }
             let cloudPosts = cloudResponse
-                .filter { $0.origin == .cloud }
+                .filter { $0.origin == .cloudNew }
                 .map { PostMigrationHelper.convertFromCodable($0) }
             
             var hasUpdates: Bool
@@ -418,7 +386,6 @@ final class PostsViewModel: ObservableObject {
                 completion(0)
                 return
             }
-            
             // 5. Save into SwiftData
             for post in uniquePosts {
                 dataSource.insert(post)
@@ -682,11 +649,11 @@ final class PostsViewModel: ObservableObject {
     }
     
     var cloudPostsCount: Int {
-        allPosts.filter { $0.origin == .cloud }.count
+        allPosts.filter { $0.origin == .cloud || $0.origin == .cloudNew }.count
     }
     
     var hasCloudPosts: Bool {
-        allPosts.contains { $0.origin == .cloud }
+        allPosts.contains { $0.origin == .cloud || $0.origin == .cloudNew}
     }
     
     var hasAvailableCuratedPostsUpdate: Bool {

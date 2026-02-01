@@ -86,19 +86,21 @@ enum PostFields: Hashable {
 //    case postDate
 }
 
+// MARK: Enums for Post model
+
 enum PostType: String, CaseIterable, Codable {
     case post
     case course
     case solution
-    case bug
+//    case bug
     case other
     
     var displayName: String {
         switch self {
-        case .post: return "Single"
+        case .post: return "Lesson"
         case .course: return "Course"
         case .solution: return "Solution"
-        case .bug: return "Bug"
+//        case .bug: return "Bug"
         case .other: return "Other"
         }
     }
@@ -357,8 +359,8 @@ enum AppRoute: Hashable, Identifiable {
     case addPost
     case editPost(Post)
     
-    // Welcome at first launch to accept Terms of Use
-    case welcomeAtFirstLaunch
+//    // Welcome at first launch to accept Terms of Use
+//    case welcomeAtFirstLaunch
     
     // Preferences
     case preferences
@@ -413,8 +415,8 @@ enum AppRoute: Hashable, Identifiable {
             return "addPost"
         case .editPost(let post):
             return "editPost_\(post.id)"
-        case .welcomeAtFirstLaunch:
-            return "welcomeAtFirstLaunch"
+//        case .welcomeAtFirstLaunch:
+//            return "welcomeAtFirstLaunch"
         case .preferences:
             return "preferences"
         case .notices:

@@ -30,8 +30,8 @@ struct ModalNavigationContainer: View {
     @ViewBuilder
     private func contentView(for route: AppRoute, isRoot: Bool) -> some View {
         switch route {
-        case .welcomeAtFirstLaunch:
-            WelcomeAtFirstLaunchView()
+//        case .welcomeAtFirstLaunch:
+//            WelcomeAtFirstLaunchView()
             
         case .postDetails(let postId): // postId is extracted from enum and available as String
             PostDetailsView(postId: postId)

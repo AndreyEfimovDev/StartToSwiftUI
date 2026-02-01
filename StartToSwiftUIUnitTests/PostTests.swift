@@ -23,7 +23,7 @@ final class PostTests: XCTestCase {
         XCTAssertEqual(post.studyLevel, .beginner)
         XCTAssertEqual(post.progress, .fresh)
         XCTAssertEqual(post.favoriteChoice, .no)
-        XCTAssertEqual(post.origin, .cloud)
+        XCTAssertEqual(post.origin, .cloudNew)
         XCTAssertFalse(post.draft)
         XCTAssertEqual(post.category, "SwiftUI")
         XCTAssertEqual(post.urlString, Constants.urlStart)
@@ -50,7 +50,7 @@ final class PostTests: XCTestCase {
             favoriteChoice: .yes,
             postRating: .excellent,
             notes: "Custom notes",
-            origin: .statical,
+            origin: .local,
             draft: true,
             date: customDate,
             addedDateStamp: customDate,
@@ -73,7 +73,7 @@ final class PostTests: XCTestCase {
         XCTAssertEqual(post.favoriteChoice, .yes)
         XCTAssertEqual(post.postRating, .excellent)
         XCTAssertEqual(post.notes, "Custom notes")
-        XCTAssertEqual(post.origin, .statical)
+        XCTAssertEqual(post.origin, .local)
         XCTAssertTrue(post.draft)
         XCTAssertEqual(post.date, customDate)
         XCTAssertEqual(post.addedDateStamp, customDate)
@@ -92,7 +92,7 @@ final class PostTests: XCTestCase {
         post.studyLevelRawValue = "advanced"
         post.progressRawValue = "practiced"
         post.favoriteChoiceRawValue = "yes"
-        post.originRawValue = "statical"
+        post.originRawValue = "cloud"
         post.postTypeRawValue = "post"
         post.postPlatformRawValue = "website"
         
@@ -100,7 +100,7 @@ final class PostTests: XCTestCase {
         XCTAssertEqual(post.studyLevel, .advanced)
         XCTAssertEqual(post.progress, .practiced)
         XCTAssertEqual(post.favoriteChoice, .yes)
-        XCTAssertEqual(post.origin, .statical)
+        XCTAssertEqual(post.origin, .cloud)
         XCTAssertEqual(post.postType, .post)
         XCTAssertEqual(post.postPlatform, .website)
     }
@@ -121,7 +121,7 @@ final class PostTests: XCTestCase {
         XCTAssertEqual(post.studyLevel, .beginner)
         XCTAssertEqual(post.progress, .fresh)
         XCTAssertEqual(post.favoriteChoice, .no)
-        XCTAssertEqual(post.origin, .cloud)
+        XCTAssertEqual(post.origin, .cloudNew)
         XCTAssertEqual(post.postType, .post)
         XCTAssertEqual(post.postPlatform, .youtube)
     }
@@ -454,7 +454,7 @@ final class PostTests: XCTestCase {
             favoriteChoice: .yes,
             postRating: .good,
             notes: "Notes",
-            origin: .statical,
+            origin: .local,
             draft: true,
             date: date,
             addedDateStamp: date,
@@ -510,7 +510,7 @@ final class PostTests: XCTestCase {
             favoriteChoice: .yes, // Should NOT be updated
             postRating: .good, // Should NOT be updated
             notes: "Original notes",
-            origin: .statical, // Should NOT be updated
+            origin: .local, // Should NOT be updated
             draft: false,
             date: originalDate, // Should NOT be updated
             addedDateStamp: originalDate, // Should NOT be updated
@@ -565,7 +565,7 @@ final class PostTests: XCTestCase {
         XCTAssertEqual(post.progress, .practiced) // Should remain unchanged
         XCTAssertEqual(post.favoriteChoice, .yes) // Should remain unchanged
         XCTAssertEqual(post.postRating, .good) // Should remain unchanged
-        XCTAssertEqual(post.origin, .statical) // Should remain unchanged
+        XCTAssertEqual(post.origin, .local) // Should remain unchanged
         XCTAssertEqual(post.date, originalDate) // Should remain unchanged
         XCTAssertEqual(post.addedDateStamp, originalDate) // Should remain unchanged
         XCTAssertEqual(post.startedDateStamp, originalDate) // Should remain unchanged
