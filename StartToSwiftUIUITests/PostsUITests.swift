@@ -139,16 +139,25 @@ final class PostsUITests: XCTestCase {
         addButton.tap()
         
         // Verify Add screen opened
-        XCTAssertTrue(app.navigationBars["Add"].waitForExistence(timeout: 2))
+        let navBar = app.navigationBars["Add"]
+        XCTAssertTrue(navBar.waitForExistence(timeout: 2))
         
-        // Go back without saving
-        let backButton = app.buttons["chevron.left"]
-        let closeButton = app.buttons["xmark"]
+        // Go back without saving - ищем кнопку ВНУТРИ NavigationBar
+        let backButton = navBar.buttons["chevron.left"]
+        let closeButton = navBar.buttons["xmark"]
         
         if backButton.exists {
             backButton.tap()
         } else if closeButton.exists {
             closeButton.tap()
+        } else {
+            // Fallback: кнопка с label "Close" в навбаре
+            let closeByLabel = navBar.buttons["Close"]
+            if closeByLabel.exists {
+                closeByLabel.tap()
+            } else {
+                XCTFail("No back/close button found in navigation bar")
+            }
         }
         
         // May show confirmation dialog for unsaved changes
@@ -159,7 +168,6 @@ final class PostsUITests: XCTestCase {
         
         sleep(1)
     }
-    
     // MARK: - Swipe Actions Tests
     
     func testSwipeToDeletePost() throws {

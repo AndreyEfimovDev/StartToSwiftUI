@@ -643,8 +643,8 @@
 			isa = PBXGroup;
 			children = (
 				47A3318F2F276A4A002883DD /* iPadUITests.swift */,
-				47A331902F276A4A002883DD /* NoticesUITests.swift */,
 				47A331912F276A4A002883DD /* PostsUITests.swift */,
+				47A331902F276A4A002883DD /* NoticesUITests.swift */,
 				47A331922F276A4A002883DD /* PreferencesUITests.swift */,
 				47A331932F276A4A002883DD /* SearchAndFilterUITests.swift */,
 				47A331942F276A4A002883DD /* StartToSwiftUIUITests.swift */,
