@@ -37,10 +37,6 @@ struct StartView: View {
             } else {
                 mainContent
                     .onAppear {
-//                        if !vm.isTermsOfUseAccepted {
-//                            coordinator.push(.welcomeAtFirstLaunch)
-//                        }
-                        // Temporary - only for single SwiftUI mode
                         vm.selectedCategory = vm.mainCategory
                     }
             }
@@ -68,19 +64,6 @@ struct StartView: View {
     
     private var iPadContent: some View {
         NavigationSplitView(columnVisibility: $visibility) {
-            
-            //                    //                if let categories = vm.allCategories {
-            //                    //                    List(categories, id: \.self, selection: $vm.selectedCategory) { category in
-            //                    //                        Text(category)
-            //                    //                    }
-            //                    //                    .navigationTitle("Categories")
-            //                    //                    .navigationSplitViewColumnWidth(150)
-            //                    //                } else {
-            //                    //                    Text("No categories")
-            //                    //                }
-            //                    //            } content: {
-
-            
             if let selectedCategory = vm.selectedCategory {
                 NavigationStack(path: $coordinator.path) {
                     HomeView(selectedCategory: selectedCategory)

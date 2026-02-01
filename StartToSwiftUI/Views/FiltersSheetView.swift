@@ -33,13 +33,12 @@ struct FiltersSheetView: View {
                 .font(.largeTitle)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.top, 55)
-            //                categoryFilter
+            
             studyLevelFilter
             favoriteFilter
             typeFilter
             typeMedia
             yearFilter
-            //                sortOptions
             
             Spacer()
             
@@ -58,30 +57,7 @@ struct FiltersSheetView: View {
     }
     
     // MARK: Subviews
-    
-    private var sortOptions: some View {
         
-        VStack {
-            Text("Sort:")
-                .font(.footnote)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
-            SegmentedOneLinePicker(
-                selection: $vm.selectedSortOption,
-                allItems: SortOption.allCases,
-                titleForCase: { $0.displayName },
-                selectedFont: selectedFont,
-                selectedTextColor: Color.mycolor.myBackground,
-                unselectedTextColor: Color.mycolor.myAccent,
-                selectedBackground: Color.mycolor.myBlue,
-                unselectedBackground: .clear,
-                showNilOption: true,
-                nilTitle: "Unsorted"
-            )
-        }
-    }
-    
     private var studyLevelFilter: some View {
         VStack {
             Text("Study level:")
@@ -168,7 +144,6 @@ struct FiltersSheetView: View {
         }
     }
 
-    
     private var yearFilter: some View {
         Group {
             if let list = vm.allYears {
@@ -186,32 +161,6 @@ struct FiltersSheetView: View {
                         selectedTextColor: Color.mycolor.myBackground,
                         unselectedTextColor: Color.mycolor.myAccent,
                         selectedBackground: Color.mycolor.myBlue,
-                        unselectedBackground: .clear,
-                        showNilOption: true,
-                        nilTitle: "All"
-                    )
-                }
-            }
-        }
-    }
-    
-    private var categoryFilter: some View {
-        Group {
-            if let list = vm.allCategories {
-                VStack(alignment: .leading) {
-                    Text("Category:")
-                        .font(.footnote)
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    CustomOneCapsulesLineSegmentedPicker(
-                        selection: $vm.selectedCategory,
-                        allItems: list,
-                        titleForCase: { $0 },
-                        selectedFont: selectedFont,
-                        selectedTextColor: Color.mycolor.myBackground,
-                        unselectedTextColor: Color.mycolor.myAccent,
-                        selectedBackground: Color.mycolor.myButtonBGBlue,
                         unselectedBackground: .clear,
                         showNilOption: true,
                         nilTitle: "All"

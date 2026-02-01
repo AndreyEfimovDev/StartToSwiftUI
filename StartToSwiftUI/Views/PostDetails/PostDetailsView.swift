@@ -143,16 +143,6 @@ struct PostDetailsView: View {
                 
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            //
-            //            if vm.selectedCategory == nil {
-            //                Text(post.category)
-            //                    .font(.body)
-            //                    .fontWeight(.medium)
-            //                    .foregroundStyle(Color.mycolor.myYellow)
-            //                    .frame(maxWidth: .infinity)
-            //            }
-            //
-            
         }
         .padding()
     }

@@ -127,8 +127,6 @@ struct RatingSelectionView: View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 Rectangle()
-//                    .foregroundColor(vm.selectedRating?.color ?? Color.mycolor.mySecondary)
-//                    .fill(LinearGradient(gradient: Gradient(colors: [Color.mycolor.myBlue.opacity(0.3), Color.mycolor.myBlue]), startPoint: .leading, endPoint: .trailing))
                     .foregroundStyle(Color.mycolor.myBlue)
                     .frame(width: CGFloat(vm.selectedRating?.value ?? 0) / 3 * geometry.size.width)
             }

@@ -35,12 +35,6 @@ struct PreferencesView: View {
                 soundNotificationToggle
             }
             
-            //                if UIDevice.isiPhone {
-            //                    Section(header: sectionHeader("Selected category")) {
-            //                        selectedCategory
-            //                    }
-            //                }
-            
             Section(header: sectionHeader("Achievements")) {
                 achievements
             }
