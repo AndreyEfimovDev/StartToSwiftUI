@@ -11,7 +11,6 @@ import SwiftData
 struct AddEditPostView: View {
     
     // MARK: - Dependencies
-
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     @StateObject private var keyboardManager = KeyboardManager()
@@ -19,7 +18,6 @@ struct AddEditPostView: View {
     private let hapticManager = HapticService.shared
     
     // MARK: - State
-    
     @State private var editedPost: Post
     @State private var isPostDraftSaved = false
     @State private var isShowingExitConfirmation = false
@@ -31,31 +29,25 @@ struct AddEditPostView: View {
     @State private var focusedFieldSaved: PostFields?
     
     // MARK: - Properties
-    
     private let originalPost: Post?
     private let copyOfThePost: Post
 
     // MARK: - Constants
-    
     private let sectionBackground = Color.mycolor.mySectionBackground
     private let sectionCornerRadius: CGFloat = 8
     private let fontSubheader: Font = .caption
     private let fontTextInput: Font = .callout
     private let colorSubheader = Color.mycolor.myAccent.opacity(0.5)
-    
     private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date.distantPast
     private let endingDate: Date = .now
     
     // MARK: - Computed Properties
-    
     private var viewTitle: String {
         originalPost == nil ? "Add" : "Edit"
     }
-    
     private var hasNoChanges: Bool {
         editedPost.isEqual(to: copyOfThePost)
     }
-    
     private var bindingPostDate: Binding<Date> {
         Binding(
             get: { editedPost.postDate ?? Date() },
@@ -64,14 +56,12 @@ struct AddEditPostView: View {
     }
     
     // MARK: - Alert Type
-    
     enum AlertType {
         case success
         case error(title: String, message: String, field: PostFields?)
     }
     
     init(post: Post?) {
-        
         if let post = post { // post for editing initialising
             // Link to the original from the context
             originalPost = post
@@ -91,7 +81,6 @@ struct AddEditPostView: View {
     // MARK: BODY
     
     var body: some View {
-        
         Group {
             VStack {
                 ScrollView {
@@ -147,7 +136,6 @@ struct AddEditPostView: View {
     // MARK: - Actions
     
     private func handleSave() {
-        
         if hasNoChanges && editedPost.draft == false {
             // If there were no changes and the post is not a draft, just exit
             navigateBack()
@@ -163,28 +151,6 @@ struct AddEditPostView: View {
         }
         
         checkAndSave()
-
-        
-//        if hasNoChanges {
-//            // If it is draft - save it as not draft -> .draft = false
-//            if editedPost.draft == true {
-//                editedPost.draft = false
-//                if editedPost.addedDateStamp == nil {
-//                    editedPost.addedDateStamp = .now
-//                }
-//                checkAndSave()
-//            } else {
-//                // If it is not draft - just exit
-//                navigateBack()
-//            }
-//        } else {
-//            // Drop draft -> .draft = false and Check&Save the post
-//            editedPost.draft = false
-//            if editedPost.addedDateStamp == nil {
-//                editedPost.addedDateStamp = .now
-//            }
-//            checkAndSave()
-//        }
     }
     
     // MARK: - Actions
@@ -203,7 +169,7 @@ struct AddEditPostView: View {
     }
 
     private func navigateBack() {
-        // Wetermine where to return
+        // Determine where to return
         if coordinator.modalPath.isEmpty {
             // In the main stack or this is the root modal view
             coordinator.closeModal()
@@ -255,11 +221,9 @@ struct AddEditPostView: View {
             )
             return false
         }
-        
         return true
     }
 
-    
     private func showError(title: String, message: String, field: PostFields?) {
         alertType = .error(title: title, message: message, field: field)
         showAlert = true
@@ -278,7 +242,6 @@ struct AddEditPostView: View {
                     focusedField = field
                 }
             )
-            
         case .success:
             let title = editedPost.draft
             ? "Draft saved successfully"
@@ -381,7 +344,6 @@ struct AddEditPostView: View {
                 }
             }
         }
-        
     }
 
     // MARK: - Sections
@@ -555,12 +517,10 @@ struct AddEditPostView: View {
                     .scrollContentBackground(.hidden)
                     .focused($focusedField, equals: .additionalInfo)
                     .submitLabel(.return)
-                
                 VStack {
                     clearButton(for: editedPost.notes) {
                         editedPost.notes = ""
                     }
-                    
                     nextFieldButton(visible: !editedPost.notes.isEmpty) {
                         focusedField = nil
                     }
