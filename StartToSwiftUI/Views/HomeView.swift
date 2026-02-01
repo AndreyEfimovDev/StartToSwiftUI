@@ -80,9 +80,7 @@ struct HomeView: View {
             .overlay { deleteConfirmationOverlay }
             .onAppear {
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-//                if vm.isTermsOfUseAccepted {
-                    noticevm.playSoundNotificationIfNeeded()
-//                }
+                noticevm.playSoundNotificationIfNeeded()
             }
         }
     }
@@ -296,6 +294,8 @@ struct HomeView: View {
         }
     }
     
+    // MARK: - Filters View
+
     private var filtersSheet: some View {
         FiltersSheetView(isFilterButtonPressed: $isFilterButtonPressed)
             .presentationBackground(.ultraThinMaterial)
