@@ -53,7 +53,6 @@ struct CapsuleButtonView: View {
                     isToChange ? buttonColorSecondary : buttonColorPrimary,
                     in: .capsule
                 )
-//                .padding(.horizontal, 40)
         }
     }
 }
