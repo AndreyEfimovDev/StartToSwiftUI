@@ -62,7 +62,6 @@ struct ImportPostsFromCloudView: View {
     private var descriptionText: some View {
         Text("""
             The collection of SwiftUI tutorials and articles to make it easy for complete beginners to get started.
-                
             """
         )
         .font(.subheadline)
