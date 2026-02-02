@@ -27,7 +27,7 @@ final class UtilityTests: XCTestCase {
             postPlatform: .youtube,
             postDate: Date(),
             studyLevel: .beginner,
-            progress: .fresh,
+            progress: .added,
             favoriteChoice: .no,
             postRating: nil,
             notes: "Test notes",
@@ -71,7 +71,7 @@ final class UtilityTests: XCTestCase {
             postPlatform: .youtube, // Default value
             postDate: nil, // Optional date - ВАЖНО: это nil!
             studyLevel: .beginner, // Default value
-            progress: .fresh, // Default value
+            progress: .added, // Default value
             favoriteChoice: .no, // Default value
             postRating: .good, // With rating
             notes: "", // Empty string
@@ -99,7 +99,7 @@ final class UtilityTests: XCTestCase {
         XCTAssertEqual(post.postPlatform, .youtube)
         XCTAssertNil(post.postDate) // ДОЛЖНО быть nil, т.к. мы передали nil в codablePost
         XCTAssertEqual(post.studyLevel, .beginner)
-        XCTAssertEqual(post.progress, .fresh)
+        XCTAssertEqual(post.progress, .added)
         XCTAssertEqual(post.favoriteChoice, .no)
         XCTAssertEqual(post.postRating, .good) // Should preserve rating
         XCTAssertEqual(post.notes, "") // Should be empty string
@@ -129,7 +129,7 @@ final class UtilityTests: XCTestCase {
             postPlatform: .youtube,
             postDate: postDate, // Установлена дата
             studyLevel: .beginner,
-            progress: .fresh,
+            progress: .added,
             favoriteChoice: .no,
             postRating: .good,
             notes: "Notes",
@@ -169,7 +169,7 @@ final class UtilityTests: XCTestCase {
             postPlatform: .youtube,
             postDate: Date(),
             studyLevel: .beginner,
-            progress: .fresh,
+            progress: .added,
             favoriteChoice: .yes,
             postRating: nil,
             notes: "Notes with URL",
@@ -263,7 +263,7 @@ final class UtilityTests: XCTestCase {
             "postPlatform": "youtube",
             "postDate": "2024-01-20T10:30:00Z",
             "studyLevel": "beginner",
-            "progress": "fresh",
+            "progress": "added",
             "favoriteChoice": "no",
             "postRating": null,
             "notes": "",
@@ -293,7 +293,7 @@ final class UtilityTests: XCTestCase {
             XCTAssertEqual(codablePost.origin, .cloud)
             XCTAssertEqual(codablePost.postPlatform, .youtube)
             XCTAssertEqual(codablePost.postType, .post)
-            XCTAssertEqual(codablePost.progress, .fresh)
+            XCTAssertEqual(codablePost.progress, .added)
             XCTAssertEqual(codablePost.urlString, "https://example.com")
             XCTAssertEqual(codablePost.notes, "")
             XCTAssertEqual(codablePost.category, "SwiftUI")
@@ -327,7 +327,7 @@ final class UtilityTests: XCTestCase {
             "postPlatform": "youtube",
             "postDate": "2024-08-08T00:00:00Z",
             "studyLevel": "middle",
-            "progress": "fresh",
+            "progress": "added",
             "favoriteChoice": "no",
             "postRating": null,
             "notes": "",
@@ -355,7 +355,7 @@ final class UtilityTests: XCTestCase {
             XCTAssertEqual(codablePost.postType, .course)
             XCTAssertEqual(codablePost.postPlatform, .youtube)
             XCTAssertEqual(codablePost.studyLevel, .middle)
-            XCTAssertEqual(codablePost.progress, .fresh)
+            XCTAssertEqual(codablePost.progress, .added)
             XCTAssertEqual(codablePost.favoriteChoice, .no)
             XCTAssertEqual(codablePost.origin, .cloud)
             XCTAssertEqual(codablePost.notes, "")
@@ -404,7 +404,7 @@ final class UtilityTests: XCTestCase {
     // Тест для проверки всех enum значений
     func testJSONDecoderAllEnumValues() {
         let testCases: [(String, PostType, Platform, StudyLevel, StudyProgress, FavoriteChoice, PostOrigin)] = [
-            ("post-youtube-beginner", .post, .youtube, .beginner, .fresh, .no, .cloud),
+            ("post-youtube-beginner", .post, .youtube, .beginner, .added, .no, .cloud),
             ("article-website-middle", .post, .website, .middle, .started, .yes, .local),
             ("course-medium-advanced", .course, .website, .advanced, .studied, .yes, .cloudNew)
         ]
@@ -478,7 +478,7 @@ final class UtilityTests: XCTestCase {
                 "urlString": "",
                 "postPlatform": "youtube",
                 "studyLevel": "beginner",
-                "progress": "fresh",
+                "progress": "added",
                 "favoriteChoice": "no",
                 "notes": "",
                 "origin": "cloud",
@@ -499,7 +499,7 @@ final class UtilityTests: XCTestCase {
                 "postPlatform": "youtube",
                 "postDate": "not-a-date",
                 "studyLevel": "beginner",
-                "progress": "fresh",
+                "progress": "added",
                 "favoriteChoice": "no",
                 "notes": "",
                 "origin": "cloud",
@@ -541,7 +541,7 @@ final class UtilityTests: XCTestCase {
             "urlString": "",
             "postPlatform": "youtube",
             "studyLevel": "beginner",
-            "progress": "fresh",
+            "progress": "added",
             "favoriteChoice": "no",
             "notes": "",
             "origin": "local",
@@ -570,7 +570,7 @@ final class UtilityTests: XCTestCase {
             XCTAssertEqual(post.urlString, "")
             XCTAssertEqual(post.postPlatform, .youtube)
             XCTAssertEqual(post.studyLevel, .beginner)
-            XCTAssertEqual(post.progress, .fresh)
+            XCTAssertEqual(post.progress, .added)
             XCTAssertEqual(post.favoriteChoice, .no)
             XCTAssertEqual(post.notes, "")
             
@@ -618,7 +618,7 @@ final class UtilityTests: XCTestCase {
             "postPlatform": "youtube",
             "postDate": "2024-01-20T10:30:00+00:00",
             "studyLevel": "beginner",
-            "progress": "fresh",
+            "progress": "added",
             "favoriteChoice": "no",
             "postRating": null,
             "notes": "",
@@ -764,7 +764,7 @@ final class UtilityTests: XCTestCase {
                 postPlatform: [.youtube, .website][i % 2],
                 postDate: Date().addingTimeInterval(Double(i) * -86400),
                 studyLevel: [.beginner, .middle, .advanced][i % 3],
-                progress: [.fresh, .started, .studied, .practiced][i % 4],
+                progress: [.added, .started, .studied, .practiced][i % 4],
                 favoriteChoice: [.yes, .no][i % 2],
                 postRating: postRating,
                 notes: i % 10 == 0 ? "Notes \(i)" : "",
@@ -801,7 +801,7 @@ final class UtilityTests: XCTestCase {
                 "postPlatform": "youtube",
                 "postDate": "2024-01-20T10:30:00Z",
                 "studyLevel": "beginner",
-                "progress": "fresh",
+                "progress": "added",
                 "favoriteChoice": "no",
                 "postRating": null,
                 "notes": "Notes for test \(i)",

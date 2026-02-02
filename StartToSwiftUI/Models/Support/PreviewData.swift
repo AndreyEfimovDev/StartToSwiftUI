@@ -8,8 +8,6 @@
 import Foundation
 import SwiftUI
 
-
-
 struct PreviewData {
     
     static let sampleNotices: [Notice] = [sampleNotice1, sampleNotice2, sampleNotice3]
@@ -57,10 +55,25 @@ struct PreviewData {
         postPlatform: .youtube,
         postDate: Date.from(year: 2021, month: 3, day: 26),
         studyLevel: .beginner,
-        progress: .fresh , // fresh, learning, studied, practiced
+        progress: .added , // added, learning, studied, practiced
         favoriteChoice: .yes,
         postRating: .good, // good, great, excellent
-        notes: "",
+        notes: """
+        In this video we are going to explore how we can stylize text for our Text views in SwiftUI.
+        We will start by looking at how we can create a `Text` view with the Markdown-formatted base postLanguage version of the string as the localization key,
+        We will also see how we can utilize string interpolation to combine and stylize our strings and present them in a text view.
+        And finally, we will take a quick look at the power of Attributed strings in SwiftUI.
+        
+        In this video we are going to explore how we can stylize text for our Text views in SwiftUI.
+        We will start by looking at how we can create a `Text` view with the Markdown-formatted base postLanguage version of the string as the localization key,
+        We will also see how we can utilize string interpolation to combine and stylize our strings and present them in a text view.
+        And finally, we will take a quick look at the power of Attributed strings in SwiftUI.
+        
+        In this video we are going to explore how we can stylize text for our Text views in SwiftUI.
+        We will start by looking at how we can create a `Text` view with the Markdown-formatted base postLanguage version of the string as the localization key,
+        We will also see how we can utilize string interpolation to combine and stylize our strings and present them in a text view.
+        And finally, we will take a quick look at the power of Attributed strings in SwiftUI.
+        """,
         origin: .cloud,
     )
     
@@ -69,12 +82,12 @@ struct PreviewData {
         intro: """
             Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
             """,
-        author: "Nick Sarno/Swiftful Thinking",
+        author: "Nick Sarno",
         postType: .course,
         urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
         postDate: nil,
         studyLevel: .advanced,
-        progress: .fresh, // fresh, learning, studied, practiced
+        progress: .added, // added, learning, studied, practiced
         postRating: .great, // good, great, excellent
         origin: .local
     )
@@ -85,12 +98,12 @@ struct PreviewData {
             TEST TEST TEST
             Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
             """,
-        author: "Nick Sarno/Swiftful Thinking",
+        author: "Nick Sarno",
         postType: .course,
         urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
         postDate: nil,
         studyLevel: .advanced,
-        progress: .studied, // fresh, learning, studied, practiced
+        progress: .studied, // added, learning, studied, practiced
         postRating: .excellent, // good, great, excellent
         origin: .local
     )
@@ -109,7 +122,7 @@ struct PreviewData {
         postPlatform: .website,
         postDate: Date.from(year: 2022, month: 8, day: 11),
         studyLevel: .middle,
-        progress: .practiced, // fresh, learning, studied, practiced
+        progress: .practiced, // added, learning, studied, practiced
         favoriteChoice: .no,
         notes: """
         In this video we are going to explore how we can stylize text for our Text views in SwiftUI.
@@ -138,7 +151,7 @@ struct PreviewData {
         postPlatform: .youtube,
         postDate: .now,
         studyLevel: .beginner,
-        progress: .fresh,
+        progress: .added,
         origin: .local,
         draft: true,
     )
@@ -151,7 +164,7 @@ struct PreviewData {
         postPlatform: .website,
         postDate: .now,
         studyLevel: .middle,
-        progress: .fresh,
+        progress: .added,
         origin: .local,
         draft: true,
     )
@@ -162,50 +175,6 @@ struct PreviewData {
 
 
 }
-
-
-//extension PreviewData {
-//    
-//    // MARK: - Codable Posts для Network Mock
-//    
-//    static let sampleCodablePosts: [CodablePost] = samplePosts.map { post in
-//        CodablePost(
-//            id: post.id,
-//            category: post.category,
-//            title: post.title,
-//            intro: post.intro,
-//            author: post.author,
-//            postType: post.postType,
-//            urlString: post.urlString,
-//            postPlatform: post.postPlatform,
-//            postDate: post.postDate,
-//            studyLevel: post.studyLevel,
-//            progress: post.progress,
-//            favoriteChoice: post.favoriteChoice,
-//            postRating: post.postRating,
-//            notes: post.notes,
-//            origin: post.origin,
-//            draft: post.draft,
-//            date: post.date,
-//            startedDateStamp: post.startedDateStamp,
-//            studiedDateStamp: post.studiedDateStamp,
-//            practicedDateStamp: post.practicedDateStamp
-//        )
-//    }
-//    
-//    // MARK: - Codable Notices для Network Mock
-//    
-//    static let sampleCodableNotices: [CodableNotice] = sampleNotices.map { notice in
-//        CodableNotice(
-//            id: notice.id,
-//            title: notice.title,
-//            noticeDate: notice.noticeDate,
-//            noticeMessage: notice.noticeMessage,
-//            isRead: notice.isRead
-//        )
-//    }
-//}
-//
 
 extension PreviewData {
     

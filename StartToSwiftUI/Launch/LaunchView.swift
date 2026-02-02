@@ -19,7 +19,7 @@ struct LaunchView: View {
     // MARK: - States
     @State private var showLoadingProgress: Bool = false
     @State private var counter: Int = 0
-    @State private var loadingString: [String] = "............. loading ............".map { String($0) }
+    @State private var loadingString: [String] = "........... loading ...........".map { String($0) }
     
     // MARK: BODY
     var body: some View {

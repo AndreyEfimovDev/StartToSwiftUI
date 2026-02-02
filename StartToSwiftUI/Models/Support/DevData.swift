@@ -12,7 +12,7 @@ struct DevData {
     
     static let postsForCloud = [
         
-// 2026-02-01
+// 2026-02-02
         Post(
             title: "Swift Basics",
             intro: """
@@ -25,9 +25,9 @@ struct DevData {
             origin: .cloudNew
         ),
         Post(
-            title: "iOS Dev Beginner Course FREE Preview",
+            title: "iOS Dev Beginner Course",
             intro: """
-                The first 7 videos from my iOS dev beginner course.
+                The first 7 videos from the iOS dev beginner course.
                 """,
             author: "Sean Allen",
             postType: .course,
@@ -38,7 +38,7 @@ struct DevData {
         Post(
             title: "Swift for Complete Beginners",
             intro: """
-                Swift for Complete Beginners teaches you all the core concepts required to get started building apps with Swift and SwiftUI.
+                All the core concepts required to get started building apps with Swift and SwiftUI.
                 """,
             author: "Paul Hudson",
             postType: .course,
@@ -55,7 +55,7 @@ struct DevData {
             author: "Stewart Lynch",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4CUCcA3fqvsRtx153akAJU1",
-            postPlatform: .website,
+            postPlatform: .youtube,
             postDate: nil,
             studyLevel: .beginner,
             origin: .cloudNew
@@ -63,7 +63,7 @@ struct DevData {
         Post(
             title: "SwiftUI Bootcamp",
             intro: """
-                The fastest way to learn SwiftUI. Learn how to build beautiful screens and other UI components.
+                Learning SwiftUI by building beautiful screens and other UI components.
                 """,
             author: "Nick Sarno",
             postType: .course,
@@ -74,7 +74,7 @@ struct DevData {
         Post(
             title: "SwiftUI Todo List",
             intro: """
-                Build your first app in SwiftUI! Learn how to build a real application with MVVM app architecture.
+                Building a real application with MVVM app architecture.
                 """,
             author: "Nick Sarno",
             postType: .course,
@@ -86,7 +86,7 @@ struct DevData {
         Post(
             title: "Swift Keywords",
             intro: """
-                The Swift Language has many keywords. This playlist will explain a lot of them.
+                The playlist explains the Swift Language has many keywords.
                 """,
             author: "Sean Allen",
             postType: .course,
@@ -98,7 +98,7 @@ struct DevData {
         Post(
             title: "Swift Tutorials & Code Snippets",
             intro: """
-                Quick Swift tutorials for common tasks in iOS Development.
+                Swift tutorials for common tasks in iOS Development.
                 """,
             author: "Sean Allen",
             postType: .course,
@@ -110,7 +110,7 @@ struct DevData {
         Post(
             title: "Swift Programming Tutorial",
             intro: """
-                FULL COURSE | Absolute Beginner.
+                A full course for absolute beginner.
                 """,
             author: "Sean Allen",
             postType: .course,
@@ -122,7 +122,7 @@ struct DevData {
         Post(
             title: "SwiftUI Fundamentals",
             intro: """
-                FULL COURSE | Beginner Friendly.
+                A full course for absolute beginner.
                 """,
             author: "Sean Allen",
             postType: .course,
@@ -145,7 +145,7 @@ struct DevData {
         Post(
             title: "SwiftUI Map App",
             intro: """
-                Build a map app to showcase real destinations around the world. Get familiar with data management and transitions.
+                Building a map app to showcase real destinations around the world. Get familiar with data management and transitions.
                 """,
             author: "Nick Sarno",
             postType: .course,
