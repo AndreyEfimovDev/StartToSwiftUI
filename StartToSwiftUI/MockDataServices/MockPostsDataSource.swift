@@ -12,7 +12,7 @@ final class MockPostsDataSource: PostsDataSourceProtocol {
     
     private var posts: [Post]
     
-    init(posts: [Post] = DevData.postsForCloud) {
+    init(posts: [Post] = PreviewData.samplePosts) {
         self.posts = posts
     }
     
