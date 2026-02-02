@@ -257,9 +257,9 @@ struct DevData {
     
     static let myPrivatePosts = [
         Post(
-            title: "iOS Dev Interview Prep - Take Home Project - UIKit - Programmatic UI - FULL COURSE",
+            title: "iOS Dev Interview Prep - Take Home Project - UIKit - Programmatic UI",
             intro: """
-                In this course I walk you through a mock take home project that is very common in the iOS dev job interview process. We start from the project brief, design, and we build the entire thing together so you can practice for the real thing.
+                This course walks through a mock take home project that is very common in the iOS dev job interview process. We start from the project brief, design, and we build the entire thing together so you can practice for the real thing.
                 """,
             author: "Sean Allen",
             postType: .course,
@@ -374,7 +374,7 @@ struct DevData {
         Post(
             title: "@propertyWrapper: Encoding Strings to Valid URL Characters",
             intro: """
-                With this @propertyWrapper code snippet you will be able to wrap String values into wrapped values of url safe characters.
+                @propertyWrapper code snippet given will wrap String values into wrapped values of url safe characters.
                 
                 Porperty wrappers serve as a new type to wrap properties and add additional logic if needed. It's part of Swift since version 5.1 and can be useful to validate values woth a set of rules or tranform values to match certain requirements etc.
                 
