@@ -25,7 +25,7 @@ final class PostsViewModel: ObservableObject {
     @Published var searchText: String = ""
     @Published var isFiltersEmpty: Bool = true
     @Published var selectedRating: PostRating? = nil
-    @Published var selectedStudyProgress: StudyProgress = .fresh
+    @Published var selectedStudyProgress: StudyProgress = .added
     
     @Published var errorMessage: String?
     @Published var showErrorMessageAlert = false
@@ -242,7 +242,7 @@ final class PostsViewModel: ObservableObject {
         post.progress = selectedStudyProgress
         
         switch selectedStudyProgress {
-        case .fresh:
+        case .added:
             post.startedDateStamp = nil
             post.studiedDateStamp = nil
             post.practicedDateStamp = nil

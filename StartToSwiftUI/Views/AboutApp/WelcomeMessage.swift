@@ -37,9 +37,9 @@ struct WelcomeMessage: View {
 
             When I first began learning SwiftUI, I was overwhelmed by the sheer variety of self-study options available. I gradually started collecting tutorials and articles from open sources that explained SwiftUI's functionality in a way that matched how I think.
             
-            Later, I realised I needed to revisit these materials several times to gain a deeper understanding of particular topics. I found it helpful to store and organise them so I could quickly find and use the relevant information.
+            Along the way, I realised I needed to revisit these materials several times to gain a deeper understanding of particular topics. I found it helpful to create a personal library of SwiftUI learning materials, organised in a way that let me quickly find and use the relevant information.
             
-            As a result, I decided to create an app for this purpose. Creating my own app also helped me to put my theoretical knowledge into practice, moving it from my head to my heart.
+            As a result, I decided to build an app for this very purpose. It will allow you to create your own personal library of learning materials, complete with useful features like tracking your progress and sharing your library with other SwiftUI beginners.
 
             If you find this app useful, I would be very happy to hear from you.
 

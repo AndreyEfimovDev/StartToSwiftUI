@@ -74,9 +74,7 @@ struct SharePostsView: View {
 
     private var descriptionText: some View {
         Text("""
-            You are about to store the materials
-            on your local device (JSON format) 
-            or
+            You are about to store the study materials on your local device (JSON format) or,
             share them directly via
             AirDop / Mail / Messenger / etc.            
             """)

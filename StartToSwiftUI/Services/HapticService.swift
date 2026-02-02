@@ -58,7 +58,6 @@ final class HapticService {
     }
 }
 
-
 struct HapticManagerView: View {
     
     var body: some View {

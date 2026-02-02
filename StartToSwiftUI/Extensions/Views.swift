@@ -200,3 +200,13 @@ extension View {
         )
     }
 }
+extension View {
+    func itemBackground() -> some View {
+        self
+            .padding(.vertical, 2)
+            .padding(.horizontal,8)
+            .background(Color.mycolor.mySecondary.opacity(0.3))
+            .clipShape(.capsule)
+    }
+}
+

@@ -28,7 +28,6 @@ struct PostStatusIcons: View {
                 .foregroundStyle(Color.mycolor.myGreen)
             post.origin.icon
         }
-        .font(.caption)
         .foregroundStyle(Color.mycolor.myAccent)
     }
 }

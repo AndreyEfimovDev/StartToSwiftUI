@@ -77,7 +77,7 @@ extension CodablePost {
         postPlatform: Platform = .youtube,
         postDate: Date? = nil,
         studyLevel: StudyLevel = .beginner,
-        progress: StudyProgress = .fresh,
+        progress: StudyProgress = .added,
         favoriteChoice: FavoriteChoice = .no,
         postRating: PostRating? = nil,
         notes: String = "",
@@ -124,7 +124,7 @@ extension CodablePost {
             title: "SwiftUI Basics",
             intro: "Learn the fundamentals of SwiftUI",
             studyLevel: .beginner,
-            progress: .fresh
+            progress: .added
         )
     }
     
