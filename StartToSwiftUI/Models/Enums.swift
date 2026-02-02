@@ -81,18 +81,34 @@ enum PostFields: Hashable {
     case postTitle
     case intro
     case author
+    case postType
+    case studyLevel
+    case platform
     case urlString
-    case additionalInfo
-//    case postDate
+    case postDate
+    case notes
 }
 
 // MARK: Enums for Post model
+
+
+enum Platform: String, CaseIterable, Codable {
+    case youtube
+    case website
+    
+    var displayName: String {
+        switch self {
+        case .youtube: return "Video"
+        case .website: return "Article"
+        }
+    }
+}
 
 enum PostType: String, CaseIterable, Codable {
     case post
     case course
     case solution
-//    case bug
+    case bug
     case other
     
     var displayName: String {
@@ -100,7 +116,7 @@ enum PostType: String, CaseIterable, Codable {
         case .post: return "Lesson"
         case .course: return "Course"
         case .solution: return "Solution"
-//        case .bug: return "Bug"
+        case .bug: return "Bug"
         case .other: return "Other"
         }
     }
@@ -266,21 +282,6 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
         case .started: return Color.mycolor.myPurple
         case .studied: return Color.mycolor.myBlue
         case .practiced: return Color.mycolor.myRed
-        }
-    }
-}
-
-
-enum Platform: String, CaseIterable, Codable {
-    case youtube
-    case website
-//    case others
-    
-    var displayName: String {
-        switch self {
-        case .youtube: return "Watch"
-        case .website: return "Read"
-//        case .others: return "Others"
         }
     }
 }
