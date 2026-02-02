@@ -427,7 +427,7 @@ struct HomeView: View {
 
 
 #Preview("With Extended Posts") {
-    let extendedPosts = PreviewData.samplePosts + DevData.postsForCloud
+    let extendedPosts = PreviewData.samplePosts
     let postsVM = PostsViewModel(
         dataSource: MockPostsDataSource(posts: extendedPosts)
     )
