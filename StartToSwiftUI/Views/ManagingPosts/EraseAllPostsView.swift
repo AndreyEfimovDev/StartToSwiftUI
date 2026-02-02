@@ -76,25 +76,12 @@ struct EraseAllPostsView: View {
             **You are about
             to delete all the study content.**
             
-            What you can do after:
-            
             """
             )
             .font(.subheadline)
             .frame(maxWidth: .infinity)
             .multilineTextAlignment(.center)
 
-            Text("""
-            - download the curated collection, 
-            - create own content, or
-            - restore backup.
-            
-            """
-            )
-            .font(.subheadline)
-            .frame(maxWidth: .infinity)
-            .multilineTextAlignment(.leading)
-            
             Text("""
             It is recommended
             to backup content before

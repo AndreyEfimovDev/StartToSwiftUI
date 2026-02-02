@@ -71,7 +71,7 @@ struct RestoreBackupView: View {
     
     private var descriptionText: some View {
         Text("""
-              You are about to restore materials from backup on the device.
+              You are about to restore study materials from backup on the device.
               
               The materials from the backup will be added to all current materials in the App.
             """)

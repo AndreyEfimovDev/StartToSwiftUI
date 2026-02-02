@@ -21,7 +21,7 @@ final class PostTests: XCTestCase {
         XCTAssertEqual(post.title, "")
         XCTAssertEqual(post.author, "")
         XCTAssertEqual(post.studyLevel, .beginner)
-        XCTAssertEqual(post.progress, .fresh)
+        XCTAssertEqual(post.progress, .added)
         XCTAssertEqual(post.favoriteChoice, .no)
         XCTAssertEqual(post.origin, .cloudNew)
         XCTAssertFalse(post.draft)
@@ -119,7 +119,7 @@ final class PostTests: XCTestCase {
         
         // Then - Should fall back to defaults
         XCTAssertEqual(post.studyLevel, .beginner)
-        XCTAssertEqual(post.progress, .fresh)
+        XCTAssertEqual(post.progress, .added)
         XCTAssertEqual(post.favoriteChoice, .no)
         XCTAssertEqual(post.origin, .cloudNew)
         XCTAssertEqual(post.postType, .post)
@@ -531,7 +531,7 @@ final class PostTests: XCTestCase {
             postPlatform: .website,
             postDate: newDate,
             studyLevel: .advanced,
-            progress: .fresh,
+            progress: .added,
             favoriteChoice: .no,
             postRating: .excellent,
             notes: "New notes",
@@ -623,7 +623,7 @@ final class PostTests: XCTestCase {
         XCTAssertEqual(post.practicedDateStamp, practiceDate)
         
         // When - Change progress
-        post.progress = .fresh
+        post.progress = .added
         
         // Then - Dates should remain unchanged
         XCTAssertEqual(post.startedDateStamp, startDate)
@@ -666,7 +666,7 @@ final class PostTests: XCTestCase {
         let _ = post.practicedDateStamp
         
         // When
-        post.progress = .fresh
+        post.progress = .added
         
         // Then
         XCTAssertNil(post.startedDateStamp)
@@ -717,8 +717,8 @@ final class PostTests: XCTestCase {
         XCTAssertNil(post.studiedDateStamp)
         XCTAssertNil(post.practicedDateStamp)
         
-        // When - Move backward to fresh
-        post.progress = .fresh
+        // When - Move backward to added
+        post.progress = .added
         
         // Then
         XCTAssertNil(post.startedDateStamp)

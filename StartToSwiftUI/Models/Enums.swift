@@ -81,18 +81,34 @@ enum PostFields: Hashable {
     case postTitle
     case intro
     case author
+    case postType
+    case studyLevel
+    case platform
+    case postDate
     case urlString
-    case additionalInfo
-//    case postDate
+    case notes
 }
 
 // MARK: Enums for Post model
+
+
+enum Platform: String, CaseIterable, Codable {
+    case youtube
+    case website
+    
+    var displayName: String {
+        switch self {
+        case .youtube: return "Video"
+        case .website: return "Article"
+        }
+    }
+}
 
 enum PostType: String, CaseIterable, Codable {
     case post
     case course
     case solution
-//    case bug
+    case bug
     case other
     
     var displayName: String {
@@ -100,7 +116,7 @@ enum PostType: String, CaseIterable, Codable {
         case .post: return "Lesson"
         case .course: return "Course"
         case .solution: return "Solution"
-//        case .bug: return "Bug"
+        case .bug: return "Bug"
         case .other: return "Other"
         }
     }
@@ -204,6 +220,41 @@ enum StudyLevel: String, CaseIterable, Codable {
     }
 }
 
+// MARK: - Type of progress
+enum StudyProgress: String, CaseIterable, Codable { // progress in mastering educational materials
+    case added, started, studied, practiced
+    
+    // 􀐾 chart.bar, 􀓎 hare, 􁗟 bird, 􁝯 tree, 􀑁 chart.line.uptrend.xyaxis
+    
+    var displayName: String {
+        switch self {
+        case .added: return "Added"
+        case .started: return "Started"
+        case .studied: return "Learnt"
+        case .practiced: return "Practiced"
+        }
+    }
+    
+    var icon: Image { // for other options look at TestSFSymbolsForProgress
+        switch self {
+        case .added: return Image(systemName: "square.and.arrow.down") // lightbulb signpost.right sparkles
+        case .started: return Image(systemName: "sunrise") // sunrise signpost.right
+        case .studied: return Image(systemName: "bolt") // brain.head.profile flag.checkered
+        case .practiced: return Image(systemName: "flag.checkered") // hand.raised.fingers.spread mountain.2.fill bolt
+        }
+    }
+    
+    var color: Color {
+        switch self {
+        case .added: return Color.mycolor.myGreen
+        case .started: return Color.mycolor.myPurple
+        case .studied: return Color.mycolor.myBlue
+        case .practiced: return Color.mycolor.myRed
+        }
+    }
+}
+
+
 // MARK: - Time periods for statistics
 enum TimePeriod: String, CaseIterable, Identifiable {
     case quarter = "Quarter"
@@ -235,56 +286,6 @@ enum TimePeriod: String, CaseIterable, Identifiable {
     }
 
 }
-
-// MARK: - Type of progress
-enum StudyProgress: String, CaseIterable, Codable { // progress in mastering educational materials
-    case fresh, started, studied, practiced
-    
-    // 􀐾 chart.bar, 􀓎 hare, 􁗟 bird, 􁝯 tree, 􀑁 chart.line.uptrend.xyaxis
-    
-    var displayName: String {
-        switch self {
-        case .fresh: return "Added"
-        case .started: return "Started"
-        case .studied: return "Learnt"
-        case .practiced: return "Practiced"
-        }
-    }
-    
-    var icon: Image { // for other options look at TestSFSymbolsForProgress
-        switch self {
-        case .fresh: return Image(systemName: "square.and.arrow.down") // lightbulb signpost.right sparkles
-        case .started: return Image(systemName: "sunrise") // sunrise signpost.right
-        case .studied: return Image(systemName: "bolt") // brain.head.profile flag.checkered
-        case .practiced: return Image(systemName: "flag.checkered") // hand.raised.fingers.spread mountain.2.fill bolt
-        }
-    }
-    
-    var color: Color {
-        switch self {
-        case .fresh: return Color.mycolor.myGreen
-        case .started: return Color.mycolor.myPurple
-        case .studied: return Color.mycolor.myBlue
-        case .practiced: return Color.mycolor.myRed
-        }
-    }
-}
-
-
-enum Platform: String, CaseIterable, Codable {
-    case youtube
-    case website
-//    case others
-    
-    var displayName: String {
-        switch self {
-        case .youtube: return "Watch"
-        case .website: return "Read"
-//        case .others: return "Others"
-        }
-    }
-}
-
 // MARK: - Network Errors
 
 enum NetworkError: LocalizedError {
@@ -358,10 +359,7 @@ enum AppRoute: Hashable, Identifiable {
     // Adding and editing posts
     case addPost
     case editPost(Post)
-    
-//    // Welcome at first launch to accept Terms of Use
-//    case welcomeAtFirstLaunch
-    
+        
     // Preferences
     case preferences
     
