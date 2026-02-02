@@ -97,8 +97,6 @@ struct CheckForPostsUpdateView: View {
     
     private var descriptionText: some View {
         Text("""
-               The curated collection of SwiftUI tutorials and articles has been compiled from open sources by the developer for the purpose of learning the SwiftUI functionality.
-                          
                The collection **will be appended** to all current posts in the App, excluding duplicates based on the post title.
                """)
         .multilineTextAlignment(.center)
@@ -111,6 +109,7 @@ struct CheckForPostsUpdateView: View {
             isToChange: isImported
         ) {
             performImport()
+            statusText = "No updates available"
         }
         .onChange(of: vm.allPosts.count) { oldValue, newValue in
             importedCount = newValue - oldValue
@@ -131,6 +130,7 @@ struct CheckForPostsUpdateView: View {
                 isUpdateAvailable = true
                 
             } else {
+                statusText = "No updates available"
                 statusColor = Color.mycolor.myGreen
                 isUpdated = true
             }

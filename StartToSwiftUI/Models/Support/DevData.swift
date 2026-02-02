@@ -25,7 +25,7 @@ struct DevData {
             origin: .cloudNew
         ),
         Post(
-            title: "iOS Dev Beginner Course FREE Preview",
+            title: "iOS Dev Beginner Course",
             intro: """
                 The first 7 videos from my iOS dev beginner course.
                 """,
