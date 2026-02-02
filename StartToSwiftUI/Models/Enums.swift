@@ -359,10 +359,7 @@ enum AppRoute: Hashable, Identifiable {
     // Adding and editing posts
     case addPost
     case editPost(Post)
-    
-//    // Welcome at first launch to accept Terms of Use
-//    case welcomeAtFirstLaunch
-    
+        
     // Preferences
     case preferences
     
