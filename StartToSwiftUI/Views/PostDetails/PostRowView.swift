@@ -16,7 +16,7 @@ struct PostRowView: View {
     // MARK: - Computed Properties
     
     private var subtitleText: String {
-        var parts = ["@\(post.author)"/*, post.category*/]
+        var parts = ["@\(post.author)"]
         
         if let postDate = post.postDate {
             parts.append(postDate.formatted(date: .numeric, time: .omitted))
@@ -25,6 +25,8 @@ struct PostRowView: View {
         if post.postType != .other {
             parts.append(post.postType.displayName)
         }
+        
+        parts.append(post.postPlatform.displayName)
         
         return parts.joined(separator: ", ")
     }
@@ -67,13 +69,14 @@ struct PostRowView: View {
     private var statusRow: some View {
         HStack {
             Text("\(post.studyLevel.displayName.capitalized)")
-                .font(.body)
+                .font(.footnote)
                 .fontWeight(.medium)
                 .foregroundStyle(post.studyLevel.color)
             
             Spacer()
             
             PostStatusIcons(post: post)
+                .font(.caption)
         }
     }
 }
@@ -83,7 +86,6 @@ struct PostRowView: View {
         ZStack {
             Color.pink.opacity(0.1)
                 .ignoresSafeArea()
-            
             VStack {
                 PostRowView(post: PreviewData.samplePost1)
                 PostRowView(post: PreviewData.samplePost2)
