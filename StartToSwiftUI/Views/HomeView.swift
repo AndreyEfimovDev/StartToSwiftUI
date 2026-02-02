@@ -219,14 +219,8 @@ struct HomeView: View {
             CircleStrokeButtonView(iconName: "plus", isShownCircle: false ){
                 coordinator.push(.addPost)
             }
-            // Filters button or Refresh button
-            if vm.allPosts.isEmpty {
-                // arrow.trianglehead.2.clockwise
-                CircleStrokeButtonView(
-                    iconName: "arrow.trianglehead.2.clockwise",
-                    isShownCircle: false
-                ){ refresh() }
-            } else {
+            // Filters button
+            if !vm.allPosts.isEmpty {
                 CircleStrokeButtonView(
                     iconName: "line.3.horizontal.decrease",
                     isIconColorToChange: !vm.isFiltersEmpty,
@@ -412,7 +406,7 @@ struct HomeView: View {
 
 
 #Preview("With Extended Posts") {
-    let extendedPosts = PreviewData.samplePosts + DevData.postsForCloud
+    let extendedPosts = PreviewData.samplePosts
     let postsVM = PostsViewModel(
         dataSource: MockPostsDataSource(posts: extendedPosts)
     )
