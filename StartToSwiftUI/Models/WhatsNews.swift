@@ -14,7 +14,7 @@ struct WhatsNews {
             news: [
                 News(
                     title: "Initial deployment",
-                    newsText: "newsText"
+                    newsText: ""
                 ),
             ]
         )

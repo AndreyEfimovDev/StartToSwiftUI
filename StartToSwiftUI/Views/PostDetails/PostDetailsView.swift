@@ -380,7 +380,7 @@ struct PostDetailsView: View {
 }
 
 #Preview("Post Details with Mock Data") {
-    let extendedPosts = PreviewData.samplePosts + DevData.postsForCloud
+    let extendedPosts = PreviewData.samplePosts
     let postsVM = PostsViewModel(
         dataSource: MockPostsDataSource(posts: extendedPosts)
     )
