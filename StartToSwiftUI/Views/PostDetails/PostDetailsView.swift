@@ -40,8 +40,6 @@ struct PostDetailsView: View {
     private let introFont: Font = .subheadline
     private let introLineSpacing: CGFloat = 0
     private let introLinesLimit: Int = 10
-    
-    private let notesFont: Font = .footnote
     private let widthRatio: CGFloat = 0.55
     
     // MARK: - Computed Properties
@@ -78,9 +76,6 @@ struct PostDetailsView: View {
             .onChange(of: proxy.size.width) { _, newValue in
                 updateWidths(for: newValue)
             }
-            .onDisappear {
-
-            }
             .safeAreaInset(edge: .bottom) {
                 if post != nil {
                     bottomTabsContainer
@@ -103,7 +98,6 @@ struct PostDetailsView: View {
                     .cardBackground()
                 
                 goToTheSourceButton(urlString: post.urlString)
-                    .padding(.top, 30)
                     .frame(maxWidth: 250)
                 
                 if !post.notes.isEmpty {
@@ -119,7 +113,7 @@ struct PostDetailsView: View {
     // MARK: - Header
     
     private func header(for post: Post) -> some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 16) {
             Text(post.title)
                 .font(.title2)
                 .fontWeight(.semibold)
@@ -131,40 +125,39 @@ struct PostDetailsView: View {
                 .font(.body)
                 .frame(maxWidth: .infinity)
             
-            HStack {
-                Text("\(post.studyLevel.displayName.capitalized)")
-                    .font(.body)
-                    .fontWeight(.medium)
-                    .foregroundStyle(post.studyLevel.color)
-                
-                Spacer()
-                
-                PostStatusIcons(post: post)
-                
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            //
-            //            if vm.selectedCategory == nil {
-            //                Text(post.category)
-            //                    .font(.body)
-            //                    .fontWeight(.medium)
-            //                    .foregroundStyle(Color.mycolor.myYellow)
-            //                    .frame(maxWidth: .infinity)
-            //            }
-            //
-            
+            headerBottomLine(for: post)
         }
-        .padding()
+        .padding(8)
+    }
+    
+    @ViewBuilder
+    private func headerBottomLine(for post: Post) -> some View {
+        HStack(spacing: 3) {
+            Text("\(post.studyLevel.displayName)")
+                .fontWeight(.medium)
+                .foregroundStyle(post.studyLevel.color)
+                .itemBackground()
+
+            if let date = post.postDate {
+                Text("\(date.formatted(date: .numeric, time: .omitted))")
+                    .itemBackground()
+            }
+            Text(post.postType.displayName)
+                .itemBackground()
+            Text(post.postPlatform.displayName)
+                .itemBackground()
+            
+            Spacer()
+            
+            PostStatusIcons(post: post)
+        }
+        .font(.caption2)
     }
     
     // MARK: - Intro
     
     private func intro(for post: Post) -> some View {
         VStack(spacing: 0) {
-            introHeader(for: post)
-                .font(.caption)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
             Text (post.intro)
                 .font(introFont)
                 .lineLimit(showFullIntro ? nil : introLinesLimit)
@@ -182,21 +175,9 @@ struct PostDetailsView: View {
                     Spacer()
                     MoreLessTextButton(showText: $showFullIntro)
                 }
-                //                    .offset(y: -10)
             }
         }
         .padding()
-    }
-    
-    @ViewBuilder
-    private func introHeader(for post: Post) -> some View {
-        let postType = post.postType.displayName
-        
-        if let date = post.postDate {
-            Text("\(postType) posted \(date.formatted(date: .numeric, time: .omitted))")
-        } else {
-            Text("\(postType)")
-        }
     }
     
     // MARK: - Notes
@@ -220,7 +201,7 @@ struct PostDetailsView: View {
             if showFullNotes {
                 VStack {
                     Text(post.notes)
-                        .font(notesFont)
+                        .font(.footnote)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 8)
                     

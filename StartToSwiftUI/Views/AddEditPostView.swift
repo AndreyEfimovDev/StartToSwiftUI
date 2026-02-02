@@ -87,11 +87,11 @@ struct AddEditPostView: View {
                     titleSection
                     introSection
                     authorSection
-                    urlSection
-                    postDateSection
                     typeSection
-                    platformSection
                     studyLevelSection
+                    platformSection
+                    postDateSection
+                    urlSection
                     notesSection
                 }
                 .foregroundStyle(Color.mycolor.myAccent)
@@ -192,7 +192,6 @@ struct AddEditPostView: View {
         alertType = .success
         showAlert = true
     }
-    
     
     private func validatePost() -> Bool {
         if editedPost.title.count < 3 {
@@ -371,7 +370,7 @@ struct AddEditPostView: View {
             HStack(spacing: 0) {
                 TextEditor(text: $editedPost.intro)
                     .font(fontTextInput)
-                    .frame(height: 200)
+                    .frame(height: 100)
                     .autocorrectionDisabled(true) // fixing leaking memory
                     .scrollContentBackground(.hidden)
                     .focused($focusedField, equals: .intro)
@@ -400,7 +399,7 @@ struct AddEditPostView: View {
                     .frame(height: 50)
                     .autocorrectionDisabled(true) // fixing leaking memory
                     .focused($focusedField, equals: .author)
-                    .onSubmit {focusedField = .urlString }
+                    .onSubmit {focusedField = .postType }
                     .submitLabel(.next)
                 
                 clearButton(for: editedPost.author) {
@@ -410,28 +409,48 @@ struct AddEditPostView: View {
         }
     }
 
-    private var urlSection: some View {
-        FormSection(title: "URL") {
-            HStack(spacing: 0) {
-                TextField("", text: $editedPost.urlString)
-                    .font(fontTextInput)
-                    .padding(.leading, 5)
-                    .frame(height: 50)
-                    .padding(.horizontal, 3)
-                    .textInputAutocapitalization(.none)
-                    .autocorrectionDisabled(true) // fixing leaking memory
-                    .keyboardType(.URL)
-                    .focused($focusedField, equals: .urlString)
-                    .onSubmit {focusedField = nil }
-                    .submitLabel(.next)
-                
-                clearButton(for: editedPost.urlString) {
-                    editedPost.urlString = ""
-                }
-            }
+    private var typeSection: some View {
+        FormSection(title: "Post Type") {
+            UnderlineSermentedPickerNotOptional(
+                selection: $editedPost.postType,
+                allItems: PostType.allCases,
+                titleForCase: { $0.displayName },
+                selectedTextColor: Color.mycolor.myBlue,
+                unselectedTextColor: Color.mycolor.mySecondary
+            )
+            .padding(.horizontal, 8)
+            .frame(height: 50)
         }
     }
 
+    private var studyLevelSection: some View {
+        FormSection(title: "Study Level") {
+            UnderlineSermentedPickerNotOptional(
+                selection: $editedPost.studyLevel,
+                allItems: StudyLevel.allCases,
+                titleForCase: { $0.displayName },
+                selectedTextColor: Color.mycolor.myBlue,
+                unselectedTextColor: Color.mycolor.mySecondary
+            )
+            .padding(.horizontal, 8)
+            .frame(height: 50)
+        }
+    }
+
+    private var platformSection: some View {
+        FormSection(title: "Platform") {
+            UnderlineSermentedPickerNotOptional(
+                selection: $editedPost.postPlatform,
+                allItems: Platform.allCases,
+                titleForCase: { $0.displayName },
+                selectedTextColor: Color.mycolor.myBlue,
+                unselectedTextColor: Color.mycolor.mySecondary
+            )
+            .padding(.horizontal, 8)
+            .frame(height: 50)
+        }
+    }
+    
     private var postDateSection: some View {
         FormSection(title: "Post Date") {
             ZStack {
@@ -465,48 +484,27 @@ struct AddEditPostView: View {
         }
     }
 
-    private var typeSection: some View {
-        FormSection(title: "Post Type") {
-            UnderlineSermentedPickerNotOptional(
-                selection: $editedPost.postType,
-                allItems: PostType.allCases,
-                titleForCase: { $0.displayName },
-                selectedTextColor: Color.mycolor.myBlue,
-                unselectedTextColor: Color.mycolor.mySecondary
-            )
-            .padding(.horizontal, 8)
-            .frame(height: 50)
+    private var urlSection: some View {
+        FormSection(title: "URL") {
+            HStack(spacing: 0) {
+                TextField("", text: $editedPost.urlString)
+                    .font(fontTextInput)
+                    .padding(.leading, 5)
+                    .frame(height: 50)
+                    .padding(.horizontal, 3)
+                    .textInputAutocapitalization(.none)
+                    .autocorrectionDisabled(true) // fixing leaking memory
+                    .keyboardType(.URL)
+                    .focused($focusedField, equals: .urlString)
+                    .onSubmit {focusedField = .notes }
+                    .submitLabel(.next)
+                
+                clearButton(for: editedPost.urlString) {
+                    editedPost.urlString = ""
+                }
+            }
         }
     }
-
-    private var platformSection: some View {
-        FormSection(title: "Platform") {
-            UnderlineSermentedPickerNotOptional(
-                selection: $editedPost.postPlatform,
-                allItems: Platform.allCases,
-                titleForCase: { $0.displayName },
-                selectedTextColor: Color.mycolor.myBlue,
-                unselectedTextColor: Color.mycolor.mySecondary
-            )
-            .padding(.horizontal, 8)
-            .frame(height: 50)
-        }
-    }
-    
-    private var studyLevelSection: some View {
-        FormSection(title: "Study Level") {
-            UnderlineSermentedPickerNotOptional(
-                selection: $editedPost.studyLevel,
-                allItems: StudyLevel.allCases,
-                titleForCase: { $0.displayName },
-                selectedTextColor: Color.mycolor.myBlue,
-                unselectedTextColor: Color.mycolor.mySecondary
-            )
-            .padding(.horizontal, 8)
-            .frame(height: 50)
-        }
-    }
-    
 
     private var notesSection: some View {
         FormSection(title: "Notes") {
@@ -515,7 +513,7 @@ struct AddEditPostView: View {
                     .font(fontTextInput)
                     .frame(minHeight: 200)
                     .scrollContentBackground(.hidden)
-                    .focused($focusedField, equals: .additionalInfo)
+                    .focused($focusedField, equals: .notes)
                     .submitLabel(.return)
                 VStack {
                     clearButton(for: editedPost.notes) {

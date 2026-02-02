@@ -60,37 +60,18 @@ struct ImportPostsFromCloudView: View {
     
     // MARK: Subviews
     private var descriptionText: some View {
-        VStack {
-            Group {
-                Text("""
-                    The collection of SwiftUI tutorials and articles compiled by the developer using open sources to make it easy for complete beginners to get started.
-
-                    """)
+        Text("""
+            The collection of SwiftUI tutorials and articles to make it easy for complete beginners to get started.
                 
-                Text("**IMPORTANT NOTICE:**")
-                    .foregroundStyle(Color.mycolor.myRed)
-                
-                Text("""
-                Clicking **Confirm and Download** constitutes your agreement to the following terms:
-                
-                """)
-                
-                Text("""
-                1. The materials will be used solely for non-commercial educational purposes.
-                2. All intellectual property rights in the materials are retained by the original authors.
-                3. You will make every effort to access and reference the original source materials.
-                """
-                )
-                .font(.subheadline)
-                .multilineTextAlignment(.leading)
-            }
-        }
+            """
+        )
+        .font(.subheadline)
     }
     
     private var buttonsSection: some View {
         Group {
             CapsuleButtonView(
-                primaryTitle: "Confirm and Download",
+                primaryTitle: "Download",
                 secondaryTitle: "\(importedCount) New Materials Added",
                 isToChange: isLoaded
             ) {
@@ -98,16 +79,6 @@ struct ImportPostsFromCloudView: View {
             }
             .disabled(isLoaded || isInProgress)
             .padding(.top, 30)
-            
-            CapsuleButtonView(
-                primaryTitle: "Don't confirm",
-                textColorPrimary: Color.mycolor.myButtonTextRed,
-                buttonColorPrimary: Color.mycolor.myButtonBGRed
-            ) {
-                coordinator.popToRoot()
-            }
-            .opacity(isLoaded ? 0 : 1)
-            .disabled(isInProgress)
         }
     }
     

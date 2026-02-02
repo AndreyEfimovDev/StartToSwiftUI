@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 
-// MARK: - AppState Model для синхронизации флагов через iCloud
+// MARK: - AppState Model for flag synchronisation via iCloud
 
 @Model
 final class AppSyncState {
