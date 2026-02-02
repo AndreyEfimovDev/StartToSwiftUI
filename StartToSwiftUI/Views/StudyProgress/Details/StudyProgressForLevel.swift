@@ -106,7 +106,7 @@ struct StudyProgressForLevel: View {
     
     private func levelPostsCount(for progressLevel: StudyProgress) -> Int {
         switch progressLevel {
-        case .fresh:
+        case .added:
             return postsForStudyLevel.filter { $0.addedDateStamp != nil }.count
         case .started:
             return postsForStudyLevel.filter { $0.startedDateStamp != nil }.count
@@ -135,7 +135,7 @@ struct StudyProgressForLevel: View {
             .withDateStamp(.studied, date: calendar.date(byAdding: .month, value: -2, to: now)!)
             .withDateStamp(.practiced, date: calendar.date(byAdding: .month, value: -1, to: now)!),
         
-        Post(title: "Post 4", intro: "Intro 4", studyLevel: .middle, progress: .fresh),
+        Post(title: "Post 4", intro: "Intro 4", studyLevel: .middle, progress: .added),
         
         Post(title: "Post 5", intro: "Intro 5", studyLevel: .beginner, progress: .started)
             .withDateStamp(.started, date: now),

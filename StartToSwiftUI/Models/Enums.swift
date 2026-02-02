@@ -84,8 +84,8 @@ enum PostFields: Hashable {
     case postType
     case studyLevel
     case platform
-    case urlString
     case postDate
+    case urlString
     case notes
 }
 
@@ -220,6 +220,41 @@ enum StudyLevel: String, CaseIterable, Codable {
     }
 }
 
+// MARK: - Type of progress
+enum StudyProgress: String, CaseIterable, Codable { // progress in mastering educational materials
+    case added, started, studied, practiced
+    
+    // 􀐾 chart.bar, 􀓎 hare, 􁗟 bird, 􁝯 tree, 􀑁 chart.line.uptrend.xyaxis
+    
+    var displayName: String {
+        switch self {
+        case .added: return "Added"
+        case .started: return "Started"
+        case .studied: return "Learnt"
+        case .practiced: return "Practiced"
+        }
+    }
+    
+    var icon: Image { // for other options look at TestSFSymbolsForProgress
+        switch self {
+        case .added: return Image(systemName: "square.and.arrow.down") // lightbulb signpost.right sparkles
+        case .started: return Image(systemName: "sunrise") // sunrise signpost.right
+        case .studied: return Image(systemName: "bolt") // brain.head.profile flag.checkered
+        case .practiced: return Image(systemName: "flag.checkered") // hand.raised.fingers.spread mountain.2.fill bolt
+        }
+    }
+    
+    var color: Color {
+        switch self {
+        case .added: return Color.mycolor.myGreen
+        case .started: return Color.mycolor.myPurple
+        case .studied: return Color.mycolor.myBlue
+        case .practiced: return Color.mycolor.myRed
+        }
+    }
+}
+
+
 // MARK: - Time periods for statistics
 enum TimePeriod: String, CaseIterable, Identifiable {
     case quarter = "Quarter"
@@ -251,41 +286,6 @@ enum TimePeriod: String, CaseIterable, Identifiable {
     }
 
 }
-
-// MARK: - Type of progress
-enum StudyProgress: String, CaseIterable, Codable { // progress in mastering educational materials
-    case fresh, started, studied, practiced
-    
-    // 􀐾 chart.bar, 􀓎 hare, 􁗟 bird, 􁝯 tree, 􀑁 chart.line.uptrend.xyaxis
-    
-    var displayName: String {
-        switch self {
-        case .fresh: return "Added"
-        case .started: return "Started"
-        case .studied: return "Learnt"
-        case .practiced: return "Practiced"
-        }
-    }
-    
-    var icon: Image { // for other options look at TestSFSymbolsForProgress
-        switch self {
-        case .fresh: return Image(systemName: "square.and.arrow.down") // lightbulb signpost.right sparkles
-        case .started: return Image(systemName: "sunrise") // sunrise signpost.right
-        case .studied: return Image(systemName: "bolt") // brain.head.profile flag.checkered
-        case .practiced: return Image(systemName: "flag.checkered") // hand.raised.fingers.spread mountain.2.fill bolt
-        }
-    }
-    
-    var color: Color {
-        switch self {
-        case .fresh: return Color.mycolor.myGreen
-        case .started: return Color.mycolor.myPurple
-        case .studied: return Color.mycolor.myBlue
-        case .practiced: return Color.mycolor.myRed
-        }
-    }
-}
-
 // MARK: - Network Errors
 
 enum NetworkError: LocalizedError {

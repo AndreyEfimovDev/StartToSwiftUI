@@ -21,7 +21,7 @@ final class Post {
     var postPlatformRawValue: String = "youtube"
     var postDate: Date?
     var studyLevelRawValue: String = "beginner"
-    var progressRawValue: String = "fresh"
+    var progressRawValue: String = "added"
     var favoriteChoiceRawValue: String = "no"
     var postRatingRawValue: String?
     var notes: String = ""
@@ -51,7 +51,7 @@ final class Post {
     }
     
     var progress: StudyProgress {
-        get { StudyProgress(rawValue: progressRawValue) ?? .fresh }
+        get { StudyProgress(rawValue: progressRawValue) ?? .added }
         set { progressRawValue = newValue.rawValue }
     }
     
@@ -89,7 +89,7 @@ final class Post {
         postPlatform: Platform = .youtube,
         postDate: Date? = nil,
         studyLevel: StudyLevel = .beginner,
-        progress: StudyProgress = .fresh,
+        progress: StudyProgress = .added,
         favoriteChoice: FavoriteChoice = .no,
         postRating: PostRating? = nil,
         notes: String = "",
