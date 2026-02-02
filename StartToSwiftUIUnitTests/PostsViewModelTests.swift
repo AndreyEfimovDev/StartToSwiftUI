@@ -63,7 +63,7 @@ final class PostsViewModelTests: XCTestCase {
         XCTAssertNil(vm.selectedYear)
         XCTAssertNil(vm.selectedSortOption)
         
-        XCTAssertEqual(vm.selectedStudyProgress, .fresh)
+        XCTAssertEqual(vm.selectedStudyProgress, .added)
         
         // isFiltersEmpty должно быть true
         XCTAssertFalse(vm.isFiltersEmpty)
@@ -234,13 +234,13 @@ final class PostsViewModelTests: XCTestCase {
         post.studiedDateStamp = Date()
         post.practicedDateStamp = Date()
         vm.addPost(post)
-        vm.selectedStudyProgress = .fresh
+        vm.selectedStudyProgress = .added
         
         // When
         vm.updatePostStudyProgress(post)
         
         // Then
-        XCTAssertEqual(post.progress, .fresh)
+        XCTAssertEqual(post.progress, .added)
         XCTAssertNil(post.startedDateStamp)
         XCTAssertNil(post.studiedDateStamp)
         XCTAssertNil(post.practicedDateStamp)

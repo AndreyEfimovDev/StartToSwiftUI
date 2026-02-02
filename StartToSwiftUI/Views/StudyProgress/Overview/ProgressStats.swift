@@ -22,7 +22,7 @@ struct ProgressStats {
         // Added = all posts with addedDateStamp in the period
         added = posts.filter {
             guard let date = $0.addedDateStamp else { return false }
-            return /*$0.progress == .fresh && */date >= startDate
+            return /*$0.progress == .added && */date >= startDate
         }.count
         // Started = all posts with startedDateStamp in the period
         started = posts.filter {

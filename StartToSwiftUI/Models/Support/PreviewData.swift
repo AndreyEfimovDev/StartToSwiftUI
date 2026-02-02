@@ -55,7 +55,7 @@ struct PreviewData {
         postPlatform: .youtube,
         postDate: Date.from(year: 2021, month: 3, day: 26),
         studyLevel: .beginner,
-        progress: .fresh , // fresh, learning, studied, practiced
+        progress: .added , // added, learning, studied, practiced
         favoriteChoice: .yes,
         postRating: .good, // good, great, excellent
         notes: """
@@ -87,7 +87,7 @@ struct PreviewData {
         urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
         postDate: nil,
         studyLevel: .advanced,
-        progress: .fresh, // fresh, learning, studied, practiced
+        progress: .added, // added, learning, studied, practiced
         postRating: .great, // good, great, excellent
         origin: .local
     )
@@ -103,7 +103,7 @@ struct PreviewData {
         urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
         postDate: nil,
         studyLevel: .advanced,
-        progress: .studied, // fresh, learning, studied, practiced
+        progress: .studied, // added, learning, studied, practiced
         postRating: .excellent, // good, great, excellent
         origin: .local
     )
@@ -122,7 +122,7 @@ struct PreviewData {
         postPlatform: .website,
         postDate: Date.from(year: 2022, month: 8, day: 11),
         studyLevel: .middle,
-        progress: .practiced, // fresh, learning, studied, practiced
+        progress: .practiced, // added, learning, studied, practiced
         favoriteChoice: .no,
         notes: """
         In this video we are going to explore how we can stylize text for our Text views in SwiftUI.
@@ -151,7 +151,7 @@ struct PreviewData {
         postPlatform: .youtube,
         postDate: .now,
         studyLevel: .beginner,
-        progress: .fresh,
+        progress: .added,
         origin: .local,
         draft: true,
     )
@@ -164,7 +164,7 @@ struct PreviewData {
         postPlatform: .website,
         postDate: .now,
         studyLevel: .middle,
-        progress: .fresh,
+        progress: .added,
         origin: .local,
         draft: true,
     )
