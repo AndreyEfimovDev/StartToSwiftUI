@@ -82,7 +82,7 @@ struct DevData {
             author: "Stewart Lynch",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4CUCcA3fqvsRtx153akAJU1",
-            postPlatform: .website,
+            postPlatform: .youtube,
             postDate: nil,
             studyLevel: .beginner,
             origin: .cloudNew

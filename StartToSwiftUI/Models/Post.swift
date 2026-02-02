@@ -25,7 +25,7 @@ final class Post {
     var favoriteChoiceRawValue: String = "no"
     var postRatingRawValue: String?
     var notes: String = ""
-    var originRawValue: String = "cloudNew"
+    var originRawValue: String = "local"
     var draft: Bool = false
     var statusRawValue: String = "active"
     var date: Date = Date() // Date this entry was created
@@ -93,7 +93,7 @@ final class Post {
         favoriteChoice: FavoriteChoice = .no,
         postRating: PostRating? = nil,
         notes: String = "",
-        origin: PostOrigin = .cloudNew,
+        origin: PostOrigin = .local,
         draft: Bool = false,
         status: PostStatus = .active,
         date: Date = .now,
