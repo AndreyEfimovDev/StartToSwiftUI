@@ -140,7 +140,7 @@ final class PostsViewModel: ObservableObject {
     
     private func restoreFilters() {
         
-        setupFirstLaunchDefaults()
+//        setupFirstLaunchDefaults()
         
         selectedCategory = storedCategory
         selectedLevel = storedLevel
@@ -152,14 +152,14 @@ final class PostsViewModel: ObservableObject {
         isFiltersEmpty = checkIfAllFiltersAreEmpty()
     }
     
-    private func setupFirstLaunchDefaults() {
-        
-        if isFirstLaunch {
-            storedLevel = .beginner
-            storedType = .course
-            isFirstLaunch = false
-        }
-    }
+//    private func setupFirstLaunchDefaults() {
+//        
+//        if isFirstLaunch {
+//            storedLevel = .beginner
+//            storedType = .course
+//            isFirstLaunch = false
+//        }
+//    }
     
     private func initializeAppState() async {
         guard let appStateManager else {
