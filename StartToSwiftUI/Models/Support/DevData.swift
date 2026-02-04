@@ -7,8 +7,8 @@
 
 import Foundation
 
-#warning("Delete this file before deployment to App Store")
 struct DevData {
+#warning("Delete this file before deployment to App Store")
     static let postsForCloud = [
         
 // 2026-02-02
