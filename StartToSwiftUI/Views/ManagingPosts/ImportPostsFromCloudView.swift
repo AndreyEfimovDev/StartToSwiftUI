@@ -93,7 +93,8 @@ struct ImportPostsFromCloudView: View {
     }
     
     private func importFromCloud() async {
-        
+#warning("Clean this func from loadDevData() before deployment to App Store")
+
         // Download local DevData (for internal use)
         // Uncomment this part when you need to load DevData
 //        await loadDevData()
@@ -103,6 +104,8 @@ struct ImportPostsFromCloudView: View {
         await loadFromCloudService()
         
     }
+
+#warning("Delete this func from loadDevData() before deployment to App Store")
 
     /// Loading DevData (for internal use, to generate JSON file for cloud)
      private func loadDevData() async {
