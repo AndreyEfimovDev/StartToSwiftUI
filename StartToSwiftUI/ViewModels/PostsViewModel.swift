@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 import Combine
 import WidgetKit
+import CoreData
 
 @MainActor
 final class PostsViewModel: ObservableObject {
@@ -100,6 +101,22 @@ final class PostsViewModel: ObservableObject {
         Task {
             await initializeAppState()
         }
+        
+        // Subscribing to changes from CloudKit
+        NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
+            .receive(on: DispatchQueue.main)
+            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main) // избегаем частых обновлений
+            .sink { [weak self] _ in
+                self?.loadPostsFromSwiftData()
+            }
+            .store(in: &cancellables)
+     
+        // Таймаут — если синхронизация не пришла за 3 секунды
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
+//            self?.isLoading = false
+//        }
+
+
     }
     
     /// Convenience initialiser for backward compatibility
