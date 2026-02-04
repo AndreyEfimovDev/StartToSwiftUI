@@ -107,7 +107,8 @@ enum Platform: String, CaseIterable, Codable {
 enum PostType: String, CaseIterable, Codable {
     case post
     case course
-    case solution
+    case article
+    case solution  // для обратной совместимости
     case bug
     case other
     
@@ -115,11 +116,17 @@ enum PostType: String, CaseIterable, Codable {
         switch self {
         case .post: return "Lesson"
         case .course: return "Course"
-        case .solution: return "Solution"
+        case .article: return "Article"
+        case .solution: return "Article"  // показываем как Article
         case .bug: return "Bug"
         case .other: return "Other"
         }
     }
+    // Исключаем solution из выбора в UI
+    static var selectablePostTypeCases: [PostType] {
+        [.post, .course, .article, .bug, .other]
+    }
+
 }
 
 

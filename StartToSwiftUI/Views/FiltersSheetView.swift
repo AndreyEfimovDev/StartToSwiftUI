@@ -133,7 +133,7 @@ struct FiltersSheetView: View {
             
             SegmentedOneLinePicker(
                 selection: $vm.selectedType,
-                allItems: PostType.allCases,
+                allItems: PostType.selectablePostTypeCases,
                 titleForCase: { $0.displayName },
                 selectedFont: selectedFont,
                 selectedTextColor: Color.mycolor.myBackground,
