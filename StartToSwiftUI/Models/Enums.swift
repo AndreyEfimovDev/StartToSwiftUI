@@ -64,13 +64,11 @@ enum StudyLevelTabs: String, CaseIterable, Codable, Hashable {
 enum SortOption: String, CaseIterable {
     case newestFirst
     case oldestFirst
-    case random
     
     var displayName: String {
         switch self {
         case .newestFirst: return "Newest"
         case .oldestFirst: return "Oldest"
-        case .random: return "Random"
         }
     }
 }
@@ -420,8 +418,6 @@ enum AppRoute: Hashable, Identifiable {
             return "addPost"
         case .editPost(let post):
             return "editPost_\(post.id)"
-//        case .welcomeAtFirstLaunch:
-//            return "welcomeAtFirstLaunch"
         case .preferences:
             return "preferences"
         case .notices:

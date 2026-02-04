@@ -39,7 +39,7 @@ struct FiltersSheetView: View {
             typeFilter
             typeMedia
             yearFilter
-//            sortOptions
+            sortOptions
             
             Spacer()
             
@@ -59,14 +59,26 @@ struct FiltersSheetView: View {
     
     // MARK: Subviews
     
-//    private var sortOptions: some View {
-//        
-//        VStack {
-//            Text("Sort:")
-//                .font(.footnote)
-//                .fontWeight(.semibold)
-//                .frame(maxWidth: .infinity, alignment: .leading)
-//            
+    private var sortOptions: some View {
+        
+        VStack {
+            Text("Sort:")
+                .font(.footnote)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            SegmentedOneLinePickerNotOptional(
+                selection: $vm.selectedSortOption,
+                allItems: SortOption.allCases,
+                titleForCase: { $0.displayName },
+                selectedFont: selectedFont,
+                selectedTextColor: Color.mycolor.myBackground,
+                unselectedTextColor: Color.mycolor.myAccent,
+                selectedBackground: Color.mycolor.myBlue,
+                unselectedBackground: .clear
+            )
+            
+            
 //            SegmentedOneLinePicker(
 //                selection: $vm.selectedSortOption,
 //                allItems: SortOption.allCases,
@@ -79,8 +91,8 @@ struct FiltersSheetView: View {
 //                showNilOption: true,
 //                nilTitle: "Unsorted"
 //            )
-//        }
-//    }
+        }
+    }
     
     private var studyLevelFilter: some View {
         VStack {
@@ -242,7 +254,7 @@ struct FiltersSheetView: View {
                 vm.selectedType = nil
                 vm.selectedPlatform = nil
                 vm.selectedYear = nil
-                vm.selectedSortOption = nil
+                vm.selectedSortOption = .newestFirst
                 updateFiltersSheetView.toggle()
             }
             .padding(.horizontal, 55)
@@ -258,7 +270,7 @@ struct FiltersSheetView: View {
                 vm.selectedType = nil
                 vm.selectedPlatform = nil
                 vm.selectedYear = nil
-                vm.selectedSortOption = nil
+                vm.selectedSortOption = .newestFirst
                 isFilterButtonPressed.toggle()
             }
             .padding(.horizontal, 55)
