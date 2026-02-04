@@ -216,22 +216,19 @@ struct HomeView: View {
   
         ToolbarItemGroup(placement: .navigationBarTrailing) {
             // Add a new post
-            CircleStrokeButtonView(iconName: "plus", isShownCircle: false ){
+            CircleStrokeButtonView(
+                iconName: "plus",
+                isShownCircle: false
+            ){
                 coordinator.push(.addPost)
             }
-            // Filters button or Refresh button
-            if vm.allPosts.isEmpty {
-                // arrow.trianglehead.2.clockwise
-                CircleStrokeButtonView(
-                    iconName: "arrow.trianglehead.2.clockwise",
-                    isShownCircle: false
-                ){ refresh() }
-            } else {
-                CircleStrokeButtonView(
-                    iconName: "line.3.horizontal.decrease",
-                    isIconColorToChange: !vm.isFiltersEmpty,
-                    isShownCircle: false
-                ) { isFilterButtonPressed.toggle() }
+            // Fliters for posts
+            CircleStrokeButtonView(
+                iconName: "line.3.horizontal.decrease",
+                isIconColorToChange: !vm.isFiltersEmpty,
+                isShownCircle: false
+            ) {
+                isFilterButtonPressed.toggle()
             }
         }
     }
