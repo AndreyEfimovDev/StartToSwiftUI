@@ -27,6 +27,7 @@ final class PostsViewModel: ObservableObject {
     @Published var isFiltersEmpty: Bool = true
     @Published var selectedRating: PostRating? = nil
     @Published var selectedStudyProgress: StudyProgress = .added
+    @Published var isNotSynchronisedWithCloud = true // if SwiftData is synchronised with the Cloud
     
     @Published var errorMessage: String?
     @Published var showErrorMessageAlert = false
@@ -104,16 +105,18 @@ final class PostsViewModel: ObservableObject {
         
         // Subscribing to changes from CloudKit
         NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
+            .first()
             .receive(on: DispatchQueue.main)
             .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main) // избегаем частых обновлений
             .sink { [weak self] _ in
                 self?.loadPostsFromSwiftData()
+                self?.isNotSynchronisedWithCloud = false
             }
             .store(in: &cancellables)
      
         // Таймаут — если синхронизация не пришла за 3 секунды
 //        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
-//            self?.isLoading = false
+//            self?.isNotSynchronisedWithCloud = false
 //        }
 
 
