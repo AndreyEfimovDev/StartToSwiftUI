@@ -53,7 +53,6 @@ final class PostsViewModel: ObservableObject {
     
     // MARK: - AppStorage
     @AppStorage("selectedTheme") var selectedTheme: Theme = .system
-    @AppStorage("isFirstLaunch") var isFirstLaunch: Bool = true
     
     // Filters
     @AppStorage("storedCategory") var storedCategory: String?
@@ -80,8 +79,8 @@ final class PostsViewModel: ObservableObject {
     @Published var selectedYear: String? = nil {
         didSet { storedYear = selectedYear }}
     
-    @AppStorage("storedSortOption") var storedSortOption: SortOption?
-    @Published var selectedSortOption: SortOption? = nil {
+    @AppStorage("storedSortOption") var storedSortOption: SortOption = .newestFirst
+    @Published var selectedSortOption: SortOption = .newestFirst {
         didSet { storedSortOption = selectedSortOption }}
         
     // MARK: - Init
@@ -462,9 +461,9 @@ final class PostsViewModel: ObservableObject {
                     category: category
                 )
                 
-                return self.searchPosts(posts: filtered)
+                let searchedPosts = self.searchPosts(posts: filtered)
                 
-//                return self.applySorting(posts: searchedPosts, option: sortOption)
+                return self.applySorting(posts: searchedPosts, option: sortOption)
             }
             .sink { [weak self] selectedPosts in
                 self?.filteredPosts = selectedPosts
@@ -529,33 +528,31 @@ final class PostsViewModel: ObservableObject {
         }
     }
     
-//    private func applySorting(posts: [Post], option: SortOption?) -> [Post] {
-//        
-//        // If nil - return unsorded (original order in array)
-//        guard let option else { return posts}
-//        
-//        // posts with postDate = nil are always at the end
-//        switch option {
-//        case .random:
-//            return posts.shuffled() // random shuffle
-//        case .newestFirst:
-//            return posts.sorted {
-//                switch ($0.postDate, $1.postDate) {
-//                case (let date1?, let date2?): return date1 > date2 // Newest first
-//                case (nil, _): return false // postDate = nil are always at the end
-//                case (_, nil): return true // postDate ≠ nil are always before nil
-//                }
-//            }
-//        case .oldestFirst:
-//            return posts.sorted {
-//                switch ($0.postDate, $1.postDate) {
-//                case (let date1?, let date2?): return date1 < date2 // Oldest first
-//                case (nil, _): return false // postDate = nil are always at the end
-//                case (_, nil): return true // postDate ≠ nil are always before nil
-//                }
-//            }
-//        }
-//    }
+    private func applySorting(posts: [Post], option: SortOption?) -> [Post] {
+        
+        // If nil - return unsorded (original order in array)
+        guard let option else { return posts}
+        
+        // posts with postDate = nil are always at the end
+        switch option {
+        case .newestFirst:
+            return posts.sorted {
+                switch ($0.postDate, $1.postDate) {
+                case (let date1?, let date2?): return date1 > date2 // Newest first
+                case (nil, _): return false // postDate = nil are always at the end
+                case (_, nil): return true // postDate ≠ nil are always before nil
+                }
+            }
+        case .oldestFirst:
+            return posts.sorted {
+                switch ($0.postDate, $1.postDate) {
+                case (let date1?, let date2?): return date1 < date2 // Oldest first
+                case (nil, _): return false // postDate = nil are always at the end
+                case (_, nil): return true // postDate ≠ nil are always before nil
+                }
+            }
+        }
+    }
     
     // MARK: - Helper Methods
     
