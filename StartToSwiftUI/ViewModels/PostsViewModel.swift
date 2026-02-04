@@ -196,6 +196,11 @@ final class PostsViewModel: ObservableObject {
         return true
     }
     
+    /// If necessary, update post.origin .cloudNew with .cloud
+    func updatePostOrigin(_ post: Post) {
+        post.origin = .cloud
+        saveContextAndReload()
+    }
     /// Post update
     func updatePost() {
         saveContextAndReload()

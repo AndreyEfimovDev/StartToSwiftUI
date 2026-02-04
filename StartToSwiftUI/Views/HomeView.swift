@@ -156,8 +156,9 @@ struct HomeView: View {
     private func handleSingleTap(on post: Post) {
         vm.selectedPostId = post.id
         
+        // Mark a new post from cloud as not new after tapping if necessary
         if post.origin == .cloudNew {
-            post.origin = .cloud
+            vm.updatePostOrigin(post)
         }
         
         if UIDevice.isiPhone {
