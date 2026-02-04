@@ -48,6 +48,10 @@ struct ImportPostsFromCloudView: View {
             }
             .padding(.horizontal, 30)
             .padding(.top, 30)
+            .onAppear {
+                // for syncing with the cloud in case of any changes on other devices
+                vm.loadPostsFromSwiftData()
+            }
             .alert("Download Error", isPresented: $vm.showErrorMessageAlert) {
                 Button("OK", role: .cancel) {
                     coordinator.pop()
