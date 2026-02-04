@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 import Combine
 import WidgetKit
+import CoreData
 
 @MainActor
 final class PostsViewModel: ObservableObject {
@@ -100,6 +101,15 @@ final class PostsViewModel: ObservableObject {
         Task {
             await initializeAppState()
         }
+        
+        // Subscribing to changes from CloudKit
+        NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
+            .receive(on: DispatchQueue.main)
+            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main) // avoiding frequent updates
+            .sink { [weak self] _ in
+                self?.loadPostsFromSwiftData()
+            }
+            .store(in: &cancellables)
     }
     
     /// Convenience initialiser for backward compatibility
@@ -122,9 +132,7 @@ final class PostsViewModel: ObservableObject {
     }
     
     private func restoreFilters() {
-        
-        setupFirstLaunchDefaults()
-        
+                
         selectedCategory = storedCategory
         selectedLevel = storedLevel
         selectedFavorite = storedFavorite
@@ -134,16 +142,7 @@ final class PostsViewModel: ObservableObject {
         selectedSortOption = storedSortOption
         isFiltersEmpty = checkIfAllFiltersAreEmpty()
     }
-    
-    private func setupFirstLaunchDefaults() {
         
-        if isFirstLaunch {
-            storedLevel = .beginner
-            storedType = .course
-            isFirstLaunch = false
-        }
-    }
-    
     private func initializeAppState() async {
         guard let appStateManager else {
             log("⚠️ init PostViewModel: dataSource is not SwiftData", level: .info)
@@ -197,6 +196,11 @@ final class PostsViewModel: ObservableObject {
         return true
     }
     
+    /// If necessary, update post.origin .cloudNew with .cloud
+    func updatePostOrigin(_ post: Post) {
+        post.origin = .cloud
+        saveContextAndReload()
+    }
     /// Post update
     func updatePost() {
         saveContextAndReload()
@@ -458,9 +462,9 @@ final class PostsViewModel: ObservableObject {
                     category: category
                 )
                 
-                let searchedPosts = self.searchPosts(posts: filtered)
+                return self.searchPosts(posts: filtered)
                 
-                return self.applySorting(posts: searchedPosts, option: sortOption)
+//                return self.applySorting(posts: searchedPosts, option: sortOption)
             }
             .sink { [weak self] selectedPosts in
                 self?.filteredPosts = selectedPosts
@@ -508,9 +512,9 @@ final class PostsViewModel: ObservableObject {
         selectedFavorite == nil &&
         selectedType == nil &&
         selectedPlatform == nil &&
-        selectedYear == nil &&
-        selectedSortOption == nil
-        //        selectedCategory == nil
+        selectedYear == nil
+//        selectedSortOption == nil
+//        selectedCategory == nil
     }
     
     private func searchPosts(posts: [Post]) -> [Post] {
@@ -525,33 +529,33 @@ final class PostsViewModel: ObservableObject {
         }
     }
     
-    private func applySorting(posts: [Post], option: SortOption?) -> [Post] {
-        
-        // If nil - return unsorded (original order in array)
-        guard let option else { return posts}
-        
-        // posts with postDate = nil are always at the end
-        switch option {
-        case .random:
-            return posts.shuffled() // random shuffle
-        case .newestFirst:
-            return posts.sorted {
-                switch ($0.postDate, $1.postDate) {
-                case (let date1?, let date2?): return date1 > date2 // Newest first
-                case (nil, _): return false // postDate = nil are always at the end
-                case (_, nil): return true // postDate ≠ nil are always before nil
-                }
-            }
-        case .oldestFirst:
-            return posts.sorted {
-                switch ($0.postDate, $1.postDate) {
-                case (let date1?, let date2?): return date1 < date2 // Oldest first
-                case (nil, _): return false // postDate = nil are always at the end
-                case (_, nil): return true // postDate ≠ nil are always before nil
-                }
-            }
-        }
-    }
+//    private func applySorting(posts: [Post], option: SortOption?) -> [Post] {
+//        
+//        // If nil - return unsorded (original order in array)
+//        guard let option else { return posts}
+//        
+//        // posts with postDate = nil are always at the end
+//        switch option {
+//        case .random:
+//            return posts.shuffled() // random shuffle
+//        case .newestFirst:
+//            return posts.sorted {
+//                switch ($0.postDate, $1.postDate) {
+//                case (let date1?, let date2?): return date1 > date2 // Newest first
+//                case (nil, _): return false // postDate = nil are always at the end
+//                case (_, nil): return true // postDate ≠ nil are always before nil
+//                }
+//            }
+//        case .oldestFirst:
+//            return posts.sorted {
+//                switch ($0.postDate, $1.postDate) {
+//                case (let date1?, let date2?): return date1 < date2 // Oldest first
+//                case (nil, _): return false // postDate = nil are always at the end
+//                case (_, nil): return true // postDate ≠ nil are always before nil
+//                }
+//            }
+//        }
+//    }
     
     // MARK: - Helper Methods
     

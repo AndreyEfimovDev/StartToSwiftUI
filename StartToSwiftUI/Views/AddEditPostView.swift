@@ -413,7 +413,7 @@ struct AddEditPostView: View {
         FormSection(title: "Post Type") {
             UnderlineSermentedPickerNotOptional(
                 selection: $editedPost.postType,
-                allItems: PostType.allCases,
+                allItems: PostType.selectablePostTypeCases,
                 titleForCase: { $0.displayName },
                 selectedTextColor: Color.mycolor.myBlue,
                 unselectedTextColor: Color.mycolor.mySecondary
