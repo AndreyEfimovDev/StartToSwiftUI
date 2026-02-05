@@ -26,6 +26,8 @@ final class NoticeViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var showErrorMessageAlert: Bool = false
     
+    private var cancellables = Set<AnyCancellable>()
+    
     private var swiftDataSource: SwiftDataNoticesDataSource? {
         dataSource as? SwiftDataNoticesDataSource
     }
@@ -50,6 +52,10 @@ final class NoticeViewModel: ObservableObject {
         self.dataSource = dataSource
         self.networkService = networkService
         loadNoticesFromSwiftData()
+        
+        // Subscribing to changes from CloudKit
+        setupSubscriptionForChangesInCloud()
+        
         Task {
             await importNoticesFromCloud()
         }
@@ -66,6 +72,18 @@ final class NoticeViewModel: ObservableObject {
           )
       }
     
+    
+    // MARK: - CloudKit Sync
+    private func setupSubscriptionForChangesInCloud() {
+        NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
+            .receive(on: DispatchQueue.main)
+            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.loadNoticesFromSwiftData()
+            }
+            .store(in: &cancellables)
+    }
+
     // MARK: - Load Notices
     func loadNoticesFromSwiftData(removeDuplicates: Bool = true) {
         
