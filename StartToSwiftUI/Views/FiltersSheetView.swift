@@ -36,22 +36,28 @@ struct FiltersSheetView: View {
             
             // Filters section
 //                categoryFilter
-            studyLevelFilter
-            favoriteFilter
-            typeFilter
-            typeMedia
-            yearFilter
-            sortOptions
+            VStack(spacing: 0) {
+                studyLevelFilter
+                favoriteFilter
+                typeFilter
+                typeMedia
+                yearFilter
+                sortOptions
+            }
+            .padding(.horizontal, UIDevice.isiPad ? 15 : 0)
             
             Spacer()
             
             // Buttons section
-            applyFiltersButton
-            HStack {
-                resetAllFiltersButton
-                resetAllFiltersAndExitButton
+            VStack {
+                applyFiltersButton
+                HStack {
+                    resetAllFiltersButton
+                    resetAllFiltersAndExitButton
+                }
             }
-            .padding(.bottom, 30)
+            .padding(.horizontal, UIDevice.isiPad ? 90 : 35)
+            .padding(.bottom, UIDevice.isiPad ? 15 : 30)
         }
         .foregroundStyle(Color.mycolor.myAccent)
         .padding(.top, -40)
