@@ -462,8 +462,11 @@ final class PostsViewModel: ObservableObject {
                 )
                 
                 let searchedPosts = self.searchPosts(posts: filtered)
+                let sortedPosts = self.applySorting(posts: searchedPosts, option: sortOption)
                 
-                return self.applySorting(posts: searchedPosts, option: sortOption)
+                log("Subscribtion run", level: .info)
+                
+                return sortedPosts
             }
             .sink { [weak self] selectedPosts in
                 self?.filteredPosts = selectedPosts
@@ -511,8 +514,8 @@ final class PostsViewModel: ObservableObject {
         selectedFavorite == nil &&
         selectedType == nil &&
         selectedPlatform == nil &&
-        selectedYear == nil
-//        selectedSortOption == nil
+        selectedYear == nil &&
+        selectedSortOption == .newestFirst
 //        selectedCategory == nil
     }
     
