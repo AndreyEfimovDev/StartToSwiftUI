@@ -79,6 +79,7 @@ struct HomeView: View {
             .overlay { gestureOverlays(proxy: proxy) }
             .overlay { deleteConfirmationOverlay }
             .onAppear {
+                vm.loadPostsFromSwiftData() // for syncing with the cloud in case of any changes on other devices
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
                 noticevm.playSoundNotificationIfNeeded()
             }
@@ -155,8 +156,9 @@ struct HomeView: View {
     private func handleSingleTap(on post: Post) {
         vm.selectedPostId = post.id
         
+        // Mark a new post from cloud as not new after tapping if necessary
         if post.origin == .cloudNew {
-            post.origin = .cloud
+            vm.updatePostOrigin(post)
         }
         
         if UIDevice.isiPhone {
@@ -216,22 +218,19 @@ struct HomeView: View {
   
         ToolbarItemGroup(placement: .navigationBarTrailing) {
             // Add a new post
-            CircleStrokeButtonView(iconName: "plus", isShownCircle: false ){
+            CircleStrokeButtonView(
+                iconName: "plus",
+                isShownCircle: false
+            ){
                 coordinator.push(.addPost)
             }
-            // Filters button or Refresh button
-            if vm.allPosts.isEmpty {
-                // arrow.trianglehead.2.clockwise
-                CircleStrokeButtonView(
-                    iconName: "arrow.trianglehead.2.clockwise",
-                    isShownCircle: false
-                ){ refresh() }
-            } else {
-                CircleStrokeButtonView(
-                    iconName: "line.3.horizontal.decrease",
-                    isIconColorToChange: !vm.isFiltersEmpty,
-                    isShownCircle: false
-                ) { isFilterButtonPressed.toggle() }
+            // Fliters for posts
+            CircleStrokeButtonView(
+                iconName: "line.3.horizontal.decrease",
+                isIconColorToChange: !vm.isFiltersEmpty,
+                isShownCircle: false
+            ) {
+                isFilterButtonPressed.toggle()
             }
         }
     }

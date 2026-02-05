@@ -64,13 +64,11 @@ enum StudyLevelTabs: String, CaseIterable, Codable, Hashable {
 enum SortOption: String, CaseIterable {
     case newestFirst
     case oldestFirst
-    case random
     
     var displayName: String {
         switch self {
         case .newestFirst: return "Newest"
         case .oldestFirst: return "Oldest"
-        case .random: return "Random"
         }
     }
 }
@@ -107,7 +105,8 @@ enum Platform: String, CaseIterable, Codable {
 enum PostType: String, CaseIterable, Codable {
     case post
     case course
-    case solution
+    case article
+    case solution  // для обратной совместимости
     case bug
     case other
     
@@ -115,11 +114,17 @@ enum PostType: String, CaseIterable, Codable {
         switch self {
         case .post: return "Lesson"
         case .course: return "Course"
-        case .solution: return "Solution"
+        case .article: return "Article"
+        case .solution: return "Article"  // показываем как Article
         case .bug: return "Bug"
         case .other: return "Other"
         }
     }
+    // Исключаем solution из выбора в UI
+    static var selectablePostTypeCases: [PostType] {
+        [.post, .course, .article, .bug, .other]
+    }
+
 }
 
 
@@ -257,11 +262,11 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
 
 // MARK: - Time periods for statistics
 enum TimePeriod: String, CaseIterable, Identifiable {
-    case quarter = "Quarter"
-    case halfYear = "1/2 Year"
-    case year = "Year"
-    case twoYears = "2 Years"
-    case threeYears = "3 Years"
+    case quarter
+    case halfYear
+    case year
+    case twoYears
+    case threeYears
     
     var id: String { rawValue }
     
@@ -277,11 +282,11 @@ enum TimePeriod: String, CaseIterable, Identifiable {
     
     var displayName: String {
         switch self {
-        case .quarter: return "Quarter"
-        case .halfYear: return "1/2 Year"
-        case .year: return "Year"
-        case .twoYears: return "2 Years"
-        case .threeYears: return "3 Years"
+        case .quarter: return "3M"
+        case .halfYear: return "6M"
+        case .year: return "12M"
+        case .twoYears: return "24M"
+        case .threeYears: return "36M"
         }
     }
 
@@ -413,8 +418,6 @@ enum AppRoute: Hashable, Identifiable {
             return "addPost"
         case .editPost(let post):
             return "editPost_\(post.id)"
-//        case .welcomeAtFirstLaunch:
-//            return "welcomeAtFirstLaunch"
         case .preferences:
             return "preferences"
         case .notices:

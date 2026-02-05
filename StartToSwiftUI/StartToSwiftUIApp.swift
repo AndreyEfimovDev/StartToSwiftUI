@@ -49,7 +49,6 @@ struct StartToSwiftUIApp: App {
         _noticeViewModel = StateObject(wrappedValue: NoticeViewModel(modelContext: context))
 
         configureNavigationBarAppearance()
-//        warmUpKeyboardAndSpeech()
     }
     
     var body: some Scene {
