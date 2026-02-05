@@ -33,6 +33,8 @@ struct FiltersSheetView: View {
                 .font(.largeTitle)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.top, 55)
+            
+            // Filters section
 //                categoryFilter
             studyLevelFilter
             favoriteFilter
@@ -43,10 +45,13 @@ struct FiltersSheetView: View {
             
             Spacer()
             
+            // Buttons section
             applyFiltersButton
-            resetAllFiltersButton
-            resetAllFiltersAndExitButton
-                .padding(.bottom, 30)
+            HStack {
+                resetAllFiltersButton
+                resetAllFiltersAndExitButton
+            }
+            .padding(.bottom, 30)
         }
         .foregroundStyle(Color.mycolor.myAccent)
         .padding(.top, -40)
@@ -77,20 +82,6 @@ struct FiltersSheetView: View {
                 selectedBackground: Color.mycolor.myBlue,
                 unselectedBackground: .clear
             )
-            
-            
-//            SegmentedOneLinePicker(
-//                selection: $vm.selectedSortOption,
-//                allItems: SortOption.allCases,
-//                titleForCase: { $0.displayName },
-//                selectedFont: selectedFont,
-//                selectedTextColor: Color.mycolor.myBackground,
-//                unselectedTextColor: Color.mycolor.myAccent,
-//                selectedBackground: Color.mycolor.myBlue,
-//                unselectedBackground: .clear,
-//                showNilOption: true,
-//                nilTitle: "Unsorted"
-//            )
         }
     }
     
@@ -240,7 +231,7 @@ struct FiltersSheetView: View {
             primaryTitleColor: Color.mycolor.myBlue) {
                 isFilterButtonPressed.toggle()
             }
-            .padding(.horizontal, 55)
+//            .padding(.horizontal, 55)
         
     }
     
@@ -257,7 +248,7 @@ struct FiltersSheetView: View {
                 vm.selectedSortOption = .newestFirst
                 updateFiltersSheetView.toggle()
             }
-            .padding(.horizontal, 55)
+//            .padding(.horizontal, 55)
     }
     
     private var resetAllFiltersAndExitButton: some View {
@@ -273,7 +264,7 @@ struct FiltersSheetView: View {
                 vm.selectedSortOption = .newestFirst
                 isFilterButtonPressed.toggle()
             }
-            .padding(.horizontal, 55)
+//            .padding(.horizontal, 55)
     }
     
 }
