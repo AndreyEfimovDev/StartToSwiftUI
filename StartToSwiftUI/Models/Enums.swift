@@ -262,11 +262,11 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
 
 // MARK: - Time periods for statistics
 enum TimePeriod: String, CaseIterable, Identifiable {
-    case quarter = "Quarter"
-    case halfYear = "1/2 Year"
-    case year = "Year"
-    case twoYears = "2 Years"
-    case threeYears = "3 Years"
+    case quarter
+    case halfYear
+    case year
+    case twoYears
+    case threeYears
     
     var id: String { rawValue }
     
@@ -282,11 +282,11 @@ enum TimePeriod: String, CaseIterable, Identifiable {
     
     var displayName: String {
         switch self {
-        case .quarter: return "Quarter"
-        case .halfYear: return "1/2 Year"
-        case .year: return "Year"
-        case .twoYears: return "2 Years"
-        case .threeYears: return "3 Years"
+        case .quarter: return "3M"
+        case .halfYear: return "6M"
+        case .year: return "12M"
+        case .twoYears: return "24M"
+        case .threeYears: return "36M"
         }
     }
 

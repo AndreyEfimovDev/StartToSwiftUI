@@ -33,20 +33,31 @@ struct FiltersSheetView: View {
                 .font(.largeTitle)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.top, 55)
+            
+            // Filters section
 //                categoryFilter
-            studyLevelFilter
-            favoriteFilter
-            typeFilter
-            typeMedia
-            yearFilter
-            sortOptions
+            VStack(spacing: 0) {
+                studyLevelFilter
+                favoriteFilter
+                typeFilter
+                typeMedia
+                yearFilter
+                sortOptions
+            }
+            .padding(.horizontal, UIDevice.isiPad ? 15 : 0)
             
             Spacer()
             
-            applyFiltersButton
-            resetAllFiltersButton
-            resetAllFiltersAndExitButton
-                .padding(.bottom, 30)
+            // Buttons section
+            VStack {
+                applyFiltersButton
+                HStack {
+                    resetAllFiltersButton
+                    resetAllFiltersAndExitButton
+                }
+            }
+            .padding(.horizontal, UIDevice.isiPad ? 90 : 35)
+            .padding(.bottom, UIDevice.isiPad ? 15 : 30)
         }
         .foregroundStyle(Color.mycolor.myAccent)
         .padding(.top, -40)
@@ -77,20 +88,6 @@ struct FiltersSheetView: View {
                 selectedBackground: Color.mycolor.myBlue,
                 unselectedBackground: .clear
             )
-            
-            
-//            SegmentedOneLinePicker(
-//                selection: $vm.selectedSortOption,
-//                allItems: SortOption.allCases,
-//                titleForCase: { $0.displayName },
-//                selectedFont: selectedFont,
-//                selectedTextColor: Color.mycolor.myBackground,
-//                unselectedTextColor: Color.mycolor.myAccent,
-//                selectedBackground: Color.mycolor.myBlue,
-//                unselectedBackground: .clear,
-//                showNilOption: true,
-//                nilTitle: "Unsorted"
-//            )
         }
     }
     
@@ -240,7 +237,7 @@ struct FiltersSheetView: View {
             primaryTitleColor: Color.mycolor.myBlue) {
                 isFilterButtonPressed.toggle()
             }
-            .padding(.horizontal, 55)
+//            .padding(.horizontal, 55)
         
     }
     
@@ -257,7 +254,7 @@ struct FiltersSheetView: View {
                 vm.selectedSortOption = .newestFirst
                 updateFiltersSheetView.toggle()
             }
-            .padding(.horizontal, 55)
+//            .padding(.horizontal, 55)
     }
     
     private var resetAllFiltersAndExitButton: some View {
@@ -273,7 +270,7 @@ struct FiltersSheetView: View {
                 vm.selectedSortOption = .newestFirst
                 isFilterButtonPressed.toggle()
             }
-            .padding(.horizontal, 55)
+//            .padding(.horizontal, 55)
     }
     
 }
