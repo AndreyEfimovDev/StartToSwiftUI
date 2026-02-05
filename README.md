@@ -3,7 +3,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/SwiftUI-6+-blue.svg" alt="SwiftUI 6+">
   <img src="https://img.shields.io/badge/iOS-18+-lightgrey.svg" alt="iOS 18+">
-  <img src="https://img.shields.io/badge/platform-iPhone_iPad-orange.svg" alt="iPhone & iPad">
+  <img src="https://img.shields.io/badge/platform-iPhone_iPad-orange.svg" alt="iPhone iPad">
   <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
   <img src="https://img.shields.io/badge/price-Free-success.svg" alt="Free">
 </p>
