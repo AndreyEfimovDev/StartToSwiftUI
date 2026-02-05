@@ -40,4 +40,4 @@
 - **SwiftUI 6.0** (framework)
 
 ### Download
-Available on the App Store: [Download StartToSwiftUI](#) *(link to be added)*
+Available on the App Store: [Download StartToSwiftUI](#) *([link to be added](https://apps.apple.com/ru/app/starttoswiftui/id6755787606?l=en-GB))*
