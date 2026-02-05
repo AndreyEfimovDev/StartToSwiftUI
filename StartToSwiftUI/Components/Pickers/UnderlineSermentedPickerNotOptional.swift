@@ -13,7 +13,6 @@ struct UnderlineSermentedPickerNotOptional<T: Hashable>: View {
     let allItems: [T]
     let titleForCase: (T) -> String
     
-    // Colors
     var selectedFont: Font = .footnote
     var selectedTextColor: Color = Color.mycolor.myBlue
     var unselectedTextColor: Color = Color.mycolor.myAccent
@@ -38,7 +37,7 @@ struct UnderlineSermentedPickerNotOptional<T: Hashable>: View {
                         RoundedRectangle(cornerRadius: 2)
                             .frame(height: 1.5)
                             .matchedGeometryEffect(id: "selection", in: namespace)
-                    } else { //
+                    } else {
                         RoundedRectangle(cornerRadius: 2)
                             .frame(height: 1.5)
                             .hidden()
@@ -53,10 +52,9 @@ struct UnderlineSermentedPickerNotOptional<T: Hashable>: View {
                         selection = item
                     }
                 }
-                .id(item) //
+                .id(item)
             }
         }
-//        .animation(.smooth, value: selection)
     }
 }
 

@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 import Combine
 import WidgetKit
+import CoreData
 
 @MainActor
 final class PostsViewModel: ObservableObject {
@@ -52,7 +53,6 @@ final class PostsViewModel: ObservableObject {
     
     // MARK: - AppStorage
     @AppStorage("selectedTheme") var selectedTheme: Theme = .system
-    @AppStorage("isFirstLaunch") var isFirstLaunch: Bool = true
     
     // Filters
     @AppStorage("storedCategory") var storedCategory: String?
@@ -79,8 +79,8 @@ final class PostsViewModel: ObservableObject {
     @Published var selectedYear: String? = nil {
         didSet { storedYear = selectedYear }}
     
-    @AppStorage("storedSortOption") var storedSortOption: SortOption?
-    @Published var selectedSortOption: SortOption? = nil {
+    @AppStorage("storedSortOption") var storedSortOption: SortOption = .newestFirst
+    @Published var selectedSortOption: SortOption = .newestFirst {
         didSet { storedSortOption = selectedSortOption }}
         
     // MARK: - Init
@@ -100,6 +100,15 @@ final class PostsViewModel: ObservableObject {
         Task {
             await initializeAppState()
         }
+        
+        // Subscribing to changes from CloudKit
+        NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
+            .receive(on: DispatchQueue.main)
+            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main) // avoiding frequent updates
+            .sink { [weak self] _ in
+                self?.loadPostsFromSwiftData()
+            }
+            .store(in: &cancellables)
     }
     
     /// Convenience initialiser for backward compatibility
@@ -122,9 +131,7 @@ final class PostsViewModel: ObservableObject {
     }
     
     private func restoreFilters() {
-        
-        setupFirstLaunchDefaults()
-        
+                
         selectedCategory = storedCategory
         selectedLevel = storedLevel
         selectedFavorite = storedFavorite
@@ -134,16 +141,7 @@ final class PostsViewModel: ObservableObject {
         selectedSortOption = storedSortOption
         isFiltersEmpty = checkIfAllFiltersAreEmpty()
     }
-    
-    private func setupFirstLaunchDefaults() {
         
-        if isFirstLaunch {
-            storedLevel = .beginner
-            storedType = .course
-            isFirstLaunch = false
-        }
-    }
-    
     private func initializeAppState() async {
         guard let appStateManager else {
             log("⚠️ init PostViewModel: dataSource is not SwiftData", level: .info)
@@ -197,6 +195,11 @@ final class PostsViewModel: ObservableObject {
         return true
     }
     
+    /// If necessary, update post.origin .cloudNew with .cloud
+    func updatePostOrigin(_ post: Post) {
+        post.origin = .cloud
+        saveContextAndReload()
+    }
     /// Post update
     func updatePost() {
         saveContextAndReload()
@@ -459,8 +462,11 @@ final class PostsViewModel: ObservableObject {
                 )
                 
                 let searchedPosts = self.searchPosts(posts: filtered)
+                let sortedPosts = self.applySorting(posts: searchedPosts, option: sortOption)
                 
-                return self.applySorting(posts: searchedPosts, option: sortOption)
+                log("Subscribtion run", level: .info)
+                
+                return sortedPosts
             }
             .sink { [weak self] selectedPosts in
                 self?.filteredPosts = selectedPosts
@@ -509,8 +515,8 @@ final class PostsViewModel: ObservableObject {
         selectedType == nil &&
         selectedPlatform == nil &&
         selectedYear == nil &&
-        selectedSortOption == nil
-        //        selectedCategory == nil
+        selectedSortOption == .newestFirst
+//        selectedCategory == nil
     }
     
     private func searchPosts(posts: [Post]) -> [Post] {
@@ -532,8 +538,6 @@ final class PostsViewModel: ObservableObject {
         
         // posts with postDate = nil are always at the end
         switch option {
-        case .random:
-            return posts.shuffled() // random shuffle
         case .newestFirst:
             return posts.sorted {
                 switch ($0.postDate, $1.postDate) {
