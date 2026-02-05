@@ -23,7 +23,7 @@ final class PostTests: XCTestCase {
         XCTAssertEqual(post.studyLevel, .beginner)
         XCTAssertEqual(post.progress, .added)
         XCTAssertEqual(post.favoriteChoice, .no)
-        XCTAssertEqual(post.origin, .cloudNew)
+        XCTAssertEqual(post.origin, .local)
         XCTAssertFalse(post.draft)
         XCTAssertEqual(post.category, "SwiftUI")
         XCTAssertEqual(post.urlString, Constants.urlStart)
