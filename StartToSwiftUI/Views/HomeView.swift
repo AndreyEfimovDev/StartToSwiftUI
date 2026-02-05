@@ -225,12 +225,14 @@ struct HomeView: View {
                 coordinator.push(.addPost)
             }
             // Fliters for posts
-            CircleStrokeButtonView(
-                iconName: "line.3.horizontal.decrease",
-                isIconColorToChange: !vm.isFiltersEmpty,
-                isShownCircle: false
-            ) {
-                isFilterButtonPressed.toggle()
+            if !vm.allPosts.isEmpty {
+                CircleStrokeButtonView(
+                    iconName: "line.3.horizontal.decrease",
+                    isIconColorToChange: !vm.isFiltersEmpty,
+                    isShownCircle: false
+                ) {
+                    isFilterButtonPressed.toggle()
+                }
             }
         }
     }
