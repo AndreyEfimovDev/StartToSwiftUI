@@ -681,26 +681,6 @@ final class PostsViewModel: ObservableObject {
         appStateManager?.getLastDateOfCuaratedPostsLoaded()
     }
     
-    // MARK: - DevData Import (creating posts for cloud)
-    /// Loading DevData to generate JSON (for internal use)
-    func loadDevData() async -> Int {
-        let newPosts = filterUniquePosts(DevData.postsForCloud)
-        
-        guard !newPosts.isEmpty else {
-            log("⚠️ DevData: No new unique posts to add", level: .info)
-            return 0
-        }
-        
-        for post in newPosts {
-            dataSource.insert(post)
-        }
-        
-        saveContextAndReload()
-        log("✅ DevData: Loaded \(newPosts.count) posts from \(DevData.postsForCloud.count)", level: .info)
-        
-        return newPosts.count
-    }
-    
     func resetCuratedPostsStatus() {
         appStateManager?.setCuratedPostsLoadStatusOn()
     }
