@@ -23,7 +23,7 @@ struct WhatsNews {
                 News(
                     title: "Added",
                     newsText: """
-                    - Sorting materials filter
+                    - Sorting study materials filter
                     """
                 ),
             ]
@@ -33,7 +33,7 @@ struct WhatsNews {
             news: [
                 News(
                     title: "Initial deployment",
-                    newsText: "newsText"
+                    newsText: ""
                 ),
             ]
         )
