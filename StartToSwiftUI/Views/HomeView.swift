@@ -225,12 +225,14 @@ struct HomeView: View {
                 coordinator.push(.addPost)
             }
             // Fliters for posts
-            CircleStrokeButtonView(
-                iconName: "line.3.horizontal.decrease",
-                isIconColorToChange: !vm.isFiltersEmpty,
-                isShownCircle: false
-            ) {
-                isFilterButtonPressed.toggle()
+            if !vm.allPosts.isEmpty {
+                CircleStrokeButtonView(
+                    iconName: "line.3.horizontal.decrease",
+                    isIconColorToChange: !vm.isFiltersEmpty,
+                    isShownCircle: false
+                ) {
+                    isFilterButtonPressed.toggle()
+                }
             }
         }
     }
@@ -274,7 +276,7 @@ struct HomeView: View {
         if UIDevice.isiPhone {
             ZStack {
                 if isLongPressSuccess {
-                    ProgressSelectionView { // RatingSelectionView
+                    ProgressSelectionView { // ProgressSelectionView
                         isLongPressSuccess = false
                         hapticManager.impact(style: .light)
                     }
@@ -284,7 +286,7 @@ struct HomeView: View {
                 }
                 
                 if showViewOnDoubleTap {
-                    RatingSelectionView { // ProgressSelectionView
+                    RatingSelectionView { // RatingSelectionView
                         showViewOnDoubleTap = false
                         hapticManager.impact(style: .light)
                     }
@@ -356,7 +358,7 @@ struct HomeView: View {
     
     private var filteredPostsIsEmpty: some View {
         ContentUnavailableView(
-            "No Results matching your search criteria",
+            "No Results matching your filter/search criteria",
             systemImage: "magnifyingglass",
             description: Text("Check the spelling or try a new search.")
         )
