@@ -244,7 +244,7 @@ struct AddEditPostView: View {
         case .success:
             let title = editedPost.draft
             ? "Draft saved successfully"
-            : (originalPost == nil ? "New Post added successfully" : "Post saved successfully")
+            : (originalPost == nil ? "New data added successfully" : "Data saved successfully")
             
             return Alert(
                 title: Text(title),

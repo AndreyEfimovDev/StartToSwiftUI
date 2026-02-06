@@ -123,7 +123,10 @@ final class NoticeViewModel: ObservableObject {
     func importNoticesFromCloud() async {
         
         do {
+            
             let cloudResponse: [CodableNotice] = try await networkService.fetchDataFromURLAsync()
+            
+            loadNoticesFromSwiftData() // sync with Cloud
             
             // Filter by date (SwiftData only)
             let relevantNotices: [CodableNotice]
