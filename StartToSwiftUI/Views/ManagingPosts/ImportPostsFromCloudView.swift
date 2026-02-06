@@ -109,7 +109,7 @@ struct ImportPostsFromCloudView: View {
         
     }
 
-#warning("Delete this func from loadDevData() before deployment to App Store")
+#warning("Delete this func loadDevData() before deployment to App Store")
 
     /// Loading DevData (for internal use, to generate JSON file for cloud)
      private func loadDevData() async {
