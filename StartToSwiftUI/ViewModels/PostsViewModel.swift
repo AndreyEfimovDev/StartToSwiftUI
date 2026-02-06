@@ -131,6 +131,7 @@ final class PostsViewModel: ObservableObject {
             .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main) // avoiding frequent updates
             .sink { [weak self] _ in
                 self?.loadPostsFromSwiftData()
+                log("Cloud posts sync subscribtion run", level: .info)
             }
             .store(in: &cancellables)
     }
@@ -469,7 +470,7 @@ final class PostsViewModel: ObservableObject {
                 let searchedPosts = self.searchPosts(posts: filtered)
                 let sortedPosts = self.applySorting(posts: searchedPosts, option: sortOption)
                 
-                log("Subscribtion run", level: .info)
+                log("Values subscribtion run", level: .info)
                 
                 return sortedPosts
             }
