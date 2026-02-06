@@ -21,7 +21,7 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiLvzZFJI6rVIBtdolrJBVB",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2024, month: 8, day: 24),
+            postDate: Date.from(year: 2023, month: 7, day: 14),
             origin: .cloudNew
         ),
         Post(
@@ -33,7 +33,7 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgHtditjG_y2DuYuj9FJommY",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2024, month: 10, day: 8),
+            postDate: Date.from(year: 2020, month: 4, day: 20),
             origin: .cloudNew
         ),
         Post(
@@ -45,7 +45,7 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLuoeXyslFTuaYpVr3S9wG6PkIvYn_yHbg",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 11, day: 17),
+            postDate: Date.from(year: 2021, month: 10, day: 14),
             origin: .cloudNew
         ),
 
@@ -58,7 +58,7 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4CUCcA3fqvsRtx153akAJU1",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2024, month: 3, day: 14),
+            postDate: Date.from(year: 2023, month: 8, day: 13),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -97,20 +97,7 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgHx8DgGsHB4Dh_H_78x8oQE",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2025, month: 3, day: 28),
-            studyLevel: .beginner,
-            origin: .cloudNew
-        ),
-        Post(
-            title: "Swift Tutorials & Code Snippets",
-            intro: """
-                Swift tutorials for common tasks in iOS Development.
-                """,
-            author: "Sean Allen",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgG3822Pbf_H9xldrODNV3XI",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2025, month: 6, day: 2),
+            postDate: Date.from(year: 2019, month: 10, day: 30),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -149,7 +136,7 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiALKk34l9mUS2f4mdJPvXq",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2024, month: 8, day: 8),
+            postDate: Date.from(year: 2024, month: 5, day: 20),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
