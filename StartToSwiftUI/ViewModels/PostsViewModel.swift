@@ -681,6 +681,8 @@ final class PostsViewModel: ObservableObject {
         appStateManager?.getLastDateOfCuaratedPostsLoaded()
     }
     
+    
+#warning("Delete this func loadDevData() before deployment to App Store")
     // MARK: - DevData Import (creating posts for cloud)
     /// Loading DevData to generate JSON (for internal use)
     func loadDevData() async -> Int {
