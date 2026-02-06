@@ -102,13 +102,7 @@ final class PostsViewModel: ObservableObject {
         }
         
         // Subscribing to changes from CloudKit
-        NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
-            .receive(on: DispatchQueue.main)
-            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main) // avoiding frequent updates
-            .sink { [weak self] _ in
-                self?.loadPostsFromSwiftData()
-            }
-            .store(in: &cancellables)
+        setupSubscriptionForChangesInCloud()
     }
     
     /// Convenience initialiser for backward compatibility
@@ -128,6 +122,18 @@ final class PostsViewModel: ObservableObject {
         if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
             utcCalendar.timeZone = utcTimeZone
         }
+    }
+    
+    // MARK: - CloudKit Sync
+    private func setupSubscriptionForChangesInCloud() {
+        NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
+            .receive(on: DispatchQueue.main)
+            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main) // avoiding frequent updates
+            .sink { [weak self] _ in
+                self?.loadPostsFromSwiftData()
+                log("Cloud posts sync subscribtion run", level: .info)
+            }
+            .store(in: &cancellables)
     }
     
     private func restoreFilters() {
@@ -464,7 +470,7 @@ final class PostsViewModel: ObservableObject {
                 let searchedPosts = self.searchPosts(posts: filtered)
                 let sortedPosts = self.applySorting(posts: searchedPosts, option: sortOption)
                 
-                log("Subscribtion run", level: .info)
+                log("Values subscribtion run", level: .info)
                 
                 return sortedPosts
             }
