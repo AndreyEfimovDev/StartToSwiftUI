@@ -31,9 +31,6 @@ struct StartView: View {
                     showLaunchView = false
                 }
                 .transition(.move(edge: .leading))
-//            } else if isLoadingData {
-//                ProgressView("Loading materials...")
-//                    .controlSize(.large)
             } else {
                 mainContent
                     .onAppear {
@@ -42,10 +39,6 @@ struct StartView: View {
             }
         }
         .preferredColorScheme(vm.selectedTheme.colorScheme)
-//        .task {
-//            try? await Task.sleep(for: .milliseconds(100))
-//            isLoadingData = false
-//        }
         .adaptiveModal(item: $coordinator.presentedSheet)
         .environmentObject(vm)
         .environmentObject(noticevm)
