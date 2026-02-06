@@ -38,7 +38,7 @@ struct AddEditPostView: View {
     private let fontSubheader: Font = .caption
     private let fontTextInput: Font = .callout
     private let colorSubheader = Color.mycolor.myAccent.opacity(0.5)
-    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2019)) ?? Date.distantPast
+    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2016)) ?? Date.distantPast
     private let endingDate: Date = .now
     
     // MARK: - Computed Properties
@@ -244,7 +244,7 @@ struct AddEditPostView: View {
         case .success:
             let title = editedPost.draft
             ? "Draft saved successfully"
-            : (originalPost == nil ? "New Post added successfully" : "Post saved successfully")
+            : (originalPost == nil ? "New data added successfully" : "Data saved successfully")
             
             return Alert(
                 title: Text(title),

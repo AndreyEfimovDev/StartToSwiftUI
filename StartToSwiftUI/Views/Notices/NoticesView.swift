@@ -30,6 +30,9 @@ struct NoticesView: View {
         .toolbar {
             navigationToolbar()
         }
+        .onAppear {
+            noticevm.loadNoticesFromSwiftData()
+        }
     }
     
     private var noticesContent: some View {

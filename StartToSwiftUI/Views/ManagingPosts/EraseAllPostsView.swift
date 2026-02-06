@@ -73,26 +73,18 @@ struct EraseAllPostsView: View {
     private var descriptionText: some View {
         VStack(spacing: 0) {
             Text("""
-            **You are about
-            to delete all the study content.**
+            You are about
+            to delete all the study content.
             
             """
             )
-            .font(.subheadline)
-            .frame(maxWidth: .infinity)
-            .multilineTextAlignment(.center)
-
             Text("""
             It is recommended
             to backup content before
             deleting it.
             """)
-            .foregroundStyle(Color.mycolor.myRed)
-            .bold()
-            .frame(maxWidth: .infinity)
-            .multilineTextAlignment(.center)
+            .foregroundStyle(Color.mycolor.myButtonTextRed)
         }
-        .font(.subheadline)
     }
     
     // MARK: - Actions

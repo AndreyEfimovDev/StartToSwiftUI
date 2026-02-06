@@ -3,6 +3,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/SwiftUI-6+-blue.svg" alt="SwiftUI 6+">
   <img src="https://img.shields.io/badge/iOS-18+-lightgrey.svg" alt="iOS 18+">
+  <img src="https://img.shields.io/badge/platform-iPhone_iPad-orange.svg" alt="iPhone iPad">
   <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
   <img src="https://img.shields.io/badge/price-Free-success.svg" alt="Free">
 </p>
@@ -40,4 +41,4 @@
 - **SwiftUI 6.0** (framework)
 
 ### Download
-Available on the App Store: [Download StartToSwiftUI](#) *(link to be added)*
+Available on the App Store: [Download StartToSwiftUI](https://apps.apple.com/ru/app/starttoswiftui/id6755787606?l=en-GB)
