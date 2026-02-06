@@ -15,12 +15,13 @@ struct DevData {
         Post(
             title: "Swift Basics",
             intro: """
-                Get started with the Swift programming language. Write your first line of code and learn the fundamentals.
+                    Start with the Swift programming language writing a first line of code and learn the fundamentals.
                 """,
-            author: "Nick Sarno",
+            author: "Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiLvzZFJI6rVIBtdolrJBVB",
             postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 7, day: 14),
             origin: .cloudNew
         ),
         Post(
@@ -32,6 +33,7 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgHtditjG_y2DuYuj9FJommY",
             postPlatform: .youtube,
+            postDate: Date.from(year: 2020, month: 4, day: 20),
             origin: .cloudNew
         ),
         Post(
@@ -43,19 +45,20 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLuoeXyslFTuaYpVr3S9wG6PkIvYn_yHbg",
             postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 10, day: 14),
             origin: .cloudNew
         ),
 
         Post(
             title: "Mastering Xcode",
             intro: """
-                9 part series on learning how to decode and encode JSON using the Swift Codable protocol.
+                Master Xcode through tutorials.
                 """,
             author: "Stewart Lynch",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4CUCcA3fqvsRtx153akAJU1",
             postPlatform: .youtube,
-            postDate: nil,
+            postDate: Date.from(year: 2023, month: 8, day: 13),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -64,10 +67,12 @@ struct DevData {
             intro: """
                 Learning SwiftUI by building beautiful screens and other UI components.
                 """,
-            author: "Nick Sarno",
+            author: "Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO",
             postPlatform: .youtube,
+            postDate: Date.from(year: 2024, month: 8, day: 24),
+            studyLevel: .beginner,
             origin: .cloudNew
         ),
         Post(
@@ -75,59 +80,51 @@ struct DevData {
             intro: """
                 Building a real application with MVVM app architecture.
                 """,
-            author: "Nick Sarno",
+            author: "Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpheGqemblOIA7v3oq0MS30i",
             postPlatform: .youtube,
-            postDate: nil,
+            postDate: Date.from(year: 2021, month: 3, day: 20),
+            studyLevel: .beginner,
             origin: .cloudNew
         ),
         Post(
             title: "Swift Keywords",
             intro: """
-                The playlist explains the Swift Language has many keywords.
+                The playlist explains many Swift Language keywords.
                 """,
             author: "Sean Allen",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgHx8DgGsHB4Dh_H_78x8oQE",
             postPlatform: .youtube,
-            postDate: nil,
-            origin: .cloudNew
-        ),
-        Post(
-            title: "Swift Tutorials & Code Snippets",
-            intro: """
-                Swift tutorials for common tasks in iOS Development.
-                """,
-            author: "Sean Allen",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgG3822Pbf_H9xldrODNV3XI",
-            postPlatform: .youtube,
-            postDate: nil,
+            postDate: Date.from(year: 2019, month: 10, day: 30),
+            studyLevel: .beginner,
             origin: .cloudNew
         ),
         Post(
             title: "Swift Programming Tutorial",
             intro: """
-                A full course for absolute beginner.
+                Swift Programming Tutorial - full course for absolute beginner ~ 10,5 hours.
                 """,
             author: "Sean Allen",
             postType: .course,
             urlString: "https://www.youtube.com/watch?v=CwA1VWP0Ldw",
             postPlatform: .youtube,
-            postDate: nil,
+            postDate: Date.from(year: 2022, month: 10, day: 8),
+            studyLevel: .beginner,
             origin: .cloudNew
         ),
         Post(
             title: "SwiftUI Fundamentals",
             intro: """
-                A full course for absolute beginner.
+                A full course for absolute beginner ~ 12 hours.
                 """,
             author: "Sean Allen",
             postType: .course,
             urlString: "https://www.youtube.com/watch?v=b1oC7sLIgpI",
             postPlatform: .youtube,
-            postDate: nil,
+            postDate: Date.from(year: 2023, month: 9, day: 6),
+            studyLevel: .beginner,
             origin: .cloudNew
         ),
         Post(
@@ -135,10 +132,12 @@ struct DevData {
             intro: """
                 A complete guide for learning how to use git. Practice using Source Control within Xcode, GitKraken, and Github. Get familiar with Git Flow.
                 """,
-            author: "Nick Sarno",
+            author: "Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiALKk34l9mUS2f4mdJPvXq",
             postPlatform: .youtube,
+            postDate: Date.from(year: 2024, month: 5, day: 20),
+            studyLevel: .beginner,
             origin: .cloudNew
         ),
         Post(
@@ -146,11 +145,12 @@ struct DevData {
             intro: """
                 Building a map app to showcase real destinations around the world. Get familiar with data management and transitions.
                 """,
-            author: "Nick Sarno",
+            author: "Swiftful Thinking",
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdpha5eVTjLM0eRlJ7-yDDwBk",
             postPlatform: .youtube,
-            postDate: nil,
+            postDate: Date.from(year: 2021, month: 12, day: 29),
+            studyLevel: .beginner,
             origin: .cloudNew
         ),
 //        Post(
