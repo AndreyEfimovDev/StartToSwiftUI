@@ -71,7 +71,7 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2024, month: 8, day: 24),
+            postDate: Date.from(year: 2021, month: 2, day: 3),
             studyLevel: .beginner,
             origin: .cloudNew
         ),

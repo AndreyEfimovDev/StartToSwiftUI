@@ -48,9 +48,13 @@ struct PreferencesView: View {
                 postDrafts
                 checkForPostsUpdate
                 importFromCloud
-                shareBackup
+                if !vm.allPosts.isEmpty {
+                    shareBackup
+                }
                 restoreBackup
-                erasePosts
+                if !vm.allPosts.isEmpty {
+                    erasePosts
+                }
             }
             Section(header: sectionHeader("Сommunication")){
                 acknowledgements
