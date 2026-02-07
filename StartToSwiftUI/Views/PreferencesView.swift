@@ -11,17 +11,14 @@ import SwiftData
 struct PreferencesView: View {
     
     // MARK: - Dependencies
-    
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     // MARK: - Constants
-    
     let iconSize: CGFloat = 18
     
     // MARK: - Body
-    
     var body: some View {
         Form {
             Section(header: sectionHeader("Appearance")) {

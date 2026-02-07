@@ -11,19 +11,15 @@ import SwiftData
 struct StartView: View {
     
     // MARK: - Dependencies
-    
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     // MARK: - States
-    
     @State private var showLaunchView: Bool = true
-//    @State private var isLoadingData = true
     @State private var visibility: NavigationSplitViewVisibility = .doubleColumn
     
     // MARK: - Body
-    
     var body: some View {
         ZStack {
             if showLaunchView {
@@ -57,7 +53,8 @@ struct StartView: View {
     
     private var iPadContent: some View {
         NavigationSplitView(columnVisibility: $visibility) {
-#warning("Delete this commented out code snippet before deployment to App Store")
+#if DEBUG
+#warning("Delete this commented out code snippet before deployment")
             //                    //                if let categories = vm.allCategories {
             //                    //                    List(categories, id: \.self, selection: $vm.selectedCategory) { category in
             //                    //                        Text(category)
@@ -68,7 +65,9 @@ struct StartView: View {
             //                    //                    Text("No categories")
             //                    //                }
             //                    //            } content: {
-            
+#else
+    #error("Remove this debug code before App Store release!")
+#endif
             if let selectedCategory = vm.selectedCategory {
                 NavigationStack(path: $coordinator.path) {
                     HomeView(selectedCategory: selectedCategory)
@@ -103,11 +102,9 @@ struct StartView: View {
     @ViewBuilder
     private func destinationView(for route: AppRoute) -> some View {
         switch route {
-            
             // Post details View
         case .postDetails(let postId):
             PostDetailsView(postId: postId)
-            
         default:
             EmptyView()
         }
@@ -126,33 +123,10 @@ struct StartView: View {
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     
-    NavigationStack {
-        StartView()
-            .modelContainer(container)
-            .environmentObject(AppCoordinator())
-            .environmentObject(postsVM)
-            .environmentObject(noticesVM)
-    }
-}
-
-#Preview("With Extended Posts") {
-    let extendedPosts = PreviewData.samplePosts
-    let postsVM = PostsViewModel(
-        dataSource: MockPostsDataSource(posts: extendedPosts)
-    )
-    let noticesVM = NoticeViewModel(
-        dataSource: MockNoticesDataSource()
-    )
-    let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppSyncState.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-    )
+    StartView()
+        .modelContainer(container)
+        .environmentObject(AppCoordinator())
+        .environmentObject(postsVM)
+        .environmentObject(noticesVM)
     
-    NavigationStack {
-        StartView()
-            .modelContainer(container)
-            .environmentObject(AppCoordinator())
-            .environmentObject(postsVM)
-            .environmentObject(noticesVM)
-    }
 }
