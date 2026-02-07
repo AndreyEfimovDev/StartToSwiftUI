@@ -64,7 +64,7 @@ struct CheckForPostsUpdateView: View {
                     .foregroundStyle(statusColor)
                 Spacer()
                 if isInProgress {
-                    CustomProgressView(scale: 1, isNoText: true)
+                    ProgressView()
                 }
             }
             if let lastDate = vm.lastCuratedPostsLoadedDate {
