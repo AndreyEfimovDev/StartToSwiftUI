@@ -359,23 +359,23 @@ final class PostsViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Backup & Restore
-    
-    func getFilePath(fileName: String) -> Result<URL, FileStorageError> {
-        guard fileName == Constants.localPostsFileName else {
-            return .failure(.fileNotFound)
-        }
-        
-        log("🍓FM(getFilePath): Exporting from SwiftData...", level: .info)
-        
-        switch exportPostsToJSON() {
-        case .success(let url):
-            log("🍓FM(getFilePath): Successfully got file url: \(url).", level: .info)
-            return .success(url)
-        case .failure(let error):
-            return .failure(.exportError(error.localizedDescription))
-        }
-    }
+//    // MARK: - Backup & Restore
+//    
+//    func getFilePath(fileName: String) -> Result<URL, FileStorageError> {
+//        guard fileName == Constants.localPostsFileName else {
+//            return .failure(.fileNotFound)
+//        }
+//        
+//        log("🍓FM(getFilePath): Exporting from SwiftData...", level: .info)
+//        
+//        switch exportPostsToJSON() {
+//        case .success(let url):
+//            log("🍓FM(getFilePath): Successfully got file url: \(url).", level: .info)
+//            return .success(url)
+//        case .failure(let error):
+//            return .failure(.exportError(error.localizedDescription))
+//        }
+//    }
     
     func getPostsFromBackup(url: URL, completion: @escaping (Int) -> Void) {
         

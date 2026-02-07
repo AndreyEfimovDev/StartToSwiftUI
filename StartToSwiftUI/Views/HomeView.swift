@@ -308,7 +308,7 @@ struct HomeView: View {
     // MARK: - Filters View
 
     private var filtersSheet: some View {
-        FiltersSheetView(isFilterButtonPressed: $isFilterButtonPressed)
+        FiltersView(isFilterButtonPressed: $isFilterButtonPressed)
             .presentationBackground(.ultraThinMaterial)
             .presentationDetents([.height(600)])
             .presentationDragIndicator(.visible)

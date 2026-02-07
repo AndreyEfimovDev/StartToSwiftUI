@@ -41,7 +41,7 @@ struct NoticeDetailsView: View {
                         Text(validNotice.noticeMessage)
                             .font(.body)
                             .padding()
-                            .frame(minHeight: 300, alignment: .topLeading)
+//                            .frame(minHeight: 300, alignment: .topLeading)
                             .frame(maxWidth: .infinity,  alignment: .leading)
                             .background(
                                 .thinMaterial,
