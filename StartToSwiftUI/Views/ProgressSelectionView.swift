@@ -137,12 +137,7 @@ struct ProgressSelectionView: View {
     let vm = PostsViewModel(
         dataSource: MockPostsDataSource(posts: extendedPosts)
     )
-    
-    let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppSyncState.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-    )
-        
+            
     ProgressSelectionView() {}
         .environmentObject(vm)
         .onAppear {
@@ -156,11 +151,6 @@ struct ProgressSelectionView: View {
         dataSource: MockPostsDataSource(posts: extendedPosts)
     )
     
-    let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppSyncState.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-    )
-        
     ProgressSelectionView() {}
         .environmentObject(vm)
         .onAppear {

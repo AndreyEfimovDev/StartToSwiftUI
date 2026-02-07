@@ -156,11 +156,6 @@ struct RatingSelectionView: View {
     let vm = PostsViewModel(
         dataSource: MockPostsDataSource(posts: extendedPosts)
     )
-    
-    let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppSyncState.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-    )
         
     RatingSelectionView() {}
         .environmentObject(vm)
@@ -174,12 +169,7 @@ struct RatingSelectionView: View {
     let vm = PostsViewModel(
         dataSource: MockPostsDataSource(posts: extendedPosts)
     )
-    
-    let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppSyncState.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-    )
-        
+            
     RatingSelectionView() {}
         .environmentObject(vm)
         .onAppear {
