@@ -24,18 +24,18 @@ struct DevData {
             postDate: Date.from(year: 2023, month: 7, day: 14),
             origin: .cloudNew
         ),
-        Post(
-            title: "iOS Dev Beginner Course",
-            intro: """
-                The first 7 videos from the iOS dev beginner course.
-                """,
-            author: "Sean Allen",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgHtditjG_y2DuYuj9FJommY",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2020, month: 4, day: 20),
-            origin: .cloudNew
-        ),
+//        Post(
+//            title: "iOS Dev Beginner Course",
+//            intro: """
+//                The first 7 videos from the iOS dev beginner course.
+//                """,
+//            author: "Sean Allen",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgHtditjG_y2DuYuj9FJommY",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2020, month: 4, day: 20),
+//            origin: .cloudNew
+//        ),
         Post(
             title: "Swift for Complete Beginners",
             intro: """
@@ -88,45 +88,45 @@ struct DevData {
             studyLevel: .beginner,
             origin: .cloudNew
         ),
-        Post(
-            title: "Swift Keywords",
-            intro: """
-                The playlist explains many Swift Language keywords.
-                """,
-            author: "Sean Allen",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgHx8DgGsHB4Dh_H_78x8oQE",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2019, month: 10, day: 30),
-            studyLevel: .beginner,
-            origin: .cloudNew
-        ),
-        Post(
-            title: "Swift Programming Tutorial",
-            intro: """
-                Swift Programming Tutorial - full course for absolute beginner ~ 10,5 hours.
-                """,
-            author: "Sean Allen",
-            postType: .course,
-            urlString: "https://www.youtube.com/watch?v=CwA1VWP0Ldw",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2022, month: 10, day: 8),
-            studyLevel: .beginner,
-            origin: .cloudNew
-        ),
-        Post(
-            title: "SwiftUI Fundamentals",
-            intro: """
-                A full course for absolute beginner ~ 12 hours.
-                """,
-            author: "Sean Allen",
-            postType: .course,
-            urlString: "https://www.youtube.com/watch?v=b1oC7sLIgpI",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2023, month: 9, day: 6),
-            studyLevel: .beginner,
-            origin: .cloudNew
-        ),
+//        Post(
+//            title: "Swift Keywords",
+//            intro: """
+//                The playlist explains many Swift Language keywords.
+//                """,
+//            author: "Sean Allen",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgHx8DgGsHB4Dh_H_78x8oQE",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2019, month: 10, day: 30),
+//            studyLevel: .beginner,
+//            origin: .cloudNew
+//        ),
+//        Post(
+//            title: "Swift Programming Tutorial",
+//            intro: """
+//                Swift Programming Tutorial - full course for absolute beginner ~ 10,5 hours.
+//                """,
+//            author: "Sean Allen",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/watch?v=CwA1VWP0Ldw",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2022, month: 10, day: 8),
+//            studyLevel: .beginner,
+//            origin: .cloudNew
+//        ),
+//        Post(
+//            title: "SwiftUI Fundamentals",
+//            intro: """
+//                A full course for absolute beginner ~ 12 hours.
+//                """,
+//            author: "Sean Allen",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/watch?v=b1oC7sLIgpI",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2023, month: 9, day: 6),
+//            studyLevel: .beginner,
+//            origin: .cloudNew
+//        ),
         Post(
             title: "Git & Source Control",
             intro: """
