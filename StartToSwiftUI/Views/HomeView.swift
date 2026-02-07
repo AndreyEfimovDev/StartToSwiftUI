@@ -11,7 +11,6 @@ import SwiftData
 struct HomeView: View {
     
     // MARK: - Dependencies
-
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
@@ -19,13 +18,10 @@ struct HomeView: View {
     private let hapticManager = HapticService.shared
     
     // MARK: - Constants
-    
     let selectedCategory: String?
-    
     private let longPressDuration: Double = 0.5
 
     // MARK: - States
-
     @State private var selectedPostToDelete: Post?
     @State private var showOnTopButton: Bool = false
     @State private var isShowingDeleteConfirmation: Bool = false
@@ -35,7 +31,6 @@ struct HomeView: View {
     @State private var isFilterButtonPressed: Bool = false
     
     // MARK: - Computed Properties
-    
     private var disableHomeView: Bool {
         isLongPressSuccess || showViewOnDoubleTap || isShowingDeleteConfirmation
     }
@@ -48,7 +43,6 @@ struct HomeView: View {
     }
     
     // MARK: BODY
-    
     var body: some View {
         GeometryReader { proxy in
             ScrollViewReader { scrollProxy in
@@ -87,7 +81,6 @@ struct HomeView: View {
     }
     
     // MARK: Subviews
-
     private var listPostRowsContent: some View {
         List {
             ForEach(postsToDisplay) { post in
