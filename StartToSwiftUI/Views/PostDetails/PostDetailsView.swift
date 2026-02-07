@@ -12,7 +12,6 @@ struct PostDetailsView: View {
     
     // MARK: - Dependencies
     
-    @Environment(\.dismiss) var dismiss
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
@@ -381,7 +380,7 @@ struct PostDetailsView: View {
 
 #Preview("Post Details with Mock Data") {
     let extendedPosts = PreviewData.samplePosts
-    let postsVM = PostsViewModel(
+    let vm = PostsViewModel(
         dataSource: MockPostsDataSource(posts: extendedPosts)
     )
     
@@ -393,9 +392,13 @@ struct PostDetailsView: View {
     if let firstPost = PreviewData.samplePosts.first {
         NavigationStack {
             PostDetailsView(postId: firstPost.id)
-                .environmentObject(postsVM)
+                .environmentObject(vm)
                 .environmentObject(AppCoordinator())
                 .modelContainer(container)
+                .onAppear {
+                    vm.selectedPostId = PreviewData.samplePost1.id
+                }
+
         }
     } else {
         Text("No posts available")

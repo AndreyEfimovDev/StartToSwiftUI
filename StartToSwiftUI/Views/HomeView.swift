@@ -358,7 +358,7 @@ struct HomeView: View {
     
     private var filteredPostsIsEmpty: some View {
         ContentUnavailableView(
-            "No Results matching your filter/search criteria",
+            "No Results matching your search criteria",
             systemImage: "magnifyingglass",
             description: Text("Check the spelling or try a new search.")
         )
