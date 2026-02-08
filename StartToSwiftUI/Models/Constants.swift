@@ -18,7 +18,7 @@ struct Constants {
     // GitHub cloud url on JSON file with TEST notifications
     static let cloudNoticesURL = "https://raw.githubusercontent.com/AndreyEfimovDev/Archive/refs/heads/main/notificaions_app.json"
 
-    
+    static let mainCategory = "SwiftUI"
     // Filename for File Manager to keep all posts locally saved
     static let localPostsFileName = "posts_app.json"
     

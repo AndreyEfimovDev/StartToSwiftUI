@@ -288,7 +288,7 @@ final class PostsViewModelTests: XCTestCase {
         [post1, post2, post3].forEach { vm.addPost($0) }
         
         // When
-        vm.searchText = "SwiftUI"
+        vm.searchText = Constants.mainCategory
         
         // Ждем debounce
         try await Task.sleep(nanoseconds: 600_000_000)

@@ -58,7 +58,7 @@ struct HomeView: View {
                 }
             }
             .disabled(disableHomeView)
-            .navigationTitle(vm.selectedCategory ?? "SwiftUI")
+            .navigationTitle(vm.selectedCategory ?? Constants.mainCategory)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
@@ -121,6 +121,7 @@ struct HomeView: View {
 
     private func refresh() {
         vm.loadPostsFromSwiftData()
+        vm.updateWidgetData()
         Task {
             await noticevm.importNoticesFromCloud()
         }
@@ -436,7 +437,7 @@ struct HomeView: View {
     )
     
     NavigationStack {
-        HomeView(selectedCategory: "SwiftUI")
+        HomeView(selectedCategory: Constants.mainCategory)
             .modelContainer(container)
             .environmentObject(AppCoordinator())
             .environmentObject(postsVM)

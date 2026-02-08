@@ -36,7 +36,7 @@ final class PostsViewModel: ObservableObject {
     
     var allYears: [String]? = nil
     var allCategories: [String]? = nil
-    let mainCategory: String = "SwiftUI"
+    let mainCategory: String = Constants.mainCategory
     var dispatchTime: DispatchTime { .now() + 1.5 }
     
     // MARK: - Computed Properties

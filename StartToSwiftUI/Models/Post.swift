@@ -12,7 +12,7 @@ import SwiftData
 @Model
 final class Post {
     var id: String = UUID().uuidString // CloudKit DO NOT support @Attribute(.unique)
-    var category: String = "SwiftUI"
+    var category: String = Constants.mainCategory
     var title: String = ""
     var intro: String = ""
     var author: String = ""
@@ -80,7 +80,7 @@ final class Post {
 
     init(
         id: String = UUID().uuidString,
-        category: String = "SwiftUI",
+        category: String = Constants.mainCategory,
         title: String = "",
         intro: String = "",
         author: String = "",
