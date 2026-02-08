@@ -10,240 +10,284 @@ import Foundation
 struct DevData {
 #warning("Delete this file before deployment to App Store")
     static let postsForCloud = [
+
         
-// 2026-02-06
+// NEW
         Post(
-            title: "Swift Basics",
+            title: "Download images with @escaping, Combine and Async/Await",
             intro: """
-                    Start with the Swift programming language writing a first line of code and learn the fundamentals.
+                In this lesson you start using async and await taking a look at the 3 main ways to write asynchronous code in Swift, by an example of downloading an image using:
+                (1) @escaping closures
+                (2) Combine
+                (3) Async / Await
                 """,
             author: "Swiftful Thinking",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiLvzZFJI6rVIBtdolrJBVB",
+            postType: .post,
+            urlString: "https://youtu.be/9fXI6o39jLQ?si=SlBHPxUZWyIl_pgf",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2023, month: 7, day: 14),
-            origin: .cloudNew
+            postDate: Date.from(year: 2022, month: 4, day: 27),
+            studyLevel: .middle,
+            origin: .cloudNew,
         ),
+        Post(
+            title: "Struct vs Class vs Actor, Value vs Reference Types, Stack vs Heap",
+            intro: """
+                The lesson covers the different between different data types in context of and far beyond Swift Concurrency:
+                (1) Structs vs Classes vs Actors
+                (2) Value vs Reference Types
+                (3) Stack vs Heap memory
+                (4) Automatic Reference Counting (ARC) in Swift
+                (5) Weak vs Strong References
+                """,
+            author: "Swiftful Thinking",
+            postType: .post,
+            urlString: "https://youtu.be/-JLenSTKEcA?si=T10f05je27bNKRPD",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2022, month: 5, day: 18),
+            studyLevel: .middle,
+            origin: .cloudNew,
+        ),
+        
+        
+// 2026-02-06
 //        Post(
-//            title: "iOS Dev Beginner Course",
+//            title: "Swift Basics",
 //            intro: """
-//                The first 7 videos from the iOS dev beginner course.
+//                    Start with the Swift programming language writing a first line of code and learn the fundamentals.
 //                """,
-//            author: "Sean Allen",
+//            author: "Swiftful Thinking",
 //            postType: .course,
-//            urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgHtditjG_y2DuYuj9FJommY",
+//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiLvzZFJI6rVIBtdolrJBVB",
 //            postPlatform: .youtube,
-//            postDate: Date.from(year: 2020, month: 4, day: 20),
+//            postDate: Date.from(year: 2023, month: 7, day: 14),
 //            origin: .cloudNew
 //        ),
+//        Post(
+//            title: "Swift for Complete Beginners",
+//            intro: """
+//                All the core concepts required to get started building apps with Swift and SwiftUI.
+//                """,
+//            author: "Paul Hudson",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLuoeXyslFTuaYpVr3S9wG6PkIvYn_yHbg",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2021, month: 10, day: 14),
+//            origin: .cloudNew
+//        ),
+//
+//        Post(
+//            title: "Mastering Xcode",
+//            intro: """
+//                Master Xcode through tutorials.
+//                """,
+//            author: "Stewart Lynch",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4CUCcA3fqvsRtx153akAJU1",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2023, month: 8, day: 13),
+//            studyLevel: .beginner,
+//            origin: .cloudNew
+//        ),
+//        Post(
+//            title: "SwiftUI Bootcamp",
+//            intro: """
+//                Learning SwiftUI by building beautiful screens and other UI components.
+//                """,
+//            author: "Swiftful Thinking",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2021, month: 2, day: 3),
+//            studyLevel: .beginner,
+//            origin: .cloudNew
+//        ),
+//        Post(
+//            title: "SwiftUI Todo List",
+//            intro: """
+//                Building a real application with MVVM app architecture.
+//                """,
+//            author: "Swiftful Thinking",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpheGqemblOIA7v3oq0MS30i",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2021, month: 3, day: 20),
+//            studyLevel: .beginner,
+//            origin: .cloudNew
+//        ),
+//        Post(
+//            title: "Git & Source Control",
+//            intro: """
+//                A complete guide for learning how to use git. Practice using Source Control within Xcode, GitKraken, and Github. Get familiar with Git Flow.
+//                """,
+//            author: "Swiftful Thinking",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiALKk34l9mUS2f4mdJPvXq",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2024, month: 5, day: 20),
+//            studyLevel: .beginner,
+//            origin: .cloudNew
+//        ),
+//        Post(
+//            title: "SwiftUI Map App",
+//            intro: """
+//                Building a map app to showcase real destinations around the world. Get familiar with data management and transitions.
+//                """,
+//            author: "Swiftful Thinking",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdpha5eVTjLM0eRlJ7-yDDwBk",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2021, month: 12, day: 29),
+//            studyLevel: .beginner,
+//            origin: .cloudNew
+//        )
+        
+        
+ /*
+                Post(
+                    title: "iOS Dev Beginner Course",
+                    intro: """
+                        The first 7 videos from the iOS dev beginner course.
+                        """,
+                    author: "Sean Allen",
+                    postType: .course,
+                    urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgHtditjG_y2DuYuj9FJommY",
+                    postPlatform: .youtube,
+                    postDate: Date.from(year: 2020, month: 4, day: 20),
+                    origin: .cloudNew
+                ),
+
         Post(
-            title: "Swift for Complete Beginners",
+            title: "Swift Keywords",
             intro: """
-                All the core concepts required to get started building apps with Swift and SwiftUI.
+                The playlist explains many Swift Language keywords.
                 """,
-            author: "Paul Hudson",
+            author: "Sean Allen",
             postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLuoeXyslFTuaYpVr3S9wG6PkIvYn_yHbg",
+            urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgHx8DgGsHB4Dh_H_78x8oQE",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 10, day: 14),
+            postDate: Date.from(year: 2019, month: 10, day: 30),
+            studyLevel: .beginner,
+            origin: .cloudNew
+        ),
+        Post(
+            title: "Swift Programming Tutorial",
+            intro: """
+                Swift Programming Tutorial - full course for absolute beginner ~ 10,5 hours.
+                """,
+            author: "Sean Allen",
+            postType: .course,
+            urlString: "https://www.youtube.com/watch?v=CwA1VWP0Ldw",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2022, month: 10, day: 8),
+            studyLevel: .beginner,
+            origin: .cloudNew
+        ),
+        Post(
+            title: "SwiftUI Fundamentals",
+            intro: """
+                A full course for absolute beginner ~ 12 hours.
+                """,
+            author: "Sean Allen",
+            postType: .course,
+            urlString: "https://www.youtube.com/watch?v=b1oC7sLIgpI",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2023, month: 9, day: 6),
+            studyLevel: .beginner,
             origin: .cloudNew
         ),
 
         Post(
-            title: "Mastering Xcode",
+            title: "SwiftData",
             intro: """
-                Master Xcode through tutorials.
+                A series on learning how to build an application using SwiftData as your persistence layer.
                 """,
             author: "Stewart Lynch",
             postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4CUCcA3fqvsRtx153akAJU1",
+            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4Ck-JEF2nkcFTF_2rhGBMKX",
+            postPlatform: .website,
+            postDate: nil,
+            studyLevel: .middle,
+            origin: .cloudNew
+        ),
+
+        Post(
+            title: "JSON and Codable Protocol - Swift",
+            intro: """
+                7 part series on learning how to use Xcode to manage Git version control.
+                """,
+            author: "Stewart Lynch",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4DADQtPjCfXrBHuPHLO80oU",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2023, month: 8, day: 13),
-            studyLevel: .beginner,
+            postDate: nil,
+            studyLevel: .middle,
+            origin: .cloudNew,
+        ),
+        Post(
+            title: "SwiftUI Continued Learning",
+            intro: """
+                Building professional apps requires knowledge of data persistence and networking. This bootcamp builds on your existing knowledge of SwiftUI.
+                """,
+            author: "Nick Sarno",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar",
+            postDate: nil,
+            studyLevel: .middle,
             origin: .cloudNew
         ),
         Post(
-            title: "SwiftUI Bootcamp",
+            title: "SwiftUI Crypto App",
             intro: """
-                Learning SwiftUI by building beautiful screens and other UI components.
+                Build a cryptocurrency app that downloads live price data from an API and saves the current user's portfolio. Get comfortable with Combine, Core Data, and MVVM.
                 """,
-            author: "Swiftful Thinking",
+            author: "Nick Sarno",
             postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO",
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 2, day: 3),
-            studyLevel: .beginner,
+            postDate: nil,
+            studyLevel: .middle,
             origin: .cloudNew
         ),
         Post(
-            title: "SwiftUI Todo List",
+            title: "SwiftUI + Firebase",
             intro: """
-                Building a real application with MVVM app architecture.
-                """,
-            author: "Swiftful Thinking",
+            Become an expert at using Google Firebase. Set up user authentication, connect to a remote database, and track your app's performance in real-time.
+            
+            Learn how to integrate Firebase into your iOS app with Swift code in our comprehensive tutorial series. Our step-by-step guide will teach you everything you need to know about using Firebase in your mobile app development, perfect for developers of all levels.
+            """,
+            author: "Nick Sarno",
             postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpheGqemblOIA7v3oq0MS30i",
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphl8ly0oi0aHx0v2B7UvDK0",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 3, day: 20),
-            studyLevel: .beginner,
-            origin: .cloudNew
-        ),
-//        Post(
-//            title: "Swift Keywords",
-//            intro: """
-//                The playlist explains many Swift Language keywords.
-//                """,
-//            author: "Sean Allen",
-//            postType: .course,
-//            urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgHx8DgGsHB4Dh_H_78x8oQE",
-//            postPlatform: .youtube,
-//            postDate: Date.from(year: 2019, month: 10, day: 30),
-//            studyLevel: .beginner,
-//            origin: .cloudNew
-//        ),
-//        Post(
-//            title: "Swift Programming Tutorial",
-//            intro: """
-//                Swift Programming Tutorial - full course for absolute beginner ~ 10,5 hours.
-//                """,
-//            author: "Sean Allen",
-//            postType: .course,
-//            urlString: "https://www.youtube.com/watch?v=CwA1VWP0Ldw",
-//            postPlatform: .youtube,
-//            postDate: Date.from(year: 2022, month: 10, day: 8),
-//            studyLevel: .beginner,
-//            origin: .cloudNew
-//        ),
-//        Post(
-//            title: "SwiftUI Fundamentals",
-//            intro: """
-//                A full course for absolute beginner ~ 12 hours.
-//                """,
-//            author: "Sean Allen",
-//            postType: .course,
-//            urlString: "https://www.youtube.com/watch?v=b1oC7sLIgpI",
-//            postPlatform: .youtube,
-//            postDate: Date.from(year: 2023, month: 9, day: 6),
-//            studyLevel: .beginner,
-//            origin: .cloudNew
-//        ),
-        Post(
-            title: "Git & Source Control",
-            intro: """
-                A complete guide for learning how to use git. Practice using Source Control within Xcode, GitKraken, and Github. Get familiar with Git Flow.
-                """,
-            author: "Swiftful Thinking",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiALKk34l9mUS2f4mdJPvXq",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2024, month: 5, day: 20),
-            studyLevel: .beginner,
-            origin: .cloudNew
+            postDate: nil,
+            studyLevel: .middle,
+            origin: .cloudNew,
         ),
         Post(
-            title: "SwiftUI Map App",
+            title: "Swift Concurrency",
             intro: """
-                Building a map app to showcase real destinations around the world. Get familiar with data management and transitions.
+                Swift Concurrency is a major upgrade to the Swift language that completely changes how to write asynchronous code in Swift. Learn everything that you need to know.
                 """,
-            author: "Swiftful Thinking",
+            author: "Nick Sarno",
             postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdpha5eVTjLM0eRlJ7-yDDwBk",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 12, day: 29),
-            studyLevel: .beginner,
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphr2Dl4sY4rS9PLzPdyi8PM",
+            postDate: nil,
+            studyLevel: .middle,
             origin: .cloudNew
         ),
-//        Post(
-//            title: "SwiftData",
-//            intro: """
-//                A series on learning how to build an application using SwiftData as your persistence layer.
-//                """,
-//            author: "Stewart Lynch",
-//            postType: .course,
-//            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4Ck-JEF2nkcFTF_2rhGBMKX",
-//            postPlatform: .website,
-//            postDate: nil,
-//            studyLevel: .middle,
-//            origin: .cloudNew
-//        ),
-//
-//        Post(
-//            title: "JSON and Codable Protocol - Swift",
-//            intro: """
-//                7 part series on learning how to use Xcode to manage Git version control.
-//                """,
-//            author: "Stewart Lynch",
-//            postType: .course,
-//            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4DADQtPjCfXrBHuPHLO80oU",
-//            postPlatform: .youtube,
-//            postDate: nil,
-//            studyLevel: .middle,
-//            origin: .cloudNew,
-//        ),
-//        Post(
-//            title: "SwiftUI Continued Learning",
-//            intro: """
-//                Building professional apps requires knowledge of data persistence and networking. This bootcamp builds on your existing knowledge of SwiftUI.
-//                """,
-//            author: "Nick Sarno",
-//            postType: .course,
-//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar",
-//            postDate: nil,
-//            studyLevel: .middle,
-//            origin: .cloudNew
-//        ),
-//        Post(
-//            title: "SwiftUI Crypto App",
-//            intro: """
-//                Build a cryptocurrency app that downloads live price data from an API and saves the current user's portfolio. Get comfortable with Combine, Core Data, and MVVM.
-//                """,
-//            author: "Nick Sarno",
-//            postType: .course,
-//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
-//            postPlatform: .youtube,
-//            postDate: nil,
-//            studyLevel: .middle,
-//            origin: .cloudNew
-//        ),
-//        Post(
-//            title: "SwiftUI + Firebase",
-//            intro: """
-//            Become an expert at using Google Firebase. Set up user authentication, connect to a remote database, and track your app's performance in real-time.
-//            
-//            Learn how to integrate Firebase into your iOS app with Swift code in our comprehensive tutorial series. Our step-by-step guide will teach you everything you need to know about using Firebase in your mobile app development, perfect for developers of all levels.
-//            """,
-//            author: "Nick Sarno",
-//            postType: .course,
-//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphl8ly0oi0aHx0v2B7UvDK0",
-//            postPlatform: .youtube,
-//            postDate: nil,
-//            studyLevel: .middle,
-//            origin: .cloudNew,
-//        ),
-//        Post(
-//            title: "Swift Concurrency",
-//            intro: """
-//                Swift Concurrency is a major upgrade to the Swift language that completely changes how to write asynchronous code in Swift. Learn everything that you need to know.
-//                """,
-//            author: "Nick Sarno",
-//            postType: .course,
-//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphr2Dl4sY4rS9PLzPdyi8PM",
-//            postDate: nil,
-//            studyLevel: .middle,
-//            origin: .cloudNew
-//        ),
-//
-//        Post(
-//            title: "SwiftUI Advanced Learning",
-//            intro: """
-//                Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
-//                """,
-//            author: "Nick Sarno",
-//            postType: .course,
-//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
-//            studyLevel: .advanced,
-//            origin: .cloudNew
-//        ),
+
+        Post(
+            title: "SwiftUI Advanced Learning",
+            intro: """
+                Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
+                """,
+            author: "Nick Sarno",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
+            studyLevel: .advanced,
+            origin: .cloudNew
+        ),
+        */
     ]
         
     
