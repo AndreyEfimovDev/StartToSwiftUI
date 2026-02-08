@@ -304,6 +304,22 @@ struct HomeView: View {
 
     private var filtersSheet: some View {
         FiltersView(isFilterButtonPressed: $isFilterButtonPressed)
+            .overlay(alignment: .top) {
+                if UIDevice.isiPhone {
+                    LinearGradient(
+                        colors: [
+                            Color.mycolor.mySecondary.opacity(0.1),
+                            Color.clear
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .frame(height: 30)
+                    .clipShape(
+                        RoundedRectangle(cornerRadius: 30)
+                    )
+                }
+            }
             .presentationBackground(.ultraThinMaterial)
             .presentationDetents([.height(600)])
             .presentationDragIndicator(.visible)

@@ -62,19 +62,6 @@ struct FiltersView: View {
         .foregroundStyle(Color.mycolor.myAccent)
         .padding(.top, -40)
         .padding(.horizontal)
-        .overlay(
-            RoundedRectangle(cornerRadius: 30)
-                .stroke(
-                    Color.mycolor.mySecondary,
-                    lineWidth: UIDevice.isiPhone ? 1 : 0
-                )
-                .mask(
-                    VStack {
-                        Rectangle().frame(height: 100)
-                        Spacer()
-                    }
-                )
-        )
         .onDisappear {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
             isFilterButtonPressed = false
@@ -84,7 +71,6 @@ struct FiltersView: View {
     // MARK: Subviews
     
     private var sortOptions: some View {
-        
         VStack {
             Text("Sort:")
                 .font(.footnote)
