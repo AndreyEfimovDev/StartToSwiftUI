@@ -76,6 +76,7 @@ struct HomeView: View {
                 vm.loadPostsFromSwiftData() // for syncing with the cloud in case of any changes on other devices
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
                 noticevm.playSoundNotificationIfNeeded()
+                vm.updateWidgetData()
             }
         }
     }

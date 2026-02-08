@@ -93,14 +93,12 @@ final class PostsViewModel: ObservableObject {
         
         setupTimezone()
         restoreFilters()
-        loadPostsFromSwiftData()
+//        loadPostsFromSwiftData()
         setupSubscriptions()
-        updateWidgetData()
-        
+//        updateWidgetData()
         Task {
             await initializeAppState()
         }
-        
         // Subscribing to changes from CloudKit
         setupSubscriptionForChangesInCloud()
     }
