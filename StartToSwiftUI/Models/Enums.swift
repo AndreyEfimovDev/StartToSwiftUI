@@ -292,25 +292,7 @@ enum TimePeriod: String, CaseIterable, Identifiable {
 
 }
 // MARK: - Network Errors
-
-//enum NetworkError: LocalizedError {
-//    case invalidURL
-//    case invalidResponse
-//    case noData
-//    
-//    var errorDescription: String? {
-//        switch self {
-//        case .invalidURL:
-//            return "Invalid URL"
-//        case .invalidResponse:
-//            return "Invalid server response"
-//        case .noData:
-//            return "No data received"
-//        }
-//    }
-//}
-
-enum APIError: Error, LocalizedError {
+enum NetworkError: Error, LocalizedError {
     case invalidURL
     case invalidResponseStatus
     case dataTaskError(String)
