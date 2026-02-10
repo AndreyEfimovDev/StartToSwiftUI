@@ -56,10 +56,6 @@ final class NoticeViewModel: ObservableObject {
         
         // Subscribing to changes from CloudKit
         setupSubscriptionForChangesInCloud()
-//        
-//        Task {
-//            await importNoticesFromCloud()
-//        }
     }
     
     /// Convenience initializer for backward compatibility

@@ -11,14 +11,12 @@ import SwiftData
 struct CheckForPostsUpdateView: View {
     
     // MARK: - Dependencies
-    
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     private let hapticManager = HapticService.shared
     
     // MARK: - State
-    
     @State private var statusText = "Checking for update..."
     @State private var statusColor = Color.mycolor.myAccent
     @State private var isInProgress = true
@@ -28,7 +26,6 @@ struct CheckForPostsUpdateView: View {
     @State private var importedCount = 0
     
     // MARK: - Body
-    
     var body: some View {
         FormCoordinatorToolbar(
             title: "Check for posts update",
