@@ -86,27 +86,25 @@ final class PostsViewModel: ObservableObject {
     // MARK: - Init
     init(
         dataSource: PostsDataSourceProtocol,
-        networkService: NetworkServiceProtocol = NetworkService(baseURL: Constants.cloudPostsURL)
+        networkService: NetworkServiceProtocol = NetworkService(urlString: Constants.cloudPostsURL)
     ) {
         self.dataSource = dataSource
         self.networkService = networkService
         
         setupTimezone()
         restoreFilters()
-//        loadPostsFromSwiftData()
         setupSubscriptions()
-//        updateWidgetData()
+        // Subscribing to changes from CloudKit
+        setupSubscriptionForChangesInCloud()
         Task {
             await initializeAppState()
         }
-        // Subscribing to changes from CloudKit
-        setupSubscriptionForChangesInCloud()
     }
     
     /// Convenience initialiser for backward compatibility
     convenience init(
         modelContext: ModelContext,
-        networkService: NetworkServiceProtocol = NetworkService(baseURL: Constants.cloudPostsURL)
+        networkService: NetworkServiceProtocol = NetworkService(urlString: Constants.cloudPostsURL)
     ) {
         self.init(
             dataSource: SwiftDataPostsDataSource(modelContext: modelContext),
@@ -284,7 +282,6 @@ final class PostsViewModel: ObservableObject {
             log("☁️ Imported \(cloudResponse.count) posts from \(sourceName))", level: .info)
             
             // Filter unique posts by ID and title
-            
             let newPosts = filterUniquePosts(from: cloudResponse)
             
             guard !newPosts.isEmpty else {
