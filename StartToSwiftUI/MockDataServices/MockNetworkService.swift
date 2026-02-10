@@ -34,7 +34,7 @@ final class MockNetworkService: NetworkServiceProtocol {
         
         // Simulating an error
         if shouldFail {
-            throw APIError.invalidResponseStatus
+            throw NetworkError.invalidResponseStatus
         }
         
         // Returning mock data
