@@ -12,21 +12,18 @@ import SwiftData
 struct ImportPostsFromCloudView: View {
     
     // MARK: - Dependencies
-    
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     private let hapticManager = HapticService.shared
     
     // MARK: - State
-    
     @State private var isInProgress = false
     @State private var isLoaded = false
     @State private var importedCount = 0
     @State private var initialPostCount = 0
     
     // MARK: - Body
-    
     var body: some View {
         FormCoordinatorToolbar(
             title: "Import materials from cloud",
@@ -49,20 +46,13 @@ struct ImportPostsFromCloudView: View {
             .padding(.horizontal, 30)
             .padding(.top, 30)
             .onAppear {
-// to make sure that it is synced with the cloud in case of any changes on other devices
                 vm.loadPostsFromSwiftData()
-            }
-            .alert("Download Error", isPresented: $vm.showErrorMessageAlert) {
-                Button("OK", role: .cancel) {
-                    coordinator.pop()
-                }
-            } message: {
-                Text(vm.errorMessage ?? "Unknown error")
             }
         }
     }
     
     // MARK: Subviews
+    
     private var descriptionText: some View {
         Text("""
             The collection of SwiftUI tutorials and articles to make it easy for complete beginners to get started.
@@ -101,7 +91,7 @@ struct ImportPostsFromCloudView: View {
 
         // Download local DevData (for internal use)
         // Uncomment this part when you need to load DevData
-//        await loadDevData()
+//        loadDevData()
        
         // Download from the cloud (main stream)
         // Comment out this part when using DevData
@@ -112,22 +102,16 @@ struct ImportPostsFromCloudView: View {
 #warning("Delete this func loadDevData() before deployment to App Store")
 
     /// Loading DevData (for internal use, to generate JSON file for cloud)
-     private func loadDevData() async {
-         let addedCount = await vm.loadDevData()
-         
-         await MainActor.run {
-             importedCount = addedCount
-             isInProgress = false
-             isLoaded = true
-             hapticManager.notification(type: .success)
-         }
-         
-         try? await Task.sleep(nanoseconds: 1_500_000_000)
-         
-         await MainActor.run {
-             coordinator.closeModal()
-         }
-     }
+    private func loadDevData() {
+        importedCount = vm.loadDevData()
+        isInProgress = false
+        isLoaded = true
+        hapticManager.notification(type: .success)
+        
+        DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+            coordinator.closeModal()
+        }
+    }
     
     /// Downloading from a cloud service
     private func loadFromCloudService() async {
