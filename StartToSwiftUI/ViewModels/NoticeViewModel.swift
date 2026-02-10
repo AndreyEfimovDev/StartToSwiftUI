@@ -48,7 +48,7 @@ final class NoticeViewModel: ObservableObject {
     
     init(
         dataSource: NoticesDataSourceProtocol,
-        networkService: NetworkServiceProtocol = NetworkService(baseURL: Constants.cloudNoticesURL)
+        networkService: NetworkServiceProtocol = NetworkService(urlString: Constants.cloudNoticesURL)
     ) {
         self.dataSource = dataSource
         self.networkService = networkService
@@ -65,7 +65,7 @@ final class NoticeViewModel: ObservableObject {
     /// Convenience initializer for backward compatibility
       convenience init(
           modelContext: ModelContext,
-          networkService: NetworkServiceProtocol = NetworkService(baseURL: Constants.cloudNoticesURL)
+          networkService: NetworkServiceProtocol = NetworkService(urlString: Constants.cloudNoticesURL)
       ) {
           self.init(
               dataSource: SwiftDataNoticesDataSource(modelContext: modelContext),

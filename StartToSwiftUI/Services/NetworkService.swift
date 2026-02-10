@@ -7,14 +7,68 @@
 
 import Foundation
 
-// MARK: - Real Implementation
+
 final class NetworkService: ObservableObject {
     
-    let baseURL: String
+    let urlString: String
     
-    init(baseURL: String) {
-        self.baseURL = baseURL
+    init(urlString: String) {
+        self.urlString = urlString
     }
+    
+    func fetchDataFromURLAsync<T: Codable>() async throws -> T {
+        
+        guard
+            let url = URL(string: urlString)
+        else {
+            throw APIError.invalidURL
+        }
+        
+        do {
+            let (jsonData, response) = try await URLSession.shared.data(from: url)
+            guard
+                let httpResponse = response as? HTTPURLResponse,
+                httpResponse.statusCode >= 200 && httpResponse.statusCode < 300
+            else {
+                throw APIError.invalidResponseStatus
+            }
+            do {
+                let decodedData = try JSONDecoder.appDecoder.decode(T.self, from: jsonData)
+                return decodedData
+            } catch {
+                throw APIError.decodingError(error.localizedDescription)
+            }
+        } catch {
+            throw APIError.dataTaskError(error.localizedDescription)
+        }
+    }
+
+    /*
+    func handleResponse<T: Codable>(data: Data?, response: URLResponse?) -> T? {
+        
+        guard
+            let jsonData = data,
+            let response = response as? HTTPURLResponse,
+            response.statusCode >= 200 && response.statusCode < 300 else {
+                return nil
+            }
+        
+        do {
+            let decodedData = try JSONDecoder.appDecoder.decode(T.self, from: jsonData)
+            return decodedData
+        } catch {
+            return nil
+        }
+    }
+    
+    func getUrl(urlString: String) -> URL? {
+        if let url = URL(string: urlString) {
+            return url
+        } else  {
+            return nil
+        }
+    }
+    
     
     func fetchDataFromURLAsync<T: Codable>() async throws -> T {
         return try await withCheckedThrowingContinuation { continuation in
@@ -29,7 +83,7 @@ final class NetworkService: ObservableObject {
         completion: @escaping (Result<T, Error>) -> Void
     ) {
                
-        guard let url = URL(string: baseURL) else {
+        guard let url = URL(string: urlString) else {
             completion(.failure(NetworkError.invalidURL))
             return
         }
@@ -69,6 +123,7 @@ final class NetworkService: ObservableObject {
         }
         task.resume()
     }
+     */
 }
 // MARK: - Protocol
 protocol NetworkServiceProtocol {
