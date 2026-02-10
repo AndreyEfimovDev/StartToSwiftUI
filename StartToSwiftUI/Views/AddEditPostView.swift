@@ -348,7 +348,7 @@ struct AddEditPostView: View {
     // MARK: - Sections
     
     private var titleSection: some View {
-        FormSection(title: "Title") {
+        FormSectionViewWraper(title: "Title") {
             HStack(spacing: 0) {
                 TextField("", text: $editedPost.title)
                     .font(fontTextInput)
@@ -366,7 +366,7 @@ struct AddEditPostView: View {
     }
     
     private var introSection: some View {
-        FormSection(title: "Intro") {
+        FormSectionViewWraper(title: "Intro") {
             HStack(spacing: 0) {
                 TextEditor(text: $editedPost.intro)
                     .font(fontTextInput)
@@ -391,7 +391,7 @@ struct AddEditPostView: View {
     }
     
     private var authorSection: some View {
-        FormSection(title: "Author") {
+        FormSectionViewWraper(title: "Author") {
             HStack(spacing: 0) {
                 TextField("", text: $editedPost.author)
                     .font(fontTextInput)
@@ -410,7 +410,7 @@ struct AddEditPostView: View {
     }
 
     private var typeSection: some View {
-        FormSection(title: "Post Type") {
+        FormSectionViewWraper(title: "Post Type") {
             UnderlineSermentedPickerNotOptional(
                 selection: $editedPost.postType,
                 allItems: PostType.selectablePostTypeCases,
@@ -424,7 +424,7 @@ struct AddEditPostView: View {
     }
 
     private var studyLevelSection: some View {
-        FormSection(title: "Study Level") {
+        FormSectionViewWraper(title: "Study Level") {
             UnderlineSermentedPickerNotOptional(
                 selection: $editedPost.studyLevel,
                 allItems: StudyLevel.allCases,
@@ -438,7 +438,7 @@ struct AddEditPostView: View {
     }
 
     private var platformSection: some View {
-        FormSection(title: "Platform") {
+        FormSectionViewWraper(title: "Platform") {
             UnderlineSermentedPickerNotOptional(
                 selection: $editedPost.postPlatform,
                 allItems: Platform.allCases,
@@ -452,7 +452,7 @@ struct AddEditPostView: View {
     }
     
     private var postDateSection: some View {
-        FormSection(title: "Post Date") {
+        FormSectionViewWraper(title: "Post Date") {
             ZStack {
                 HStack {
                     Button(editedPost.postDate == nil ? "Set date" : "Reset date") {
@@ -485,7 +485,7 @@ struct AddEditPostView: View {
     }
 
     private var urlSection: some View {
-        FormSection(title: "URL") {
+        FormSectionViewWraper(title: "URL") {
             HStack(spacing: 0) {
                 TextField("", text: $editedPost.urlString)
                     .font(fontTextInput)
@@ -507,7 +507,7 @@ struct AddEditPostView: View {
     }
 
     private var notesSection: some View {
-        FormSection(title: "Notes") {
+        FormSectionViewWraper(title: "Notes") {
             HStack(spacing: 0) {
                 TextEditor(text: $editedPost.notes)
                     .font(fontTextInput)
