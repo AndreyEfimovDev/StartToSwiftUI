@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 final class Notice {
-    var id: String = UUID().uuidString // CloudKit НЕ поддерживает @Attribute(.unique)
+    var id: String = UUID().uuidString // CloudKit DOES NOT support @Attribute(.unique)
     var title: String = ""
     var noticeDate: Date = Date()
     var noticeMessage: String  = ""
@@ -28,6 +28,19 @@ final class Notice {
         self.noticeDate = noticeDate
         self.noticeMessage = noticeMessage
         self.isRead = isRead
+    }
+}
+
+// MARK: Converts JSON codable notice to a SwiftData notice
+struct NoticeMigrationHelper {
+    static func convertFromCodable(_ codableNotice: CodableNotice) -> Notice {
+        return Notice(
+            id: codableNotice.id,
+            title: codableNotice.title,
+            noticeDate: codableNotice.noticeDate,
+            noticeMessage: codableNotice.noticeMessage,
+            isRead: codableNotice.isRead
+        )
     }
 }
 

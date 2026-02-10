@@ -332,16 +332,3 @@ final class NoticeViewModel: ObservableObject {
     }
 
 }
-
-// MARK: Convert an old encoded JSON notice to a SwiftData one
-struct NoticeMigrationHelper {
-    static func convertFromCodable(_ codableNotice: CodableNotice) -> Notice {
-        return Notice(
-            id: codableNotice.id,
-            title: codableNotice.title,
-            noticeDate: codableNotice.noticeDate,
-            noticeMessage: codableNotice.noticeMessage,
-            isRead: codableNotice.isRead
-        )
-    }
-}
