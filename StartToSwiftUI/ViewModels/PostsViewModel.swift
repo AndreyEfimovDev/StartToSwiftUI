@@ -38,6 +38,8 @@ final class PostsViewModel: ObservableObject {
     var allCategories: [String]? = nil
     let mainCategory: String = Constants.mainCategory
     var dispatchTime: DispatchTime { .now() + 1.5 }
+    var dispatchFor: Double = 1.5
+
     
     // MARK: - Computed Properties
     
@@ -133,7 +135,6 @@ final class PostsViewModel: ObservableObject {
     }
     
     private func restoreFilters() {
-                
         selectedCategory = storedCategory
         selectedLevel = storedLevel
         selectedFavorite = storedFavorite
@@ -161,10 +162,8 @@ final class PostsViewModel: ObservableObject {
     
     /// Loading posts from SwiftData
     func loadPostsFromSwiftData() {
-        
         //        let callStack = Thread.callStackSymbols.joined(separator: "\n")
         //        log("📊 [CALL STACK] loadPostsFromSwiftData called from:\n\(callStack)", level: .debug)
-        
         do {
             allPosts = try dataSource.fetchPosts()
             allYears = getAllYears()
@@ -268,10 +267,8 @@ final class PostsViewModel: ObservableObject {
         saveContextAndReload()
     }
     
-    
     // MARK: - Cloud import of curated study materials
-    
-    func importPostsFromCloud(completion: @escaping () -> Void) async {
+    func importPostsFromCloud() async -> Bool {
         
         clearError()
         
@@ -281,39 +278,79 @@ final class PostsViewModel: ObservableObject {
             let cloudResponse: [CodablePost] = try await networkService.fetchDataFromURLAsync()
             log("☁️ Imported \(cloudResponse.count) posts from \(sourceName))", level: .info)
             
-            // Filter unique posts by ID and title
             let newPosts = filterUniquePosts(from: cloudResponse)
             
             guard !newPosts.isEmpty else {
                 hapticManager.impact(style: .light)
                 log("ℹ️ No new posts from \(sourceName)", level: .info)
-                completion()
-                return
+                return true // успех, просто нет новых
             }
-            // Add new posts
+            
             for post in newPosts {
                 post.addedDateStamp = .now
                 dataSource.insert(post)
             }
             saveContextAndReload()
             
-            // SwiftData-specific logic (только для SwiftData)
             if let appStateManager {
-                // Update the date of the last import of curated posts
                 let latestDate = getLatestDateFromPosts(posts: allPosts) ?? .now
                 appStateManager.setLastDateOfCuaratedPostsLoaded(latestDate)
-                // As a result of importing curated posts - no new materials -> false
                 appStateManager.setCuratedPostsLoadStatusOff()
             }
             
             hapticManager.notification(type: .success)
             log("✅ Added \(newPosts.count) new posts from \(sourceName)", level: .info)
+            return true
             
         } catch {
             handleError(error, message: "Import error from \(sourceName)")
+            return false
         }
-        completion()
     }
+    
+//    func importPostsFromCloud(completion: @escaping () -> Void) async {
+//        
+//        clearError()
+//        
+//        let sourceName = isSwiftData ? "SwiftData" : "(Mock)"
+//        
+//        do {
+//            let cloudResponse: [CodablePost] = try await networkService.fetchDataFromURLAsync()
+//            log("☁️ Imported \(cloudResponse.count) posts from \(sourceName))", level: .info)
+//            
+//            // Filter unique posts by ID and title
+//            let newPosts = filterUniquePosts(from: cloudResponse)
+//            
+//            guard !newPosts.isEmpty else {
+//                hapticManager.impact(style: .light)
+//                log("ℹ️ No new posts from \(sourceName)", level: .info)
+//                completion()
+//                return
+//            }
+//            // Add new posts
+//            for post in newPosts {
+//                post.addedDateStamp = .now
+//                dataSource.insert(post)
+//            }
+//            saveContextAndReload()
+//            
+//            // SwiftData-specific logic (только для SwiftData)
+//            if let appStateManager {
+//                // Update the date of the last import of curated posts
+//                let latestDate = getLatestDateFromPosts(posts: allPosts) ?? .now
+//                appStateManager.setLastDateOfCuaratedPostsLoaded(latestDate)
+//                // As a result of importing curated posts - no new materials -> false
+//                appStateManager.setCuratedPostsLoadStatusOff()
+//            }
+//            
+//            hapticManager.notification(type: .success)
+//            log("✅ Added \(newPosts.count) new posts from \(sourceName)", level: .info)
+//            
+//        } catch {
+//            handleError(error, message: "Import error from \(sourceName)")
+//        }
+//        completion()
+//    }
     
     /// Check for updates to available posts in the cloud.
     ///
