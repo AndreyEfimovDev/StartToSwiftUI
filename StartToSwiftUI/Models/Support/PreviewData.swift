@@ -21,7 +21,7 @@ struct PreviewData {
     )
     static let sampleNotice2 = Notice(
         id: "002",
-        title: "New App release 01.01.02 is availavle New App release 01.01.02 is availavle",
+        title: "New App release 01.01.02 is availavle New App release 01.01.02 is available",
         noticeDate: .now + 1,
         noticeMessage: """
             New release includes the following:
@@ -33,7 +33,7 @@ struct PreviewData {
     )
     static let sampleNotice3 = Notice(
         id: "003",
-        title: "New App release 01.01.03 is availavle",
+        title: "New App release 01.01.03 is available",
         noticeDate: .now + 2,
         noticeMessage: """
             New release includes the following:

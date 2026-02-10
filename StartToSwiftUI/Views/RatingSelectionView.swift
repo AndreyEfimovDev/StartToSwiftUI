@@ -25,63 +25,29 @@ struct RatingSelectionView: View {
                 VStack {
                     ZStack(alignment: .topTrailing) {
                         xmarkButton
-                        .padding()
-                        .zIndex(1)
-                        
+                            .padding()
+                            .zIndex(1)
                         VStack {
-                            Text("Rate Material")
-                                .font(.title3).bold()
-                                .foregroundStyle(Color.mycolor.myBlue)
-                            VStack (spacing: 8) {
-                                Text(post.title)
-                                    .font(.headline)
-                                    .minimumScaleFactor(0.75)
-                                    .lineLimit(2)
-                                    .multilineTextAlignment(.center)
-                                
-                                Text("@" + post.author)
-                                    .font(.footnote)
-                                    .lineLimit(1)
-                            }
-                            .foregroundStyle(Color.mycolor.myAccent)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding(.top)
-                            
+                            header(post)
                             ratingIconsView
                                 .overlay(raringOverlayView.mask(ratingIconsView))
                                 .padding(.vertical, 30)
-                            
-                            HStack (spacing: 20) {
-                                if vm.selectedRating != nil {
-                                    ClearCupsuleButton(
-                                        primaryTitle: "Reset",
-                                        primaryTitleColor: Color.mycolor.myRed) {
-                                            withAnimation(.easeInOut(duration: 0.3)) {
-                                                vm.selectedRating = nil
-                                            }
-                                        }
-                                        .frame(maxWidth: 200)
-                                }
-                                ClearCupsuleButton(
-                                    primaryTitle: "Place",
-                                    primaryTitleColor: Color.mycolor.myBlue) {
-                                        vm.ratePost(post)
-                                        completion()
-                                    }
-                                    .frame(maxWidth: 200)
-                            }
-                            .padding(.bottom)
+                            bottomResetPlaceButtons(post)
                         } // VStack
                         .padding(20)
-                    } // ZStack
-                } //VStack
+                    }
+                }
                 .onAppear {
                     vm.selectedRating = post.postRating
                 }
             } else {
-                Text("No post found")
+                VStack{
+                    xmarkButton
+                    Text("No post found")
+                        .padding()
+                }
             }
-        } // Group
+        }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             .bar,
@@ -93,6 +59,29 @@ struct RatingSelectionView: View {
             isShowingView = true
         }
     }
+    
+    @ViewBuilder
+    private func header(_ post: Post) -> some View {
+        Text("Rate Material")
+            .font(.title3).bold()
+            .foregroundStyle(Color.mycolor.myBlue)
+        VStack (spacing: 8) {
+            Text(post.title)
+                .font(.headline)
+                .minimumScaleFactor(0.75)
+                .lineLimit(2)
+                .multilineTextAlignment(.center)
+            
+            Text("@" + post.author)
+                .font(.footnote)
+                .lineLimit(1)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+        .frame(maxWidth: .infinity, alignment: .center)
+        .padding(.top)
+
+    }
+    
     private var xmarkButton: some View {
         CircleStrokeButtonView(
             iconName: "xmark",
@@ -135,17 +124,55 @@ struct RatingSelectionView: View {
         }
         .allowsHitTesting(false)
     }
+    
+    @ViewBuilder
+    private func bottomResetPlaceButtons(_ post: Post) -> some View {
+        HStack (spacing: 20) {
+            if vm.selectedRating != nil {
+                ClearCupsuleButton(
+                    primaryTitle: "Reset",
+                    primaryTitleColor: Color.mycolor.myRed) {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            vm.selectedRating = nil
+                        }
+                    }
+                    .frame(maxWidth: 200)
+            }
+            ClearCupsuleButton(
+                primaryTitle: "Place",
+                primaryTitleColor: Color.mycolor.myBlue) {
+                    vm.ratePost(post)
+                    completion()
+                }
+                .frame(maxWidth: 200)
+        }
+        .padding(.bottom)
+
+    }
 }
 
-#Preview {
-    let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppSyncState.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+#Preview ("Valid post") {
+    let extendedPosts = PreviewData.samplePosts
+    let vm = PostsViewModel(
+        dataSource: MockPostsDataSource(posts: extendedPosts)
     )
-    let context = ModelContext(container)
-    
-    let vm = PostsViewModel(modelContext: context)
-    
+        
     RatingSelectionView() {}
         .environmentObject(vm)
+        .onAppear {
+            vm.selectedPostId = PreviewData.samplePost1.id
+        }
+}
+
+#Preview ("Invalid post") {
+    let extendedPosts = PreviewData.samplePosts
+    let vm = PostsViewModel(
+        dataSource: MockPostsDataSource(posts: extendedPosts)
+    )
+            
+    RatingSelectionView() {}
+        .environmentObject(vm)
+        .onAppear {
+            vm.selectedPostId = nil
+        }
 }

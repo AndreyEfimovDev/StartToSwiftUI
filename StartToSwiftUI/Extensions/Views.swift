@@ -205,7 +205,8 @@ extension View {
         self
             .padding(.vertical, 2)
             .padding(.horizontal,8)
-            .background(Color.mycolor.mySecondary.opacity(0.3))
+//            .background(Color.mycolor.mySecondary.opacity(0.15))
+            .background(.ultraThinMaterial)
             .clipShape(.capsule)
     }
 }

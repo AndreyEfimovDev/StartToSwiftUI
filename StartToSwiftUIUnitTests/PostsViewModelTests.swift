@@ -288,7 +288,7 @@ final class PostsViewModelTests: XCTestCase {
         [post1, post2, post3].forEach { vm.addPost($0) }
         
         // When
-        vm.searchText = "SwiftUI"
+        vm.searchText = Constants.mainCategory
         
         // Ждем debounce
         try await Task.sleep(nanoseconds: 600_000_000)
@@ -382,10 +382,7 @@ final class PostsViewModelTests: XCTestCase {
         XCTAssertNil(foundPost)
     }
     
-    func testCheckIfAllFiltersAreEmpty() {
-//        // When & Then - Initially should be true
-//        XCTAssertTrue(vm.checkIfAllFiltersAreEmpty())
-        
+    func testCheckIfAllFiltersAreEmpty() {        
         // When
         vm.selectedLevel = .beginner
         vm.selectedType = .course
@@ -417,9 +414,10 @@ final class PostsViewModelTests: XCTestCase {
         )
         
         // When
-        await testVM.importPostsFromCloud {}
+        let success = await testVM.importPostsFromCloud()
         
         // Then
+        XCTAssertTrue(success)
         XCTAssertEqual(testVM.allPosts.count, 2)
         XCTAssertEqual(mockNetwork.fetchCallCount, 1)
     }
@@ -433,9 +431,10 @@ final class PostsViewModelTests: XCTestCase {
         )
         
         // When
-        await testVM.importPostsFromCloud {}
+        let success = await testVM.importPostsFromCloud()
         
         // Then
+        XCTAssertTrue(success)
         XCTAssertNotNil(testVM.errorMessage)
         XCTAssertTrue(testVM.showErrorMessageAlert)
         XCTAssertEqual(testVM.allPosts.count, 0)
@@ -458,9 +457,11 @@ final class PostsViewModelTests: XCTestCase {
         )
         
         // When
-        await testVM.importPostsFromCloud {}
+        // When
+        let success = await testVM.importPostsFromCloud()
         
         // Then
+        XCTAssertTrue(success)
         XCTAssertEqual(testVM.allPosts.count, 2) // Only new post added
     }
 
@@ -479,9 +480,11 @@ final class PostsViewModelTests: XCTestCase {
         )
         
         // When
-        await testVM.importPostsFromCloud {}
+        // When
+        let success = await testVM.importPostsFromCloud()
         
         // Then
+        XCTAssertTrue(success)
         XCTAssertEqual(testVM.allPosts.count, 3)
         XCTAssertTrue(testVM.allPosts.contains { $0.studyLevel == .beginner })
         XCTAssertTrue(testVM.allPosts.contains { $0.studyLevel == .middle })
@@ -502,9 +505,10 @@ final class PostsViewModelTests: XCTestCase {
         )
         
         // When
-        await testVM.importPostsFromCloud {}
+        let success = await testVM.importPostsFromCloud()
         
         // Then
+        XCTAssertTrue(success)
         let favoriteCount = testVM.allPosts.filter { $0.favoriteChoice == .yes }.count
         XCTAssertEqual(favoriteCount, 1)
     }
@@ -523,9 +527,10 @@ final class PostsViewModelTests: XCTestCase {
         )
         
         // When
-        await testVM.importPostsFromCloud {}
+        let success = await testVM.importPostsFromCloud()
         
         // Then
+        XCTAssertTrue(success)
         let draftCount = testVM.allPosts.filter { $0.draft }.count
         XCTAssertEqual(draftCount, 1)
     }

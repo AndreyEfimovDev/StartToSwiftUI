@@ -11,7 +11,6 @@ import SwiftData
 struct HomeView: View {
     
     // MARK: - Dependencies
-
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticeViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
@@ -19,13 +18,10 @@ struct HomeView: View {
     private let hapticManager = HapticService.shared
     
     // MARK: - Constants
-    
     let selectedCategory: String?
-    
     private let longPressDuration: Double = 0.5
 
     // MARK: - States
-
     @State private var selectedPostToDelete: Post?
     @State private var showOnTopButton: Bool = false
     @State private var isShowingDeleteConfirmation: Bool = false
@@ -35,7 +31,6 @@ struct HomeView: View {
     @State private var isFilterButtonPressed: Bool = false
     
     // MARK: - Computed Properties
-    
     private var disableHomeView: Bool {
         isLongPressSuccess || showViewOnDoubleTap || isShowingDeleteConfirmation
     }
@@ -48,7 +43,6 @@ struct HomeView: View {
     }
     
     // MARK: BODY
-    
     var body: some View {
         GeometryReader { proxy in
             ScrollViewReader { scrollProxy in
@@ -64,7 +58,7 @@ struct HomeView: View {
                 }
             }
             .disabled(disableHomeView)
-            .navigationTitle(vm.selectedCategory ?? "SwiftUI")
+            .navigationTitle(vm.selectedCategory ?? Constants.mainCategory)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
@@ -78,16 +72,31 @@ struct HomeView: View {
             }
             .overlay { gestureOverlays(proxy: proxy) }
             .overlay { deleteConfirmationOverlay }
-            .onAppear {
-                vm.loadPostsFromSwiftData() // for syncing with the cloud in case of any changes on other devices
+            .alert("Error", isPresented: $vm.showErrorMessageAlert, actions: {
+                Button("OK") {}
+            }, message: {
+                if let errorMessage = vm.errorMessage {
+                    Text(errorMessage)
+                }
+            })
+            .alert("Error", isPresented: $noticevm.showErrorMessageAlert, actions: {
+                Button("OK") {}
+            }, message: {
+                if let errorMessage = noticevm.errorMessage {
+                    Text(errorMessage)
+                }
+            })
+            .task {
+                vm.loadPostsFromSwiftData()
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
                 noticevm.playSoundNotificationIfNeeded()
+                vm.updateWidgetData()
+                await noticevm.importNoticesFromCloud()
             }
         }
     }
     
     // MARK: Subviews
-
     private var listPostRowsContent: some View {
         List {
             ForEach(postsToDisplay) { post in
@@ -127,6 +136,7 @@ struct HomeView: View {
 
     private func refresh() {
         vm.loadPostsFromSwiftData()
+        vm.updateWidgetData()
         Task {
             await noticevm.importNoticesFromCloud()
         }
@@ -308,7 +318,23 @@ struct HomeView: View {
     // MARK: - Filters View
 
     private var filtersSheet: some View {
-        FiltersSheetView(isFilterButtonPressed: $isFilterButtonPressed)
+        FiltersView(isFilterButtonPressed: $isFilterButtonPressed)
+            .overlay(alignment: .top) {
+                if UIDevice.isiPhone {
+                    LinearGradient(
+                        colors: [
+                            Color.mycolor.mySecondary.opacity(0.1),
+                            Color.clear
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .frame(height: 30)
+                    .clipShape(
+                        RoundedRectangle(cornerRadius: 30)
+                    )
+                }
+            }
             .presentationBackground(.ultraThinMaterial)
             .presentationDetents([.height(600)])
             .presentationDragIndicator(.visible)
@@ -358,7 +384,7 @@ struct HomeView: View {
     
     private var filteredPostsIsEmpty: some View {
         ContentUnavailableView(
-            "No Results matching your filter/search criteria",
+            "No Results matching your search criteria",
             systemImage: "magnifyingglass",
             description: Text("Check the spelling or try a new search.")
         )
@@ -442,7 +468,7 @@ struct HomeView: View {
     )
     
     NavigationStack {
-        HomeView(selectedCategory: "SwiftUI")
+        HomeView(selectedCategory: Constants.mainCategory)
             .modelContainer(container)
             .environmentObject(AppCoordinator())
             .environmentObject(postsVM)
