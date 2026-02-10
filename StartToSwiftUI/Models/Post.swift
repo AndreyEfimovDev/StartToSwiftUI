@@ -11,7 +11,7 @@ import SwiftData
 
 @Model
 final class Post {
-    var id: String = UUID().uuidString // CloudKit DO NOT support @Attribute(.unique)
+    var id: String = UUID().uuidString // CloudKit DOES NOT support @Attribute(.unique)
     var category: String = Constants.mainCategory
     var title: String = ""
     var intro: String = ""

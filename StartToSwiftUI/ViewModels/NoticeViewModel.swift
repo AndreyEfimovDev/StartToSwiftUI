@@ -48,7 +48,7 @@ final class NoticeViewModel: ObservableObject {
     
     init(
         dataSource: NoticesDataSourceProtocol,
-        networkService: NetworkServiceProtocol = NetworkService(baseURL: Constants.cloudNoticesURL)
+        networkService: NetworkServiceProtocol = NetworkService(urlString: Constants.cloudNoticesURL)
     ) {
         self.dataSource = dataSource
         self.networkService = networkService
@@ -56,16 +56,12 @@ final class NoticeViewModel: ObservableObject {
         
         // Subscribing to changes from CloudKit
         setupSubscriptionForChangesInCloud()
-        
-        Task {
-            await importNoticesFromCloud()
-        }
     }
     
     /// Convenience initializer for backward compatibility
       convenience init(
           modelContext: ModelContext,
-          networkService: NetworkServiceProtocol = NetworkService(baseURL: Constants.cloudNoticesURL)
+          networkService: NetworkServiceProtocol = NetworkService(urlString: Constants.cloudNoticesURL)
       ) {
           self.init(
               dataSource: SwiftDataNoticesDataSource(modelContext: modelContext),
@@ -335,17 +331,4 @@ final class NoticeViewModel: ObservableObject {
         }
     }
 
-}
-
-// MARK: Convert an old encoded JSON notice to a SwiftData one
-struct NoticeMigrationHelper {
-    static func convertFromCodable(_ codableNotice: CodableNotice) -> Notice {
-        return Notice(
-            id: codableNotice.id,
-            title: codableNotice.title,
-            noticeDate: codableNotice.noticeDate,
-            noticeMessage: codableNotice.noticeMessage,
-            isRead: codableNotice.isRead
-        )
-    }
 }

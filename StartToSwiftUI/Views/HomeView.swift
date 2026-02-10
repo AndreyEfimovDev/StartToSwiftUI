@@ -72,11 +72,26 @@ struct HomeView: View {
             }
             .overlay { gestureOverlays(proxy: proxy) }
             .overlay { deleteConfirmationOverlay }
-            .onAppear {
-                vm.loadPostsFromSwiftData() // for syncing with the cloud in case of any changes on other devices
+            .alert("Error", isPresented: $vm.showErrorMessageAlert, actions: {
+                Button("OK") {}
+            }, message: {
+                if let errorMessage = vm.errorMessage {
+                    Text(errorMessage)
+                }
+            })
+            .alert("Error", isPresented: $noticevm.showErrorMessageAlert, actions: {
+                Button("OK") {}
+            }, message: {
+                if let errorMessage = noticevm.errorMessage {
+                    Text(errorMessage)
+                }
+            })
+            .task {
+                vm.loadPostsFromSwiftData()
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
                 noticevm.playSoundNotificationIfNeeded()
                 vm.updateWidgetData()
+                await noticevm.importNoticesFromCloud()
             }
         }
     }
