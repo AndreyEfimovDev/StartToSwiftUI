@@ -36,11 +36,12 @@ final class PostsViewModel: ObservableObject {
     
     var allYears: [String]? = nil
     var allCategories: [String]? = nil
-    let mainCategory: String = "SwiftUI"
-    var dispatchTime: DispatchTime { .now() + 1.5 }
+    let mainCategory: String = Constants.mainCategory
+    var dispatchTime: DispatchTime { .now() + 1.5 } // for DispatchQueue.main.asyncAfter(deadline: ...)
+    var dispatchFor: Double = 1.5 // for Task.sleep(for: .seconds ...)
+
     
     // MARK: - Computed Properties
-    
     private var swiftDataSource: SwiftDataPostsDataSource? {
         dataSource as? SwiftDataPostsDataSource
     }
@@ -86,29 +87,25 @@ final class PostsViewModel: ObservableObject {
     // MARK: - Init
     init(
         dataSource: PostsDataSourceProtocol,
-        networkService: NetworkServiceProtocol = NetworkService(baseURL: Constants.cloudPostsURL)
+        networkService: NetworkServiceProtocol = NetworkService(urlString: Constants.cloudPostsURL)
     ) {
         self.dataSource = dataSource
         self.networkService = networkService
         
         setupTimezone()
         restoreFilters()
-        loadPostsFromSwiftData()
         setupSubscriptions()
-        updateWidgetData()
-        
+        // Subscribing to changes from CloudKit
+        setupSubscriptionForChangesInCloud()
         Task {
             await initializeAppState()
         }
-        
-        // Subscribing to changes from CloudKit
-        setupSubscriptionForChangesInCloud()
     }
     
     /// Convenience initialiser for backward compatibility
     convenience init(
         modelContext: ModelContext,
-        networkService: NetworkServiceProtocol = NetworkService(baseURL: Constants.cloudPostsURL)
+        networkService: NetworkServiceProtocol = NetworkService(urlString: Constants.cloudPostsURL)
     ) {
         self.init(
             dataSource: SwiftDataPostsDataSource(modelContext: modelContext),
@@ -128,7 +125,7 @@ final class PostsViewModel: ObservableObject {
     private func setupSubscriptionForChangesInCloud() {
         NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
             .receive(on: DispatchQueue.main)
-            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main) // avoiding frequent updates
+            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.loadPostsFromSwiftData()
                 log("Cloud posts sync subscribtion run", level: .info)
@@ -137,7 +134,6 @@ final class PostsViewModel: ObservableObject {
     }
     
     private func restoreFilters() {
-                
         selectedCategory = storedCategory
         selectedLevel = storedLevel
         selectedFavorite = storedFavorite
@@ -165,10 +161,8 @@ final class PostsViewModel: ObservableObject {
     
     /// Loading posts from SwiftData
     func loadPostsFromSwiftData() {
-        
         //        let callStack = Thread.callStackSymbols.joined(separator: "\n")
         //        log("📊 [CALL STACK] loadPostsFromSwiftData called from:\n\(callStack)", level: .debug)
-        
         do {
             allPosts = try dataSource.fetchPosts()
             allYears = getAllYears()
@@ -272,10 +266,8 @@ final class PostsViewModel: ObservableObject {
         saveContextAndReload()
     }
     
-    
     // MARK: - Cloud import of curated study materials
-    
-    func importPostsFromCloud(completion: @escaping () -> Void) async {
+    func importPostsFromCloud() async -> Bool {
         
         clearError()
         
@@ -285,39 +277,34 @@ final class PostsViewModel: ObservableObject {
             let cloudResponse: [CodablePost] = try await networkService.fetchDataFromURLAsync()
             log("☁️ Imported \(cloudResponse.count) posts from \(sourceName))", level: .info)
             
-            // Filter unique posts by ID and title
-            
             let newPosts = filterUniquePosts(from: cloudResponse)
             
             guard !newPosts.isEmpty else {
                 hapticManager.impact(style: .light)
                 log("ℹ️ No new posts from \(sourceName)", level: .info)
-                completion()
-                return
+                return true // успех, просто нет новых
             }
-            // Add new posts
+            
             for post in newPosts {
                 post.addedDateStamp = .now
                 dataSource.insert(post)
             }
             saveContextAndReload()
             
-            // SwiftData-specific logic (только для SwiftData)
             if let appStateManager {
-                // Update the date of the last import of curated posts
                 let latestDate = getLatestDateFromPosts(posts: allPosts) ?? .now
                 appStateManager.setLastDateOfCuaratedPostsLoaded(latestDate)
-                // As a result of importing curated posts - no new materials -> false
                 appStateManager.setCuratedPostsLoadStatusOff()
             }
             
             hapticManager.notification(type: .success)
             log("✅ Added \(newPosts.count) new posts from \(sourceName)", level: .info)
+            return true
             
         } catch {
             handleError(error, message: "Import error from \(sourceName)")
+            return false
         }
-        completion()
     }
     
     /// Check for updates to available posts in the cloud.
@@ -360,23 +347,6 @@ final class PostsViewModel: ObservableObject {
     }
     
     // MARK: - Backup & Restore
-    
-    func getFilePath(fileName: String) -> Result<URL, FileStorageError> {
-        guard fileName == Constants.localPostsFileName else {
-            return .failure(.fileNotFound)
-        }
-        
-        log("🍓FM(getFilePath): Exporting from SwiftData...", level: .info)
-        
-        switch exportPostsToJSON() {
-        case .success(let url):
-            log("🍓FM(getFilePath): Successfully got file url: \(url).", level: .info)
-            return .success(url)
-        case .failure(let error):
-            return .failure(.exportError(error.localizedDescription))
-        }
-    }
-    
     func getPostsFromBackup(url: URL, completion: @escaping (Int) -> Void) {
         
         clearError()
@@ -681,9 +651,11 @@ final class PostsViewModel: ObservableObject {
         appStateManager?.getLastDateOfCuaratedPostsLoaded()
     }
     
+    
+#warning("Delete this func loadDevData() before deployment to App Store")
     // MARK: - DevData Import (creating posts for cloud)
     /// Loading DevData to generate JSON (for internal use)
-    func loadDevData() async -> Int {
+    func loadDevData() -> Int {
         let newPosts = filterUniquePosts(DevData.postsForCloud)
         
         guard !newPosts.isEmpty else {

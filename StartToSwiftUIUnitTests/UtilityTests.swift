@@ -18,7 +18,7 @@ final class UtilityTests: XCTestCase {
         // Given
         let codablePost = CodablePost(
             id: "test-id",
-            category: "SwiftUI",
+            category: Constants.mainCategory,
             title: "Test Title",
             intro: "Test Intro",
             author: "Test Author",
@@ -296,7 +296,7 @@ final class UtilityTests: XCTestCase {
             XCTAssertEqual(codablePost.progress, .added)
             XCTAssertEqual(codablePost.urlString, "https://example.com")
             XCTAssertEqual(codablePost.notes, "")
-            XCTAssertEqual(codablePost.category, "SwiftUI")
+            XCTAssertEqual(codablePost.category, Constants.mainCategory)
             XCTAssertEqual(codablePost.intro, "Test Intro")
             XCTAssertEqual(codablePost.author, "Test Author")
             XCTAssertEqual(codablePost.draft, false)
@@ -351,7 +351,7 @@ final class UtilityTests: XCTestCase {
             XCTAssertEqual(codablePost.id, "18F152F6-B9A7-43B5-ABCF-E116E3E9F51C")
             XCTAssertEqual(codablePost.title, "SwiftUI Crypto App")
             XCTAssertEqual(codablePost.author, "Nick Sarno/Swiftful Thinking")
-            XCTAssertEqual(codablePost.category, "SwiftUI")
+            XCTAssertEqual(codablePost.category, Constants.mainCategory)
             XCTAssertEqual(codablePost.postType, .course)
             XCTAssertEqual(codablePost.postPlatform, .youtube)
             XCTAssertEqual(codablePost.studyLevel, .middle)

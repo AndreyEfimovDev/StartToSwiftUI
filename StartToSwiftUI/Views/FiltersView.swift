@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct FiltersSheetView: View {
+struct FiltersView: View {
     
     // MARK: Dependencies
     @Environment(\.dismiss) var dismiss
@@ -71,7 +71,6 @@ struct FiltersSheetView: View {
     // MARK: Subviews
     
     private var sortOptions: some View {
-        
         VStack {
             Text("Sort:")
                 .font(.footnote)
@@ -286,7 +285,7 @@ struct FiltersSheetView: View {
     let vm = PostsViewModel(modelContext: context)
     
     ZStack {
-        FiltersSheetView(
+        FiltersView(
             isFilterButtonPressed: .constant(true)
         )
         .environmentObject(vm)

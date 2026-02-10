@@ -18,11 +18,17 @@ struct NoticeRowView: View {
                 .font(.caption2)
                 .padding(.top, 4)
             
-            Text(notice.title)
-                .font(.body)
-                .minimumScaleFactor(0.75)
-                .lineLimit(2, reservesSpace: true)
-                .padding(.vertical)
+            HStack(alignment: .bottom) {
+                Text(notice.title)
+                    .font(.body)
+                    .minimumScaleFactor(0.75)
+                    .lineLimit(2, reservesSpace: true)
+                Spacer()
+                Image(systemName: "ellipsis") // chevron.right
+                    .font(.caption)
+                    .opacity(0.5)
+            }
+            .padding(.vertical)
         }
         .foregroundStyle(Color.mycolor.myAccent)
         .fontWeight(notice.isRead ? .regular : .bold)

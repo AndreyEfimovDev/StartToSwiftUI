@@ -26,77 +26,29 @@ struct ProgressSelectionView: View {
             if let post = vm.allPosts.first(where: { $0.id == vm.selectedPostId}) {
                 VStack {
                     ZStack(alignment: .topTrailing) {
-                        CircleStrokeButtonView(
-                            iconName: "xmark",
-                            isShownCircle: false) {
-                                withAnimation {
-                                    completion()
-                                }
-                            }
+                        xmarkButton
                             .padding()
                             .zIndex(1)
-                        
                         VStack {
-                            Text("Update Progress")
-                                .font(.title3).bold()
-                                .foregroundStyle(selectionColor)
-                            VStack (spacing: 8) {
-                                Text(post.title)
-                                    .font(.headline)
-                                    .lineLimit(2)
-                                    .multilineTextAlignment(.center)
-                                
-                                Text("@" + post.author)
-                                    .font(.footnote)
-                                    .lineLimit(1)
-                            }
-                            .foregroundStyle(Color.mycolor.myAccent)
-                            .frame(maxWidth: .infinity/*, alignment: .center*/)
-                            .padding(.top)
-                            
-                            VStack {
-                                HStack {
-                                    ForEach(StudyProgress.allCases, id:\.self) { item in
-                                        let isSelected = vm.selectedStudyProgress == item
-                                        item.icon
-                                            .font(.caption)
-                                            .foregroundStyle(isSelected ? selectionColor : Color.mycolor.myAccent)
-                                            .fontWeight(isSelected ? .bold : .regular)
-                                            .frame(maxWidth: .infinity)
-                                    }
-                                }
-                                
-                                UnderlineSermentedPickerNotOptional(
-                                    selection: $vm.selectedStudyProgress,
-                                    allItems: StudyProgress.allCases,
-                                    titleForCase: { $0.displayName },
-                                    selectedFont: .caption,
-                                    selectedTextColor: selectionColor,
-                                    unselectedTextColor: Color.mycolor.myAccent
-                                )
-                            }
-                            .padding(30)
-                            
-                            ClearCupsuleButton(
-                                primaryTitle: "Place",
-                                primaryTitleColor: Color.mycolor.myBlue) {
-                                    vm.updatePostStudyProgress(post)
-                                    completion()
-                                }
-                                .padding(.horizontal)
-                                .frame(maxWidth: 200)
-                                .padding(.bottom)
-                        } // VStack
+                            header(post)
+                            progressSelector
+                            bottomPlaceButton(post)
+                        }
                         .padding(.vertical, 20)
-                    } // ZStack
-                } //VStack
+                    }
+                }
                 .onAppear {
                     vm.selectedStudyProgress = post.progress
                 }
             } else {
-                Text("No post found")
+                VStack{
+                    xmarkButton
+                    Text("No post found")
+                        .padding()
+                }
             }
-        } // Group
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             .bar,
             in: RoundedRectangle(cornerRadius: 30))
@@ -107,17 +59,102 @@ struct ProgressSelectionView: View {
             isShowingView = true
         }
     }
+    
+    @ViewBuilder
+    private func header(_ post: Post) -> some View {
+        Text("Update Progress")
+            .font(.title3).bold()
+            .foregroundStyle(selectionColor)
+        VStack (spacing: 8) {
+            Text(post.title)
+                .font(.headline)
+                .lineLimit(2)
+                .multilineTextAlignment(.center)
+            
+            Text("@" + post.author)
+                .font(.footnote)
+                .lineLimit(1)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+        .frame(maxWidth: .infinity/*, alignment: .center*/)
+        .padding(.top)
+
+    }
+    
+    private var progressSelector: some View {
+        VStack {
+            HStack {
+                ForEach(StudyProgress.allCases, id:\.self) { item in
+                    let isSelected = vm.selectedStudyProgress == item
+                    item.icon
+                        .font(.caption)
+                        .foregroundStyle(isSelected ? selectionColor : Color.mycolor.myAccent)
+                        .fontWeight(isSelected ? .bold : .regular)
+                        .frame(maxWidth: .infinity)
+                }
+            }
+            
+            UnderlineSermentedPickerNotOptional(
+                selection: $vm.selectedStudyProgress,
+                allItems: StudyProgress.allCases,
+                titleForCase: { $0.displayName },
+                selectedFont: .caption,
+                selectedTextColor: selectionColor,
+                unselectedTextColor: Color.mycolor.myAccent
+            )
+        }
+        .padding(30)
+    }
+    
+    @ViewBuilder
+    private func bottomPlaceButton(_ post: Post) -> some View {
+        ClearCupsuleButton(
+            primaryTitle: "Place",
+            primaryTitleColor: Color.mycolor.myBlue) {
+                vm.updatePostStudyProgress(post)
+                completion()
+            }
+            .padding(.horizontal)
+            .frame(maxWidth: 200)
+            .padding(.bottom)
+    }
+    
+    private var xmarkButton: some View {
+        CircleStrokeButtonView(
+            iconName: "xmark",
+            isShownCircle: false
+        ){
+            withAnimation {
+                completion()
+            }
+        }
+    }
+
 }
 
-#Preview {
-    let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppSyncState.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+#Preview ("Valid post") {
+    let extendedPosts = PreviewData.samplePosts
+    let vm = PostsViewModel(
+        dataSource: MockPostsDataSource(posts: extendedPosts)
     )
-    let context = ModelContext(container)
-    
-    let vm = PostsViewModel(modelContext: context)
+            
+    ProgressSelectionView() {}
+        .environmentObject(vm)
+        .onAppear {
+            vm.selectedPostId = PreviewData.samplePost1.id
+        }
+}
+
+#Preview ("Invalid post") {
+    let extendedPosts = PreviewData.samplePosts
+    let vm = PostsViewModel(
+        dataSource: MockPostsDataSource(posts: extendedPosts)
+    )
     
     ProgressSelectionView() {}
         .environmentObject(vm)
+        .onAppear {
+            vm.selectedPostId = nil
+        }
 }
+

@@ -11,14 +11,12 @@ import SwiftData
 struct CheckForPostsUpdateView: View {
     
     // MARK: - Dependencies
-    
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     private let hapticManager = HapticService.shared
     
     // MARK: - State
-    
     @State private var statusText = "Checking for update..."
     @State private var statusColor = Color.mycolor.myAccent
     @State private var isInProgress = true
@@ -28,7 +26,6 @@ struct CheckForPostsUpdateView: View {
     @State private var importedCount = 0
     
     // MARK: - Body
-    
     var body: some View {
         FormCoordinatorToolbar(
             title: "Check for posts update",
@@ -40,17 +37,9 @@ struct CheckForPostsUpdateView: View {
                     actionSection
                 }
             }
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime + 1) {
-                    checkForUpdates()
-                }
-            }
-            .alert("Import Error", isPresented: $vm.showErrorMessageAlert) {
-                Button("OK", role: .cancel) {
-                    coordinator.pop()
-                }
-            } message: {
-                Text(vm.errorMessage ?? "Unknown error")
+            .task {
+                try? await Task.sleep(for: .seconds(2.5))
+                await checkForUpdates()
             }
         }
     }
@@ -64,7 +53,7 @@ struct CheckForPostsUpdateView: View {
                     .foregroundStyle(statusColor)
                 Spacer()
                 if isInProgress {
-                    CustomProgressView(scale: 1, isNoText: true)
+                    ProgressView()
                 }
             }
             if let lastDate = vm.lastCuratedPostsLoadedDate {
@@ -108,8 +97,11 @@ struct CheckForPostsUpdateView: View {
             secondaryTitle: "Imported \(importedCount) posts",
             isToChange: isImported
         ) {
-            performImport()
-            statusText = "No updates available"
+            isInProgress = true
+            Task {
+                await performImport()
+                statusText = "No updates available"
+            }
         }
         .onChange(of: vm.allPosts.count) { oldValue, newValue in
             importedCount = newValue - oldValue
@@ -120,41 +112,38 @@ struct CheckForPostsUpdateView: View {
     // MARK: - Actions
     
     /// Check if updates for curated study materials are available
-    private func checkForUpdates() {
-        Task {
-            let hasUpdates = await vm.checkCloudCuratedPostsForUpdates()
+    private func checkForUpdates() async {
+        let hasUpdates = await vm.checkCloudCuratedPostsForUpdates()
+        
+        if hasUpdates {
+            statusText = "Updates available!"
+            statusColor = Color.mycolor.myRed
+            isUpdateAvailable = true
             
-            if hasUpdates {
-                statusText = "Updates available!"
-                statusColor = Color.mycolor.myRed
-                isUpdateAvailable = true
-                
-            } else {
-                statusText = "No updates available"
-                statusColor = Color.mycolor.myGreen
-                isUpdated = true
-            }
-            
-            isInProgress = false
+        } else {
+            statusText = "No updates available"
+            statusColor = Color.mycolor.myGreen
+            isUpdated = true
         }
+        
+        isInProgress = false
     }
     
-    private func performImport() {
-        Task {
-            isInProgress = true
-            await vm.importPostsFromCloud {
-                isInProgress = false
-                isImported = true
-                hapticManager.notification(type: .success)
-                
-                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+    private func performImport() async {
+        let success = await vm.importPostsFromCloud()
+        isInProgress = false
+        
+        if success {
+            isImported = true
+            hapticManager.notification(type: .success)
+            Task {
+                try? await Task.sleep(for: .seconds(vm.dispatchFor + 1))
+                await MainActor.run {
                     coordinator.closeModal()
                 }
             }
         }
     }
-
-
 }
 
 #Preview {

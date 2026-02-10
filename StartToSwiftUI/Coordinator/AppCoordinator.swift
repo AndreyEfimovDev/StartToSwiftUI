@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-@MainActor
-class AppCoordinator: ObservableObject {
+final class AppCoordinator: ObservableObject {
     
     private let hapticManager = HapticService.shared
 

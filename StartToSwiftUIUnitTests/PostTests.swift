@@ -25,7 +25,7 @@ final class PostTests: XCTestCase {
         XCTAssertEqual(post.favoriteChoice, .no)
         XCTAssertEqual(post.origin, .local)
         XCTAssertFalse(post.draft)
-        XCTAssertEqual(post.category, "SwiftUI")
+        XCTAssertEqual(post.category, Constants.mainCategory)
         XCTAssertEqual(post.urlString, Constants.urlStart)
         XCTAssertEqual(post.postPlatform, .youtube)
         XCTAssertEqual(post.postType, .post)
@@ -175,7 +175,7 @@ final class PostTests: XCTestCase {
     func testPostIsEqualAllFields() {
         // Given
         let post1 = Post(
-            category: "SwiftUI",
+            category: Constants.mainCategory,
             title: "Test Title",
             intro: "Test Intro",
             author: "Test Author",
@@ -187,7 +187,7 @@ final class PostTests: XCTestCase {
         )
         
         let post2 = Post(
-            category: "SwiftUI",
+            category: Constants.mainCategory,
             title: "Test Title",
             intro: "Test Intro",
             author: "Test Author",
@@ -223,7 +223,7 @@ final class PostTests: XCTestCase {
     func testPostIsNotEqualByCategory() {
         // Given
         let post1 = Post(
-            category: "SwiftUI",
+            category: Constants.mainCategory,
             title: "Test Title",
             intro: "Test Intro",
             author: "Test Author"

@@ -5,16 +5,35 @@
 //  Created by Andrey Efimov on 14.11.2025.
 //
 
-import Foundation
+import SwiftUI
 
 struct WhatsNews {
+#warning("Add upated info before deployment to App Store")
     static let releases: [Release] = [
+        Release(
+            release: "Release 1.1.1(2)",
+            news: [
+                News(
+                    title: "Fixed",
+                    newsText: """
+                    - Improved cloud data synchronisation across devices
+
+                    """
+                ),
+                News(
+                    title: "Added",
+                    newsText: """
+                    - Sorting study materials filter
+                    """
+                ),
+            ]
+        ),
         Release(
             release: "Release 1.1.1(1)",
             news: [
                 News(
                     title: "Initial deployment",
-                    newsText: "newsText"
+                    newsText: ""
                 ),
             ]
         )
@@ -54,4 +73,3 @@ struct Release: Identifiable {
         self.news = news
     }
 }
-

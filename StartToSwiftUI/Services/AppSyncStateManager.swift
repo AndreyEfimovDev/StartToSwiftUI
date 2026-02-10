@@ -21,12 +21,13 @@ final class AppSyncState {
 
     // Flag indicating the presence of new curated materials
     var isNewCuratedPostsAvailable: Bool = false // For the first launch, false, it will be updated in checkCloudCuratedPostsForUpdates()
-    var latestDateOfCuaratedPostsLoaded: Date? // Update in importPostsFromCloud() and use in CheckForPostsUpdateView()
+    var latestDateOfCuaratedPostsLoaded: Date? // Updated in importPostsFromCloud() and use in CheckForPostsUpdateView()
     
     // For internal purposes:
     // - cleanupDuplicateAppStates()
     // - getOrCreateAppState()
     // - mergeDuplicateAppStates()
+    
     var lastCloudSyncDate: Date?
     var appFirstLaunchDate: Date?
     

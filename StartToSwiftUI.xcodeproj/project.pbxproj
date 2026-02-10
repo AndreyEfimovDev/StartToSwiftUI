@@ -12,7 +12,7 @@
 		470E63702EFB241D007B75B5 /* FormCoordinatorToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470E636F2EFB241D007B75B5 /* FormCoordinatorToolbar.swift */; };
 		470E63762EFD5044007B75B5 /* CountdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470E63752EFD5044007B75B5 /* CountdownView.swift */; };
 		470E637A2EFDE1CF007B75B5 /* ModalNavigationContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470E63792EFDE1CF007B75B5 /* ModalNavigationContainer.swift */; };
-		4715FA2E2F263BB000ED732A /* FormSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4715FA2D2F263BB000ED732A /* FormSection.swift */; };
+		4715FA2E2F263BB000ED732A /* FormSectionViewWraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4715FA2D2F263BB000ED732A /* FormSectionViewWraper.swift */; };
 		471BBF9A2EC5F6170004AC45 /* PostDraftsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471BBF992EC5F6170004AC45 /* PostDraftsView.swift */; };
 		471BBF9C2EC620D70004AC45 /* PostDraftsRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471BBF9B2EC620D70004AC45 /* PostDraftsRowView.swift */; };
 		471BBF9F2EC721480004AC45 /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471BBF9E2EC721480004AC45 /* Notice.swift */; };
@@ -75,7 +75,7 @@
 		47656C002EE1EF9500F45AA6 /* StudyProgressForLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47656BFF2EE1EF9500F45AA6 /* StudyProgressForLevel.swift */; };
 		4765A76D2EAE5F7B00EACDF4 /* PostRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */; };
 		4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773545A2E65C470001DEDEE /* CapsulesSegmentedPicker.swift */; };
-		4773545D2E65D03A001DEDEE /* FiltersSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */; };
+		4773545D2E65D03A001DEDEE /* FiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773545C2E65D03A001DEDEE /* FiltersView.swift */; };
 		4773AC902F269D4B00A713EF /* PostStatusIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773AC8F2F269D4B00A713EF /* PostStatusIcons.swift */; };
 		477C74602ECFB0F300F77F5B /* WhatsNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477C745F2ECFB0E800F77F5B /* WhatsNews.swift */; };
 		478116462EBFF9DD00EF25F8 /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */; };
@@ -182,7 +182,7 @@
 		470E636F2EFB241D007B75B5 /* FormCoordinatorToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormCoordinatorToolbar.swift; sourceTree = "<group>"; };
 		470E63752EFD5044007B75B5 /* CountdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownView.swift; sourceTree = "<group>"; };
 		470E63792EFDE1CF007B75B5 /* ModalNavigationContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalNavigationContainer.swift; sourceTree = "<group>"; };
-		4715FA2D2F263BB000ED732A /* FormSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormSection.swift; sourceTree = "<group>"; };
+		4715FA2D2F263BB000ED732A /* FormSectionViewWraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormSectionViewWraper.swift; sourceTree = "<group>"; };
 		471BBF992EC5F6170004AC45 /* PostDraftsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDraftsView.swift; sourceTree = "<group>"; };
 		471BBF9B2EC620D70004AC45 /* PostDraftsRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDraftsRowView.swift; sourceTree = "<group>"; };
 		471BBF9E2EC721480004AC45 /* Notice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notice.swift; sourceTree = "<group>"; };
@@ -249,7 +249,7 @@
 		47656BFF2EE1EF9500F45AA6 /* StudyProgressForLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressForLevel.swift; sourceTree = "<group>"; };
 		4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRowView.swift; sourceTree = "<group>"; };
 		4773545A2E65C470001DEDEE /* CapsulesSegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsulesSegmentedPicker.swift; sourceTree = "<group>"; };
-		4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersSheetView.swift; sourceTree = "<group>"; };
+		4773545C2E65D03A001DEDEE /* FiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersView.swift; sourceTree = "<group>"; };
 		4773AC8F2F269D4B00A713EF /* PostStatusIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostStatusIcons.swift; sourceTree = "<group>"; };
 		477C745F2ECFB0E800F77F5B /* WhatsNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNews.swift; sourceTree = "<group>"; };
 		478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
@@ -366,14 +366,6 @@
 				4773545A2E65C470001DEDEE /* CapsulesSegmentedPicker.swift */,
 			);
 			path = Pickers;
-			sourceTree = "<group>";
-		};
-		4715FA2C2F263B9600ED732A /* ViewWrapers */ = {
-			isa = PBXGroup;
-			children = (
-				4715FA2D2F263BB000ED732A /* FormSection.swift */,
-			);
-			path = ViewWrapers;
 			sourceTree = "<group>";
 		};
 		4715FA2F2F263BE800ED732A /* PostDetails */ = {
@@ -528,14 +520,14 @@
 		475997592E5C86C5008E20F0 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				472243772EFFE31F0055461A /* GlobalMethods.swift */,
 				47BAF0A32E60613200287F10 /* SearchBarView.swift */,
 				47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */,
 				478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */,
 				470E63752EFD5044007B75B5 /* CountdownView.swift */,
-				472243772EFFE31F0055461A /* GlobalMethods.swift */,
+				4715FA2D2F263BB000ED732A /* FormSectionViewWraper.swift */,
 				47BAF09E2E5F9C4500287F10 /* Buttons */,
 				470A21C42E6E389D006D2D66 /* Pickers */,
-				4715FA2C2F263B9600ED732A /* ViewWrapers */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -684,7 +676,7 @@
 				47B4657F2E6867930059CCB7 /* HomeView.swift */,
 				4791CE032E748DA200687126 /* AddEditPostView.swift */,
 				4791CDAE2E70187E00687126 /* PreferencesView.swift */,
-				4773545C2E65D03A001DEDEE /* FiltersSheetView.swift */,
+				4773545C2E65D03A001DEDEE /* FiltersView.swift */,
 				47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */,
 				47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */,
 				4715FA2F2F263BE800ED732A /* PostDetails */,
@@ -912,7 +904,7 @@
 				4751DAEC2F1534B800EC9C53 /* StudyProgressChartView.swift in Sources */,
 				4732FB332EAA5A9E0062269D /* ActivityView.swift in Sources */,
 				47C56FEC2EC9C66700F0796C /* NoticeDetailsView.swift in Sources */,
-				4773545D2E65D03A001DEDEE /* FiltersSheetView.swift in Sources */,
+				4773545D2E65D03A001DEDEE /* FiltersView.swift in Sources */,
 				47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */,
 				47FF42592EE556DB0069D232 /* TapHandler.swift in Sources */,
 				475CC64D2F216B870099CAA6 /* DataSourcesProtocols.swift in Sources */,
@@ -939,7 +931,7 @@
 				471DCBCE2EBB83D200AFA5F4 /* LegalInformationView.swift in Sources */,
 				475CC69C2F22904A0099CAA6 /* MockNoticesNetworkService.swift in Sources */,
 				471DCBD42EBB8A6400AFA5F4 /* TermsOfUse.swift in Sources */,
-				4715FA2E2F263BB000ED732A /* FormSection.swift in Sources */,
+				4715FA2E2F263BB000ED732A /* FormSectionViewWraper.swift in Sources */,
 				47A7339D2ED1C355006BB8A6 /* SpeechRecogniser.swift in Sources */,
 				47BAF0FA2E64CC8700287F10 /* UnderlineSermentedPicker.swift in Sources */,
 				4764A1F82EAD1DAA00D76C3A /* ClearCupsuleButton.swift in Sources */,

@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - Form Section Component fro AddEditView
 
-struct FormSection<Content: View>: View {
+struct FormSectionViewWraper<Content: View>: View {
     let title: String
     @ViewBuilder let content: Content
     

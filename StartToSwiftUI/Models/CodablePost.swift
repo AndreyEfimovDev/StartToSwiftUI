@@ -68,7 +68,7 @@ extension CodablePost {
 extension CodablePost {
     static func mock(
         id: String = UUID().uuidString,
-        category: String = "SwiftUI",
+        category: String = Constants.mainCategory,
         title: String = "Test Post",
         intro: String = "Test Content",
         author: String = "Test Author",
