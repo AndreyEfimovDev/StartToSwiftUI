@@ -40,17 +40,9 @@ struct CheckForPostsUpdateView: View {
                     actionSection
                 }
             }
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime + 1) {
-                    checkForUpdates()
-                }
-            }
-            .alert("Import Error", isPresented: $vm.showErrorMessageAlert) {
-                Button("OK", role: .cancel) {
-                    coordinator.pop()
-                }
-            } message: {
-                Text(vm.errorMessage ?? "Unknown error")
+            .task {
+                try? await Task.sleep(for: .seconds(2.5))
+                await checkForUpdates()
             }
         }
     }
@@ -108,8 +100,11 @@ struct CheckForPostsUpdateView: View {
             secondaryTitle: "Imported \(importedCount) posts",
             isToChange: isImported
         ) {
-            performImport()
-            statusText = "No updates available"
+            isInProgress = true
+            Task {
+                await performImport()
+                statusText = "No updates available"
+            }
         }
         .onChange(of: vm.allPosts.count) { oldValue, newValue in
             importedCount = newValue - oldValue
@@ -120,41 +115,38 @@ struct CheckForPostsUpdateView: View {
     // MARK: - Actions
     
     /// Check if updates for curated study materials are available
-    private func checkForUpdates() {
-        Task {
-            let hasUpdates = await vm.checkCloudCuratedPostsForUpdates()
+    private func checkForUpdates() async {
+        let hasUpdates = await vm.checkCloudCuratedPostsForUpdates()
+        
+        if hasUpdates {
+            statusText = "Updates available!"
+            statusColor = Color.mycolor.myRed
+            isUpdateAvailable = true
             
-            if hasUpdates {
-                statusText = "Updates available!"
-                statusColor = Color.mycolor.myRed
-                isUpdateAvailable = true
-                
-            } else {
-                statusText = "No updates available"
-                statusColor = Color.mycolor.myGreen
-                isUpdated = true
-            }
-            
-            isInProgress = false
+        } else {
+            statusText = "No updates available"
+            statusColor = Color.mycolor.myGreen
+            isUpdated = true
         }
+        
+        isInProgress = false
     }
     
-    private func performImport() {
-        Task {
-            isInProgress = true
-            await vm.importPostsFromCloud {
-                isInProgress = false
-                isImported = true
-                hapticManager.notification(type: .success)
-                
-                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
+    private func performImport() async {
+        let success = await vm.importPostsFromCloud()
+        isInProgress = false
+        
+        if success {
+            isImported = true
+            hapticManager.notification(type: .success)
+            Task {
+                try? await Task.sleep(for: .seconds(vm.dispatchFor + 1))
+                await MainActor.run {
                     coordinator.closeModal()
                 }
             }
         }
     }
-
-
 }
 
 #Preview {
