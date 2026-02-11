@@ -41,12 +41,7 @@ enum StudyLevelTabs: String, CaseIterable, Codable, Hashable {
     case advanced
     
     var displayName: String {
-        switch self {
-        case .all: return "All"
-        case .beginner: return "Beginner"
-        case .middle: return "Middle"
-        case .advanced: return "Advanced"
-        }
+        studyLevel?.displayName ?? "All"
     }
     
     var studyLevel: StudyLevel? {
@@ -469,4 +464,14 @@ enum AppRoute: Hashable, Identifiable {
         }
     }
 }
+
+
+//var id: String {
+//    switch self {
+//    case .postDetails(let postId): return "postDetails_\(postId)"
+//    case .editPost(let post): return "editPost_\(post.id)"
+//    case .noticeDetails(let noticeId): return "noticeDetails_\(noticeId)"
+//    default: return String(describing: self)
+//    }
+//}
 

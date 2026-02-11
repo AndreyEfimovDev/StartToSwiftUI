@@ -77,7 +77,7 @@ final class NoticeViewModel: ObservableObject {
             .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.loadNoticesFromSwiftData()
-                log("Cloud notices sync subscribtion run", level: .info)
+                log("Cloud notices sync subscription run", level: .info)
             }
             .store(in: &cancellables)
     }
