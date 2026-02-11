@@ -57,11 +57,13 @@ enum StudyLevelTabs: String, CaseIterable, Codable, Hashable {
 // MARK: Sorting options
 
 enum SortOption: String, CaseIterable {
+    case notSorted
     case newestFirst
     case oldestFirst
     
     var displayName: String {
         switch self {
+        case .notSorted: return "Not sorted"
         case .newestFirst: return "Newest"
         case .oldestFirst: return "Oldest"
         }
