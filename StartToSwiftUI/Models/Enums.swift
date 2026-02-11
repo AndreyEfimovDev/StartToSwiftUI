@@ -41,12 +41,7 @@ enum StudyLevelTabs: String, CaseIterable, Codable, Hashable {
     case advanced
     
     var displayName: String {
-        switch self {
-        case .all: return "All"
-        case .beginner: return "Beginner"
-        case .middle: return "Middle"
-        case .advanced: return "Advanced"
-        }
+        studyLevel?.displayName ?? "All"
     }
     
     var studyLevel: StudyLevel? {
