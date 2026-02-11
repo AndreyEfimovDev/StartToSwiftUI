@@ -80,7 +80,7 @@ final class PostsViewModel: ObservableObject {
     @Published var selectedYear: String? = nil {
         didSet { storedYear = selectedYear }}
     
-    @AppStorage("storedSortOption") var storedSortOption: SortOption = .newestFirst
+    @AppStorage("storedSortOption") var storedSortOption: SortOption = .notSorted
     @Published var selectedSortOption: SortOption = .newestFirst {
         didSet { storedSortOption = selectedSortOption }}
         
@@ -149,8 +149,10 @@ final class PostsViewModel: ObservableObject {
             return
         }
         
-        appStateManager.cleanupDuplicateAppStates()
+        // Ensure AppState exists (creates with appFirstLaunchDate if first launch)
+        _ = appStateManager.getOrCreateAppState()
         
+        appStateManager.cleanupDuplicateAppStates()
         if await checkCloudCuratedPostsForUpdates() {
             appStateManager.setCuratedPostsLoadStatusOn()
         }

@@ -94,7 +94,7 @@ extension PostsViewModel {
         selectedType == nil &&
         selectedPlatform == nil &&
         selectedYear == nil &&
-        selectedSortOption == .newestFirst
+        selectedSortOption == .notSorted
     }
     
     private func searchPosts(posts: [Post]) -> [Post] {
@@ -109,9 +109,7 @@ extension PostsViewModel {
         }
     }
     
-    private func applySorting(posts: [Post], option: SortOption?) -> [Post] {
-        guard let option else { return posts }
-        
+    private func applySorting(posts: [Post], option: SortOption) -> [Post] {
         switch option {
         case .newestFirst:
             return posts.sorted {
@@ -129,6 +127,8 @@ extension PostsViewModel {
                 case (_, nil): return true
                 }
             }
+        case .notSorted:
+            return posts
         }
     }
 }
