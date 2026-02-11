@@ -250,7 +250,7 @@ struct FiltersView: View {
                 vm.selectedType = nil
                 vm.selectedPlatform = nil
                 vm.selectedYear = nil
-                vm.selectedSortOption = .newestFirst
+                vm.selectedSortOption = .notSorted
                 updateFiltersSheetView.toggle()
             }
 //            .padding(.horizontal, 55)
@@ -266,7 +266,7 @@ struct FiltersView: View {
                 vm.selectedType = nil
                 vm.selectedPlatform = nil
                 vm.selectedYear = nil
-                vm.selectedSortOption = .newestFirst
+                vm.selectedSortOption = .notSorted
                 isFilterButtonPressed.toggle()
             }
 //            .padding(.horizontal, 55)
