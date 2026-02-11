@@ -465,3 +465,13 @@ enum AppRoute: Hashable, Identifiable {
     }
 }
 
+
+//var id: String {
+//    switch self {
+//    case .postDetails(let postId): return "postDetails_\(postId)"
+//    case .editPost(let post): return "editPost_\(post.id)"
+//    case .noticeDetails(let noticeId): return "noticeDetails_\(noticeId)"
+//    default: return String(describing: self)
+//    }
+//}
+

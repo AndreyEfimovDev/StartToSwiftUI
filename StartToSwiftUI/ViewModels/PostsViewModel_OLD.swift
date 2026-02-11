@@ -128,7 +128,7 @@
 //            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
 //            .sink { [weak self] _ in
 //                self?.loadPostsFromSwiftData()
-//                log("Cloud posts sync subscribtion run", level: .info)
+//                log("Cloud posts sync subscription run", level: .info)
 //            }
 //            .store(in: &cancellables)
 //    }
@@ -440,8 +440,8 @@
 //                let searchedPosts = self.searchPosts(posts: filtered)
 //                let sortedPosts = self.applySorting(posts: searchedPosts, option: sortOption)
 //                
-//                log("Values subscribtion run", level: .info)
-//                
+//                log("Values subscription run", level: .info)
+//
 //                return sortedPosts
 //            }
 //            .sink { [weak self] selectedPosts in
