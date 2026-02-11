@@ -206,7 +206,7 @@ enum StudyLevel: String, CaseIterable, Codable {
     var displayName: String {
         switch self {
         case .beginner: return "Beginner"
-        case .middle: return "Intermediate"
+        case .middle: return "Middle"
         case .advanced: return "Advanced"
         }
     }
@@ -286,75 +286,6 @@ enum TimePeriod: String, CaseIterable, Identifiable {
     }
 
 }
-// MARK: - Network Errors
-enum NetworkError: Error, LocalizedError {
-    case invalidURL
-    case invalidResponseStatus
-    case dataTaskError(String)
-    case corruptData
-    case decodingError(String)
-    
-    var errorDescription: String? {
-        switch self {
-        case .invalidURL:
-            return NSLocalizedString("The endpoint URL is invalid", comment: "")
-        case .invalidResponseStatus:
-            return NSLocalizedString("The APIO failed to issue a valid response.", comment: "")
-        case .dataTaskError(let string):
-            return string
-        case .corruptData:
-            return NSLocalizedString("The data provided appears to be corrupt", comment: "")
-        case .decodingError(let string):
-            return string
-        }
-    }
-}
-
-
-// MARK: - Debug print states + func
-enum LogLevel {
-    case debug, info, warning, error
-    
-    var icon: String {
-        switch self {
-        case .debug: return "🔥"
-        case .info: return "ℹ️"
-        case .warning: return "⚠️"
-        case .error: return "❌"
-        }
-    }
-}
-
-
-
-// MARK: - File Storage Errors
-
-enum FileStorageError: LocalizedError {
-    case fileNotFound
-    case invalidURL
-    case encodingFailed(Error)
-    case decodingFailed(Error)
-    case fileSystemError(Error)
-    case exportError(String)
-    
-    var errorDescription: String? {
-        switch self {
-        case .fileNotFound:
-            return "File not found"
-        case .invalidURL:
-            return "Invalid file URL"
-        case .encodingFailed(let error):
-            return "Encoding failed: \(error.localizedDescription)"
-        case .decodingFailed(let error):
-            return "Decoding failed: \(error.localizedDescription)"
-        case .fileSystemError(let error):
-            return "File system error: \(error.localizedDescription)"
-        case .exportError(let message):
-            return message
-        }
-    }
-}
-
 
 // MARK: - Navigation Routes
 enum AppRoute: Hashable, Identifiable {

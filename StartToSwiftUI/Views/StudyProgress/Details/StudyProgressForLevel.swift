@@ -37,11 +37,7 @@ struct StudyProgressForLevel: View {
     }
     
     var body: some View {
-        
         VStack {
-            // TITLE
-            sectionTitle
-            
             // PROGRESS VIEWS
             ForEach([StudyProgress.practiced, StudyProgress.studied , StudyProgress.started], id: \.self) { level in
                 HStack {
@@ -64,7 +60,7 @@ struct StudyProgressForLevel: View {
                         colour: level.color,
                         lineWidth: lineWidth
                     )
-                        .frame(maxWidth: .infinity, alignment: .trailing)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 .padding(.vertical)
                 .padding(.trailing, 30)
@@ -78,6 +74,8 @@ struct StudyProgressForLevel: View {
                 )
                 .padding(8)
             } // ForEach
+            // TITLE
+            sectionTitle
         }
         .padding(.horizontal, 30)
         .bold()

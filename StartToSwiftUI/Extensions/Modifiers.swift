@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-// MARK: Custom One/Two Taps for RoawPost in HomeView
+// MARK: Custom One/Two Taps for RowPost in HomeView
 
 struct TapAndDoubleTapModifier: ViewModifier {
     let singleTap: () -> Void
@@ -98,7 +98,6 @@ struct AdaptiveModalModifier: ViewModifier {
         )
     }
 
-
     func body(content: Content) -> some View {
         content
         // FullScreen for iPhone and for WelcomeAtFirstLaunchView on iPad
@@ -137,14 +136,7 @@ struct AdaptiveModalModifier: ViewModifier {
         if UIDevice.isiPhone {
             return true
         }
-        
-//        // On iPad, only welcomeAtFirstLaunch is full-screen
-//        switch route {
-//        case .welcomeAtFirstLaunch:
-//            return true
-//        default:
             return false
-//        }
     }
 }
 

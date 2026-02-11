@@ -22,6 +22,17 @@ struct StudyProgressDetailsView: View {
     
     var body: some View {
         VStack(spacing: 0)  {
+            
+            UnderlineSermentedPickerNotOptional(
+                selection: $selectedTab,
+                allItems: StudyLevelTabs.allCases,
+                titleForCase: { $0.displayName },
+                selectedFont: UIDevice.isiPad ? .footnote : .subheadline
+            )
+            .padding(.horizontal)
+            
+            Spacer()
+
             Group {
                 switch selectedTab {
                 case .all:
@@ -40,17 +51,6 @@ struct StudyProgressDetailsView: View {
             }
             .transition(.slide)
             .animation(.linear(duration: 0.3), value: selectedTab)
-            
-            Spacer()
-            
-            UnderlineSermentedPickerNotOptional(
-                selection: $selectedTab,
-                allItems: StudyLevelTabs.allCases,
-                titleForCase: { $0.displayName },
-                selectedFont: UIDevice.isiPad ? .footnote : .subheadline
-            )
-            .padding(.horizontal)
-            .padding(.top)
         }
         .padding()
     }

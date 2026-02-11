@@ -33,4 +33,31 @@ final class JSONFileManager: ObservableObject {
     }
 }
 
+// MARK: - File Storage Errors
+enum FileStorageError: LocalizedError {
+    case fileNotFound
+    case invalidURL
+    case encodingFailed(Error)
+    case decodingFailed(Error)
+    case fileSystemError(Error)
+    case exportError(String)
+    
+    var errorDescription: String? {
+        switch self {
+        case .fileNotFound:
+            return "File not found"
+        case .invalidURL:
+            return "Invalid file URL"
+        case .encodingFailed(let error):
+            return "Encoding failed: \(error.localizedDescription)"
+        case .decodingFailed(let error):
+            return "Decoding failed: \(error.localizedDescription)"
+        case .fileSystemError(let error):
+            return "File system error: \(error.localizedDescription)"
+        case .exportError(let message):
+            return message
+        }
+    }
+}
+
 
