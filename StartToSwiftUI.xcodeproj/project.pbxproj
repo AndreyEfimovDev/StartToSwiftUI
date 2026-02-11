@@ -54,7 +54,6 @@
 		4759974D2E5C690B008E20F0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 475997492E5C690B008E20F0 /* Assets.xcassets */; };
 		4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */; };
 		475997512E5C6C9D008E20F0 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997502E5C6C9D008E20F0 /* Post.swift */; };
-		475997532E5C7680008E20F0 /* PostsViewModel_OLD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997522E5C7680008E20F0 /* PostsViewModel_OLD.swift */; };
 		475997552E5C7F81008E20F0 /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997542E5C7F81008E20F0 /* PreviewData.swift */; };
 		4759975F2E5CA789008E20F0 /* CountingLinesInTextBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4759975E2E5CA789008E20F0 /* CountingLinesInTextBlock.swift */; };
 		475997612E5CC0F8008E20F0 /* PostDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997602E5CC0F8008E20F0 /* PostDetailsView.swift */; };
@@ -232,7 +231,6 @@
 		475997492E5C690B008E20F0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartToSwiftUIApp.swift; sourceTree = "<group>"; };
 		475997502E5C6C9D008E20F0 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
-		475997522E5C7680008E20F0 /* PostsViewModel_OLD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsViewModel_OLD.swift; sourceTree = "<group>"; };
 		475997542E5C7F81008E20F0 /* PreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewData.swift; sourceTree = "<group>"; };
 		4759975E2E5CA789008E20F0 /* CountingLinesInTextBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountingLinesInTextBlock.swift; sourceTree = "<group>"; };
 		475997602E5CC0F8008E20F0 /* PostDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailsView.swift; sourceTree = "<group>"; };
@@ -521,7 +519,6 @@
 		475997572E5C8688008E20F0 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				475997522E5C7680008E20F0 /* PostsViewModel_OLD.swift */,
 				474BFB942F3C8E46006E639B /* PostsViewModel.swift */,
 				474BFB8C2F3C8DF2006E639B /* PostsViewModel+Filtering.swift */,
 				474BFB8E2F3C8E05006E639B /* PostsViewModel+CloudImport.swift */,
@@ -933,7 +930,6 @@
 				4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */,
 				471DCBDC2EBBC67500AFA5F4 /* Introduction.swift in Sources */,
 				4791CE002E747B2E00687126 /* HapticService.swift in Sources */,
-				475997532E5C7680008E20F0 /* PostsViewModel_OLD.swift in Sources */,
 				475CC6A02F22B0790099CAA6 /* CodablePost.swift in Sources */,
 				475CC6922F2246E00099CAA6 /* MockNoticesDataSource.swift in Sources */,
 				4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */,
