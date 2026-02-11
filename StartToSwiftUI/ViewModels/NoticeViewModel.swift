@@ -117,9 +117,7 @@ final class NoticeViewModel: ObservableObject {
     /// - sendLocalNotification() → system notification (if enabled)
     /// 
     func importNoticesFromCloud() async {
-        
         do {
-            
             let cloudResponse: [CodableNotice] = try await networkService.fetchDataFromURLAsync()
             
             loadNoticesFromSwiftData() // sync with Cloud

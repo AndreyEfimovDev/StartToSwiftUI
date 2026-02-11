@@ -19,6 +19,7 @@ final class PostsViewModel: ObservableObject {
     let fileManager = JSONFileManager.shared
     let hapticManager = HapticService.shared
     let networkService: NetworkServiceProtocol
+    let appStateManager: AppSyncStateManager?
     
     @Published var allPosts: [Post] = []
     @Published var filteredPosts: [Post] = []
@@ -45,9 +46,9 @@ final class PostsViewModel: ObservableObject {
     var swiftDataSource: SwiftDataPostsDataSource? {
         dataSource as? SwiftDataPostsDataSource
     }
-    var appStateManager: AppSyncStateManager? {
-        swiftDataSource.map { AppSyncStateManager(modelContext: $0.modelContext) }
-    }
+//    var appStateManager: AppSyncStateManager? {
+//        swiftDataSource.map { AppSyncStateManager(modelContext: $0.modelContext) }
+//    }
     var isSwiftData: Bool {
         swiftDataSource != nil
     }
@@ -81,7 +82,7 @@ final class PostsViewModel: ObservableObject {
         didSet { storedYear = selectedYear }}
     
     @AppStorage("storedSortOption") var storedSortOption: SortOption = .notSorted
-    @Published var selectedSortOption: SortOption = .newestFirst {
+    @Published var selectedSortOption: SortOption = .notSorted {
         didSet { storedSortOption = selectedSortOption }}
         
     // MARK: - Init
@@ -92,6 +93,12 @@ final class PostsViewModel: ObservableObject {
         self.dataSource = dataSource
         self.networkService = networkService
         
+        if let swiftDataSource = dataSource as? SwiftDataPostsDataSource {
+            self.appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
+        } else {
+            self.appStateManager = nil
+        }
+
         setupTimezone()
         restoreFilters()
         setupSubscriptions()
@@ -100,7 +107,6 @@ final class PostsViewModel: ObservableObject {
             await initializeAppState()
         }
     }
-    
     /// Convenience initialiser for backward compatibility
     convenience init(
         modelContext: ModelContext,
@@ -113,7 +119,6 @@ final class PostsViewModel: ObservableObject {
     }
     
     // MARK: - Setup
-    
     private func setupTimezone() {
         if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
             utcCalendar.timeZone = utcTimeZone
@@ -148,11 +153,25 @@ final class PostsViewModel: ObservableObject {
             log("⚠️ init PostViewModel: dataSource is not SwiftData", level: .info)
             return
         }
-        
-        // Ensure AppState exists (creates with appFirstLaunchDate if first launch)
+        // To folow the next order in important
+        /* Step1:
+        Ensure AppState exists (creates with appFirstLaunchDate if first launch).
+        Search for AppSyncState in SwiftData - it guarantees the existence of the AppState:
+        - The first launch will not find it, it will create a new one with appFirstLaunchDate = Date() and save it to the database.
+        - Restart — it will find an existing one and return it.
+        */
         _ = appStateManager.getOrCreateAppState()
         
+        /* Step2:
+        Clean dublicates if any. iCloud sync can create multiple appsyncstates on different devices.
+        This function finds duplicates, merges their data into one (the oldest), and deletes the rest.
+         */
         appStateManager.cleanupDuplicateAppStates()
+        
+        /* Step 3:
+        Compare the dates of local and cloud posts.
+        If there are new materials in the cloud, it sets the isNewCuratedPostsAvailable -> true
+        */
         if await checkCloudCuratedPostsForUpdates() {
             appStateManager.setCuratedPostsLoadStatusOn()
         }
@@ -160,10 +179,11 @@ final class PostsViewModel: ObservableObject {
         
     // MARK: - SwiftData Operations
     
-    /// Loading posts from SwiftData
+    /// Load posts from SwiftData
     func loadPostsFromSwiftData() {
         do {
             allPosts = try dataSource.fetchPosts()
+            removeDuplicatePosts()
             allYears = getAllYears()
             allCategories = getAllCategories()
             log("📊 Loaded \(allPosts.count) posts from SwiftData:", level: .debug)
@@ -172,7 +192,58 @@ final class PostsViewModel: ObservableObject {
         }
     }
     
-    /// Adding a new post
+    /// Remove Duplicate Posts
+    private func removeDuplicatePosts() {
+        var postsToDelete: [Post] = []
+        
+        // Pass 1: duplicates by ID
+        let idGroups = Dictionary(grouping: allPosts, by: \.id)
+            .filter { $0.value.count > 1 }
+        
+        /* persistentModelID is a unique internal identifier of SwiftData, which each @Model object receives automatically. It is unique even if your id and title are the same */
+        for (id, postsList) in idGroups {
+            if let postToKeep = postsList.sorted(by: { $0.date < $1.date }).first {
+                for post in postsList where post.persistentModelID != postToKeep.persistentModelID {
+                    postsToDelete.append(post)
+                    log("🗑️ Duplicate by ID \(id): '\(post.title)'", level: .info)
+                }
+            }
+        }
+        
+        // Pass 2: duplicates by title
+        /* Avoid double processing of posts */
+        let markedIDs = Set(postsToDelete.map { $0.persistentModelID })
+        /* Leave only those posts that have not been marked for deletion in Pass 1. This is important, otherwise the deleted duplicate by ID could also end up in the duplicate group by title */
+        let remainingPosts = allPosts.filter { !markedIDs.contains($0.persistentModelID) }
+        /* Grouping the remaining ones by title */
+        let titleGroups = Dictionary(grouping: remainingPosts, by: \.title)
+            .filter { $0.value.count > 1 }
+        /* Leave the oldest in each group: title is the key, postsList is an array of duplicates */
+        for (title, postsList) in titleGroups {
+            if let postToKeep = postsList.sorted(by: { $0.date < $1.date }).first {
+                for post in postsList where post.persistentModelID != postToKeep.persistentModelID {
+                    postsToDelete.append(post)
+                    log("🗑️ Duplicate by title '\(title)'", level: .info)
+                }
+            }
+        }
+        
+        guard !postsToDelete.isEmpty else { return }
+        
+        for post in postsToDelete {
+            dataSource.delete(post)
+        }
+        
+        do {
+            try dataSource.save()
+            allPosts = try dataSource.fetchPosts()
+            log("✅ Removed \(postsToDelete.count) duplicate posts", level: .info)
+        } catch {
+            handleError(error, message: "Error removing duplicate posts")
+        }
+    }
+
+    /// Add a new post
     func addPost(_ newPost: Post) {
         dataSource.insert(newPost)
         saveContextAndReload()
@@ -200,7 +271,7 @@ final class PostsViewModel: ObservableObject {
         saveContextAndReload()
     }
     
-    /// Deleting a post
+    /// Delete a post
     func deletePost(_ post: Post?) {
         guard let post else {
             log("❌ Attempt to delete a nil post", level: .error)
@@ -210,7 +281,7 @@ final class PostsViewModel: ObservableObject {
         saveContextAndReload()
     }
     
-    /// Deleting all posts
+    /// Delete all posts
     func eraseAllPosts(_ completion: @escaping () -> ()) {
         if let swiftDataSource {
             do {

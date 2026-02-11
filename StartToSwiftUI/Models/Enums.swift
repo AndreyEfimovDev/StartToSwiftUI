@@ -63,7 +63,7 @@ enum SortOption: String, CaseIterable {
     
     var displayName: String {
         switch self {
-        case .notSorted: return "Not sorted"
+        case .notSorted: return "Original"
         case .newestFirst: return "Newest"
         case .oldestFirst: return "Oldest"
         }
