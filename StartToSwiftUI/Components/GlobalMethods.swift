@@ -13,3 +13,17 @@ func log(_ message: String, level: LogLevel = .debug, file: String = #file, func
     print("\(level.icon) [\(fileName):\(line)] \(function) - \(message)")
     #endif
 }
+
+// MARK: - Debug print states + func
+enum LogLevel {
+    case debug, info, warning, error
+    
+    var icon: String {
+        switch self {
+        case .debug: return "🔥"
+        case .info: return "ℹ️"
+        case .warning: return "⚠️"
+        case .error: return "❌"
+        }
+    }
+}
