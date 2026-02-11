@@ -127,8 +127,12 @@ final class NoticeViewModel: ObservableObject {
             // Filter by date (SwiftData only)
             let relevantNotices: [CodableNotice]
             if let appStateManager, let swiftDataSource {
-                let lastDate = appStateManager.getLastNoticeDate() ?? Date.distantPast
-                relevantNotices = cloudResponse.filter { $0.noticeDate > lastDate }
+                // Take a maximum of two dates — the date of the last notice and the date of the application installation
+                // At the first launch, the user will not receive all the old notiсes, but only those that were created after installation
+                let lastNoticeDate = appStateManager.getLastNoticeDate() ?? Date.distantPast
+                let appInstallDate = appStateManager.getAppFirstLaunchDate() ?? Date.distantPast
+                let filterDate = max(lastNoticeDate, appInstallDate)
+                relevantNotices = cloudResponse.filter { $0.noticeDate > filterDate }
                 log("🍉 📦 Received \(cloudResponse.count), selected \(relevantNotices.count) notices", level: .info)
                 removeDuplicateNotices(from: swiftDataSource)
             } else {

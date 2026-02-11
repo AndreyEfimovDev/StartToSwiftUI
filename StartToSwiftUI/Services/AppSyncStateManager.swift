@@ -297,4 +297,9 @@ class AppSyncStateManager {
         }
     }
     
+    func getAppFirstLaunchDate() -> Date? {
+        let appState = getOrCreateAppState()
+        return appState.appFirstLaunchDate
+    }
+
 }
