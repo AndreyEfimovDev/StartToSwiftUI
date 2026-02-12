@@ -16,6 +16,7 @@ struct StartToSwiftUIApp: App {
     @StateObject private var postsViewModel: PostsViewModel
     @StateObject private var noticeViewModel: NoticeViewModel
     @StateObject private var coordinator = AppCoordinator()
+    @Environment(\.scenePhase) private var scenePhase
 
     private let hapticManager = HapticService.shared
     
@@ -49,6 +50,15 @@ struct StartToSwiftUIApp: App {
         _noticeViewModel = StateObject(wrappedValue: NoticeViewModel(modelContext: context))
 
         configureNavigationBarAppearance()
+        
+        // Sync appFirstLaunchDate from SwiftData to UserDefaults
+        // so BackgroundRefreshService can access it without ModelContext
+        if let launchDate = postsViewModel.appStateManager?.getAppFirstLaunchDate() {
+            UserDefaults.standard.set(launchDate, forKey: "appFirstLaunchDate")
+        }
+
+        // Register background refresh task
+        BackgroundRefreshService.shared.registerBackgroundTask()
     }
     
     var body: some Scene {
@@ -58,7 +68,16 @@ struct StartToSwiftUIApp: App {
                 .environmentObject(coordinator)
                 .environmentObject(postsViewModel)
                 .environmentObject(noticeViewModel)
-
+                .onAppear {
+                    // Request notification permission on first launch
+                    LocalNotificationService.shared.requestPermission()
+                }
+        }
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+            if newPhase == .background {
+                BackgroundRefreshService.shared.scheduleBackgroundRefresh()
+                log("🔄 App moved to background, refresh scheduled", level: .info)
+            }
         }
     }
     
