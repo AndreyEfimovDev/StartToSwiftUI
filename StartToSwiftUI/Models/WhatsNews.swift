@@ -11,19 +11,31 @@ struct WhatsNews {
 #warning("Add upated info before deployment to App Store")
     static let releases: [Release] = [
         Release(
-            release: "Release 1.1.1(2)",
+            release: "Release 1.2.1(3)",
+            news: [
+                News(
+                    title: "Added",
+                    newsText: """
+                    - Native push norifications.
+                    - A new option "Original" (not sorted) for study materials filter.
+                    """
+                ),
+            ]
+        ),
+        Release(
+            release: "Release 1.1.2(2)",
             news: [
                 News(
                     title: "Fixed",
                     newsText: """
-                    - Improved cloud data synchronisation across devices
-
+                    - Improved cloud data synchronisation across devices.
+                    - Minor UX enhancements.
                     """
                 ),
                 News(
                     title: "Added",
                     newsText: """
-                    - Sorting study materials filter
+                    - Sorting study materials filter.
                     """
                 ),
             ]

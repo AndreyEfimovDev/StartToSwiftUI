@@ -44,6 +44,7 @@
 		474BFB952F3C8E46006E639B /* PostsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB942F3C8E46006E639B /* PostsViewModel.swift */; };
 		474BFB972F3D1D69006E639B /* LocalNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB962F3D1D69006E639B /* LocalNotificationService.swift */; };
 		474BFB992F3D1D72006E639B /* BackgroundRefreshService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB982F3D1D72006E639B /* BackgroundRefreshService.swift */; };
+		474BFB9F2F3DE1B1006E639B /* AppSyncStateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB9E2F3DE1B1006E639B /* AppSyncStateModel.swift */; };
 		4751DAEC2F1534B800EC9C53 /* StudyProgressChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DAEB2F1534B800EC9C53 /* StudyProgressChartView.swift */; };
 		4751DAEE2F163BA600EC9C53 /* StudyProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DAED2F163BA600EC9C53 /* StudyProgressView.swift */; };
 		4751DAF22F16402E00EC9C53 /* ProgressStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DAF12F16402E00EC9C53 /* ProgressStats.swift */; };
@@ -221,6 +222,7 @@
 		474BFB942F3C8E46006E639B /* PostsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsViewModel.swift; sourceTree = "<group>"; };
 		474BFB962F3D1D69006E639B /* LocalNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationService.swift; sourceTree = "<group>"; };
 		474BFB982F3D1D72006E639B /* BackgroundRefreshService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundRefreshService.swift; sourceTree = "<group>"; };
+		474BFB9E2F3DE1B1006E639B /* AppSyncStateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSyncStateModel.swift; sourceTree = "<group>"; };
 		4751DAEB2F1534B800EC9C53 /* StudyProgressChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressChartView.swift; sourceTree = "<group>"; };
 		4751DAED2F163BA600EC9C53 /* StudyProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressView.swift; sourceTree = "<group>"; };
 		4751DAF12F16402E00EC9C53 /* ProgressStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressStats.swift; sourceTree = "<group>"; };
@@ -423,6 +425,55 @@
 			path = AboutApp;
 			sourceTree = "<group>";
 		};
+		474BFB9A2F3DE124006E639B /* PushNotifications */ = {
+			isa = PBXGroup;
+			children = (
+				474BFB962F3D1D69006E639B /* LocalNotificationService.swift */,
+				474BFB982F3D1D72006E639B /* BackgroundRefreshService.swift */,
+			);
+			path = PushNotifications;
+			sourceTree = "<group>";
+		};
+		474BFB9B2F3DE156006E639B /* AppSyncStateService */ = {
+			isa = PBXGroup;
+			children = (
+				474BFB9E2F3DE1B1006E639B /* AppSyncStateModel.swift */,
+				47EA14302EF530780064583B /* AppSyncStateManager.swift */,
+			);
+			path = AppSyncStateService;
+			sourceTree = "<group>";
+		};
+		474BFBA02F3DE2B1006E639B /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				4732FB322EAA5A9E0062269D /* ActivityView.swift */,
+				4791CDC02E708E1000687126 /* DocumentPicker.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		474BFBA12F3DE313006E639B /* VoiceSpeachProcessor */ = {
+			isa = PBXGroup;
+			children = (
+				47A7339C2ED1C355006BB8A6 /* SpeechRecogniser.swift */,
+				47A7339E2ED1C55A006BB8A6 /* VoiceSearchView.swift */,
+			);
+			path = VoiceSpeachProcessor;
+			sourceTree = "<group>";
+		};
+		474BFBA42F3DE35B006E639B /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				4791CE032E748DA200687126 /* AddEditPostView.swift */,
+				4773545C2E65D03A001DEDEE /* FiltersView.swift */,
+				47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */,
+				47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */,
+				4791CDAE2E70187E00687126 /* PreferencesView.swift */,
+				47870FB92ECC8628004175E4 /* Acknowledgements.swift */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
 		4751DAEF2F163FE500EC9C53 /* Details */ = {
 			isa = PBXGroup;
 			children = (
@@ -491,6 +542,8 @@
 				475CC64B2F216B480099CAA6 /* MockDataServices */,
 				475997722E5DA436008E20F0 /* Extensions */,
 				4759976C2E5D931F008E20F0 /* Services */,
+				474BFB9B2F3DE156006E639B /* AppSyncStateService */,
+				474BFB9A2F3DE124006E639B /* PushNotifications */,
 				4751DB032F16517100EC9C53 /* Coordinator */,
 				475997592E5C86C5008E20F0 /* Components */,
 				475997562E5C8671008E20F0 /* Models */,
@@ -538,10 +591,13 @@
 			children = (
 				472243772EFFE31F0055461A /* GlobalMethods.swift */,
 				47BAF0A32E60613200287F10 /* SearchBarView.swift */,
+				4791CDFB2E746FF100687126 /* EmailService.swift */,
 				47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */,
 				478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */,
+				4759975E2E5CA789008E20F0 /* CountingLinesInTextBlock.swift */,
 				470E63752EFD5044007B75B5 /* CountdownView.swift */,
 				4715FA2D2F263BB000ED732A /* FormSectionViewWraper.swift */,
+				474BFBA12F3DE313006E639B /* VoiceSpeachProcessor */,
 				47BAF09E2E5F9C4500287F10 /* Buttons */,
 				470A21C42E6E389D006D2D66 /* Pickers */,
 			);
@@ -551,12 +607,6 @@
 		475997622E5CF0C3008E20F0 /* SupportFrom3rdParties */ = {
 			isa = PBXGroup;
 			children = (
-				4791CDC02E708E1000687126 /* DocumentPicker.swift */,
-				4732FB322EAA5A9E0062269D /* ActivityView.swift */,
-				4759975E2E5CA789008E20F0 /* CountingLinesInTextBlock.swift */,
-				4791CDFB2E746FF100687126 /* EmailService.swift */,
-				47A7339C2ED1C355006BB8A6 /* SpeechRecogniser.swift */,
-				47A7339E2ED1C55A006BB8A6 /* VoiceSearchView.swift */,
 				472E05CB2EDDC9BA005D774E /* KeyboardManager.swift */,
 			);
 			path = SupportFrom3rdParties;
@@ -567,9 +617,6 @@
 			children = (
 				47E439B62EA9290E007001AD /* NetworkService.swift */,
 				4791CDFD2E747AC100687126 /* JSONFileManager.swift */,
-				47EA14302EF530780064583B /* AppSyncStateManager.swift */,
-				474BFB962F3D1D69006E639B /* LocalNotificationService.swift */,
-				474BFB982F3D1D72006E639B /* BackgroundRefreshService.swift */,
 				4791CDFF2E747B2E00687126 /* HapticService.swift */,
 				47FF42582EE556DA0069D232 /* TapHandler.swift */,
 			);
@@ -692,11 +739,7 @@
 			children = (
 				47542EB32EF2C8E400B0AB79 /* StartView.swift */,
 				47B4657F2E6867930059CCB7 /* HomeView.swift */,
-				4791CE032E748DA200687126 /* AddEditPostView.swift */,
-				4791CDAE2E70187E00687126 /* PreferencesView.swift */,
-				4773545C2E65D03A001DEDEE /* FiltersView.swift */,
-				47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */,
-				47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */,
+				474BFBA42F3DE35B006E639B /* SubViews */,
 				4715FA2F2F263BE800ED732A /* PostDetails */,
 				47C56FF02EC9CEA300F0796C /* Notices */,
 				47656BFA2EE1EBBD00F45AA6 /* StudyProgress */,
@@ -704,7 +747,6 @@
 				47870FBB2ECCB927004175E4 /* PostDrafts */,
 				471DCBDA2EBBC60E00AFA5F4 /* AboutApp */,
 				471DCBD72EBBB97000AFA5F4 /* LegalInformation */,
-				47870FB92ECC8628004175E4 /* Acknowledgements.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -717,6 +759,7 @@
 				4732FB302EAA59B00062269D /* SharePostsView.swift */,
 				47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */,
 				4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */,
+				474BFBA02F3DE2B1006E639B /* Helpers */,
 			);
 			path = ManagingPosts;
 			sourceTree = "<group>";
@@ -924,6 +967,7 @@
 				4732FB332EAA5A9E0062269D /* ActivityView.swift in Sources */,
 				474BFB912F3C8E20006E639B /* PostsViewModel+BackupRestore.swift in Sources */,
 				47C56FEC2EC9C66700F0796C /* NoticeDetailsView.swift in Sources */,
+				474BFB9F2F3DE1B1006E639B /* AppSyncStateModel.swift in Sources */,
 				4773545D2E65D03A001DEDEE /* FiltersView.swift in Sources */,
 				47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */,
 				47FF42592EE556DB0069D232 /* TapHandler.swift in Sources */,

@@ -51,11 +51,17 @@ struct StartToSwiftUIApp: App {
 
         configureNavigationBarAppearance()
         
-        // Sync appFirstLaunchDate from SwiftData to UserDefaults
-        // so BackgroundRefreshService can access it without ModelContext
-        if let launchDate = postsViewModel.appStateManager?.getAppFirstLaunchDate() {
-            UserDefaults.standard.set(launchDate, forKey: "appFirstLaunchDate")
+        // Sync dates from SwiftData to UserDefaults
+        // so BackgroundRefreshService can access them without ModelContext
+        if let appStateManager = postsViewModel.appStateManager {
+            if let launchDate = appStateManager.getAppFirstLaunchDate() {
+                UserDefaults.standard.set(launchDate, forKey: "appFirstLaunchDate")
+            }
+            if let noticeDate = appStateManager.getLastNoticeDate() {
+                UserDefaults.standard.set(noticeDate, forKey: "lastNoticeDate")
+            }
         }
+
 
         // Register background refresh task
         BackgroundRefreshService.shared.registerBackgroundTask()
@@ -75,6 +81,13 @@ struct StartToSwiftUIApp: App {
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if newPhase == .background {
+                /* Update cached lastNoticeDate before scheduling,because
+                   while the application was running,
+                   importNoticesFromCloud() could update this date in SwiftData
+                 */
+                if let noticeDate = postsViewModel.appStateManager?.getLastNoticeDate() {
+                    UserDefaults.standard.set(noticeDate, forKey: "lastNoticeDate")
+                }
                 BackgroundRefreshService.shared.scheduleBackgroundRefresh()
                 log("🔄 App moved to background, refresh scheduled", level: .info)
             }
