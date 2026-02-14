@@ -68,11 +68,15 @@ struct PostRowView: View {
     
     private var statusRow: some View {
         HStack {
-            Text("\(post.studyLevel.displayName.capitalized)")
-                .font(.footnote)
-                .fontWeight(.medium)
-                .foregroundStyle(post.studyLevel.color)
-            
+            Group {
+                Text("\(post.studyLevel.displayName.capitalized)")
+#warning("Remove the next line with post.date before deployment to App Store")
+                Text("\(post.date.formatted(date: .numeric, time: .omitted))")
+            }
+            .font(.footnote)
+            .fontWeight(.medium)
+            .foregroundStyle(post.studyLevel.color)
+
             Spacer()
             
             PostStatusIcons(post: post)

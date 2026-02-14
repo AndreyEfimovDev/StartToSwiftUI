@@ -24,7 +24,7 @@ struct PreferencesView: View {
             Section(header: sectionHeader("Appearance")) {
                 themeAppearance
             }
-            Section(header: sectionHeader("Notices")) {
+            Section(header: sectionHeader("Notice messages")) {
                 if noticevm.notices.count > 0 {
                     noticeMessages
                 }

@@ -466,9 +466,9 @@
 			children = (
 				4791CE032E748DA200687126 /* AddEditPostView.swift */,
 				4773545C2E65D03A001DEDEE /* FiltersView.swift */,
+				4791CDAE2E70187E00687126 /* PreferencesView.swift */,
 				47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */,
 				47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */,
-				4791CDAE2E70187E00687126 /* PreferencesView.swift */,
 				47870FB92ECC8628004175E4 /* Acknowledgements.swift */,
 			);
 			path = SubViews;

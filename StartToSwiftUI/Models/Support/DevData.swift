@@ -12,32 +12,102 @@ struct DevData {
     static let postsForCloud = [
 
         
-// NEW
+// 2026-02-20 planned
+//        Post(
+//            title: "[weak self] in Swift",
+//            intro: """
+//                Swift uses Automatic Reference Counting (ARC) to manage the app’s memory usage. As a developer, you want to try to keep the ARC count as low as possible, which will keep your app running fast and efficiently. In this video we will learn how to use "weak references" instead of "strong references" to keep our count low!
+//                """,
+//            author: "Swiftful Thinking",
+//            postType: .post,
+//            urlString: "https://www.youtube.com/watch?v=TPHp9kR0Go8&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=20",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2021, month: 4, day: 18),
+//            studyLevel: .middle,
+//            origin: .cloudNew,
+//        ),
+//        Post(
+//            title: "@escaping closures in Swift",
+//            intro: """
+//                We use @escaping closures to deal with returning from functions when using asynchronous code. This is code that does NOT execute immediately, but rather at a future point in time. This becomes extremely important when we need to download data from the internet!
+//                """,
+//            author: "Swiftful Thinking",
+//            postType: .post,
+//            urlString: "https://www.youtube.com/watch?v=7gg8iBH2fg4&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=22",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2021, month: 4, day: 20),
+//            studyLevel: .middle,
+//            origin: .cloudNew,
+//        ),
+//        Post(
+//            title: "Download images with @escaping, Combine and Async/Await",
+//            intro: """
+//                In this lesson you start using async and await taking a look at the 3 main ways to write asynchronous code in Swift, by an example of downloading an image using:
+//                (1) @escaping closures
+//                (2) Combine
+//                (3) Async / Await
+//                """,
+//            author: "Swiftful Thinking",
+//            postType: .post,
+//            urlString: "https://youtu.be/9fXI6o39jLQ?si=SlBHPxUZWyIl_pgf",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2022, month: 4, day: 27),
+//            studyLevel: .middle,
+//            origin: .cloudNew,
+//        ),
+//        Post(
+//            title: "Struct vs Class vs Actor, Value vs Reference Types, Stack vs Heap",
+//            intro: """
+//                The lesson covers the different between different data types in context of and far beyond Swift Concurrency:
+//                (1) Structs vs Classes vs Actors
+//                (2) Value vs Reference Types
+//                (3) Stack vs Heap memory
+//                (4) Automatic Reference Counting (ARC) in Swift
+//                (5) Weak vs Strong References
+//                """,
+//            author: "Swiftful Thinking",
+//            postType: .post,
+//            urlString: "https://youtu.be/-JLenSTKEcA?si=T10f05je27bNKRPD",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2022, month: 5, day: 18),
+//            studyLevel: .middle,
+//            origin: .cloudNew,
+//        ),
+//        Post(
+//            title: "Protocols in Swift",
+//            intro: """
+//                In this video we will learn how to create custom protocols and then walk through a few real-world implementations.
+//                """,
+//            author: "Swiftful Thinking",
+//            postType: .post,
+//            urlString: "https://youtu.be/0gM1wmW1Xvc?si=lxgEC8M9rZ9wEVME",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2021, month: 10, day: 20),
+//            studyLevel: .advanced,
+//            origin: .cloudNew,
+//        ),
+//        Post(
+//            title: "Dependency Injection in SwiftUI",
+//            intro: """
+//                In this video we will implement Dependency Injection using Protocols.
+//                Using Dependency Injection becomes extremely important when creating scalable and testable apps.
+//                We will also talk about the downfalls of Singleton's and how Dependency Injection can solve them.
+//                """,
+//            author: "Swiftful Thinking",
+//            postType: .post,
+//            urlString: "https://www.youtube.com/watch?v=E3x07blYvdE",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2021, month: 10, day: 22),
+//            studyLevel: .advanced,
+//            origin: .cloudNew,
+//        ),
+        
+        
+// 2026-02-14
         Post(
-            title: "Download images with @escaping, Combine and Async/Await",
+            title: "Swift Concurrency",
             intro: """
-                In this lesson you start using async and await taking a look at the 3 main ways to write asynchronous code in Swift, by an example of downloading an image using:
-                (1) @escaping closures
-                (2) Combine
-                (3) Async / Await
-                """,
-            author: "Swiftful Thinking",
-            postType: .post,
-            urlString: "https://youtu.be/9fXI6o39jLQ?si=SlBHPxUZWyIl_pgf",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2022, month: 4, day: 27),
-            studyLevel: .middle,
-            origin: .cloudNew,
-        ),
-        Post(
-            title: "Struct vs Class vs Actor, Value vs Reference Types, Stack vs Heap",
-            intro: """
-                The lesson covers the different between different data types in context of and far beyond Swift Concurrency:
-                (1) Structs vs Classes vs Actors
-                (2) Value vs Reference Types
-                (3) Stack vs Heap memory
-                (4) Automatic Reference Counting (ARC) in Swift
-                (5) Weak vs Strong References
+                This playlist take you from from Completion Handlers to Async/Await.
                 """,
             author: "Swiftful Thinking",
             postType: .post,
@@ -47,6 +117,19 @@ struct DevData {
             studyLevel: .middle,
             origin: .cloudNew,
         ),
+        Post(
+            title: "SwiftUI Continued Learning",
+            intro: """
+                Building professional apps requires knowledge of data persistence and networking. This bootcamp builds on your existing knowledge of SwiftUI.
+                """,
+            author: "Swiftful Thinking",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar",
+            postDate: nil,
+            studyLevel: .middle,
+            origin: .cloudNew
+        ),
+
         
         
 // 2026-02-06
@@ -222,18 +305,6 @@ struct DevData {
             postDate: nil,
             studyLevel: .middle,
             origin: .cloudNew,
-        ),
-        Post(
-            title: "SwiftUI Continued Learning",
-            intro: """
-                Building professional apps requires knowledge of data persistence and networking. This bootcamp builds on your existing knowledge of SwiftUI.
-                """,
-            author: "Nick Sarno",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar",
-            postDate: nil,
-            studyLevel: .middle,
-            origin: .cloudNew
         ),
         Post(
             title: "SwiftUI Crypto App",

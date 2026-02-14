@@ -17,7 +17,7 @@ struct WhatsNews {
                     title: "Added",
                     newsText: """
                     - Native push norifications.
-                    - A new option "Original" (not sorted) for study materials filter.
+                    - A new option "Original" (not sorted) for materials filter.
                     """
                 ),
             ]
@@ -35,7 +35,7 @@ struct WhatsNews {
                 News(
                     title: "Added",
                     newsText: """
-                    - Sorting study materials filter.
+                    - Sorting option for materials "Newest"/"Oldest".
                     """
                 ),
             ]
