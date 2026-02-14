@@ -62,7 +62,6 @@ struct StartToSwiftUIApp: App {
             }
         }
 
-
         // Register background refresh task
         BackgroundRefreshService.shared.registerBackgroundTask()
     }

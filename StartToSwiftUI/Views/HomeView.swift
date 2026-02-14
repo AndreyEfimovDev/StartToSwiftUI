@@ -61,9 +61,7 @@ struct HomeView: View {
             .navigationTitle(vm.selectedCategory ?? Constants.mainCategory)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .toolbar {
-                navigationToolbar()
-            }
+            .toolbar { navigationToolbar() }
             .safeAreaInset(edge: .top) {
                 SearchBarView()
             }
@@ -89,9 +87,9 @@ struct HomeView: View {
             .task {
                 vm.loadPostsFromSwiftData()
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                noticevm.playSoundNotificationIfNeeded()
                 vm.updateWidgetData()
                 await noticevm.importNoticesFromCloud()
+                noticevm.playSoundNotificationIfNeeded()
             }
         }
     }

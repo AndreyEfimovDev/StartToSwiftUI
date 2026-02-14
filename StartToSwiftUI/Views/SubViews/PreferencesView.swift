@@ -17,10 +17,44 @@ struct PreferencesView: View {
     
     // MARK: - Constants
     let iconSize: CGFloat = 18
-    
+ 
+#warning("Delete this var appFirstLaunchDate before deployment")
+
+    /// Date of the first app launch (from AppSyncState.appFirstLaunchDate)
+    private var localFirstLaunchDate: Date {
+        UserDefaults.standard.object(forKey: "appFirstLaunchDate") as? Date ?? Date()
+    }
+//    let appStateManager: AppSyncStateManager?
+    @State var appFirstLaunchDate: Date = .now
+    @State var lastNoticeDate: Date = .now
+
     // MARK: - Body
     var body: some View {
         Form {
+#if DEBUG
+#warning("Delete this Button and Texts before deployment")
+            Button("Test Background Check") {
+                Task {
+                    // Check permission
+                    LocalNotificationService.shared.checkPermissionStatus { granted in
+                        log("🔔 Notification permission: \(granted)", level: .info)
+                    }
+                    // Check dates
+                    let lastNotice = UserDefaults.standard.object(forKey: "lastNoticeDate") as? Date
+                    let firstLaunch = UserDefaults.standard.object(forKey: "appFirstLaunchDate") as? Date
+                    log("🔄 UserDefaults lastNoticeDate: \(String(describing: lastNotice))", level: .info)
+                    log("🔄 UserDefaults appFirstLaunchDate: \(String(describing: firstLaunch))", level: .info)
+                    
+                    await BackgroundRefreshService.shared.checkForNewNoticesManually()
+                }
+            }
+            Text("appFirstLaunchDate: \(localFirstLaunchDate)")
+            Text("appFirstLaunchDate: \(appFirstLaunchDate)")
+            Text("lastNoticeDate: \(lastNoticeDate)")
+#else
+    #error("Remove this debug code before App Store release!")
+#endif
+            
             Section(header: sectionHeader("Appearance")) {
                 themeAppearance
             }
@@ -68,6 +102,12 @@ struct PreferencesView: View {
         .navigationViewStyle(StackNavigationViewStyle())
         .toolbar { toolbar }
         .preferredColorScheme(vm.selectedTheme.colorScheme)
+        .onAppear {
+            if let appStateManager = vm.appStateManager {
+                appFirstLaunchDate = appStateManager.getAppFirstLaunchDate() ?? .now
+                lastNoticeDate = appStateManager.getLastNoticeDate() ?? .now
+            }
+        }
     }
     
     // MARK: - Toolbar

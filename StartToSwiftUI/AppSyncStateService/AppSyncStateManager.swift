@@ -113,7 +113,7 @@ class AppSyncStateManager {
         for state in sortedStates {
             
             // AND logic for isUserNotNotifiedBySound (if at least one is already notified, take false)
-            if !state.isUserNotNotifiedBySound {
+            if !state.toNotifyUserBySound {
                 mergedIsUserNotNotified = false
             }
             
@@ -133,7 +133,7 @@ class AppSyncStateManager {
         }
         
         // Updating the main object with the merged data
-        primaryState.isUserNotNotifiedBySound = mergedIsUserNotNotified
+        primaryState.toNotifyUserBySound = mergedIsUserNotNotified
         primaryState.appFirstLaunchDate = earliestDate
         primaryState.lastCloudSyncDate = latestSyncDate
         
@@ -156,14 +156,14 @@ class AppSyncStateManager {
     /// Check whether the user should be notified with a sound
     func getUserNotifiedBySoundStatus() -> Bool {
         let appState = getOrCreateAppState()
-        let result = appState.isUserNotNotifiedBySound
+        let result = appState.toNotifyUserBySound
         return result
     }
     
     /// Enable the "Need to notify user" flag.
     func markUserNotNotifiedBySound() {
         let appState = getOrCreateAppState()
-        appState.isUserNotNotifiedBySound = true
+        appState.toNotifyUserBySound = true
         
         saveContext()
     }
@@ -171,7 +171,7 @@ class AppSyncStateManager {
     /// Mark the user as already notified
     func markUserNotifiedBySound() {
         let appState = getOrCreateAppState()
-        appState.isUserNotNotifiedBySound = false
+        appState.toNotifyUserBySound = false
         
         saveContext()
     }

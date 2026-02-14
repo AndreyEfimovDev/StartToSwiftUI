@@ -7,12 +7,26 @@
 
 import UserNotifications
 
-final class LocalNotificationService {
+final class LocalNotificationService: NSObject, UNUserNotificationCenterDelegate {
     
     static let shared = LocalNotificationService()
     
-    private init() {}
+//    private init() {}
     
+    private override init() {
+        super.init()
+        UNUserNotificationCenter.current().delegate = self
+    }
+    
+    // Show notification even when app is in foreground
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        completionHandler([.banner, .sound, .badge])
+    }
+
     // MARK: - Request Permission
     func requestPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
