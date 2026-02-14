@@ -30,6 +30,7 @@ extension PostsViewModel {
                 
                 let ((level, favorite, type, year), platform, sortOption, category) = data
                 
+                // Apply filters
                 let filtered = self.filterPosts(
                     allPosts: posts,
                     platform: platform,
@@ -40,7 +41,10 @@ extension PostsViewModel {
                     category: category
                 )
                 
+                // Apply search query
                 let searchedPosts = self.searchPosts(posts: filtered)
+                
+                // Apply sorting option
                 let sortedPosts = self.applySorting(posts: searchedPosts, option: sortOption)
                 
                 log("Values subscription run", level: .info)
@@ -63,12 +67,13 @@ extension PostsViewModel {
         category: String? = nil
     ) -> [Post] {
         
-        guard platform != nil ||
-                level != nil ||
-                favorite != nil ||
-                type != nil ||
-                year != nil ||
-                category != nil
+        guard
+            level != nil ||
+            favorite != nil ||
+            type != nil ||
+            platform != nil ||
+            year != nil ||
+            category != nil
         else {
             return allPosts
         }
@@ -95,6 +100,15 @@ extension PostsViewModel {
         selectedPlatform == nil &&
         selectedYear == nil &&
         selectedSortOption == .notSorted
+    }
+    
+    func resetAllFilters() {
+        selectedLevel = nil
+        selectedFavorite = nil
+        selectedType = nil
+        selectedPlatform = nil
+        selectedYear = nil
+        selectedSortOption = .notSorted
     }
     
     private func searchPosts(posts: [Post]) -> [Post] {

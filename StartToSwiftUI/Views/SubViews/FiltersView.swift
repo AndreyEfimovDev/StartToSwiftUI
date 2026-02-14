@@ -245,15 +245,15 @@ struct FiltersView: View {
         ClearCupsuleButton(
             primaryTitle: "Reset All",
             primaryTitleColor: Color.mycolor.myRed) {
-                vm.selectedLevel = nil
-                vm.selectedFavorite = nil
-                vm.selectedType = nil
-                vm.selectedPlatform = nil
-                vm.selectedYear = nil
-                vm.selectedSortOption = .notSorted
+                vm.resetAllFilters()
+//                vm.selectedLevel = nil
+//                vm.selectedFavorite = nil
+//                vm.selectedType = nil
+//                vm.selectedPlatform = nil
+//                vm.selectedYear = nil
+//                vm.selectedSortOption = .notSorted
                 updateFiltersSheetView.toggle()
             }
-//            .padding(.horizontal, 55)
     }
     
     private var resetAllFiltersAndExitButton: some View {
@@ -261,15 +261,15 @@ struct FiltersView: View {
         ClearCupsuleButton(
             primaryTitle: "Reset All & Exit",
             primaryTitleColor: Color.mycolor.myRed) {
-                vm.selectedLevel = nil
-                vm.selectedFavorite = nil
-                vm.selectedType = nil
-                vm.selectedPlatform = nil
-                vm.selectedYear = nil
-                vm.selectedSortOption = .notSorted
+                vm.resetAllFilters()
+//                vm.selectedLevel = nil
+//                vm.selectedFavorite = nil
+//                vm.selectedType = nil
+//                vm.selectedPlatform = nil
+//                vm.selectedYear = nil
+//                vm.selectedSortOption = .notSorted
                 isFilterButtonPressed.toggle()
             }
-//            .padding(.horizontal, 55)
     }
     
 }

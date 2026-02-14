@@ -200,7 +200,10 @@ final class PostsViewModel: ObservableObject {
         let idGroups = Dictionary(grouping: allPosts, by: \.id)
             .filter { $0.value.count > 1 }
         
-        /* persistentModelID is a unique internal identifier of SwiftData, which each @Model object receives automatically. It is unique even if your id and title are the same */
+        /*
+         persistentModelID is a unique internal identifier of SwiftData, which each @Model object receives automatically.
+         It is unique even if an id and title are the same
+         */
         for (id, postsList) in idGroups {
             if let postToKeep = postsList.sorted(by: { $0.date < $1.date }).first {
                 for post in postsList where post.persistentModelID != postToKeep.persistentModelID {
