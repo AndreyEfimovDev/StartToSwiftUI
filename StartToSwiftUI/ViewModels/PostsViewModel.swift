@@ -20,7 +20,7 @@ final class PostsViewModel: ObservableObject {
     let hapticManager = HapticService.shared
     let networkService: NetworkServiceProtocol
     let appStateManager: AppSyncStateManager?
-    
+
     @Published var allPosts: [Post] = []
     @Published var filteredPosts: [Post] = []
     @Published var selectedPostId: String? = nil
@@ -32,20 +32,18 @@ final class PostsViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var showErrorMessageAlert = false
     
+    let mainCategory: String = Constants.mainCategory
+    
     var cancellables = Set<AnyCancellable>()
     var utcCalendar = Calendar.current
-    
     var allYears: [String]? = nil
     var allCategories: [String]? = nil
-    let mainCategory: String = Constants.mainCategory
     var dispatchTime: DispatchTime { .now() + 1.5 }
     var dispatchFor: Double = 1.5
     
-    private var isLoading = false
     private var lastLoadTime: Date = .distantPast
     private let minLoadInterval: TimeInterval = 3
 
-    
     // MARK: - Computed Properties
     var swiftDataSource: SwiftDataPostsDataSource? {
         dataSource as? SwiftDataPostsDataSource
@@ -102,11 +100,6 @@ final class PostsViewModel: ObservableObject {
 
         setupTimezone()
         restoreFilters()
-//        setupSubscriptions()
-//        setupSubscriptionForChangesInCloud()
-//        Task {
-//            await initializeAppState()
-//        }
     }
     /// Convenience initialiser for backward compatibility
     convenience init(
@@ -458,25 +451,5 @@ final class PostsViewModel: ObservableObject {
     
     func resetCuratedPostsStatus() {
         appStateManager?.setCuratedPostsLoadStatusOn()
-    }
-
-    #warning("Delete this func loadDevData() before deployment to App Store")
-    // MARK: - DevData Import (creating posts for cloud)
-    func loadDevData() -> Int {
-        let newPosts = filterUniquePosts(DevData.postsForCloud)
-        
-        guard !newPosts.isEmpty else {
-            log("⚠️ DevData: No new unique posts to add", level: .info)
-            return 0
-        }
-        
-        for post in newPosts {
-            dataSource.insert(post)
-        }
-        
-        saveContextAndReload()
-        log("✅ DevData: Loaded \(newPosts.count) posts from \(DevData.postsForCloud.count)", level: .info)
-        
-        return newPosts.count
     }
 }

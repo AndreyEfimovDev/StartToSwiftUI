@@ -55,10 +55,6 @@ final class NoticeViewModel: ObservableObject {
     ) {
         self.dataSource = dataSource
         self.networkService = networkService
-//        loadNoticesFromSwiftData()
-//        
-//        // Subscribing to changes from CloudKit
-//        setupSubscriptionForChangesInCloud()
     }
     
     /// Convenience initializer for backward compatibility
@@ -109,8 +105,6 @@ final class NoticeViewModel: ObservableObject {
         do {
             self.notices = try dataSource.fetchNotices()
             updateUnreadStatus()  // ← always update status when fetch notices
-//          let duration = Date().timeIntervalSince(startTime)
-//          log("🍉 ✅ Download completed in \(String(format: "%.2f", duration))s. Notifications: \(fetchedNotices.count)", level: .info)
         } catch {
             handleError(error, message: "Error loading notices")
         }
@@ -340,7 +334,7 @@ final class NoticeViewModel: ObservableObject {
                 appStateManager.markUserNotifiedBySound()
             }
             
-            // Notify View about animation (через Publisher или callback)
+            // Notify View about animation
             self.shouldAnimateNoticeButton = true
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
