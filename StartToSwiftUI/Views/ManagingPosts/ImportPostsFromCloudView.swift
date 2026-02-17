@@ -87,30 +87,8 @@ struct ImportPostsFromCloudView: View {
     }
     
     private func importFromCloud() async {
-#warning("Clean this func from loadDevData() before deployment to App Store")
-
-        // Download local DevData (for internal use)
-        // Uncomment this part when you need to load DevData
-//        loadDevData()
-       
-        // Download from the cloud (main stream)
-        // Comment out this part when using DevData
         await loadFromCloudService()
         
-    }
-
-#warning("Delete this func loadDevData() before deployment to App Store")
-
-    /// Loading DevData (for internal use, to generate JSON file for cloud)
-    private func loadDevData() {
-        importedCount = vm.loadDevData()
-        isInProgress = false
-        isLoaded = true
-        hapticManager.notification(type: .success)
-        
-        DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-            coordinator.closeModal()
-        }
     }
     
     /// Downloading from a cloud service
@@ -133,31 +111,6 @@ struct ImportPostsFromCloudView: View {
             hapticManager.notification(type: .error)
         }
     }
-    
-//    private func loadFromCloudService() async {
-//
-//        await vm.importPostsFromCloud() {
-//            isInProgress = false
-//            
-//            if !vm.showErrorMessageAlert {
-//                isLoaded = true
-//                
-//                // Updating the counter of downloaded posts
-//                importedCount = vm.allPosts.count - initialPostCount
-//                hapticManager.notification(type: .success)
-//                
-//                // Closing in 1.5 seconds
-//                Task {
-//                    try? await Task.sleep(nanoseconds: 1_500_000_000)
-//                    await MainActor.run {
-//                        coordinator.closeModal()
-//                    }
-//                }
-//            } else {
-//                hapticManager.notification(type: .error)
-//            }
-//        }
-//    }
 }
 
 #Preview {

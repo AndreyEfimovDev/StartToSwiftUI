@@ -8,22 +8,38 @@
 import SwiftUI
 
 struct WhatsNews {
-#warning("Add upated info before deployment to App Store")
     static let releases: [Release] = [
         Release(
-            release: "Release 1.1.1(2)",
+            release: "Release 1.2.1(3)",
             news: [
+                News(
+                    title: "Added",
+                    newsText: """
+                    - An 'Original' sorting option to the materials filter to view them in their default order
+                    """
+                ),
                 News(
                     title: "Fixed",
                     newsText: """
-                    - Improved cloud data synchronisation across devices
-
+                    - Improved overall performance
+                    - Various UX enhancements
                     """
                 ),
+            ]
+        ),
+        Release(
+            release: "Release 1.1.2(2)",
+            news: [
                 News(
                     title: "Added",
                     newsText: """
                     - Sorting study materials filter
+                    """
+                ),
+                News(
+                    title: "Fixed",
+                    newsText: """
+                    - Improved cloud data synchronisation across devices
                     """
                 ),
             ]
