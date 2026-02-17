@@ -247,7 +247,7 @@
 		475CC6952F22472E0099CAA6 /* SwiftDataNoticesDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataNoticesDataSource.swift; sourceTree = "<group>"; };
 		475CC6972F22476D0099CAA6 /* SwiftDataPostsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataPostsDataSource.swift; sourceTree = "<group>"; };
 		475CC6992F22900A0099CAA6 /* MockPostsNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPostsNetworkService.swift; sourceTree = "<group>"; };
-		475CC69B2F22904A0099CAA6 /* MockNoticesNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MockNoticesNetworkService.swift; path = StartToSwiftUI/MockDataServices/MockNoticesNetworkService.swift; sourceTree = SOURCE_ROOT; };
+		475CC69B2F22904A0099CAA6 /* MockNoticesNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MockNoticesNetworkService.swift; path = StartToSwiftUI/SupportFrom3rdParties/MockDataServices/MockNoticesNetworkService.swift; sourceTree = SOURCE_ROOT; };
 		475CC69D2F2290910099CAA6 /* MockNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkService.swift; sourceTree = "<group>"; };
 		475CC69F2F22B0790099CAA6 /* CodablePost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodablePost.swift; sourceTree = "<group>"; };
 		475CC6A12F22B0A90099CAA6 /* CodableNotice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableNotice.swift; sourceTree = "<group>"; };
@@ -484,7 +484,6 @@
 			children = (
 				4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */,
 				475997622E5CF0C3008E20F0 /* SupportFrom3rdParties */,
-				475CC64B2F216B480099CAA6 /* MockDataServices */,
 				475997722E5DA436008E20F0 /* Extensions */,
 				4759976C2E5D931F008E20F0 /* Services */,
 				4751DB032F16517100EC9C53 /* Coordinator */,
@@ -554,6 +553,7 @@
 				47A7339C2ED1C355006BB8A6 /* SpeechRecogniser.swift */,
 				47A7339E2ED1C55A006BB8A6 /* VoiceSearchView.swift */,
 				472E05CB2EDDC9BA005D774E /* KeyboardManager.swift */,
+				475CC64B2F216B480099CAA6 /* MockDataServices */,
 			);
 			path = SupportFrom3rdParties;
 			sourceTree = "<group>";
