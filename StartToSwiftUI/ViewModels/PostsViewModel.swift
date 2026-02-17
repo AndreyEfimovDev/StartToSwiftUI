@@ -40,15 +40,16 @@ final class PostsViewModel: ObservableObject {
     let mainCategory: String = Constants.mainCategory
     var dispatchTime: DispatchTime { .now() + 1.5 }
     var dispatchFor: Double = 1.5
+    
+    private var isLoading = false
+    private var lastLoadTime: Date = .distantPast
+    private let minLoadInterval: TimeInterval = 3
 
     
     // MARK: - Computed Properties
     var swiftDataSource: SwiftDataPostsDataSource? {
         dataSource as? SwiftDataPostsDataSource
     }
-//    var appStateManager: AppSyncStateManager? {
-//        swiftDataSource.map { AppSyncStateManager(modelContext: $0.modelContext) }
-//    }
     var isSwiftData: Bool {
         swiftDataSource != nil
     }
@@ -101,11 +102,11 @@ final class PostsViewModel: ObservableObject {
 
         setupTimezone()
         restoreFilters()
-        setupSubscriptions()
-        setupSubscriptionForChangesInCloud()
-        Task {
-            await initializeAppState()
-        }
+//        setupSubscriptions()
+//        setupSubscriptionForChangesInCloud()
+//        Task {
+//            await initializeAppState()
+//        }
     }
     /// Convenience initialiser for backward compatibility
     convenience init(
@@ -116,6 +117,18 @@ final class PostsViewModel: ObservableObject {
             dataSource: SwiftDataPostsDataSource(modelContext: modelContext),
             networkService: networkService
         )
+    }
+    
+    
+    func start() {
+        setupSubscriptions()
+        setupSubscriptionForChangesInCloud()
+        loadPostsFromSwiftData()
+
+        Task { [weak self] in
+            guard let self else { return }
+            await self.initializeAppState()
+        }
     }
     
     // MARK: - Setup
@@ -129,9 +142,15 @@ final class PostsViewModel: ObservableObject {
     private func setupSubscriptionForChangesInCloud() {
         NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
             .receive(on: DispatchQueue.main)
-            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
+            .debounce(for: .seconds(2), scheduler: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.loadPostsFromSwiftData()
+                guard let self else { return }
+                let now = Date()
+                guard now.timeIntervalSince(self.lastLoadTime) >= self.minLoadInterval else {
+                    log("Cloud sync skipped (too soon)", level: .debug)
+                    return
+                }
+                self.loadPostsFromSwiftData()
                 log("Cloud posts sync subscription run", level: .info)
             }
             .store(in: &cancellables)
@@ -181,6 +200,9 @@ final class PostsViewModel: ObservableObject {
     
     /// Load posts from SwiftData
     func loadPostsFromSwiftData() {
+        
+        lastLoadTime = Date()
+        
         do {
             allPosts = try dataSource.fetchPosts()
             removeDuplicatePosts()

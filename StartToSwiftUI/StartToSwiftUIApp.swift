@@ -58,7 +58,10 @@ struct StartToSwiftUIApp: App {
                 .environmentObject(coordinator)
                 .environmentObject(postsViewModel)
                 .environmentObject(noticeViewModel)
-
+                .task {
+                    postsViewModel.start()
+                    noticeViewModel.start()
+                }
         }
     }
     

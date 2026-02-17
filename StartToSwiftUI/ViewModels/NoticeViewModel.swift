@@ -29,6 +29,9 @@ final class NoticeViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     
+    private var lastLoadTime: Date = .distantPast
+    private let minLoadInterval: TimeInterval = 3
+    
     private var swiftDataSource: SwiftDataNoticesDataSource? {
         dataSource as? SwiftDataNoticesDataSource
     }
@@ -52,10 +55,10 @@ final class NoticeViewModel: ObservableObject {
     ) {
         self.dataSource = dataSource
         self.networkService = networkService
-        loadNoticesFromSwiftData()
-        
-        // Subscribing to changes from CloudKit
-        setupSubscriptionForChangesInCloud()
+//        loadNoticesFromSwiftData()
+//        
+//        // Subscribing to changes from CloudKit
+//        setupSubscriptionForChangesInCloud()
     }
     
     /// Convenience initializer for backward compatibility
@@ -70,13 +73,24 @@ final class NoticeViewModel: ObservableObject {
       }
     
     
+    func start() {
+        setupSubscriptionForChangesInCloud()
+        loadNoticesFromSwiftData()
+    }
+    
     // MARK: - CloudKit Sync
     private func setupSubscriptionForChangesInCloud() {
         NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
             .receive(on: DispatchQueue.main)
-            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
+            .debounce(for: .seconds(2), scheduler: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.loadNoticesFromSwiftData()
+                guard let self else { return }
+                let now = Date()
+                guard now.timeIntervalSince(self.lastLoadTime) >= self.minLoadInterval else {
+                    log("Cloud sync skipped (too soon)", level: .debug)
+                    return
+                }
+                self.loadNoticesFromSwiftData()
                 log("Cloud notices sync subscription run", level: .info)
             }
             .store(in: &cancellables)
@@ -84,6 +98,8 @@ final class NoticeViewModel: ObservableObject {
 
     // MARK: - Load Notices
     func loadNoticesFromSwiftData(removeDuplicates: Bool = true) {
+        
+        lastLoadTime = Date()
         
         // Removing duplicate notices in SwiftUI, leaving only one instance for each ID - for SwiftData only
         if removeDuplicates, let swiftDataSource {
