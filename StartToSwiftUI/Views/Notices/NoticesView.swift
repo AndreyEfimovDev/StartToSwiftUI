@@ -15,7 +15,7 @@ struct NoticesView: View {
     @EnvironmentObject private var noticevm: NoticeViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
-    private let hapticManager = HapticService.shared
+    private let hapticManager = HapticManager.shared
     
     var body: some View {
         

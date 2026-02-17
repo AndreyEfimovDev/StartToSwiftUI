@@ -17,7 +17,7 @@ final class PostsViewModel: ObservableObject {
     // MARK: - Properties
     let dataSource: PostsDataSourceProtocol
     let fileManager = JSONFileManager.shared
-    let hapticManager = HapticService.shared
+    let hapticManager = HapticManager.shared
     let networkService: NetworkServiceProtocol
     let appStateManager: AppSyncStateManager?
     
@@ -41,11 +41,9 @@ final class PostsViewModel: ObservableObject {
     var dispatchTime: DispatchTime { .now() + 1.5 }
     var dispatchFor: Double = 1.5
     
-    private var isLoading = false
     private var lastLoadTime: Date = .distantPast
     private let minLoadInterval: TimeInterval = 3
 
-    
     // MARK: - Computed Properties
     var swiftDataSource: SwiftDataPostsDataSource? {
         dataSource as? SwiftDataPostsDataSource
@@ -89,7 +87,7 @@ final class PostsViewModel: ObservableObject {
     // MARK: - Init
     init(
         dataSource: PostsDataSourceProtocol,
-        networkService: NetworkServiceProtocol = NetworkService(urlString: Constants.cloudPostsURL)
+        networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudPostsURL)
     ) {
         self.dataSource = dataSource
         self.networkService = networkService
@@ -102,16 +100,11 @@ final class PostsViewModel: ObservableObject {
 
         setupTimezone()
         restoreFilters()
-//        setupSubscriptions()
-//        setupSubscriptionForChangesInCloud()
-//        Task {
-//            await initializeAppState()
-//        }
     }
     /// Convenience initialiser for backward compatibility
     convenience init(
         modelContext: ModelContext,
-        networkService: NetworkServiceProtocol = NetworkService(urlString: Constants.cloudPostsURL)
+        networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudPostsURL)
     ) {
         self.init(
             dataSource: SwiftDataPostsDataSource(modelContext: modelContext),

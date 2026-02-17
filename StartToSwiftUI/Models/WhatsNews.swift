@@ -16,13 +16,13 @@ struct WhatsNews {
                 News(
                     title: "Added",
                     newsText: """
-                    - An 'Original' sorting option to the filters to view materials in their default order
+                    - An additional sorting option to the filter to view materials in their default order
                     """
                 ),
                 News(
                     title: "Fixed",
                     newsText: """
-                    - Improved overall performance
+                    - Improved overall performance at app launch related to Cloud sync
                     - Various UX enhancements
                     """
                 ),

@@ -9,7 +9,7 @@ import SwiftUI
 
 final class AppCoordinator: ObservableObject {
     
-    private let hapticManager = HapticService.shared
+    private let hapticManager = HapticManager.shared
 
     // For main stack navigation
     @Published var path = NavigationPath() {

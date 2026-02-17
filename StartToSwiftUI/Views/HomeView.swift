@@ -15,7 +15,7 @@ struct HomeView: View {
     @EnvironmentObject private var noticevm: NoticeViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
-    private let hapticManager = HapticService.shared
+    private let hapticManager = HapticManager.shared
     
     // MARK: - Constants
     let selectedCategory: String?
@@ -218,6 +218,7 @@ struct HomeView: View {
         ToolbarItem(placement: .navigationBarLeading) {
             CircleStrokeButtonView(iconName: "gearshape", isShownCircle: false) {
                 coordinator.push(.preferences)
+                hapticManager.impact(style: .light)
             }
         }
         if noticevm.unreadCount != 0  {
@@ -233,6 +234,7 @@ struct HomeView: View {
                 isShownCircle: false
             ){
                 coordinator.push(.addPost)
+                hapticManager.impact(style: .light)
             }
             // Fliters for posts
             if !vm.allPosts.isEmpty {
@@ -242,6 +244,7 @@ struct HomeView: View {
                     isShownCircle: false
                 ) {
                     isFilterButtonPressed.toggle()
+                    hapticManager.impact(style: .light)
                 }
             }
         }

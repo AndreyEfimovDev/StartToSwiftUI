@@ -17,7 +17,7 @@ struct StartToSwiftUIApp: App {
     @StateObject private var noticeViewModel: NoticeViewModel
     @StateObject private var coordinator = AppCoordinator()
 
-    private let hapticManager = HapticService.shared
+    private let hapticManager = HapticManager.shared
     
     // MARK: - SwiftData Container with sync via iCloud
     let modelContainer: ModelContainer = {

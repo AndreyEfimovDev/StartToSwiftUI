@@ -15,7 +15,7 @@ import Combine
 final class NoticeViewModel: ObservableObject {
     
     private let dataSource: NoticesDataSourceProtocol
-    private let hapticManager = HapticService.shared
+    private let hapticManager = HapticManager.shared
     private let networkService: NetworkServiceProtocol
     
     @Published var notices: [Notice] = []
@@ -51,20 +51,16 @@ final class NoticeViewModel: ObservableObject {
     
     init(
         dataSource: NoticesDataSourceProtocol,
-        networkService: NetworkServiceProtocol = NetworkService(urlString: Constants.cloudNoticesURL)
+        networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudNoticesURL)
     ) {
         self.dataSource = dataSource
         self.networkService = networkService
-//        loadNoticesFromSwiftData()
-//        
-//        // Subscribing to changes from CloudKit
-//        setupSubscriptionForChangesInCloud()
     }
     
     /// Convenience initializer for backward compatibility
       convenience init(
           modelContext: ModelContext,
-          networkService: NetworkServiceProtocol = NetworkService(urlString: Constants.cloudNoticesURL)
+          networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudNoticesURL)
       ) {
           self.init(
               dataSource: SwiftDataNoticesDataSource(modelContext: modelContext),

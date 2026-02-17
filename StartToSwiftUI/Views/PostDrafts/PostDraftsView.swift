@@ -13,7 +13,7 @@ struct PostDraftsView: View {
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
 
-    private let hapticManager = HapticService.shared
+    private let hapticManager = HapticManager.shared
         
     var body: some View {
         FormCoordinatorToolbar(

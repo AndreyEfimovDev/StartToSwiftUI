@@ -7,10 +7,9 @@
 
 import SwiftUI
 
-
-class HapticService {
+final class HapticManager {
     
-    static let shared = HapticService()
+    static let shared = HapticManager()
 
     private var notificationGenerator: UINotificationFeedbackGenerator?
     private var impactGenerators: [UIImpactFeedbackGenerator.FeedbackStyle: UIImpactFeedbackGenerator] = [:]
@@ -58,21 +57,20 @@ class HapticService {
     }
 }
 
-
 struct HapticManagerView: View {
     
     var body: some View {
         VStack(spacing: 20) {
             
-            Button("success") { HapticService.shared.notification(type: .success) }
-            Button("warning") { HapticService.shared.notification(type: .warning) }
-            Button("error") { HapticService.shared.notification(type: .error) }
+            Button("success") { HapticManager.shared.notification(type: .success) }
+            Button("warning") { HapticManager.shared.notification(type: .warning) }
+            Button("error") { HapticManager.shared.notification(type: .error) }
             Divider()
-            Button("soft") { HapticService.shared.impact(style: .soft) }
-            Button("light") { HapticService.shared.impact(style: .light) }
-            Button("medium") { HapticService.shared.impact(style: .medium) }
-            Button("rigid") { HapticService.shared.impact(style: .rigid) }
-            Button("heavy") { HapticService.shared.impact(style: .heavy) }
+            Button("soft") { HapticManager.shared.impact(style: .soft) }
+            Button("light") { HapticManager.shared.impact(style: .light) }
+            Button("medium") { HapticManager.shared.impact(style: .medium) }
+            Button("rigid") { HapticManager.shared.impact(style: .rigid) }
+            Button("heavy") { HapticManager.shared.impact(style: .heavy) }
         }
     }
 }

@@ -15,7 +15,7 @@ struct AddEditPostView: View {
     @EnvironmentObject private var coordinator: AppCoordinator
     @StateObject private var keyboardManager = KeyboardManager()
    
-    private let hapticManager = HapticService.shared
+    private let hapticManager = HapticManager.shared
     
     // MARK: - State
     @State private var editedPost: Post

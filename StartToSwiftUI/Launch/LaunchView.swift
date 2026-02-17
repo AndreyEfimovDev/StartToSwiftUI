@@ -10,7 +10,7 @@ import SwiftUI
 struct LaunchView: View {
     
     // MARK: - Dependencies
-    private let hapticManager = HapticService.shared
+    private let hapticManager = HapticManager.shared
     
     // MARK: - Constants
     let completion: () -> ()

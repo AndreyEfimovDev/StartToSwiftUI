@@ -12,7 +12,7 @@ class MockPostsNetworkService {
     var fetchCallCount = 0
     
     // Create a real NetworkService, but override its behavior
-    private let realService = NetworkService(urlString: Constants.cloudNoticesURL)
+    private let realService = NetworkManager(urlString: Constants.cloudNoticesURL)
     
     func fetchDataFromURLAsync<T: Codable>() async throws -> T {
         fetchCallCount += 1
