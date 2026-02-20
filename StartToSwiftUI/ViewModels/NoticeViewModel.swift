@@ -328,7 +328,7 @@ final class NoticeViewModel: ObservableObject {
             return
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self else { return }
             
             if self.isSoundNotificationOn {
