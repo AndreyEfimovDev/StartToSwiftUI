@@ -9,9 +9,13 @@ import SwiftUI
 import SwiftData
 import Speech
 import CloudKit
+import Firebase
 
 @main
 struct StartToSwiftUIApp: App {
+    
+    // Connect Firebase
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     @StateObject private var postsViewModel: PostsViewModel
     @StateObject private var noticeViewModel: NoticeViewModel
@@ -109,5 +113,22 @@ struct StartToSwiftUIApp: App {
                 }
             }
         }
+    }
+}
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        FirebaseApp.configure()
+
+        return true
+    }
+    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        
+    }
+    
+    func applicationWillResignActive(_ application: UIApplication) {
+        
     }
 }
