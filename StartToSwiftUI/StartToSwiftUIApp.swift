@@ -65,8 +65,7 @@ struct StartToSwiftUIApp: App {
                 .task {
                     postsViewModel.start()
                     noticeViewModel.start()
-                    await FBNoticesManager.shared.getAllNotices()
-                }
+                                    }
         }
     }
     

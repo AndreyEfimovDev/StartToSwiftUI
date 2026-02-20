@@ -91,7 +91,8 @@ struct HomeView: View {
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
                 noticevm.playSoundNotificationIfNeeded()
 //                vm.updateWidgetData()
-                await noticevm.importNoticesFromCloud()
+//                await noticevm.importNoticesFromCloud()
+                await noticevm.loadNoticesFromFirebase()
             }
         }
     }
@@ -138,7 +139,8 @@ struct HomeView: View {
         vm.loadPostsFromSwiftData()
         vm.updateWidgetData()
         Task {
-            await noticevm.importNoticesFromCloud()
+//            await noticevm.importNoticesFromCloud()
+            await noticevm.loadNoticesFromFirebase()
         }
     }
     

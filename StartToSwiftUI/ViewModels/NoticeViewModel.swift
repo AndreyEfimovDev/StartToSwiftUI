@@ -17,6 +17,7 @@ final class NoticeViewModel: ObservableObject {
     private let dataSource: NoticesDataSourceProtocol
     private let hapticManager = HapticManager.shared
     private let networkService: NetworkServiceProtocol
+    private let fbNoticesManager: FBNoticesManagerProtocol
     
     @Published var notices: [Notice] = []
     @Published var hasUnreadNotices: Bool = false
@@ -51,10 +52,12 @@ final class NoticeViewModel: ObservableObject {
     
     init(
         dataSource: NoticesDataSourceProtocol,
-        networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudNoticesURL)
+        networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudNoticesURL),
+        fbNoticesManager: FBNoticesManagerProtocol = FBNoticesManager()
     ) {
         self.dataSource = dataSource
         self.networkService = networkService
+        self.fbNoticesManager = fbNoticesManager
     }
     
     /// Convenience initializer for backward compatibility
@@ -111,6 +114,64 @@ final class NoticeViewModel: ObservableObject {
             handleError(error, message: "Error loading notices")
         }
     }
+    
+    func loadNoticesFromFirebase() async {
+        
+        let firebaseNotices: [FBNoticeModel] = await fbNoticesManager.getAllNotices()
+        
+        // sync with Cloud
+        loadNoticesFromSwiftData()
+        
+        // Filter by date (SwiftData only)
+        let relevantNotices: [FBNoticeModel]
+        if let appStateManager, let swiftDataSource {
+            // Take a maximum of two dates — the date of the last notice and the date of the application installation
+            // At the first launch, the user will not receive all the old notiсes, but only those that were created after installation
+            let lastNoticeDate = appStateManager.getLastNoticeDate() ?? Date.distantPast
+            log("🔥 LastNoticeDate from appStateManager \(lastNoticeDate)", level: .info)
+            let firstLaunchDate = appStateManager.getAppFirstLaunchDate() ?? Date.distantPast
+            log("🔥 FirstLaunchDate from appStateManager \(firstLaunchDate)", level: .info)
+            let filterDate = max(lastNoticeDate, firstLaunchDate)
+            relevantNotices = firebaseNotices.filter { $0.noticeDate > filterDate }
+            log("🍉 📦 Received \(firebaseNotices.count), selected \(relevantNotices.count) notices", level: .info)
+            removeDuplicateNotices(from: swiftDataSource)
+        } else {
+            relevantNotices = firebaseNotices
+        }
+        
+        // Filter by ID (general logic)
+        let existingIDs = Set(notices.map { $0.id })
+        let newNotices = relevantNotices.filter { !existingIDs.contains($0.noticeId) }
+        
+        // Update latest date regardless of whether there are new notices
+        // This prevents reprocessing the same notices on next launch
+        if let appStateManager {
+            if let latestDate = firebaseNotices.map({ $0.noticeDate }).max() {
+                appStateManager.updateLatestNoticeDate(latestDate)
+            }
+        }
+
+        guard !newNotices.isEmpty else { return }
+        
+        // Adding new notices
+        for firebaseNotice in newNotices {
+            dataSource.insert(NoticeMigrationHelper.convertFromFirebase(firebaseNotice))
+        }
+        
+        // Updating and saving the state
+        if let appStateManager {
+            appStateManager.markUserNotNotifiedBySound()
+            if isNotificationOn {
+                sendLocalNotification(count: newNotices.count)
+            }
+        }
+        
+        saveContext()
+        loadNoticesFromSwiftData(removeDuplicates: false)
+        log("🍉 ✅ Import complete: \(newNotices.count) notices added", level: .info)
+    }
+
+    
     
     // MARK: - Import from Cloud
     /// Called once upon application startup
