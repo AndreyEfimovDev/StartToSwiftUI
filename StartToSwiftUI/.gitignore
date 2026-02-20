@@ -1,5 +1,5 @@
 # For Firebase sensitive data
-test.plist
+GoogleService-Info.plist
 
 # For Xcode
 xcuserdata/
