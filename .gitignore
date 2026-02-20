@@ -1,0 +1,9 @@
+# For Firebase sensitive data
+GoogleService-Info.plist
+
+# For Xcode
+xcuserdata/
+*.xcuserstate
+.DS_Store
+
+
