@@ -1,7 +1,11 @@
 # For Firebase sensitive data
 GoogleService-Info.plist
+
 **/test.plist
+*/test.plist
 test.plist
+StartToSwiftUI/test.plist
+StartToSwiftUI/Views/test.plist
 
 # For Xcode
 xcuserdata/
