@@ -42,6 +42,7 @@
 		473436412F48661100CF00FA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 473436402F48661100CF00FA /* FirebaseFirestore */; };
 		473436432F48661100CF00FA /* FirebasePerformance in Frameworks */ = {isa = PBXBuildFile; productRef = 473436422F48661100CF00FA /* FirebasePerformance */; };
 		4734366F2F489F3B00CF00FA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4734366E2F489F3B00CF00FA /* GoogleService-Info.plist */; };
+		473436742F48C96300CF00FA /* FBNoticeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436732F48C96300CF00FA /* FBNoticeManager.swift */; };
 		47453E042EAB73A9000D2C16 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47453E032EAB73A9000D2C16 /* Date.swift */; };
 		474BFB8D2F3C8DF2006E639B /* PostsViewModel+Filtering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB8C2F3C8DF2006E639B /* PostsViewModel+Filtering.swift */; };
 		474BFB8F2F3C8E05006E639B /* PostsViewModel+CloudImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB8E2F3C8E05006E639B /* PostsViewModel+CloudImport.swift */; };
@@ -218,6 +219,7 @@
 		4732FB322EAA5A9E0062269D /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
 		4732FB362EAA63810062269D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		4734366E2F489F3B00CF00FA /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		473436732F48C96300CF00FA /* FBNoticeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBNoticeManager.swift; sourceTree = "<group>"; };
 		47453E032EAB73A9000D2C16 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		474BFB8C2F3C8DF2006E639B /* PostsViewModel+Filtering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+Filtering.swift"; sourceTree = "<group>"; };
 		474BFB8E2F3C8E05006E639B /* PostsViewModel+CloudImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+CloudImport.swift"; sourceTree = "<group>"; };
@@ -466,6 +468,7 @@
 		473436702F48A11300CF00FA /* Firebase */ = {
 			isa = PBXGroup;
 			children = (
+				473436732F48C96300CF00FA /* FBNoticeManager.swift */,
 			);
 			path = Firebase;
 			sourceTree = "<group>";
@@ -1029,6 +1032,7 @@
 				470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */,
 				470E63762EFD5044007B75B5 /* CountdownView.swift in Sources */,
 				471BBFA62EC7AB640004AC45 /* NoticesView.swift in Sources */,
+				473436742F48C96300CF00FA /* FBNoticeManager.swift in Sources */,
 				47870FBF2ECCD743004175E4 /* LinkButtonURL.swift in Sources */,
 				47BAF0F62E6485B000287F10 /* SegmentedOneLinePicker.swift in Sources */,
 				471BBF9A2EC5F6170004AC45 /* PostDraftsView.swift in Sources */,
