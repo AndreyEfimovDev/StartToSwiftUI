@@ -463,6 +463,13 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		473436702F48A11300CF00FA /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
 		4751DAEF2F163FE500EC9C53 /* Details */ = {
 			isa = PBXGroup;
 			children = (
@@ -529,6 +536,7 @@
 			children = (
 				4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */,
 				475997722E5DA436008E20F0 /* Extensions */,
+				473436702F48A11300CF00FA /* Firebase */,
 				475CC64B2F216B480099CAA6 /* MockDataServices */,
 				4759976C2E5D931F008E20F0 /* Services */,
 				4751DB032F16517100EC9C53 /* Coordinator */,

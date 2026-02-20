@@ -14,15 +14,13 @@ import Firebase
 @main
 struct StartToSwiftUIApp: App {
     
-    // Connect Firebase
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
+    // MARK: - Dependencies
     @StateObject private var postsViewModel: PostsViewModel
     @StateObject private var noticeViewModel: NoticeViewModel
     @StateObject private var coordinator = AppCoordinator()
 
-    
-    
     private let hapticManager = HapticManager.shared
     
     // MARK: - SwiftData Container with sync via iCloud
@@ -118,6 +116,7 @@ struct StartToSwiftUIApp: App {
     }
 }
 
+// MARK: - Connect Firebase
 class AppDelegate: NSObject, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
