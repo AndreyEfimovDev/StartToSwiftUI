@@ -6,27 +6,14 @@
 //
 
 import Foundation
-//import FirebaseCore
 import FirebaseFirestore
 
-// MARK: - Firestore Manager
+// MARK: - Firestore Notices Manager
 final class FBNoticesManager: FBNoticesManagerProtocol {
     
     init() {}
     
     private let noticesCollection: CollectionReference = Firestore.firestore().collection("notices")
-    
-//    func getAllNotices() async -> [FBNoticeModel] {
-//        do {
-//            let snapshot = try await noticesCollection.getDocuments()
-//            let notices = snapshot.documents.compactMap{ FBNoticeModel(document: $0) }
-//            log("🔥 Firebase: received \(notices.count) notices", level: .info)
-//            return notices
-//        } catch {
-//            log("❌ Firebase getAllNotices error: \(error.localizedDescription)", level: .error)
-//            return []
-//        }
-//    }
     
     func getAllNotices(after date: Date) async -> [FBNoticeModel] {
         do {
@@ -37,7 +24,7 @@ final class FBNoticesManager: FBNoticesManagerProtocol {
             log("🔥 Firebase: received \(notices.count) notices", level: .info)
             return notices
         } catch {
-            log("❌ Firebase getAllNotices_after_date error: \(error.localizedDescription)", level: .error)
+            log("❌ Firebase: getAllNotices_after_date error: \(error.localizedDescription)", level: .error)
             return []
         }
     }
@@ -46,6 +33,5 @@ final class FBNoticesManager: FBNoticesManagerProtocol {
 
 // MARK: - Firestore Protocol
 protocol FBNoticesManagerProtocol {
-//    func getAllNotices() async -> [FBNoticeModel]
     func getAllNotices(after: Date) async -> [FBNoticeModel]
 }

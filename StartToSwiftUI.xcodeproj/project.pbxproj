@@ -44,6 +44,9 @@
 		4734366F2F489F3B00CF00FA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4734366E2F489F3B00CF00FA /* GoogleService-Info.plist */; };
 		473436742F48C96300CF00FA /* FBNoticeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436732F48C96300CF00FA /* FBNoticeManager.swift */; };
 		473436762F48F18600CF00FA /* FBNoticeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436752F48F18200CF00FA /* FBNoticeModel.swift */; };
+		473436782F49BC1B00CF00FA /* FBPostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436772F49BC1B00CF00FA /* FBPostModel.swift */; };
+		4734367A2F49C49000CF00FA /* FBPostsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436792F49C49000CF00FA /* FBPostsManager.swift */; };
+		4734367C2F49C5E400CF00FA /* PostsViewModel+FBImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4734367B2F49C5E400CF00FA /* PostsViewModel+FBImport.swift */; };
 		47453E042EAB73A9000D2C16 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47453E032EAB73A9000D2C16 /* Date.swift */; };
 		474BFB8D2F3C8DF2006E639B /* PostsViewModel+Filtering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB8C2F3C8DF2006E639B /* PostsViewModel+Filtering.swift */; };
 		474BFB8F2F3C8E05006E639B /* PostsViewModel+CloudImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB8E2F3C8E05006E639B /* PostsViewModel+CloudImport.swift */; };
@@ -222,6 +225,9 @@
 		4734366E2F489F3B00CF00FA /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		473436732F48C96300CF00FA /* FBNoticeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBNoticeManager.swift; sourceTree = "<group>"; };
 		473436752F48F18200CF00FA /* FBNoticeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBNoticeModel.swift; sourceTree = "<group>"; };
+		473436772F49BC1B00CF00FA /* FBPostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBPostModel.swift; sourceTree = "<group>"; };
+		473436792F49C49000CF00FA /* FBPostsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBPostsManager.swift; sourceTree = "<group>"; };
+		4734367B2F49C5E400CF00FA /* PostsViewModel+FBImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PostsViewModel+FBImport.swift"; path = "StartToSwiftUI/Firebase/PostsViewModel+FBImport.swift"; sourceTree = SOURCE_ROOT; };
 		47453E032EAB73A9000D2C16 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		474BFB8C2F3C8DF2006E639B /* PostsViewModel+Filtering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+Filtering.swift"; sourceTree = "<group>"; };
 		474BFB8E2F3C8E05006E639B /* PostsViewModel+CloudImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+CloudImport.swift"; sourceTree = "<group>"; };
@@ -470,6 +476,8 @@
 		473436702F48A11300CF00FA /* Firebase */ = {
 			isa = PBXGroup;
 			children = (
+				473436772F49BC1B00CF00FA /* FBPostModel.swift */,
+				473436792F49C49000CF00FA /* FBPostsManager.swift */,
 				473436752F48F18200CF00FA /* FBNoticeModel.swift */,
 				473436732F48C96300CF00FA /* FBNoticeManager.swift */,
 			);
@@ -580,6 +588,7 @@
 				474BFB942F3C8E46006E639B /* PostsViewModel.swift */,
 				474BFB8C2F3C8DF2006E639B /* PostsViewModel+Filtering.swift */,
 				474BFB8E2F3C8E05006E639B /* PostsViewModel+CloudImport.swift */,
+				4734367B2F49C5E400CF00FA /* PostsViewModel+FBImport.swift */,
 				474BFB902F3C8E20006E639B /* PostsViewModel+BackupRestore.swift */,
 				474BFB922F3C8E2F006E639B /* PostsViewModel+Widget.swift */,
 				471BBFA02EC7251D0004AC45 /* NoticeViewModel.swift */,
@@ -971,6 +980,7 @@
 				474BFB912F3C8E20006E639B /* PostsViewModel+BackupRestore.swift in Sources */,
 				47C56FEC2EC9C66700F0796C /* NoticeDetailsView.swift in Sources */,
 				4773545D2E65D03A001DEDEE /* FiltersView.swift in Sources */,
+				4734367C2F49C5E400CF00FA /* PostsViewModel+FBImport.swift in Sources */,
 				47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */,
 				47FF42592EE556DB0069D232 /* TapHandler.swift in Sources */,
 				475CC64D2F216B870099CAA6 /* DataSourcesProtocols.swift in Sources */,
@@ -991,6 +1001,7 @@
 				47BAF0CA2E635E2800287F10 /* Views.swift in Sources */,
 				47656C002EE1EF9500F45AA6 /* StudyProgressForLevel.swift in Sources */,
 				4725A52B2EDD757F00235C40 /* UIDevice.swift in Sources */,
+				473436782F49BC1B00CF00FA /* FBPostModel.swift in Sources */,
 				475CC6942F2246FB0099CAA6 /* MockPostsDataSource.swift in Sources */,
 				47AC34432F28F2360023C7AF /* Calendar.swift in Sources */,
 				47656BFC2EE1EBF000F45AA6 /* ProgressIndicatorView.swift in Sources */,
@@ -1009,6 +1020,7 @@
 				4791CDF12E7428EE00687126 /* CircleShadowButtonView.swift in Sources */,
 				475CC6982F22476D0099CAA6 /* SwiftDataPostsDataSource.swift in Sources */,
 				47542EB42EF2C8E400B0AB79 /* StartView.swift in Sources */,
+				4734367A2F49C49000CF00FA /* FBPostsManager.swift in Sources */,
 				47AC34452F28F39C0023C7AF /* SegmentedOneLinePickerNotOptional.swift in Sources */,
 				47E2AF4F2EBCD86000B0214F /* CategoryFilterView.swift in Sources */,
 				478116462EBFF9DD00EF25F8 /* CustomProgressView.swift in Sources */,

@@ -20,6 +20,7 @@ final class PostsViewModel: ObservableObject {
     let hapticManager = HapticManager.shared
     let networkService: NetworkServiceProtocol
     let appStateManager: AppSyncStateManager?
+    let fbPostsManager: FBPostsManagerProtocol
     
     @Published var allPosts: [Post] = []
     @Published var filteredPosts: [Post] = []
@@ -87,10 +88,12 @@ final class PostsViewModel: ObservableObject {
     // MARK: - Init
     init(
         dataSource: PostsDataSourceProtocol,
-        networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudPostsURL)
+        networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudPostsURL),
+        fbPostsManager: FBPostsManagerProtocol = FBPostsManager()
     ) {
         self.dataSource = dataSource
         self.networkService = networkService
+        self.fbPostsManager = fbPostsManager
         
         if let swiftDataSource = dataSource as? SwiftDataPostsDataSource {
             self.appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
@@ -104,11 +107,13 @@ final class PostsViewModel: ObservableObject {
     /// Convenience initialiser for backward compatibility
     convenience init(
         modelContext: ModelContext,
-        networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudPostsURL)
+        networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudPostsURL),
+        fbPostsManager: FBPostsManagerProtocol = FBPostsManager()
     ) {
         self.init(
             dataSource: SwiftDataPostsDataSource(modelContext: modelContext),
-            networkService: networkService
+            networkService: networkService,
+            fbPostsManager: fbPostsManager
         )
     }
     
@@ -184,7 +189,7 @@ final class PostsViewModel: ObservableObject {
         Compare the dates of local and cloud posts.
         If there are new materials in the cloud, it sets the isNewCuratedPostsAvailable -> true
         */
-        if await checkCloudCuratedPostsForUpdates() {
+        if await checkFBPostsForUpdates() {
             appStateManager.setCuratedPostsLoadStatusOn()
         }
     }
@@ -371,10 +376,18 @@ final class PostsViewModel: ObservableObject {
         let existingIds = Set(allPosts.map { $0.id })
         
         return cloudResponse
-            .filter { !existingTitles.contains($0.title) && !existingIds.contains($0.id) }
+            .filter { !existingTitles.contains($0.title) || !existingIds.contains($0.id) }
             .map { PostMigrationHelper.convertFromCodable($0) }
     }
     
+    func filterUniquePosts(from fbResponse: [FBPostModel]) -> [FBPostModel] {
+        let existingTitles = Set(allPosts.map { $0.title })
+        let existingIds = Set(allPosts.map { $0.id })
+        
+        return fbResponse
+            .filter { !existingTitles.contains($0.title) || !existingIds.contains($0.postId) }
+    }
+
     func filterUniquePosts(_ posts: [Post]) -> [Post] {
         let existingTitles = Set(allPosts.map { $0.title })
         let existingIds = Set(allPosts.map { $0.id })
@@ -445,8 +458,8 @@ final class PostsViewModel: ObservableObject {
     
     // MARK: - Curated Posts State
     
-    var lastCuratedPostsLoadedDate: Date? {
-        appStateManager?.getLastDateOfCuaratedPostsLoaded()
+    var lastDatePostsLoaded: Date? {
+        appStateManager?.getLastDateOfPostsLoaded()
     }
     
     func resetCuratedPostsStatus() {

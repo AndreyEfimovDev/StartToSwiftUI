@@ -414,8 +414,9 @@ final class PostsViewModelTests: XCTestCase {
         )
         
         // When
-        let success = await testVM.importPostsFromCloud()
-        
+//        let success = await testVM.importPostsFromCloud()
+        let success = await testVM.importPostsFromFirebase()
+
         // Then
         XCTAssertTrue(success)
         XCTAssertEqual(testVM.allPosts.count, 2)
@@ -431,8 +432,9 @@ final class PostsViewModelTests: XCTestCase {
         )
         
         // When
-        let success = await testVM.importPostsFromCloud()
-        
+//        let success = await testVM.importPostsFromCloud()
+        let success = await testVM.importPostsFromFirebase()
+
         // Then
         XCTAssertTrue(success)
         XCTAssertNotNil(testVM.errorMessage)
@@ -458,8 +460,9 @@ final class PostsViewModelTests: XCTestCase {
         
         // When
         // When
-        let success = await testVM.importPostsFromCloud()
-        
+        //        let success = await testVM.importPostsFromCloud()
+        let success = await testVM.importPostsFromFirebase()
+
         // Then
         XCTAssertTrue(success)
         XCTAssertEqual(testVM.allPosts.count, 2) // Only new post added
@@ -481,8 +484,9 @@ final class PostsViewModelTests: XCTestCase {
         
         // When
         // When
-        let success = await testVM.importPostsFromCloud()
-        
+        //        let success = await testVM.importPostsFromCloud()
+        let success = await testVM.importPostsFromFirebase()
+
         // Then
         XCTAssertTrue(success)
         XCTAssertEqual(testVM.allPosts.count, 3)
@@ -505,8 +509,9 @@ final class PostsViewModelTests: XCTestCase {
         )
         
         // When
-        let success = await testVM.importPostsFromCloud()
-        
+        //        let success = await testVM.importPostsFromCloud()
+        let success = await testVM.importPostsFromFirebase()
+
         // Then
         XCTAssertTrue(success)
         let favoriteCount = testVM.allPosts.filter { $0.favoriteChoice == .yes }.count
@@ -527,8 +532,9 @@ final class PostsViewModelTests: XCTestCase {
         )
         
         // When
-        let success = await testVM.importPostsFromCloud()
-        
+        //        let success = await testVM.importPostsFromCloud()
+        let success = await testVM.importPostsFromFirebase()
+
         // Then
         XCTAssertTrue(success)
         let draftCount = testVM.allPosts.filter { $0.draft }.count

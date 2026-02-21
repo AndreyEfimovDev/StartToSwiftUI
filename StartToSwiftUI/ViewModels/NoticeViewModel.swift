@@ -61,15 +61,17 @@ final class NoticeViewModel: ObservableObject {
     }
     
     /// Convenience initializer for backward compatibility
-      convenience init(
-          modelContext: ModelContext,
-          networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudNoticesURL)
-      ) {
-          self.init(
-              dataSource: SwiftDataNoticesDataSource(modelContext: modelContext),
-              networkService: networkService
-          )
-      }
+    convenience init(
+        modelContext: ModelContext,
+        networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudNoticesURL),
+        fbNoticesManager: FBNoticesManagerProtocol = FBNoticesManager()
+    ) {
+        self.init(
+            dataSource: SwiftDataNoticesDataSource(modelContext: modelContext),
+            networkService: networkService,
+            fbNoticesManager: fbNoticesManager
+        )
+    }
     
     
     func start() {
@@ -122,7 +124,9 @@ final class NoticeViewModel: ObservableObject {
 
         if let appStateManager, let swiftDataSource {
             // Take a maximum of two dates — the date of the last notice and the date of the application installation
-            // At the first launch, the user will not receive all the old notiсes, but only those that were created after installation
+            // At the first launch, the user will not receive all the old notiсes, but only those that were created after app first launch
+            // Note: timeIntervalSince1970 is the number of seconds that have passed since January 1, 1970 00:00:00 UTC
+            // this point is called the Unix Epoch
             let rawLastDate = appStateManager.getLastNoticeDate() ?? Date.distantPast
             let lastNoticeDate = Date(timeIntervalSince1970: rawLastDate.timeIntervalSince1970.rounded(.down))
             log("🔥 LastNoticeDate from appStateManager \(lastNoticeDate)", level: .info)
@@ -175,7 +179,7 @@ final class NoticeViewModel: ObservableObject {
 
     
     
-    // MARK: - Import from Cloud
+    // MARK: - Import from Cloud (GitHub)
     /// Called once upon application startup
     ///
     /// 1. Download from the cloud → get cloudResponse

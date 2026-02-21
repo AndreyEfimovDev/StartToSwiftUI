@@ -5,7 +5,6 @@
 //  Created by Andrey Efimov on 20.02.2026.
 //
 
-
 import Foundation
 import FirebaseFirestore
 
@@ -29,7 +28,7 @@ struct FBNoticeModel {
     }
 }
 
-// MARK: - Firestore Mapping
+// MARK: - Firestore Notice Mapping
 extension FBNoticeModel {
     // Initialisation from the Firestore DocumentSnapshot
     init?(document: DocumentSnapshot) {
