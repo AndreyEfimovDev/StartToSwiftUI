@@ -7,6 +7,7 @@
 
 
 import Foundation
+import FirebaseFirestore
 
 // MARK: - Firestore Notice Model
 struct FBNoticeModel {
@@ -27,3 +28,27 @@ struct FBNoticeModel {
         self.noticeDate = noticeDate
     }
 }
+
+// MARK: - Firestore Mapping
+extension FBNoticeModel {
+    // Initialisation from the Firestore DocumentSnapshot
+    init?(document: DocumentSnapshot) {
+        guard
+            let data = document.data(),
+            let title = data["title"] as? String,
+            let message = data["notice_message"] as? String,
+            let timestamp = data["notice_date"] as? Timestamp
+        else {
+            return nil
+        }
+        self.noticeId = document.documentID
+        self.title = title
+        self.message = message
+        // Truncate to seconds — remove nanoseconds from Firestore Timestamp
+        let rawDate = timestamp.dateValue()
+        self.noticeDate = Date(timeIntervalSince1970: rawDate.timeIntervalSince1970.rounded(.down))
+    }
+}
+
+
+

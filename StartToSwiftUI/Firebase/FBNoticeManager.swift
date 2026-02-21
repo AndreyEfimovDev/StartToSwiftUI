@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import FirebaseCore
+//import FirebaseCore
 import FirebaseFirestore
 
 // MARK: - Firestore Manager
@@ -49,26 +49,3 @@ protocol FBNoticesManagerProtocol {
 //    func getAllNotices() async -> [FBNoticeModel]
     func getAllNotices(after: Date) async -> [FBNoticeModel]
 }
-
-// MARK: - Firestore Mapping
-extension FBNoticeModel {
-    // Initialisation from the Firestore DocumentSnapshot
-    init?(document: DocumentSnapshot) {
-        guard
-            let data = document.data(),
-            let title = data["title"] as? String,
-            let message = data["notice_message"] as? String,
-            let timestamp = data["notice_date"] as? Timestamp
-        else {
-            return nil
-        }
-        self.noticeId = document.documentID
-        self.title = title
-        self.message = message
-        self.noticeDate = timestamp.dateValue()
-    }
-    
-}
-
-
-

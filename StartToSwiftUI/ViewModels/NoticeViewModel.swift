@@ -123,10 +123,14 @@ final class NoticeViewModel: ObservableObject {
         if let appStateManager, let swiftDataSource {
             // Take a maximum of two dates — the date of the last notice and the date of the application installation
             // At the first launch, the user will not receive all the old notiсes, but only those that were created after installation
-            let lastNoticeDate = appStateManager.getLastNoticeDate() ?? Date.distantPast
+            let rawLastDate = appStateManager.getLastNoticeDate() ?? Date.distantPast
+            let lastNoticeDate = Date(timeIntervalSince1970: rawLastDate.timeIntervalSince1970.rounded(.down))
             log("🔥 LastNoticeDate from appStateManager \(lastNoticeDate)", level: .info)
-            let firstLaunchDate = appStateManager.getAppFirstLaunchDate() ?? Date.distantPast
+            
+            let rawFirstLaunch = appStateManager.getAppFirstLaunchDate() ?? Date.distantPast
+            let firstLaunchDate = Date(timeIntervalSince1970: rawFirstLaunch.timeIntervalSince1970.rounded(.down))
             log("🔥 FirstLaunchDate from appStateManager \(firstLaunchDate)", level: .info)
+            
             let filterDate = max(lastNoticeDate, firstLaunchDate)
             relevantNotices = await fbNoticesManager.getAllNotices(after: filterDate)
         } else {
@@ -144,7 +148,8 @@ final class NoticeViewModel: ObservableObject {
         // This prevents reprocessing the same notices on next launch
         if let appStateManager {
             if let latestDate = relevantNotices.map({ $0.noticeDate }).max() {
-                appStateManager.updateLatestNoticeDate(latestDate)
+                appStateManager.updateLatestNoticeDate(latestDate.addingTimeInterval(1))
+                log("🔥 LastNoticeDate updated in appStateManager \(latestDate)", level: .info)
             }
         }
 
