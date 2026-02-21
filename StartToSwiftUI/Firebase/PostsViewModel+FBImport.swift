@@ -60,4 +60,8 @@ extension PostsViewModel {
         log("🔥 checkFBPostsForUpdates: \(hasUpdates ? "Updates available" : "No updates")", level: .info)
         return hasUpdates
     }
+    
+    func migratePostsFromGitHubToFirebase() async {
+        await fbPostsManager.migratePostsFromGitHubToFirebase()
+    }
 }
