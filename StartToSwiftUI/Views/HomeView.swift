@@ -460,9 +460,11 @@ struct HomeView: View {
 //    }
     
 #Preview("With Mock Posts") {
-    let extendedPosts = PreviewData.samplePosts
+    
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+
     let postsVM = PostsViewModel(
-        dataSource: MockPostsDataSource(posts: extendedPosts),
+        dataSource: MockPostsDataSource(posts: PreviewData.samplePosts),
         fbPostsManager: MockFBPostsManager()
     )
     let noticesVM = NoticeViewModel(
