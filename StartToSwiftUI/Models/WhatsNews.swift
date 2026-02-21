@@ -16,7 +16,7 @@ struct WhatsNews {
                 News(
                     title: "Added",
                     newsText: """
-                    - An additional sorting option to the filter to view materials in their default order
+                    - An 'Original' sorting option to the filter to view materials in their default order
                     """
                 ),
                 News(

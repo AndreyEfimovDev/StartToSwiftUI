@@ -16,22 +16,38 @@ final class FBNoticesManager: FBNoticesManagerProtocol {
     
     private let noticesCollection: CollectionReference = Firestore.firestore().collection("notices")
     
-    func getAllNotices() async -> [FBNoticeModel] {
+//    func getAllNotices() async -> [FBNoticeModel] {
+//        do {
+//            let snapshot = try await noticesCollection.getDocuments()
+//            let notices = snapshot.documents.compactMap{ FBNoticeModel(document: $0) }
+//            log("🔥 Firebase: received \(notices.count) notices", level: .info)
+//            return notices
+//        } catch {
+//            log("❌ Firebase getAllNotices error: \(error.localizedDescription)", level: .error)
+//            return []
+//        }
+//    }
+    
+    func getAllNotices(after date: Date) async -> [FBNoticeModel] {
         do {
-            let snapshot = try await noticesCollection.getDocuments()
+            let snapshot = try await noticesCollection
+                .whereField("notice_date", isGreaterThan: Timestamp(date: date))
+                .getDocuments()
             let notices = snapshot.documents.compactMap{ FBNoticeModel(document: $0) }
             log("🔥 Firebase: received \(notices.count) notices", level: .info)
             return notices
         } catch {
-            log("❌ Firebase getAllNotices error: \(error.localizedDescription)", level: .error)
+            log("❌ Firebase getAllNotices_after_date error: \(error.localizedDescription)", level: .error)
             return []
         }
     }
+
 }
 
 // MARK: - Firestore Protocol
 protocol FBNoticesManagerProtocol {
-    func getAllNotices() async -> [FBNoticeModel]
+//    func getAllNotices() async -> [FBNoticeModel]
+    func getAllNotices(after: Date) async -> [FBNoticeModel]
 }
 
 // MARK: - Firestore Mapping

@@ -117,13 +117,9 @@ final class NoticeViewModel: ObservableObject {
     
     func loadNoticesFromFirebase() async {
         
-        let firebaseNotices: [FBNoticeModel] = await fbNoticesManager.getAllNotices()
-        
-        // sync with Cloud
-        loadNoticesFromSwiftData()
-        
         // Filter by date (SwiftData only)
         let relevantNotices: [FBNoticeModel]
+
         if let appStateManager, let swiftDataSource {
             // Take a maximum of two dates — the date of the last notice and the date of the application installation
             // At the first launch, the user will not receive all the old notiсes, but only those that were created after installation
@@ -132,12 +128,13 @@ final class NoticeViewModel: ObservableObject {
             let firstLaunchDate = appStateManager.getAppFirstLaunchDate() ?? Date.distantPast
             log("🔥 FirstLaunchDate from appStateManager \(firstLaunchDate)", level: .info)
             let filterDate = max(lastNoticeDate, firstLaunchDate)
-            relevantNotices = firebaseNotices.filter { $0.noticeDate > filterDate }
-            log("🍉 📦 Received \(firebaseNotices.count), selected \(relevantNotices.count) notices", level: .info)
-            removeDuplicateNotices(from: swiftDataSource)
+            relevantNotices = await fbNoticesManager.getAllNotices(after: filterDate)
         } else {
-            relevantNotices = firebaseNotices
+            relevantNotices = await fbNoticesManager.getAllNotices(after: Date.distantPast)
         }
+                
+        // sync with Cloud
+        loadNoticesFromSwiftData()
         
         // Filter by ID (general logic)
         let existingIDs = Set(notices.map { $0.id })
@@ -146,7 +143,7 @@ final class NoticeViewModel: ObservableObject {
         // Update latest date regardless of whether there are new notices
         // This prevents reprocessing the same notices on next launch
         if let appStateManager {
-            if let latestDate = firebaseNotices.map({ $0.noticeDate }).max() {
+            if let latestDate = relevantNotices.map({ $0.noticeDate }).max() {
                 appStateManager.updateLatestNoticeDate(latestDate)
             }
         }
