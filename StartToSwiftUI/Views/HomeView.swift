@@ -397,7 +397,7 @@ struct HomeView: View {
             description: Text("Check the spelling or try a new search.")
         )
     }
-    
+#warning("Delete this func before deployment to App Store")
 //    private func postsForCategory(_ category: String?) -> [Post] {
 //        guard let category = category else {
 //            return vm.filteredPosts
@@ -451,7 +451,7 @@ struct HomeView: View {
         }
     }
 }
-
+#warning("Delete this var before deployment to App Store")
 //    private func shortenPostTitle(title: String) -> String {
 //        if title.count > limitToShortenTitle {
 //            return String(title.prefix(limitToShortenTitle - 3)) + "..."
@@ -459,15 +459,15 @@ struct HomeView: View {
 //        return title
 //    }
     
-
-
-#Preview("With Extended Posts") {
+#Preview("With Mock Posts") {
     let extendedPosts = PreviewData.samplePosts
     let postsVM = PostsViewModel(
-        dataSource: MockPostsDataSource(posts: extendedPosts)
+        dataSource: MockPostsDataSource(posts: extendedPosts),
+        fbPostsManager: MockFBPostsManager()
     )
     let noticesVM = NoticeViewModel(
-        dataSource: MockNoticesDataSource()
+        dataSource: MockNoticesDataSource(),
+        fbNoticesManager: MockFBNoticesManager()
     )
     
     let container = try! ModelContainer(

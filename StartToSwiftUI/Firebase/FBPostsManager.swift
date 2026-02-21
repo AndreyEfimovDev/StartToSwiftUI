@@ -35,7 +35,7 @@ final class FBPostsManager: FBPostsManagerProtocol {
             return []
         }
     }
-    
+#warning("Delete this func before deployment to App Store")
     func migratePostsFromGitHubToFirebase() async {
         
         // Step 1: load posts from GitHub
@@ -69,14 +69,45 @@ final class FBPostsManager: FBPostsManagerProtocol {
                 log("❌ Failed to migrate: \(codablePost.title) — \(error.localizedDescription)", level: .error)
             }
         }
-        
-        log("🏁 Migration complete: \(successCount)/\(cloudResponse.count) posts", level: .info)
+        log("🏁 Migration From GitHub To Firebase complete: \(successCount)/\(cloudResponse.count) posts", level: .info)
     }
+
+#warning("Delete this func before deployment to App Store")
+    func uploadDevDataPostsToFirebase() async {
+        var successCount = 0
+        
+        for post in DevData.postsForCloud {
+            let data: [String: Any] = [
+                "category": post.category,
+                "title": post.title,
+                "intro": post.intro,
+                "author": post.author,
+                "post_type": post.postType.rawValue,
+                "url_string": post.urlString,
+                "post_platform": post.postPlatform.rawValue,
+                "post_date": Timestamp(date: post.postDate ?? Date()),
+                "study_level": post.studyLevel.rawValue,
+                "date": Timestamp(date: post.date)
+            ]
+            
+            do {
+                try await postsCollection.document(post.id).setData(data)
+                successCount += 1
+                log("✅ Migrated: \(post.title)", level: .info)
+            } catch {
+                log("❌ Failed: \(post.title) — \(error.localizedDescription)", level: .error)
+            }
+        }
+        log("🏁 uploadDevDataPostsToFirebase complete: \(successCount)/\(DevData.postsForCloud.count) posts", level: .info)
+    }
+
 
 }
 
 // MARK: - Firestore Protocol
 protocol FBPostsManagerProtocol {
     func getAllPosts(after: Date?) async -> [FBPostModel]
-    func migratePostsFromGitHubToFirebase() async
+    func uploadDevDataPostsToFirebase() async
+//    func migratePostsFromGitHubToFirebase() async
+//    func uploadDevDataPostsToFirebase() async
 }

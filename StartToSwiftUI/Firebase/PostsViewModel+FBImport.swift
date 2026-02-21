@@ -61,7 +61,13 @@ extension PostsViewModel {
         return hasUpdates
     }
     
-    func migratePostsFromGitHubToFirebase() async {
-        await fbPostsManager.migratePostsFromGitHubToFirebase()
+#warning("Delete this func before deployment to App Store")
+//    func migratePostsFromGitHubToFirebase() async {
+//        await fbPostsManager.migratePostsFromGitHubToFirebase()
+//    }
+#warning("Delete this func before deployment to App Store")
+    func uploadDevDataPostsToFirebase() async {
+        await fbPostsManager.uploadDevDataPostsToFirebase()
     }
+
 }

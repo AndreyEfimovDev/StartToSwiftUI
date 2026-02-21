@@ -26,8 +26,7 @@ struct DevData {
             urlString: "https://youtu.be/9fXI6o39jLQ?si=SlBHPxUZWyIl_pgf",
             postPlatform: .youtube,
             postDate: Date.from(year: 2022, month: 4, day: 27),
-            studyLevel: .middle,
-            origin: .cloudNew,
+            studyLevel: .middle
         ),
         Post(
             title: "Struct vs Class vs Actor, Value vs Reference Types, Stack vs Heap",

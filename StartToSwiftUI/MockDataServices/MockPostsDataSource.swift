@@ -34,3 +34,8 @@ final class MockPostsDataSource: PostsDataSourceProtocol {
     }
 }
 
+final class MockFBPostsManager: FBPostsManagerProtocol {
+    var mockPosts: [FBPostModel] = []
+    func getAllPosts(after date: Date?) async -> [FBPostModel] { mockPosts }
+    func uploadDevDataPostsToFirebase() async {}
+}

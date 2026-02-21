@@ -112,12 +112,18 @@ struct StartView: View {
 }
 
 #Preview("StartView with Mock Data") {
+    
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+
     let postsVM = PostsViewModel(
-        dataSource: MockPostsDataSource(posts: PreviewData.samplePosts)
+        dataSource: MockPostsDataSource(posts: PreviewData.samplePosts),
+        fbPostsManager: MockFBPostsManager()
     )
     let noticesVM = NoticeViewModel(
-        dataSource: MockNoticesDataSource(notices: PreviewData.sampleNotices)
+        dataSource: MockNoticesDataSource(notices: PreviewData.sampleNotices),
+        fbNoticesManager: MockFBNoticesManager()
     )
+
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
