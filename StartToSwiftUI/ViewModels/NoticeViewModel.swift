@@ -16,7 +16,7 @@ final class NoticeViewModel: ObservableObject {
     
     private let dataSource: NoticesDataSourceProtocol
     private let hapticManager = HapticManager.shared
-    private let networkService: NetworkServiceProtocol
+//    private let networkService: NetworkServiceProtocol
     private let fbNoticesManager: FBNoticesManagerProtocol
     
     @Published var notices: [Notice] = []
@@ -52,23 +52,23 @@ final class NoticeViewModel: ObservableObject {
     
     init(
         dataSource: NoticesDataSourceProtocol,
-        networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudNoticesURL),
+//        networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudNoticesURL),
         fbNoticesManager: FBNoticesManagerProtocol = FBNoticesManager()
     ) {
         self.dataSource = dataSource
-        self.networkService = networkService
+//        self.networkService = networkService
         self.fbNoticesManager = fbNoticesManager
     }
     
     /// Convenience initializer for backward compatibility
     convenience init(
         modelContext: ModelContext,
-        networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudNoticesURL),
+//        networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudNoticesURL),
         fbNoticesManager: FBNoticesManagerProtocol = FBNoticesManager()
     ) {
         self.init(
             dataSource: SwiftDataNoticesDataSource(modelContext: modelContext),
-            networkService: networkService,
+//            networkService: networkService,
             fbNoticesManager: fbNoticesManager
         )
     }
@@ -179,78 +179,78 @@ final class NoticeViewModel: ObservableObject {
 
     
     
-    // MARK: - Import from Cloud (GitHub)
-    /// Called once upon application startup
-    ///
-    /// 1. Download from the cloud → get cloudResponse
-    /// 2. Filter cloud notices by date - select those later than the last download date → get relevantCloudNotices
-    /// 3. Remove local duplicates → removeDuplicateNotices()
-    /// 4. Filter by ID → create newNoticesByID with those that don't exist locally only
-    /// 5. Add only truly new notices → newNoticesByID. If there are new ones:
-    /// - Convert → NoticeMigrationHelper
-    /// - Add to context → modelContext.insert()
-    /// - Save to SwiftData → saveContext()
-    /// - Update UI by load the updated list →  loadNoticesFromSwiftData()
-    /// 7. Notify the user:
-    /// - markUserNotNotifiedBySound() → set the flag for sound notification
-    /// - sendLocalNotification() → system notification (if enabled)
-    /// 
-    func importNoticesFromCloud() async {
-        do {
-            let cloudResponse: [CodableNotice] = try await networkService.fetchDataFromURLAsync()
-            
-            loadNoticesFromSwiftData() // sync with Cloud
-            
-            // Filter by date (SwiftData only)
-            let relevantNotices: [CodableNotice]
-            if let appStateManager, let swiftDataSource {
-                // Take a maximum of two dates — the date of the last notice and the date of the application installation
-                // At the first launch, the user will not receive all the old notiсes, but only those that were created after installation
-                let lastNoticeDate = appStateManager.getLastNoticeDate() ?? Date.distantPast
-                let appInstallDate = appStateManager.getAppFirstLaunchDate() ?? Date.distantPast
-                let filterDate = max(lastNoticeDate, appInstallDate)
-                relevantNotices = cloudResponse.filter { $0.noticeDate > filterDate }
-                log("🍉 📦 Received \(cloudResponse.count), selected \(relevantNotices.count) notices", level: .info)
-                removeDuplicateNotices(from: swiftDataSource)
-            } else {
-                relevantNotices = cloudResponse
-            }
-            
-            // Filter by ID (general logic)
-            let existingIDs = Set(notices.map { $0.id })
-            let newNotices = relevantNotices.filter { !existingIDs.contains($0.id) }
-            
-            guard !newNotices.isEmpty else { return }
-            
-            // Adding new notices
-            for cloudNotice in newNotices {
-                dataSource.insert(NoticeMigrationHelper.convertFromCodable(cloudNotice))
-            }
-            
-            // Updating and saving the state
-            if let appStateManager {
-                if let latestDate = cloudResponse.map({ $0.noticeDate }).max() {
-                    appStateManager.updateLatestNoticeDate(latestDate)
-                }
-                appStateManager.markUserNotNotifiedBySound()
-                
-                saveContext()
-                
-                if isNotificationOn {
-                    sendLocalNotification(count: newNotices.count)
-                }
-            } else {
-                try dataSource.save()
-            }
-            
-            loadNoticesFromSwiftData(removeDuplicates: false)
-            
-            log("🍉 ✅ Import complete: \(newNotices.count) notices added", level: .info)
-            
-        } catch {
-            handleError(error, message: "Import error")
-        }
-    }
+//    // MARK: - Import from Cloud (GitHub)
+//    /// Called once upon application startup
+//    ///
+//    /// 1. Download from the cloud → get cloudResponse
+//    /// 2. Filter cloud notices by date - select those later than the last download date → get relevantCloudNotices
+//    /// 3. Remove local duplicates → removeDuplicateNotices()
+//    /// 4. Filter by ID → create newNoticesByID with those that don't exist locally only
+//    /// 5. Add only truly new notices → newNoticesByID. If there are new ones:
+//    /// - Convert → NoticeMigrationHelper
+//    /// - Add to context → modelContext.insert()
+//    /// - Save to SwiftData → saveContext()
+//    /// - Update UI by load the updated list →  loadNoticesFromSwiftData()
+//    /// 7. Notify the user:
+//    /// - markUserNotNotifiedBySound() → set the flag for sound notification
+//    /// - sendLocalNotification() → system notification (if enabled)
+//    /// 
+//    func importNoticesFromCloud() async {
+//        do {
+//            let cloudResponse: [CodableNotice] = try await networkService.fetchDataFromURLAsync()
+//            
+//            loadNoticesFromSwiftData() // sync with Cloud
+//            
+//            // Filter by date (SwiftData only)
+//            let relevantNotices: [CodableNotice]
+//            if let appStateManager, let swiftDataSource {
+//                // Take a maximum of two dates — the date of the last notice and the date of the application installation
+//                // At the first launch, the user will not receive all the old notiсes, but only those that were created after installation
+//                let lastNoticeDate = appStateManager.getLastNoticeDate() ?? Date.distantPast
+//                let appInstallDate = appStateManager.getAppFirstLaunchDate() ?? Date.distantPast
+//                let filterDate = max(lastNoticeDate, appInstallDate)
+//                relevantNotices = cloudResponse.filter { $0.noticeDate > filterDate }
+//                log("🍉 📦 Received \(cloudResponse.count), selected \(relevantNotices.count) notices", level: .info)
+//                removeDuplicateNotices(from: swiftDataSource)
+//            } else {
+//                relevantNotices = cloudResponse
+//            }
+//            
+//            // Filter by ID (general logic)
+//            let existingIDs = Set(notices.map { $0.id })
+//            let newNotices = relevantNotices.filter { !existingIDs.contains($0.id) }
+//            
+//            guard !newNotices.isEmpty else { return }
+//            
+//            // Adding new notices
+//            for cloudNotice in newNotices {
+//                dataSource.insert(NoticeMigrationHelper.convertFromCodable(cloudNotice))
+//            }
+//            
+//            // Updating and saving the state
+//            if let appStateManager {
+//                if let latestDate = cloudResponse.map({ $0.noticeDate }).max() {
+//                    appStateManager.updateLatestNoticeDate(latestDate)
+//                }
+//                appStateManager.markUserNotNotifiedBySound()
+//                
+//                saveContext()
+//                
+//                if isNotificationOn {
+//                    sendLocalNotification(count: newNotices.count)
+//                }
+//            } else {
+//                try dataSource.save()
+//            }
+//            
+//            loadNoticesFromSwiftData(removeDuplicates: false)
+//            
+//            log("🍉 ✅ Import complete: \(newNotices.count) notices added", level: .info)
+//            
+//        } catch {
+//            handleError(error, message: "Import error")
+//        }
+//    }
     
     // MARK: - Remove Duplicates
     /// Remove duplicate notifications in SwiftUI, leaving only one instance of each ID
