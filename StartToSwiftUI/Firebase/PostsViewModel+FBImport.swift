@@ -60,11 +60,7 @@ extension PostsViewModel {
         log("🔥 checkFBPostsForUpdates: \(hasUpdates ? "Updates available" : "No updates")", level: .info)
         return hasUpdates
     }
-    
-#warning("Delete this func before deployment to App Store")
-//    func migratePostsFromGitHubToFirebase() async {
-//        await fbPostsManager.migratePostsFromGitHubToFirebase()
-//    }
+
 #warning("Delete this func before deployment to App Store")
     func uploadDevDataPostsToFirebase() async {
         await fbPostsManager.uploadDevDataPostsToFirebase()

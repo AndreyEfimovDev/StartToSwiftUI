@@ -65,7 +65,7 @@ struct StartToSwiftUIApp: App {
                 .task {
                     postsViewModel.start()
                     noticeViewModel.start()
-                                    }
+                }
         }
     }
     

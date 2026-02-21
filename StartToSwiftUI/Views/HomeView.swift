@@ -87,10 +87,11 @@ struct HomeView: View {
                 }
             })
             .task {
-//                vm.loadPostsFromSwiftData()
+                vm.loadPostsFromSwiftData()
+                noticevm.loadNoticesFromSwiftData()
+                vm.updateWidgetData()
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
                 noticevm.playSoundNotificationIfNeeded()
-//                vm.updateWidgetData()
                 await noticevm.loadNoticesFromFirebase()
             }
         }

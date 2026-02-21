@@ -47,9 +47,9 @@
 		473436782F49BC1B00CF00FA /* FBPostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436772F49BC1B00CF00FA /* FBPostModel.swift */; };
 		4734367A2F49C49000CF00FA /* FBPostsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436792F49C49000CF00FA /* FBPostsManager.swift */; };
 		4734367C2F49C5E400CF00FA /* PostsViewModel+FBImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4734367B2F49C5E400CF00FA /* PostsViewModel+FBImport.swift */; };
+		4734367F2F4A345500CF00FA /* AppSyncStateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4734367E2F4A345500CF00FA /* AppSyncStateModel.swift */; };
 		47453E042EAB73A9000D2C16 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47453E032EAB73A9000D2C16 /* Date.swift */; };
 		474BFB8D2F3C8DF2006E639B /* PostsViewModel+Filtering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB8C2F3C8DF2006E639B /* PostsViewModel+Filtering.swift */; };
-		474BFB8F2F3C8E05006E639B /* PostsViewModel+CloudImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB8E2F3C8E05006E639B /* PostsViewModel+CloudImport.swift */; };
 		474BFB912F3C8E20006E639B /* PostsViewModel+BackupRestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB902F3C8E20006E639B /* PostsViewModel+BackupRestore.swift */; };
 		474BFB932F3C8E2F006E639B /* PostsViewModel+Widget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB922F3C8E2F006E639B /* PostsViewModel+Widget.swift */; };
 		474BFB952F3C8E46006E639B /* PostsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB942F3C8E46006E639B /* PostsViewModel.swift */; };
@@ -79,9 +79,6 @@
 		475CC6942F2246FB0099CAA6 /* MockPostsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC6932F2246FB0099CAA6 /* MockPostsDataSource.swift */; };
 		475CC6962F22472E0099CAA6 /* SwiftDataNoticesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC6952F22472E0099CAA6 /* SwiftDataNoticesDataSource.swift */; };
 		475CC6982F22476D0099CAA6 /* SwiftDataPostsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC6972F22476D0099CAA6 /* SwiftDataPostsDataSource.swift */; };
-		475CC69A2F22900A0099CAA6 /* MockPostsNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC6992F22900A0099CAA6 /* MockPostsNetworkService.swift */; };
-		475CC69C2F22904A0099CAA6 /* MockNoticesNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC69B2F22904A0099CAA6 /* MockNoticesNetworkService.swift */; };
-		475CC69E2F2290910099CAA6 /* MockNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC69D2F2290910099CAA6 /* MockNetworkService.swift */; };
 		475CC6A02F22B0790099CAA6 /* CodablePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC69F2F22B0790099CAA6 /* CodablePost.swift */; };
 		475CC6A22F22B0A90099CAA6 /* CodableNotice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC6A12F22B0A90099CAA6 /* CodableNotice.swift */; };
 		4764A1F82EAD1DAA00D76C3A /* ClearCupsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4764A1F72EAD1DAA00D76C3A /* ClearCupsuleButton.swift */; };
@@ -143,7 +140,6 @@
 		47C56FEE2EC9C94100F0796C /* NoticeRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C56FED2EC9C94100F0796C /* NoticeRowView.swift */; };
 		47C57E7F2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */; };
 		47E2AF4F2EBCD86000B0214F /* CategoryFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */; };
-		47E439B72EA9290E007001AD /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E439B62EA9290E007001AD /* NetworkManager.swift */; };
 		47EA14312EF530780064583B /* AppSyncStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EA14302EF530780064583B /* AppSyncStateManager.swift */; };
 		47F38B1F2ED480B0006DEDBE /* DevData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F38B1E2ED480B0006DEDBE /* DevData.swift */; };
 		47F68A4A2EFB0232003786D0 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F68A492EFB0232003786D0 /* AppCoordinator.swift */; };
@@ -228,9 +224,9 @@
 		473436772F49BC1B00CF00FA /* FBPostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBPostModel.swift; sourceTree = "<group>"; };
 		473436792F49C49000CF00FA /* FBPostsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBPostsManager.swift; sourceTree = "<group>"; };
 		4734367B2F49C5E400CF00FA /* PostsViewModel+FBImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PostsViewModel+FBImport.swift"; path = "StartToSwiftUI/Firebase/PostsViewModel+FBImport.swift"; sourceTree = SOURCE_ROOT; };
+		4734367E2F4A345500CF00FA /* AppSyncStateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSyncStateModel.swift; sourceTree = "<group>"; };
 		47453E032EAB73A9000D2C16 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		474BFB8C2F3C8DF2006E639B /* PostsViewModel+Filtering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+Filtering.swift"; sourceTree = "<group>"; };
-		474BFB8E2F3C8E05006E639B /* PostsViewModel+CloudImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+CloudImport.swift"; sourceTree = "<group>"; };
 		474BFB902F3C8E20006E639B /* PostsViewModel+BackupRestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+BackupRestore.swift"; sourceTree = "<group>"; };
 		474BFB922F3C8E2F006E639B /* PostsViewModel+Widget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+Widget.swift"; sourceTree = "<group>"; };
 		474BFB942F3C8E46006E639B /* PostsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsViewModel.swift; sourceTree = "<group>"; };
@@ -263,9 +259,6 @@
 		475CC6932F2246FB0099CAA6 /* MockPostsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPostsDataSource.swift; sourceTree = "<group>"; };
 		475CC6952F22472E0099CAA6 /* SwiftDataNoticesDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataNoticesDataSource.swift; sourceTree = "<group>"; };
 		475CC6972F22476D0099CAA6 /* SwiftDataPostsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataPostsDataSource.swift; sourceTree = "<group>"; };
-		475CC6992F22900A0099CAA6 /* MockPostsNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPostsNetworkService.swift; sourceTree = "<group>"; };
-		475CC69B2F22904A0099CAA6 /* MockNoticesNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MockNoticesNetworkService.swift; path = StartToSwiftUI/MockDataServices/MockNoticesNetworkService.swift; sourceTree = SOURCE_ROOT; };
-		475CC69D2F2290910099CAA6 /* MockNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkService.swift; sourceTree = "<group>"; };
 		475CC69F2F22B0790099CAA6 /* CodablePost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodablePost.swift; sourceTree = "<group>"; };
 		475CC6A12F22B0A90099CAA6 /* CodableNotice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableNotice.swift; sourceTree = "<group>"; };
 		4764A1F72EAD1DAA00D76C3A /* ClearCupsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearCupsuleButton.swift; sourceTree = "<group>"; };
@@ -329,7 +322,6 @@
 		47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForPostsUpdateView.swift; sourceTree = "<group>"; };
 		47E229FE2EF42B9400341DD2 /* StartToSwiftUIDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StartToSwiftUIDebug.entitlements; sourceTree = "<group>"; };
 		47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilterView.swift; sourceTree = "<group>"; };
-		47E439B62EA9290E007001AD /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		47EA14302EF530780064583B /* AppSyncStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSyncStateManager.swift; sourceTree = "<group>"; };
 		47F38B1E2ED480B0006DEDBE /* DevData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevData.swift; sourceTree = "<group>"; };
 		47F68A492EFB0232003786D0 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
@@ -484,6 +476,15 @@
 			path = Firebase;
 			sourceTree = "<group>";
 		};
+		4734367D2F4A342200CF00FA /* AppSyncStateManager */ = {
+			isa = PBXGroup;
+			children = (
+				4734367E2F4A345500CF00FA /* AppSyncStateModel.swift */,
+				47EA14302EF530780064583B /* AppSyncStateManager.swift */,
+			);
+			path = AppSyncStateManager;
+			sourceTree = "<group>";
+		};
 		4751DAEF2F163FE500EC9C53 /* Details */ = {
 			isa = PBXGroup;
 			children = (
@@ -552,6 +553,7 @@
 				475997722E5DA436008E20F0 /* Extensions */,
 				473436702F48A11300CF00FA /* Firebase */,
 				475CC64B2F216B480099CAA6 /* MockDataServices */,
+				4734367D2F4A342200CF00FA /* AppSyncStateManager */,
 				4759976C2E5D931F008E20F0 /* Services */,
 				4751DB032F16517100EC9C53 /* Coordinator */,
 				475997592E5C86C5008E20F0 /* Components */,
@@ -587,7 +589,6 @@
 			children = (
 				474BFB942F3C8E46006E639B /* PostsViewModel.swift */,
 				474BFB8C2F3C8DF2006E639B /* PostsViewModel+Filtering.swift */,
-				474BFB8E2F3C8E05006E639B /* PostsViewModel+CloudImport.swift */,
 				4734367B2F49C5E400CF00FA /* PostsViewModel+FBImport.swift */,
 				474BFB902F3C8E20006E639B /* PostsViewModel+BackupRestore.swift */,
 				474BFB922F3C8E2F006E639B /* PostsViewModel+Widget.swift */,
@@ -615,9 +616,7 @@
 		4759976C2E5D931F008E20F0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				47E439B62EA9290E007001AD /* NetworkManager.swift */,
 				4791CDFD2E747AC100687126 /* JSONFileManager.swift */,
-				47EA14302EF530780064583B /* AppSyncStateManager.swift */,
 				4791CDFF2E747B2E00687126 /* HapticManager.swift */,
 				472E05CB2EDDC9BA005D774E /* KeyboardManager.swift */,
 				4791CDFB2E746FF100687126 /* EmailService.swift */,
@@ -648,9 +647,6 @@
 				475CC6952F22472E0099CAA6 /* SwiftDataNoticesDataSource.swift */,
 				475CC6932F2246FB0099CAA6 /* MockPostsDataSource.swift */,
 				475CC6912F2246E00099CAA6 /* MockNoticesDataSource.swift */,
-				475CC69D2F2290910099CAA6 /* MockNetworkService.swift */,
-				475CC6992F22900A0099CAA6 /* MockPostsNetworkService.swift */,
-				475CC69B2F22904A0099CAA6 /* MockNoticesNetworkService.swift */,
 			);
 			path = MockDataServices;
 			sourceTree = "<group>";
@@ -963,7 +959,6 @@
 				4751DAFA2F1640C300EC9C53 /* StatCard.swift in Sources */,
 				4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */,
 				4751DAF82F16409B00EC9C53 /* StatsCardsView.swift in Sources */,
-				475CC69E2F2290910099CAA6 /* MockNetworkService.swift in Sources */,
 				47B465802E6867930059CCB7 /* HomeView.swift in Sources */,
 				47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */,
 				47F68A4A2EFB0232003786D0 /* AppCoordinator.swift in Sources */,
@@ -984,6 +979,7 @@
 				47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */,
 				47FF42592EE556DB0069D232 /* TapHandler.swift in Sources */,
 				475CC64D2F216B870099CAA6 /* DataSourcesProtocols.swift in Sources */,
+				4734367F2F4A345500CF00FA /* AppSyncStateModel.swift in Sources */,
 				47AC34412F28D9F40023C7AF /* Functionality.swift in Sources */,
 				472E05CC2EDDC9BA005D774E /* KeyboardManager.swift in Sources */,
 				471DCBD02EBB88A400AFA5F4 /* CopyrightPolicy.swift in Sources */,
@@ -1006,7 +1002,6 @@
 				47AC34432F28F2360023C7AF /* Calendar.swift in Sources */,
 				47656BFC2EE1EBF000F45AA6 /* ProgressIndicatorView.swift in Sources */,
 				471DCBCE2EBB83D200AFA5F4 /* LegalInformationView.swift in Sources */,
-				475CC69C2F22904A0099CAA6 /* MockNoticesNetworkService.swift in Sources */,
 				471DCBD42EBB8A6400AFA5F4 /* TermsOfUse.swift in Sources */,
 				4715FA2E2F263BB000ED732A /* FormSectionViewWraper.swift in Sources */,
 				47A7339D2ED1C355006BB8A6 /* SpeechRecogniser.swift in Sources */,
@@ -1061,19 +1056,16 @@
 				4781D72E2ED716AE00B74F85 /* Bundle.swift in Sources */,
 				47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */,
 				4791CDC12E708E1300687126 /* DocumentPicker.swift in Sources */,
-				47E439B72EA9290E007001AD /* NetworkManager.swift in Sources */,
 				474BFB932F3C8E2F006E639B /* PostsViewModel+Widget.swift in Sources */,
 				470E637A2EFDE1CF007B75B5 /* ModalNavigationContainer.swift in Sources */,
 				471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */,
 				47AA558A2EA9741D000AF4E9 /* RestoreBackupView.swift in Sources */,
 				4751DAF62F16407200EC9C53 /* ChartDataPoint.swift in Sources */,
-				474BFB8F2F3C8E05006E639B /* PostsViewModel+CloudImport.swift in Sources */,
 				4791CDBB2E702E9700687126 /* EraseAllPostsView.swift in Sources */,
 				4732FB372EAA63810062269D /* Constants.swift in Sources */,
 				4773AC902F269D4B00A713EF /* PostStatusIcons.swift in Sources */,
 				4791CDFC2E746FF100687126 /* EmailService.swift in Sources */,
 				475997612E5CC0F8008E20F0 /* PostDetailsView.swift in Sources */,
-				475CC69A2F22900A0099CAA6 /* MockPostsNetworkService.swift in Sources */,
 				47870FBA2ECC8628004175E4 /* Acknowledgements.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -18,7 +18,6 @@ final class PostsViewModel: ObservableObject {
     let dataSource: PostsDataSourceProtocol
     let fileManager = JSONFileManager.shared
     let hapticManager = HapticManager.shared
-//    let networkService: NetworkServiceProtocol
     let appStateManager: AppSyncStateManager?
     let fbPostsManager: FBPostsManagerProtocol
     
@@ -88,11 +87,9 @@ final class PostsViewModel: ObservableObject {
     // MARK: - Init
     init(
         dataSource: PostsDataSourceProtocol,
-//        networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudPostsURL),
         fbPostsManager: FBPostsManagerProtocol = FBPostsManager()
     ) {
         self.dataSource = dataSource
-//        self.networkService = networkService
         self.fbPostsManager = fbPostsManager
         
         if let swiftDataSource = dataSource as? SwiftDataPostsDataSource {
@@ -107,12 +104,10 @@ final class PostsViewModel: ObservableObject {
     /// Convenience initialiser for backward compatibility
     convenience init(
         modelContext: ModelContext,
-//        networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudPostsURL),
         fbPostsManager: FBPostsManagerProtocol = FBPostsManager()
     ) {
         self.init(
             dataSource: SwiftDataPostsDataSource(modelContext: modelContext),
-//            networkService: networkService,
             fbPostsManager: fbPostsManager
         )
     }
@@ -121,8 +116,7 @@ final class PostsViewModel: ObservableObject {
     func start() {
         setupSubscriptions()
         setupSubscriptionForChangesInCloud()
-        loadPostsFromSwiftData()
-
+        
         Task { [weak self] in
             guard let self else { return }
             await self.initializeAppState()
