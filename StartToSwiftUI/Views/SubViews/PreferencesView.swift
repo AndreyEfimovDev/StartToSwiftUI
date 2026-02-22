@@ -38,9 +38,9 @@ struct PreferencesView: View {
 //                        .cornerRadius(30)
 //                }
 
-//                Button("Test Crash") {
-//                    fatalError("Test crash")
-//                }
+                Button("Test Crash") {
+                    fatalError("Test crash")
+                }
 //            }
 #endif
             Section(header: sectionHeader("Appearance")) {
