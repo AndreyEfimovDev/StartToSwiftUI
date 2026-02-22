@@ -100,6 +100,10 @@ extension PostsViewModel {
     private func searchPosts(posts: [Post]) -> [Post] {
         guard !searchText.isEmpty else { return posts }
         
+        if searchText.count == 1 {
+            FBAnalyticsManager.shared.logEvent(name: "search_used")
+        }
+        
         let query = searchText.lowercased()
         return posts.filter {
             $0.title.lowercased().contains(query) ||

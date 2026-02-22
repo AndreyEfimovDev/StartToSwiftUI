@@ -53,7 +53,7 @@ struct StartView: View {
     
     private var iPadContent: some View {
         NavigationSplitView(columnVisibility: $visibility) {
-#if DEBUG
+//#if DEBUG
 #warning("Delete this commented out code snippet before deployment")
             //                    //                if let categories = vm.allCategories {
             //                    //                    List(categories, id: \.self, selection: $vm.selectedCategory) { category in
@@ -65,9 +65,9 @@ struct StartView: View {
             //                    //                    Text("No categories")
             //                    //                }
             //                    //            } content: {
-#else
-    #error("Remove this debug code before App Store release!")
-#endif
+//#else
+//    #error("Remove this debug code before App Store release!")
+//#endif
             if let selectedCategory = vm.selectedCategory {
                 NavigationStack(path: $coordinator.path) {
                     HomeView(selectedCategory: selectedCategory)

@@ -87,12 +87,13 @@ struct HomeView: View {
                 }
             })
             .task {
+                FBAnalyticsManager.shared.logScreen(name: "HomeView")
                 vm.loadPostsFromSwiftData()
                 noticevm.loadNoticesFromSwiftData()
                 vm.updateWidgetData()
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
                 noticevm.playSoundNotificationIfNeeded()
-                await noticevm.loadNoticesFromFirebase()
+                await noticevm.importNoticesFromFirebase()
             }
         }
     }
@@ -144,7 +145,7 @@ struct HomeView: View {
                     appStateManager.setCuratedPostsLoadStatusOn()
                 }
             }
-            await noticevm.loadNoticesFromFirebase()
+            await noticevm.importNoticesFromFirebase()
         }
     }
     

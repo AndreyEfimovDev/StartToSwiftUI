@@ -33,7 +33,7 @@ struct FiltersView: View {
                 .font(.largeTitle)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.top, 55)
-            
+#warning("Remove before deployment to App Store")
             // Filters section
 //                categoryFilter
             VStack(spacing: 0) {
@@ -234,10 +234,17 @@ struct FiltersView: View {
         ClearCupsuleButton(
             primaryTitle: "Apply",
             primaryTitleColor: Color.mycolor.myBlue) {
+                FBAnalyticsManager.shared.logEvent(name: "filter_applied", params: [
+                    "level": vm.selectedLevel?.rawValue ?? "",
+                    "favorite": vm.selectedFavorite?.rawValue ?? "",
+                    "type": vm.selectedType?.rawValue ?? "",
+                    "platform": vm.selectedPlatform?.rawValue ?? "",
+                    "year": vm.selectedYear ?? "",
+                    "sort": vm.selectedSortOption.rawValue
+//                    "category": vm.selectedCategory ?? ""
+                ])
                 isFilterButtonPressed.toggle()
             }
-//            .padding(.horizontal, 55)
-        
     }
     
     private var resetAllFiltersButton: some View {
@@ -253,7 +260,6 @@ struct FiltersView: View {
                 vm.selectedSortOption = .notSorted
                 updateFiltersSheetView.toggle()
             }
-//            .padding(.horizontal, 55)
     }
     
     private var resetAllFiltersAndExitButton: some View {
@@ -269,7 +275,6 @@ struct FiltersView: View {
                 vm.selectedSortOption = .notSorted
                 isFilterButtonPressed.toggle()
             }
-//            .padding(.horizontal, 55)
     }
     
 }

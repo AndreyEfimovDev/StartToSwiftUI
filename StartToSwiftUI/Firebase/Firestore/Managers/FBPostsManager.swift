@@ -66,7 +66,7 @@ final class FBPostsManager: FBPostsManagerProtocol {
 
 }
 
-// MARK: - Firestore Protocol
+// MARK: - Firestore Posts Manager Protocol
 protocol FBPostsManagerProtocol {
     func getAllPosts(after: Date?) async -> [FBPostModel]
     func uploadDevDataPostsToFirebase() async

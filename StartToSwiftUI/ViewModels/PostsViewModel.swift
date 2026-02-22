@@ -20,7 +20,7 @@ final class PostsViewModel: ObservableObject {
     let hapticManager = HapticManager.shared
     let appStateManager: AppSyncStateManager?
     let fbPostsManager: FBPostsManagerProtocol
-    
+
     @Published var allPosts: [Post] = []
     @Published var filteredPosts: [Post] = []
     @Published var selectedPostId: String? = nil
@@ -112,7 +112,6 @@ final class PostsViewModel: ObservableObject {
         )
     }
     
-    
     func start() {
         setupSubscriptions()
         setupSubscriptionForChangesInCloud()
@@ -172,7 +171,9 @@ final class PostsViewModel: ObservableObject {
         - Restart — it will find an existing one and return it.
         */
         _ = appStateManager.getOrCreateAppState()
-        
+        FBCrashManager.shared.addLog(
+            "initializeAppState: firstLaunchDate \(appStateManager.getAppFirstLaunchDate() ?? Date.distantPast), postsCount \(allPosts.count)"
+        )
         /* Step2:
         Clean dublicates if any. iCloud sync can create multiple appsyncstates on different devices.
         This function finds duplicates, merges their data into one (the oldest), and deletes the rest.
@@ -192,18 +193,23 @@ final class PostsViewModel: ObservableObject {
     
     /// Load posts from SwiftData
     func loadPostsFromSwiftData() {
-        
+        FBPerformanceManager.shared.startTrace(name: "load_posts_swiftdata")
         lastLoadTime = Date()
         
         do {
             allPosts = try dataSource.fetchPosts()
+            FBCrashManager.shared.addLog("loadPostsFromSwiftData: loaded local posts: \(allPosts.count)")
             removeDuplicatePosts()
+            FBCrashManager.shared.addLog("loadPostsFromSwiftData: posts count after check for duplicates: \(allPosts.count)")
             allYears = getAllYears()
             allCategories = getAllCategories()
+            FBCrashManager.shared.setUserContext(allPosts.count, hasCloudPosts)
             log("📊 Loaded \(allPosts.count) posts from SwiftData:", level: .debug)
         } catch {
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error loading data")
         }
+        FBPerformanceManager.shared.stopTrace(name: "load_posts_swiftdata")
     }
     
     /// Remove Duplicate Posts
@@ -223,7 +229,7 @@ final class PostsViewModel: ObservableObject {
                 }
             }
         }
-        
+
         // Pass 2: duplicates by title
         /* Avoid double processing of posts */
         let markedIDs = Set(postsToDelete.map { $0.persistentModelID })
@@ -241,9 +247,11 @@ final class PostsViewModel: ObservableObject {
                 }
             }
         }
-        
+
         guard !postsToDelete.isEmpty else { return }
         
+        FBCrashManager.shared.addLog("removeDuplicatePosts: found \(postsToDelete.count) duplicates")
+
         for post in postsToDelete {
             dataSource.delete(post)
         }
@@ -253,6 +261,7 @@ final class PostsViewModel: ObservableObject {
             allPosts = try dataSource.fetchPosts()
             log("✅ Removed \(postsToDelete.count) duplicate posts", level: .info)
         } catch {
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error removing duplicate posts")
         }
     }
@@ -302,6 +311,7 @@ final class PostsViewModel: ObservableObject {
                 try swiftDataSource.modelContext.delete(model: Post.self)
                 saveContextAndReload()
             } catch {
+                FBCrashManager.shared.sendNonFatal(error)
                 handleError(error, message: "Error deleting data")
             }
         } else {
@@ -313,6 +323,9 @@ final class PostsViewModel: ObservableObject {
     /// Toggle favorite flag
     func favoriteToggle(_ post: Post) {
         post.favoriteChoice = post.favoriteChoice == .yes ? .no : .yes
+        if post.favoriteChoice == .yes {
+            FBAnalyticsManager.shared.logEvent(name: "post_favorited")
+        }
         saveContextAndReload()
     }
     
@@ -341,6 +354,7 @@ final class PostsViewModel: ObservableObject {
         case .practiced:
             post.practicedDateStamp = .now
         }
+        FBAnalyticsManager.shared.logEvent(name: "study_progress_changed", params: ["progress": selectedStudyProgress.rawValue])
         saveContextAndReload()
     }
     
@@ -357,6 +371,7 @@ final class PostsViewModel: ObservableObject {
             loadPostsFromSwiftData()
             updateWidgetData()
         } catch {
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error saving data")
         }
     }

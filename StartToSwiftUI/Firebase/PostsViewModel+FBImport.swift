@@ -12,7 +12,8 @@ extension PostsViewModel {
     
     /// Firebase import of study materials
     func importPostsFromFirebase() async -> Bool {
-        
+        FBCrashManager.shared.addLog("importPostsFromFirebase: started, posts count: \(allPosts.count)")
+        FBPerformanceManager.shared.startTrace(name: "import_posts_firebase")
         clearError()
         let sourceName = isSwiftData ? "SwiftData" : "(Mock)"
         
@@ -24,9 +25,12 @@ extension PostsViewModel {
         
         guard !fbResponseChecked.isEmpty else {
             hapticManager.impact(style: .light)
+            FBPerformanceManager.shared.stopTrace(name: "import_posts_firebase")
             log("ℹ️ No new posts from \(sourceName)", level: .info)
             return true
         }
+        
+        FBAnalyticsManager.shared.logEvent(name: "import_posts", params: ["count": fbResponseChecked.count])
         
         // Adding new posts
         for firebasePost in fbResponseChecked {
@@ -44,7 +48,16 @@ extension PostsViewModel {
         }
         
         hapticManager.notification(type: .success)
+        
+        FBCrashManager.shared.addLog("importPostsFromFirebase: finished, import count: \(fbResponseChecked.count)")
+        FBCrashManager.shared.addLog("importPostsFromFirebase: finished, updated posts count: \(allPosts.count)")
         log("✅ Added \(fbResponseChecked.count) new posts from \(sourceName)", level: .info)
+        FBPerformanceManager.shared.setValue(
+            name: "import_posts_firebase",
+            value: "\(fbResponseChecked.count)/\(fbResponse.count)",
+            forAttribute: "posts_new_of_received"
+        )
+        FBPerformanceManager.shared.stopTrace(name: "import_posts_firebase")
         return true
     }
 
@@ -64,6 +77,7 @@ extension PostsViewModel {
 #warning("Delete this func before deployment to App Store")
     func uploadDevDataPostsToFirebase() async {
         await fbPostsManager.uploadDevDataPostsToFirebase()
+        FBAnalyticsManager.shared.logEvent(name: "dev_data_uploaded")
     }
 
 }

@@ -70,6 +70,7 @@ struct PostDetailsView: View {
                 }
             }
             .onAppear {
+                FBAnalyticsManager.shared.logScreen(name: "PostDetailsView")
                 updateWidths(for: proxy.size.width)
             }
             .onChange(of: proxy.size.width) { _, newValue in

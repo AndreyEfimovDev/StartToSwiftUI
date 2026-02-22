@@ -93,28 +93,34 @@ final class NoticeViewModel: ObservableObject {
 
     // MARK: - Load Notices
     func loadNoticesFromSwiftData(removeDuplicates: Bool = true) {
-        
+        FBPerformanceManager.shared.startTrace(name: "load_notices_swiftdata")
         lastLoadTime = Date()
-        
+        FBCrashManager.shared.addLog("loadNoticesFromSwiftData: notices count: \(notices.count)")
+
         // Removing duplicate notices in SwiftUI, leaving only one instance for each ID - for SwiftData only
         if removeDuplicates, let swiftDataSource {
             removeDuplicateNotices(from: swiftDataSource)
         }
+        FBCrashManager.shared.addLog("loadNoticesFromSwiftData: notices count after check for duplicates: \(notices.count)")
 
         do {
             self.notices = try dataSource.fetchNotices()
+            FBCrashManager.shared.addLog("loadNoticesFromSwiftData: notices count after fetch from SwiftData: \(notices.count)")
             updateUnreadStatus()  // ← always update status when fetch notices
 //          let duration = Date().timeIntervalSince(startTime)
 //          log("🍉 ✅ Download completed in \(String(format: "%.2f", duration))s. Notifications: \(fetchedNotices.count)", level: .info)
         } catch {
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error loading notices")
         }
+        FBPerformanceManager.shared.stopTrace(name: "load_notices_swiftdata")
     }
     
-    func loadNoticesFromFirebase() async {
-        
+    func importNoticesFromFirebase() async {
+        FBPerformanceManager.shared.startTrace(name: "import_notices_firebase")
         // Filter by date (SwiftData only)
         let relevantNotices: [FBNoticeModel]
+        FBCrashManager.shared.addLog("loadNoticesFromFirebase: started, notices count: \(notices.count)")
 
         if let appStateManager {
             // Take a maximum of two dates — the date of the last notice and the date of the application installation
@@ -134,24 +140,29 @@ final class NoticeViewModel: ObservableObject {
         } else {
             relevantNotices = await fbNoticesManager.getAllNotices(after: Date.distantPast)
         }
-        
+        FBCrashManager.shared.addLog("loadNoticesFromFirebase: in progress, notices imported: \(relevantNotices.count)")
+
         // sync with Cloud
         loadNoticesFromSwiftData()
         
         // Filter by ID (general logic)
         let existingIDs = Set(notices.map { $0.id })
         let newNotices = relevantNotices.filter { !existingIDs.contains($0.noticeId) }
-        
+        FBCrashManager.shared.addLog("loadNoticesFromFirebase: in progress, new notices found count: \(newNotices.count)")
+
         // Update latest date regardless of whether there are new notices
         // This prevents reprocessing the same notices on next launch
         if let appStateManager {
             if let latestDate = relevantNotices.map({ $0.noticeDate }).max() {
                 appStateManager.updateLatestNoticeDate(latestDate.addingTimeInterval(1))
+                FBCrashManager.shared.addLog("loadNoticesFromFirebase: latest notices date updated: \(latestDate)")
                 log("🔥 LastNoticeDate updated in appStateManager \(latestDate)", level: .info)
             }
         }
-
-        guard !newNotices.isEmpty else { return }
+        guard !newNotices.isEmpty else {
+            FBPerformanceManager.shared.stopTrace(name: "import_notices_firebase")
+            return
+        }
         
         // Adding new notices
         for firebaseNotice in newNotices {
@@ -161,6 +172,7 @@ final class NoticeViewModel: ObservableObject {
         // Updating and saving the state
         if let appStateManager {
             appStateManager.markUserNotNotifiedBySound()
+            FBCrashManager.shared.addLog("loadNoticesFromFirebase: user notified by sound status: \(appStateManager.getUserNotifiedBySoundStatus())")
             if isNotificationOn {
                 sendLocalNotification(count: newNotices.count)
             }
@@ -169,6 +181,12 @@ final class NoticeViewModel: ObservableObject {
         saveContext()
         loadNoticesFromSwiftData(removeDuplicates: false)
         log("🍉 ✅ Import complete: \(newNotices.count) notices added", level: .info)
+        FBPerformanceManager.shared.setValue(
+            name: "import_notices_firebase",
+            value: "\(newNotices.count)/\(relevantNotices.count)",
+            forAttribute: "notices_new_of_received"
+        )
+        FBPerformanceManager.shared.stopTrace(name: "import_notices_firebase")
     }
     
     // MARK: - Remove Duplicates
@@ -183,10 +201,11 @@ final class NoticeViewModel: ObservableObject {
                 .filter { $0.value.count > 1 }
             
             guard !duplicateGroups.isEmpty else { return }
-            
+            FBCrashManager.shared.addLog("removeDuplicateNotices: found \(duplicateGroups.count) duplicates")
             log("🍉 🗑️ Found \(duplicateGroups.count) IDs with duplicates", level: .info)
             
             for (id, noticesList) in duplicateGroups {
+                
                 log("  🔍 ID \(id): \(noticesList.count) duplicates", level: .info)
                 
                 // Priority: Read > First
@@ -200,6 +219,7 @@ final class NoticeViewModel: ObservableObject {
             }
             saveContext()
         } catch {
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error removing duplicates")
         }
     }
@@ -273,6 +293,7 @@ final class NoticeViewModel: ObservableObject {
             loadNoticesFromSwiftData()
             log("🍉 ➕ Notice added, total: \(notices.count)", level: .info)
         } catch {
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error adding notice")
         }
     }
@@ -282,6 +303,7 @@ final class NoticeViewModel: ObservableObject {
         do {
             try dataSource.save()
         } catch {
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error saving notices")
         }
     }
