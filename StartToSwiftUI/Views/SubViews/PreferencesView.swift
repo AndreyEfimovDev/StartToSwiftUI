@@ -23,25 +23,25 @@ struct PreferencesView: View {
         Form {
 #warning("Delete this button before deployment to App Store")
 #if DEBUG
-            VStack {
-                Button {
-                    Task {
-                        await vm.uploadDevDataPostsToFirebase()
-                    }
-                } label: {
-                    Text("Upload DevData to Firebase")
-                        .font(.headline)
-                        .foregroundStyle(Color.mycolor.myAccent)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 55)
-                        .background(Color.mycolor.myRed.opacity(0.3))
-                        .cornerRadius(30)
-                }
+//            VStack {
+//                Button {
+//                    Task {
+//                        await vm.uploadDevDataPostsToFirebase()
+//                    }
+//                } label: {
+//                    Text("Upload DevData to Firebase")
+//                        .font(.headline)
+//                        .foregroundStyle(Color.mycolor.myAccent)
+//                        .frame(maxWidth: .infinity)
+//                        .frame(height: 55)
+//                        .background(Color.mycolor.myRed.opacity(0.3))
+//                        .cornerRadius(30)
+//                }
 
-                Button("Test Crash") {
-                    fatalError("Test crash")
-                }
-            }
+//                Button("Test Crash") {
+//                    fatalError("Test crash")
+//                }
+//            }
 #endif
             Section(header: sectionHeader("Appearance")) {
                 themeAppearance
