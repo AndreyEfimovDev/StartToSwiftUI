@@ -583,6 +583,7 @@
 			children = (
 				47A331A42F27A33C002883DD /* StudyProgressWidgetExtensionDebug.entitlements */,
 				47A3318E2F2767B2002883DD /* StudyProgressWidgetExtensionRelease.entitlements */,
+				4734368F2F4B5AC200CF00FA /* GoogleService-Info.plist */,
 				4759974C2E5C690B008E20F0 /* StartToSwiftUI */,
 				47A3319D2F276A53002883DD /* StudyProgressWidget */,
 				475CC68B2F217B890099CAA6 /* StartToSwiftUIUnitTests */,
@@ -620,7 +621,6 @@
 				47BAF0EE2E645B0A00287F10 /* Views */,
 				475997492E5C690B008E20F0 /* Assets.xcassets */,
 				471BEF4F2EA793880093F962 /* Info.plist */,
-				4734368F2F4B5AC200CF00FA /* GoogleService-Info.plist */,
 				47542EB52EF3171200B0AB79 /* StartToSwiftUIRelease.entitlements */,
 				47E229FE2EF42B9400341DD2 /* StartToSwiftUIDebug.entitlements */,
 			);
