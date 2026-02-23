@@ -12,7 +12,6 @@ import Combine
 extension PostsViewModel {
     
     func setupSubscriptions() {
-        
         let filters = $selectedLevel
             .combineLatest($selectedFavorite, $selectedType, $selectedYear)
         
@@ -20,13 +19,11 @@ extension PostsViewModel {
             .combineLatest($selectedPlatform, $selectedSortOption, $selectedCategory)
         
         let debouncedSearchText = $searchText
-//            .prepend(searchText)
-            .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
+            .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
         
         $allPosts
             .combineLatest(debouncedSearchText, filtersWithPlatformAndSortOption)
             .map { [weak self] posts, searchText, data -> [Post] in
-                
                 guard let self else { return posts }
                 
                 let ((level, favorite, type, year), platform, sortOption, category) = data

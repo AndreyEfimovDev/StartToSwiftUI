@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import Combine
 
 struct StartView: View {
     
@@ -111,33 +112,38 @@ struct StartView: View {
     }
 }
 
-#Preview("StartView with Mock Data") {
+
+private struct StartViewPreview: View {
     
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @StateObject var vm: PostsViewModel = {
+        let vm = PostsViewModel(
+            dataSource: MockPostsDataSource(),
+            fbPostsManager: MockFBPostsManager()
+        )
+        vm.start()
+        return vm
+    }()
     
+    @StateObject var noticesVM = NoticeViewModel(
+        dataSource: MockNoticesDataSource(),
+        fbNoticesManager: MockFBNoticesManager()
+    )
+    
+    var body: some View {
+        NavigationStack {
+            StartView()
+                .environmentObject(AppCoordinator())
+                .environmentObject(vm)
+                .environmentObject(noticesVM)
+        }
+    }
+}
+
+#Preview("With Mock Posts") {
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
-
-    let vm: PostsViewModel = {
-        let vm = PostsViewModel(
-            dataSource: MockPostsDataSource(posts: PreviewData.samplePosts),
-            fbPostsManager: MockFBPostsManager()
-        )
-        vm.saveContextAndReload()
-        return vm
-    }()
-    
-    let noticesVM = NoticeViewModel(
-        dataSource: MockNoticesDataSource(notices: PreviewData.sampleNotices),
-        fbNoticesManager: MockFBNoticesManager()
-    )
-    
-    StartView()
+    StartViewPreview()
         .modelContainer(container)
-        .environmentObject(AppCoordinator())
-        .environmentObject(vm)
-        .environmentObject(noticesVM)
-    
 }

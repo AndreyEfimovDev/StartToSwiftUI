@@ -97,7 +97,6 @@ final class PostsViewModel: ObservableObject {
         } else {
             self.appStateManager = nil
         }
-
         setupTimezone()
         restoreFilters()
     }

@@ -453,41 +453,38 @@ struct HomeView: View {
         }
     }
 }
-#warning("Delete this var before deployment to App Store")
-//    private func shortenPostTitle(title: String) -> String {
-//        if title.count > limitToShortenTitle {
-//            return String(title.prefix(limitToShortenTitle - 3)) + "..."
-//        }
-//        return title
-//    }
-    
-#Preview("With Mock Posts") {
-    
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
-    let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppSyncState.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-    )
 
-    let vm: PostsViewModel = {
+private struct HomeViewPreview: View {
+    
+    @StateObject var vm: PostsViewModel = {
         let vm = PostsViewModel(
             dataSource: MockPostsDataSource(),
             fbPostsManager: MockFBPostsManager()
         )
+        vm.start()
         return vm
     }()
     
-    let noticesVM = NoticeViewModel(
+    @StateObject var noticesVM = NoticeViewModel(
         dataSource: MockNoticesDataSource(),
         fbNoticesManager: MockFBNoticesManager()
     )
     
-    NavigationStack {
-        HomeView(selectedCategory: Constants.mainCategory)
-            .modelContainer(container)
-            .environmentObject(AppCoordinator())
-            .environmentObject(vm)
-            .environmentObject(noticesVM)
+    var body: some View {
+        NavigationStack {
+            HomeView(selectedCategory: Constants.mainCategory)
+                .environmentObject(AppCoordinator())
+                .environmentObject(vm)
+                .environmentObject(noticesVM)
+        }
     }
+}
+
+#Preview("With Mock Posts") {
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppSyncState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+    HomeViewPreview()
+        .modelContainer(container)
 }

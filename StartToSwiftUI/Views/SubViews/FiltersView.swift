@@ -28,40 +28,43 @@ struct FiltersView: View {
     // MARK: Body
     
     var body: some View {
-        VStack (alignment: .leading) {
+        VStack (spacing: 0) {
             Text("Filters")
                 .font(.largeTitle)
                 .frame(maxWidth: .infinity, alignment: .center)
-//                .padding(.top, 55)
+                .padding(.top, 35)
+
 #warning("Remove before deployment to App Store")
             // Filters section
 //                categoryFilter
-            VStack(spacing: 0) {
-                studyLevelFilter
-                favoriteFilter
-                typeFilter
-                typeMedia
-                yearFilter
-                sortOptions
-            }
-            .padding(.horizontal, UIDevice.isiPad ? 15 : 0)
-            
-            Spacer()
-            
-            // Buttons section
-            VStack {
-                applyFiltersButton
-                HStack {
-                    resetAllFiltersButton
-                    resetAllFiltersAndExitButton
+            Group {
+                VStack(spacing: 0) {
+                    studyLevelFilter
+                    favoriteFilter
+                    typeFilter
+                    typeMedia
+                    yearFilter
+                    sortOptions
+                }
+//                .padding(.horizontal, UIDevice.isiPad ? 15 : 0)
+                .border(.red)
+
+                Spacer()
+                
+                // Buttons section
+                VStack {
+                    applyFiltersButton
+                    HStack {
+                        resetAllFiltersButton
+                        resetAllFiltersAndExitButton
+                    }
                 }
             }
-            .padding(.horizontal, UIDevice.isiPad ? 90 : 35)
-            .padding(.bottom, UIDevice.isiPad ? 15 : 30)
+//            .padding(.horizontal, UIDevice.isiPad ? 90 : 55)
+//            .padding(.bottom, UIDevice.isiPad ? 15 : 30)
         }
         .foregroundStyle(Color.mycolor.myAccent)
-//        .padding(.top, -40)
-        .padding(.horizontal)
+//        .padding(.horizontal)
         .onDisappear {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
             isFilterButtonPressed = false
@@ -69,24 +72,93 @@ struct FiltersView: View {
     }
     
     // MARK: Subviews
-    
-    @ViewBuilder
-    private func formatedFilterTitle(_ title: String) -> some View {
-        Text(title)
-            .font(.footnote)
-            .fontWeight(.semibold)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.top, 8)
+    private var studyLevelFilter: some View {
+        filterSection(
+            title: "Study level:",
+            selection: $vm.selectedLevel,
+            allItems: StudyLevel.allCases,
+            titleForCase: { $0.displayName }
+        )
     }
     
+    private var favoriteFilter: some View {
+        filterSection(
+            title: "Favorite:",
+            selection: $vm.selectedFavorite,
+            allItems: FavoriteChoice.allCases,
+            titleForCase: { $0.displayName }
+        )
+    }
+
+    private var typeFilter: some View {
+        filterSection(
+            title: "Post type:",
+            selection: $vm.selectedType,
+            allItems: PostType.allCases,
+            titleForCase: { $0.displayName }
+        )
+    }
+
+    private var typeMedia: some View {
+        filterSection(
+            title: "Media:",
+            selection: $vm.selectedPlatform,
+            allItems: Platform.allCases,
+            titleForCase: { $0.displayName }
+        )
+    }
+    
+    private var yearFilter: some View {
+        Group {
+            if let list = vm.allYears {
+                filterSection(
+                    title: "Year:",
+                    selection: $vm.selectedYear,
+                    allItems: list,
+                    titleForCase: { $0 }
+                )
+            }
+        }
+    }
+
+    private var categoryFilter: some View {
+        Group {
+            if let list = vm.allCategories {
+                filterSection(
+                    title: "Category:",
+                    selection: $vm.selectedCategory,
+                    allItems: list,
+                    titleForCase: { $0 }
+                )
+            }
+        }
+    }
+
     private var sortOptions: some View {
-        VStack {
-            formatedFilterTitle("Sort:")
+        filterSection(
+            title: "Sort:",
+            selection: $vm.selectedSortOption,
+            allItems: SortOption.allCases,
+            titleForCase: { $0.displayName }
+        )
+    }
+        
+    // MARK: Helpers
+    /// For Non-Optional filters (SortOption)
+//    @ViewBuilder
+    private func filterSection<T: Hashable & CaseIterable>(
+        title: String,
+        selection: Binding<T>,
+        allItems: [T],
+        titleForCase: @escaping (T) -> String
+    ) -> some View {
+        VStack(spacing: 3) {
+            formatedFilterTitle(title)
             
             SegmentedOneLinePickerNotOptional(
-                selection: $vm.selectedSortOption,
-                allItems: SortOption.allCases,
-                titleForCase: { $0.displayName },
+                selection: selection,
+                allItems: allItems,
+                titleForCase: titleForCase,
                 selectedFont: selectedFont,
                 selectedTextColor: Color.mycolor.myBackground,
                 unselectedTextColor: Color.mycolor.myAccent,
@@ -96,14 +168,20 @@ struct FiltersView: View {
         }
     }
     
-    private var studyLevelFilter: some View {
-        VStack {
-            formatedFilterTitle("Study level:")
-            
+    /// For Optional filters CaseIterable (StudyLevel?, FavoriteChoice?, etc.)
+//    @ViewBuilder
+    private func filterSection<T: Hashable & CaseIterable>(
+        title: String,
+        selection: Binding<T?>,
+        allItems: [T],
+        titleForCase: @escaping (T) -> String
+    ) -> some View {
+        VStack(spacing: 3) {
+            formatedFilterTitle(title)
             SegmentedOneLinePicker(
-                selection: $vm.selectedLevel,
-                allItems: StudyLevel.allCases,
-                titleForCase: { $0.displayName },
+                selection: selection,
+                allItems: allItems,
+                titleForCase: titleForCase,
                 selectedFont: selectedFont,
                 selectedTextColor: Color.mycolor.myBackground,
                 unselectedTextColor: Color.mycolor.myAccent,
@@ -115,52 +193,20 @@ struct FiltersView: View {
         }
     }
     
-    private var favoriteFilter: some View {
-        VStack {
-            formatedFilterTitle("Favorite:")
-            
+    /// For Optional filters not CaseIterable (year, category)
+//    @ViewBuilder
+    private func filterSection<T: Hashable>(
+        title: String,
+        selection: Binding<T?>,
+        allItems: [T],
+        titleForCase: @escaping (T) -> String
+    ) -> some View {
+        VStack(spacing: 3) {
+            formatedFilterTitle(title)
             SegmentedOneLinePicker(
-                selection: $vm.selectedFavorite,
-                allItems: FavoriteChoice.allCases,
-                titleForCase: { $0.displayName },
-                selectedFont: selectedFont,
-                selectedTextColor: Color.mycolor.myBackground,
-                unselectedTextColor: Color.mycolor.myAccent,
-                selectedBackground: Color.mycolor.myBlue,
-                unselectedBackground: .clear,
-                showNilOption: true,
-                nilTitle: "All"
-            )
-        }
-    }
-    
-    private var typeFilter: some View {
-        VStack {
-            formatedFilterTitle("Post type:")
-            
-            SegmentedOneLinePicker(
-                selection: $vm.selectedType,
-                allItems: PostType.selectablePostTypeCases,
-                titleForCase: { $0.displayName },
-                selectedFont: selectedFont,
-                selectedTextColor: Color.mycolor.myBackground,
-                unselectedTextColor: Color.mycolor.myAccent,
-                selectedBackground: Color.mycolor.myBlue,
-                unselectedBackground: .clear,
-                showNilOption: true,
-                nilTitle: "All"
-            )
-        }
-    }
-    
-    private var typeMedia: some View {
-        VStack {
-            formatedFilterTitle("Media:")
-            
-            SegmentedOneLinePicker(
-                selection: $vm.selectedPlatform,
-                allItems: Platform.allCases,
-                titleForCase: { $0.displayName },
+                selection: selection,
+                allItems: allItems,
+                titleForCase: titleForCase,
                 selectedFont: selectedFont,
                 selectedTextColor: Color.mycolor.myBackground,
                 unselectedTextColor: Color.mycolor.myAccent,
@@ -172,53 +218,21 @@ struct FiltersView: View {
         }
     }
 
-    
-    private var yearFilter: some View {
-        Group {
-            if let list = vm.allYears {
-                VStack(alignment: .leading) {
-                    formatedFilterTitle("Year:")
-                    
-                    CustomOneCapsulesLineSegmentedPicker(
-                        selection: $vm.selectedYear,
-                        allItems: list,
-                        titleForCase: { $0 },
-                        selectedFont: selectedFont,
-                        selectedTextColor: Color.mycolor.myBackground,
-                        unselectedTextColor: Color.mycolor.myAccent,
-                        selectedBackground: Color.mycolor.myBlue,
-                        unselectedBackground: .clear,
-                        showNilOption: true,
-                        nilTitle: "All"
-                    )
-                }
-            }
-        }
-    }
-    
-    private var categoryFilter: some View {
-        Group {
-            if let list = vm.allCategories {
-                VStack(alignment: .leading) {
-                    formatedFilterTitle("Category:")
 
-                    CustomOneCapsulesLineSegmentedPicker(
-                        selection: $vm.selectedCategory,
-                        allItems: list,
-                        titleForCase: { $0 },
-                        selectedFont: selectedFont,
-                        selectedTextColor: Color.mycolor.myBackground,
-                        unselectedTextColor: Color.mycolor.myAccent,
-                        selectedBackground: Color.mycolor.myButtonBGBlue,
-                        unselectedBackground: .clear,
-                        showNilOption: true,
-                        nilTitle: "All"
-                    )
-                }
-            }
-        }
+    @ViewBuilder
+    private func formatedFilterTitle(_ title: String) -> some View {
+        Text(title)
+            .font(.footnote)
+            .fontWeight(.semibold)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, 8)
     }
+
     
+    
+    
+    
+    // MARK: Buttons
     private var applyFiltersButton: some View {
 #warning("Delete the line with 'category' before deployment to App Store")
         ClearCupsuleButton(
