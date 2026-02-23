@@ -50,7 +50,6 @@
 		473436852F4B05EB00CF00FA /* FBCrashManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436842F4B05EB00CF00FA /* FBCrashManager.swift */; };
 		4734368A2F4B24FA00CF00FA /* FBPerformanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436892F4B24FA00CF00FA /* FBPerformanceManager.swift */; };
 		4734368D2F4B2A4100CF00FA /* FBAnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4734368C2F4B2A4100CF00FA /* FBAnalyticsManager.swift */; };
-		473436902F4B5AC200CF00FA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4734368F2F4B5AC200CF00FA /* GoogleService-Info.plist */; };
 		47453E042EAB73A9000D2C16 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47453E032EAB73A9000D2C16 /* Date.swift */; };
 		474BFB8D2F3C8DF2006E639B /* PostsViewModel+Filtering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB8C2F3C8DF2006E639B /* PostsViewModel+Filtering.swift */; };
 		474BFB912F3C8E20006E639B /* PostsViewModel+BackupRestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB902F3C8E20006E639B /* PostsViewModel+BackupRestore.swift */; };
@@ -230,7 +229,6 @@
 		473436842F4B05EB00CF00FA /* FBCrashManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBCrashManager.swift; sourceTree = "<group>"; };
 		473436892F4B24FA00CF00FA /* FBPerformanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBPerformanceManager.swift; sourceTree = "<group>"; };
 		4734368C2F4B2A4100CF00FA /* FBAnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FBAnalyticsManager.swift; path = StartToSwiftUI/AppSyncStateManager/FBAnalyticsManager.swift; sourceTree = SOURCE_ROOT; };
-		4734368F2F4B5AC200CF00FA /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		47453E032EAB73A9000D2C16 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		474BFB8C2F3C8DF2006E639B /* PostsViewModel+Filtering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+Filtering.swift"; sourceTree = "<group>"; };
 		474BFB902F3C8E20006E639B /* PostsViewModel+BackupRestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+BackupRestore.swift"; sourceTree = "<group>"; };
@@ -584,7 +582,6 @@
 			children = (
 				47A331A42F27A33C002883DD /* StudyProgressWidgetExtensionDebug.entitlements */,
 				47A3318E2F2767B2002883DD /* StudyProgressWidgetExtensionRelease.entitlements */,
-				4734368F2F4B5AC200CF00FA /* GoogleService-Info.plist */,
 				4759974C2E5C690B008E20F0 /* StartToSwiftUI */,
 				47A3319D2F276A53002883DD /* StudyProgressWidget */,
 				475CC68B2F217B890099CAA6 /* StartToSwiftUIUnitTests */,
@@ -977,7 +974,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4759974D2E5C690B008E20F0 /* Assets.xcassets in Resources */,
-				473436902F4B5AC200CF00FA /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
