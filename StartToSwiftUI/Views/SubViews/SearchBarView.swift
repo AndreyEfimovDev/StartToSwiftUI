@@ -31,7 +31,7 @@ struct SearchBarView: View {
                 TextField("Search here ...", text: $vm.searchText)
                     .foregroundStyle(Color.mycolor.myAccent)
                     .autocorrectionDisabled(true)
-                    .keyboardType(.asciiCapable)
+//                    .keyboardType(.asciiCapable)
                     .frame(height: isFocusedOnSearchBar ? 50 : 35)
                     .focused($isFocusedOnSearchBar)
                     .submitLabel(.search)
