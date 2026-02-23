@@ -18,7 +18,7 @@ struct DevData {
         Post(
             title: "Struct vs Class vs Actor, Value vs Reference Types, Stack vs Heap",
             intro: """
-                The lesson covers the different between different data types in context of and far beyond Swift Concurrency:
+                The lesson covers the differences between different data types in context of and far beyond Swift Concurrency:
                 (1) Structs vs Classes vs Actors
                 (2) Value vs Reference Types
                 (3) Stack vs Heap memory
