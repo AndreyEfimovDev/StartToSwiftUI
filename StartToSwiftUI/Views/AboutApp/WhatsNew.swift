@@ -36,6 +36,8 @@ struct WhatsNewView: View {
                         .bold()
                         .padding(.top)
                         .padding(.leading)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+
                     VStack (spacing: 10) {
                         ForEach(release.news) { news in
                             VStack (alignment: .leading) {
@@ -45,7 +47,6 @@ struct WhatsNewView: View {
                                     .padding(.bottom, 4)
                                 Text(news.newsText)
                                     .font(.callout)
-                                    .foregroundStyle(Color.mycolor.myAccent)
                             }
                             .padding(.horizontal)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -61,6 +62,7 @@ struct WhatsNewView: View {
                 }
                 .padding(.horizontal)
             }
+            .foregroundStyle(Color.mycolor.myAccent)
         }
     }
 }

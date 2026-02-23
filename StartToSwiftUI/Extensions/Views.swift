@@ -210,7 +210,7 @@ extension View {
             .overlay(
                 Capsule()
                     .stroke(Color.mycolor.mySecondary, lineWidth: 1)
-                    .opacity(0.50)
+                    .opacity(0.25)
             )
 
     }
