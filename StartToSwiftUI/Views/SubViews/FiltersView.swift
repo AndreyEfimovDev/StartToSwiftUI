@@ -11,7 +11,6 @@ import SwiftData
 struct FiltersView: View {
     
     // MARK: Dependencies
-    @Environment(\.dismiss) var dismiss
     @EnvironmentObject var vm: PostsViewModel
     
     // MARK: States
@@ -31,14 +30,12 @@ struct FiltersView: View {
         VStack (spacing: 0) {
             Text("Filters")
                 .font(.largeTitle)
-                .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.top, 35)
 
-#warning("Remove before deployment to App Store")
             // Filters section
-//                categoryFilter
-            Group {
                 VStack(spacing: 0) {
+#warning("Remove before deployment to App Store")
+                    //                categoryFilter
                     studyLevelFilter
                     favoriteFilter
                     typeFilter
@@ -46,8 +43,7 @@ struct FiltersView: View {
                     yearFilter
                     sortOptions
                 }
-//                .padding(.horizontal, UIDevice.isiPad ? 15 : 0)
-                .border(.red)
+                .padding(.horizontal, UIDevice.isiPad ? 15 : 0)
 
                 Spacer()
                 
@@ -59,12 +55,11 @@ struct FiltersView: View {
                         resetAllFiltersAndExitButton
                     }
                 }
-            }
-//            .padding(.horizontal, UIDevice.isiPad ? 90 : 55)
-//            .padding(.bottom, UIDevice.isiPad ? 15 : 30)
+                .padding(.horizontal, UIDevice.isiPad ? 90 : 0)
+                .padding(.bottom, UIDevice.isiPad ? 15 : 30)
         }
         .foregroundStyle(Color.mycolor.myAccent)
-//        .padding(.horizontal)
+        .padding(.horizontal)
         .onDisappear {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
             isFilterButtonPressed = false
@@ -94,7 +89,7 @@ struct FiltersView: View {
         filterSection(
             title: "Post type:",
             selection: $vm.selectedType,
-            allItems: PostType.allCases,
+            allItems: PostType.selectablePostTypeCases,
             titleForCase: { $0.displayName }
         )
     }
@@ -145,7 +140,6 @@ struct FiltersView: View {
         
     // MARK: Helpers
     /// For Non-Optional filters (SortOption)
-//    @ViewBuilder
     private func filterSection<T: Hashable & CaseIterable>(
         title: String,
         selection: Binding<T>,
@@ -153,8 +147,11 @@ struct FiltersView: View {
         titleForCase: @escaping (T) -> String
     ) -> some View {
         VStack(spacing: 3) {
-            formatedFilterTitle(title)
-            
+            Text(title)
+                .font(.footnote)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, 8)
             SegmentedOneLinePickerNotOptional(
                 selection: selection,
                 allItems: allItems,
@@ -169,7 +166,6 @@ struct FiltersView: View {
     }
     
     /// For Optional filters CaseIterable (StudyLevel?, FavoriteChoice?, etc.)
-//    @ViewBuilder
     private func filterSection<T: Hashable & CaseIterable>(
         title: String,
         selection: Binding<T?>,
@@ -177,7 +173,11 @@ struct FiltersView: View {
         titleForCase: @escaping (T) -> String
     ) -> some View {
         VStack(spacing: 3) {
-            formatedFilterTitle(title)
+            Text(title)
+                .font(.footnote)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, 8)
             SegmentedOneLinePicker(
                 selection: selection,
                 allItems: allItems,
@@ -194,7 +194,6 @@ struct FiltersView: View {
     }
     
     /// For Optional filters not CaseIterable (year, category)
-//    @ViewBuilder
     private func filterSection<T: Hashable>(
         title: String,
         selection: Binding<T?>,
@@ -202,7 +201,11 @@ struct FiltersView: View {
         titleForCase: @escaping (T) -> String
     ) -> some View {
         VStack(spacing: 3) {
-            formatedFilterTitle(title)
+            Text(title)
+                .font(.footnote)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, 8)
             SegmentedOneLinePicker(
                 selection: selection,
                 allItems: allItems,
@@ -218,20 +221,6 @@ struct FiltersView: View {
         }
     }
 
-
-    @ViewBuilder
-    private func formatedFilterTitle(_ title: String) -> some View {
-        Text(title)
-            .font(.footnote)
-            .fontWeight(.semibold)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.top, 8)
-    }
-
-    
-    
-    
-    
     // MARK: Buttons
     private var applyFiltersButton: some View {
 #warning("Delete the line with 'category' before deployment to App Store")
@@ -285,8 +274,6 @@ struct FiltersView: View {
 
 #Preview {
     
-//    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
@@ -296,7 +283,6 @@ struct FiltersView: View {
     
     let vm = PostsViewModel(
         dataSource: MockPostsDataSource(posts: PreviewData.samplePosts)
-//        fbPostsManager: MockFBPostsManager()
     )
     ZStack {
         FiltersView(
