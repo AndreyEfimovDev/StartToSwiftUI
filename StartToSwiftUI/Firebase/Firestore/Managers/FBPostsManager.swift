@@ -9,7 +9,7 @@ import Foundation
 import FirebaseFirestore
 
 // MARK: - Firestore Manager
-final class FBPostsManager: FBPostsManagerProtocol {
+actor FBPostsManager: FBPostsManagerProtocol {
     
     init() {}
     
@@ -62,8 +62,6 @@ final class FBPostsManager: FBPostsManagerProtocol {
         }
         log("🏁 uploadDevDataPostsToFirebase complete: \(successCount)/\(DevData.postsForCloud.count) posts", level: .info)
     }
-
-
 }
 
 // MARK: - Firestore Posts Manager Protocol
