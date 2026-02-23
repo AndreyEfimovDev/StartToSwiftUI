@@ -153,7 +153,7 @@ struct HomeView: View {
     
     private func handleLongPress(on post: Post) {
         vm.selectedRating = post.postRating
-        vm.selectedPostId = post.id
+        vm.selectedPost = post
         isLongPressSuccess = true
         hapticManager.impact(style: .light)
     }
@@ -171,7 +171,7 @@ struct HomeView: View {
     }
     
     private func handleSingleTap(on post: Post) {
-        vm.selectedPostId = post.id
+        vm.selectedPost = post
         
         // Mark a new post from cloud as not new after tapping if necessary
         if post.origin == .cloudNew {
@@ -179,13 +179,13 @@ struct HomeView: View {
         }
         
         if UIDevice.isiPhone {
-            coordinator.push(.postDetails(postId: post.id))
+            coordinator.push(.postDetails(post: post))
         }
     }
     
     private func handleDoubleTap(on post: Post) {
         vm.selectedStudyProgress = post.progress
-        vm.selectedPostId = post.id
+        vm.selectedPost = post
         showViewOnDoubleTap = true
         hapticManager.impact(style: .light)
     }
@@ -453,37 +453,38 @@ struct HomeView: View {
         }
     }
 }
-#warning("Delete this var before deployment to App Store")
-//    private func shortenPostTitle(title: String) -> String {
-//        if title.count > limitToShortenTitle {
-//            return String(title.prefix(limitToShortenTitle - 3)) + "..."
-//        }
-//        return title
-//    }
-    
-#Preview("With Mock Posts") {
-    
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
-    let postsVM = PostsViewModel(
-        dataSource: MockPostsDataSource(posts: PreviewData.samplePosts),
-        fbPostsManager: MockFBPostsManager()
-    )
-    let noticesVM = NoticeViewModel(
+private struct HomeViewPreview: View {
+    
+    @StateObject var vm: PostsViewModel = {
+        let vm = PostsViewModel(
+            dataSource: MockPostsDataSource(),
+            fbPostsManager: MockFBPostsManager()
+        )
+        vm.start()
+        return vm
+    }()
+    
+    @StateObject var noticesVM = NoticeViewModel(
         dataSource: MockNoticesDataSource(),
         fbNoticesManager: MockFBNoticesManager()
     )
     
+    var body: some View {
+        NavigationStack {
+            HomeView(selectedCategory: Constants.mainCategory)
+                .environmentObject(AppCoordinator())
+                .environmentObject(vm)
+                .environmentObject(noticesVM)
+        }
+    }
+}
+
+#Preview("With Mock Posts") {
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
-    
-    NavigationStack {
-        HomeView(selectedCategory: Constants.mainCategory)
-            .modelContainer(container)
-            .environmentObject(AppCoordinator())
-            .environmentObject(postsVM)
-            .environmentObject(noticesVM)
-    }
+    HomeViewPreview()
+        .modelContainer(container)
 }

@@ -31,7 +31,6 @@ struct SegmentedOneLinePickerNotOptional<T: Hashable>: View {
                     Text(titleForCase(item))
                         .font(selectedFont)
                         .foregroundColor(selection == item ? selectedTextColor : unselectedTextColor)
-                        .padding(.vertical, 8)
                         .frame(width: 60, height: 30)
                         .frame(maxWidth: .infinity)
                         .background(selection == item ? selectedBackground : unselectedBackground)

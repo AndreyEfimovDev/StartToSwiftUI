@@ -23,7 +23,7 @@ struct ProgressSelectionView: View {
     
     var body: some View {
         Group {
-            if let post = vm.allPosts.first(where: { $0.id == vm.selectedPostId}) {
+            if let post = vm.selectedPost {
                 VStack {
                     ZStack(alignment: .topTrailing) {
                         xmarkButton
@@ -132,29 +132,14 @@ struct ProgressSelectionView: View {
 
 }
 
-#Preview ("Valid post") {
-    let extendedPosts = PreviewData.samplePosts
-    let vm = PostsViewModel(
-        dataSource: MockPostsDataSource(posts: extendedPosts)
-    )
-            
-    ProgressSelectionView() {}
-        .environmentObject(vm)
-        .onAppear {
-            vm.selectedPostId = PreviewData.samplePost1.id
-        }
-}
-
-#Preview ("Invalid post") {
-    let extendedPosts = PreviewData.samplePosts
-    let vm = PostsViewModel(
-        dataSource: MockPostsDataSource(posts: extendedPosts)
-    )
+#Preview("Valid post") {
+    let vm: PostsViewModel = {
+        let vm = PostsViewModel(dataSource: MockPostsDataSource(posts: PreviewData.samplePosts))
+        vm.start()
+        vm.selectedPost = PreviewData.samplePost1
+        return vm
+    }()
     
     ProgressSelectionView() {}
         .environmentObject(vm)
-        .onAppear {
-            vm.selectedPostId = nil
-        }
 }
-

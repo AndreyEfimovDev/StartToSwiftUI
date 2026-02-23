@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import Combine
 
 struct StartView: View {
     
@@ -80,9 +81,9 @@ struct StartView: View {
                 postNotSelectedEmptyView(text: "Select Category")
             }
         } detail: {
-            if let selectedPostId = vm.selectedPostId {
-                PostDetailsView(postId: selectedPostId)
-                    .id(selectedPostId)
+            if let selectedPost = vm.selectedPost {
+                PostDetailsView(post: selectedPost)
+                    .id(selectedPost.id)
             } else {
                 postNotSelectedEmptyView(text: "Select Topic")
             }
@@ -103,36 +104,46 @@ struct StartView: View {
     private func destinationView(for route: AppRoute) -> some View {
         switch route {
             // Post details View
-        case .postDetails(let postId):
-            PostDetailsView(postId: postId)
+        case .postDetails(let post):
+            PostDetailsView(post: post)
         default:
             EmptyView()
         }
     }
 }
 
-#Preview("StartView with Mock Data") {
-    
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
-    let postsVM = PostsViewModel(
-        dataSource: MockPostsDataSource(posts: PreviewData.samplePosts),
-        fbPostsManager: MockFBPostsManager()
-    )
-    let noticesVM = NoticeViewModel(
-        dataSource: MockNoticesDataSource(notices: PreviewData.sampleNotices),
+private struct StartViewPreview: View {
+    
+    @StateObject var vm: PostsViewModel = {
+        let vm = PostsViewModel(
+            dataSource: MockPostsDataSource(),
+            fbPostsManager: MockFBPostsManager()
+        )
+        vm.start()
+        return vm
+    }()
+    
+    @StateObject var noticesVM = NoticeViewModel(
+        dataSource: MockNoticesDataSource(),
         fbNoticesManager: MockFBNoticesManager()
     )
+    
+    var body: some View {
+        NavigationStack {
+            StartView()
+                .environmentObject(AppCoordinator())
+                .environmentObject(vm)
+                .environmentObject(noticesVM)
+        }
+    }
+}
 
+#Preview("With Mock Posts") {
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
-    
-    StartView()
+    StartViewPreview()
         .modelContainer(container)
-        .environmentObject(AppCoordinator())
-        .environmentObject(postsVM)
-        .environmentObject(noticesVM)
-    
 }

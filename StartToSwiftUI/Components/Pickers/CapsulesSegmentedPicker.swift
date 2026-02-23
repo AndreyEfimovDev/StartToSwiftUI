@@ -121,8 +121,8 @@ fileprivate struct CustomOneCapsulesLineSegmentedPickerPreview2: View {
     
     @AppStorage("selectedString") var selectedForPreview: String?
     
-    let listOfSelectedForPreview: [String] = ["One", "Two", "Three"]
-    
+    let listOfSelectedForPreview: [String] = ["2021", "2022", "2023", "2024", "2025", "2026"]
+
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             
@@ -156,8 +156,8 @@ fileprivate struct CustomOneCapsulesLineSegmentedPickerPreview3: View {
     
     @AppStorage("selectedString") var selectedForPreview: String?
     
-    let listOfSelectedForPreview: [String] = ["One", "Two", "Three"]
-    
+    let listOfSelectedForPreview: [String] = ["2021", "2022", "2023", "2024", "2025", "2026"]
+
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             

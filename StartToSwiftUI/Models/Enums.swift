@@ -293,7 +293,7 @@ enum TimePeriod: String, CaseIterable, Identifiable {
 enum AppRoute: Hashable, Identifiable {
     
     // Dealing with details
-    case postDetails(postId: String) // postId - associated value
+    case postDetails(post: Post)
     
     // Adding and editing posts
     case addPost
