@@ -206,7 +206,7 @@ struct FiltersView: View {
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.top, 8)
-            SegmentedOneLinePicker(
+            CustomOneCapsulesLineSegmentedPicker(
                 selection: selection,
                 allItems: allItems,
                 titleForCase: titleForCase,
