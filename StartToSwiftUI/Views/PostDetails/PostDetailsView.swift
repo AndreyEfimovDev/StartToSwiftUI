@@ -151,7 +151,7 @@ struct PostDetailsView: View {
             
             PostStatusIcons(post: post)
         }
-        .font(.caption2)
+        .font(.caption)
     }
     
     // MARK: - Intro
@@ -381,10 +381,11 @@ struct PostDetailsView: View {
 }
 
 #Preview("Post Details with Mock Data") {
-    let extendedPosts = PreviewData.samplePosts
-    let vm = PostsViewModel(
-        dataSource: MockPostsDataSource(posts: extendedPosts)
-    )
+    let vm: PostsViewModel = {
+        let vm = PostsViewModel(dataSource: MockPostsDataSource(posts: PreviewData.samplePosts))
+        vm.loadPostsFromSwiftData()
+        return vm
+    }()
     
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
@@ -397,13 +398,10 @@ struct PostDetailsView: View {
                 .environmentObject(vm)
                 .environmentObject(AppCoordinator())
                 .modelContainer(container)
-                .onAppear {
-                    vm.selectedPostId = PreviewData.samplePost1.id
-                }
-
         }
-    } else {
-        Text("No posts available")
+    }
+    else {
+        Text("Something wrong")
             .padding()
     }
 }

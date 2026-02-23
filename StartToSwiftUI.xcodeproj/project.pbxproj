@@ -402,6 +402,7 @@
 				4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */,
 				475997602E5CC0F8008E20F0 /* PostDetailsView.swift */,
 				4773AC8F2F269D4B00A713EF /* PostStatusIcons.swift */,
+				47870FBE2ECCD743004175E4 /* LinkButtonURL.swift */,
 			);
 			path = PostDetails;
 			sourceTree = "<group>";
@@ -784,7 +785,6 @@
 				4791CDF02E7428EE00687126 /* CircleShadowButtonView.swift */,
 				470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */,
 				4791CD852E6ED58B00687126 /* ShrinkIconButtonStyle.swift */,
-				47870FBE2ECCD743004175E4 /* LinkButtonURL.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
