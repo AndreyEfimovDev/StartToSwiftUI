@@ -21,7 +21,7 @@ struct RatingSelectionView: View {
 
     var body: some View {
         Group {
-            if let post = vm.allPosts.first(where: { $0 == vm.selectedPost}) {
+            if let post = vm.selectedPost {
                 VStack {
                     ZStack(alignment: .topTrailing) {
                         xmarkButton
@@ -151,15 +151,14 @@ struct RatingSelectionView: View {
     }
 }
 
-#Preview ("Valid post") {
-    let extendedPosts = PreviewData.samplePosts
-    let vm = PostsViewModel(
-        dataSource: MockPostsDataSource(posts: extendedPosts)
-    )
-        
+#Preview("Valid post") {
+    let vm: PostsViewModel = {
+        let vm = PostsViewModel(dataSource: MockPostsDataSource(posts: PreviewData.samplePosts))
+        vm.start()
+        vm.selectedPost = PreviewData.samplePost1
+        return vm
+    }()
+    
     RatingSelectionView() {}
         .environmentObject(vm)
-        .onAppear {
-            vm.selectedPost = PreviewData.samplePost1
-        }
 }
