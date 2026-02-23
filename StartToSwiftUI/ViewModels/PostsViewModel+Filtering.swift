@@ -20,6 +20,7 @@ extension PostsViewModel {
             .combineLatest($selectedPlatform, $selectedSortOption, $selectedCategory)
         
         let debouncedSearchText = $searchText
+//            .prepend(searchText)
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
         
         $allPosts

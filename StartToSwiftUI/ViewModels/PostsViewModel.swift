@@ -23,7 +23,7 @@ final class PostsViewModel: ObservableObject {
 
     @Published var allPosts: [Post] = []
     @Published var filteredPosts: [Post] = []
-    @Published var selectedPostId: String? = nil
+    @Published var selectedPost: Post? = nil
     @Published var searchText: String = ""
     @Published var isFiltersEmpty: Bool = true
     @Published var selectedRating: PostRating? = nil

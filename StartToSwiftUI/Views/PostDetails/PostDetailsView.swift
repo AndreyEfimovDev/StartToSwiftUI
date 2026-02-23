@@ -34,7 +34,7 @@ struct PostDetailsView: View {
     
     // MARK: - Constants
     
-    let postId: String
+    let post: Post
     
     private let introFont: Font = .subheadline
     private let introLineSpacing: CGFloat = 0
@@ -43,16 +43,16 @@ struct PostDetailsView: View {
     
     // MARK: - Computed Properties
     
-    private var post: Post? {
-        vm.getPost(id: postId)
-    }
+//    private var post: Post? {
+//        vm.getPost(id: postId)
+//    }
     
     private var minHeight: CGFloat {
         UIDevice.isiPad ? 60 : 75
     }
     
     private var isEditable: Bool {
-        post?.origin == .local
+        post.origin == .local
     }
     
     // MARK: - Body
@@ -60,14 +60,14 @@ struct PostDetailsView: View {
     var body: some View {
         GeometryReader { proxy in
             VStack {
-                if let post {
+//                if let post {
                     postContent(for: post)
                         .navigationBarBackButtonHidden(true)
                         .navigationBarTitleDisplayMode(.inline)
                         .toolbar { toolbar(for: post) }
-                } else {
-                    postNotSelectedEmptyView(text: "Post is not found")
-                }
+//                } else {
+//                    postNotSelectedEmptyView(text: "Post is not found")
+//                }
             }
             .onAppear {
                 FBAnalyticsManager.shared.logScreen(name: "PostDetailsView")
@@ -77,9 +77,9 @@ struct PostDetailsView: View {
                 updateWidths(for: newValue)
             }
             .safeAreaInset(edge: .bottom) {
-                if post != nil {
+//                if post != nil {
                     bottomTabsContainer
-                }
+//                }
             }
             .ignoresSafeArea(edges: .bottom)
         }
@@ -394,7 +394,7 @@ struct PostDetailsView: View {
     
     if let firstPost = PreviewData.samplePosts.first {
         NavigationStack {
-            PostDetailsView(postId: firstPost.id)
+            PostDetailsView(post: firstPost)
                 .environmentObject(vm)
                 .environmentObject(AppCoordinator())
                 .modelContainer(container)

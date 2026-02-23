@@ -80,9 +80,9 @@ struct StartView: View {
                 postNotSelectedEmptyView(text: "Select Category")
             }
         } detail: {
-            if let selectedPostId = vm.selectedPostId {
-                PostDetailsView(postId: selectedPostId)
-                    .id(selectedPostId)
+            if let selectedPost = vm.selectedPost {
+                PostDetailsView(post: selectedPost)
+                    .id(selectedPost.id)
             } else {
                 postNotSelectedEmptyView(text: "Select Topic")
             }
@@ -103,8 +103,8 @@ struct StartView: View {
     private func destinationView(for route: AppRoute) -> some View {
         switch route {
             // Post details View
-        case .postDetails(let postId):
-            PostDetailsView(postId: postId)
+        case .postDetails(let post):
+            PostDetailsView(post: post)
         default:
             EmptyView()
         }
@@ -114,25 +114,30 @@ struct StartView: View {
 #Preview("StartView with Mock Data") {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-
-    let postsVM = PostsViewModel(
-        dataSource: MockPostsDataSource(posts: PreviewData.samplePosts),
-        fbPostsManager: MockFBPostsManager()
-    )
-    let noticesVM = NoticeViewModel(
-        dataSource: MockNoticesDataSource(notices: PreviewData.sampleNotices),
-        fbNoticesManager: MockFBNoticesManager()
-    )
-
+    
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+
+    let vm: PostsViewModel = {
+        let vm = PostsViewModel(
+            dataSource: MockPostsDataSource(posts: PreviewData.samplePosts),
+            fbPostsManager: MockFBPostsManager()
+        )
+        vm.saveContextAndReload()
+        return vm
+    }()
+    
+    let noticesVM = NoticeViewModel(
+        dataSource: MockNoticesDataSource(notices: PreviewData.sampleNotices),
+        fbNoticesManager: MockFBNoticesManager()
     )
     
     StartView()
         .modelContainer(container)
         .environmentObject(AppCoordinator())
-        .environmentObject(postsVM)
+        .environmentObject(vm)
         .environmentObject(noticesVM)
     
 }

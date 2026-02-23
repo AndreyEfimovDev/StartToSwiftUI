@@ -32,7 +32,7 @@ struct FiltersView: View {
             Text("Filters")
                 .font(.largeTitle)
                 .frame(maxWidth: .infinity, alignment: .center)
-                .padding(.top, 55)
+//                .padding(.top, 55)
 #warning("Remove before deployment to App Store")
             // Filters section
 //                categoryFilter
@@ -60,7 +60,7 @@ struct FiltersView: View {
             .padding(.bottom, UIDevice.isiPad ? 15 : 30)
         }
         .foregroundStyle(Color.mycolor.myAccent)
-        .padding(.top, -40)
+//        .padding(.top, -40)
         .padding(.horizontal)
         .onDisappear {
             vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
@@ -70,12 +70,18 @@ struct FiltersView: View {
     
     // MARK: Subviews
     
+    @ViewBuilder
+    private func formatedFilterTitle(_ title: String) -> some View {
+        Text(title)
+            .font(.footnote)
+            .fontWeight(.semibold)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, 8)
+    }
+    
     private var sortOptions: some View {
         VStack {
-            Text("Sort:")
-                .font(.footnote)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            formatedFilterTitle("Sort:")
             
             SegmentedOneLinePickerNotOptional(
                 selection: $vm.selectedSortOption,
@@ -92,10 +98,8 @@ struct FiltersView: View {
     
     private var studyLevelFilter: some View {
         VStack {
-            Text("Study level:")
-                .font(.footnote)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            formatedFilterTitle("Study level:")
+            
             SegmentedOneLinePicker(
                 selection: $vm.selectedLevel,
                 allItems: StudyLevel.allCases,
@@ -113,10 +117,8 @@ struct FiltersView: View {
     
     private var favoriteFilter: some View {
         VStack {
-            Text("Favorite:")
-                .font(.footnote)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            formatedFilterTitle("Favorite:")
+            
             SegmentedOneLinePicker(
                 selection: $vm.selectedFavorite,
                 allItems: FavoriteChoice.allCases,
@@ -134,10 +136,7 @@ struct FiltersView: View {
     
     private var typeFilter: some View {
         VStack {
-            Text("Post type:")
-                .font(.footnote)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            formatedFilterTitle("Post type:")
             
             SegmentedOneLinePicker(
                 selection: $vm.selectedType,
@@ -156,10 +155,7 @@ struct FiltersView: View {
     
     private var typeMedia: some View {
         VStack {
-            Text("Media:")
-                .font(.footnote)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            formatedFilterTitle("Media:")
             
             SegmentedOneLinePicker(
                 selection: $vm.selectedPlatform,
@@ -181,10 +177,7 @@ struct FiltersView: View {
         Group {
             if let list = vm.allYears {
                 VStack(alignment: .leading) {
-                    Text("Year:")
-                        .font(.footnote)
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    formatedFilterTitle("Year:")
                     
                     CustomOneCapsulesLineSegmentedPicker(
                         selection: $vm.selectedYear,
@@ -207,11 +200,8 @@ struct FiltersView: View {
         Group {
             if let list = vm.allCategories {
                 VStack(alignment: .leading) {
-                    Text("Category:")
-                        .font(.footnote)
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
+                    formatedFilterTitle("Category:")
+
                     CustomOneCapsulesLineSegmentedPicker(
                         selection: $vm.selectedCategory,
                         allItems: list,
@@ -230,7 +220,7 @@ struct FiltersView: View {
     }
     
     private var applyFiltersButton: some View {
-        
+#warning("Delete the line with 'category' before deployment to App Store")
         ClearCupsuleButton(
             primaryTitle: "Apply",
             primaryTitleColor: Color.mycolor.myBlue) {
@@ -280,6 +270,9 @@ struct FiltersView: View {
 }
 
 #Preview {
+    
+//    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
@@ -287,8 +280,10 @@ struct FiltersView: View {
     
     let context = ModelContext(container)
     
-    let vm = PostsViewModel(modelContext: context)
-    
+    let vm = PostsViewModel(
+        dataSource: MockPostsDataSource(posts: PreviewData.samplePosts)
+//        fbPostsManager: MockFBPostsManager()
+    )
     ZStack {
         FiltersView(
             isFilterButtonPressed: .constant(true)
