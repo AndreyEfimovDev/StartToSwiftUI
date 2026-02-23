@@ -55,7 +55,7 @@ struct FiltersView: View {
                         resetAllFiltersAndExitButton
                     }
                 }
-                .padding(.horizontal, UIDevice.isiPad ? 90 : 0)
+                .padding(.horizontal, UIDevice.isiPad ? 90 : 30)
                 .padding(.bottom, UIDevice.isiPad ? 15 : 30)
         }
         .foregroundStyle(Color.mycolor.myAccent)
