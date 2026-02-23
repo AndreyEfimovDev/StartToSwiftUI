@@ -35,6 +35,7 @@ extension PostsViewModel {
             completion(uniquePosts.count)
             
         } catch {
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Failed to load posts")
             completion(0)
         }
@@ -56,6 +57,7 @@ extension PostsViewModel {
             log("🍓✅ Exported to: \(url.lastPathComponent)", level: .info)
             return .success(url)
         case .failure(let error):
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Export failed")
             return .failure(error)
         }
