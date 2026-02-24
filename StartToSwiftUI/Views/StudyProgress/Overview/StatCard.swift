@@ -17,18 +17,19 @@ struct StatCard: View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 3){
                 icon
-                Text(title)
+                Spacer()
+                Text(value)
+                    .font(.headline)
+                    .foregroundStyle(Color.mycolor.myAccent)
             }
-            .font(.caption2)
-            .foregroundStyle(color)
 
-            Text(value)
-                .font(.headline)
-                .foregroundStyle(Color.mycolor.myAccent)
+            Text(title)
         }
+        .font(.caption)
+        .foregroundStyle(color)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(8)
-        .background(color.opacity(0.3))
+        .background(color.opacity(0.15))
         .clipShape(
             RoundedRectangle(cornerRadius: 15)
         )

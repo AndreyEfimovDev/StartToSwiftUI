@@ -223,7 +223,7 @@ enum StudyLevel: String, CaseIterable, Codable {
 }
 
 // MARK: - Type of progress
-enum StudyProgress: String, CaseIterable, Codable { // progress in mastering educational materials
+enum StudyProgress: String, CaseIterable, Codable, Hashable { // progress in mastering educational materials
     case added, started, studied, practiced
     
     // 􀐾 chart.bar, 􀓎 hare, 􁗟 bird, 􁝯 tree, 􀑁 chart.line.uptrend.xyaxis
