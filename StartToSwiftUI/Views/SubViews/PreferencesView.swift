@@ -15,6 +15,8 @@ struct PreferencesView: View {
     @EnvironmentObject private var noticevm: NoticeViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
+    @State private var hasPostsUpdate = false
+    
     // MARK: - Constants
     let iconSize: CGFloat = 18
     
@@ -92,6 +94,9 @@ struct PreferencesView: View {
         .preferredColorScheme(vm.selectedTheme.colorScheme)
         .onAppear {
             FBAnalyticsManager.shared.logScreen(name: "PreferencesView")
+        }
+        .task {
+            hasPostsUpdate = await vm.checkFBPostsForUpdates()
         }
     }
     
@@ -212,11 +217,17 @@ struct PreferencesView: View {
     ///
     @ViewBuilder
     private var checkForPostsUpdate: some View {
-        if vm.hasAvailableCuratedPostsUpdate {
+        if hasPostsUpdate {
             Button("Check for materials update") {
                 coordinator.pushModal(.checkForUpdates)
             }
             .customListRowStyle(iconName: "arrow.trianglehead.counterclockwise", iconWidth: iconSize)
+        } else {
+            Button("Make all curated collection available") {
+                vm.appStateManager?.resetLastDateOfPostsLoaded()
+                hasPostsUpdate = true
+            }
+            .customListRowStyle(iconName: "arrow.down.circle", iconWidth: iconSize)
         }
     }
         

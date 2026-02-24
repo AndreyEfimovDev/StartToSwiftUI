@@ -38,7 +38,7 @@ struct AddEditPostView: View {
     private let fontSubheader: Font = .caption
     private let fontTextInput: Font = .callout
     private let colorSubheader = Color.mycolor.myAccent.opacity(0.5)
-    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2016)) ?? Date.distantPast
+    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2016)) ?? Date(timeIntervalSince1970: 0)
     private let endingDate: Date = .now
     
     // MARK: - Computed Properties

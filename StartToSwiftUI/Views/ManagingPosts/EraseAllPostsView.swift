@@ -96,9 +96,10 @@ struct EraseAllPostsView: View {
             isDeleted = true
             isInProgress = false
             
-            // Reset curated posts status to allow re-import
-            vm.resetCuratedPostsStatus()
-            
+//            if let appStateManager {
+//                appStateManager.setLastDateOfPostsLoaded(nil)
+//            }
+
             DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
                 coordinator.closeModal()
             }

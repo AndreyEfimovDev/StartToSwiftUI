@@ -43,7 +43,7 @@ final class PostsViewModel: ObservableObject {
     var dispatchTime: DispatchTime { .now() + 1.5 }
     var dispatchFor: Double = 1.5
     
-    private var lastLoadTime: Date = .distantPast
+    private var lastLoadTime: Date = Date(timeIntervalSince1970: 0)
     private let minLoadInterval: TimeInterval = 3
 
     // MARK: - Computed Properties
@@ -178,21 +178,13 @@ final class PostsViewModel: ObservableObject {
         */
         _ = appStateManager.getOrCreateAppState()
         FBCrashManager.shared.addLog(
-            "initializeAppState: firstLaunchDate \(appStateManager.getAppFirstLaunchDate() ?? Date.distantPast), postsCount \(allPosts.count)"
+            "initializeAppState: firstLaunchDate \(appStateManager.getAppFirstLaunchDate() ?? Date(timeIntervalSince1970: 0)), postsCount \(allPosts.count)"
         )
         /* Step2:
         Clean dublicates if any. iCloud sync can create multiple appsyncstates on different devices.
         This function finds duplicates, merges their data into one (the oldest), and deletes the rest.
          */
         appStateManager.cleanupDuplicateAppStates()
-        
-        /* Step 3:
-        Compare the dates of local and cloud posts.
-        If there are new materials in the cloud, it sets the isNewCuratedPostsAvailable -> true
-        */
-        if await checkFBPostsForUpdates() {
-            appStateManager.setCuratedPostsLoadStatusOn()
-        }
     }
         
     // MARK: - SwiftData Operations
@@ -462,9 +454,10 @@ final class PostsViewModel: ObservableObject {
         allPosts.contains { $0.origin == .cloud || $0.origin == .cloudNew}
     }
     
-    var hasAvailableCuratedPostsUpdate: Bool {
+    var isPostFBUpdateAvailable: Bool {
         guard let appStateManager else { return false }
-        return appStateManager.getAvailableNewCuratedPostsStatus() && hasCloudPosts
+#warning("Поменять логику")
+        return hasCloudPosts //
     }
     
     var shouldShowImportFromCloud: Bool {
@@ -475,10 +468,6 @@ final class PostsViewModel: ObservableObject {
     
     var lastDatePostsLoaded: Date? {
         appStateManager?.getLastDateOfPostsLoaded()
-    }
-    
-    func resetCuratedPostsStatus() {
-        appStateManager?.setCuratedPostsLoadStatusOn()
     }
 
     #warning("Delete this func loadDevData() before deployment to App Store")
