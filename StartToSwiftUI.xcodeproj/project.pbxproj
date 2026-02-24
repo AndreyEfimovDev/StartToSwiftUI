@@ -88,6 +88,7 @@
 		47656BFE2EE1EC4D00F45AA6 /* StudyProgressDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47656BFD2EE1EC4D00F45AA6 /* StudyProgressDetailsView.swift */; };
 		47656C002EE1EF9500F45AA6 /* StudyProgressForLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47656BFF2EE1EF9500F45AA6 /* StudyProgressForLevel.swift */; };
 		4765A76D2EAE5F7B00EACDF4 /* PostRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */; };
+		4765A9BE2F4DAD1D00A0FB37 /* StudyProgressRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4765A9BD2F4DAD1D00A0FB37 /* StudyProgressRow.swift */; };
 		4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773545A2E65C470001DEDEE /* CapsulesSegmentedPicker.swift */; };
 		4773545D2E65D03A001DEDEE /* FiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773545C2E65D03A001DEDEE /* FiltersView.swift */; };
 		4773AC902F269D4B00A713EF /* PostStatusIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773AC8F2F269D4B00A713EF /* PostStatusIcons.swift */; };
@@ -272,6 +273,7 @@
 		47656BFD2EE1EC4D00F45AA6 /* StudyProgressDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressDetailsView.swift; sourceTree = "<group>"; };
 		47656BFF2EE1EF9500F45AA6 /* StudyProgressForLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressForLevel.swift; sourceTree = "<group>"; };
 		4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRowView.swift; sourceTree = "<group>"; };
+		4765A9BD2F4DAD1D00A0FB37 /* StudyProgressRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressRow.swift; sourceTree = "<group>"; };
 		4773545A2E65C470001DEDEE /* CapsulesSegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsulesSegmentedPicker.swift; sourceTree = "<group>"; };
 		4773545C2E65D03A001DEDEE /* FiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersView.swift; sourceTree = "<group>"; };
 		4773AC8F2F269D4B00A713EF /* PostStatusIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostStatusIcons.swift; sourceTree = "<group>"; };
@@ -551,6 +553,7 @@
 			children = (
 				47656BFD2EE1EC4D00F45AA6 /* StudyProgressDetailsView.swift */,
 				47656BFF2EE1EF9500F45AA6 /* StudyProgressForLevel.swift */,
+				4765A9BD2F4DAD1D00A0FB37 /* StudyProgressRow.swift */,
 				47656BFB2EE1EBF000F45AA6 /* ProgressIndicatorView.swift */,
 			);
 			path = Details;
@@ -1091,6 +1094,7 @@
 				4715FA2E2F263BB000ED732A /* FormSectionViewWraper.swift in Sources */,
 				47A7339D2ED1C355006BB8A6 /* SpeechRecogniser.swift in Sources */,
 				474BFB8D2F3C8DF2006E639B /* PostsViewModel+Filtering.swift in Sources */,
+				4765A9BE2F4DAD1D00A0FB37 /* StudyProgressRow.swift in Sources */,
 				47BAF0FA2E64CC8700287F10 /* UnderlineSermentedPicker.swift in Sources */,
 				4764A1F82EAD1DAA00D76C3A /* ClearCupsuleButton.swift in Sources */,
 				47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */,

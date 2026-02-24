@@ -1,68 +1,57 @@
 //
-//  ProgressIndicatorView.swift
+//  StudyProgressRow.swift
 //  StartToSwiftUI
 //
-//  Created by Andrey Efimov on 04.12.2025.
+//  Created by Andrey Efimov on 24.02.2026.
 //
 
 import SwiftUI
 
-struct ProgressIndicatorView: View {
+struct StudyProgressRow: View {
     
-    @State private var trim: Double = 0
-    @State private var isAppear: Bool = false
-    
-    let progress: Double
+    let level: StudyProgress
     let count: Int
-    let colour: Color
+    let progress: Double
     
-    private let opacity: Double = 0.3
-    private var lineWidth: Double {
-        UIDevice.isiPad ? 4.0 : 8.0
+    private var fontForSectionTitle: Font {
+        UIDevice.isiPad ? .subheadline : .headline
     }
-
+    
     var body: some View {
         ZStack {
-            ZStack {
-                Circle()
-                    .stroke(lineWidth: lineWidth)
-                    .foregroundStyle(Color.mycolor.mySecondary)
-                    .opacity(opacity)
-                Circle()
-                    .trim(from: 0, to: trim)
-                    .stroke(style: StrokeStyle(
-                        lineWidth: lineWidth,
-                        lineCap: .round,
-                        lineJoin: .round))
-                    .foregroundStyle(colour)
-                    .rotationEffect(.degrees(-90))
-                    .animation(.linear(duration: 0.8), value: trim)
+            VStack(alignment: .leading, spacing: 8) {
+                level.icon
+                Text(level.displayName)
             }
-            .padding(lineWidth / 2)
+            .font(fontForSectionTitle)
+            .foregroundStyle(level.color)
+//            .border(.yellow)
+            .padding()
+            .padding(.vertical, UIDevice.isiPad ? 0 : 8)
+            .padding(.leading, 15)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(.ultraThinMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 30))
+            .overlay(RoundedRectangle(cornerRadius: 30).stroke(.blue, lineWidth: 1))
+//            .border(.red)
             
-            VStack {
-                Text("\(count)")
-                    .font(.largeTitle)
-                HStack(alignment: .lastTextBaseline, spacing: 0) {
-                    Text("(")
-                    Text(String(format: "%.1f", trim * 100))
-                    Text("%")
-                        .font(.caption2)
-                    Text(")")
-                }
-                .font(UIDevice.isiPad ? .footnote : .callout)
-            }
-            .bold()
-            .foregroundStyle(Color.mycolor.myAccent)
+            ProgressIndicatorView(
+                progress: progress,
+                count: count,
+                colour: level.color
+            )
+            .background(.ultraThinMaterial)
+            .clipShape(Circle())
+            .padding(.trailing, 15)
+            .frame(maxWidth: .infinity, alignment: .trailing)
+//            .border(.green)
         }
-        .opacity(isAppear ? 1 : 0)
-        .onAppear {
-            isAppear.toggle()
-            trim = progress
-        }
+        .padding(.vertical, UIDevice.isiPad ? 0 : 8)
+        .padding(.horizontal, UIDevice.isiPad ? 75 : 0)
+        .padding(4)
     }
+    
 }
-
 #Preview {
     let calendar = Calendar.current
     let now = Date()
