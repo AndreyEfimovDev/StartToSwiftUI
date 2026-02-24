@@ -87,11 +87,13 @@ struct HomeView: View {
                 }
             })
             .task {
-//                vm.loadPostsFromSwiftData()
+                FBAnalyticsManager.shared.logScreen(name: "HomeView")
+                vm.loadPostsFromSwiftData()
+                noticevm.loadNoticesFromSwiftData()
+                vm.updateWidgetData()
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
                 noticevm.playSoundNotificationIfNeeded()
-//                vm.updateWidgetData()
-                await noticevm.importNoticesFromCloud()
+                await noticevm.importNoticesFromFirebase()
             }
         }
     }
@@ -138,7 +140,12 @@ struct HomeView: View {
         vm.loadPostsFromSwiftData()
         vm.updateWidgetData()
         Task {
-            await noticevm.importNoticesFromCloud()
+            if await vm.checkFBPostsForUpdates() {
+                if let appStateManager = vm.appStateManager {
+                    appStateManager.setCuratedPostsLoadStatusOn()
+                }
+            }
+            await noticevm.importNoticesFromFirebase()
         }
     }
     
@@ -146,7 +153,7 @@ struct HomeView: View {
     
     private func handleLongPress(on post: Post) {
         vm.selectedRating = post.postRating
-        vm.selectedPostId = post.id
+        vm.selectedPost = post
         isLongPressSuccess = true
         hapticManager.impact(style: .light)
     }
@@ -164,7 +171,7 @@ struct HomeView: View {
     }
     
     private func handleSingleTap(on post: Post) {
-        vm.selectedPostId = post.id
+        vm.selectedPost = post
         
         // Mark a new post from cloud as not new after tapping if necessary
         if post.origin == .cloudNew {
@@ -172,13 +179,13 @@ struct HomeView: View {
         }
         
         if UIDevice.isiPhone {
-            coordinator.push(.postDetails(postId: post.id))
+            coordinator.push(.postDetails(post: post))
         }
     }
     
     private func handleDoubleTap(on post: Post) {
         vm.selectedStudyProgress = post.progress
-        vm.selectedPostId = post.id
+        vm.selectedPost = post
         showViewOnDoubleTap = true
         hapticManager.impact(style: .light)
     }
@@ -392,7 +399,7 @@ struct HomeView: View {
             description: Text("Check the spelling or try a new search.")
         )
     }
-    
+#warning("Delete this func before deployment to App Store")
 //    private func postsForCategory(_ category: String?) -> [Post] {
 //        guard let category = category else {
 //            return vm.filteredPosts
@@ -447,34 +454,37 @@ struct HomeView: View {
     }
 }
 
-//    private func shortenPostTitle(title: String) -> String {
-//        if title.count > limitToShortenTitle {
-//            return String(title.prefix(limitToShortenTitle - 3)) + "..."
-//        }
-//        return title
-//    }
+private struct HomeViewPreview: View {
     
-
-
-#Preview("With Extended Posts") {
-    let extendedPosts = PreviewData.samplePosts
-    let postsVM = PostsViewModel(
-        dataSource: MockPostsDataSource(posts: extendedPosts)
-    )
-    let noticesVM = NoticeViewModel(
-        dataSource: MockNoticesDataSource()
+    @StateObject var vm: PostsViewModel = {
+        let vm = PostsViewModel(
+            dataSource: MockPostsDataSource(),
+            fbPostsManager: MockFBPostsManager()
+        )
+        vm.start()
+        return vm
+    }()
+    
+    @StateObject var noticesVM = NoticeViewModel(
+        dataSource: MockNoticesDataSource(),
+        fbNoticesManager: MockFBNoticesManager()
     )
     
+    var body: some View {
+        NavigationStack {
+            HomeView(selectedCategory: Constants.mainCategory)
+                .environmentObject(AppCoordinator())
+                .environmentObject(vm)
+                .environmentObject(noticesVM)
+        }
+    }
+}
+
+#Preview("With Mock Posts") {
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
-    
-    NavigationStack {
-        HomeView(selectedCategory: Constants.mainCategory)
-            .modelContainer(container)
-            .environmentObject(AppCoordinator())
-            .environmentObject(postsVM)
-            .environmentObject(noticesVM)
-    }
+    HomeViewPreview()
+        .modelContainer(container)
 }

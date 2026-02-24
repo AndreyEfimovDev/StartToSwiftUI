@@ -7,10 +7,10 @@
 
 import Foundation
 
-// MARK: - Cloud Import & Update Check
+// MARK: - Cloud (GitHub) Import & Update Check
 extension PostsViewModel {
     
-    /// Cloud import of curated study materials
+    /// Cloud import of study materials
     func importPostsFromCloud() async -> Bool {
         
         clearError()
@@ -37,7 +37,7 @@ extension PostsViewModel {
             
             if let appStateManager {
                 let latestDate = getLatestDateFromPosts(posts: allPosts) ?? .now
-                appStateManager.setLastDateOfCuaratedPostsLoaded(latestDate)
+                appStateManager.setLastDateOfPostsLoaded(latestDate)
                 appStateManager.setCuratedPostsLoadStatusOff()
             }
             
@@ -52,7 +52,7 @@ extension PostsViewModel {
     }
     
     /// Check for updates to available posts in the cloud
-    func checkCloudCuratedPostsForUpdates() async -> Bool {
+    func checkCloudPostsForUpdates() async -> Bool {
         
         clearError()
         

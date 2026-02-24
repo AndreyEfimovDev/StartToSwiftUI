@@ -56,7 +56,7 @@ struct CheckForPostsUpdateView: View {
                     ProgressView()
                 }
             }
-            if let lastDate = vm.lastCuratedPostsLoadedDate {
+            if let lastDate = vm.lastDatePostsLoaded {
                 HStack {
                     Text("Last update from:")
                     Spacer()
@@ -113,7 +113,7 @@ struct CheckForPostsUpdateView: View {
     
     /// Check if updates for curated study materials are available
     private func checkForUpdates() async {
-        let hasUpdates = await vm.checkCloudCuratedPostsForUpdates()
+        let hasUpdates = await vm.checkFBPostsForUpdates()
         
         if hasUpdates {
             statusText = "Updates available!"
@@ -130,7 +130,8 @@ struct CheckForPostsUpdateView: View {
     }
     
     private func performImport() async {
-        let success = await vm.importPostsFromCloud()
+        let success = await vm.importPostsFromFirebase()
+
         isInProgress = false
         
         if success {

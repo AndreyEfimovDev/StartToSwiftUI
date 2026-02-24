@@ -21,6 +21,28 @@ struct PreferencesView: View {
     // MARK: - Body
     var body: some View {
         Form {
+#warning("Delete this button before deployment to App Store")
+#if DEBUG
+//            VStack {
+//                Button {
+//                    Task {
+//                        await vm.uploadDevDataPostsToFirebase()
+//                    }
+//                } label: {
+//                    Text("Upload DevData to Firebase")
+//                        .font(.headline)
+//                        .foregroundStyle(Color.mycolor.myAccent)
+//                        .frame(maxWidth: .infinity)
+//                        .frame(height: 55)
+//                        .background(Color.mycolor.myRed.opacity(0.3))
+//                        .cornerRadius(30)
+//                }
+
+//                Button("Test Crash") {
+//                    fatalError("Test crash")
+//                }
+//            }
+#endif
             Section(header: sectionHeader("Appearance")) {
                 themeAppearance
             }
@@ -31,7 +53,7 @@ struct PreferencesView: View {
                 notificationToggle
                 soundNotificationToggle
             }
-            
+#warning("Delete this code before deployment to App Store")
             //                if UIDevice.isiPhone {
             //                    Section(header: sectionHeader("Selected category")) {
             //                        selectedCategory
@@ -68,6 +90,9 @@ struct PreferencesView: View {
         .navigationViewStyle(StackNavigationViewStyle())
         .toolbar { toolbar }
         .preferredColorScheme(vm.selectedTheme.colorScheme)
+        .onAppear {
+            FBAnalyticsManager.shared.logScreen(name: "PreferencesView")
+        }
     }
     
     // MARK: - Toolbar
@@ -88,7 +113,7 @@ struct PreferencesView: View {
         return Text(text)
             .foregroundStyle(Color.mycolor.myAccent)
     }
-    
+#warning("Delete this var before deployment to App Store")
     private var selectedCategory: some View {
         Group {
             if let list = vm.allCategories {

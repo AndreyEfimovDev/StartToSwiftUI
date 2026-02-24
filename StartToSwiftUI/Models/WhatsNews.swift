@@ -11,19 +11,37 @@ struct WhatsNews {
 #warning("Add upated info before deployment to App Store")
     static let releases: [Release] = [
         Release(
+            release: "Release 1.2.2(4)",
+            news: [
+                News(
+                    title: "Added",
+                    newsText: """
+                    - The "Random" sorting option in the filter to display materials in random order
+                    """
+                ),
+                News(
+                    title: "Fixed",
+                    newsText: """
+                    - Remote curated content migrated to Firestore Cloud
+                    - Various UI/UX enhancements
+                    """
+                ),
+            ]
+        ),
+        Release(
             release: "Release 1.2.1(3)",
             news: [
                 News(
                     title: "Added",
                     newsText: """
-                    - An additional sorting option to the filter to view materials in their default order
+                    - The "Original" sorting option in the filter to display materials in the default order
                     """
                 ),
                 News(
                     title: "Fixed",
                     newsText: """
                     - Improved overall performance at app launch related to Cloud sync
-                    - Various UX enhancements
+                    - Various UI/UX enhancements
                     """
                 ),
             ]

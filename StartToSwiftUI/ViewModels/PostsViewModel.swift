@@ -18,16 +18,17 @@ final class PostsViewModel: ObservableObject {
     let dataSource: PostsDataSourceProtocol
     let fileManager = JSONFileManager.shared
     let hapticManager = HapticManager.shared
-    let networkService: NetworkServiceProtocol
     let appStateManager: AppSyncStateManager?
-    
+    let fbPostsManager: FBPostsManagerProtocol
+
     @Published var allPosts: [Post] = []
     @Published var filteredPosts: [Post] = []
-    @Published var selectedPostId: String? = nil
+    @Published var selectedPost: Post? = nil
     @Published var searchText: String = ""
     @Published var isFiltersEmpty: Bool = true
     @Published var selectedRating: PostRating? = nil
     @Published var selectedStudyProgress: StudyProgress = .added
+    @Published var reshuffleToken = UUID()
     
     @Published var errorMessage: String?
     @Published var showErrorMessageAlert = false
@@ -38,6 +39,7 @@ final class PostsViewModel: ObservableObject {
     var allYears: [String]? = nil
     var allCategories: [String]? = nil
     let mainCategory: String = Constants.mainCategory
+    var randomSortOrder: [String] = []
     var dispatchTime: DispatchTime { .now() + 1.5 }
     var dispatchFor: Double = 1.5
     
@@ -82,42 +84,44 @@ final class PostsViewModel: ObservableObject {
     
     @AppStorage("storedSortOption") var storedSortOption: SortOption = .notSorted
     @Published var selectedSortOption: SortOption = .notSorted {
-        didSet { storedSortOption = selectedSortOption }}
+        didSet {
+            storedSortOption = selectedSortOption
+            if selectedSortOption == .random {
+                randomSortOrder = allPosts.map { $0.id }.shuffled()
+            }
+        }}
         
     // MARK: - Init
     init(
         dataSource: PostsDataSourceProtocol,
-        networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudPostsURL)
+        fbPostsManager: FBPostsManagerProtocol = FBPostsManager()
     ) {
         self.dataSource = dataSource
-        self.networkService = networkService
+        self.fbPostsManager = fbPostsManager
         
         if let swiftDataSource = dataSource as? SwiftDataPostsDataSource {
             self.appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
         } else {
             self.appStateManager = nil
         }
-
         setupTimezone()
         restoreFilters()
     }
     /// Convenience initialiser for backward compatibility
     convenience init(
         modelContext: ModelContext,
-        networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudPostsURL)
+        fbPostsManager: FBPostsManagerProtocol = FBPostsManager()
     ) {
         self.init(
             dataSource: SwiftDataPostsDataSource(modelContext: modelContext),
-            networkService: networkService
+            fbPostsManager: fbPostsManager
         )
     }
-    
     
     func start() {
         setupSubscriptions()
         setupSubscriptionForChangesInCloud()
-        loadPostsFromSwiftData()
-
+        
         Task { [weak self] in
             guard let self else { return }
             await self.initializeAppState()
@@ -173,7 +177,9 @@ final class PostsViewModel: ObservableObject {
         - Restart — it will find an existing one and return it.
         */
         _ = appStateManager.getOrCreateAppState()
-        
+        FBCrashManager.shared.addLog(
+            "initializeAppState: firstLaunchDate \(appStateManager.getAppFirstLaunchDate() ?? Date.distantPast), postsCount \(allPosts.count)"
+        )
         /* Step2:
         Clean dublicates if any. iCloud sync can create multiple appsyncstates on different devices.
         This function finds duplicates, merges their data into one (the oldest), and deletes the rest.
@@ -184,7 +190,7 @@ final class PostsViewModel: ObservableObject {
         Compare the dates of local and cloud posts.
         If there are new materials in the cloud, it sets the isNewCuratedPostsAvailable -> true
         */
-        if await checkCloudCuratedPostsForUpdates() {
+        if await checkFBPostsForUpdates() {
             appStateManager.setCuratedPostsLoadStatusOn()
         }
     }
@@ -193,18 +199,23 @@ final class PostsViewModel: ObservableObject {
     
     /// Load posts from SwiftData
     func loadPostsFromSwiftData() {
-        
+        FBPerformanceManager.shared.startTrace(name: "load_posts_swiftdata")
         lastLoadTime = Date()
         
         do {
             allPosts = try dataSource.fetchPosts()
+            FBCrashManager.shared.addLog("loadPostsFromSwiftData: loaded local posts: \(allPosts.count)")
             removeDuplicatePosts()
+            FBCrashManager.shared.addLog("loadPostsFromSwiftData: posts count after check for duplicates: \(allPosts.count)")
             allYears = getAllYears()
             allCategories = getAllCategories()
+            FBCrashManager.shared.setUserContext(allPosts.count, hasCloudPosts)
             log("📊 Loaded \(allPosts.count) posts from SwiftData:", level: .debug)
         } catch {
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error loading data")
         }
+        FBPerformanceManager.shared.stopTrace(name: "load_posts_swiftdata")
     }
     
     /// Remove Duplicate Posts
@@ -224,7 +235,7 @@ final class PostsViewModel: ObservableObject {
                 }
             }
         }
-        
+
         // Pass 2: duplicates by title
         /* Avoid double processing of posts */
         let markedIDs = Set(postsToDelete.map { $0.persistentModelID })
@@ -242,9 +253,11 @@ final class PostsViewModel: ObservableObject {
                 }
             }
         }
-        
+
         guard !postsToDelete.isEmpty else { return }
         
+        FBCrashManager.shared.addLog("removeDuplicatePosts: found \(postsToDelete.count) duplicates")
+
         for post in postsToDelete {
             dataSource.delete(post)
         }
@@ -254,6 +267,7 @@ final class PostsViewModel: ObservableObject {
             allPosts = try dataSource.fetchPosts()
             log("✅ Removed \(postsToDelete.count) duplicate posts", level: .info)
         } catch {
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error removing duplicate posts")
         }
     }
@@ -303,6 +317,7 @@ final class PostsViewModel: ObservableObject {
                 try swiftDataSource.modelContext.delete(model: Post.self)
                 saveContextAndReload()
             } catch {
+                FBCrashManager.shared.sendNonFatal(error)
                 handleError(error, message: "Error deleting data")
             }
         } else {
@@ -314,6 +329,9 @@ final class PostsViewModel: ObservableObject {
     /// Toggle favorite flag
     func favoriteToggle(_ post: Post) {
         post.favoriteChoice = post.favoriteChoice == .yes ? .no : .yes
+        if post.favoriteChoice == .yes {
+            FBAnalyticsManager.shared.logEvent(name: "post_favorited")
+        }
         saveContextAndReload()
     }
     
@@ -342,6 +360,7 @@ final class PostsViewModel: ObservableObject {
         case .practiced:
             post.practicedDateStamp = .now
         }
+        FBAnalyticsManager.shared.logEvent(name: "study_progress_changed", params: ["progress": selectedStudyProgress.rawValue])
         saveContextAndReload()
     }
     
@@ -358,6 +377,7 @@ final class PostsViewModel: ObservableObject {
             loadPostsFromSwiftData()
             updateWidgetData()
         } catch {
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error saving data")
         }
     }
@@ -371,10 +391,18 @@ final class PostsViewModel: ObservableObject {
         let existingIds = Set(allPosts.map { $0.id })
         
         return cloudResponse
-            .filter { !existingTitles.contains($0.title) && !existingIds.contains($0.id) }
+            .filter { !existingTitles.contains($0.title) || !existingIds.contains($0.id) }
             .map { PostMigrationHelper.convertFromCodable($0) }
     }
     
+    func filterUniquePosts(from fbResponse: [FBPostModel]) -> [FBPostModel] {
+        let existingTitles = Set(allPosts.map { $0.title })
+        let existingIds = Set(allPosts.map { $0.id })
+        
+        return fbResponse
+            .filter { !existingTitles.contains($0.title) || !existingIds.contains($0.postId) }
+    }
+
     func filterUniquePosts(_ posts: [Post]) -> [Post] {
         let existingTitles = Set(allPosts.map { $0.title })
         let existingIds = Set(allPosts.map { $0.id })
@@ -445,8 +473,8 @@ final class PostsViewModel: ObservableObject {
     
     // MARK: - Curated Posts State
     
-    var lastCuratedPostsLoadedDate: Date? {
-        appStateManager?.getLastDateOfCuaratedPostsLoaded()
+    var lastDatePostsLoaded: Date? {
+        appStateManager?.getLastDateOfPostsLoaded()
     }
     
     func resetCuratedPostsStatus() {

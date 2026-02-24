@@ -16,7 +16,7 @@ final class NoticeViewModel: ObservableObject {
     
     private let dataSource: NoticesDataSourceProtocol
     private let hapticManager = HapticManager.shared
-    private let networkService: NetworkServiceProtocol
+    private let fbNoticesManager: FBNoticesManagerProtocol
     
     @Published var notices: [Notice] = []
     @Published var hasUnreadNotices: Bool = false
@@ -51,27 +51,26 @@ final class NoticeViewModel: ObservableObject {
     
     init(
         dataSource: NoticesDataSourceProtocol,
-        networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudNoticesURL)
+        fbNoticesManager: FBNoticesManagerProtocol = FBNoticesManager()
     ) {
         self.dataSource = dataSource
-        self.networkService = networkService
+        self.fbNoticesManager = fbNoticesManager
     }
     
     /// Convenience initializer for backward compatibility
-      convenience init(
-          modelContext: ModelContext,
-          networkService: NetworkServiceProtocol = NetworkManager(urlString: Constants.cloudNoticesURL)
-      ) {
-          self.init(
-              dataSource: SwiftDataNoticesDataSource(modelContext: modelContext),
-              networkService: networkService
-          )
-      }
+    convenience init(
+        modelContext: ModelContext,
+        fbNoticesManager: FBNoticesManagerProtocol = FBNoticesManager()
+    ) {
+        self.init(
+            dataSource: SwiftDataNoticesDataSource(modelContext: modelContext),
+            fbNoticesManager: fbNoticesManager
+        )
+    }
     
     
     func start() {
         setupSubscriptionForChangesInCloud()
-        loadNoticesFromSwiftData()
     }
     
     // MARK: - CloudKit Sync
@@ -94,95 +93,100 @@ final class NoticeViewModel: ObservableObject {
 
     // MARK: - Load Notices
     func loadNoticesFromSwiftData(removeDuplicates: Bool = true) {
-        
+        FBPerformanceManager.shared.startTrace(name: "load_notices_swiftdata")
         lastLoadTime = Date()
-        
+        FBCrashManager.shared.addLog("loadNoticesFromSwiftData: notices count: \(notices.count)")
+
         // Removing duplicate notices in SwiftUI, leaving only one instance for each ID - for SwiftData only
         if removeDuplicates, let swiftDataSource {
             removeDuplicateNotices(from: swiftDataSource)
         }
+        FBCrashManager.shared.addLog("loadNoticesFromSwiftData: notices count after check for duplicates: \(notices.count)")
 
         do {
             self.notices = try dataSource.fetchNotices()
+            FBCrashManager.shared.addLog("loadNoticesFromSwiftData: notices count after fetch from SwiftData: \(notices.count)")
             updateUnreadStatus()  // ← always update status when fetch notices
 //          let duration = Date().timeIntervalSince(startTime)
 //          log("🍉 ✅ Download completed in \(String(format: "%.2f", duration))s. Notifications: \(fetchedNotices.count)", level: .info)
         } catch {
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error loading notices")
         }
+        FBPerformanceManager.shared.stopTrace(name: "load_notices_swiftdata")
     }
     
-    // MARK: - Import from Cloud
-    /// Called once upon application startup
-    ///
-    /// 1. Download from the cloud → get cloudResponse
-    /// 2. Filter cloud notices by date - select those later than the last download date → get relevantCloudNotices
-    /// 3. Remove local duplicates → removeDuplicateNotices()
-    /// 4. Filter by ID → create newNoticesByID with those that don't exist locally only
-    /// 5. Add only truly new notices → newNoticesByID. If there are new ones:
-    /// - Convert → NoticeMigrationHelper
-    /// - Add to context → modelContext.insert()
-    /// - Save to SwiftData → saveContext()
-    /// - Update UI by load the updated list →  loadNoticesFromSwiftData()
-    /// 7. Notify the user:
-    /// - markUserNotNotifiedBySound() → set the flag for sound notification
-    /// - sendLocalNotification() → system notification (if enabled)
-    /// 
-    func importNoticesFromCloud() async {
-        do {
-            let cloudResponse: [CodableNotice] = try await networkService.fetchDataFromURLAsync()
+    func importNoticesFromFirebase() async {
+        FBPerformanceManager.shared.startTrace(name: "import_notices_firebase")
+        // Filter by date (SwiftData only)
+        let relevantNotices: [FBNoticeModel]
+        FBCrashManager.shared.addLog("loadNoticesFromFirebase: started, notices count: \(notices.count)")
+
+        if let appStateManager {
+            // Take a maximum of two dates — the date of the last notice and the date of the application installation
+            // At the first launch, the user will not receive all the old notiсes, but only those that were created after app first launch
+            // Note: timeIntervalSince1970 is the number of seconds that have passed since January 1, 1970 00:00:00 UTC
+            // this point is called the Unix Epoch
+            let rawLastDate = appStateManager.getLastNoticeDate() ?? Date.distantPast
+            let lastNoticeDate = Date(timeIntervalSince1970: rawLastDate.timeIntervalSince1970.rounded(.down))
+            log("🔥 LastNoticeDate from appStateManager \(lastNoticeDate)", level: .info)
             
-            loadNoticesFromSwiftData() // sync with Cloud
+            let rawFirstLaunch = appStateManager.getAppFirstLaunchDate() ?? Date.distantPast
+            let firstLaunchDate = Date(timeIntervalSince1970: rawFirstLaunch.timeIntervalSince1970.rounded(.down))
+            log("🔥 FirstLaunchDate from appStateManager \(firstLaunchDate)", level: .info)
             
-            // Filter by date (SwiftData only)
-            let relevantNotices: [CodableNotice]
-            if let appStateManager, let swiftDataSource {
-                // Take a maximum of two dates — the date of the last notice and the date of the application installation
-                // At the first launch, the user will not receive all the old notiсes, but only those that were created after installation
-                let lastNoticeDate = appStateManager.getLastNoticeDate() ?? Date.distantPast
-                let appInstallDate = appStateManager.getAppFirstLaunchDate() ?? Date.distantPast
-                let filterDate = max(lastNoticeDate, appInstallDate)
-                relevantNotices = cloudResponse.filter { $0.noticeDate > filterDate }
-                log("🍉 📦 Received \(cloudResponse.count), selected \(relevantNotices.count) notices", level: .info)
-                removeDuplicateNotices(from: swiftDataSource)
-            } else {
-                relevantNotices = cloudResponse
-            }
-            
-            // Filter by ID (general logic)
-            let existingIDs = Set(notices.map { $0.id })
-            let newNotices = relevantNotices.filter { !existingIDs.contains($0.id) }
-            
-            guard !newNotices.isEmpty else { return }
-            
-            // Adding new notices
-            for cloudNotice in newNotices {
-                dataSource.insert(NoticeMigrationHelper.convertFromCodable(cloudNotice))
-            }
-            
-            // Updating and saving the state
-            if let appStateManager {
-                if let latestDate = cloudResponse.map({ $0.noticeDate }).max() {
-                    appStateManager.updateLatestNoticeDate(latestDate)
-                }
-                appStateManager.markUserNotNotifiedBySound()
-                
-                saveContext()
-                
-                if isNotificationOn {
-                    sendLocalNotification(count: newNotices.count)
-                }
-            } else {
-                try dataSource.save()
-            }
-            
-            loadNoticesFromSwiftData(removeDuplicates: false)
-            
-            log("🍉 ✅ Import complete: \(newNotices.count) notices added", level: .info)
-            
-        } catch {
-            handleError(error, message: "Import error")
+            let filterDate = max(lastNoticeDate, firstLaunchDate)
+            relevantNotices = await fbNoticesManager.getAllNotices(after: filterDate)
+        } else {
+            relevantNotices = await fbNoticesManager.getAllNotices(after: Date.distantPast)
         }
+        FBCrashManager.shared.addLog("loadNoticesFromFirebase: in progress, notices imported: \(relevantNotices.count)")
+
+        // sync with Cloud
+        loadNoticesFromSwiftData()
+        
+        // Filter by ID (general logic)
+        let existingIDs = Set(notices.map { $0.id })
+        let newNotices = relevantNotices.filter { !existingIDs.contains($0.noticeId) }
+        FBCrashManager.shared.addLog("loadNoticesFromFirebase: in progress, new notices found count: \(newNotices.count)")
+
+        // Update latest date regardless of whether there are new notices
+        // This prevents reprocessing the same notices on next launch
+        if let appStateManager {
+            if let latestDate = relevantNotices.map({ $0.noticeDate }).max() {
+                appStateManager.updateLatestNoticeDate(latestDate.addingTimeInterval(1))
+                FBCrashManager.shared.addLog("loadNoticesFromFirebase: latest notices date updated: \(latestDate)")
+                log("🔥 LastNoticeDate updated in appStateManager \(latestDate)", level: .info)
+            }
+        }
+        guard !newNotices.isEmpty else {
+            FBPerformanceManager.shared.stopTrace(name: "import_notices_firebase")
+            return
+        }
+        
+        // Adding new notices
+        for firebaseNotice in newNotices {
+            dataSource.insert(NoticeMigrationHelper.convertFromFirebase(firebaseNotice))
+        }
+        
+        // Updating and saving the state
+        if let appStateManager {
+            appStateManager.markUserNotNotifiedBySound()
+            FBCrashManager.shared.addLog("loadNoticesFromFirebase: user notified by sound status: \(appStateManager.getUserNotifiedBySoundStatus())")
+            if isNotificationOn {
+                sendLocalNotification(count: newNotices.count)
+            }
+        }
+        
+        saveContext()
+        loadNoticesFromSwiftData(removeDuplicates: false)
+        log("🍉 ✅ Import complete: \(newNotices.count) notices added", level: .info)
+        FBPerformanceManager.shared.setValue(
+            name: "import_notices_firebase",
+            value: "\(newNotices.count)/\(relevantNotices.count)",
+            forAttribute: "notices_new_of_received"
+        )
+        FBPerformanceManager.shared.stopTrace(name: "import_notices_firebase")
     }
     
     // MARK: - Remove Duplicates
@@ -197,10 +201,11 @@ final class NoticeViewModel: ObservableObject {
                 .filter { $0.value.count > 1 }
             
             guard !duplicateGroups.isEmpty else { return }
-            
+            FBCrashManager.shared.addLog("removeDuplicateNotices: found \(duplicateGroups.count) duplicates")
             log("🍉 🗑️ Found \(duplicateGroups.count) IDs with duplicates", level: .info)
             
             for (id, noticesList) in duplicateGroups {
+                
                 log("  🔍 ID \(id): \(noticesList.count) duplicates", level: .info)
                 
                 // Priority: Read > First
@@ -214,6 +219,7 @@ final class NoticeViewModel: ObservableObject {
             }
             saveContext()
         } catch {
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error removing duplicates")
         }
     }
@@ -287,6 +293,7 @@ final class NoticeViewModel: ObservableObject {
             loadNoticesFromSwiftData()
             log("🍉 ➕ Notice added, total: \(notices.count)", level: .info)
         } catch {
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error adding notice")
         }
     }
@@ -296,6 +303,7 @@ final class NoticeViewModel: ObservableObject {
         do {
             try dataSource.save()
         } catch {
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error saving notices")
         }
     }

@@ -115,7 +115,9 @@ struct ImportPostsFromCloudView: View {
     
     /// Downloading from a cloud service
     private func loadFromCloudService() async {
-        let success = await vm.importPostsFromCloud()
+//        let success = await vm.importPostsFromCloud()
+        let success = await vm.importPostsFromFirebase()
+
         isInProgress = false
         
         if success {
@@ -133,31 +135,6 @@ struct ImportPostsFromCloudView: View {
             hapticManager.notification(type: .error)
         }
     }
-    
-//    private func loadFromCloudService() async {
-//
-//        await vm.importPostsFromCloud() {
-//            isInProgress = false
-//            
-//            if !vm.showErrorMessageAlert {
-//                isLoaded = true
-//                
-//                // Updating the counter of downloaded posts
-//                importedCount = vm.allPosts.count - initialPostCount
-//                hapticManager.notification(type: .success)
-//                
-//                // Closing in 1.5 seconds
-//                Task {
-//                    try? await Task.sleep(nanoseconds: 1_500_000_000)
-//                    await MainActor.run {
-//                        coordinator.closeModal()
-//                    }
-//                }
-//            } else {
-//                hapticManager.notification(type: .error)
-//            }
-//        }
-//    }
 }
 
 #Preview {

@@ -34,7 +34,7 @@ struct PostDetailsView: View {
     
     // MARK: - Constants
     
-    let postId: String
+    let post: Post
     
     private let introFont: Font = .subheadline
     private let introLineSpacing: CGFloat = 0
@@ -43,16 +43,16 @@ struct PostDetailsView: View {
     
     // MARK: - Computed Properties
     
-    private var post: Post? {
-        vm.getPost(id: postId)
-    }
+//    private var post: Post? {
+//        vm.getPost(id: postId)
+//    }
     
     private var minHeight: CGFloat {
         UIDevice.isiPad ? 60 : 75
     }
     
     private var isEditable: Bool {
-        post?.origin == .local
+        post.origin == .local
     }
     
     // MARK: - Body
@@ -60,25 +60,26 @@ struct PostDetailsView: View {
     var body: some View {
         GeometryReader { proxy in
             VStack {
-                if let post {
+//                if let post {
                     postContent(for: post)
                         .navigationBarBackButtonHidden(true)
                         .navigationBarTitleDisplayMode(.inline)
                         .toolbar { toolbar(for: post) }
-                } else {
-                    postNotSelectedEmptyView(text: "Post is not found")
-                }
+//                } else {
+//                    postNotSelectedEmptyView(text: "Post is not found")
+//                }
             }
             .onAppear {
+                FBAnalyticsManager.shared.logScreen(name: "PostDetailsView")
                 updateWidths(for: proxy.size.width)
             }
             .onChange(of: proxy.size.width) { _, newValue in
                 updateWidths(for: newValue)
             }
             .safeAreaInset(edge: .bottom) {
-                if post != nil {
+//                if post != nil {
                     bottomTabsContainer
-                }
+//                }
             }
             .ignoresSafeArea(edges: .bottom)
         }
@@ -150,7 +151,7 @@ struct PostDetailsView: View {
             
             PostStatusIcons(post: post)
         }
-        .font(.caption2)
+        .font(.caption)
     }
     
     // MARK: - Intro
@@ -380,10 +381,11 @@ struct PostDetailsView: View {
 }
 
 #Preview("Post Details with Mock Data") {
-    let extendedPosts = PreviewData.samplePosts
-    let vm = PostsViewModel(
-        dataSource: MockPostsDataSource(posts: extendedPosts)
-    )
+    let vm: PostsViewModel = {
+        let vm = PostsViewModel(dataSource: MockPostsDataSource(posts: PreviewData.samplePosts))
+        vm.loadPostsFromSwiftData()
+        return vm
+    }()
     
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
@@ -392,17 +394,14 @@ struct PostDetailsView: View {
     
     if let firstPost = PreviewData.samplePosts.first {
         NavigationStack {
-            PostDetailsView(postId: firstPost.id)
+            PostDetailsView(post: firstPost)
                 .environmentObject(vm)
                 .environmentObject(AppCoordinator())
                 .modelContainer(container)
-                .onAppear {
-                    vm.selectedPostId = PreviewData.samplePost1.id
-                }
-
         }
-    } else {
-        Text("No posts available")
+    }
+    else {
+        Text("Something wrong")
             .padding()
     }
 }

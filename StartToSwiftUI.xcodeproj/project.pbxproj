@@ -36,9 +36,22 @@
 		4732FB312EAA59B00062269D /* SharePostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4732FB302EAA59B00062269D /* SharePostsView.swift */; };
 		4732FB332EAA5A9E0062269D /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4732FB322EAA5A9E0062269D /* ActivityView.swift */; };
 		4732FB372EAA63810062269D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4732FB362EAA63810062269D /* Constants.swift */; };
+		4734363B2F48661100CF00FA /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 4734363A2F48661100CF00FA /* FirebaseAnalytics */; };
+		4734363D2F48661100CF00FA /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 4734363C2F48661100CF00FA /* FirebaseAuth */; };
+		4734363F2F48661100CF00FA /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 4734363E2F48661100CF00FA /* FirebaseCrashlytics */; };
+		473436412F48661100CF00FA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 473436402F48661100CF00FA /* FirebaseFirestore */; };
+		473436432F48661100CF00FA /* FirebasePerformance in Frameworks */ = {isa = PBXBuildFile; productRef = 473436422F48661100CF00FA /* FirebasePerformance */; };
+		473436742F48C96300CF00FA /* FBNoticeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436732F48C96300CF00FA /* FBNoticeManager.swift */; };
+		473436762F48F18600CF00FA /* FBNoticeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436752F48F18200CF00FA /* FBNoticeModel.swift */; };
+		473436782F49BC1B00CF00FA /* FBPostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436772F49BC1B00CF00FA /* FBPostModel.swift */; };
+		4734367A2F49C49000CF00FA /* FBPostsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436792F49C49000CF00FA /* FBPostsManager.swift */; };
+		4734367C2F49C5E400CF00FA /* PostsViewModel+FBImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4734367B2F49C5E400CF00FA /* PostsViewModel+FBImport.swift */; };
+		4734367F2F4A345500CF00FA /* AppSyncStateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4734367E2F4A345500CF00FA /* AppSyncStateModel.swift */; };
+		473436852F4B05EB00CF00FA /* FBCrashManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436842F4B05EB00CF00FA /* FBCrashManager.swift */; };
+		4734368A2F4B24FA00CF00FA /* FBPerformanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436892F4B24FA00CF00FA /* FBPerformanceManager.swift */; };
+		4734368D2F4B2A4100CF00FA /* FBAnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4734368C2F4B2A4100CF00FA /* FBAnalyticsManager.swift */; };
 		47453E042EAB73A9000D2C16 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47453E032EAB73A9000D2C16 /* Date.swift */; };
 		474BFB8D2F3C8DF2006E639B /* PostsViewModel+Filtering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB8C2F3C8DF2006E639B /* PostsViewModel+Filtering.swift */; };
-		474BFB8F2F3C8E05006E639B /* PostsViewModel+CloudImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB8E2F3C8E05006E639B /* PostsViewModel+CloudImport.swift */; };
 		474BFB912F3C8E20006E639B /* PostsViewModel+BackupRestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB902F3C8E20006E639B /* PostsViewModel+BackupRestore.swift */; };
 		474BFB932F3C8E2F006E639B /* PostsViewModel+Widget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB922F3C8E2F006E639B /* PostsViewModel+Widget.swift */; };
 		474BFB952F3C8E46006E639B /* PostsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB942F3C8E46006E639B /* PostsViewModel.swift */; };
@@ -68,9 +81,6 @@
 		475CC6942F2246FB0099CAA6 /* MockPostsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC6932F2246FB0099CAA6 /* MockPostsDataSource.swift */; };
 		475CC6962F22472E0099CAA6 /* SwiftDataNoticesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC6952F22472E0099CAA6 /* SwiftDataNoticesDataSource.swift */; };
 		475CC6982F22476D0099CAA6 /* SwiftDataPostsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC6972F22476D0099CAA6 /* SwiftDataPostsDataSource.swift */; };
-		475CC69A2F22900A0099CAA6 /* MockPostsNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC6992F22900A0099CAA6 /* MockPostsNetworkService.swift */; };
-		475CC69C2F22904A0099CAA6 /* MockNoticesNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC69B2F22904A0099CAA6 /* MockNoticesNetworkService.swift */; };
-		475CC69E2F2290910099CAA6 /* MockNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC69D2F2290910099CAA6 /* MockNetworkService.swift */; };
 		475CC6A02F22B0790099CAA6 /* CodablePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC69F2F22B0790099CAA6 /* CodablePost.swift */; };
 		475CC6A22F22B0A90099CAA6 /* CodableNotice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC6A12F22B0A90099CAA6 /* CodableNotice.swift */; };
 		4764A1F82EAD1DAA00D76C3A /* ClearCupsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4764A1F72EAD1DAA00D76C3A /* ClearCupsuleButton.swift */; };
@@ -78,6 +88,7 @@
 		47656BFE2EE1EC4D00F45AA6 /* StudyProgressDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47656BFD2EE1EC4D00F45AA6 /* StudyProgressDetailsView.swift */; };
 		47656C002EE1EF9500F45AA6 /* StudyProgressForLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47656BFF2EE1EF9500F45AA6 /* StudyProgressForLevel.swift */; };
 		4765A76D2EAE5F7B00EACDF4 /* PostRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */; };
+		4765A9BE2F4DAD1D00A0FB37 /* StudyProgressRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4765A9BD2F4DAD1D00A0FB37 /* StudyProgressRow.swift */; };
 		4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773545A2E65C470001DEDEE /* CapsulesSegmentedPicker.swift */; };
 		4773545D2E65D03A001DEDEE /* FiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773545C2E65D03A001DEDEE /* FiltersView.swift */; };
 		4773AC902F269D4B00A713EF /* PostStatusIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773AC8F2F269D4B00A713EF /* PostStatusIcons.swift */; };
@@ -120,6 +131,8 @@
 		47AC34452F28F39C0023C7AF /* SegmentedOneLinePickerNotOptional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AC34442F28F39C0023C7AF /* SegmentedOneLinePickerNotOptional.swift */; };
 		47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AE6C802E7D7FD0006230DA /* Modifiers.swift */; };
 		47B465802E6867930059CCB7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B4657F2E6867930059CCB7 /* HomeView.swift */; };
+		47B65CDD2F4C90C9002FB480 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 47B65CDC2F4C90C9002FB480 /* GoogleService-Info.plist */; };
+		47B65CDF2F4C98D4002FB480 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 47B65CDE2F4C98D4002FB480 /* FirebaseCore */; };
 		47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */; };
 		47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF09F2E5F9E9800287F10 /* MoreLessTextButton.swift */; };
 		47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF0A12E60485D00287F10 /* FavoriteButton.swift */; };
@@ -132,7 +145,6 @@
 		47C56FEE2EC9C94100F0796C /* NoticeRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C56FED2EC9C94100F0796C /* NoticeRowView.swift */; };
 		47C57E7F2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */; };
 		47E2AF4F2EBCD86000B0214F /* CategoryFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */; };
-		47E439B72EA9290E007001AD /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E439B62EA9290E007001AD /* NetworkManager.swift */; };
 		47EA14312EF530780064583B /* AppSyncStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EA14302EF530780064583B /* AppSyncStateManager.swift */; };
 		47F38B1F2ED480B0006DEDBE /* DevData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F38B1E2ED480B0006DEDBE /* DevData.swift */; };
 		47F68A4A2EFB0232003786D0 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F68A492EFB0232003786D0 /* AppCoordinator.swift */; };
@@ -211,9 +223,17 @@
 		4732FB302EAA59B00062269D /* SharePostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePostsView.swift; sourceTree = "<group>"; };
 		4732FB322EAA5A9E0062269D /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
 		4732FB362EAA63810062269D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		473436732F48C96300CF00FA /* FBNoticeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBNoticeManager.swift; sourceTree = "<group>"; };
+		473436752F48F18200CF00FA /* FBNoticeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBNoticeModel.swift; sourceTree = "<group>"; };
+		473436772F49BC1B00CF00FA /* FBPostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBPostModel.swift; sourceTree = "<group>"; };
+		473436792F49C49000CF00FA /* FBPostsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBPostsManager.swift; sourceTree = "<group>"; };
+		4734367B2F49C5E400CF00FA /* PostsViewModel+FBImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PostsViewModel+FBImport.swift"; path = "StartToSwiftUI/Firebase/PostsViewModel+FBImport.swift"; sourceTree = SOURCE_ROOT; };
+		4734367E2F4A345500CF00FA /* AppSyncStateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSyncStateModel.swift; sourceTree = "<group>"; };
+		473436842F4B05EB00CF00FA /* FBCrashManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBCrashManager.swift; sourceTree = "<group>"; };
+		473436892F4B24FA00CF00FA /* FBPerformanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBPerformanceManager.swift; sourceTree = "<group>"; };
+		4734368C2F4B2A4100CF00FA /* FBAnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FBAnalyticsManager.swift; path = StartToSwiftUI/AppSyncStateManager/FBAnalyticsManager.swift; sourceTree = SOURCE_ROOT; };
 		47453E032EAB73A9000D2C16 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		474BFB8C2F3C8DF2006E639B /* PostsViewModel+Filtering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+Filtering.swift"; sourceTree = "<group>"; };
-		474BFB8E2F3C8E05006E639B /* PostsViewModel+CloudImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+CloudImport.swift"; sourceTree = "<group>"; };
 		474BFB902F3C8E20006E639B /* PostsViewModel+BackupRestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+BackupRestore.swift"; sourceTree = "<group>"; };
 		474BFB922F3C8E2F006E639B /* PostsViewModel+Widget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+Widget.swift"; sourceTree = "<group>"; };
 		474BFB942F3C8E46006E639B /* PostsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsViewModel.swift; sourceTree = "<group>"; };
@@ -246,9 +266,6 @@
 		475CC6932F2246FB0099CAA6 /* MockPostsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPostsDataSource.swift; sourceTree = "<group>"; };
 		475CC6952F22472E0099CAA6 /* SwiftDataNoticesDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataNoticesDataSource.swift; sourceTree = "<group>"; };
 		475CC6972F22476D0099CAA6 /* SwiftDataPostsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataPostsDataSource.swift; sourceTree = "<group>"; };
-		475CC6992F22900A0099CAA6 /* MockPostsNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPostsNetworkService.swift; sourceTree = "<group>"; };
-		475CC69B2F22904A0099CAA6 /* MockNoticesNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MockNoticesNetworkService.swift; path = StartToSwiftUI/MockDataServices/MockNoticesNetworkService.swift; sourceTree = SOURCE_ROOT; };
-		475CC69D2F2290910099CAA6 /* MockNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkService.swift; sourceTree = "<group>"; };
 		475CC69F2F22B0790099CAA6 /* CodablePost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodablePost.swift; sourceTree = "<group>"; };
 		475CC6A12F22B0A90099CAA6 /* CodableNotice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableNotice.swift; sourceTree = "<group>"; };
 		4764A1F72EAD1DAA00D76C3A /* ClearCupsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearCupsuleButton.swift; sourceTree = "<group>"; };
@@ -256,6 +273,7 @@
 		47656BFD2EE1EC4D00F45AA6 /* StudyProgressDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressDetailsView.swift; sourceTree = "<group>"; };
 		47656BFF2EE1EF9500F45AA6 /* StudyProgressForLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressForLevel.swift; sourceTree = "<group>"; };
 		4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRowView.swift; sourceTree = "<group>"; };
+		4765A9BD2F4DAD1D00A0FB37 /* StudyProgressRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressRow.swift; sourceTree = "<group>"; };
 		4773545A2E65C470001DEDEE /* CapsulesSegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsulesSegmentedPicker.swift; sourceTree = "<group>"; };
 		4773545C2E65D03A001DEDEE /* FiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersView.swift; sourceTree = "<group>"; };
 		4773AC8F2F269D4B00A713EF /* PostStatusIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostStatusIcons.swift; sourceTree = "<group>"; };
@@ -299,6 +317,7 @@
 		47AC34442F28F39C0023C7AF /* SegmentedOneLinePickerNotOptional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedOneLinePickerNotOptional.swift; sourceTree = "<group>"; };
 		47AE6C802E7D7FD0006230DA /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
 		47B4657F2E6867930059CCB7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		47B65CDC2F4C90C9002FB480 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedCupsuleButton.swift; sourceTree = "<group>"; };
 		47BAF09F2E5F9E9800287F10 /* MoreLessTextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreLessTextButton.swift; sourceTree = "<group>"; };
 		47BAF0A12E60485D00287F10 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
@@ -312,7 +331,6 @@
 		47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForPostsUpdateView.swift; sourceTree = "<group>"; };
 		47E229FE2EF42B9400341DD2 /* StartToSwiftUIDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StartToSwiftUIDebug.entitlements; sourceTree = "<group>"; };
 		47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilterView.swift; sourceTree = "<group>"; };
-		47E439B62EA9290E007001AD /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		47EA14302EF530780064583B /* AppSyncStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSyncStateManager.swift; sourceTree = "<group>"; };
 		47F38B1E2ED480B0006DEDBE /* DevData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevData.swift; sourceTree = "<group>"; };
 		47F68A492EFB0232003786D0 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
@@ -327,6 +345,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4734363F2F48661100CF00FA /* FirebaseCrashlytics in Frameworks */,
+				473436412F48661100CF00FA /* FirebaseFirestore in Frameworks */,
+				473436432F48661100CF00FA /* FirebasePerformance in Frameworks */,
+				4734363B2F48661100CF00FA /* FirebaseAnalytics in Frameworks */,
+				47B65CDF2F4C98D4002FB480 /* FirebaseCore in Frameworks */,
+				4734363D2F48661100CF00FA /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,6 +406,7 @@
 				4765A76C2EAE5F7B00EACDF4 /* PostRowView.swift */,
 				475997602E5CC0F8008E20F0 /* PostDetailsView.swift */,
 				4773AC8F2F269D4B00A713EF /* PostStatusIcons.swift */,
+				47870FBE2ECCD743004175E4 /* LinkButtonURL.swift */,
 			);
 			path = PostDetails;
 			sourceTree = "<group>";
@@ -425,6 +450,7 @@
 				4791CE032E748DA200687126 /* AddEditPostView.swift */,
 				4791CDAE2E70187E00687126 /* PreferencesView.swift */,
 				4773545C2E65D03A001DEDEE /* FiltersView.swift */,
+				47BAF0A32E60613200287F10 /* SearchBarView.swift */,
 				47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */,
 				47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */,
 				473436382F449CA800CF00FA /* Helpers */,
@@ -451,11 +477,83 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		473436702F48A11300CF00FA /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				473436832F4B05BB00CF00FA /* Firestore */,
+				473436802F4B059200CF00FA /* Crashlytics */,
+				473436882F4B24DA00CF00FA /* Performance */,
+				4734368B2F4B2A0C00CF00FA /* Analytics */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		4734367D2F4A342200CF00FA /* AppSyncStateManager */ = {
+			isa = PBXGroup;
+			children = (
+				4734367E2F4A345500CF00FA /* AppSyncStateModel.swift */,
+				47EA14302EF530780064583B /* AppSyncStateManager.swift */,
+			);
+			path = AppSyncStateManager;
+			sourceTree = "<group>";
+		};
+		473436802F4B059200CF00FA /* Crashlytics */ = {
+			isa = PBXGroup;
+			children = (
+				473436842F4B05EB00CF00FA /* FBCrashManager.swift */,
+			);
+			path = Crashlytics;
+			sourceTree = "<group>";
+		};
+		473436832F4B05BB00CF00FA /* Firestore */ = {
+			isa = PBXGroup;
+			children = (
+				473436862F4B06B900CF00FA /* Models */,
+				473436872F4B06C300CF00FA /* Managers */,
+			);
+			path = Firestore;
+			sourceTree = "<group>";
+		};
+		473436862F4B06B900CF00FA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				473436772F49BC1B00CF00FA /* FBPostModel.swift */,
+				473436752F48F18200CF00FA /* FBNoticeModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		473436872F4B06C300CF00FA /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				473436792F49C49000CF00FA /* FBPostsManager.swift */,
+				473436732F48C96300CF00FA /* FBNoticeManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		473436882F4B24DA00CF00FA /* Performance */ = {
+			isa = PBXGroup;
+			children = (
+				473436892F4B24FA00CF00FA /* FBPerformanceManager.swift */,
+			);
+			path = Performance;
+			sourceTree = "<group>";
+		};
+		4734368B2F4B2A0C00CF00FA /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				4734368C2F4B2A4100CF00FA /* FBAnalyticsManager.swift */,
+			);
+			path = Analytics;
+			sourceTree = "<group>";
+		};
 		4751DAEF2F163FE500EC9C53 /* Details */ = {
 			isa = PBXGroup;
 			children = (
 				47656BFD2EE1EC4D00F45AA6 /* StudyProgressDetailsView.swift */,
 				47656BFF2EE1EF9500F45AA6 /* StudyProgressForLevel.swift */,
+				4765A9BD2F4DAD1D00A0FB37 /* StudyProgressRow.swift */,
 				47656BFB2EE1EBF000F45AA6 /* ProgressIndicatorView.swift */,
 			);
 			path = Details;
@@ -491,6 +589,7 @@
 			children = (
 				47A331A42F27A33C002883DD /* StudyProgressWidgetExtensionDebug.entitlements */,
 				47A3318E2F2767B2002883DD /* StudyProgressWidgetExtensionRelease.entitlements */,
+				47B65CDC2F4C90C9002FB480 /* GoogleService-Info.plist */,
 				4759974C2E5C690B008E20F0 /* StartToSwiftUI */,
 				47A3319D2F276A53002883DD /* StudyProgressWidget */,
 				475CC68B2F217B890099CAA6 /* StartToSwiftUIUnitTests */,
@@ -516,7 +615,9 @@
 			children = (
 				4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */,
 				475997722E5DA436008E20F0 /* Extensions */,
+				473436702F48A11300CF00FA /* Firebase */,
 				475CC64B2F216B480099CAA6 /* MockDataServices */,
+				4734367D2F4A342200CF00FA /* AppSyncStateManager */,
 				4759976C2E5D931F008E20F0 /* Services */,
 				4751DB032F16517100EC9C53 /* Coordinator */,
 				475997592E5C86C5008E20F0 /* Components */,
@@ -552,7 +653,7 @@
 			children = (
 				474BFB942F3C8E46006E639B /* PostsViewModel.swift */,
 				474BFB8C2F3C8DF2006E639B /* PostsViewModel+Filtering.swift */,
-				474BFB8E2F3C8E05006E639B /* PostsViewModel+CloudImport.swift */,
+				4734367B2F49C5E400CF00FA /* PostsViewModel+FBImport.swift */,
 				474BFB902F3C8E20006E639B /* PostsViewModel+BackupRestore.swift */,
 				474BFB922F3C8E2F006E639B /* PostsViewModel+Widget.swift */,
 				471BBFA02EC7251D0004AC45 /* NoticeViewModel.swift */,
@@ -564,7 +665,6 @@
 			isa = PBXGroup;
 			children = (
 				472243772EFFE31F0055461A /* GlobalMethods.swift */,
-				47BAF0A32E60613200287F10 /* SearchBarView.swift */,
 				47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */,
 				478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */,
 				4759975E2E5CA789008E20F0 /* CountingLinesInTextBlock.swift */,
@@ -579,9 +679,7 @@
 		4759976C2E5D931F008E20F0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				47E439B62EA9290E007001AD /* NetworkManager.swift */,
 				4791CDFD2E747AC100687126 /* JSONFileManager.swift */,
-				47EA14302EF530780064583B /* AppSyncStateManager.swift */,
 				4791CDFF2E747B2E00687126 /* HapticManager.swift */,
 				472E05CB2EDDC9BA005D774E /* KeyboardManager.swift */,
 				4791CDFB2E746FF100687126 /* EmailService.swift */,
@@ -612,9 +710,6 @@
 				475CC6952F22472E0099CAA6 /* SwiftDataNoticesDataSource.swift */,
 				475CC6932F2246FB0099CAA6 /* MockPostsDataSource.swift */,
 				475CC6912F2246E00099CAA6 /* MockNoticesDataSource.swift */,
-				475CC69D2F2290910099CAA6 /* MockNetworkService.swift */,
-				475CC6992F22900A0099CAA6 /* MockPostsNetworkService.swift */,
-				475CC69B2F22904A0099CAA6 /* MockNoticesNetworkService.swift */,
 			);
 			path = MockDataServices;
 			sourceTree = "<group>";
@@ -695,7 +790,6 @@
 				4791CDF02E7428EE00687126 /* CircleShadowButtonView.swift */,
 				470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */,
 				4791CD852E6ED58B00687126 /* ShrinkIconButtonStyle.swift */,
-				47870FBE2ECCD743004175E4 /* LinkButtonURL.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -752,6 +846,7 @@
 				475997382E5C6901008E20F0 /* Frameworks */,
 				475997392E5C6901008E20F0 /* Resources */,
 				47A3318D2F276734002883DD /* Embed Foundation Extensions */,
+				4734368E2F4B3F8900CF00FA /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -760,6 +855,12 @@
 			);
 			name = StartToSwiftUI;
 			packageProductDependencies = (
+				4734363A2F48661100CF00FA /* FirebaseAnalytics */,
+				4734363C2F48661100CF00FA /* FirebaseAuth */,
+				4734363E2F48661100CF00FA /* FirebaseCrashlytics */,
+				473436402F48661100CF00FA /* FirebaseFirestore */,
+				473436422F48661100CF00FA /* FirebasePerformance */,
+				47B65CDE2F4C98D4002FB480 /* FirebaseCore */,
 			);
 			productName = StartToSwiftUI;
 			productReference = 4759973B2E5C6901008E20F0 /* StartToSwiftUI.app */;
@@ -860,6 +961,9 @@
 			);
 			mainGroup = 475997322E5C6901008E20F0;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				473436392F48661100CF00FA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4759973C2E5C6901008E20F0 /* Products */;
 			projectDirPath = "";
@@ -879,6 +983,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4759974D2E5C690B008E20F0 /* Assets.xcassets in Resources */,
+				47B65CDD2F4C90C9002FB480 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -907,6 +1012,28 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4734368E2F4B3F8900CF00FA /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "
+";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		475997372E5C6901008E20F0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -918,7 +1045,6 @@
 				4751DAFA2F1640C300EC9C53 /* StatCard.swift in Sources */,
 				4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */,
 				4751DAF82F16409B00EC9C53 /* StatsCardsView.swift in Sources */,
-				475CC69E2F2290910099CAA6 /* MockNetworkService.swift in Sources */,
 				47B465802E6867930059CCB7 /* HomeView.swift in Sources */,
 				47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */,
 				47F68A4A2EFB0232003786D0 /* AppCoordinator.swift in Sources */,
@@ -935,9 +1061,11 @@
 				474BFB912F3C8E20006E639B /* PostsViewModel+BackupRestore.swift in Sources */,
 				47C56FEC2EC9C66700F0796C /* NoticeDetailsView.swift in Sources */,
 				4773545D2E65D03A001DEDEE /* FiltersView.swift in Sources */,
+				4734367C2F49C5E400CF00FA /* PostsViewModel+FBImport.swift in Sources */,
 				47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */,
 				47FF42592EE556DB0069D232 /* TapHandler.swift in Sources */,
 				475CC64D2F216B870099CAA6 /* DataSourcesProtocols.swift in Sources */,
+				4734367F2F4A345500CF00FA /* AppSyncStateModel.swift in Sources */,
 				47AC34412F28D9F40023C7AF /* Functionality.swift in Sources */,
 				472E05CC2EDDC9BA005D774E /* KeyboardManager.swift in Sources */,
 				471DCBD02EBB88A400AFA5F4 /* CopyrightPolicy.swift in Sources */,
@@ -948,21 +1076,25 @@
 				4791CE002E747B2E00687126 /* HapticManager.swift in Sources */,
 				475CC6A02F22B0790099CAA6 /* CodablePost.swift in Sources */,
 				475CC6922F2246E00099CAA6 /* MockNoticesDataSource.swift in Sources */,
+				473436852F4B05EB00CF00FA /* FBCrashManager.swift in Sources */,
+				473436762F48F18600CF00FA /* FBNoticeModel.swift in Sources */,
 				4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */,
 				4751DAFE2F16410000EC9C53 /* CumulativeLegendView.swift in Sources */,
 				475CC6A22F22B0A90099CAA6 /* CodableNotice.swift in Sources */,
+				4734368A2F4B24FA00CF00FA /* FBPerformanceManager.swift in Sources */,
 				47BAF0CA2E635E2800287F10 /* Views.swift in Sources */,
 				47656C002EE1EF9500F45AA6 /* StudyProgressForLevel.swift in Sources */,
 				4725A52B2EDD757F00235C40 /* UIDevice.swift in Sources */,
+				473436782F49BC1B00CF00FA /* FBPostModel.swift in Sources */,
 				475CC6942F2246FB0099CAA6 /* MockPostsDataSource.swift in Sources */,
 				47AC34432F28F2360023C7AF /* Calendar.swift in Sources */,
 				47656BFC2EE1EBF000F45AA6 /* ProgressIndicatorView.swift in Sources */,
 				471DCBCE2EBB83D200AFA5F4 /* LegalInformationView.swift in Sources */,
-				475CC69C2F22904A0099CAA6 /* MockNoticesNetworkService.swift in Sources */,
 				471DCBD42EBB8A6400AFA5F4 /* TermsOfUse.swift in Sources */,
 				4715FA2E2F263BB000ED732A /* FormSectionViewWraper.swift in Sources */,
 				47A7339D2ED1C355006BB8A6 /* SpeechRecogniser.swift in Sources */,
 				474BFB8D2F3C8DF2006E639B /* PostsViewModel+Filtering.swift in Sources */,
+				4765A9BE2F4DAD1D00A0FB37 /* StudyProgressRow.swift in Sources */,
 				47BAF0FA2E64CC8700287F10 /* UnderlineSermentedPicker.swift in Sources */,
 				4764A1F82EAD1DAA00D76C3A /* ClearCupsuleButton.swift in Sources */,
 				47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */,
@@ -972,6 +1104,7 @@
 				4791CDF12E7428EE00687126 /* CircleShadowButtonView.swift in Sources */,
 				475CC6982F22476D0099CAA6 /* SwiftDataPostsDataSource.swift in Sources */,
 				47542EB42EF2C8E400B0AB79 /* StartView.swift in Sources */,
+				4734367A2F49C49000CF00FA /* FBPostsManager.swift in Sources */,
 				47AC34452F28F39C0023C7AF /* SegmentedOneLinePickerNotOptional.swift in Sources */,
 				47E2AF4F2EBCD86000B0214F /* CategoryFilterView.swift in Sources */,
 				478116462EBFF9DD00EF25F8 /* CustomProgressView.swift in Sources */,
@@ -993,12 +1126,14 @@
 				472A9B5B2EDC3B6F00ED3344 /* BackButtonView.swift in Sources */,
 				471DCBCA2EBB633300AFA5F4 /* PrivacyPolicy.swift in Sources */,
 				472243782EFFE31F0055461A /* GlobalMethods.swift in Sources */,
+				4734368D2F4B2A4100CF00FA /* FBAnalyticsManager.swift in Sources */,
 				47F78A552F02DB12005394BE /* ModalNavigationContainerWrapper.swift in Sources */,
 				47EA14312EF530780064583B /* AppSyncStateManager.swift in Sources */,
 				47FF424B2EE4B5960069D232 /* RatingSelectionView.swift in Sources */,
 				470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */,
 				470E63762EFD5044007B75B5 /* CountdownView.swift in Sources */,
 				471BBFA62EC7AB640004AC45 /* NoticesView.swift in Sources */,
+				473436742F48C96300CF00FA /* FBNoticeManager.swift in Sources */,
 				47870FBF2ECCD743004175E4 /* LinkButtonURL.swift in Sources */,
 				47BAF0F62E6485B000287F10 /* SegmentedOneLinePicker.swift in Sources */,
 				471BBF9A2EC5F6170004AC45 /* PostDraftsView.swift in Sources */,
@@ -1011,19 +1146,16 @@
 				4781D72E2ED716AE00B74F85 /* Bundle.swift in Sources */,
 				47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */,
 				4791CDC12E708E1300687126 /* DocumentPicker.swift in Sources */,
-				47E439B72EA9290E007001AD /* NetworkManager.swift in Sources */,
 				474BFB932F3C8E2F006E639B /* PostsViewModel+Widget.swift in Sources */,
 				470E637A2EFDE1CF007B75B5 /* ModalNavigationContainer.swift in Sources */,
 				471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */,
 				47AA558A2EA9741D000AF4E9 /* RestoreBackupView.swift in Sources */,
 				4751DAF62F16407200EC9C53 /* ChartDataPoint.swift in Sources */,
-				474BFB8F2F3C8E05006E639B /* PostsViewModel+CloudImport.swift in Sources */,
 				4791CDBB2E702E9700687126 /* EraseAllPostsView.swift in Sources */,
 				4732FB372EAA63810062269D /* Constants.swift in Sources */,
 				4773AC902F269D4B00A713EF /* PostStatusIcons.swift in Sources */,
 				4791CDFC2E746FF100687126 /* EmailService.swift in Sources */,
 				475997612E5CC0F8008E20F0 /* PostDetailsView.swift in Sources */,
-				475CC69A2F22900A0099CAA6 /* MockPostsNetworkService.swift in Sources */,
 				47870FBA2ECC8628004175E4 /* Acknowledgements.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1218,7 +1350,7 @@
 				CODE_SIGN_ENTITLEMENTS = StartToSwiftUI/StartToSwiftUIDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -1241,7 +1373,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 1.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = PELSH.StartToSwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1265,7 +1397,7 @@
 				CODE_SIGN_ENTITLEMENTS = StartToSwiftUI/StartToSwiftUIRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readwrite;
 				ENABLE_FILE_ACCESS_PICTURE_FOLDER = readwrite;
@@ -1300,7 +1432,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 1.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = PELSH.StartToSwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1428,7 +1560,7 @@
 				CODE_SIGN_ENTITLEMENTS = StudyProgressWidgetExtensionDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StudyProgressWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StudyProgressWidget;
@@ -1439,7 +1571,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 1.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = PELSH.StartToSwiftUI.StudyProgressWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1464,7 +1596,7 @@
 				CODE_SIGN_ENTITLEMENTS = StudyProgressWidgetExtensionRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StudyProgressWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StudyProgressWidget;
@@ -1475,7 +1607,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 1.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = PELSH.StartToSwiftUI.StudyProgressWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1541,6 +1673,50 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		473436392F48661100CF00FA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.9.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4734363A2F48661100CF00FA /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 473436392F48661100CF00FA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		4734363C2F48661100CF00FA /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 473436392F48661100CF00FA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		4734363E2F48661100CF00FA /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 473436392F48661100CF00FA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		473436402F48661100CF00FA /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 473436392F48661100CF00FA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		473436422F48661100CF00FA /* FirebasePerformance */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 473436392F48661100CF00FA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebasePerformance;
+		};
+		47B65CDE2F4C98D4002FB480 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 473436392F48661100CF00FA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 475997332E5C6901008E20F0 /* Project object */;
 }

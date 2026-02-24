@@ -8,57 +8,6 @@
 import Foundation
 import SwiftData
 
-// MARK: - AppState Model for flag synchronisation via iCloud
-
-@Model
-final class AppSyncState {
-    var id: String = "app_state_singleton" // Always one copy
-    
-    // Set the flag to true to notify the user with a sound once about new notices if they appear
-    var isUserNotNotifiedBySound: Bool = true
-    // Date of last notices
-    var latestNoticeDate: Date?
-
-    // Flag indicating the presence of new curated materials
-    var isNewCuratedPostsAvailable: Bool = false // For the first launch, false, it will be updated in checkCloudCuratedPostsForUpdates()
-    var latestDateOfCuaratedPostsLoaded: Date? // Updated in importPostsFromCloud() and use in CheckForPostsUpdateView()
-    
-    // For internal purposes:
-    // - cleanupDuplicateAppStates()
-    // - getOrCreateAppState()
-    // - mergeDuplicateAppStates()
-    
-    var lastCloudSyncDate: Date?
-    var appFirstLaunchDate: Date?
-    
-    init(
-        id: String = "app_state_singleton",
-        
-        lastNoticeDate: Date? = nil,
-        isUserNotNotifiedBySound: Bool = true,
-        
-        isNewCuratedPostsAvailable: Bool = true,
-        latestDateOfCuaratedPostsLoaded: Date? = nil,
-
-        lastCloudSyncDate: Date? = nil,
-        appFirstLaunchDate: Date? = nil
-        
-    ) {
-        self.id = id
-        
-        self.isUserNotNotifiedBySound = isUserNotNotifiedBySound
-        self.latestNoticeDate = lastNoticeDate
-
-        self.isNewCuratedPostsAvailable = isNewCuratedPostsAvailable
-        self.latestDateOfCuaratedPostsLoaded = latestDateOfCuaratedPostsLoaded
-        
-        self.lastCloudSyncDate = lastCloudSyncDate
-        self.appFirstLaunchDate = appFirstLaunchDate
-        
-    }
-}
-
-
 @MainActor
 class AppSyncStateManager {
     
@@ -215,7 +164,6 @@ class AppSyncStateManager {
     func markUserNotNotifiedBySound() {
         let appState = getOrCreateAppState()
         appState.isUserNotNotifiedBySound = true
-        
         saveContext()
     }
     
@@ -223,16 +171,15 @@ class AppSyncStateManager {
     func markUserNotifiedBySound() {
         let appState = getOrCreateAppState()
         appState.isUserNotNotifiedBySound = false
-        
         saveContext()
     }
     
     /// Update last sync date
-    func updateLastCloudSyncDate() {
-        let appState = getOrCreateAppState()
-        appState.lastCloudSyncDate = Date()
-        saveContext()
-    }
+//    func updateLastCloudSyncDate(date: Date) {
+//        let appState = getOrCreateAppState()
+//        appState.lastCloudSyncDate = date
+//        saveContext()
+//    }
     
     func getLastNoticeDate() -> Date? {
         let appState = getOrCreateAppState()
@@ -243,7 +190,6 @@ class AppSyncStateManager {
     func updateLatestNoticeDate(_ date: Date) {
         let appState = getOrCreateAppState()
         appState.latestNoticeDate = date
-        
         saveContext()
     }
 
@@ -265,7 +211,7 @@ class AppSyncStateManager {
     func setCuratedPostsLoadStatusOn() {
         let appState = getOrCreateAppState()
         appState.isNewCuratedPostsAvailable = true
-        
+//        appState.latestDateOfCuaratedPostsLoaded = nil
         saveContext()
     }
         
@@ -273,18 +219,17 @@ class AppSyncStateManager {
     func setCuratedPostsLoadStatusOff() {
         let appState = getOrCreateAppState()
         appState.isNewCuratedPostsAvailable = false
-
         saveContext()
     }
     
     /// Update the latest date of downloaded materials from the cloud
-    func setLastDateOfCuaratedPostsLoaded(_ date: Date) {
+    func setLastDateOfPostsLoaded(_ date: Date) {
         let appState = getOrCreateAppState()
         appState.latestDateOfCuaratedPostsLoaded = date
     }
 
     /// Get the latest date of downloaded materials from the cloud
-    func getLastDateOfCuaratedPostsLoaded() -> Date? {
+    func getLastDateOfPostsLoaded() -> Date? {
         let appState = getOrCreateAppState()
         return appState.latestDateOfCuaratedPostsLoaded
     }

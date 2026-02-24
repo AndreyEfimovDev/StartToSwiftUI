@@ -14,15 +14,7 @@ struct StudyProgressForLevel: View {
     let studyLevel: StudyLevel?
 
     @State private var refreshID = UUID()
-
-    private var fontForSectionTitle: Font {
-        UIDevice.isiPad ? .subheadline : .headline
-    }
     
-    private var lineWidth: Double {
-        UIDevice.isiPad ? 4.0 : 8.0
-    }
-
     var titleForStudyLevel: String {
         if let studyLevel = studyLevel {
             "All " + studyLevel.displayName
@@ -36,55 +28,29 @@ struct StudyProgressForLevel: View {
         return posts
     }
     
+    private var progressLevels: [StudyProgress] {
+        [.practiced, .studied, .started]
+    }
+        
     var body: some View {
-        VStack {
-            // PROGRESS VIEWS
-            ForEach([StudyProgress.practiced, StudyProgress.studied , StudyProgress.started], id: \.self) { level in
-                HStack {
-                    
-                    let count = levelPostsCount(for: level)
-                    
-                    VStack(spacing: 8) {
-                        level.icon
-                        Text(level.displayName)
-                        Text("(\(count))")
-                            .frame(maxWidth: .infinity)
-                    }
-                    .font(fontForSectionTitle)
-                    .foregroundStyle(level.color)
-
-                    Spacer()
-                    
-                    ProgressIndicator(
-                        progress: progressCount(for: level),
-                        colour: level.color,
-                        lineWidth: lineWidth
-                    )
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                }
-                .padding(.vertical)
-                .padding(.trailing, 30)
-                .background(.ultraThinMaterial)
-                .clipShape(
-                    RoundedRectangle(cornerRadius: 30)
+        // PROGRESS VIEWS
+        VStack (spacing: 0) {
+            ForEach(progressLevels, id: \.self) { level in
+                StudyProgressRow(
+                    level: level,
+                    count: levelPostsCount(for: level),
+                    progress: progressCount(for: level)
                 )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 30)
-                        .stroke(.blue, lineWidth: 1)
-                )
-                .padding(8)
-            } // ForEach
-            // TITLE
+            }
             sectionTitle
         }
-        .padding(.horizontal, 30)
         .bold()
+        .padding(.horizontal)
         .id(refreshID)
-        .onAppear {
-            refreshID = UUID()
-        }
+        .onAppear { refreshID = UUID() }
     }
     
+    // MARK: Subviews & Functions
     private var sectionTitle: some View {
         HStack {
             Image(systemName: "hare")

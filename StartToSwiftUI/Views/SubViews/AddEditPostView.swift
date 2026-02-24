@@ -195,7 +195,7 @@ struct AddEditPostView: View {
     
     private func validatePost() -> Bool {
         if editedPost.title.count < 3 {
-            showError(
+            showAlert(
                 title: "The Title must contain at least 3 characters.",
                 message: "Please correct the Title.",
                 field: .postTitle
@@ -204,7 +204,7 @@ struct AddEditPostView: View {
         }
         
         if editedPost.author.count < 2 {
-            showError(
+            showAlert(
                 title: "The Author must contain at least 2 characters.",
                 message: "Please correct the Author.",
                 field: .author
@@ -213,7 +213,7 @@ struct AddEditPostView: View {
         }
         
         if vm.checkNewPostForUniqueTitle(editedPost.title, editingPostId: originalPost?.id) {
-            showError(
+            showAlert(
                 title: "The Title must be unique.",
                 message: "Please correct the Title.",
                 field: .postTitle
@@ -223,7 +223,7 @@ struct AddEditPostView: View {
         return true
     }
 
-    private func showError(title: String, message: String, field: PostFields?) {
+    private func showAlert(title: String, message: String, field: PostFields?) {
         alertType = .error(title: title, message: message, field: field)
         showAlert = true
     }

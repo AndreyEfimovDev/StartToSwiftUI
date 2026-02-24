@@ -7,12 +7,16 @@
 
 import SwiftUI
 import SwiftData
-import Speech
+//import Speech
 import CloudKit
+import Firebase
 
 @main
 struct StartToSwiftUIApp: App {
     
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
+    // MARK: - Dependencies
     @StateObject private var postsViewModel: PostsViewModel
     @StateObject private var noticeViewModel: NoticeViewModel
     @StateObject private var coordinator = AppCoordinator()
@@ -90,24 +94,42 @@ struct StartToSwiftUIApp: App {
         UITableView.appearance().backgroundColor = UIColor.clear
     }
     
-    private func warmUpKeyboardAndSpeech() {
-        // Warm Keyboard
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                  let window = scene.windows.first else { return }
-            let textField = UITextField()
-            window.addSubview(textField)
-            textField.becomeFirstResponder()
-            textField.resignFirstResponder()
-            textField.removeFromSuperview()
-            log("✅ Keyboard warmed up", level: .info)
+//    private func warmUpKeyboardAndSpeech() {
+//        // Warm Keyboard
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//            guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+//                  let window = scene.windows.first else { return }
+//            let textField = UITextField()
+//            window.addSubview(textField)
+//            textField.becomeFirstResponder()
+//            textField.resignFirstResponder()
+//            textField.removeFromSuperview()
+//            log("✅ Keyboard warmed up", level: .info)
+//
+//            // Warm Speech Recognition
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//                SFSpeechRecognizer.requestAuthorization { _ in
+//                    log("✅ Speech recognizer warmed up", level: .info)
+//                }
+//            }
+//        }
+//    }
+}
 
-            // Warm Speech Recognition
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                SFSpeechRecognizer.requestAuthorization { _ in
-                    log("✅ Speech recognizer warmed up", level: .info)
-                }
-            }
-        }
+// MARK: - Connect Firebase
+class AppDelegate: NSObject, UIApplicationDelegate {
+    
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        FirebaseApp.configure()
+
+        return true
+    }
+    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        
+    }
+    
+    func applicationWillResignActive(_ application: UIApplication) {
+        
     }
 }
