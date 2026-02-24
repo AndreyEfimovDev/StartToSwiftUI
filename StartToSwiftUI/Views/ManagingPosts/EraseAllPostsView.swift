@@ -91,13 +91,10 @@ struct EraseAllPostsView: View {
     
     private func performErase() {
         isInProgress = true
-        
+        vm.appStateManager?.resetLastDateOfPostsLoaded()
         vm.eraseAllPosts {
             isDeleted = true
             isInProgress = false
-            
-            // Reset curated posts status to allow re-import
-            vm.resetCuratedPostsStatus()
             
             DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
                 coordinator.closeModal()

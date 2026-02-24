@@ -88,6 +88,7 @@ struct HomeView: View {
             })
             .task {
                 FBAnalyticsManager.shared.logScreen(name: "HomeView")
+                
                 vm.loadPostsFromSwiftData()
                 noticevm.loadNoticesFromSwiftData()
                 vm.updateWidgetData()
@@ -142,7 +143,7 @@ struct HomeView: View {
         Task {
             if await vm.checkFBPostsForUpdates() {
                 if let appStateManager = vm.appStateManager {
-                    appStateManager.setCuratedPostsLoadStatusOn()
+//                    appStateManager.setCuratedPostsLoadStatusOn()
                 }
             }
             await noticevm.importNoticesFromFirebase()

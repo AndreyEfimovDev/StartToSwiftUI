@@ -27,6 +27,21 @@ extension PostsViewModel {
             hapticManager.impact(style: .light)
             FBPerformanceManager.shared.stopTrace(name: "import_posts_firebase")
             log("ℹ️ No new posts from \(sourceName)", level: .info)
+            
+            // Migration: If the date has not yet been set, we take it from local posts
+            // TODO: Remove this migration block after v?.? — one-time fix for users
+            // who had lastPostsFBUpdateDate = nil before saveContext() was added
+            if let appStateManager {
+                let lastDate = appStateManager.getLastDateOfPostsLoaded()
+                if lastDate == nil || (lastDate ?? Date()) <= Date(timeIntervalSince1970: 1) {
+                    let cloudPosts = allPosts.filter { $0.origin == .cloud || $0.origin == .cloudNew }
+                    if let latestDate = cloudPosts.max(by: { $0.date < $1.date })?.date {
+                        appStateManager.setLastDateOfPostsLoaded(latestDate.addingTimeInterval(1))
+                        log("🔥 lastPostsFBUpdateDate restored from local posts: \(latestDate)", level: .info)
+                    }
+                }
+            }
+
             return true
         }
         
@@ -42,8 +57,7 @@ extension PostsViewModel {
         if let appStateManager,
            let latestDate = fbResponseChecked.max(by: { $0.date < $1.date })?.date {
             appStateManager.setLastDateOfPostsLoaded(latestDate.addingTimeInterval(1))
-            appStateManager.setCuratedPostsLoadStatusOff()
-            log("🔥 LastNoticeDate updated in appStateManager \(latestDate)", level: .info)
+            log("🔥 lastPostsFBUpdateDate updated in appStateManager \(latestDate)", level: .info)
             
         }
         
@@ -64,16 +78,22 @@ extension PostsViewModel {
     /// Check for updates to available posts in the cloud
     func checkFBPostsForUpdates() async -> Bool {
         clearError()
-        guard let appStateManager else { return false }
-        
+        guard let appStateManager else {
+//            print("🔥🔥🔥🔥🔥 checkFBPostsForUpdates(): appStateManager is not valid")
+            return false
+        }
         guard let lastLoadedDate = appStateManager.getLastDateOfPostsLoaded() else {
-                log("🔥 checkFBPostsForUpdates: no lastLoadedDate, skipping", level: .info)
-                return false
-            }
+//            print("🔥🔥🔥🔥🔥 checkFBPostsForUpdates(): lastLoadedDate is nil")
+            return true
+        }
+//        print("🔥🔥🔥🔥🔥 checkFBPostsForUpdates(): lastLoadedDate: \(lastLoadedDate)")
 
         let newPosts = await fbPostsManager.getAllPosts(after: lastLoadedDate)
+   /* */    print("🔥🔥🔥🔥🔥 checkFBPostsForUpdates(): newPosts count: \(newPosts.count)")
+
         let hasUpdates = !newPosts.isEmpty
-        log("🔥 checkFBPostsForUpdates: \(hasUpdates ? "Updates available" : "No updates")", level: .info)
+//        print("🔥🔥🔥🔥🔥 checkFBPostsForUpdates(): hasUpdates: \(hasUpdates)")
+
         return hasUpdates
     }
 

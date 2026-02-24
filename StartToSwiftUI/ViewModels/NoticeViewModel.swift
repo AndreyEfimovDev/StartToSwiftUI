@@ -29,7 +29,7 @@ final class NoticeViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     
-    private var lastLoadTime: Date = .distantPast
+    private var lastLoadTime: Date = Date(timeIntervalSince1970: 0)
     private let minLoadInterval: TimeInterval = 3
     
     private var swiftDataSource: SwiftDataNoticesDataSource? {
@@ -127,18 +127,18 @@ final class NoticeViewModel: ObservableObject {
             // At the first launch, the user will not receive all the old notiсes, but only those that were created after app first launch
             // Note: timeIntervalSince1970 is the number of seconds that have passed since January 1, 1970 00:00:00 UTC
             // this point is called the Unix Epoch
-            let rawLastDate = appStateManager.getLastNoticeDate() ?? Date.distantPast
+            let rawLastDate = appStateManager.getLastNoticeDate() ?? Date(timeIntervalSince1970: 0)
             let lastNoticeDate = Date(timeIntervalSince1970: rawLastDate.timeIntervalSince1970.rounded(.down))
             log("🔥 LastNoticeDate from appStateManager \(lastNoticeDate)", level: .info)
             
-            let rawFirstLaunch = appStateManager.getAppFirstLaunchDate() ?? Date.distantPast
+            let rawFirstLaunch = appStateManager.getAppFirstLaunchDate() ?? Date(timeIntervalSince1970: 0)
             let firstLaunchDate = Date(timeIntervalSince1970: rawFirstLaunch.timeIntervalSince1970.rounded(.down))
             log("🔥 FirstLaunchDate from appStateManager \(firstLaunchDate)", level: .info)
             
             let filterDate = max(lastNoticeDate, firstLaunchDate)
             relevantNotices = await fbNoticesManager.getAllNotices(after: filterDate)
         } else {
-            relevantNotices = await fbNoticesManager.getAllNotices(after: Date.distantPast)
+            relevantNotices = await fbNoticesManager.getAllNotices(after: Date(timeIntervalSince1970: 0))
         }
         FBCrashManager.shared.addLog("loadNoticesFromFirebase: in progress, notices imported: \(relevantNotices.count)")
 

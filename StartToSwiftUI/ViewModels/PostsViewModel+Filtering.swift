@@ -77,7 +77,7 @@ extension PostsViewModel {
             let matchesType = type == nil || post.postType == type
             let matchesPlatform = platform == nil || post.postPlatform == platform
             
-            let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date.distantPast))
+            let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date(timeIntervalSince1970: 0)))
             let matchesYear = year == nil || postYear == year
             
             let matchesCategory = category == nil || post.category == category

@@ -60,6 +60,15 @@ class AppSyncStateManager {
             
             // 3. If one is found, return it
             if let existingState = results.first {
+                
+                // TODO: Remove after v?.? — migration for users with distantPast date in Firestore
+                // Date.distantPast caused 'Timestamp seconds out of range' crash in Firestore
+//                if let date = existingState.lastPostsFBUpdateDate, date < Date(timeIntervalSince1970: 0) {
+//                    existingState.lastPostsFBUpdateDate = Date(timeIntervalSince1970: 0)
+//                    saveContext()
+//                    log("🔥 Migration: lastPostsFBUpdateDate fixed from distantPast", level: .info)
+//                }
+
                 return existingState
             }
             
@@ -125,7 +134,7 @@ class AppSyncStateManager {
             }
             
             // Latest synchronization
-            if let date = state.lastCloudSyncDate {
+            if let date = state.lastCloudSyncDateToMergeDuplicate {
                 if latestSyncDate == nil || date > latestSyncDate! {
                     latestSyncDate = date
                 }
@@ -135,7 +144,7 @@ class AppSyncStateManager {
         // Updating the main object with the merged data
         primaryState.isUserNotNotifiedBySound = mergedIsUserNotNotified
         primaryState.appFirstLaunchDate = earliestDate
-        primaryState.lastCloudSyncDate = latestSyncDate
+        primaryState.lastCloudSyncDateToMergeDuplicate = latestSyncDate
         
         log("  ✅ Combined data:", level: .info)
         log("     isUserNotNotifiedBySound: \(mergedIsUserNotNotified)", level: .info)
@@ -193,45 +202,25 @@ class AppSyncStateManager {
         saveContext()
     }
 
-    // MARK: - Methods for Cloud import of curated posts status
-    /// The isNewCuratedPostsAvailable status is set to false after:
-    /// - after the user imports new curated post materials from the cloud
-    /// The isFirstImportCuratedPostsCompleted status is set to true:
-    /// - initial value for the first app load
-    /// - when checking and detecting new curated post materials in the cloud (included in PostsViewModel init())
-    /// - when deleting all study materials - the "Erase all materials" function
-    ///
-    /// Get the status of new materials and author references in the cloud
-    func getAvailableNewCuratedPostsStatus() -> Bool {
-        let appState = getOrCreateAppState()
-        return appState.isNewCuratedPostsAvailable
-    }
-    
-    /// Set the status of new materials and author references in the cloud
-    func setCuratedPostsLoadStatusOn() {
-        let appState = getOrCreateAppState()
-        appState.isNewCuratedPostsAvailable = true
-//        appState.latestDateOfCuaratedPostsLoaded = nil
-        saveContext()
-    }
-        
-    /// Reset the flag for the presence of new materials in the cloud
-    func setCuratedPostsLoadStatusOff() {
-        let appState = getOrCreateAppState()
-        appState.isNewCuratedPostsAvailable = false
-        saveContext()
-    }
+    // MARK: - Managing lastPostsFBUpdateDate
     
     /// Update the latest date of downloaded materials from the cloud
     func setLastDateOfPostsLoaded(_ date: Date) {
         let appState = getOrCreateAppState()
-        appState.latestDateOfCuaratedPostsLoaded = date
+        appState.lastPostsFBUpdateDate = date
+        saveContext()
+    }
+
+    func resetLastDateOfPostsLoaded() {
+        let appState = getOrCreateAppState()
+        appState.lastPostsFBUpdateDate = Date(timeIntervalSince1970: 0)
+        saveContext()
     }
 
     /// Get the latest date of downloaded materials from the cloud
     func getLastDateOfPostsLoaded() -> Date? {
         let appState = getOrCreateAppState()
-        return appState.latestDateOfCuaratedPostsLoaded
+        return appState.lastPostsFBUpdateDate
     }
     
     private func saveContext() {

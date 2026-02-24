@@ -19,16 +19,14 @@ final class AppSyncState {
     // Date of last notices
     var latestNoticeDate: Date?
 
-    // Flag indicating the presence of new curated materials
-    var isNewCuratedPostsAvailable: Bool = false // For the first launch, false, it will be updated in checkCloudPostsForUpdates()
-    var latestDateOfCuaratedPostsLoaded: Date? // Updated in importPostsFromCloud() and use in CheckForPostsUpdateView()
+    var lastPostsFBUpdateDate: Date?
     
     // For internal purposes:
     // - cleanupDuplicateAppStates()
     // - getOrCreateAppState()
     // - mergeDuplicateAppStates()
     
-    var lastCloudSyncDate: Date?
+    var lastCloudSyncDateToMergeDuplicate: Date?
     var appFirstLaunchDate: Date?
     
     init(
@@ -37,8 +35,7 @@ final class AppSyncState {
         lastNoticeDate: Date? = nil,
         isUserNotNotifiedBySound: Bool = true,
         
-        isNewCuratedPostsAvailable: Bool = true,
-        latestDateOfCuaratedPostsLoaded: Date? = nil,
+        lastPostsFBUpdateDate: Date? = nil,
 
         lastCloudSyncDate: Date? = nil,
         appFirstLaunchDate: Date? = nil
@@ -49,10 +46,9 @@ final class AppSyncState {
         self.isUserNotNotifiedBySound = isUserNotNotifiedBySound
         self.latestNoticeDate = lastNoticeDate
 
-        self.isNewCuratedPostsAvailable = isNewCuratedPostsAvailable
-        self.latestDateOfCuaratedPostsLoaded = latestDateOfCuaratedPostsLoaded
+        self.lastPostsFBUpdateDate = lastPostsFBUpdateDate
         
-        self.lastCloudSyncDate = lastCloudSyncDate
+        self.lastCloudSyncDateToMergeDuplicate = lastCloudSyncDate
         self.appFirstLaunchDate = appFirstLaunchDate
         
     }

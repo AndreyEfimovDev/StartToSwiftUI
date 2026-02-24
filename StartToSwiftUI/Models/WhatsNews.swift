@@ -17,14 +17,20 @@ struct WhatsNews {
                     title: "Added",
                     newsText: """
                     - Study content can be managed by first moving it to the 'hidden' pool, then to the 'deleted' pool, before it is permanently erased
-                    - The "Random" sorting option in the filter to display materials in random order
+                    - The "Random" sorting option in the filter to display materials in shuffled order
+                    - The "Make all curated collection available" option to drop the latest date of loading curated collection
+                    """
+                ),
+                News(
+                    title: "Improved",
+                    newsText: """
+                    - Curated content migrated to Firestore Cloud
                     """
                 ),
                 News(
                     title: "Fixed",
                     newsText: """
-                    - Remote curated content migrated to Firestore Cloud
-                    - Various UI/UX enhancements
+                    - Avoiding crashes with Firestore distantPast
                     """
                 ),
             ]
@@ -39,9 +45,9 @@ struct WhatsNews {
                     """
                 ),
                 News(
-                    title: "Fixed",
+                    title: "Improved",
                     newsText: """
-                    - Improved overall performance at app launch related to Cloud sync
+                    - Overall performance at app launch related to Cloud sync
                     - Various UI/UX enhancements
                     """
                 ),
@@ -57,9 +63,9 @@ struct WhatsNews {
                     """
                 ),
                 News(
-                    title: "Fixed",
+                    title: "Improved",
                     newsText: """
-                    - Improved cloud data synchronisation across devices
+                    - Cloud data synchronisation across devices
                     """
                 ),
             ]
