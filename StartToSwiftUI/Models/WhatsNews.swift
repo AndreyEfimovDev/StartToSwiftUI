@@ -22,10 +22,15 @@ struct WhatsNews {
                     """
                 ),
                 News(
+                    title: "Improved",
+                    newsText: """
+                    - Curated content migrated to Firestore Cloud
+                    """
+                ),
+                News(
                     title: "Fixed",
                     newsText: """
-                    - Remote curated content migrated to Firestore Cloud
-                    - Various UI/UX enhancements
+                    - Avoiding crashes with Firestore distantPast
                     """
                 ),
             ]
@@ -40,9 +45,9 @@ struct WhatsNews {
                     """
                 ),
                 News(
-                    title: "Fixed",
+                    title: "Improved",
                     newsText: """
-                    - Improved overall performance at app launch related to Cloud sync
+                    - Overall performance at app launch related to Cloud sync
                     - Various UI/UX enhancements
                     """
                 ),
@@ -58,9 +63,9 @@ struct WhatsNews {
                     """
                 ),
                 News(
-                    title: "Fixed",
+                    title: "Improved",
                     newsText: """
-                    - Improved cloud data synchronisation across devices
+                    - Cloud data synchronisation across devices
                     """
                 ),
             ]

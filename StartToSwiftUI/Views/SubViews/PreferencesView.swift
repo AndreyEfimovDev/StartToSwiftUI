@@ -147,29 +147,29 @@ struct PreferencesView: View {
     // MARK: - Notifications
     
     private var noticeMessages: some View {
-        Button("Messages (\(noticevm.unreadCount)/\(noticevm.notices.count))") {
+        Button("Notices (\(noticevm.unreadCount)/\(noticevm.notices.count))") {
             coordinator.pushModal(.notices)
         }
         .accessibilityIdentifier("MessagesButton")
         .customListRowStyle(
-            iconName: noticevm.unreadCount == 0 ? "message" : "message.badge",
+            iconName: noticevm.unreadCount == 0 ? "envelope" : "envelope.badge.plus", // envelope message message.badge
             iconWidth: iconSize
         )
     }
     
     private var notificationToggle: some View {
         HStack {
-            Image(systemName: noticevm.isNotificationOn ? "bell" : "bell.slash")
+            Image(systemName: noticevm.isNotificationOn ? "eye" : "eye.slash")
                 .frame(width: iconSize)
                 .foregroundStyle(Color.mycolor.myBlue)
-            Toggle(noticevm.isNotificationOn ? "Message icon On" : "Message icon Off", isOn: $noticevm.isNotificationOn)
+            Toggle(noticevm.isNotificationOn ? "Notice badge On" : "Notice badge Off", isOn: $noticevm.isNotificationOn)
                 .tint(Color.mycolor.myBlue)
         }
     }
     
     private var soundNotificationToggle: some View {
         HStack {
-            Image(systemName: noticevm.isSoundNotificationOn ? "speaker.wave.2" : "speaker.slash")
+            Image(systemName: noticevm.isSoundNotificationOn ? "bell" : "bell.slash") // speaker.wave.2 speaker.slash
                 .frame(width: iconSize)
                 .foregroundStyle(Color.mycolor.myBlue)
             Toggle(noticevm.isSoundNotificationOn ? "One-shot sound On" : "One-shot sound Off", isOn: $noticevm.isSoundNotificationOn)
