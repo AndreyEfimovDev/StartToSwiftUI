@@ -16,7 +16,7 @@ struct WhatsNews {
                 News(
                     title: "Added",
                     newsText: """
-                    - Puch notifications
+                    - The "Random" sorting option in the filter to display materials in random order
                     """
                 ),
                 News(
@@ -34,7 +34,7 @@ struct WhatsNews {
                 News(
                     title: "Added",
                     newsText: """
-                    - An 'Original' sorting option to the filter to view materials in their default order
+                    - The "Original" sorting option in the filter to display materials in the default order
                     """
                 ),
                 News(

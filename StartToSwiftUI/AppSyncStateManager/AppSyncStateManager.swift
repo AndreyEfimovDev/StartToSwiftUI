@@ -211,7 +211,7 @@ class AppSyncStateManager {
     func setCuratedPostsLoadStatusOn() {
         let appState = getOrCreateAppState()
         appState.isNewCuratedPostsAvailable = true
-        appState.latestDateOfCuaratedPostsLoaded = nil
+//        appState.latestDateOfCuaratedPostsLoaded = nil
         saveContext()
     }
         

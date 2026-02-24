@@ -22,8 +22,8 @@ extension PostsViewModel {
             .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
         
         $allPosts
-            .combineLatest(debouncedSearchText, filtersWithPlatformAndSortOption)
-            .map { [weak self] posts, searchText, data -> [Post] in
+            .combineLatest(debouncedSearchText, filtersWithPlatformAndSortOption, $reshuffleToken)
+            .map { [weak self] posts, searchText, data, _ -> [Post] in
                 guard let self else { return posts }
                 
                 let ((level, favorite, type, year), platform, sortOption, category) = data
@@ -113,6 +113,8 @@ extension PostsViewModel {
     
     private func applySorting(posts: [Post], option: SortOption) -> [Post] {
         switch option {
+        case .notSorted:
+            return posts
         case .newestFirst:
             return posts.sorted {
                 switch ($0.postDate, $1.postDate) {
@@ -129,8 +131,18 @@ extension PostsViewModel {
                 case (_, nil): return true
                 }
             }
-        case .notSorted:
-            return posts
+        case .random:
+            return posts.sorted { a, b in
+                let indexA = randomSortOrder.firstIndex(of: a.id) ?? Int.max
+                let indexB = randomSortOrder.firstIndex(of: b.id) ?? Int.max
+                return indexA < indexB
+            }
         }
     }
+    
+    func reshufflePosts() {
+        randomSortOrder = allPosts.map { $0.id }.shuffled()
+        reshuffleToken = UUID() // меняется → pipeline срабатывает
+    }
+
 }

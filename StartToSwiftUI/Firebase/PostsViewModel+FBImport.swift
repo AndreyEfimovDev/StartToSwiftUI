@@ -66,9 +66,12 @@ extension PostsViewModel {
         clearError()
         guard let appStateManager else { return false }
         
-        let lastLoadedDate = appStateManager.getLastDateOfPostsLoaded()
-        let newPosts = await fbPostsManager.getAllPosts(after: lastLoadedDate)
+        guard let lastLoadedDate = appStateManager.getLastDateOfPostsLoaded() else {
+                log("🔥 checkFBPostsForUpdates: no lastLoadedDate, skipping", level: .info)
+                return false
+            }
 
+        let newPosts = await fbPostsManager.getAllPosts(after: lastLoadedDate)
         let hasUpdates = !newPosts.isEmpty
         log("🔥 checkFBPostsForUpdates: \(hasUpdates ? "Updates available" : "No updates")", level: .info)
         return hasUpdates
