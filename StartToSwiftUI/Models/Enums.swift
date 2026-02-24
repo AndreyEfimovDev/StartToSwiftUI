@@ -60,12 +60,14 @@ enum SortOption: String, CaseIterable {
     case notSorted
     case newestFirst
     case oldestFirst
+    case random
     
     var displayName: String {
         switch self {
         case .notSorted: return "Original"
         case .newestFirst: return "Newest"
         case .oldestFirst: return "Oldest"
+        case .random: return "Random"
         }
     }
 }
@@ -129,6 +131,15 @@ enum PostStatus: String, CaseIterable, Codable {
     case active
     case hidden
     case deleted
+    
+    var displayName: String {
+        switch self {
+        case .active: return "Active"
+        case .hidden: return "Hidden"
+        case .deleted: return "Deleted"
+        }
+    }
+
 }
 
 enum PostOrigin: String, CaseIterable, Codable {

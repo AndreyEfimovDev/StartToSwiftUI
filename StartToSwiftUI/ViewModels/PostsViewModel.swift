@@ -28,6 +28,7 @@ final class PostsViewModel: ObservableObject {
     @Published var isFiltersEmpty: Bool = true
     @Published var selectedRating: PostRating? = nil
     @Published var selectedStudyProgress: StudyProgress = .added
+    @Published var reshuffleToken = UUID()
     
     @Published var errorMessage: String?
     @Published var showErrorMessageAlert = false
@@ -38,6 +39,7 @@ final class PostsViewModel: ObservableObject {
     var allYears: [String]? = nil
     var allCategories: [String]? = nil
     let mainCategory: String = Constants.mainCategory
+    var randomSortOrder: [String] = []
     var dispatchTime: DispatchTime { .now() + 1.5 }
     var dispatchFor: Double = 1.5
     
@@ -82,7 +84,12 @@ final class PostsViewModel: ObservableObject {
     
     @AppStorage("storedSortOption") var storedSortOption: SortOption = .notSorted
     @Published var selectedSortOption: SortOption = .notSorted {
-        didSet { storedSortOption = selectedSortOption }}
+        didSet {
+            storedSortOption = selectedSortOption
+            if selectedSortOption == .random {
+                randomSortOrder = allPosts.map { $0.id }.shuffled()
+            }
+        }}
         
     // MARK: - Init
     init(

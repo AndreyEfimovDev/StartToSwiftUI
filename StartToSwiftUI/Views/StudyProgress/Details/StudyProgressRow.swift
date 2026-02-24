@@ -25,7 +25,6 @@ struct StudyProgressRow: View {
             }
             .font(fontForSectionTitle)
             .foregroundStyle(level.color)
-//            .border(.yellow)
             .padding()
             .padding(.vertical, UIDevice.isiPad ? 0 : 8)
             .padding(.leading, 15)
@@ -33,7 +32,6 @@ struct StudyProgressRow: View {
             .background(.ultraThinMaterial)
             .clipShape(RoundedRectangle(cornerRadius: 30))
             .overlay(RoundedRectangle(cornerRadius: 30).stroke(.blue, lineWidth: 1))
-//            .border(.red)
             
             ProgressIndicatorView(
                 progress: progress,
@@ -44,7 +42,6 @@ struct StudyProgressRow: View {
             .clipShape(Circle())
             .padding(.trailing, 15)
             .frame(maxWidth: .infinity, alignment: .trailing)
-//            .border(.green)
         }
         .padding(.vertical, UIDevice.isiPad ? 0 : 8)
         .padding(.horizontal, UIDevice.isiPad ? 75 : 0)
