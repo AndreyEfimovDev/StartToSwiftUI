@@ -18,6 +18,7 @@ struct WhatsNews {
                     newsText: """
                     - Study content can be managed by first moving it to the 'hidden' pool, then to the 'deleted' pool, before it is permanently erased
                     - The "Random" sorting option in the filter to display materials in shuffled order
+                    - The "Make all curated collection available" option to drop the latest date of loading curated collection
                     """
                 ),
                 News(

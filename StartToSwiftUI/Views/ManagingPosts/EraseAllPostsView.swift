@@ -91,15 +91,11 @@ struct EraseAllPostsView: View {
     
     private func performErase() {
         isInProgress = true
-        
+        vm.appStateManager?.resetLastDateOfPostsLoaded()
         vm.eraseAllPosts {
             isDeleted = true
             isInProgress = false
             
-//            if let appStateManager {
-//                appStateManager.setLastDateOfPostsLoaded(nil)
-//            }
-
             DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
                 coordinator.closeModal()
             }

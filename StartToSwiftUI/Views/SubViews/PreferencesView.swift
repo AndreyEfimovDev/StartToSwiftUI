@@ -25,7 +25,6 @@ struct PreferencesView: View {
         Form {
 #warning("Delete this button before deployment to App Store")
 #if DEBUG
-//            VStack {
 //                Button {
 //                    Task {
 //                        await vm.uploadDevDataPostsToFirebase()
@@ -39,11 +38,6 @@ struct PreferencesView: View {
 //                        .background(Color.mycolor.myRed.opacity(0.3))
 //                        .cornerRadius(30)
 //                }
-
-//                Button("Test Crash") {
-//                    fatalError("Test crash")
-//                }
-//            }
 #endif
             Section(header: sectionHeader("Appearance")) {
                 themeAppearance
@@ -67,7 +61,6 @@ struct PreferencesView: View {
             }
             Section(header: sectionHeader("Manage materials (\(vm.allPosts.count))")) {
                 postDrafts
-                checkForPostsUpdate
                 importFromCloud
                 if !vm.allPosts.isEmpty {
                     shareBackup
@@ -76,6 +69,7 @@ struct PreferencesView: View {
                 if !vm.allPosts.isEmpty {
                     erasePosts
                 }
+                makeAllCuratedAvailable
             }
             Section(header: sectionHeader("Сommunication")){
                 acknowledgements
@@ -168,7 +162,7 @@ struct PreferencesView: View {
             Image(systemName: noticevm.isNotificationOn ? "bell" : "bell.slash")
                 .frame(width: iconSize)
                 .foregroundStyle(Color.mycolor.myBlue)
-            Toggle(noticevm.isNotificationOn ? "On" : "Off", isOn: $noticevm.isNotificationOn)
+            Toggle(noticevm.isNotificationOn ? "Message icon On" : "Message icon Off", isOn: $noticevm.isNotificationOn)
                 .tint(Color.mycolor.myBlue)
         }
     }
@@ -178,7 +172,7 @@ struct PreferencesView: View {
             Image(systemName: noticevm.isSoundNotificationOn ? "speaker.wave.2" : "speaker.slash")
                 .frame(width: iconSize)
                 .foregroundStyle(Color.mycolor.myBlue)
-            Toggle(noticevm.isSoundNotificationOn ? "Sound On" : "Sound Off", isOn: $noticevm.isSoundNotificationOn)
+            Toggle(noticevm.isSoundNotificationOn ? "One-shot sound On" : "One-shot sound Off", isOn: $noticevm.isSoundNotificationOn)
                 .tint(Color.mycolor.myBlue)
         }
     }
@@ -211,27 +205,9 @@ struct PreferencesView: View {
         }
     }
     
-    /// Checking for new curated references to materials is available if:
-    /// - new materials availability status = true, and
-    /// - The local array of materials contains author's materials (for posts with origin = .cloud)
-    ///
-    @ViewBuilder
-    private var checkForPostsUpdate: some View {
-        if hasPostsUpdate {
-            Button("Check for materials update") {
-                coordinator.pushModal(.checkForUpdates)
-            }
-            .customListRowStyle(iconName: "arrow.trianglehead.counterclockwise", iconWidth: iconSize)
-        } else {
-            Button("Make all curated collection available") {
-                vm.appStateManager?.resetLastDateOfPostsLoaded()
-                hasPostsUpdate = true
-            }
-            .customListRowStyle(iconName: "arrow.down.circle", iconWidth: iconSize)
-        }
-    }
-        
-    /// Import is available if there are no curated materials in the local array (for posts with origin = .cloud)
+    /// Import is available if there are no curated materials in the local array (for posts with origin = .cloud), and
+    /// Checking for new curated references to materials is available with
+    /// possibility to reset lastPostsFBUpdateDate in appState
     @ViewBuilder
     private var importFromCloud: some View {
         if vm.shouldShowImportFromCloud {
@@ -239,6 +215,11 @@ struct PreferencesView: View {
                 coordinator.pushModal(.importFromCloud)
             }
             .customListRowStyle(iconName: "icloud.and.arrow.down", iconWidth: iconSize)
+        } else if hasPostsUpdate {
+            Button("Check for materials update") {
+                coordinator.pushModal(.checkForUpdates)
+            }
+            .customListRowStyle(iconName: "arrow.trianglehead.counterclockwise", iconWidth: iconSize)
         }
     }
         
@@ -270,6 +251,20 @@ struct PreferencesView: View {
             iconName: "trash",
             iconWidth: iconSize
         )
+    }
+    
+    @ViewBuilder
+    private var makeAllCuratedAvailable: some View {
+        if let date = vm.appStateManager?.getLastDateOfPostsLoaded(),
+           date <= Date(timeIntervalSince1970: 1),
+           vm.hasCloudPosts,
+           !hasPostsUpdate {
+            Button("Make all curated collection available") {
+                vm.appStateManager?.resetLastDateOfPostsLoaded()
+                hasPostsUpdate = true
+            }
+            .customListRowStyle(iconName: "arrow.down.circle", iconWidth: iconSize)
+        }
     }
     
     // MARK: - Communication

@@ -13,7 +13,6 @@ struct SearchBarView: View {
     
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var vm: PostsViewModel
-//    @StateObject private var speechRecogniser = SpeechRecogniser()
     
     @FocusState private var isFocusedOnSearchBar: Bool
     
@@ -25,24 +24,15 @@ struct SearchBarView: View {
             HStack(spacing: 0) {
                 Image(systemName: "magnifyingglass")
                     .foregroundStyle(
-                        isFocusedOnSearchBar /*|| speechRecogniser.isRecording*/ ? Color.mycolor.myAccent : Color.mycolor.mySecondary
+                        isFocusedOnSearchBar ? Color.mycolor.myAccent : Color.mycolor.mySecondary
                     )
 
                 TextField("Search here ...", text: $vm.searchText)
                     .foregroundStyle(Color.mycolor.myAccent)
                     .autocorrectionDisabled(true)
-//                    .keyboardType(.asciiCapable)
                     .frame(height: isFocusedOnSearchBar ? 50 : 35)
                     .focused($isFocusedOnSearchBar)
                     .submitLabel(.search)
-//                    .onChange(of: speechRecogniser.recognisedText) { _, newSearchText in
-//                        if !vm.searchText.isEmpty {
-//                            vm.searchText.append(" " + newSearchText)
-//                        } else {
-//                            vm.searchText = newSearchText
-//                        }
-//                        vm.searchText = removeDoubleSpaces(vm.searchText)
-//                    }
                     .padding(.leading, isFocusedOnSearchBar ? 8 : 0)
                 
                 xmarkButton
@@ -63,8 +53,6 @@ struct SearchBarView: View {
             )
             .padding(.horizontal)
             .padding(.vertical, 8)
-            
-//            micButton
         }
         .animation(.easeInOut, value: isFocusedOnSearchBar)
     }
@@ -79,60 +67,14 @@ struct SearchBarView: View {
             .background(.black.opacity(0.001))
             .opacity(isFocusedOnSearchBar ? 1 : 0)
             .onTapGesture {
-//                if speechRecogniser.isRecording {
-//                    speechRecogniser.stopRecording()
-//                    speechRecogniser.errorMessage = nil
-//                } else {
-                    isFocusedOnSearchBar = false
-                    vm.searchText = ""
-//                    speechRecogniser.recognisedText = ""
-//                }
+                isFocusedOnSearchBar = false
+                vm.searchText = ""
             }
     }
-    
-//    private var micButton: some View {
-//        Button {
-//            
-//            if speechRecogniser.isRecording {
-//                speechRecogniser.stopRecording()
-//                if vm.searchText.isEmpty {
-//                    isFocusedOnSearchBar = false
-//                }
-//            } else {
-//                speechRecogniser.startRecording()
-//                isFocusedOnSearchBar = true
-//            }
-//
-//        } label: {
-//            
-//            ZStack {
-//                
-//                Circle()
-//                    .fill(speechRecogniser.isRecording ? Color.mycolor.myRed : Color.clear)
-//                    .frame(width: 50, height: 50)
-//                    .scaleEffect(speechRecogniser.isRecording ? 1 : 0.0)
-//                    .opacity(speechRecogniser.isRecording ? 0 : 1)
-//                    .animation(
-//                        speechRecogniser.isRecording
-//                        ? .easeOut(duration: 1.0).repeatForever(autoreverses: false)
-//                        : .default,
-//                        value: speechRecogniser.isRecording
-//                    )
-//
-//                Image(systemName: speechRecogniser.isRecording ? "stop.circle" : "mic")
-//                    .font(isFocusedOnSearchBar ? .title : .body)
-//                    .foregroundStyle(
-//                        speechRecogniser.isRecording ? Color.mycolor.myRed : Color.mycolor.mySecondary
-//                    )
-//                    .padding(8)
-//            }
-//        }
+//    
+//    private func removeDoubleSpaces(_ string: String) -> String {
+//        return string.replacingOccurrences(of: "  ", with: " ")
 //    }
-    
-    private func removeDoubleSpaces(_ string: String) -> String {
-        return string.replacingOccurrences(of: "  ", with: " ")
-    }
-    
 }
 
 #Preview {

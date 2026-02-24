@@ -31,13 +31,17 @@ extension PostsViewModel {
             // Migration: If the date has not yet been set, we take it from local posts
             // TODO: Remove this migration block after v?.? — one-time fix for users
             // who had lastPostsFBUpdateDate = nil before saveContext() was added
-            if let appStateManager, appStateManager.getLastDateOfPostsLoaded() == nil {
-                let cloudPosts = allPosts.filter { $0.origin == .cloud || $0.origin == .cloudNew }
-                if let latestDate = cloudPosts.max(by: { $0.date < $1.date })?.date {
-                    appStateManager.setLastDateOfPostsLoaded(latestDate.addingTimeInterval(1))
-                    log("🔥 Migration: lastPostsFBUpdateDate set from local posts: \(latestDate)", level: .info)
+            if let appStateManager {
+                let lastDate = appStateManager.getLastDateOfPostsLoaded()
+                if lastDate == nil || (lastDate ?? Date()) <= Date(timeIntervalSince1970: 1) {
+                    let cloudPosts = allPosts.filter { $0.origin == .cloud || $0.origin == .cloudNew }
+                    if let latestDate = cloudPosts.max(by: { $0.date < $1.date })?.date {
+                        appStateManager.setLastDateOfPostsLoaded(latestDate.addingTimeInterval(1))
+                        log("🔥 lastPostsFBUpdateDate restored from local posts: \(latestDate)", level: .info)
+                    }
                 }
             }
+
             return true
         }
         
