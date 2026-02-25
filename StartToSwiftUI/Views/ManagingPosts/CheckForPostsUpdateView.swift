@@ -114,21 +114,26 @@ struct CheckForPostsUpdateView: View {
     /// Check if updates for curated study materials are available
     private func checkForUpdates() async {
         let hasUpdates = await vm.checkFBPostsForUpdates()
+        isInProgress = false
         
         if hasUpdates {
             statusText = "Updates available!"
             statusColor = Color.mycolor.myRed
             isUpdateAvailable = true
-            
         } else {
             statusText = "No updates available"
             statusColor = Color.mycolor.myGreen
             isUpdated = true
+            Task {
+                try? await Task.sleep(for: .seconds(vm.dispatchFor + 1))
+                await MainActor.run {
+                    coordinator.closeModal()
+                }
+            }
         }
-        
-        isInProgress = false
     }
     
+    /// Perform import new curated content from Firestore
     private func performImport() async {
         let success = await vm.importPostsFromFirebase()
 

@@ -49,7 +49,6 @@ struct WhatsNews {
                     title: "Improved",
                     newsText: """
                     - Overall performance at app launch related to Cloud sync
-                    - Various UI/UX enhancements
                     """
                 ),
             ]
