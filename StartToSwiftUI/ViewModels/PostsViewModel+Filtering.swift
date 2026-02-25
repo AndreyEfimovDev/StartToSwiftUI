@@ -142,7 +142,7 @@ extension PostsViewModel {
     
     func reshufflePosts() {
         randomSortOrder = allPosts.map { $0.id }.shuffled()
-        reshuffleToken = UUID() // меняется → pipeline срабатывает
+        reshuffleToken = UUID() // on change → Combine pipeline is triggered
     }
 
 }
