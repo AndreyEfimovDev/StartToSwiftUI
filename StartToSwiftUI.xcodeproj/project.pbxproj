@@ -109,6 +109,7 @@
 		4791CE042E748DA200687126 /* AddEditPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE032E748DA200687126 /* AddEditPostView.swift */; };
 		4791CE082E75AAB000687126 /* UnderlineSermentedPickerNotOptional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE072E75AAAF00687126 /* UnderlineSermentedPickerNotOptional.swift */; };
 		47939D772F4EEB9E00CBE432 /* ArchivedPostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47939D762F4EEB9E00CBE432 /* ArchivedPostsView.swift */; };
+		47939D792F4F2CDE00CBE432 /* DateFormater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47939D782F4F2CDE00CBE432 /* DateFormater.swift */; };
 		47A331732F2761F9002883DD /* WidgetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A331722F2761F9002883DD /* WidgetData.swift */; };
 		47A3317B2F27672F002883DD /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47A3317A2F27672D002883DD /* WidgetKit.framework */; };
 		47A3317D2F27672F002883DD /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47A3317C2F27672F002883DD /* SwiftUI.framework */; };
@@ -293,6 +294,7 @@
 		4791CE032E748DA200687126 /* AddEditPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditPostView.swift; sourceTree = "<group>"; };
 		4791CE072E75AAAF00687126 /* UnderlineSermentedPickerNotOptional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineSermentedPickerNotOptional.swift; sourceTree = "<group>"; };
 		47939D762F4EEB9E00CBE432 /* ArchivedPostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedPostsView.swift; sourceTree = "<group>"; };
+		47939D782F4F2CDE00CBE432 /* DateFormater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormater.swift; sourceTree = "<group>"; };
 		47A3313C2F26B256002883DD /* StartToSwiftUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StartToSwiftUIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		47A3316C2F276123002883DD /* StudyProgressWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressWidget.swift; sourceTree = "<group>"; };
 		47A331722F2761F9002883DD /* WidgetData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetData.swift; sourceTree = "<group>"; };
@@ -694,6 +696,7 @@
 				4725A52A2EDD757F00235C40 /* UIDevice.swift */,
 				47AE6C802E7D7FD0006230DA /* Modifiers.swift */,
 				47AC34422F28F2360023C7AF /* Calendar.swift */,
+				47939D782F4F2CDE00CBE432 /* DateFormater.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1079,6 +1082,7 @@
 				4751DAFE2F16410000EC9C53 /* CumulativeLegendView.swift in Sources */,
 				475CC6A22F22B0A90099CAA6 /* CodableNotice.swift in Sources */,
 				4734368A2F4B24FA00CF00FA /* FBPerformanceManager.swift in Sources */,
+				47939D792F4F2CDE00CBE432 /* DateFormater.swift in Sources */,
 				47BAF0CA2E635E2800287F10 /* Views.swift in Sources */,
 				47656C002EE1EF9500F45AA6 /* StudyProgressForLevel.swift in Sources */,
 				4725A52B2EDD757F00235C40 /* UIDevice.swift in Sources */,
