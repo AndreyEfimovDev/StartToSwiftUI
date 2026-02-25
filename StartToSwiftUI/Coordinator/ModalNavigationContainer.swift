@@ -50,6 +50,8 @@ struct ModalNavigationContainer: View {
             
         case .postDrafts:
             PostDraftsView()
+        case .archivedPosts:
+            ArchivedPostsView()
         case .checkForUpdates:
             CheckForPostsUpdateView()
         case .importFromCloud:

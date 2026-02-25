@@ -79,21 +79,14 @@ extension PostsViewModel {
     func checkFBPostsForUpdates() async -> Bool {
         clearError()
         guard let appStateManager else {
-//            print("🔥🔥🔥🔥🔥 checkFBPostsForUpdates(): appStateManager is not valid")
             return false
         }
         guard let lastLoadedDate = appStateManager.getLastDateOfPostsLoaded() else {
-//            print("🔥🔥🔥🔥🔥 checkFBPostsForUpdates(): lastLoadedDate is nil")
             return true
         }
-//        print("🔥🔥🔥🔥🔥 checkFBPostsForUpdates(): lastLoadedDate: \(lastLoadedDate)")
 
         let newPosts = await fbPostsManager.getAllPosts(after: lastLoadedDate)
-   /* */    print("🔥🔥🔥🔥🔥 checkFBPostsForUpdates(): newPosts count: \(newPosts.count)")
-
         let hasUpdates = !newPosts.isEmpty
-//        print("🔥🔥🔥🔥🔥 checkFBPostsForUpdates(): hasUpdates: \(hasUpdates)")
-
         return hasUpdates
     }
 

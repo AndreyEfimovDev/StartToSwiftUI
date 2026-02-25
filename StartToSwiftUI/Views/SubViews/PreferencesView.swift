@@ -43,9 +43,7 @@ struct PreferencesView: View {
                 themeAppearance
             }
             Section(header: sectionHeader("Notices")) {
-                if noticevm.notices.count > 0 {
-                    noticeMessages
-                }
+                noticeMessages
                 notificationToggle
                 soundNotificationToggle
             }
@@ -61,14 +59,11 @@ struct PreferencesView: View {
             }
             Section(header: sectionHeader("Manage materials (\(vm.allPosts.count))")) {
                 postDrafts
+                archivedPosts
                 importFromCloud
-                if !vm.allPosts.isEmpty {
-                    shareBackup
-                }
+                shareBackup
                 restoreBackup
-                if !vm.allPosts.isEmpty {
-                    erasePosts
-                }
+                erasePosts
                 makeAllCuratedAvailable
             }
             Section(header: sectionHeader("Сommunication")){
@@ -144,17 +139,21 @@ struct PreferencesView: View {
         .preferredColorScheme(vm.selectedTheme.colorScheme)
     }
     
-    // MARK: - Notifications
+    // MARK: - Notices
     
     private var noticeMessages: some View {
-        Button("Notices (\(noticevm.unreadCount)/\(noticevm.notices.count))") {
-            coordinator.pushModal(.notices)
+        Group {
+            if noticevm.notices.count > 0 {
+                Button("Notices (\(noticevm.unreadCount)/\(noticevm.notices.count))") {
+                    coordinator.pushModal(.notices)
+                }
+                .accessibilityIdentifier("MessagesButton")
+                .customListRowStyle(
+                    iconName: noticevm.unreadCount == 0 ? "envelope" : "envelope.badge.plus",
+                    iconWidth: iconSize
+                )
+            }
         }
-        .accessibilityIdentifier("MessagesButton")
-        .customListRowStyle(
-            iconName: noticevm.unreadCount == 0 ? "envelope" : "envelope.badge.plus",
-            iconWidth: iconSize
-        )
     }
     
     private var notificationToggle: some View {
@@ -179,7 +178,7 @@ struct PreferencesView: View {
                     noticevm.isSoundNotificationOn ? Color.mycolor.myBlue : Color.mycolor.mySecondary
                 )
             Toggle(
-                noticevm.isSoundNotificationOn ? "One-shot sound On" : "One-shot sound Off",
+                noticevm.isSoundNotificationOn ? "One-time sound On" : "One-time sound Off",
                 isOn: $noticevm.isSoundNotificationOn
             ).tint(Color.mycolor.myBlue)
         }
@@ -198,7 +197,7 @@ struct PreferencesView: View {
     }
     
     // MARK: - Materials Management
-    
+  
     private var postDrafts: some View {
         Group {
             if vm.hasDrafts {
@@ -212,6 +211,20 @@ struct PreferencesView: View {
             }
         }
     }
+    private var archivedPosts: some View {
+        Group {
+            if vm.hasHidden || vm.hasDeleted {
+                Button("Archived materials") {
+                    coordinator.pushModal(.archivedPosts)
+                }
+                .customListRowStyle(
+                    iconName: "archivebox",
+                    iconWidth: iconSize
+                )
+            }
+        }
+    }
+
     
     /// Import is available if there are no curated materials in the local array (for posts with origin = .cloud), and
     /// Checking for new curated references to materials is available with
@@ -232,13 +245,17 @@ struct PreferencesView: View {
     }
         
     private var shareBackup: some View {
-        Button("Share/Backup") {
-            coordinator.pushModal(.shareBackup)
+        Group {
+            if !vm.allPosts.isEmpty {
+                Button("Share/Backup") {
+                    coordinator.pushModal(.shareBackup)
+                }
+                .customListRowStyle(
+                    iconName: "square.and.arrow.up",
+                    iconWidth: iconSize
+                )
+            }
         }
-        .customListRowStyle(
-            iconName: "square.and.arrow.up",
-            iconWidth: iconSize
-        )
     }
     
     private var restoreBackup: some View {
@@ -252,13 +269,17 @@ struct PreferencesView: View {
     }
     
     private var erasePosts: some View {
-        Button("Erase all materials") {
-            coordinator.pushModal(.erasePosts)
+        Group{
+            if !vm.allPosts.isEmpty {
+                Button("Erase all materials") {
+                    coordinator.pushModal(.erasePosts)
+                }
+                .customListRowStyle(
+                    iconName: "trash",
+                    iconWidth: iconSize
+                )
+            }
         }
-        .customListRowStyle(
-            iconName: "trash",
-            iconWidth: iconSize
-        )
     }
     
     @ViewBuilder

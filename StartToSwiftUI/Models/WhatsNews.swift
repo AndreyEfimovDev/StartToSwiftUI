@@ -11,32 +11,33 @@ struct WhatsNews {
 #warning("Add upated info before deployment to App Store")
     static let releases: [Release] = [
         Release(
-            release: "Release 1.3.1(4)",
+            release: "Release 1.3.0(4)",
             news: [
                 News(
                     title: "Added",
                     newsText: """
-                    - Study content can be managed by first moving it to the 'hidden' pool, then to the 'deleted' pool, before it is permanently erased
+                    - Materials can now be hidden or moved to Deleted before permanent erase
+                    - Hidden and deleted materials can be restored to Active in the new 'Archived Materials' view
                     - The "Random" sorting option in the filter to display materials in shuffled order
-                    - The "Make all curated collection available" option to drop the latest date of loading curated collection
                     """
                 ),
                 News(
                     title: "Improved",
                     newsText: """
-                    - Curated content migrated to Firestore Cloud
+                    - Curated content migrated from GitHub JSON to Firestore Cloud for faster updates
+                    - Search bar now supports keyboard language switching
                     """
                 ),
                 News(
                     title: "Fixed",
                     newsText: """
-                    - Avoiding crashes with Firestore distantPast
+                    - Fixed a potential crash caused by distantPast date handling in Firestore
                     """
                 ),
             ]
         ),
         Release(
-            release: "Release 1.2.1(3)",
+            release: "Release 1.2.0(3)",
             news: [
                 News(
                     title: "Added",
@@ -54,7 +55,7 @@ struct WhatsNews {
             ]
         ),
         Release(
-            release: "Release 1.1.2(2)",
+            release: "Release 1.1.1(2)",
             news: [
                 News(
                     title: "Added",
@@ -71,7 +72,7 @@ struct WhatsNews {
             ]
         ),
         Release(
-            release: "Release 1.1.1(1)",
+            release: "Release 1.1.0(1)",
             news: [
                 News(
                     title: "Initial deployment",

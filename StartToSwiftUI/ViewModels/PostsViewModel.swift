@@ -91,7 +91,47 @@ final class PostsViewModel: ObservableObject {
             }
         }
     }
+    
+    // MARK: - Computed Properties for Preferences
+    
+    var drafts: [Post] {
+        allPosts.filter { $0.draft == true }
+    }
+    
+    var draftsCount: Int {
+        allPosts.filter { $0.draft }.count
+    }
+    
+    var hasDrafts: Bool {
+        allPosts.contains { $0.draft }
+    }
+    
+    var hasHidden: Bool {
+        allPosts.contains { $0.status == .hidden }
+    }
+
+    var hasDeleted: Bool {
+        allPosts.contains { $0.status == .deleted }
+    }
+    
+    var cloudPostsCount: Int {
+        allPosts.filter { $0.origin == .cloud || $0.origin == .cloudNew }.count
+    }
+    
+    var hasCloudPosts: Bool {
+        allPosts.contains { $0.origin == .cloud || $0.origin == .cloudNew}
+    }
         
+    var shouldShowImportFromCloud: Bool {
+        !hasCloudPosts
+    }
+    
+    // MARK: - Curated Posts State
+    
+    var lastDatePostsLoaded: Date? {
+        appStateManager?.getLastDateOfPostsLoaded()
+    }
+
     // MARK: - Init
     init(
         dataSource: PostsDataSourceProtocol,
@@ -293,8 +333,23 @@ final class PostsViewModel: ObservableObject {
         saveContextAndReload()
     }
     
-    /// Delete a post
-    func deletePost(_ post: Post?) {
+    /// Managing post.status
+    func setPostActive(_ post: Post) {
+        post.status = .active
+        saveContextAndReload()
+    }
+    func setPostHidden(_ post: Post) {
+        post.status = .hidden
+        saveContextAndReload()
+    }
+    func setPostDeleted(_ post: Post) {
+        post.status = .deleted
+        saveContextAndReload()
+    }
+
+
+    /// Erase a post
+    func erasePost(_ post: Post?) {
         guard let post else {
             log("❌ Attempt to delete a nil post", level: .error)
             return
@@ -433,38 +488,6 @@ final class PostsViewModel: ObservableObject {
         log("❌ \(message): \(description)", level: .error)
     }
     
-    // MARK: - Computed Properties for Preferences
-    
-    var drafts: [Post] {
-        allPosts.filter { $0.draft == true }
-    }
-    
-    var draftsCount: Int {
-        allPosts.filter { $0.draft }.count
-    }
-    
-    var hasDrafts: Bool {
-        allPosts.contains { $0.draft }
-    }
-    
-    var cloudPostsCount: Int {
-        allPosts.filter { $0.origin == .cloud || $0.origin == .cloudNew }.count
-    }
-    
-    var hasCloudPosts: Bool {
-        allPosts.contains { $0.origin == .cloud || $0.origin == .cloudNew}
-    }
-        
-    var shouldShowImportFromCloud: Bool {
-        !hasCloudPosts
-    }
-    
-    // MARK: - Curated Posts State
-    
-    var lastDatePostsLoaded: Date? {
-        appStateManager?.getLastDateOfPostsLoaded()
-    }
-
     #warning("Delete this func loadDevData() before deployment to App Store")
     // MARK: - DevData Import (creating posts for cloud)
     func loadDevData() -> Int {

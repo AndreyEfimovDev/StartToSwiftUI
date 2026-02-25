@@ -9,7 +9,6 @@ import WidgetKit
 import SwiftUI
 
 // MARK: - Widget Bundle
-
 @main
 struct StudyProgressWidgetBundle: WidgetBundle {
     var body: some Widget {
@@ -19,7 +18,6 @@ struct StudyProgressWidgetBundle: WidgetBundle {
 
 
 // MARK: - Widget Configuration
-
 struct StudyProgressWidget: Widget {
     let kind: String = "StudyProgressWidget"
     
@@ -41,7 +39,6 @@ struct StudyProgressWidget: Widget {
 }
 
 // MARK: - Widget Views
-
 struct StudyProgressWidgetEntryView: View {
     
     @Environment(\.widgetFamily) var widgetFamily
@@ -70,14 +67,12 @@ struct StudyProgressWidgetEntryView: View {
 
 
 // MARK: - Timeline Entry
-
 struct StudyProgressEntry: TimelineEntry {
     let date: Date
     let data: StudyProgressData
 }
 
 // MARK: - Timeline Provider
-
 struct StudyProgressProvider: TimelineProvider {
     
     func placeholder(in context: Context) -> StudyProgressEntry {
@@ -157,7 +152,6 @@ struct SmallWidgetView: View {
 }
 
 // MARK: - Medium Widget
-
 struct MediumWidgetView: View {
     let data: StudyProgressData
     
@@ -225,7 +219,6 @@ struct MediumWidgetView: View {
         .containerBackground(.fill.tertiary, for: .widget)
     }
 }
-
 struct StatRow: View {
     let icon: String
     let label: String
@@ -256,7 +249,6 @@ struct StatRow: View {
 }
 
 // MARK: - Large Widget
-
 struct LargeWidgetView: View {
     let data: StudyProgressData
     
@@ -302,9 +294,6 @@ struct LargeWidgetView: View {
                             .font(.system(.title3, design: .rounded))
                             .fontWeight(.bold)
                             .foregroundStyle(Color.mycolor.myAccent)
-//                        Text("overall")
-//                            .font(.caption2)
-//                            .foregroundStyle(Color.mycolor.mySecondary)
                     }
                 }
                 .frame(width: 110, height: 110)
@@ -366,7 +355,6 @@ struct LargeStatCard: View {
 }
 
 // MARK: - Lock Screen Widgets (iOS 16+)
-
 struct AccessoryCircularView: View {
     let data: StudyProgressData
     

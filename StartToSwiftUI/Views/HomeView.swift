@@ -22,9 +22,9 @@ struct HomeView: View {
     private let longPressDuration: Double = 0.5
 
     // MARK: - States
-    @State private var selectedPostToDelete: Post?
+//    @State private var selectedPostToDelete: Post?
     @State private var showOnTopButton: Bool = false
-    @State private var isShowingDeleteConfirmation: Bool = false
+//    @State private var isShowingDeleteConfirmation: Bool = false
     @State private var isDetectingLongPress: Bool = false
     @State private var isLongPressSuccess: Bool = false
     @State private var showViewOnDoubleTap: Bool = false
@@ -32,7 +32,7 @@ struct HomeView: View {
     
     // MARK: - Computed Properties
     private var disableHomeView: Bool {
-        isLongPressSuccess || showViewOnDoubleTap || isShowingDeleteConfirmation
+        isLongPressSuccess || showViewOnDoubleTap
     }
     
     private var postsToDisplay: [Post] {
@@ -71,7 +71,6 @@ struct HomeView: View {
                 filtersSheet
             }
             .overlay { gestureOverlays(proxy: proxy) }
-            .overlay { deleteConfirmationOverlay }
             .alert("Error", isPresented: $vm.showErrorMessageAlert, actions: {
                 Button("OK") {}
             }, message: {
@@ -102,7 +101,7 @@ struct HomeView: View {
     // MARK: Subviews
     private var listPostRowsContent: some View {
         List {
-            ForEach(postsToDisplay) { post in
+            ForEach(postsToDisplay.filter { $0.status == .active }) { post in
                 PostRowView(post: post)
                     .id(post.id)
                     .background(trackingFirstPostInList(post: post))
@@ -141,11 +140,6 @@ struct HomeView: View {
         vm.loadPostsFromSwiftData()
         vm.updateWidgetData()
         Task {
-            if await vm.checkFBPostsForUpdates() {
-                if let appStateManager = vm.appStateManager {
-//                    appStateManager.setCuratedPostsLoadStatusOn()
-                }
-            }
             await noticevm.importNoticesFromFirebase()
         }
     }
@@ -202,10 +196,15 @@ struct HomeView: View {
 //        }
 //        .tint(Color.mycolor.myRed)
         Button("Hide", systemImage: "eye.slash") {
+            vm.setPostHidden(post)
         }
         .tint(Color.mycolor.myPurple)
 
-        
+        Button("Delete", systemImage: "trash") {
+            vm.setPostDeleted(post)
+        }
+        .tint(Color.mycolor.myRed)
+
         Button("Edit", systemImage: post.origin == .local ? "pencil" : "pencil.slash") {
             coordinator.push(.editPost(post))
         }
@@ -322,14 +321,6 @@ struct HomeView: View {
         }
     }
     
-    @ViewBuilder
-    private var deleteConfirmationOverlay: some View {
-        if isShowingDeleteConfirmation {
-            postDeletionConfirmation
-                .transition(.move(edge: .bottom))
-        }
-    }
-    
     // MARK: - Filters View
 
     private var filtersSheet: some View {
@@ -412,51 +403,6 @@ struct HomeView: View {
 //        return vm.filteredPosts.filter { $0.category == category }
 //    }
     
-    private var postDeletionConfirmation: some View {
-        ZStack {
-            Color.mycolor.myAccent.opacity(0.001)
-                .ignoresSafeArea()
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    isShowingDeleteConfirmation = false
-                }
-            VStack(spacing: 8) {
-                Text("Are you sure you want to delete the material?")
-                    .font(.headline)
-                    .foregroundColor(Color.mycolor.myRed)
-                    .multilineTextAlignment(.center)
-                    .padding(.vertical)
-                Text(selectedPostToDelete?.title ?? "No material selected")
-                    .font(.subheadline)
-                    .foregroundColor(Color.mycolor.myAccent)
-                    .minimumScaleFactor(0.75)
-                    .lineLimit(3)
-                    .multilineTextAlignment(.center)
-                Text("This cannot be undone.")
-                    .font(.caption2)
-                    .foregroundColor(Color.mycolor.myAccent)
-                    .padding(.vertical)
-                ClearCupsuleButton(
-                    primaryTitle: "Delete",
-                    primaryTitleColor: Color.mycolor.myRed) {
-                        withAnimation {
-                            vm.deletePost(selectedPostToDelete)
-                            hapticManager.notification(type: .success)
-                            isShowingDeleteConfirmation = false
-                        }
-                    }
-                ClearCupsuleButton(
-                    primaryTitle: "Cancel",
-                    primaryTitleColor: Color.mycolor.myAccent) {
-                        isShowingDeleteConfirmation = false
-                    }
-            }
-            .padding()
-            .background(.ultraThinMaterial)
-            .menuFormater()
-            .padding(.horizontal, 40)
-        }
-    }
 }
 
 private struct HomeViewPreview: View {

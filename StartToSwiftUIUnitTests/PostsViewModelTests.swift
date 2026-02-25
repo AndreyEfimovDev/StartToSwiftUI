@@ -144,7 +144,7 @@ final class PostsViewModelTests: XCTestCase {
         let initialCount = vm.allPosts.count
         
         // When
-        vm.deletePost(post)
+        vm.erasePost(post)
         
         // Then
         XCTAssertEqual(vm.allPosts.count, initialCount - 1)
@@ -156,7 +156,7 @@ final class PostsViewModelTests: XCTestCase {
         let initialCount = vm.allPosts.count
         
         // When
-        vm.deletePost(nil)
+        vm.erasePost(nil)
         
         // Then - Should not crash and count should remain unchanged
         XCTAssertEqual(vm.allPosts.count, initialCount)
