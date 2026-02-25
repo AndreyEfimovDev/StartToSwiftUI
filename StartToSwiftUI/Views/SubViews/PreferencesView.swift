@@ -39,6 +39,16 @@ struct PreferencesView: View {
 //                        .cornerRadius(30)
 //                }
 #endif
+            
+#warning("Delete this code before deployment to App Store")
+//            Section(header: sectionHeader("Categories")) {
+                //                if UIDevice.isiPhone {
+                //                    Section(header: sectionHeader("Selected category")) {
+                //                        selectedCategory
+                //                    }
+                //                }
+                
+//            }
             Section(header: sectionHeader("Appearance")) {
                 themeAppearance
             }
@@ -47,19 +57,12 @@ struct PreferencesView: View {
                 notificationToggle
                 soundNotificationToggle
             }
-#warning("Delete this code before deployment to App Store")
-            //                if UIDevice.isiPhone {
-            //                    Section(header: sectionHeader("Selected category")) {
-            //                        selectedCategory
-            //                    }
-            //                }
-            
             Section(header: sectionHeader("Achievements")) {
                 achievements
             }
             Section(header: sectionHeader("Manage materials (\(vm.allPosts.count))")) {
                 postDrafts
-                archivedPosts
+                archivedMaterials
                 importFromCloud
                 shareBackup
                 restoreBackup
@@ -211,7 +214,7 @@ struct PreferencesView: View {
             }
         }
     }
-    private var archivedPosts: some View {
+    private var archivedMaterials: some View {
         Group {
             if vm.hasHidden || vm.hasDeleted {
                 Button("Archived materials") {

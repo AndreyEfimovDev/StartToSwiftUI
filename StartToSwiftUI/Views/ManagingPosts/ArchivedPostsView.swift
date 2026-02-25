@@ -37,7 +37,7 @@ struct ArchivedPostsView: View {
     // MARK: Body
     var body: some View {
         FormCoordinatorToolbar(
-            title: "Managing archived posts",
+            title: "Managing archived materials",
             showHomeButton: true
         ) {
             VStack {
@@ -48,7 +48,8 @@ struct ArchivedPostsView: View {
                     selectedFont: .callout
                 )
                 .padding()
-                
+                .padding(.horizontal)
+
                 if selectedTab == .hidden {
                     List { hiddenSection }
                 } else {
@@ -82,7 +83,7 @@ struct ArchivedPostsView: View {
                     isShowingDeleteConfirmation = false
                 }
             VStack(spacing: 8) {
-                Text("Are you sure you want to delete the material?")
+                Text("Permanently erase the material?")
                     .font(.headline)
                     .foregroundColor(Color.mycolor.myRed)
                     .multilineTextAlignment(.center)
@@ -98,7 +99,7 @@ struct ArchivedPostsView: View {
                     .foregroundColor(Color.mycolor.myAccent)
                     .padding(.vertical)
                 ClearCupsuleButton(
-                    primaryTitle: "Delete",
+                    primaryTitle: "Erase",
                     primaryTitleColor: Color.mycolor.myRed) {
                         withAnimation {
                             vm.erasePost(selectedPostToDelete)
