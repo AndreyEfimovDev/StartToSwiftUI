@@ -108,6 +108,7 @@
 		4791CE002E747B2E00687126 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDFF2E747B2E00687126 /* HapticManager.swift */; };
 		4791CE042E748DA200687126 /* AddEditPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE032E748DA200687126 /* AddEditPostView.swift */; };
 		4791CE082E75AAB000687126 /* UnderlineSermentedPickerNotOptional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CE072E75AAAF00687126 /* UnderlineSermentedPickerNotOptional.swift */; };
+		47939D772F4EEB9E00CBE432 /* ArchivedPostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47939D762F4EEB9E00CBE432 /* ArchivedPostsView.swift */; };
 		47A331732F2761F9002883DD /* WidgetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A331722F2761F9002883DD /* WidgetData.swift */; };
 		47A3317B2F27672F002883DD /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47A3317A2F27672D002883DD /* WidgetKit.framework */; };
 		47A3317D2F27672F002883DD /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47A3317C2F27672F002883DD /* SwiftUI.framework */; };
@@ -291,6 +292,7 @@
 		4791CDFF2E747B2E00687126 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		4791CE032E748DA200687126 /* AddEditPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditPostView.swift; sourceTree = "<group>"; };
 		4791CE072E75AAAF00687126 /* UnderlineSermentedPickerNotOptional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineSermentedPickerNotOptional.swift; sourceTree = "<group>"; };
+		47939D762F4EEB9E00CBE432 /* ArchivedPostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedPostsView.swift; sourceTree = "<group>"; };
 		47A3313C2F26B256002883DD /* StartToSwiftUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StartToSwiftUIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		47A3316C2F276123002883DD /* StudyProgressWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressWidget.swift; sourceTree = "<group>"; };
 		47A331722F2761F9002883DD /* WidgetData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetData.swift; sourceTree = "<group>"; };
@@ -810,6 +812,7 @@
 			isa = PBXGroup;
 			children = (
 				47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */,
+				47939D762F4EEB9E00CBE432 /* ArchivedPostsView.swift */,
 				4732FB2C2EAA2BFC0062269D /* ImportPostsFromCloudView.swift */,
 				4732FB302EAA59B00062269D /* SharePostsView.swift */,
 				47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */,
@@ -1083,6 +1086,7 @@
 				475CC6942F2246FB0099CAA6 /* MockPostsDataSource.swift in Sources */,
 				47AC34432F28F2360023C7AF /* Calendar.swift in Sources */,
 				47656BFC2EE1EBF000F45AA6 /* ProgressIndicatorView.swift in Sources */,
+				47939D772F4EEB9E00CBE432 /* ArchivedPostsView.swift in Sources */,
 				471DCBCE2EBB83D200AFA5F4 /* LegalInformationView.swift in Sources */,
 				471DCBD42EBB8A6400AFA5F4 /* TermsOfUse.swift in Sources */,
 				4715FA2E2F263BB000ED732A /* FormSectionViewWraper.swift in Sources */,

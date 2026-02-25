@@ -41,7 +41,7 @@ struct PostDraftsView: View {
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         Button("Delete", systemImage: "trash") {
                             withAnimation {
-                                vm.deletePost(post)
+                                vm.erasePost(post)
                                 hapticManager.notification(type: .success)
                             }
                         }
