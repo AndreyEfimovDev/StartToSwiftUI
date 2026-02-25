@@ -87,9 +87,10 @@ final class PostsViewModel: ObservableObject {
         didSet {
             storedSortOption = selectedSortOption
             if selectedSortOption == .random {
-                randomSortOrder = allPosts.map { $0.id }.shuffled()
+                reshufflePosts()
             }
-        }}
+        }
+    }
         
     // MARK: - Init
     init(
@@ -453,13 +454,7 @@ final class PostsViewModel: ObservableObject {
     var hasCloudPosts: Bool {
         allPosts.contains { $0.origin == .cloud || $0.origin == .cloudNew}
     }
-    
-    var isPostFBUpdateAvailable: Bool {
-        guard let appStateManager else { return false }
-#warning("Поменять логику")
-        return hasCloudPosts //
-    }
-    
+        
     var shouldShowImportFromCloud: Bool {
         !hasCloudPosts
     }
