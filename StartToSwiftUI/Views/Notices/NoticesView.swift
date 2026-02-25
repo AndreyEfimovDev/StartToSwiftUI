@@ -67,14 +67,14 @@ struct NoticesView: View {
                         .tint(notice.isRead ? Color.mycolor.mySecondary : Color.mycolor.myBlue)
                     }
             } // ForEach
-            .listRowBackground(Color.clear)
-            .listRowSeparatorTint(Color.mycolor.myAccent.opacity(0.35))
-            .listRowSeparator(.hidden, edges: [.top])
-            .listRowInsets(
-                EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-            )
+//            .listRowBackground(Color.clear)
+//            .listRowSeparatorTint(Color.mycolor.myAccent.opacity(0.35))
+//            .listRowSeparator(.hidden, edges: [.top])
+//            .listRowInsets(
+//                EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+//            )
         }
-        .listStyle(.plain)
+//        .listStyle(.plain)
     }
     
     @ToolbarContentBuilder

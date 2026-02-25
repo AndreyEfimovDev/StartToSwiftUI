@@ -45,7 +45,7 @@ struct ArchivedPostsView: View {
                     selection: $selectedTab,
                     allItems: tabs,
                     titleForCase: { $0.displayName },
-                    selectedFont: .footnote
+                    selectedFont: .callout
                 )
                 .padding()
                 

@@ -178,7 +178,7 @@ struct PreferencesView: View {
                     noticevm.isSoundNotificationOn ? Color.mycolor.myBlue : Color.mycolor.mySecondary
                 )
             Toggle(
-                noticevm.isSoundNotificationOn ? "One-shot sound On" : "One-shot sound Off",
+                noticevm.isSoundNotificationOn ? "One-time sound On" : "One-time sound Off",
                 isOn: $noticevm.isSoundNotificationOn
             ).tint(Color.mycolor.myBlue)
         }
