@@ -195,12 +195,16 @@ struct HomeView: View {
     
     @ViewBuilder
     private func trailingSwipeActions(for post: Post) -> some View {
-        Button("Delete", systemImage: "trash") {
-            selectedPostToDelete = post
-            hapticManager.notification(type: .warning)
-            isShowingDeleteConfirmation = true
+//        Button("Delete", systemImage: "trash") {
+//            selectedPostToDelete = post
+//            hapticManager.notification(type: .warning)
+//            isShowingDeleteConfirmation = true
+//        }
+//        .tint(Color.mycolor.myRed)
+        Button("Hide", systemImage: "eye.slash") {
         }
-        .tint(Color.mycolor.myRed)
+        .tint(Color.mycolor.myPurple)
+
         
         Button("Edit", systemImage: post.origin == .local ? "pencil" : "pencil.slash") {
             coordinator.push(.editPost(post))
