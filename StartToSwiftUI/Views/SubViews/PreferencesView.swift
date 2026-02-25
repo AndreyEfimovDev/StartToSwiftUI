@@ -152,28 +152,36 @@ struct PreferencesView: View {
         }
         .accessibilityIdentifier("MessagesButton")
         .customListRowStyle(
-            iconName: noticevm.unreadCount == 0 ? "envelope" : "envelope.badge.plus", // envelope message message.badge
+            iconName: noticevm.unreadCount == 0 ? "envelope" : "envelope.badge.plus",
             iconWidth: iconSize
         )
     }
     
     private var notificationToggle: some View {
         HStack {
-            Image(systemName: noticevm.isNotificationOn ? "eye" : "eye.slash")
+            Image(systemName: "message.badge")
                 .frame(width: iconSize)
-                .foregroundStyle(Color.mycolor.myBlue)
-            Toggle(noticevm.isNotificationOn ? "Notice badge On" : "Notice badge Off", isOn: $noticevm.isNotificationOn)
-                .tint(Color.mycolor.myBlue)
+                .foregroundStyle(
+                    noticevm.isNotificationOn ? Color.mycolor.myBlue : Color.mycolor.mySecondary
+                )
+            Toggle(
+                noticevm.isNotificationOn ? "Notice message badge On" : "Notice message badge Off",
+                isOn: $noticevm.isNotificationOn
+            ).tint(Color.mycolor.myBlue)
         }
     }
     
     private var soundNotificationToggle: some View {
         HStack {
-            Image(systemName: noticevm.isSoundNotificationOn ? "bell" : "bell.slash") // speaker.wave.2 speaker.slash
+            Image(systemName: "bell") // speaker.wave.2 speaker.slash
                 .frame(width: iconSize)
-                .foregroundStyle(Color.mycolor.myBlue)
-            Toggle(noticevm.isSoundNotificationOn ? "One-shot sound On" : "One-shot sound Off", isOn: $noticevm.isSoundNotificationOn)
-                .tint(Color.mycolor.myBlue)
+                .foregroundStyle(
+                    noticevm.isSoundNotificationOn ? Color.mycolor.myBlue : Color.mycolor.mySecondary
+                )
+            Toggle(
+                noticevm.isSoundNotificationOn ? "One-shot sound On" : "One-shot sound Off",
+                isOn: $noticevm.isSoundNotificationOn
+            ).tint(Color.mycolor.myBlue)
         }
     }
     
@@ -186,7 +194,7 @@ struct PreferencesView: View {
         .customListRowStyle(
             iconName: "hare",
             iconWidth: iconSize
-        ) // gauge.open.with.lines.needle.67percent.and.arrowtriangle
+        )
     }
     
     // MARK: - Materials Management
