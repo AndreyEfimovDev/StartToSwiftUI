@@ -41,7 +41,7 @@ final class PostsViewModel: ObservableObject {
     let mainCategory: String = Constants.mainCategory
     var randomSortOrder: [String] = []
     var dispatchTime: DispatchTime { .now() + 1.5 }
-    var dispatchFor: Double = 1.5
+    var dispatchFor: Double = 2.5 // for async methods
     
     private var lastLoadTime: Date = Date(timeIntervalSince1970: 0)
     private let minLoadInterval: TimeInterval = 3
