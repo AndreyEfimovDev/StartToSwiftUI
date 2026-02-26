@@ -256,4 +256,17 @@ final class PreferencesUITests: XCTestCase {
         // Just verify the option exists, don't tap it
         XCTAssertTrue(eraseButton.exists, "Erase all materials option should exist")
     }
+    
+    func testArchivedMaterialsOptionAppearsWhenNeeded() throws {
+        // Кнопка появляется только если есть hidden/deleted посты
+        let archivedButton = app.buttons["Archived materials"]
+        // Не фейлим если нет — условная кнопка
+        if archivedButton.waitForExistence(timeout: 2) {
+            archivedButton.tap()
+            sleep(1)
+            let backButton = app.buttons["chevron.left"]
+            if backButton.exists { backButton.tap() }
+        }
+    }
+
 }

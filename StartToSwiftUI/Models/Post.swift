@@ -215,6 +215,34 @@ struct PostMigrationHelper {
             practicedDateStamp: codablePost.practicedDateStamp
         )
     }
+    
+    static func convertFromFirebase(_ fbPost: FBPostModel) -> Post {
+        return Post(
+            id: fbPost.postId,
+            category: fbPost.category,
+            title: fbPost.title,
+            intro: fbPost.intro,
+            author: fbPost.author,
+            postType: fbPost.postType,
+            urlString: fbPost.urlString,
+            postPlatform: fbPost.postPlatform,
+            postDate: fbPost.postDate,
+            studyLevel: fbPost.studyLevel,
+            progress: .added, // default value
+            favoriteChoice: .no, // default value
+            postRating: .none, // default value
+            notes: "",
+            origin: .cloudNew, // default value
+            draft: false, // default value
+            status: .active, // default value
+            date: fbPost.date,
+            addedDateStamp: .now, // default value
+            startedDateStamp: nil, // default value
+            studiedDateStamp: nil, // default value
+            practicedDateStamp: nil // default value
+        )
+    }
+
 }
 
 

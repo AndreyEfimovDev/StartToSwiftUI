@@ -26,7 +26,6 @@ struct NoticeRowView: View {
                 Spacer()
                 Image(systemName: "ellipsis") // chevron.right
                     .font(.caption)
-                    .opacity(0.5)
             }
             .padding(.vertical)
         }

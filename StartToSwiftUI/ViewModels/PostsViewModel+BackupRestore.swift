@@ -35,6 +35,7 @@ extension PostsViewModel {
             completion(uniquePosts.count)
             
         } catch {
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Failed to load posts")
             completion(0)
         }
@@ -45,9 +46,11 @@ extension PostsViewModel {
         
         let codablePosts = allPosts.map { CodablePost(from: $0) }
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd_HH-mm"
-        let fileName = "StartToSwiftUI_backup_\(dateFormatter.string(from: Date())).json"
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "yyyy-MM-dd_HH-mm"
+//        let fileName = "StartToSwiftUI_backup_\(dateFormatter.string(from: Date())).json"
+//        
+        let fileName = "StartToSwiftUI_backup_\(DateFormatter.yyyyMMddHHmm.string(from: Date())).json"
         
         let result = fileManager.exportToTemporary(codablePosts, fileName: fileName)
         
@@ -56,6 +59,7 @@ extension PostsViewModel {
             log("🍓✅ Exported to: \(url.lastPathComponent)", level: .info)
             return .success(url)
         case .failure(let error):
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Export failed")
             return .failure(error)
         }

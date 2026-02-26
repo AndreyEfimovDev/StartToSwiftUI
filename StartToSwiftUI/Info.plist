@@ -4,16 +4,18 @@
 <dict>
 	<key>CFBundleGetInfoString</key>
 	<string></string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>remote-notification</string>
-	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>remote-notification</string>
+    </array>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>
 		<string>LaunchBackgroundColor</string>
 	</dict>
+    <key>FirebaseAutomaticScreenReportingEnabled</key>
+    <false/>
 </dict>
 </plist>

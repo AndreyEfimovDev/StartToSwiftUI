@@ -15,7 +15,7 @@ struct AddEditPostView: View {
     @EnvironmentObject private var coordinator: AppCoordinator
     @StateObject private var keyboardManager = KeyboardManager()
    
-    private let hapticManager = HapticService.shared
+    private let hapticManager = HapticManager.shared
     
     // MARK: - State
     @State private var editedPost: Post
@@ -24,6 +24,7 @@ struct AddEditPostView: View {
     @State private var urlTrigger = true
     @State private var showAlert = false
     @State private var alertType: AlertType?
+    @State private var showEditHint: Bool = false
     
     @FocusState private var focusedField: PostFields?
     @State private var focusedFieldSaved: PostFields?
@@ -38,7 +39,7 @@ struct AddEditPostView: View {
     private let fontSubheader: Font = .caption
     private let fontTextInput: Font = .callout
     private let colorSubheader = Color.mycolor.myAccent.opacity(0.5)
-    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2016)) ?? Date.distantPast
+    private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2016)) ?? Date(timeIntervalSince1970: 0)
     private let endingDate: Date = .now
     
     // MARK: - Computed Properties
@@ -54,7 +55,8 @@ struct AddEditPostView: View {
             set: { editedPost.postDate = $0 }
         )
     }
-    
+    private var isEditable: Bool = true
+
     // MARK: - Alert Type
     enum AlertType {
         case success
@@ -69,6 +71,8 @@ struct AddEditPostView: View {
             _editedPost = State(initialValue: post.copy())
             // Copy for comparison
             copyOfThePost = post.copy()
+            isEditable = post.origin == .local
+            _showEditHint = State(initialValue: post.origin != .local)
             
         } else { // if post is not passed (nil) - add a new post initialising
             originalPost = nil
@@ -104,14 +108,41 @@ struct AddEditPostView: View {
             .toolbar { toolbar }
             .overlay { hideKeybordButton }
             .overlay { exitConfirmationOverlay }
-            .opacity(isShowingExitConfirmation ? 0.5 : 1.0)
+            .overlay(alignment: .top) { editHintBubble }
+            .onTapGesture {
+                if showEditHint {
+                    withAnimation(.easeOut) {
+                        showEditHint = false
+                    }
+                }
+            }
             .alert(isPresented: $showAlert) { alert }
             .onAppear { focusedField = .postTitle }
         }
     }
+   
+    // MARK: - Bubble notification for editing curated materials
+    @ViewBuilder
+    private var editHintBubble: some View {
+        if showEditHint {
+            Text("Only Notes are available for editing in curated materials")
+                .font(.callout)
+                .foregroundStyle(Color.mycolor.myAccent)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .background(.ultraThinMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.mycolor.mySecondary, lineWidth: 1)
+                )
+                .padding(.horizontal, 40)
+                .transition(.opacity.combined(with: .move(edge: .top)))
+        }
+    }
     
     // MARK: - Toolbar
-    
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
@@ -134,7 +165,6 @@ struct AddEditPostView: View {
     }
 
     // MARK: - Actions
-    
     private func handleSave() {
         if hasNoChanges && editedPost.draft == false {
             // If there were no changes and the post is not a draft, just exit
@@ -153,8 +183,6 @@ struct AddEditPostView: View {
         checkAndSave()
     }
     
-    // MARK: - Actions
-
     private func handleCancel() {
         if hasNoChanges {
             navigateBack()
@@ -195,7 +223,7 @@ struct AddEditPostView: View {
     
     private func validatePost() -> Bool {
         if editedPost.title.count < 3 {
-            showError(
+            showAlert(
                 title: "The Title must contain at least 3 characters.",
                 message: "Please correct the Title.",
                 field: .postTitle
@@ -204,7 +232,7 @@ struct AddEditPostView: View {
         }
         
         if editedPost.author.count < 2 {
-            showError(
+            showAlert(
                 title: "The Author must contain at least 2 characters.",
                 message: "Please correct the Author.",
                 field: .author
@@ -213,7 +241,7 @@ struct AddEditPostView: View {
         }
         
         if vm.checkNewPostForUniqueTitle(editedPost.title, editingPostId: originalPost?.id) {
-            showError(
+            showAlert(
                 title: "The Title must be unique.",
                 message: "Please correct the Title.",
                 field: .postTitle
@@ -222,13 +250,12 @@ struct AddEditPostView: View {
         }
         return true
     }
-
-    private func showError(title: String, message: String, field: PostFields?) {
+    
+    // MARK: - Alert
+    private func showAlert(title: String, message: String, field: PostFields?) {
         alertType = .error(title: title, message: message, field: field)
         showAlert = true
     }
-
-    // MARK: - Alert
 
     private var alert: Alert {
         switch alertType {
@@ -260,7 +287,6 @@ struct AddEditPostView: View {
     }
     
     // MARK: - Exit Confirmation
-    
     @ViewBuilder
     private var exitConfirmationOverlay: some View {
         if isShowingExitConfirmation {
@@ -323,7 +349,6 @@ struct AddEditPostView: View {
     }
     
     // MARK: - Keyboard Button
-    
     @ViewBuilder
     private var hideKeybordButton: some View {
         if focusedField != nil && keyboardManager.shouldShowHideButton {
@@ -346,7 +371,6 @@ struct AddEditPostView: View {
     }
 
     // MARK: - Sections
-    
     private var titleSection: some View {
         FormSectionViewWraper(title: "Title") {
             HStack(spacing: 0) {
@@ -362,6 +386,7 @@ struct AddEditPostView: View {
                     editedPost.title = ""
                 }
             }
+            .disabled(!isEditable)
         }
     }
     
@@ -387,6 +412,7 @@ struct AddEditPostView: View {
                     .frame(maxHeight: .infinity, alignment: .bottom)
                 }
             }
+            .disabled(!isEditable)
         }
     }
     
@@ -406,6 +432,7 @@ struct AddEditPostView: View {
                     editedPost.author = ""
                 }
             }
+            .disabled(!isEditable)
         }
     }
 
@@ -420,6 +447,7 @@ struct AddEditPostView: View {
             )
             .padding(.horizontal, 8)
             .frame(height: 50)
+            .disabled(!isEditable)
         }
     }
 
@@ -434,6 +462,7 @@ struct AddEditPostView: View {
             )
             .padding(.horizontal, 8)
             .frame(height: 50)
+            .disabled(!isEditable)
         }
     }
 
@@ -448,6 +477,7 @@ struct AddEditPostView: View {
             )
             .padding(.horizontal, 8)
             .frame(height: 50)
+            .disabled(!isEditable)
         }
     }
     
@@ -481,6 +511,7 @@ struct AddEditPostView: View {
                     .datePickerStyle(.compact)
                 }
             }
+            .disabled(!isEditable)
         }
     }
 
@@ -503,6 +534,7 @@ struct AddEditPostView: View {
                     editedPost.urlString = ""
                 }
             }
+            .disabled(!isEditable)
         }
     }
 
@@ -529,7 +561,6 @@ struct AddEditPostView: View {
     }
     
     // MARK: - Helper Views
-    
     @ViewBuilder
     private func clearButton(for text: String, action: @escaping () -> Void) -> some View {
         if !text.isEmpty {

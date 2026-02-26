@@ -15,7 +15,7 @@ struct SharePostsView: View {
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
 
-    private let hapticManager = HapticService.shared
+    private let hapticManager = HapticManager.shared
     
     // MARK: - State
 
@@ -28,7 +28,7 @@ struct SharePostsView: View {
 
     var body: some View {
         FormCoordinatorToolbar(
-            title: "Share/Store",
+            title: "Share/Backup",
             showHomeButton: true
         ) {
             VStack {
@@ -36,7 +36,7 @@ struct SharePostsView: View {
                     .textFormater()
                 
                 CapsuleButtonView(
-                    primaryTitle: "Share/Store",
+                    primaryTitle: "Share/Backup",
                     secondaryTitle: "Completed",
                     isToChange: isShareCompleted
                 ) {
@@ -74,7 +74,7 @@ struct SharePostsView: View {
 
     private var descriptionText: some View {
         Text("""
-            You are about to store the study materials on your local device (JSON format) or,
+            You are about to backup the study materials on your local device (JSON format) or,
             share them directly via
             AirDop / Mail / Messenger / etc.            
             """)

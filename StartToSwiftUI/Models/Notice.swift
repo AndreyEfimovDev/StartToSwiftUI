@@ -39,8 +39,18 @@ struct NoticeMigrationHelper {
             title: codableNotice.title,
             noticeDate: codableNotice.noticeDate,
             noticeMessage: codableNotice.noticeMessage,
-            isRead: codableNotice.isRead
+            isRead: false
         )
     }
+    static func convertFromFirebase(_ firebaseNotice: FBNoticeModel) -> Notice {
+        return Notice(
+            id: firebaseNotice.noticeId,
+            title: firebaseNotice.title,
+            noticeDate: firebaseNotice.noticeDate,
+            noticeMessage: firebaseNotice.message,
+            isRead: false
+        )
+    }
+
 }
 

@@ -9,7 +9,7 @@ import SwiftUI
 
 final class AppCoordinator: ObservableObject {
     
-    private let hapticManager = HapticService.shared
+    private let hapticManager = HapticManager.shared
 
     // For main stack navigation
     @Published var path = NavigationPath() {
@@ -114,5 +114,115 @@ final class AppCoordinator: ObservableObject {
     }
 }
 
+// MARK: - Navigation Routes
+enum AppRoute: Hashable, Identifiable {
+    
+    // Dealing with details
+    case postDetails(post: Post)
+    
+    // Adding and editing posts
+    case addPost
+    case editPost(Post)
+        
+    // Preferences
+    case preferences
+    
+    // Managing notices
+    case notices // called from HomeView and Preferences
+    case noticeDetails(noticeId: String)
 
+    // Study progress
+    case studyProgress
+    
+    // Managing posts
+    case postDrafts
+    case archivedPosts
+    case checkForUpdates
+    case importFromCloud
+    case shareBackup
+    case restoreBackup
+    case erasePosts
+    
+    // Gratitude
+    case acknowledgements
+    
+    // About App
+    case aboutApp
+    case welcome
+    case introduction
+    case functionality
+    case whatIsNew
+    
+    // Legal information
+    case legalInfo
+    case termsOfUse
+    case privacyPolicy
+    case copyrightPolicy
+    case fairUseNotice
+    
+    // Set root modal Views to manage different behaviour
+    var isRootModal: Bool {
+        switch self {
+        case .preferences, .notices, .aboutApp, .legalInfo:
+            return true  // These items open as root modal Views
+        default:
+            return false // Other open inside other modal Views
+        }
+    }
+
+    var id: String {
+        switch self {
+        case .postDetails(let postId):
+            return "postDetails_\(postId)"
+        case .addPost:
+            return "addPost"
+        case .editPost(let post):
+            return "editPost_\(post.id)"
+        case .preferences:
+            return "preferences"
+        case .notices:
+            return "notices"
+        case .noticeDetails(let noticeId):
+            return "noticeDetails_\(noticeId)"
+        case .studyProgress:
+            return "studyProgress"
+        case .postDrafts:
+            return "postDrafts"
+        case .archivedPosts:
+            return "archivedPosts"
+        case .checkForUpdates:
+            return "checkForUpdates"
+        case .importFromCloud:
+            return "importFromCloud"
+        case .shareBackup:
+            return "shareBackup"
+        case .restoreBackup:
+            return "restoreBackup"
+        case .erasePosts:
+            return "erasePosts"
+        case .acknowledgements:
+            return "acknowledgements"
+        case .aboutApp:
+            return "aboutApp"
+        case .welcome:
+            return "welcome"
+        case .introduction:
+            return "introduction"
+        case .functionality:
+            return "functionality"
+        case .whatIsNew:
+            return "whatIsNew"
+        case .legalInfo:
+            return "legalInfo"
+        case .termsOfUse:
+            return "termsOfUse"
+        case .privacyPolicy:
+            return "privacyPolicy"
+        case .copyrightPolicy:
+            return "copyrightPolicy"
+        case .fairUseNotice:
+            return "fairUseNotice"
+        }
+    }
+}
 

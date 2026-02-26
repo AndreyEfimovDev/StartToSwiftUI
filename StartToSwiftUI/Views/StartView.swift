@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import Combine
 
 struct StartView: View {
     
@@ -53,7 +54,7 @@ struct StartView: View {
     
     private var iPadContent: some View {
         NavigationSplitView(columnVisibility: $visibility) {
-#if DEBUG
+//#if DEBUG
 #warning("Delete this commented out code snippet before deployment")
             //                    //                if let categories = vm.allCategories {
             //                    //                    List(categories, id: \.self, selection: $vm.selectedCategory) { category in
@@ -65,9 +66,9 @@ struct StartView: View {
             //                    //                    Text("No categories")
             //                    //                }
             //                    //            } content: {
-#else
-    #error("Remove this debug code before App Store release!")
-#endif
+//#else
+//    #error("Remove this debug code before App Store release!")
+//#endif
             if let selectedCategory = vm.selectedCategory {
                 NavigationStack(path: $coordinator.path) {
                     HomeView(selectedCategory: selectedCategory)
@@ -80,9 +81,9 @@ struct StartView: View {
                 postNotSelectedEmptyView(text: "Select Category")
             }
         } detail: {
-            if let selectedPostId = vm.selectedPostId {
-                PostDetailsView(postId: selectedPostId)
-                    .id(selectedPostId)
+            if let selectedPost = vm.selectedPost {
+                PostDetailsView(post: selectedPost)
+                    .id(selectedPost.id)
             } else {
                 postNotSelectedEmptyView(text: "Select Topic")
             }
@@ -103,30 +104,46 @@ struct StartView: View {
     private func destinationView(for route: AppRoute) -> some View {
         switch route {
             // Post details View
-        case .postDetails(let postId):
-            PostDetailsView(postId: postId)
+        case .postDetails(let post):
+            PostDetailsView(post: post)
         default:
             EmptyView()
         }
     }
 }
 
-#Preview("StartView with Mock Data") {
-    let postsVM = PostsViewModel(
-        dataSource: MockPostsDataSource(posts: PreviewData.samplePosts)
+
+private struct StartViewPreview: View {
+    
+    @StateObject var vm: PostsViewModel = {
+        let vm = PostsViewModel(
+            dataSource: MockPostsDataSource(),
+            fbPostsManager: MockFBPostsManager()
+        )
+        vm.start()
+        return vm
+    }()
+    
+    @StateObject var noticesVM = NoticeViewModel(
+        dataSource: MockNoticesDataSource(),
+        fbNoticesManager: MockFBNoticesManager()
     )
-    let noticesVM = NoticeViewModel(
-        dataSource: MockNoticesDataSource(notices: PreviewData.sampleNotices)
-    )
+    
+    var body: some View {
+        NavigationStack {
+            StartView()
+                .environmentObject(AppCoordinator())
+                .environmentObject(vm)
+                .environmentObject(noticesVM)
+        }
+    }
+}
+
+#Preview("With Mock Posts") {
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
-    
-    StartView()
+    StartViewPreview()
         .modelContainer(container)
-        .environmentObject(AppCoordinator())
-        .environmentObject(postsVM)
-        .environmentObject(noticesVM)
-    
 }

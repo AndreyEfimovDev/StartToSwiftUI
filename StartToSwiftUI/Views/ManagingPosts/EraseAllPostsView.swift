@@ -15,7 +15,7 @@ struct EraseAllPostsView: View {
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
-    private let hapticManager = HapticService.shared
+    private let hapticManager = HapticManager.shared
     
     // MARK: - State
     
@@ -91,13 +91,10 @@ struct EraseAllPostsView: View {
     
     private func performErase() {
         isInProgress = true
-        
+        vm.appStateManager?.resetLastDateOfPostsLoaded()
         vm.eraseAllPosts {
             isDeleted = true
             isInProgress = false
-            
-            // Reset curated posts status to allow re-import
-            vm.resetCuratedPostsStatus()
             
             DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
                 coordinator.closeModal()

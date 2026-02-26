@@ -19,10 +19,16 @@ struct StatsCardsView: View {
             
             UIDeviceLayout {
                 StatCard(
-                    title: "Practiced",
-                    value: "\(stats.practiced)",
-                    color: StudyProgress.practiced.color,
-                    icon: StudyProgress.practiced.icon
+                    title: "Added",
+                    value: "\(stats.added)",
+                    color: StudyProgress.added.color,
+                    icon: StudyProgress.added.icon
+                )
+                StatCard(
+                    title: "Started",
+                    value: "\(stats.started)",
+                    color: StudyProgress.started.color,
+                    icon: StudyProgress.started.icon
                 )
                 StatCard(
                     title: "Learnt",
@@ -31,17 +37,11 @@ struct StatsCardsView: View {
                     icon: StudyProgress.studied.icon
                 )
                 StatCard(
-                    title: "Started",
-                    value: "\(stats.started)",
-                    color: StudyProgress.started.color,
-                    icon: StudyProgress.started.icon
+                    title: "Practiced",
+                    value: "\(stats.practiced)",
+                    color: StudyProgress.practiced.color,
+                    icon: StudyProgress.practiced.icon
                 )
-//                StatCard(
-//                    title: "Added",
-//                    value: "\(stats.added)",
-//                    color: StudyProgress.added.color,
-//                    icon: StudyProgress.added.icon
-//                )
             }
         }
     }

@@ -7,6 +7,41 @@
 
 import SwiftUI
 
+struct CrossedImage: ViewModifier {
+    var color: Color = Color.mycolor.myBlue
+    var lineWidth: CGFloat = 2
+    var isCrossed: Bool
+    
+    func body(content: Content) -> some View {
+        content
+            .overlay(
+                Rectangle()
+                    .frame(height: lineWidth)
+                    .foregroundColor(color)
+                    .rotationEffect(.degrees(45))
+                    .opacity(isCrossed ? 1 : 0)
+                    .animation(.easeInOut(duration: 0.3), value: isCrossed)
+            )
+
+//            .overlay(
+//                GeometryReader { geometry in
+//                    Path { path in
+//                        path.move(to: CGPoint(x: 0, y: 0))
+//                        path.addLine(to: CGPoint(x: geometry.size.width, y: geometry.size.height))
+//                    }
+//                    .stroke(color, lineWidth: lineWidth)
+//                }
+//            )
+    }
+}
+
+extension View {
+    func crossed(color: Color = .red, lineWidth: CGFloat = 2, isCrossed: Bool) -> some View {
+        modifier(CrossedImage(color: color, lineWidth: lineWidth, isCrossed: isCrossed))
+    }
+}
+
+
 // MARK: Custom One/Two Taps for RowPost in HomeView
 
 struct TapAndDoubleTapModifier: ViewModifier {
@@ -29,6 +64,7 @@ struct TapAndDoubleTapModifier: ViewModifier {
                 }
             }
     }
+    
 }
 
 // MARK: Adaptaion StudyProgressView for iPad

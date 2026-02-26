@@ -57,13 +57,17 @@ enum StudyLevelTabs: String, CaseIterable, Codable, Hashable {
 // MARK: Sorting options
 
 enum SortOption: String, CaseIterable {
+    case notSorted
     case newestFirst
     case oldestFirst
+    case random
     
     var displayName: String {
         switch self {
+        case .notSorted: return "Original"
         case .newestFirst: return "Newest"
         case .oldestFirst: return "Oldest"
+        case .random: return "Random"
         }
     }
 }
@@ -127,6 +131,15 @@ enum PostStatus: String, CaseIterable, Codable {
     case active
     case hidden
     case deleted
+    
+    var displayName: String {
+        switch self {
+        case .active: return "Active"
+        case .hidden: return "Hidden"
+        case .deleted: return "Deleted"
+        }
+    }
+
 }
 
 enum PostOrigin: String, CaseIterable, Codable {
@@ -136,9 +149,9 @@ enum PostOrigin: String, CaseIterable, Codable {
     
     var icon: Image {
         switch self {
-        case .local: return Image(systemName: "archivebox") // tray cube  archivebox folder arrow.up.folder text.document
+        case .local: return Image(systemName: "person")
         case .cloud: return Image(systemName: "cloud")
-        case .cloudNew: return Image(systemName: "cloud.fill")
+        case .cloudNew: return Image(systemName: "cloud.sun")
         }
     }
 }
@@ -156,8 +169,8 @@ enum FavoriteChoice: String, CaseIterable, Codable {
 
     var icon: Image {
         switch self {
-        case .yes: return Image(systemName: "star")
-        case .no: return Image(systemName: "star.fill")
+        case .yes: return Image(systemName: "heart")
+        case .no: return Image(systemName: "heart.slash")
         }
     }
 }
@@ -173,11 +186,11 @@ enum PostRating: String, CaseIterable, Codable {
         }
     }
     
-    var icon: Image { // for other options look at TestSFSymbolsForRating
+    var icon: Image {
         switch self {
-        case .good: return Image(systemName: "face.smiling")
-        case .great: return Image(systemName: "star.fill")
-        case .excellent: return Image(systemName: "crown.fill")
+        case .good: return Image(systemName: "hand.thumbsup")
+        case .great: return Image(systemName: "star")
+        case .excellent: return Image(systemName: "crown")
         }
     }
     
@@ -221,10 +234,9 @@ enum StudyLevel: String, CaseIterable, Codable {
 }
 
 // MARK: - Type of progress
-enum StudyProgress: String, CaseIterable, Codable { // progress in mastering educational materials
+// 􀐾 chart.bar, 􀓎 hare, 􁗟 bird, 􁝯 tree, 􀑁 chart.line.uptrend.xyaxis
+enum StudyProgress: String, CaseIterable, Codable, Hashable {
     case added, started, studied, practiced
-    
-    // 􀐾 chart.bar, 􀓎 hare, 􁗟 bird, 􁝯 tree, 􀑁 chart.line.uptrend.xyaxis
     
     var displayName: String {
         switch self {
@@ -237,10 +249,10 @@ enum StudyProgress: String, CaseIterable, Codable { // progress in mastering edu
     
     var icon: Image { // for other options look at TestSFSymbolsForProgress
         switch self {
-        case .added: return Image(systemName: "square.and.arrow.down") // lightbulb signpost.right sparkles
-        case .started: return Image(systemName: "sunrise") // sunrise signpost.right
-        case .studied: return Image(systemName: "bolt") // brain.head.profile flag.checkered
-        case .practiced: return Image(systemName: "flag.checkered") // hand.raised.fingers.spread mountain.2.fill bolt
+        case .added: return Image(systemName: "plus")
+        case .started: return Image(systemName: "sunrise")
+        case .studied: return Image(systemName: "bolt")
+        case .practiced: return Image(systemName: "flag.checkered")
         }
     }
     
@@ -286,123 +298,3 @@ enum TimePeriod: String, CaseIterable, Identifiable {
     }
 
 }
-
-// MARK: - Navigation Routes
-enum AppRoute: Hashable, Identifiable {
-    
-    // Dealing with details
-    case postDetails(postId: String) // postId - associated value
-    
-    // Adding and editing posts
-    case addPost
-    case editPost(Post)
-        
-    // Preferences
-    case preferences
-    
-    // Managing notices
-    case notices // called from HomeView and Preferences
-    case noticeDetails(noticeId: String)
-
-    // Study progress
-    case studyProgress
-    
-    // Managing posts
-    case postDrafts
-    case checkForUpdates
-    case importFromCloud
-    case shareBackup
-    case restoreBackup
-    case erasePosts
-    
-    // Gratitude
-    case acknowledgements
-    
-    // About App
-    case aboutApp
-    case welcome
-    case introduction
-    case functionality
-    case whatIsNew
-    
-    // Legal information
-    case legalInfo
-    case termsOfUse
-    case privacyPolicy
-    case copyrightPolicy
-    case fairUseNotice
-    
-    // Set root modal Views to manage different behaviour
-    var isRootModal: Bool {
-        switch self {
-        case .preferences, .notices, .aboutApp, .legalInfo:
-            return true  // These items open as root modal Views
-        default:
-            return false // Other open inside other modal Views
-        }
-    }
-
-    var id: String {
-        switch self {
-        case .postDetails(let postId):
-            return "postDetails_\(postId)"
-        case .addPost:
-            return "addPost"
-        case .editPost(let post):
-            return "editPost_\(post.id)"
-        case .preferences:
-            return "preferences"
-        case .notices:
-            return "notices"
-        case .noticeDetails(let noticeId):
-            return "noticeDetails_\(noticeId)"
-        case .studyProgress:
-            return "studyProgress"
-        case .postDrafts:
-            return "postDrafts"
-        case .checkForUpdates:
-            return "checkForUpdates"
-        case .importFromCloud:
-            return "importFromCloud"
-        case .shareBackup:
-            return "shareBackup"
-        case .restoreBackup:
-            return "restoreBackup"
-        case .erasePosts:
-            return "erasePosts"
-        case .acknowledgements:
-            return "acknowledgements"
-        case .aboutApp:
-            return "aboutApp"
-        case .welcome:
-            return "welcome"
-        case .introduction:
-            return "introduction"
-        case .functionality:
-            return "functionality"
-        case .whatIsNew:
-            return "whatIsNew"
-        case .legalInfo:
-            return "legalInfo"
-        case .termsOfUse:
-            return "termsOfUse"
-        case .privacyPolicy:
-            return "privacyPolicy"
-        case .copyrightPolicy:
-            return "copyrightPolicy"
-        case .fairUseNotice:
-            return "fairUseNotice"
-        }
-    }
-}
-
-
-//var id: String {
-//    switch self {
-//    case .postDetails(let postId): return "postDetails_\(postId)"
-//    case .editPost(let post): return "editPost_\(post.id)"
-//    case .noticeDetails(let noticeId): return "noticeDetails_\(noticeId)"
-//    default: return String(describing: self)
-//    }
-//}
-

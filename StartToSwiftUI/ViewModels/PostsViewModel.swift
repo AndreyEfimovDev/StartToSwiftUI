@@ -17,16 +17,18 @@ final class PostsViewModel: ObservableObject {
     // MARK: - Properties
     let dataSource: PostsDataSourceProtocol
     let fileManager = JSONFileManager.shared
-    let hapticManager = HapticService.shared
-    let networkService: NetworkServiceProtocol
-    
+    let hapticManager = HapticManager.shared
+    let appStateManager: AppSyncStateManager?
+    let fbPostsManager: FBPostsManagerProtocol
+
     @Published var allPosts: [Post] = []
     @Published var filteredPosts: [Post] = []
-    @Published var selectedPostId: String? = nil
+    @Published var selectedPost: Post? = nil
     @Published var searchText: String = ""
     @Published var isFiltersEmpty: Bool = true
     @Published var selectedRating: PostRating? = nil
     @Published var selectedStudyProgress: StudyProgress = .added
+    @Published var reshuffleToken = UUID()
     
     @Published var errorMessage: String?
     @Published var showErrorMessageAlert = false
@@ -37,16 +39,16 @@ final class PostsViewModel: ObservableObject {
     var allYears: [String]? = nil
     var allCategories: [String]? = nil
     let mainCategory: String = Constants.mainCategory
+    var randomSortOrder: [String] = []
     var dispatchTime: DispatchTime { .now() + 1.5 }
-    var dispatchFor: Double = 1.5
-
+    var dispatchFor: Double = 2.5 // for async methods
     
+    private var lastLoadTime: Date = Date(timeIntervalSince1970: 0)
+    private let minLoadInterval: TimeInterval = 3
+
     // MARK: - Computed Properties
     var swiftDataSource: SwiftDataPostsDataSource? {
         dataSource as? SwiftDataPostsDataSource
-    }
-    var appStateManager: AppSyncStateManager? {
-        swiftDataSource.map { AppSyncStateManager(modelContext: $0.modelContext) }
     }
     var isSwiftData: Bool {
         swiftDataSource != nil
@@ -80,40 +82,94 @@ final class PostsViewModel: ObservableObject {
     @Published var selectedYear: String? = nil {
         didSet { storedYear = selectedYear }}
     
-    @AppStorage("storedSortOption") var storedSortOption: SortOption = .newestFirst
-    @Published var selectedSortOption: SortOption = .newestFirst {
-        didSet { storedSortOption = selectedSortOption }}
-        
-    // MARK: - Init
-    init(
-        dataSource: PostsDataSourceProtocol,
-        networkService: NetworkServiceProtocol = NetworkService(urlString: Constants.cloudPostsURL)
-    ) {
-        self.dataSource = dataSource
-        self.networkService = networkService
-        
-        setupTimezone()
-        restoreFilters()
-        setupSubscriptions()
-        setupSubscriptionForChangesInCloud()
-        Task {
-            await initializeAppState()
+    @AppStorage("storedSortOption") var storedSortOption: SortOption = .notSorted
+    @Published var selectedSortOption: SortOption = .notSorted {
+        didSet {
+            storedSortOption = selectedSortOption
+            if selectedSortOption == .random {
+                reshufflePosts()
+            }
         }
     }
     
+    // MARK: - Computed Properties for Preferences
+    
+    var drafts: [Post] {
+        allPosts.filter { $0.draft == true }
+    }
+    
+    var draftsCount: Int {
+        allPosts.filter { $0.draft }.count
+    }
+    
+    var hasDrafts: Bool {
+        allPosts.contains { $0.draft }
+    }
+    
+    var hasHidden: Bool {
+        allPosts.contains { $0.status == .hidden }
+    }
+
+    var hasDeleted: Bool {
+        allPosts.contains { $0.status == .deleted }
+    }
+    
+    var cloudPostsCount: Int {
+        allPosts.filter { $0.origin == .cloud || $0.origin == .cloudNew }.count
+    }
+    
+    var hasCloudPosts: Bool {
+        allPosts.contains { $0.origin == .cloud || $0.origin == .cloudNew}
+    }
+        
+    var shouldShowImportFromCloud: Bool {
+        !hasCloudPosts
+    }
+    
+    // MARK: - Curated Posts State
+    
+    var lastDatePostsLoaded: Date? {
+        appStateManager?.getLastDateOfPostsLoaded()
+    }
+
+    // MARK: - Init
+    init(
+        dataSource: PostsDataSourceProtocol,
+        fbPostsManager: FBPostsManagerProtocol = FBPostsManager()
+    ) {
+        self.dataSource = dataSource
+        self.fbPostsManager = fbPostsManager
+        
+        if let swiftDataSource = dataSource as? SwiftDataPostsDataSource {
+            self.appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
+        } else {
+            self.appStateManager = nil
+        }
+        setupTimezone()
+        restoreFilters()
+    }
     /// Convenience initialiser for backward compatibility
     convenience init(
         modelContext: ModelContext,
-        networkService: NetworkServiceProtocol = NetworkService(urlString: Constants.cloudPostsURL)
+        fbPostsManager: FBPostsManagerProtocol = FBPostsManager()
     ) {
         self.init(
             dataSource: SwiftDataPostsDataSource(modelContext: modelContext),
-            networkService: networkService
+            fbPostsManager: fbPostsManager
         )
     }
     
-    // MARK: - Setup
+    func start() {
+        setupSubscriptions()
+        setupSubscriptionForChangesInCloud()
+        
+        Task { [weak self] in
+            guard let self else { return }
+            await self.initializeAppState()
+        }
+    }
     
+    // MARK: - Setup
     private func setupTimezone() {
         if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
             utcCalendar.timeZone = utcTimeZone
@@ -124,9 +180,15 @@ final class PostsViewModel: ObservableObject {
     private func setupSubscriptionForChangesInCloud() {
         NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
             .receive(on: DispatchQueue.main)
-            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
+            .debounce(for: .seconds(2), scheduler: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.loadPostsFromSwiftData()
+                guard let self else { return }
+                let now = Date()
+                guard now.timeIntervalSince(self.lastLoadTime) >= self.minLoadInterval else {
+                    log("Cloud sync skipped (too soon)", level: .debug)
+                    return
+                }
+                self.loadPostsFromSwiftData()
                 log("Cloud posts sync subscription run", level: .info)
             }
             .store(in: &cancellables)
@@ -148,29 +210,102 @@ final class PostsViewModel: ObservableObject {
             log("⚠️ init PostViewModel: dataSource is not SwiftData", level: .info)
             return
         }
-        
+        // To folow the next order in important
+        /* Step1:
+        Ensure AppState exists (creates with appFirstLaunchDate if first launch).
+        Search for AppSyncState in SwiftData - it guarantees the existence of the AppState:
+        - The first launch will not find it, it will create a new one with appFirstLaunchDate = Date() and save it to the database.
+        - Restart — it will find an existing one and return it.
+        */
+        _ = appStateManager.getOrCreateAppState()
+        FBCrashManager.shared.addLog(
+            "initializeAppState: firstLaunchDate \(appStateManager.getAppFirstLaunchDate() ?? Date(timeIntervalSince1970: 0)), postsCount \(allPosts.count)"
+        )
+        /* Step2:
+        Clean dublicates if any. iCloud sync can create multiple appsyncstates on different devices.
+        This function finds duplicates, merges their data into one (the oldest), and deletes the rest.
+         */
         appStateManager.cleanupDuplicateAppStates()
-        
-        if await checkCloudCuratedPostsForUpdates() {
-            appStateManager.setCuratedPostsLoadStatusOn()
-        }
     }
         
     // MARK: - SwiftData Operations
     
-    /// Loading posts from SwiftData
+    /// Load posts from SwiftData
     func loadPostsFromSwiftData() {
+        FBPerformanceManager.shared.startTrace(name: "load_posts_swiftdata")
+        lastLoadTime = Date()
+        
         do {
             allPosts = try dataSource.fetchPosts()
+            FBCrashManager.shared.addLog("loadPostsFromSwiftData: loaded local posts: \(allPosts.count)")
+            removeDuplicatePosts()
+            FBCrashManager.shared.addLog("loadPostsFromSwiftData: posts count after check for duplicates: \(allPosts.count)")
             allYears = getAllYears()
             allCategories = getAllCategories()
+            FBCrashManager.shared.setUserContext(allPosts.count, hasCloudPosts)
             log("📊 Loaded \(allPosts.count) posts from SwiftData:", level: .debug)
         } catch {
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error loading data")
         }
+        FBPerformanceManager.shared.stopTrace(name: "load_posts_swiftdata")
     }
     
-    /// Adding a new post
+    /// Remove Duplicate Posts
+    private func removeDuplicatePosts() {
+        var postsToDelete: [Post] = []
+        
+        // Pass 1: duplicates by ID
+        let idGroups = Dictionary(grouping: allPosts, by: \.id)
+            .filter { $0.value.count > 1 }
+        
+        /* persistentModelID is a unique internal identifier of SwiftData, which each @Model object receives automatically. It is unique even if your id and title are the same */
+        for (id, postsList) in idGroups {
+            if let postToKeep = postsList.sorted(by: { $0.date < $1.date }).first {
+                for post in postsList where post.persistentModelID != postToKeep.persistentModelID {
+                    postsToDelete.append(post)
+                    log("🗑️ Duplicate by ID \(id): '\(post.title)'", level: .info)
+                }
+            }
+        }
+
+        // Pass 2: duplicates by title
+        /* Avoid double processing of posts */
+        let markedIDs = Set(postsToDelete.map { $0.persistentModelID })
+        /* Leave only those posts that have not been marked for deletion in Pass 1. This is important, otherwise the deleted duplicate by ID could also end up in the duplicate group by title */
+        let remainingPosts = allPosts.filter { !markedIDs.contains($0.persistentModelID) }
+        /* Grouping the remaining ones by title */
+        let titleGroups = Dictionary(grouping: remainingPosts, by: \.title)
+            .filter { $0.value.count > 1 }
+        /* Leave the oldest in each group: title is the key, postsList is an array of duplicates */
+        for (title, postsList) in titleGroups {
+            if let postToKeep = postsList.sorted(by: { $0.date < $1.date }).first {
+                for post in postsList where post.persistentModelID != postToKeep.persistentModelID {
+                    postsToDelete.append(post)
+                    log("🗑️ Duplicate by title '\(title)'", level: .info)
+                }
+            }
+        }
+
+        guard !postsToDelete.isEmpty else { return }
+        
+        FBCrashManager.shared.addLog("removeDuplicatePosts: found \(postsToDelete.count) duplicates")
+
+        for post in postsToDelete {
+            dataSource.delete(post)
+        }
+        
+        do {
+            try dataSource.save()
+            allPosts = try dataSource.fetchPosts()
+            log("✅ Removed \(postsToDelete.count) duplicate posts", level: .info)
+        } catch {
+            FBCrashManager.shared.sendNonFatal(error)
+            handleError(error, message: "Error removing duplicate posts")
+        }
+    }
+
+    /// Add a new post
     func addPost(_ newPost: Post) {
         dataSource.insert(newPost)
         saveContextAndReload()
@@ -198,8 +333,23 @@ final class PostsViewModel: ObservableObject {
         saveContextAndReload()
     }
     
-    /// Deleting a post
-    func deletePost(_ post: Post?) {
+    /// Managing post.status
+    func setPostActive(_ post: Post) {
+        post.status = .active
+        saveContextAndReload()
+    }
+    func setPostHidden(_ post: Post) {
+        post.status = .hidden
+        saveContextAndReload()
+    }
+    func setPostDeleted(_ post: Post) {
+        post.status = .deleted
+        saveContextAndReload()
+    }
+
+
+    /// Erase a post
+    func erasePost(_ post: Post?) {
         guard let post else {
             log("❌ Attempt to delete a nil post", level: .error)
             return
@@ -208,13 +358,14 @@ final class PostsViewModel: ObservableObject {
         saveContextAndReload()
     }
     
-    /// Deleting all posts
+    /// Delete all posts
     func eraseAllPosts(_ completion: @escaping () -> ()) {
         if let swiftDataSource {
             do {
                 try swiftDataSource.modelContext.delete(model: Post.self)
                 saveContextAndReload()
             } catch {
+                FBCrashManager.shared.sendNonFatal(error)
                 handleError(error, message: "Error deleting data")
             }
         } else {
@@ -226,6 +377,9 @@ final class PostsViewModel: ObservableObject {
     /// Toggle favorite flag
     func favoriteToggle(_ post: Post) {
         post.favoriteChoice = post.favoriteChoice == .yes ? .no : .yes
+        if post.favoriteChoice == .yes {
+            FBAnalyticsManager.shared.logEvent(name: "post_favorited")
+        }
         saveContextAndReload()
     }
     
@@ -254,6 +408,7 @@ final class PostsViewModel: ObservableObject {
         case .practiced:
             post.practicedDateStamp = .now
         }
+        FBAnalyticsManager.shared.logEvent(name: "study_progress_changed", params: ["progress": selectedStudyProgress.rawValue])
         saveContextAndReload()
     }
     
@@ -270,6 +425,7 @@ final class PostsViewModel: ObservableObject {
             loadPostsFromSwiftData()
             updateWidgetData()
         } catch {
+            FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error saving data")
         }
     }
@@ -283,10 +439,18 @@ final class PostsViewModel: ObservableObject {
         let existingIds = Set(allPosts.map { $0.id })
         
         return cloudResponse
-            .filter { !existingTitles.contains($0.title) && !existingIds.contains($0.id) }
+            .filter { !existingTitles.contains($0.title) || !existingIds.contains($0.id) }
             .map { PostMigrationHelper.convertFromCodable($0) }
     }
     
+    func filterUniquePosts(from fbResponse: [FBPostModel]) -> [FBPostModel] {
+        let existingTitles = Set(allPosts.map { $0.title })
+        let existingIds = Set(allPosts.map { $0.id })
+        
+        return fbResponse
+            .filter { !existingTitles.contains($0.title) || !existingIds.contains($0.postId) }
+    }
+
     func filterUniquePosts(_ posts: [Post]) -> [Post] {
         let existingTitles = Set(allPosts.map { $0.title })
         let existingIds = Set(allPosts.map { $0.id })
@@ -324,47 +488,6 @@ final class PostsViewModel: ObservableObject {
         log("❌ \(message): \(description)", level: .error)
     }
     
-    // MARK: - Computed Properties for Preferences
-    
-    var drafts: [Post] {
-        allPosts.filter { $0.draft == true }
-    }
-    
-    var draftsCount: Int {
-        allPosts.filter { $0.draft }.count
-    }
-    
-    var hasDrafts: Bool {
-        allPosts.contains { $0.draft }
-    }
-    
-    var cloudPostsCount: Int {
-        allPosts.filter { $0.origin == .cloud || $0.origin == .cloudNew }.count
-    }
-    
-    var hasCloudPosts: Bool {
-        allPosts.contains { $0.origin == .cloud || $0.origin == .cloudNew}
-    }
-    
-    var hasAvailableCuratedPostsUpdate: Bool {
-        guard let appStateManager else { return false }
-        return appStateManager.getAvailableNewCuratedPostsStatus() && hasCloudPosts
-    }
-    
-    var shouldShowImportFromCloud: Bool {
-        !hasCloudPosts
-    }
-    
-    // MARK: - Curated Posts State
-    
-    var lastCuratedPostsLoadedDate: Date? {
-        appStateManager?.getLastDateOfCuaratedPostsLoaded()
-    }
-    
-    func resetCuratedPostsStatus() {
-        appStateManager?.setCuratedPostsLoadStatusOn()
-    }
-
     #warning("Delete this func loadDevData() before deployment to App Store")
     // MARK: - DevData Import (creating posts for cloud)
     func loadDevData() -> Int {
@@ -375,7 +498,11 @@ final class PostsViewModel: ObservableObject {
             return 0
         }
         
+        let datePrefix = DateFormatter.yyyyMMdd.string(from: Date())
+
         for post in newPosts {
+            let trimmedUUID = String(post.id.suffix(from: post.id.index(post.id.startIndex, offsetBy: 11)))
+            post.id = "\(datePrefix)-\(trimmedUUID)"
             dataSource.insert(post)
         }
         

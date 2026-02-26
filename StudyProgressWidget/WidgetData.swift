@@ -80,7 +80,6 @@ final class WidgetDataManager {
         
         if let encoded = try? JSONEncoder().encode(data) {
             userDefaults.set(encoded, forKey: AppGroupConfig.widgetDataKey)
-            userDefaults.synchronize()
         }
     }
     

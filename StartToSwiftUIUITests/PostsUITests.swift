@@ -185,7 +185,11 @@ final class PostsUITests: XCTestCase {
         firstCell.swipeLeft()
         
         // Check if delete button appears
+        let hideButton = app.buttons["Hide"]
         let deleteButton = app.buttons["Delete"]
+        let hasActions = hideButton.waitForExistence(timeout: 2) || deleteButton.exists
+        XCTAssertTrue(hasActions, "Swipe actions should be visible")
+
         if deleteButton.waitForExistence(timeout: 2) {
             // Don't actually delete, just verify the action exists
             // Swipe right to dismiss
@@ -193,7 +197,7 @@ final class PostsUITests: XCTestCase {
         }
     }
     
-    func testSwipeToFavoritePost() throws {
+    func testSwipeToFavouritePost() throws {
         let list = app.collectionViews.firstMatch
         guard list.waitForExistence(timeout: 3) else {
             throw XCTSkip("No posts available")

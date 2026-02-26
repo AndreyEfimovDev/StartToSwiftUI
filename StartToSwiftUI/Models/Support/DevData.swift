@@ -12,7 +12,27 @@ struct DevData {
     static let postsForCloud = [
 
         
-// NEW
+// MARK: NEW
+        
+        // MARK: 2026-02-28
+        Post(
+            title: "Struct vs Class vs Actor, Value vs Reference Types, Stack vs Heap",
+            intro: """
+                The lesson covers the differences between different data types in context of and far beyond Swift Concurrency:
+                (1) Structs vs Classes vs Actors
+                (2) Value vs Reference Types
+                (3) Stack vs Heap memory
+                (4) Automatic Reference Counting (ARC) in Swift
+                (5) Weak vs Strong References
+                """,
+            author: "Swiftful Thinking",
+            postType: .post,
+            urlString: "https://youtu.be/-JLenSTKEcA?si=T10f05je27bNKRPD",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2022, month: 5, day: 18),
+            studyLevel: .middle,
+            origin: .cloudNew,
+        ),
         Post(
             title: "Download images with @escaping, Combine and Async/Await",
             intro: """
@@ -30,26 +50,90 @@ struct DevData {
             origin: .cloudNew,
         ),
         Post(
-            title: "Struct vs Class vs Actor, Value vs Reference Types, Stack vs Heap",
+            title: "Dependency Injection in SwiftUI",
             intro: """
-                The lesson covers the different between different data types in context of and far beyond Swift Concurrency:
-                (1) Structs vs Classes vs Actors
-                (2) Value vs Reference Types
-                (3) Stack vs Heap memory
-                (4) Automatic Reference Counting (ARC) in Swift
-                (5) Weak vs Strong References
+                Using Dependency Injection in your apps becomes extremely important when creating scalable and testable apps. In this video, we will implement Dependency Injection into the project using Protocols.
+                
+                We will also talk about the downfalls of Singleton's and how Dependency Injection can solve them.
                 """,
             author: "Swiftful Thinking",
             postType: .post,
-            urlString: "https://youtu.be/-JLenSTKEcA?si=T10f05je27bNKRPD",
+            urlString: "https://youtu.be/E3x07blYvdE?si=PdJgvPFksjMLZNHk",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2022, month: 5, day: 18),
+            postDate: Date.from(year: 2021, month: 10, day: 22),
+            studyLevel: .advanced,
+            origin: .cloudNew,
+        ),
+        Post(
+            title: "Protocols in Swift",
+            intro: """
+                In this video we jump into the wild world of Protocols in Swift. We will learn how to create custom protocols and then walk through a few real-world implementations.
+                
+                Apple's definition of a Protocol:
+
+                A protocol defines a blueprint of methods, properties, and other requirements that suit a particular task or piece of functionality. The protocol can then be adopted by a class, structure, or enumeration to provide an actual implementation of those requirements. Any type that satisfies the requirements of a protocol is said to conform to that protocol.
+                """,
+            author: "Swiftful Thinking",
+            postType: .post,
+            urlString: "https://youtu.be/0gM1wmW1Xvc?si=27QofcQFa8SyOZAT",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 10, day: 20),
+            studyLevel: .advanced,
+            origin: .cloudNew,
+        ),
+        Post(
+            title: "@escaping closures in Swift",
+            intro: """
+                We use @escaping closures to deal with returning from functions when using asynchronous code. This is code that does NOT execute immediately, but rather at a future point in time. This becomes extremely important when we need to download data from the internet!
+                """,
+            author: "Swiftful Thinking",
+            postType: .post,
+            urlString: "https://youtu.be/7gg8iBH2fg4?si=SLRsHGWRVsAbzJd5",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 04, day: 20),
             studyLevel: .middle,
             origin: .cloudNew,
         ),
-        
-        
-// 2026-02-06
+        Post(
+            title: "[weak self] in Swift",
+            intro: """
+                Swift uses Automatic Reference Counting (ARC) to manage your app’s memory usage. As a developer, you want to try to keep the ARC count as low as possible, which will keep your app running fast and efficiently. In this video we will learn how to use "weak references" instead of "strong references" to keep our count low!
+                """,
+            author: "Swiftful Thinking",
+            postType: .post,
+            urlString: "https://youtu.be/TPHp9kR0Go8?si=McEbTyD9-OrebNO_",
+            postPlatform: .youtube,
+            postDate: Date.from(year: 2021, month: 04, day: 18),
+            studyLevel: .middle,
+            origin: .cloudNew,
+        ),
+        // MARK: 2026-02-18
+//        Post(
+//            title: "SwiftUI Continued Learning",
+//            intro: """
+//                Building professional apps requires knowledge of data persistence and networking. This bootcamp builds on your existing knowledge of SwiftUI.
+//                """,
+//            author: "Nick Sarno",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2021, month: 3, day: 29),
+//            studyLevel: .middle,
+//            origin: .cloudNew
+//        ),
+//        Post(
+//            title: "Swift Concurrency",
+//            intro: """
+//                Swift Concurrency is a major upgrade to the Swift language that completely changes how to write asynchronous code in Swift. Learn everything that you need to know.
+//                """,
+//            author: "Nick Sarno",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphr2Dl4sY4rS9PLzPdyi8PM",
+//            postDate: Date.from(year: 2022, month: 5, day: 18),
+//            studyLevel: .middle,
+//            origin: .cloudNew
+//        ),
+        // MARK: 2026-02-06
 //        Post(
 //            title: "Swift Basics",
 //            intro: """
@@ -224,18 +308,6 @@ struct DevData {
             origin: .cloudNew,
         ),
         Post(
-            title: "SwiftUI Continued Learning",
-            intro: """
-                Building professional apps requires knowledge of data persistence and networking. This bootcamp builds on your existing knowledge of SwiftUI.
-                """,
-            author: "Nick Sarno",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar",
-            postDate: nil,
-            studyLevel: .middle,
-            origin: .cloudNew
-        ),
-        Post(
             title: "SwiftUI Crypto App",
             intro: """
                 Build a cryptocurrency app that downloads live price data from an API and saves the current user's portfolio. Get comfortable with Combine, Core Data, and MVVM.
@@ -263,19 +335,6 @@ struct DevData {
             studyLevel: .middle,
             origin: .cloudNew,
         ),
-        Post(
-            title: "Swift Concurrency",
-            intro: """
-                Swift Concurrency is a major upgrade to the Swift language that completely changes how to write asynchronous code in Swift. Learn everything that you need to know.
-                """,
-            author: "Nick Sarno",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphr2Dl4sY4rS9PLzPdyi8PM",
-            postDate: nil,
-            studyLevel: .middle,
-            origin: .cloudNew
-        ),
-
         Post(
             title: "SwiftUI Advanced Learning",
             intro: """

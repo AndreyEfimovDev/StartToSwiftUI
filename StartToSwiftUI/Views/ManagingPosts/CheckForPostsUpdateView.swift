@@ -14,7 +14,7 @@ struct CheckForPostsUpdateView: View {
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
-    private let hapticManager = HapticService.shared
+    private let hapticManager = HapticManager.shared
     
     // MARK: - State
     @State private var statusText = "Checking for update..."
@@ -38,7 +38,7 @@ struct CheckForPostsUpdateView: View {
                 }
             }
             .task {
-                try? await Task.sleep(for: .seconds(2.5))
+                try? await Task.sleep(for: .seconds(vm.dispatchFor))
                 await checkForUpdates()
             }
         }
@@ -56,7 +56,7 @@ struct CheckForPostsUpdateView: View {
                     ProgressView()
                 }
             }
-            if let lastDate = vm.lastCuratedPostsLoadedDate {
+            if let lastDate = vm.lastDatePostsLoaded {
                 HStack {
                     Text("Last update from:")
                     Spacer()
@@ -86,7 +86,7 @@ struct CheckForPostsUpdateView: View {
     
     private var descriptionText: some View {
         Text("""
-               The collection **will be appended** to all current materilas in the app, excluding duplicates based on the post title.
+               The collection **will be appended** to all current materilas in the app, excluding duplicates based on titles.
                """)
         .multilineTextAlignment(.center)
     }
@@ -113,31 +113,37 @@ struct CheckForPostsUpdateView: View {
     
     /// Check if updates for curated study materials are available
     private func checkForUpdates() async {
-        let hasUpdates = await vm.checkCloudCuratedPostsForUpdates()
+        let hasUpdates = await vm.checkFBPostsForUpdates()
+        isInProgress = false
         
         if hasUpdates {
             statusText = "Updates available!"
             statusColor = Color.mycolor.myRed
             isUpdateAvailable = true
-            
         } else {
             statusText = "No updates available"
             statusColor = Color.mycolor.myGreen
             isUpdated = true
+            Task {
+                try? await Task.sleep(for: .seconds(vm.dispatchFor))
+                await MainActor.run {
+                    coordinator.closeModal()
+                }
+            }
         }
-        
-        isInProgress = false
     }
     
+    /// Perform import new curated content from Firestore
     private func performImport() async {
-        let success = await vm.importPostsFromCloud()
+        let success = await vm.importPostsFromFirebase()
+
         isInProgress = false
         
         if success {
             isImported = true
             hapticManager.notification(type: .success)
             Task {
-                try? await Task.sleep(for: .seconds(vm.dispatchFor + 1))
+                try? await Task.sleep(for: .seconds(vm.dispatchFor))
                 await MainActor.run {
                     coordinator.closeModal()
                 }

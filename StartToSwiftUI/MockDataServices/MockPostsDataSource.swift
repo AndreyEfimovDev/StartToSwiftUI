@@ -17,7 +17,7 @@ final class MockPostsDataSource: PostsDataSourceProtocol {
     }
     
     
-    func fetchPosts() -> [Post] {
+    func fetchPosts() throws -> [Post] {
         return posts
     }
     
@@ -29,8 +29,7 @@ final class MockPostsDataSource: PostsDataSourceProtocol {
         posts.removeAll { $0.id == post.id }
     }
     
-    func save() {
+    func save() throws {
         // Mock - ничего не делаем
     }
 }
-

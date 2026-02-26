@@ -32,44 +32,56 @@ struct Functionality: View {
                Here are some tips to help you easily navigate the app and explore its functionality.
                
                **Home View Navigation**
-               From the main list of study materials:
-               - Pull down to refresh the list of items
-               - Tap on a material to open its Details view
-               - Swipe right on an item to mark or unmark it as a Favourite
-               - Swipe left on an item to Edit or Delete it
-               - Press and hold on an item to update your Study Progress
+               - Tap on a item to see its Details
+               - Swipe right on an item to Add or Remove from Favourites
+               - Swipe left on an item to Edit, Hide, or move to Deleted (restorable)
+               - Press and hold on an item to Update your Study Progress
                - Double-tap on an item to Rate the material
+               - Pull down to Refresh the list of materials
                
-               **Add Materials**
-               You have the ability to create your own study content:
+               **Create Own Study Content**
                - Title
                - Intro description
-               - Author's name of the material
-               - Reference to the original source
-               - Type of the source (Website, YouTube)
-               - Publication date (if known)
-               - Type of material (lesson, course, solution, etc.)
-               - Difficulty level (Beginner, Intermediate, Advanced)
-               - Your personal notes on the material
+               - Author's name
+               - Type (Lesson, Course, Article)
+               - Study level (Beginner, Middle, Advanced)
+               - Platform (Website, YouTube)
+               - Date of publication (if known)
+               - Link to the material
+               - Personal notes
                
-               **Widget**
-               To add a widget to your iPhone or iPad Home Screen:
+               **Add Widgets**
                - Touch and hold an empty area on your Home Screen until the apps jiggle
-               - Tap the + (Add) button in the top-left corner
+               - Tap the '+' button in the top-left corner
                - Search for "SwiftUI Study" in the widget gallery
                - Select your preferred widget size (Small, Medium, or Large)
                - Tap Add Widget, then tap Done
 
-               The rest should be self-explanatory.
+               **Icons**
+               *Drafts*
+               \(Image(systemName: "square.stack.3d.up")) - draft
+               *Favourite choice*
+               \(FavoriteChoice.yes.icon) - yes
+               \(FavoriteChoice.no.icon) - no
+               *Original source*
+               \(PostOrigin.local.icon) - created locally
+               \(PostOrigin.cloud.icon) - loaded from cloud (curated collection)
+               \(PostOrigin.cloudNew.icon) - recently loaded from cloud
+               *Study progress*
+               \(StudyProgress.added.icon) - added
+               \(StudyProgress.started.icon) - started 
+               \(StudyProgress.studied.icon) - learnt
+               \(StudyProgress.practiced.icon) - practiced
+               *Rating*
+               \(PostRating.good.icon) - good
+               \(PostRating.great.icon) - great
+               \(PostRating.excellent.icon) - excellent               
                """)
-            
             .multilineTextAlignment(.leading)
             .textFormater()
             .padding()
         }
     }
-
-
 }
 
 #Preview {

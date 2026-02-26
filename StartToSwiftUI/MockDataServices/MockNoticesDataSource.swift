@@ -43,3 +43,9 @@ final class MockNoticesDataSource: NoticesDataSourceProtocol {
         log("💾 Mock: save() called, \(notices.count) notices in memory", level: .info)
     }
 }
+//
+//final class MockFBNoticesManager: FBNoticesManagerProtocol {
+//    var mockNotices: [FBNoticeModel] = []
+//    func getAllNotices(after: Date) async -> [FBNoticeModel] { mockNotices }
+//}
+

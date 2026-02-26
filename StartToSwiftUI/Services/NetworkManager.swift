@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - NetworkService
-final class NetworkService: ObservableObject {
+final class NetworkManager: ObservableObject {
     
     let urlString: String
     
@@ -51,7 +51,7 @@ protocol NetworkServiceProtocol {
     func fetchDataFromURLAsync<T: Codable>() async throws -> T
 }
 
-extension NetworkService: NetworkServiceProtocol {}
+extension NetworkManager: NetworkServiceProtocol {}
 
 // MARK: - Network Errors
 enum NetworkError: Error, LocalizedError {

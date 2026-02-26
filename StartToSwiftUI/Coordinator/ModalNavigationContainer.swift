@@ -31,8 +31,8 @@ struct ModalNavigationContainer: View {
     private func contentView(for route: AppRoute, isRoot: Bool) -> some View {
         switch route {
             
-        case .postDetails(let postId): // postId is extracted from enum and available as String
-            PostDetailsView(postId: postId)
+        case .postDetails(let post):
+            PostDetailsView(post: post)
         case .addPost:
             AddEditPostView(post: nil)
         case .editPost(let post):
@@ -50,6 +50,8 @@ struct ModalNavigationContainer: View {
             
         case .postDrafts:
             PostDraftsView()
+        case .archivedPosts:
+            ArchivedPostsView()
         case .checkForUpdates:
             CheckForPostsUpdateView()
         case .importFromCloud:

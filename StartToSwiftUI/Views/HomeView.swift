@@ -15,16 +15,14 @@ struct HomeView: View {
     @EnvironmentObject private var noticevm: NoticeViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
-    private let hapticManager = HapticService.shared
+    private let hapticManager = HapticManager.shared
     
     // MARK: - Constants
     let selectedCategory: String?
     private let longPressDuration: Double = 0.5
 
     // MARK: - States
-    @State private var selectedPostToDelete: Post?
     @State private var showOnTopButton: Bool = false
-    @State private var isShowingDeleteConfirmation: Bool = false
     @State private var isDetectingLongPress: Bool = false
     @State private var isLongPressSuccess: Bool = false
     @State private var showViewOnDoubleTap: Bool = false
@@ -32,7 +30,7 @@ struct HomeView: View {
     
     // MARK: - Computed Properties
     private var disableHomeView: Bool {
-        isLongPressSuccess || showViewOnDoubleTap || isShowingDeleteConfirmation
+        isLongPressSuccess || showViewOnDoubleTap
     }
     
     private var postsToDisplay: [Post] {
@@ -71,7 +69,6 @@ struct HomeView: View {
                 filtersSheet
             }
             .overlay { gestureOverlays(proxy: proxy) }
-            .overlay { deleteConfirmationOverlay }
             .alert("Error", isPresented: $vm.showErrorMessageAlert, actions: {
                 Button("OK") {}
             }, message: {
@@ -87,11 +84,14 @@ struct HomeView: View {
                 }
             })
             .task {
+                FBAnalyticsManager.shared.logScreen(name: "HomeView")
+                
                 vm.loadPostsFromSwiftData()
+                noticevm.loadNoticesFromSwiftData()
+                vm.updateWidgetData()
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
                 noticevm.playSoundNotificationIfNeeded()
-                vm.updateWidgetData()
-                await noticevm.importNoticesFromCloud()
+                await noticevm.importNoticesFromFirebase()
             }
         }
     }
@@ -99,7 +99,7 @@ struct HomeView: View {
     // MARK: Subviews
     private var listPostRowsContent: some View {
         List {
-            ForEach(postsToDisplay) { post in
+            ForEach(postsToDisplay.filter { $0.status == .active && !$0.draft }) { post in
                 PostRowView(post: post)
                     .id(post.id)
                     .background(trackingFirstPostInList(post: post))
@@ -138,7 +138,7 @@ struct HomeView: View {
         vm.loadPostsFromSwiftData()
         vm.updateWidgetData()
         Task {
-            await noticevm.importNoticesFromCloud()
+            await noticevm.importNoticesFromFirebase()
         }
     }
     
@@ -146,7 +146,7 @@ struct HomeView: View {
     
     private func handleLongPress(on post: Post) {
         vm.selectedRating = post.postRating
-        vm.selectedPostId = post.id
+        vm.selectedPost = post
         isLongPressSuccess = true
         hapticManager.impact(style: .light)
     }
@@ -164,7 +164,7 @@ struct HomeView: View {
     }
     
     private func handleSingleTap(on post: Post) {
-        vm.selectedPostId = post.id
+        vm.selectedPost = post
         
         // Mark a new post from cloud as not new after tapping if necessary
         if post.origin == .cloudNew {
@@ -172,13 +172,13 @@ struct HomeView: View {
         }
         
         if UIDevice.isiPhone {
-            coordinator.push(.postDetails(postId: post.id))
+            coordinator.push(.postDetails(post: post))
         }
     }
     
     private func handleDoubleTap(on post: Post) {
         vm.selectedStudyProgress = post.progress
-        vm.selectedPostId = post.id
+        vm.selectedPost = post
         showViewOnDoubleTap = true
         hapticManager.impact(style: .light)
     }
@@ -187,18 +187,17 @@ struct HomeView: View {
     
     @ViewBuilder
     private func trailingSwipeActions(for post: Post) -> some View {
-        Button("Delete", systemImage: "trash") {
-            selectedPostToDelete = post
-            hapticManager.notification(type: .warning)
-            isShowingDeleteConfirmation = true
-        }
-        .tint(Color.mycolor.myRed)
-        
-        Button("Edit", systemImage: post.origin == .local ? "pencil" : "pencil.slash") {
+        Button("Hide", systemImage: "eye.slash") {
+            vm.setPostHidden(post)
+        }.tint(Color.mycolor.myPurple)
+
+        Button("Delete", systemImage: "archivebox") {
+            vm.setPostDeleted(post)
+        }.tint(Color.mycolor.myOrange)
+
+        Button("Edit", systemImage: "pencil") {
             coordinator.push(.editPost(post))
-        }
-        .tint(Color.mycolor.myBlue)
-        .disabled(post.origin != .local)
+        }.tint(Color.mycolor.myBlue)
     }
     
     @ViewBuilder
@@ -218,6 +217,7 @@ struct HomeView: View {
         ToolbarItem(placement: .navigationBarLeading) {
             CircleStrokeButtonView(iconName: "gearshape", isShownCircle: false) {
                 coordinator.push(.preferences)
+                hapticManager.impact(style: .light)
             }
         }
         if noticevm.unreadCount != 0  {
@@ -233,6 +233,7 @@ struct HomeView: View {
                 isShownCircle: false
             ){
                 coordinator.push(.addPost)
+                hapticManager.impact(style: .light)
             }
             // Fliters for posts
             if !vm.allPosts.isEmpty {
@@ -242,6 +243,7 @@ struct HomeView: View {
                     isShownCircle: false
                 ) {
                     isFilterButtonPressed.toggle()
+                    hapticManager.impact(style: .light)
                 }
             }
         }
@@ -304,14 +306,6 @@ struct HomeView: View {
                     .padding(.horizontal, 30)
                 }
             }
-        }
-    }
-    
-    @ViewBuilder
-    private var deleteConfirmationOverlay: some View {
-        if isShowingDeleteConfirmation {
-            postDeletionConfirmation
-                .transition(.move(edge: .bottom))
         }
     }
     
@@ -389,7 +383,7 @@ struct HomeView: View {
             description: Text("Check the spelling or try a new search.")
         )
     }
-    
+#warning("Delete this func before deployment to App Store")
 //    private func postsForCategory(_ category: String?) -> [Post] {
 //        guard let category = category else {
 //            return vm.filteredPosts
@@ -397,81 +391,39 @@ struct HomeView: View {
 //        return vm.filteredPosts.filter { $0.category == category }
 //    }
     
-    private var postDeletionConfirmation: some View {
-        ZStack {
-            Color.mycolor.myAccent.opacity(0.001)
-                .ignoresSafeArea()
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    isShowingDeleteConfirmation = false
-                }
-            VStack(spacing: 8) {
-                Text("Are you sure you want to delete the material?")
-                    .font(.headline)
-                    .foregroundColor(Color.mycolor.myRed)
-                    .multilineTextAlignment(.center)
-                    .padding(.vertical)
-                Text(selectedPostToDelete?.title ?? "No material selected")
-                    .font(.subheadline)
-                    .foregroundColor(Color.mycolor.myAccent)
-                    .minimumScaleFactor(0.75)
-                    .lineLimit(3)
-                    .multilineTextAlignment(.center)
-                Text("This cannot be undone.")
-                    .font(.caption2)
-                    .foregroundColor(Color.mycolor.myAccent)
-                    .padding(.vertical)
-                ClearCupsuleButton(
-                    primaryTitle: "Delete",
-                    primaryTitleColor: Color.mycolor.myRed) {
-                        withAnimation {
-                            vm.deletePost(selectedPostToDelete)
-                            hapticManager.notification(type: .success)
-                            isShowingDeleteConfirmation = false
-                        }
-                    }
-                ClearCupsuleButton(
-                    primaryTitle: "Cancel",
-                    primaryTitleColor: Color.mycolor.myAccent) {
-                        isShowingDeleteConfirmation = false
-                    }
-            }
-            .padding()
-            .background(.ultraThinMaterial)
-            .menuFormater()
-            .padding(.horizontal, 40)
+}
+
+private struct HomeViewPreview: View {
+    
+    @StateObject var vm: PostsViewModel = {
+        let vm = PostsViewModel(
+            dataSource: MockPostsDataSource(),
+            fbPostsManager: MockFBPostsManager()
+        )
+        vm.start()
+        return vm
+    }()
+    
+    @StateObject var noticesVM = NoticeViewModel(
+        dataSource: MockNoticesDataSource(),
+        fbNoticesManager: MockFBNoticesManager()
+    )
+    
+    var body: some View {
+        NavigationStack {
+            HomeView(selectedCategory: Constants.mainCategory)
+                .environmentObject(AppCoordinator())
+                .environmentObject(vm)
+                .environmentObject(noticesVM)
         }
     }
 }
 
-//    private func shortenPostTitle(title: String) -> String {
-//        if title.count > limitToShortenTitle {
-//            return String(title.prefix(limitToShortenTitle - 3)) + "..."
-//        }
-//        return title
-//    }
-    
-
-
-#Preview("With Extended Posts") {
-    let extendedPosts = PreviewData.samplePosts
-    let postsVM = PostsViewModel(
-        dataSource: MockPostsDataSource(posts: extendedPosts)
-    )
-    let noticesVM = NoticeViewModel(
-        dataSource: MockNoticesDataSource()
-    )
-    
+#Preview("With Mock Posts") {
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
-    
-    NavigationStack {
-        HomeView(selectedCategory: Constants.mainCategory)
-            .modelContainer(container)
-            .environmentObject(AppCoordinator())
-            .environmentObject(postsVM)
-            .environmentObject(noticesVM)
-    }
+    HomeViewPreview()
+        .modelContainer(container)
 }

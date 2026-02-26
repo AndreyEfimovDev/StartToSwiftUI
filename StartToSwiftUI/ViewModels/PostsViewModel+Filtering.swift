@@ -12,7 +12,6 @@ import Combine
 extension PostsViewModel {
     
     func setupSubscriptions() {
-        
         let filters = $selectedLevel
             .combineLatest($selectedFavorite, $selectedType, $selectedYear)
         
@@ -20,12 +19,11 @@ extension PostsViewModel {
             .combineLatest($selectedPlatform, $selectedSortOption, $selectedCategory)
         
         let debouncedSearchText = $searchText
-            .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
+            .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
         
         $allPosts
-            .combineLatest(debouncedSearchText, filtersWithPlatformAndSortOption)
-            .map { [weak self] posts, searchText, data -> [Post] in
-                
+            .combineLatest(debouncedSearchText, filtersWithPlatformAndSortOption, $reshuffleToken)
+            .map { [weak self] posts, searchText, data, _ -> [Post] in
                 guard let self else { return posts }
                 
                 let ((level, favorite, type, year), platform, sortOption, category) = data
@@ -79,7 +77,7 @@ extension PostsViewModel {
             let matchesType = type == nil || post.postType == type
             let matchesPlatform = platform == nil || post.postPlatform == platform
             
-            let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date.distantPast))
+            let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date(timeIntervalSince1970: 0)))
             let matchesYear = year == nil || postYear == year
             
             let matchesCategory = category == nil || post.category == category
@@ -94,11 +92,15 @@ extension PostsViewModel {
         selectedType == nil &&
         selectedPlatform == nil &&
         selectedYear == nil &&
-        selectedSortOption == .newestFirst
+        selectedSortOption == .notSorted
     }
     
     private func searchPosts(posts: [Post]) -> [Post] {
         guard !searchText.isEmpty else { return posts }
+        
+        if searchText.count == 1 {
+            FBAnalyticsManager.shared.logEvent(name: "search_used")
+        }
         
         let query = searchText.lowercased()
         return posts.filter {
@@ -109,10 +111,10 @@ extension PostsViewModel {
         }
     }
     
-    private func applySorting(posts: [Post], option: SortOption?) -> [Post] {
-        guard let option else { return posts }
-        
+    private func applySorting(posts: [Post], option: SortOption) -> [Post] {
         switch option {
+        case .notSorted:
+            return posts
         case .newestFirst:
             return posts.sorted {
                 switch ($0.postDate, $1.postDate) {
@@ -129,6 +131,18 @@ extension PostsViewModel {
                 case (_, nil): return true
                 }
             }
+        case .random:
+            return posts.sorted { a, b in
+                let indexA = randomSortOrder.firstIndex(of: a.id) ?? Int.max
+                let indexB = randomSortOrder.firstIndex(of: b.id) ?? Int.max
+                return indexA < indexB
+            }
         }
     }
+    
+    func reshufflePosts() {
+        randomSortOrder = allPosts.map { $0.id }.shuffled()
+        reshuffleToken = UUID() // on change → Combine pipeline is triggered
+    }
+
 }
