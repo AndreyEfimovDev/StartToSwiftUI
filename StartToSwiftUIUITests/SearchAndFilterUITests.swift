@@ -185,4 +185,20 @@ final class SearchAndFilterUITests: XCTestCase {
             print("Voice search button not found - feature may not be available")
         }
     }
+    
+    func testRandomSortOption() throws {
+        let filtersButton = app.buttons["line.3.horizontal.decrease"]
+        guard filtersButton.waitForExistence(timeout: 3) else {
+            throw XCTSkip("Filters button not found")
+        }
+        filtersButton.tap()
+        sleep(1)
+        
+        let randomOption = app.buttons["Random"]
+        if randomOption.waitForExistence(timeout: 2) {
+            randomOption.tap()
+            sleep(1)
+        }
+        app.swipeDown()
+    }
 }

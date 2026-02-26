@@ -17,7 +17,7 @@ final class MockPostsDataSource: PostsDataSourceProtocol {
     }
     
     
-    func fetchPosts() -> [Post] {
+    func fetchPosts() throws -> [Post] {
         return posts
     }
     
@@ -29,28 +29,7 @@ final class MockPostsDataSource: PostsDataSourceProtocol {
         posts.removeAll { $0.id == post.id }
     }
     
-    func save() {
+    func save() throws {
         // Mock - ничего не делаем
     }
-}
-
-final class MockFBPostsManager: FBPostsManagerProtocol {
-    var mockPosts: [FBPostModel] = [
-        FBPostModel(
-            postId: "postID",
-            category: "SwiftUI",
-            title: "Mock Title",
-            intro: "Mock Intro",
-            author: "Mock Author",
-            postType: .article,
-            urlString: "",
-            postPlatform: .website,
-            postDate: .now,
-            studyLevel: .beginner,
-            date: .now
-        )
-        
-    ]
-    func getAllPosts(after date: Date?) async -> [FBPostModel] { mockPosts }
-    func uploadDevDataPostsToFirebase() async {}
 }
