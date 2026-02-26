@@ -43,31 +43,19 @@ struct PostDetailsView: View {
     
     // MARK: - Computed Properties
     
-//    private var post: Post? {
-//        vm.getPost(id: postId)
-//    }
-    
     private var minHeight: CGFloat {
         UIDevice.isiPad ? 60 : 75
     }
-    
-    private var isEditable: Bool {
-        post.origin == .local
-    }
-    
+        
     // MARK: - Body
     
     var body: some View {
         GeometryReader { proxy in
             VStack {
-//                if let post {
                     postContent(for: post)
                         .navigationBarBackButtonHidden(true)
                         .navigationBarTitleDisplayMode(.inline)
                         .toolbar { toolbar(for: post) }
-//                } else {
-//                    postNotSelectedEmptyView(text: "Post is not found")
-//                }
             }
             .onAppear {
                 FBAnalyticsManager.shared.logScreen(name: "PostDetailsView")
@@ -77,9 +65,7 @@ struct PostDetailsView: View {
                 updateWidths(for: newValue)
             }
             .safeAreaInset(edge: .bottom) {
-//                if post != nil {
                     bottomTabsContainer
-//                }
             }
             .ignoresSafeArea(edges: .bottom)
         }
@@ -229,7 +215,6 @@ struct PostDetailsView: View {
     @ToolbarContentBuilder
     private func toolbar(for post: Post) -> some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
-            
             if UIDevice.isiPhone {
                 BackButtonView() { coordinator.pop() }
             }
@@ -245,7 +230,6 @@ struct PostDetailsView: View {
         }
         
         ToolbarItemGroup(placement: .topBarTrailing) {
-            
             CircleStrokeButtonView(
                 iconName: post.favoriteChoice == .yes ? "heart.slash" : "heart",
                 iconFont: .headline,
@@ -255,13 +239,14 @@ struct PostDetailsView: View {
                 hapticManager.impact(style: .light)
             }
             
-            CircleStrokeButtonView(
-                iconName: isEditable ? "pencil" : "pencil.slash",
-                isShownCircle: false
-            ) {
-                coordinator.push(.editPost(post))
+            if post.origin == .local {
+                CircleStrokeButtonView(
+                    iconName: "pencil",
+                    isShownCircle: false
+                ) {
+                    coordinator.push(.editPost(post))
+                }
             }
-            .disabled(!isEditable)
         }
     }
     

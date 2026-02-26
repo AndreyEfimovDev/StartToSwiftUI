@@ -149,9 +149,9 @@ enum PostOrigin: String, CaseIterable, Codable {
     
     var icon: Image {
         switch self {
-        case .local: return Image(systemName: "archivebox") // tray cube  archivebox folder arrow.up.folder text.document
+        case .local: return Image(systemName: "person")
         case .cloud: return Image(systemName: "cloud")
-        case .cloudNew: return Image(systemName: "cloud.fill")
+        case .cloudNew: return Image(systemName: "cloud.sun")
         }
     }
 }
@@ -169,8 +169,8 @@ enum FavoriteChoice: String, CaseIterable, Codable {
 
     var icon: Image {
         switch self {
-        case .yes: return Image(systemName: "star")
-        case .no: return Image(systemName: "star.fill")
+        case .yes: return Image(systemName: "heart")
+        case .no: return Image(systemName: "heart.slash")
         }
     }
 }
@@ -186,11 +186,11 @@ enum PostRating: String, CaseIterable, Codable {
         }
     }
     
-    var icon: Image { // for other options look at TestSFSymbolsForRating
+    var icon: Image {
         switch self {
-        case .good: return Image(systemName: "face.smiling")
-        case .great: return Image(systemName: "star.fill")
-        case .excellent: return Image(systemName: "crown.fill")
+        case .good: return Image(systemName: "hand.thumbsup")
+        case .great: return Image(systemName: "star")
+        case .excellent: return Image(systemName: "crown")
         }
     }
     
@@ -234,10 +234,9 @@ enum StudyLevel: String, CaseIterable, Codable {
 }
 
 // MARK: - Type of progress
-enum StudyProgress: String, CaseIterable, Codable, Hashable { // progress in mastering educational materials
+// 􀐾 chart.bar, 􀓎 hare, 􁗟 bird, 􁝯 tree, 􀑁 chart.line.uptrend.xyaxis
+enum StudyProgress: String, CaseIterable, Codable, Hashable {
     case added, started, studied, practiced
-    
-    // 􀐾 chart.bar, 􀓎 hare, 􁗟 bird, 􁝯 tree, 􀑁 chart.line.uptrend.xyaxis
     
     var displayName: String {
         switch self {
@@ -250,10 +249,10 @@ enum StudyProgress: String, CaseIterable, Codable, Hashable { // progress in mas
     
     var icon: Image { // for other options look at TestSFSymbolsForProgress
         switch self {
-        case .added: return Image(systemName: "square.and.arrow.down") // lightbulb signpost.right sparkles
-        case .started: return Image(systemName: "sunrise") // sunrise signpost.right
-        case .studied: return Image(systemName: "bolt") // brain.head.profile flag.checkered
-        case .practiced: return Image(systemName: "flag.checkered") // hand.raised.fingers.spread mountain.2.fill bolt
+        case .added: return Image(systemName: "plus")
+        case .started: return Image(systemName: "sunrise")
+        case .studied: return Image(systemName: "bolt")
+        case .practiced: return Image(systemName: "flag.checkered")
         }
     }
     
@@ -299,16 +298,3 @@ enum TimePeriod: String, CaseIterable, Identifiable {
     }
 
 }
-
-
-
-
-//var id: String {
-//    switch self {
-//    case .postDetails(let postId): return "postDetails_\(postId)"
-//    case .editPost(let post): return "editPost_\(post.id)"
-//    case .noticeDetails(let noticeId): return "noticeDetails_\(noticeId)"
-//    default: return String(describing: self)
-//    }
-//}
-

@@ -37,7 +37,7 @@ struct FiltersView: View {
 #warning("Remove before deployment to App Store")
                     //                categoryFilter
                     studyLevelFilter
-                    favoriteFilter
+                    favouriteFilter
                     typeFilter
                     typeMedia
                     yearFilter
@@ -76,9 +76,9 @@ struct FiltersView: View {
         )
     }
     
-    private var favoriteFilter: some View {
+    private var favouriteFilter: some View {
         filterSection(
-            title: "Favorite:",
+            title: "Favourite:",
             selection: $vm.selectedFavorite,
             allItems: FavoriteChoice.allCases,
             titleForCase: { $0.displayName }

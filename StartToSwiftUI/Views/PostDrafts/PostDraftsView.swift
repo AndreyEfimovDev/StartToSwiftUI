@@ -39,31 +39,22 @@ struct PostDraftsView: View {
                         coordinator.pushModal(.editPost(post))
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        Button("Delete", systemImage: "trash") {
-                            withAnimation {
-                                vm.erasePost(post)
-                                hapticManager.notification(type: .success)
-                            }
-                        }
-                        .tint(Color.mycolor.myRed)
+                        Button("Delete", systemImage: "archivebox") {
+                            vm.setPostDeleted(post)
+                            hapticManager.notification(type: .success)
+                        }.tint(Color.mycolor.myOrange)
                     }
             }
-            .listRowBackground(Color.clear)
-            .listRowSeparatorTint(Color.mycolor.myAccent.opacity(0.35))
-            .listRowSeparator(.hidden, edges: [.top])
-            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
         }
-        .listStyle(.plain)
     }
 
     private var postDraftsIsEmpty: some View {
         ContentUnavailableView(
-            "No Post Drafts",
+            "No Drafts Saved",
             systemImage: "square.stack.3d.up",
-            description: Text("Post drafts will appear here when you save drafts.")
+            description: Text("Drafts will appear here when you save drafts.")
         )
     }
-    
 }
 
 #Preview("With Drafts") {

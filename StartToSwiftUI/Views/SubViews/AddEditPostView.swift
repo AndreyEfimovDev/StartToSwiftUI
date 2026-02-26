@@ -104,7 +104,7 @@ struct AddEditPostView: View {
             .toolbar { toolbar }
             .overlay { hideKeybordButton }
             .overlay { exitConfirmationOverlay }
-            .opacity(isShowingExitConfirmation ? 0.5 : 1.0)
+//            .opacity(isShowingExitConfirmation ? 0.5 : 1.0)
             .alert(isPresented: $showAlert) { alert }
             .onAppear { focusedField = .postTitle }
         }

@@ -18,7 +18,7 @@ struct StudyProgressView: View {
     
     var body: some View {
         FormCoordinatorToolbar(
-            title: "Achievements",
+            title: "Study progress",
             showHomeButton: true
         ) {
             VStack(spacing: 0) {

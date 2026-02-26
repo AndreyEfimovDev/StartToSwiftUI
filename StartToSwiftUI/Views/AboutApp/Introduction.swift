@@ -41,11 +41,12 @@ struct Introduction: View {
                The app offers the following features:
                         
                **CONTENT CREATION**:
-               - Create your own study content with full editing capabilities
-               - Save drafts for later completion
+               - Build a personal study library with full editing capabilities
                - Add personal notes to the content
+               - Save drafts for later completion
                
                **LEARNING MANAGEMENT**:
+               - Put on the own shelve: Lesson, Course, Article, Bug, Other
                - Track progress: 'Added' → 'Started' → 'Learnt' → 'Practiced'
                - Rate materials: Good / Great / Excellent
                - Organise by difficulty level: Beginner / Intermediate / Advanced
@@ -54,7 +55,7 @@ struct Introduction: View {
                
                **ANALYTICS & PROGRESS**:
                - Visual study progress dashboard
-               - Statistics by difficulty level
+               - Review statistics by difficulty level
                - Learning history with timestamps
                - Retrospective analysis across different time periods
                - Selective filtering for study progress review
@@ -68,6 +69,7 @@ struct Introduction: View {
                - Real-time sync with main app
 
                **DATA MANAGEMENT**:
+               - Hide materials, move them to Deleted, or restore back to Active anytime
                - Share, backup, restore and delete materials as needed
 
                For detailed functionality information, please visit the 'Functionality' section. 

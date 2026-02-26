@@ -37,7 +37,7 @@ struct ArchivedPostsView: View {
     // MARK: Body
     var body: some View {
         FormCoordinatorToolbar(
-            title: "Managing archived materials",
+            title: "Archived materials",
             showHomeButton: true
         ) {
             VStack {
@@ -51,9 +51,17 @@ struct ArchivedPostsView: View {
                 .padding(.horizontal)
 
                 if selectedTab == .hidden {
-                    List { hiddenSection }
+                    if hiddenPosts.isEmpty {
+                        emptyView(text: "No Hidden Materials", subText: "")
+                    } else {
+                        List { hiddenSection }
+                    }
                 } else {
-                    List { deletedSection }
+                    if deletedPosts.isEmpty {
+                        emptyView(text: "No Deleted Materials", subText: "")
+                    } else {
+                        List { deletedSection }
+                    }
                 }
             }
             .disabled(disableView)
@@ -119,6 +127,15 @@ struct ArchivedPostsView: View {
             .padding(.horizontal, 40)
         }
     }
+    
+    private func emptyView(text: String, subText: String) -> some View {
+        ContentUnavailableView(
+            text,
+            systemImage: "square.stack.3d.up",
+            description: Text(subText)
+        )
+    }
+
 }
 
 extension ArchivedPostsView {
@@ -128,12 +145,12 @@ extension ArchivedPostsView {
         ForEach(hiddenPosts) { post in
             PostRowView(post: post)
                 .swipeActions(edge: .trailing) {
-                    Button("Delete", systemImage: "trash") {
+                    Button("Delete", systemImage: "archivebox") { // archivebox trash
                         vm.setPostDeleted(post)
                     }
-                    .tint(Color.mycolor.myRed)
+                    .tint(Color.mycolor.myOrange)
                     
-                    Button("Restore", systemImage: "eye") {
+                    Button("Restore", systemImage: "arrow.uturn.left") {
                         vm.setPostActive(post)
                     }
                     .tint(Color.mycolor.myGreen)
@@ -146,7 +163,7 @@ extension ArchivedPostsView {
         ForEach(deletedPosts) { post in
             PostRowView(post: post)
                 .swipeActions(edge: .trailing) {
-                    Button("Erase", systemImage: "trash.fill") {
+                    Button("Erase", systemImage: "trash") { // xmark.bin
                         selectedPostToDelete = post
                         hapticManager.notification(type: .warning)
                         isShowingDeleteConfirmation = true

@@ -86,7 +86,7 @@ struct CheckForPostsUpdateView: View {
     
     private var descriptionText: some View {
         Text("""
-               The collection **will be appended** to all current materilas in the app, excluding duplicates based on the post title.
+               The collection **will be appended** to all current materilas in the app, excluding duplicates based on titles.
                """)
         .multilineTextAlignment(.center)
     }

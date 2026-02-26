@@ -22,9 +22,7 @@ struct HomeView: View {
     private let longPressDuration: Double = 0.5
 
     // MARK: - States
-//    @State private var selectedPostToDelete: Post?
     @State private var showOnTopButton: Bool = false
-//    @State private var isShowingDeleteConfirmation: Bool = false
     @State private var isDetectingLongPress: Bool = false
     @State private var isLongPressSuccess: Bool = false
     @State private var showViewOnDoubleTap: Bool = false
@@ -101,7 +99,7 @@ struct HomeView: View {
     // MARK: Subviews
     private var listPostRowsContent: some View {
         List {
-            ForEach(postsToDisplay.filter { $0.status == .active }) { post in
+            ForEach(postsToDisplay.filter { $0.status == .active && !$0.draft }) { post in
                 PostRowView(post: post)
                     .id(post.id)
                     .background(trackingFirstPostInList(post: post))
@@ -189,27 +187,19 @@ struct HomeView: View {
     
     @ViewBuilder
     private func trailingSwipeActions(for post: Post) -> some View {
-//        Button("Delete", systemImage: "trash") {
-//            selectedPostToDelete = post
-//            hapticManager.notification(type: .warning)
-//            isShowingDeleteConfirmation = true
-//        }
-//        .tint(Color.mycolor.myRed)
         Button("Hide", systemImage: "eye.slash") {
             vm.setPostHidden(post)
-        }
-        .tint(Color.mycolor.myPurple)
+        }.tint(Color.mycolor.myPurple)
 
-        Button("Delete", systemImage: "trash") {
+        Button("Delete", systemImage: "archivebox") {
             vm.setPostDeleted(post)
-        }
-        .tint(Color.mycolor.myRed)
+        }.tint(Color.mycolor.myOrange)
 
-        Button("Edit", systemImage: post.origin == .local ? "pencil" : "pencil.slash") {
-            coordinator.push(.editPost(post))
+        if post.origin == .local {
+            Button("Edit", systemImage: "pencil") {
+                coordinator.push(.editPost(post))
+            }.tint(Color.mycolor.myBlue)
         }
-        .tint(Color.mycolor.myBlue)
-        .disabled(post.origin != .local)
     }
     
     @ViewBuilder

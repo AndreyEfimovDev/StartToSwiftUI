@@ -52,13 +52,13 @@ struct PreferencesView: View {
             Section(header: sectionHeader("Appearance")) {
                 themeAppearance
             }
+            Section(header: sectionHeader("Achievements")) {
+                achievements
+            }
             Section(header: sectionHeader("Notices")) {
                 noticeMessages
                 notificationToggle
                 soundNotificationToggle
-            }
-            Section(header: sectionHeader("Achievements")) {
-                achievements
             }
             Section(header: sectionHeader("Manage materials (\(vm.allPosts.count))")) {
                 postDrafts
@@ -111,24 +111,24 @@ struct PreferencesView: View {
             .foregroundStyle(Color.mycolor.myAccent)
     }
 #warning("Delete this var before deployment to App Store")
-    private var selectedCategory: some View {
-        Group {
-            if let list = vm.allCategories {
-                CustomOneCapsulesLineSegmentedPicker(
-                    selection: $vm.selectedCategory,
-                    allItems: list,
-                    titleForCase: { $0 },
-                    selectedTextColor: Color.mycolor.myBackground,
-                    unselectedTextColor: Color.mycolor.myAccent,
-                    selectedBackground: Color.mycolor.myButtonBGBlue,
-                    unselectedBackground: .clear,
-                    showNilOption: true,
-                    nilTitle: "All"
-                )
-                .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
-            }
-        }
-    }
+//    private var selectedCategory: some View {
+//        Group {
+//            if let list = vm.allCategories {
+//                CustomOneCapsulesLineSegmentedPicker(
+//                    selection: $vm.selectedCategory,
+//                    allItems: list,
+//                    titleForCase: { $0 },
+//                    selectedTextColor: Color.mycolor.myBackground,
+//                    unselectedTextColor: Color.mycolor.myAccent,
+//                    selectedBackground: Color.mycolor.myButtonBGBlue,
+//                    unselectedBackground: .clear,
+//                    showNilOption: true,
+//                    nilTitle: "All"
+//                )
+//                .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+//            }
+//        }
+//    }
     
     // MARK: - Appearance
     
@@ -140,6 +140,18 @@ struct PreferencesView: View {
             selectedFont: .footnote
         )
         .preferredColorScheme(vm.selectedTheme.colorScheme)
+    }
+    
+    // MARK: - Achievements
+    
+    private var achievements: some View {
+        Button("Study progress") {
+            coordinator.pushModal(.studyProgress)
+        }
+        .customListRowStyle(
+            iconName: "hare",
+            iconWidth: iconSize
+        )
     }
     
     // MARK: - Notices
@@ -186,25 +198,13 @@ struct PreferencesView: View {
             ).tint(Color.mycolor.myBlue)
         }
     }
-    
-    // MARK: - Achievements
-    
-    private var achievements: some View {
-        Button("Check progress") {
-            coordinator.pushModal(.studyProgress)
-        }
-        .customListRowStyle(
-            iconName: "hare",
-            iconWidth: iconSize
-        )
-    }
-    
+        
     // MARK: - Materials Management
   
     private var postDrafts: some View {
         Group {
             if vm.hasDrafts {
-                Button("Post drafts (\(vm.draftsCount))") {
+                Button("Drafts (\(vm.draftsCount))") {
                     coordinator.pushModal(.postDrafts)
                 }
                 .customListRowStyle(

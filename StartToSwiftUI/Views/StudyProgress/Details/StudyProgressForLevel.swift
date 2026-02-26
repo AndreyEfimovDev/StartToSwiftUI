@@ -35,6 +35,10 @@ struct StudyProgressForLevel: View {
     var body: some View {
         // PROGRESS VIEWS
         VStack (spacing: 0) {
+
+            sectionTitle
+                .padding(.top)
+
             ForEach(progressLevels, id: \.self) { level in
                 StudyProgressRow(
                     level: level,
@@ -42,7 +46,6 @@ struct StudyProgressForLevel: View {
                     progress: progressCount(for: level)
                 )
             }
-            sectionTitle
         }
         .bold()
         .padding(.horizontal)
@@ -56,7 +59,7 @@ struct StudyProgressForLevel: View {
             Image(systemName: "hare")
             Text(titleForStudyLevel + " (\(postsForStudyLevel.count))")
         }
-        .font(.footnote)
+        .font(.headline)
         .bold()
         .foregroundStyle(studyLevel?.color ?? Color.mycolor.myAccent)
     }
