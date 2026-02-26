@@ -195,11 +195,9 @@ struct HomeView: View {
             vm.setPostDeleted(post)
         }.tint(Color.mycolor.myOrange)
 
-        if post.origin == .local {
-            Button("Edit", systemImage: "pencil") {
-                coordinator.push(.editPost(post))
-            }.tint(Color.mycolor.myBlue)
-        }
+        Button("Edit", systemImage: "pencil") {
+            coordinator.push(.editPost(post))
+        }.tint(Color.mycolor.myBlue)
     }
     
     @ViewBuilder

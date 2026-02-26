@@ -239,13 +239,11 @@ struct PostDetailsView: View {
                 hapticManager.impact(style: .light)
             }
             
-            if post.origin == .local {
-                CircleStrokeButtonView(
-                    iconName: "pencil",
-                    isShownCircle: false
-                ) {
-                    coordinator.push(.editPost(post))
-                }
+            CircleStrokeButtonView(
+                iconName: "pencil",
+                isShownCircle: false
+            ) {
+                coordinator.push(.editPost(post))
             }
         }
     }
