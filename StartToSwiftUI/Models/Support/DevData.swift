@@ -14,7 +14,7 @@ struct DevData {
         
 // MARK: NEW
         
-        // MARK: 2026-02-28
+        // MARK: 2026-02-26
         Post(
             title: "Struct vs Class vs Actor, Value vs Reference Types, Stack vs Heap",
             intro: """
@@ -32,6 +32,7 @@ struct DevData {
             postDate: Date.from(year: 2022, month: 5, day: 18),
             studyLevel: .middle,
             origin: .cloudNew,
+            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
         ),
         Post(
             title: "Download images with @escaping, Combine and Async/Await",
@@ -48,6 +49,7 @@ struct DevData {
             postDate: Date.from(year: 2022, month: 4, day: 27),
             studyLevel: .middle,
             origin: .cloudNew,
+            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
         ),
         Post(
             title: "Dependency Injection in SwiftUI",
@@ -63,6 +65,7 @@ struct DevData {
             postDate: Date.from(year: 2021, month: 10, day: 22),
             studyLevel: .advanced,
             origin: .cloudNew,
+            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
         ),
         Post(
             title: "Protocols in Swift",
@@ -80,6 +83,7 @@ struct DevData {
             postDate: Date.from(year: 2021, month: 10, day: 20),
             studyLevel: .advanced,
             origin: .cloudNew,
+            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
         ),
         Post(
             title: "@escaping closures in Swift",
@@ -93,6 +97,7 @@ struct DevData {
             postDate: Date.from(year: 2021, month: 04, day: 20),
             studyLevel: .middle,
             origin: .cloudNew,
+            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
         ),
         Post(
             title: "[weak self] in Swift",
@@ -106,8 +111,9 @@ struct DevData {
             postDate: Date.from(year: 2021, month: 04, day: 18),
             studyLevel: .middle,
             origin: .cloudNew,
+            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
         ),
-        // MARK: 2026-02-18
+        // MARK: 2026-02-13
 //        Post(
 //            title: "SwiftUI Continued Learning",
 //            intro: """
@@ -119,7 +125,8 @@ struct DevData {
 //            postPlatform: .youtube,
 //            postDate: Date.from(year: 2021, month: 3, day: 29),
 //            studyLevel: .middle,
-//            origin: .cloudNew
+//            origin: .cloudNew,
+//            date: Date.from(year: 2026, month: 02, day: 13) ?? Date()
 //        ),
 //        Post(
 //            title: "Swift Concurrency",
@@ -131,7 +138,8 @@ struct DevData {
 //            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphr2Dl4sY4rS9PLzPdyi8PM",
 //            postDate: Date.from(year: 2022, month: 5, day: 18),
 //            studyLevel: .middle,
-//            origin: .cloudNew
+//            origin: .cloudNew,
+//            date: Date.from(year: 2026, month: 02, day: 13) ?? Date()
 //        ),
         // MARK: 2026-02-06
 //        Post(
@@ -144,7 +152,8 @@ struct DevData {
 //            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiLvzZFJI6rVIBtdolrJBVB",
 //            postPlatform: .youtube,
 //            postDate: Date.from(year: 2023, month: 7, day: 14),
-//            origin: .cloudNew
+//            origin: .cloudNew,
+//            date: Date.from(year: 2026, month: 02, day: 06) ?? Date()
 //        ),
 //        Post(
 //            title: "Swift for Complete Beginners",
@@ -156,7 +165,8 @@ struct DevData {
 //            urlString: "https://www.youtube.com/playlist?list=PLuoeXyslFTuaYpVr3S9wG6PkIvYn_yHbg",
 //            postPlatform: .youtube,
 //            postDate: Date.from(year: 2021, month: 10, day: 14),
-//            origin: .cloudNew
+//            origin: .cloudNew,
+//            date: Date.from(year: 2026, month: 02, day: 06) ?? Date()
 //        ),
 //
 //        Post(
@@ -170,7 +180,8 @@ struct DevData {
 //            postPlatform: .youtube,
 //            postDate: Date.from(year: 2023, month: 8, day: 13),
 //            studyLevel: .beginner,
-//            origin: .cloudNew
+//            origin: .cloudNew,
+//            date: Date.from(year: 2026, month: 02, day: 06) ?? Date()
 //        ),
 //        Post(
 //            title: "SwiftUI Bootcamp",
@@ -183,7 +194,8 @@ struct DevData {
 //            postPlatform: .youtube,
 //            postDate: Date.from(year: 2021, month: 2, day: 3),
 //            studyLevel: .beginner,
-//            origin: .cloudNew
+//            origin: .cloudNew,
+//            date: Date.from(year: 2026, month: 02, day: 06) ?? Date()
 //        ),
 //        Post(
 //            title: "SwiftUI Todo List",
@@ -196,7 +208,8 @@ struct DevData {
 //            postPlatform: .youtube,
 //            postDate: Date.from(year: 2021, month: 3, day: 20),
 //            studyLevel: .beginner,
-//            origin: .cloudNew
+//            origin: .cloudNew,
+//            date: Date.from(year: 2026, month: 02, day: 06) ?? Date()
 //        ),
 //        Post(
 //            title: "Git & Source Control",
@@ -209,7 +222,8 @@ struct DevData {
 //            postPlatform: .youtube,
 //            postDate: Date.from(year: 2024, month: 5, day: 20),
 //            studyLevel: .beginner,
-//            origin: .cloudNew
+//            origin: .cloudNew,
+//            date: Date.from(year: 2026, month: 02, day: 06) ?? Date()
 //        ),
 //        Post(
 //            title: "SwiftUI Map App",
@@ -222,7 +236,8 @@ struct DevData {
 //            postPlatform: .youtube,
 //            postDate: Date.from(year: 2021, month: 12, day: 29),
 //            studyLevel: .beginner,
-//            origin: .cloudNew
+//            origin: .cloudNew,
+//            date: Date.from(year: 2026, month: 02, day: 06) ?? Date()
 //        )
         
         

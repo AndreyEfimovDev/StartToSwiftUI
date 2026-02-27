@@ -93,7 +93,6 @@ extension PostsViewModel {
 #warning("Delete this func before deployment to App Store")
     func uploadDevDataPostsToFirebase() async {
         await fbPostsManager.uploadDevDataPostsToFirebase()
-        FBAnalyticsManager.shared.logEvent(name: "dev_data_uploaded")
     }
 
 }

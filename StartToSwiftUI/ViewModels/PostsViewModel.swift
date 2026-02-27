@@ -506,11 +506,10 @@ final class PostsViewModel: ObservableObject {
             return 0
         }
         
-        let datePrefix = DateFormatter.yyyyMMdd.string(from: Date())
-
         for post in newPosts {
+            let datePrefix = DateFormatter.yyyyMMdd.string(from: post.date)
             let trimmedUUID = String(post.id.suffix(from: post.id.index(post.id.startIndex, offsetBy: 11)))
-            post.id = "\(datePrefix)-\(trimmedUUID)"
+            post.id = "\(datePrefix)_\(trimmedUUID)"
             dataSource.insert(post)
         }
         
