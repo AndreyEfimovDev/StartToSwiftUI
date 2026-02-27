@@ -52,10 +52,10 @@ struct PostDetailsView: View {
     var body: some View {
         GeometryReader { proxy in
             VStack {
-                    postContent(for: post)
-                        .navigationBarBackButtonHidden(true)
-                        .navigationBarTitleDisplayMode(.inline)
-                        .toolbar { toolbar(for: post) }
+                postContent(for: post)
+                    .navigationBarBackButtonHidden(true)
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar { toolbar(for: post) }
             }
             .onAppear {
                 FBAnalyticsManager.shared.logScreen(name: "PostDetailsView")
@@ -231,7 +231,7 @@ struct PostDetailsView: View {
         
         ToolbarItemGroup(placement: .topBarTrailing) {
             CircleStrokeButtonView(
-                iconName: post.favoriteChoice == .yes ? "heart.slash" : "heart",
+                iconName: post.favoriteChoice == .yes ? "star.slash" : "star",
                 iconFont: .headline,
                 isShownCircle: false
             ) {

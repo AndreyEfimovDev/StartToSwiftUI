@@ -59,23 +59,23 @@ struct Functionality: View {
 
                **Icons**
                *Drafts*
-               \(Image(systemName: "square.stack.3d.up")) - draft
+                \(Image(systemName: "square.stack.3d.up")) - draft
                *Favourite choice*
-               \(FavoriteChoice.yes.icon) - yes
-               \(FavoriteChoice.no.icon) - no
+                \(FavoriteChoice.yes.icon) - yes
+                \(FavoriteChoice.no.icon) - no
                *Original source*
-               \(PostOrigin.local.icon) - created locally
-               \(PostOrigin.cloud.icon) - loaded from cloud (curated collection)
-               \(PostOrigin.cloudNew.icon) - recently loaded from cloud
+                \(PostOrigin.local.icon) - created locally
+                \(PostOrigin.cloud.icon) - loaded from cloud (curated collection)
+                \(PostOrigin.cloudNew.icon) - recently loaded from cloud
                *Study progress*
-               \(StudyProgress.added.icon) - added
-               \(StudyProgress.started.icon) - started 
-               \(StudyProgress.studied.icon) - learnt
-               \(StudyProgress.practiced.icon) - practiced
+                \(StudyProgress.added.icon) - added
+                \(StudyProgress.started.icon) - started 
+                \(StudyProgress.studied.icon) - learnt
+                \(StudyProgress.practiced.icon) - practiced
                *Rating*
-               \(PostRating.good.icon) - good
-               \(PostRating.great.icon) - great
-               \(PostRating.excellent.icon) - excellent               
+                \(PostRating.good.icon) - good
+                \(PostRating.great.icon) - great
+                \(PostRating.excellent.icon) - excellent               
                """)
             .multilineTextAlignment(.leading)
             .textFormater()
