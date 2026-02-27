@@ -179,7 +179,7 @@ struct PreferencesView: View {
                     noticevm.isNotificationOn ? Color.mycolor.myBlue : Color.mycolor.mySecondary
                 )
             Toggle(
-                noticevm.isNotificationOn ? "Notice message badge On" : "Notice message badge Off",
+                noticevm.isNotificationOn ? "New notices badge On" : "New notices badge Off",
                 isOn: $noticevm.isNotificationOn
             ).tint(Color.mycolor.myBlue)
         }
@@ -217,7 +217,7 @@ struct PreferencesView: View {
     private var archivedMaterials: some View {
         Group {
             if vm.hasHidden || vm.hasDeleted {
-                Button("Archived materials") {
+                Button("Archived materials (\(vm.hiddenCount + vm.deletedCount))") {
                     coordinator.pushModal(.archivedPosts)
                 }
                 .customListRowStyle(

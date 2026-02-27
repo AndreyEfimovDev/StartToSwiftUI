@@ -114,6 +114,14 @@ final class PostsViewModel: ObservableObject {
         allPosts.contains { $0.status == .deleted }
     }
     
+    var hiddenCount: Int {
+        allPosts.filter { $0.status == .hidden }.count
+    }
+
+    var deletedCount: Int {
+        allPosts.filter { $0.status == .deleted }.count
+    }
+
     var cloudPostsCount: Int {
         allPosts.filter { $0.origin == .cloud || $0.origin == .cloudNew }.count
     }
