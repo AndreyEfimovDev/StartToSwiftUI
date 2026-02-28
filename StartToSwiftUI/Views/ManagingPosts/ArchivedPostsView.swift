@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ArchivedPostsView: View {
     
@@ -55,12 +56,16 @@ struct ArchivedPostsView: View {
                         emptyView(text: "No Hidden Materials", subText: "")
                     } else {
                         List { hiddenSection }
+                            .scrollContentBackground(.hidden)
+                            .background(Color.mycolor.myPurple.opacity(0.10))
                     }
                 } else {
                     if deletedPosts.isEmpty {
                         emptyView(text: "No Deleted Materials", subText: "")
                     } else {
                         List { deletedSection }
+                            .scrollContentBackground(.hidden)
+                            .background(Color.mycolor.myOrange.opacity(0.10))
                     }
                 }
             }
@@ -181,5 +186,25 @@ extension ArchivedPostsView {
 
 
 #Preview {
-    ArchivedPostsView()
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppSyncState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+    let context = ModelContext(container)
+    
+    let hiddenPost = Post(title: "Hidden Post", intro: "Some intro", author: "Author")
+    hiddenPost.status = .hidden
+    context.insert(hiddenPost)
+    
+    let deletedPost = Post(title: "Deleted Post", intro: "Some intro", author: "Author")
+    deletedPost.status = .deleted
+    context.insert(deletedPost)
+    
+    let vm = PostsViewModel(modelContext: context)
+    vm.loadPostsFromSwiftData()
+    
+    return ArchivedPostsView()
+        .modelContainer(container)
+        .environmentObject(vm)
+        .environmentObject(AppCoordinator())
 }

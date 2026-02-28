@@ -176,12 +176,10 @@ struct PreferencesView: View {
             Image(systemName: "message.badge")
                 .frame(width: iconSize)
                 .foregroundStyle(
-                    noticevm.isNotificationOn ? Color.mycolor.myBlue : Color.mycolor.mySecondary
+                    noticevm.isShowBadgeForNewNotices ? Color.mycolor.myBlue : Color.mycolor.mySecondary
                 )
-            Toggle(
-                noticevm.isNotificationOn ? "New notices badge On" : "New notices badge Off",
-                isOn: $noticevm.isNotificationOn
-            ).tint(Color.mycolor.myBlue)
+            Toggle("Show badge for new notices", isOn: $noticevm.isShowBadgeForNewNotices)
+                .tint(Color.mycolor.myBlue)
         }
     }
     
@@ -190,12 +188,10 @@ struct PreferencesView: View {
             Image(systemName: "bell") // speaker.wave.2 speaker.slash
                 .frame(width: iconSize)
                 .foregroundStyle(
-                    noticevm.isSoundNotificationOn ? Color.mycolor.myBlue : Color.mycolor.mySecondary
+                    noticevm.isPlaySoundForNewNotices ? Color.mycolor.myBlue : Color.mycolor.mySecondary
                 )
-            Toggle(
-                noticevm.isSoundNotificationOn ? "One-time sound On" : "One-time sound Off",
-                isOn: $noticevm.isSoundNotificationOn
-            ).tint(Color.mycolor.myBlue)
+            Toggle("Play sound for new notices", isOn: $noticevm.isPlaySoundForNewNotices)
+                .tint(Color.mycolor.myBlue)
         }
     }
         

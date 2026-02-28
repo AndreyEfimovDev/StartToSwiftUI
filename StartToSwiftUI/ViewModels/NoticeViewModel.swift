@@ -21,8 +21,8 @@ final class NoticeViewModel: ObservableObject {
     @Published var notices: [Notice] = []
     @Published var hasUnreadNotices: Bool = false
     @Published var shouldAnimateNoticeButton = false
-    @AppStorage("isNotificationOn") var isNotificationOn: Bool = true
-    @AppStorage("isSoundNotificationOn") var isSoundNotificationOn: Bool = true
+    @AppStorage("isNotificationOn") var isShowBadgeForNewNotices: Bool = true
+    @AppStorage("isSoundNotificationOn") var isPlaySoundForNewNotices: Bool = true
     
     @Published var errorMessage: String?
     @Published var showErrorMessageAlert: Bool = false
@@ -173,7 +173,7 @@ final class NoticeViewModel: ObservableObject {
         if let appStateManager {
             appStateManager.markUserNotNotifiedBySound()
             FBCrashManager.shared.addLog("loadNoticesFromFirebase: user notified by sound status: \(appStateManager.getUserNotifiedBySoundStatus())")
-            if isNotificationOn {
+            if isShowBadgeForNewNotices {
                 sendLocalNotification(count: newNotices.count)
             }
         }
@@ -321,7 +321,7 @@ final class NoticeViewModel: ObservableObject {
     // MARK: - Notifications
     /// Send local notification of new notices
     private func sendLocalNotification(count: Int) {
-        guard isNotificationOn, isSoundNotificationOn else { return }
+        guard isShowBadgeForNewNotices, isPlaySoundForNewNotices else { return }
         hapticManager.notification(type: .success)
         log("🍉 🔔 Local notification sent: \(count) new", level: .info)
     }
@@ -331,7 +331,7 @@ final class NoticeViewModel: ObservableObject {
     func playSoundNotificationIfNeeded() {
         guard let appStateManager,
               hasUnreadNotices,
-              isNotificationOn,
+              isShowBadgeForNewNotices,
               appStateManager.getUserNotifiedBySoundStatus() else {
             return
         }
@@ -339,7 +339,7 @@ final class NoticeViewModel: ObservableObject {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self else { return }
             
-            if self.isSoundNotificationOn {
+            if self.isPlaySoundForNewNotices {
                 AudioServicesPlaySystemSound(1013)
                 appStateManager.markUserNotifiedBySound()
             }
