@@ -59,7 +59,9 @@ struct ArchivedPostsView: View {
                             List { hiddenSection }
                                 .scrollContentBackground(.hidden)
                         }
-                    }.background(Color.mycolor.myPurple.opacity(0.15))
+                    }.background(
+                        Color.mycolor.myPurple.opacity(0.3)
+                    )
                 } else {
                     Group {
                         if deletedPosts.isEmpty {
@@ -69,7 +71,9 @@ struct ArchivedPostsView: View {
                                 .scrollContentBackground(.hidden)
                         }
                     }
-                    .background(Color.mycolor.myOrange.opacity(0.15))
+                    .background(
+                        Color.mycolor.myRed.opacity(0.3)
+                    )
                 }
             }
             .disabled(disableView)

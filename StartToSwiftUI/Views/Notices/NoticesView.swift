@@ -44,11 +44,11 @@ struct NoticesView: View {
                         coordinator.pushModal(.noticeDetails(noticeId: notice.id))
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        Button("Delete", systemImage: "archivebox") {
+                        Button("Erase", systemImage: "trash") {
                             withAnimation {
-                                noticevm.deleteNotice(notice)
+                                noticevm.deleteErase(notice)
                             }
-                        }.tint(PostStatus.deleted.color)
+                        }.tint(Color.mycolor.myRed)
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: false) {
                         Button(notice.isRead ? "Unread" : "Read", systemImage: notice.isRead ?  "eye.slash.circle" : "eye.circle") {

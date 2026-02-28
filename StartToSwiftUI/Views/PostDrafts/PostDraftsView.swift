@@ -39,10 +39,13 @@ struct PostDraftsView: View {
                         coordinator.pushModal(.editPost(post))
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        Button("Hide", systemImage: "eye.slash") {
+                            vm.setPostHidden(post)
+                        }.tint(PostStatus.hidden.color)
+                        
                         Button("Delete", systemImage: "archivebox") {
                             vm.setPostDeleted(post)
-                            hapticManager.notification(type: .success)
-                        }.tint(Color.mycolor.myOrange)
+                        }.tint(PostStatus.deleted.color)
                     }
             }
         }

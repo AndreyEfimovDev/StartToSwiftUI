@@ -90,7 +90,7 @@ struct HomeView: View {
                 noticevm.loadNoticesFromSwiftData()
                 vm.updateWidgetData()
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                noticevm.playSoundNotificationIfNeeded()
+//                noticevm.playSoundNotificationIfNeeded()
                 await noticevm.importNoticesFromFirebase()
             }
         }

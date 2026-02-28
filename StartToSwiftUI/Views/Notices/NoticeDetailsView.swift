@@ -80,7 +80,7 @@ struct NoticeDetailsView: View {
                 isShownCircle: false
             ) {
                 withAnimation {
-                    noticevm.deleteNotice(notice)
+                    noticevm.deleteErase(notice)
                     coordinator.popModal()
                 }
             }

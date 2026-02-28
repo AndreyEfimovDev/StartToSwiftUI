@@ -22,7 +22,7 @@ final class NoticeViewModel: ObservableObject {
     @Published var hasUnreadNotices: Bool = false
     @Published var shouldAnimateNoticeButton = false
     @AppStorage("isNotificationOn") var isShowBadgeForNewNotices: Bool = true
-    @AppStorage("isSoundNotificationOn") var isPlaySoundForNewNotices: Bool = true
+//    @AppStorage("isSoundNotificationOn") var isPlaySoundForNewNotices: Bool = false
     
     @Published var errorMessage: String?
     @Published var showErrorMessageAlert: Bool = false
@@ -171,8 +171,7 @@ final class NoticeViewModel: ObservableObject {
         
         // Updating and saving the state
         if let appStateManager {
-            appStateManager.markUserNotNotifiedBySound()
-            FBCrashManager.shared.addLog("loadNoticesFromFirebase: user notified by sound status: \(appStateManager.getUserNotifiedBySoundStatus())")
+//            appStateManager.markUserNotNotifiedBySound()
             if isShowBadgeForNewNotices {
                 sendLocalNotification(count: newNotices.count)
             }
@@ -268,9 +267,9 @@ final class NoticeViewModel: ObservableObject {
     }
     
     // MARK: - Delete Notice
-    func deleteNotice(_ notice: Notice?) {
+    func deleteErase(_ notice: Notice?) {
         guard let notice else {
-            handleError(nil, message: "Notice to delete is nil")
+            handleError(nil, message: "Notice to erase is nil")
             return
         }
         dataSource.delete(notice)
@@ -321,36 +320,36 @@ final class NoticeViewModel: ObservableObject {
     // MARK: - Notifications
     /// Send local notification of new notices
     private func sendLocalNotification(count: Int) {
-        guard isShowBadgeForNewNotices, isPlaySoundForNewNotices else { return }
+        guard isShowBadgeForNewNotices else { return }
         hapticManager.notification(type: .success)
         log("🍉 🔔 Local notification sent: \(count) new", level: .info)
     }
     
     
     /// One-time sound alert to the user when new notifications appear
-    func playSoundNotificationIfNeeded() {
-        guard let appStateManager,
-              hasUnreadNotices,
-              isShowBadgeForNewNotices,
-              appStateManager.getUserNotifiedBySoundStatus() else {
-            return
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self else { return }
-            
-            if self.isPlaySoundForNewNotices {
-                AudioServicesPlaySystemSound(1013)
-                appStateManager.markUserNotifiedBySound()
-            }
-            
-            // Notify View about animation (через Publisher или callback)
-            self.shouldAnimateNoticeButton = true
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                self.shouldAnimateNoticeButton = false
-            }
-        }
-    }
+//    func playSoundNotificationIfNeeded() {
+//        guard let appStateManager,
+//              hasUnreadNotices,
+//              isShowBadgeForNewNotices,
+//              appStateManager.getUserNotifiedBySoundStatus() else {
+//            return
+//        }
+//        
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+//            guard let self else { return }
+//            
+//            if self.isPlaySoundForNewNotices {
+//                AudioServicesPlaySystemSound(1013)
+//                appStateManager.markUserNotifiedBySound()
+//            }
+//            
+//            // Notify View about animation (через Publisher или callback)
+//            self.shouldAnimateNoticeButton = true
+//            
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+//                self.shouldAnimateNoticeButton = false
+//            }
+//        }
+//    }
 
 }
