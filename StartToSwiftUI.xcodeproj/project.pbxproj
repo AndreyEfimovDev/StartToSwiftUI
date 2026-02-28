@@ -478,7 +478,8 @@
 		473436702F48A11300CF00FA /* Firebase */ = {
 			isa = PBXGroup;
 			children = (
-				473436832F4B05BB00CF00FA /* Firestore */,
+				473436862F4B06B900CF00FA /* FirestoreModels */,
+				473436872F4B06C300CF00FA /* FirestoreManagers */,
 				473436802F4B059200CF00FA /* Crashlytics */,
 				473436882F4B24DA00CF00FA /* Performance */,
 				4734368B2F4B2A0C00CF00FA /* Analytics */,
@@ -503,31 +504,22 @@
 			path = Crashlytics;
 			sourceTree = "<group>";
 		};
-		473436832F4B05BB00CF00FA /* Firestore */ = {
-			isa = PBXGroup;
-			children = (
-				473436862F4B06B900CF00FA /* Models */,
-				473436872F4B06C300CF00FA /* Managers */,
-			);
-			path = Firestore;
-			sourceTree = "<group>";
-		};
-		473436862F4B06B900CF00FA /* Models */ = {
+		473436862F4B06B900CF00FA /* FirestoreModels */ = {
 			isa = PBXGroup;
 			children = (
 				473436772F49BC1B00CF00FA /* FBPostModel.swift */,
 				473436752F48F18200CF00FA /* FBNoticeModel.swift */,
 			);
-			path = Models;
+			path = FirestoreModels;
 			sourceTree = "<group>";
 		};
-		473436872F4B06C300CF00FA /* Managers */ = {
+		473436872F4B06C300CF00FA /* FirestoreManagers */ = {
 			isa = PBXGroup;
 			children = (
 				473436792F49C49000CF00FA /* FBPostsManager.swift */,
 				473436732F48C96300CF00FA /* FBNoticeManager.swift */,
 			);
-			path = Managers;
+			path = FirestoreManagers;
 			sourceTree = "<group>";
 		};
 		473436882F4B24DA00CF00FA /* Performance */ = {
