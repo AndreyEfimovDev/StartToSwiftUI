@@ -25,6 +25,7 @@
 - Analyse your learning history, review statistics by difficulty
 - Quick access to your frequently used favourite materials
 - Advanced search and filtering capabilities
+- Hide materials, move them to Deleted, or restore back to Active anytime
 - Home and Lock Screen widgets keep your progress visible — no need to open the app
 
 ### Sync & Backup
