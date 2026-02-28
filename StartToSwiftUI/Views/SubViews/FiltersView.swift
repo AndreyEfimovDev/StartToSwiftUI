@@ -34,8 +34,6 @@ struct FiltersView: View {
 
             // Filters section
                 VStack(spacing: 0) {
-#warning("Remove before deployment to App Store")
-                    //                categoryFilter
                     studyLevelFilter
                     favouriteFilter
                     typeFilter
@@ -223,7 +221,6 @@ struct FiltersView: View {
 
     // MARK: Buttons
     private var applyFiltersButton: some View {
-#warning("Delete the line with 'category' before deployment to App Store")
         ClearCupsuleButton(
             primaryTitle: "Apply",
             primaryTitleColor: Color.mycolor.myBlue) {
@@ -234,7 +231,6 @@ struct FiltersView: View {
                     "platform": vm.selectedPlatform?.rawValue ?? "",
                     "year": vm.selectedYear ?? "",
                     "sort": vm.selectedSortOption.rawValue
-//                    "category": vm.selectedCategory ?? ""
                 ])
                 isFilterButtonPressed.toggle()
             }
@@ -272,15 +268,7 @@ struct FiltersView: View {
     
 }
 
-#Preview {
-    
-    let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppSyncState.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-    )
-    
-    let context = ModelContext(container)
-    
+#Preview {    
     let vm = PostsViewModel(
         dataSource: MockPostsDataSource(posts: PreviewData.samplePosts)
     )

@@ -172,11 +172,8 @@ final class NoticeViewModel: ObservableObject {
         }
         
         // Updating and saving the state
-        if let appStateManager {
-//            appStateManager.markUserNotNotifiedBySound()
-            if isShowBadgeForNewNotices {
-                sendLocalNotification(count: newNotices.count)
-            }
+        if isShowBadgeForNewNotices {
+            sendLocalNotification(count: newNotices.count)
         }
         
         saveContext()

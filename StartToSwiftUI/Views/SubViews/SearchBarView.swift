@@ -7,7 +7,6 @@
 
 import SwiftUI
 import SwiftData
-//import Speech
 
 struct SearchBarView: View {
     
@@ -71,10 +70,6 @@ struct SearchBarView: View {
                 vm.searchText = ""
             }
     }
-//    
-//    private func removeDoubleSpaces(_ string: String) -> String {
-//        return string.replacingOccurrences(of: "  ", with: " ")
-//    }
 }
 
 #Preview {

@@ -90,7 +90,6 @@ struct HomeView: View {
                 noticevm.loadNoticesFromSwiftData()
                 vm.updateWidgetData()
                 vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-//                noticevm.playSoundNotificationIfNeeded()
                 await noticevm.importNoticesFromFirebase()
             }
         }
@@ -380,14 +379,6 @@ struct HomeView: View {
             description: Text("Check the spelling or try a new search.")
         )
     }
-#warning("Delete this func before deployment to App Store")
-//    private func postsForCategory(_ category: String?) -> [Post] {
-//        guard let category = category else {
-//            return vm.filteredPosts
-//        }
-//        return vm.filteredPosts.filter { $0.category == category }
-//    }
-    
 }
 
 private struct HomeViewPreview: View {
