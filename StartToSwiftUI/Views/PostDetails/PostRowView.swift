@@ -44,6 +44,7 @@ struct PostRowView: View {
         }
         .padding(8)
         .padding(.horizontal, 8)
+        .frame(height: 100)
         .background(.black.opacity(0.001))
         
     }

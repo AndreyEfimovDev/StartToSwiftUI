@@ -115,7 +115,6 @@ struct ImportPostsFromCloudView: View {
     
     /// Downloading from a cloud service
     private func loadFromCloudService() async {
-//        let success = await vm.importPostsFromCloud()
         let success = await vm.importPostsFromFirebase()
 
         isInProgress = false

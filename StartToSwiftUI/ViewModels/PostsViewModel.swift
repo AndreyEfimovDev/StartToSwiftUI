@@ -114,6 +114,14 @@ final class PostsViewModel: ObservableObject {
         allPosts.contains { $0.status == .deleted }
     }
     
+    var hiddenCount: Int {
+        allPosts.filter { $0.status == .hidden }.count
+    }
+
+    var deletedCount: Int {
+        allPosts.filter { $0.status == .deleted }.count
+    }
+
     var cloudPostsCount: Int {
         allPosts.filter { $0.origin == .cloud || $0.origin == .cloudNew }.count
     }
@@ -498,11 +506,10 @@ final class PostsViewModel: ObservableObject {
             return 0
         }
         
-        let datePrefix = DateFormatter.yyyyMMdd.string(from: Date())
-
         for post in newPosts {
+            let datePrefix = DateFormatter.yyyyMMdd.string(from: post.date)
             let trimmedUUID = String(post.id.suffix(from: post.id.index(post.id.startIndex, offsetBy: 11)))
-            post.id = "\(datePrefix)-\(trimmedUUID)"
+            post.id = "\(datePrefix)_\(trimmedUUID)"
             dataSource.insert(post)
         }
         

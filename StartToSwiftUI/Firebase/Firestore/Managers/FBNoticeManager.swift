@@ -15,7 +15,7 @@ actor FBNoticesManager: FBNoticesManagerProtocol {
     
     private let noticesCollection: CollectionReference = Firestore.firestore().collection("notices")
     
-    func getAllNotices(after date: Date) async -> [FBNoticeModel] {
+    func fetchFBNotices(after date: Date) async -> [FBNoticeModel] {
         do {
             let snapshot = try await noticesCollection
                 .whereField("notice_date", isGreaterThan: Timestamp(date: date))
@@ -33,5 +33,5 @@ actor FBNoticesManager: FBNoticesManagerProtocol {
 
 // MARK: - Firestore Protocol
 protocol FBNoticesManagerProtocol {
-    func getAllNotices(after: Date) async -> [FBNoticeModel]
+    func fetchFBNotices(after: Date) async -> [FBNoticeModel]
 }

@@ -55,10 +55,10 @@ struct PreferencesView: View {
             Section(header: sectionHeader("Achievements")) {
                 achievements
             }
-            Section(header: sectionHeader("Notices")) {
-                noticeMessages
-                notificationToggle
-                soundNotificationToggle
+            if noticevm.notices.count > 0 {
+                Section(header: sectionHeader("Notices")) {
+                    noticeMessages
+                }
             }
             Section(header: sectionHeader("Manage materials (\(vm.allPosts.count))")) {
                 postDrafts
@@ -157,47 +157,39 @@ struct PreferencesView: View {
     // MARK: - Notices
     
     private var noticeMessages: some View {
-        Group {
-            if noticevm.notices.count > 0 {
-                Button("Notices (\(noticevm.unreadCount)/\(noticevm.notices.count))") {
-                    coordinator.pushModal(.notices)
-                }
-                .accessibilityIdentifier("MessagesButton")
-                .customListRowStyle(
-                    iconName: noticevm.unreadCount == 0 ? "envelope" : "envelope.badge.plus",
-                    iconWidth: iconSize
-                )
-            }
+        Button("Messages  (\(noticevm.unreadCount)/\(noticevm.notices.count))") {
+            coordinator.pushModal(.notices)
         }
+        .accessibilityIdentifier("MessagesButton")
+        .customListRowStyle(
+            iconName: "message",
+            iconWidth: iconSize
+        )
     }
     
-    private var notificationToggle: some View {
-        HStack {
-            Image(systemName: "message.badge")
-                .frame(width: iconSize)
-                .foregroundStyle(
-                    noticevm.isNotificationOn ? Color.mycolor.myBlue : Color.mycolor.mySecondary
-                )
-            Toggle(
-                noticevm.isNotificationOn ? "Notice message badge On" : "Notice message badge Off",
-                isOn: $noticevm.isNotificationOn
-            ).tint(Color.mycolor.myBlue)
-        }
-    }
+//    private var notificationToggle: some View {
+//        HStack {
+//            Image(systemName: "message.badge")
+//                .frame(width: iconSize)
+//                .foregroundStyle(
+//                    noticevm.isShowBadgeForNewNotices ? Color.mycolor.myBlue : Color.mycolor.mySecondary
+//                )
+//            Toggle("Show badge for new notices", isOn: $noticevm.isShowBadgeForNewNotices)
+//                .tint(Color.mycolor.myBlue)
+//        }
+//    }
     
-    private var soundNotificationToggle: some View {
-        HStack {
-            Image(systemName: "bell") // speaker.wave.2 speaker.slash
-                .frame(width: iconSize)
-                .foregroundStyle(
-                    noticevm.isSoundNotificationOn ? Color.mycolor.myBlue : Color.mycolor.mySecondary
-                )
-            Toggle(
-                noticevm.isSoundNotificationOn ? "One-time sound On" : "One-time sound Off",
-                isOn: $noticevm.isSoundNotificationOn
-            ).tint(Color.mycolor.myBlue)
-        }
-    }
+//    private var soundNotificationToggle: some View {
+//        HStack {
+//            Image(systemName: "bell") // speaker.wave.2 speaker.slash
+//                .frame(width: iconSize)
+//                .foregroundStyle(
+//                    noticevm.isPlaySoundForNewNotices ? Color.mycolor.myBlue : Color.mycolor.mySecondary
+//                )
+//            Toggle("Play sound for new notices", isOn: $noticevm.isPlaySoundForNewNotices)
+//                .tint(Color.mycolor.myBlue)
+//        }
+//    }
         
     // MARK: - Materials Management
   
@@ -217,7 +209,7 @@ struct PreferencesView: View {
     private var archivedMaterials: some View {
         Group {
             if vm.hasHidden || vm.hasDeleted {
-                Button("Archived materials") {
+                Button("Archived materials (\(vm.hiddenCount + vm.deletedCount))") {
                     coordinator.pushModal(.archivedPosts)
                 }
                 .customListRowStyle(

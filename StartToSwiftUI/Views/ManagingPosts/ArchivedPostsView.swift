@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ArchivedPostsView: View {
     
@@ -45,23 +46,34 @@ struct ArchivedPostsView: View {
                     selection: $selectedTab,
                     allItems: tabs,
                     titleForCase: { $0.displayName },
-                    selectedFont: .callout
+                    selectedFont: .headline
                 )
                 .padding()
                 .padding(.horizontal)
 
                 if selectedTab == .hidden {
-                    if hiddenPosts.isEmpty {
-                        emptyView(text: "No Hidden Materials", subText: "")
-                    } else {
-                        List { hiddenSection }
-                    }
+                    Group {
+                        if hiddenPosts.isEmpty {
+                            emptyView(text: "No Hidden Materials", subText: "")
+                        } else {
+                            List { hiddenSection }
+                                .scrollContentBackground(.hidden)
+                        }
+                    }.background(
+                        Color.mycolor.myPurple.opacity(0.3)
+                    )
                 } else {
-                    if deletedPosts.isEmpty {
-                        emptyView(text: "No Deleted Materials", subText: "")
-                    } else {
-                        List { deletedSection }
+                    Group {
+                        if deletedPosts.isEmpty {
+                            emptyView(text: "No Deleted Materials", subText: "")
+                        } else {
+                            List { deletedSection }
+                                .scrollContentBackground(.hidden)
+                        }
                     }
+                    .background(
+                        Color.mycolor.myRed.opacity(0.3)
+                    )
                 }
             }
             .disabled(disableView)
@@ -78,7 +90,6 @@ struct ArchivedPostsView: View {
     private var deleteConfirmationOverlay: some View {
         if isShowingDeleteConfirmation {
             postDeletionConfirmation
-                .transition(.move(edge: .bottom))
         }
     }
     
@@ -145,10 +156,10 @@ extension ArchivedPostsView {
         ForEach(hiddenPosts) { post in
             PostRowView(post: post)
                 .swipeActions(edge: .trailing) {
-                    Button("Delete", systemImage: "archivebox") { // archivebox trash
+                    Button("Delete", systemImage: "archivebox") {
                         vm.setPostDeleted(post)
                     }
-                    .tint(Color.mycolor.myOrange)
+                    .tint(PostStatus.deleted.color)
                     
                     Button("Restore", systemImage: "arrow.uturn.left") {
                         vm.setPostActive(post)
@@ -181,5 +192,25 @@ extension ArchivedPostsView {
 
 
 #Preview {
-    ArchivedPostsView()
+    let container = try! ModelContainer(
+        for: Post.self, Notice.self, AppSyncState.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+    let context = ModelContext(container)
+    
+    let hiddenPost = Post(title: "Hidden Post", intro: "Some intro", author: "Author")
+    hiddenPost.status = .hidden
+    context.insert(hiddenPost)
+    
+    let deletedPost = Post(title: "Deleted Post", intro: "Some intro", author: "Author")
+    deletedPost.status = .deleted
+    context.insert(deletedPost)
+    
+    let vm = PostsViewModel(modelContext: context)
+    vm.loadPostsFromSwiftData()
+    
+    return ArchivedPostsView()
+        .modelContainer(container)
+        .environmentObject(vm)
+        .environmentObject(AppCoordinator())
 }

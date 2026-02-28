@@ -26,7 +26,7 @@ final class MockFBPostsManager: FBPostsManagerProtocol {
     }
     
     // MARK: - Protocol Implementation
-    func getAllPosts(after: Date?) async -> [FBPostModel] {
+    func fetchFBPosts(after: Date?) async -> [FBPostModel] {
         fetchCallCount += 1
         if shouldSimulateDelay {
             try? await Task.sleep(nanoseconds: 500_000_000)

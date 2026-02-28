@@ -15,7 +15,7 @@ final class AppSyncState {
     var id: String = "app_state_singleton" // Always one copy
     
     // Set the flag to true to notify the user with a sound once about new notices if they appear
-    var isUserNotNotifiedBySound: Bool = true
+//    var isUserNotNotifiedBySound: Bool = true
     // Date of last notices
     var latestNoticeDate: Date?
 
@@ -33,7 +33,7 @@ final class AppSyncState {
         id: String = "app_state_singleton",
         
         lastNoticeDate: Date? = nil,
-        isUserNotNotifiedBySound: Bool = true,
+//        isUserNotNotifiedBySound: Bool = true,
         
         lastPostsFBUpdateDate: Date? = nil,
 
@@ -43,7 +43,7 @@ final class AppSyncState {
     ) {
         self.id = id
         
-        self.isUserNotNotifiedBySound = isUserNotNotifiedBySound
+//        self.isUserNotNotifiedBySound = isUserNotNotifiedBySound
         self.latestNoticeDate = lastNoticeDate
 
         self.lastPostsFBUpdateDate = lastPostsFBUpdateDate
