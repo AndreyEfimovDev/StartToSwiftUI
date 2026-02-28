@@ -18,7 +18,7 @@ struct NoticeRowView: View {
                 .font(.caption2)
                 .padding(.top, 4)
             
-            HStack(alignment: .top) {
+            HStack {
                 Text(notice.title)
                     .font(.body)
                     .minimumScaleFactor(0.75)
