@@ -43,38 +43,21 @@ struct NoticesView: View {
                     .onTapGesture {
                         coordinator.pushModal(.noticeDetails(noticeId: notice.id))
                     }
-                // right side swipe action buttonss
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        Button {
+                        Button("Delete", systemImage: "archivebox") {
                             withAnimation {
                                 noticevm.deleteNotice(notice)
-                                hapticManager.notification(type: .success)
                             }
-                        } label: {
-                            VStack {
-                                Image(systemName: "trash")
-                                Text("Delete")
-                                    .font(.caption2)
-                            }
-                        }
-                        .tint(Color.mycolor.myRed)
+                        }.tint(PostStatus.deleted.color)
                     }
-                // left side swipe action buttons
                     .swipeActions(edge: .leading, allowsFullSwipe: false) {
                         Button(notice.isRead ? "Unread" : "Read", systemImage: notice.isRead ?  "eye.slash.circle" : "eye.circle") {
                             noticevm.toggleReadStatus(notice)
                         }
                         .tint(notice.isRead ? Color.mycolor.mySecondary : Color.mycolor.myBlue)
                     }
-            } // ForEach
-//            .listRowBackground(Color.clear)
-//            .listRowSeparatorTint(Color.mycolor.myAccent.opacity(0.35))
-//            .listRowSeparator(.hidden, edges: [.top])
-//            .listRowInsets(
-//                EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-//            )
+            }
         }
-//        .listStyle(.plain)
     }
     
     @ToolbarContentBuilder

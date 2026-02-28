@@ -46,27 +46,30 @@ struct ArchivedPostsView: View {
                     selection: $selectedTab,
                     allItems: tabs,
                     titleForCase: { $0.displayName },
-                    selectedFont: .callout
+                    selectedFont: .headline
                 )
                 .padding()
                 .padding(.horizontal)
 
                 if selectedTab == .hidden {
-                    if hiddenPosts.isEmpty {
-                        emptyView(text: "No Hidden Materials", subText: "")
-                    } else {
-                        List { hiddenSection }
-                            .scrollContentBackground(.hidden)
-                            .background(Color.mycolor.myPurple.opacity(0.10))
-                    }
+                    Group {
+                        if hiddenPosts.isEmpty {
+                            emptyView(text: "No Hidden Materials", subText: "")
+                        } else {
+                            List { hiddenSection }
+                                .scrollContentBackground(.hidden)
+                        }
+                    }.background(Color.mycolor.myPurple.opacity(0.15))
                 } else {
-                    if deletedPosts.isEmpty {
-                        emptyView(text: "No Deleted Materials", subText: "")
-                    } else {
-                        List { deletedSection }
-                            .scrollContentBackground(.hidden)
-                            .background(Color.mycolor.myOrange.opacity(0.10))
+                    Group {
+                        if deletedPosts.isEmpty {
+                            emptyView(text: "No Deleted Materials", subText: "")
+                        } else {
+                            List { deletedSection }
+                                .scrollContentBackground(.hidden)
+                        }
                     }
+                    .background(Color.mycolor.myOrange.opacity(0.15))
                 }
             }
             .disabled(disableView)
@@ -83,7 +86,6 @@ struct ArchivedPostsView: View {
     private var deleteConfirmationOverlay: some View {
         if isShowingDeleteConfirmation {
             postDeletionConfirmation
-                .transition(.move(edge: .bottom))
         }
     }
     
@@ -150,10 +152,10 @@ extension ArchivedPostsView {
         ForEach(hiddenPosts) { post in
             PostRowView(post: post)
                 .swipeActions(edge: .trailing) {
-                    Button("Delete", systemImage: "archivebox") { // archivebox trash
+                    Button("Delete", systemImage: "archivebox") {
                         vm.setPostDeleted(post)
                     }
-                    .tint(Color.mycolor.myOrange)
+                    .tint(PostStatus.deleted.color)
                     
                     Button("Restore", systemImage: "arrow.uturn.left") {
                         vm.setPostActive(post)

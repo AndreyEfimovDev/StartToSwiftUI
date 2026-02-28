@@ -139,7 +139,13 @@ enum PostStatus: String, CaseIterable, Codable {
         case .deleted: return "Deleted"
         }
     }
-
+    var color: Color {
+        switch self {
+        case .active: return Color.mycolor.myBackground
+        case .hidden: return Color.mycolor.myPurple
+        case .deleted: return Color.mycolor.myOrange
+        }
+    }
 }
 
 enum PostOrigin: String, CaseIterable, Codable {
@@ -173,6 +179,14 @@ enum FavoriteChoice: String, CaseIterable, Codable {
         case .no: return Image(systemName: "star.slash")
         }
     }
+    
+    var color: Color {
+        switch self {
+        case .yes: return Color.mycolor.mySecondary
+        case .no: return Color.mycolor.myYellow
+        }
+    }
+
 }
 
 enum PostRating: String, CaseIterable, Codable {

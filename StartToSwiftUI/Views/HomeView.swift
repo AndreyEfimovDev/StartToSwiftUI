@@ -189,12 +189,8 @@ struct HomeView: View {
     private func trailingSwipeActions(for post: Post) -> some View {
         Button("Hide", systemImage: "eye.slash") {
             vm.setPostHidden(post)
-        }.tint(Color.mycolor.myPurple)
-
-//        Button("Delete", systemImage: "archivebox") {
-//            vm.setPostDeleted(post)
-//        }.tint(Color.mycolor.myOrange)
-
+        }.tint(PostStatus.hidden.color)
+        
         Button("Edit", systemImage: "pencil") {
             coordinator.push(.editPost(post))
         }.tint(Color.mycolor.myBlue)
@@ -203,10 +199,11 @@ struct HomeView: View {
     @ViewBuilder
     private func leadingSwipeActions(for post: Post) -> some View {
         Button(post.favoriteChoice == .yes ? "Unmark" : "Mark",
-               systemImage: post.favoriteChoice == .yes ? "star.slash" : "star") {
+               systemImage: post.favoriteChoice == .yes ? "star.slash" : "star"
+        ) {
             vm.favoriteToggle(post)
         }
-        .tint(post.favoriteChoice == .yes ? Color.mycolor.mySecondary : Color.mycolor.myYellow)
+        .tint(post.favoriteChoice.color)
     }
     
     // MARK: - Toolbar
