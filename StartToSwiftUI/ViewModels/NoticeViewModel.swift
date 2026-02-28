@@ -22,7 +22,6 @@ final class NoticeViewModel: ObservableObject {
     @Published var hasUnreadNotices: Bool = false
     @Published var shouldAnimateNoticeButton = false
     @AppStorage("isNotificationOn") var isShowBadgeForNewNotices: Bool = true
-//    @AppStorage("isSoundNotificationOn") var isPlaySoundForNewNotices: Bool = false
     
     @Published var errorMessage: String?
     @Published var showErrorMessageAlert: Bool = false
@@ -172,11 +171,8 @@ final class NoticeViewModel: ObservableObject {
         }
         
         // Updating and saving the state
-        if let appStateManager {
-//            appStateManager.markUserNotNotifiedBySound()
-            if isShowBadgeForNewNotices {
-                sendLocalNotification(count: newNotices.count)
-            }
+        if isShowBadgeForNewNotices {
+            sendLocalNotification(count: newNotices.count)
         }
         
         saveContext()
@@ -309,7 +305,6 @@ final class NoticeViewModel: ObservableObject {
         }
     }
     
-    
     private func handleError(_ error: Error?, message: String) {
         let description = error?.localizedDescription ?? message
         errorMessage = description
@@ -318,7 +313,6 @@ final class NoticeViewModel: ObservableObject {
         log("🍉 ❌ \(message): \(description)", level: .error)
     }
 
-    
     // MARK: - Notifications
     /// Send local notification of new notices
     private func sendLocalNotification(count: Int) {
@@ -326,32 +320,4 @@ final class NoticeViewModel: ObservableObject {
         hapticManager.notification(type: .success)
         log("🍉 🔔 Local notification sent: \(count) new", level: .info)
     }
-    
-    
-    /// One-time sound alert to the user when new notifications appear
-//    func playSoundNotificationIfNeeded() {
-//        guard let appStateManager,
-//              hasUnreadNotices,
-//              isShowBadgeForNewNotices,
-//              appStateManager.getUserNotifiedBySoundStatus() else {
-//            return
-//        }
-//        
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-//            guard let self else { return }
-//            
-//            if self.isPlaySoundForNewNotices {
-//                AudioServicesPlaySystemSound(1013)
-//                appStateManager.markUserNotifiedBySound()
-//            }
-//            
-//            // Notify View about animation (через Publisher или callback)
-//            self.shouldAnimateNoticeButton = true
-//            
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-//                self.shouldAnimateNoticeButton = false
-//            }
-//        }
-//    }
-
 }

@@ -14,8 +14,6 @@ import SwiftData
 final class AppSyncState {
     var id: String = "app_state_singleton" // Always one copy
     
-    // Set the flag to true to notify the user with a sound once about new notices if they appear
-//    var isUserNotNotifiedBySound: Bool = true
     // Date of last notices
     var latestNoticeDate: Date?
 
@@ -33,22 +31,18 @@ final class AppSyncState {
         id: String = "app_state_singleton",
         
         lastNoticeDate: Date? = nil,
-//        isUserNotNotifiedBySound: Bool = true,
-        
         lastPostsFBUpdateDate: Date? = nil,
 
-        lastCloudSyncDate: Date? = nil,
+        lastCloudSyncDateToMergeDuplicate: Date? = nil,
         appFirstLaunchDate: Date? = nil
         
     ) {
         self.id = id
         
-//        self.isUserNotNotifiedBySound = isUserNotNotifiedBySound
         self.latestNoticeDate = lastNoticeDate
-
         self.lastPostsFBUpdateDate = lastPostsFBUpdateDate
         
-        self.lastCloudSyncDateToMergeDuplicate = lastCloudSyncDate
+        self.lastCloudSyncDateToMergeDuplicate = lastCloudSyncDateToMergeDuplicate
         self.appFirstLaunchDate = appFirstLaunchDate
         
     }
