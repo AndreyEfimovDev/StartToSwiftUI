@@ -14,10 +14,10 @@
             filePath = "StartToSwiftUI/Views/HomeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "396"
-            endingLineNumber = "396"
-            landmarkName = "vm"
-            landmarkType = "24">
+            startingLineNumber = "388"
+            endingLineNumber = "388"
+            landmarkName = "HomeView"
+            landmarkType = "14">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

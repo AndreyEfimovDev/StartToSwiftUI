@@ -45,11 +45,7 @@ extension PostsViewModel {
         log("🍓 Exporting \(allPosts.count) posts from SwiftData", level: .info)
         
         let codablePosts = allPosts.map { CodablePost(from: $0) }
-        
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "yyyy-MM-dd_HH-mm"
-//        let fileName = "StartToSwiftUI_backup_\(dateFormatter.string(from: Date())).json"
-//        
+
         let fileName = "StartToSwiftUI_backup_\(DateFormatter.yyyyMMddHHmm.string(from: Date())).json"
         
         let result = fileManager.exportToTemporary(codablePosts, fileName: fileName)

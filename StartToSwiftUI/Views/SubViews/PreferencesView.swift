@@ -166,31 +166,7 @@ struct PreferencesView: View {
             iconWidth: iconSize
         )
     }
-    
-//    private var notificationToggle: some View {
-//        HStack {
-//            Image(systemName: "message.badge")
-//                .frame(width: iconSize)
-//                .foregroundStyle(
-//                    noticevm.isShowBadgeForNewNotices ? Color.mycolor.myBlue : Color.mycolor.mySecondary
-//                )
-//            Toggle("Show badge for new notices", isOn: $noticevm.isShowBadgeForNewNotices)
-//                .tint(Color.mycolor.myBlue)
-//        }
-//    }
-    
-//    private var soundNotificationToggle: some View {
-//        HStack {
-//            Image(systemName: "bell") // speaker.wave.2 speaker.slash
-//                .frame(width: iconSize)
-//                .foregroundStyle(
-//                    noticevm.isPlaySoundForNewNotices ? Color.mycolor.myBlue : Color.mycolor.mySecondary
-//                )
-//            Toggle("Play sound for new notices", isOn: $noticevm.isPlaySoundForNewNotices)
-//                .tint(Color.mycolor.myBlue)
-//        }
-//    }
-        
+ 
     // MARK: - Materials Management
   
     private var postDrafts: some View {
