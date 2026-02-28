@@ -67,4 +67,5 @@ actor FBPostsManager: FBPostsManagerProtocol {
 // MARK: - Firestore Posts Manager Protocol
 protocol FBPostsManagerProtocol {
     func fetchFBPosts(after: Date?) async -> [FBPostModel]
+    func uploadDevDataPostsToFirebase() async
 }
