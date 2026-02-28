@@ -115,16 +115,11 @@ class AppSyncStateManager {
         log("  📌 Main AppState: \(primaryState.id)", level: .info)
         
         // Merge the flags: if at least one is true, we take true
-//        var mergedIsUserNotNotified = true
         var earliestDate: Date?
         var latestSyncDate: Date?
         
         for state in sortedStates {
             
-            // AND logic for isUserNotNotifiedBySound (if at least one is already notified, take false)
-//            if !state.isUserNotNotifiedBySound {
-//                mergedIsUserNotNotified = false
-//            }
             
             // Earliest launch date
             if let date = state.appFirstLaunchDate {
@@ -142,12 +137,10 @@ class AppSyncStateManager {
         }
         
         // Updating the main object with the merged data
-//        primaryState.isUserNotNotifiedBySound = mergedIsUserNotNotified
         primaryState.appFirstLaunchDate = earliestDate
         primaryState.lastCloudSyncDateToMergeDuplicate = latestSyncDate
         
         log("  ✅ Combined data:", level: .info)
-//        log("     isUserNotNotifiedBySound: \(mergedIsUserNotNotified)", level: .info)
         
         // Remove duplicates
         for duplicateState in sortedStates.dropFirst() {
@@ -162,33 +155,6 @@ class AppSyncStateManager {
     }
     
     // MARK: - Methods for Notices
-    /// Check whether the user should be notified with a sound
-//    func getUserNotifiedBySoundStatus() -> Bool {
-//        let appState = getOrCreateAppState()
-//        let result = appState.isUserNotNotifiedBySound
-//        return result
-//    }
-    
-    /// Enable the "Need to notify user" flag.
-//    func markUserNotNotifiedBySound() {
-//        let appState = getOrCreateAppState()
-//        appState.isUserNotNotifiedBySound = true
-//        saveContext()
-//    }
-    
-    /// Mark the user as already notified
-//    func markUserNotifiedBySound() {
-//        let appState = getOrCreateAppState()
-//        appState.isUserNotNotifiedBySound = false
-//        saveContext()
-//    }
-    
-    /// Update last sync date
-//    func updateLastCloudSyncDate(date: Date) {
-//        let appState = getOrCreateAppState()
-//        appState.lastCloudSyncDate = date
-//        saveContext()
-//    }
     
     func getLastNoticeDate() -> Date? {
         let appState = getOrCreateAppState()
