@@ -16,7 +16,7 @@ struct WhatsNews {
                 News(
                     title: "Added",
                     newsText: """
-                    - Materials can now be hidden or moved to Deleted before permanent erase
+                    - Materials can now be hidden and then moved to Deleted before permanent erase
                     - Hidden and deleted materials can be restored to Active in the new 'Archived Materials' view
                     - Notes in curated materials are now available for editing
                     - The "Random" sorting option in the filter to display materials in shuffled order
