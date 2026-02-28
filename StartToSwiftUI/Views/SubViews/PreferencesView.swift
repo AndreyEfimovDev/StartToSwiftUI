@@ -55,10 +55,10 @@ struct PreferencesView: View {
             Section(header: sectionHeader("Achievements")) {
                 achievements
             }
-            Section(header: sectionHeader("Notices")) {
-                noticeMessages
-//                notificationToggle
-//                soundNotificationToggle
+            if noticevm.notices.count > 0 {
+                Section(header: sectionHeader("Notices")) {
+                    noticeMessages
+                }
             }
             Section(header: sectionHeader("Manage materials (\(vm.allPosts.count))")) {
                 postDrafts
@@ -157,12 +157,12 @@ struct PreferencesView: View {
     // MARK: - Notices
     
     private var noticeMessages: some View {
-        Button("Notices (\(noticevm.unreadCount)/\(noticevm.notices.count))") {
+        Button("Messages  (\(noticevm.unreadCount)/\(noticevm.notices.count))") {
             coordinator.pushModal(.notices)
         }
         .accessibilityIdentifier("MessagesButton")
         .customListRowStyle(
-            iconName: noticevm.unreadCount == 0 ? "envelope" : "envelope.badge.plus",
+            iconName: "message",
             iconWidth: iconSize
         )
     }

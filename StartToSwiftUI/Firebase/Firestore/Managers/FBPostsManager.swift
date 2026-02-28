@@ -15,7 +15,7 @@ actor FBPostsManager: FBPostsManagerProtocol {
     
     private let postsCollection: CollectionReference = Firestore.firestore().collection("posts")
 
-    func getAllPosts(after date: Date?) async -> [FBPostModel] {
+    func fetchFBPosts(after date: Date?) async -> [FBPostModel] {
         do {
             let query: Query
             if let date {
@@ -66,6 +66,6 @@ actor FBPostsManager: FBPostsManagerProtocol {
 
 // MARK: - Firestore Posts Manager Protocol
 protocol FBPostsManagerProtocol {
-    func getAllPosts(after: Date?) async -> [FBPostModel]
+    func fetchFBPosts(after: Date?) async -> [FBPostModel]
     func uploadDevDataPostsToFirebase() async
 }

@@ -57,6 +57,7 @@ struct NoticesView: View {
                         .tint(notice.isRead ? Color.mycolor.mySecondary : Color.mycolor.myBlue)
                     }
             }
+            .border(.red)
         }
     }
     

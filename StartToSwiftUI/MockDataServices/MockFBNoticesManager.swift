@@ -26,7 +26,7 @@ final class MockFBNoticesManager: FBNoticesManagerProtocol {
     }
     
     // MARK: - Protocol Implementation
-    func getAllNotices(after: Date) async -> [FBNoticeModel] {
+    func fetchFBNotices(after: Date) async -> [FBNoticeModel] {
         fetchCallCount += 1
         if shouldSimulateDelay {
             try? await Task.sleep(nanoseconds: 500_000_000)

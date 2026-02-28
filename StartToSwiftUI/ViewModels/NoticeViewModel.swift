@@ -136,9 +136,11 @@ final class NoticeViewModel: ObservableObject {
             log("🔥 FirstLaunchDate from appStateManager \(firstLaunchDate)", level: .info)
             
             let filterDate = max(lastNoticeDate, firstLaunchDate)
-            relevantNotices = await fbNoticesManager.getAllNotices(after: filterDate)
+            log("🔥 filterDate from appStateManager \(filterDate)", level: .info)
+
+            relevantNotices = await fbNoticesManager.fetchFBNotices(after: filterDate)
         } else {
-            relevantNotices = await fbNoticesManager.getAllNotices(after: Date(timeIntervalSince1970: 0))
+            relevantNotices = await fbNoticesManager.fetchFBNotices(after: Date(timeIntervalSince1970: 0))
         }
         FBCrashManager.shared.addLog("loadNoticesFromFirebase: in progress, notices imported: \(relevantNotices.count)")
 

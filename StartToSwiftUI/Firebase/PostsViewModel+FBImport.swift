@@ -17,7 +17,7 @@ extension PostsViewModel {
         clearError()
         let sourceName = isSwiftData ? "SwiftData" : "(Mock)"
         
-        let fbResponse: [FBPostModel] = await fbPostsManager.getAllPosts(after: lastDatePostsLoaded)
+        let fbResponse: [FBPostModel] = await fbPostsManager.fetchFBPosts(after: lastDatePostsLoaded)
         log("🔥 lastDatePostsLoaded \(String(describing: lastDatePostsLoaded))", level: .info)
         log("☁️ Imported \(fbResponse.count) posts from \(sourceName))", level: .info)
         
@@ -85,7 +85,7 @@ extension PostsViewModel {
             return true
         }
 
-        let newPosts = await fbPostsManager.getAllPosts(after: lastLoadedDate)
+        let newPosts = await fbPostsManager.fetchFBPosts(after: lastLoadedDate)
         let hasUpdates = !newPosts.isEmpty
         return hasUpdates
     }

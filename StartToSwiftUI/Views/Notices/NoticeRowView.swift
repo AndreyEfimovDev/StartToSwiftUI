@@ -18,13 +18,13 @@ struct NoticeRowView: View {
                 .font(.caption2)
                 .padding(.top, 4)
             
-            HStack(alignment: .bottom) {
+            HStack(alignment: .top) {
                 Text(notice.title)
                     .font(.body)
                     .minimumScaleFactor(0.75)
                     .lineLimit(2, reservesSpace: true)
                 Spacer()
-                Image(systemName: "ellipsis") // chevron.right
+                Image(systemName: "chevron.forward")
                     .font(.caption)
             }
             .padding(.vertical)

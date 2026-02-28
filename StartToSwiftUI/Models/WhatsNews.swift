@@ -32,7 +32,7 @@ struct WhatsNews {
                 News(
                     title: "Fixed",
                     newsText: """
-                    - Fixed a potential crash caused by distantPast date handling in Firestore
+                    - A potential crash caused by distantPast date handling in Firestore
                     """
                 ),
             ]
