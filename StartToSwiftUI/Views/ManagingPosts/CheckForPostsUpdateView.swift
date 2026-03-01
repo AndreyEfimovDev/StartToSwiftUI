@@ -118,7 +118,7 @@ struct CheckForPostsUpdateView: View {
         
         if hasUpdates {
             statusText = "Updates available!"
-            statusColor = Color.mycolor.myRed
+            statusColor = isImported ? Color.mycolor.myGreen : Color.mycolor.myRed
             isUpdateAvailable = true
         } else {
             statusText = "No updates available"
