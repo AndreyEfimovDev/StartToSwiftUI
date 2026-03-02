@@ -388,3 +388,4 @@ struct PostDetailsView: View {
             .padding()
     }
 }
+
