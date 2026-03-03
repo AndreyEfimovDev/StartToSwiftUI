@@ -9,7 +9,7 @@ import Foundation
 import FirebaseFirestore
 
 // MARK: - Firestore Manager
-actor FBPostsManager: FBPostsManagerProtocol {
+final class FBPostsManager: FBPostsManagerProtocol {
     
     init() {}
     
