@@ -115,6 +115,17 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         return true
     }
     
+    func application(_ application: UIApplication,
+        didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Messaging.messaging().apnsToken = deviceToken
+        log("🔔 APNs token received", level: .info)
+    }
+
+    func application(_ application: UIApplication,
+        didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        log("🔔 APNs registration failed: \(error)", level: .error)
+    }
+    
     func applicationDidBecomeActive(_ application: UIApplication) {}
     
     func applicationWillResignActive(_ application: UIApplication) {}
