@@ -133,6 +133,7 @@
 		47B465802E6867930059CCB7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B4657F2E6867930059CCB7 /* HomeView.swift */; };
 		47B65CDD2F4C90C9002FB480 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 47B65CDC2F4C90C9002FB480 /* GoogleService-Info.plist */; };
 		47B65CDF2F4C98D4002FB480 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 47B65CDE2F4C98D4002FB480 /* FirebaseCore */; };
+		47B6E7DF2F5AFDD800EF7441 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 47B6E7DE2F5AFDD800EF7441 /* FirebaseMessaging */; };
 		47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */; };
 		47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF09F2E5F9E9800287F10 /* MoreLessTextButton.swift */; };
 		47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF0A12E60485D00287F10 /* FavoriteButton.swift */; };
@@ -347,6 +348,7 @@
 			files = (
 				4734363F2F48661100CF00FA /* FirebaseCrashlytics in Frameworks */,
 				473436412F48661100CF00FA /* FirebaseFirestore in Frameworks */,
+				47B6E7DF2F5AFDD800EF7441 /* FirebaseMessaging in Frameworks */,
 				473436432F48661100CF00FA /* FirebasePerformance in Frameworks */,
 				4734363B2F48661100CF00FA /* FirebaseAnalytics in Frameworks */,
 				47B65CDF2F4C98D4002FB480 /* FirebaseCore in Frameworks */,
@@ -853,6 +855,7 @@
 				473436402F48661100CF00FA /* FirebaseFirestore */,
 				473436422F48661100CF00FA /* FirebasePerformance */,
 				47B65CDE2F4C98D4002FB480 /* FirebaseCore */,
+				47B6E7DE2F5AFDD800EF7441 /* FirebaseMessaging */,
 			);
 			productName = StartToSwiftUI;
 			productReference = 4759973B2E5C6901008E20F0 /* StartToSwiftUI.app */;
@@ -1708,6 +1711,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 473436392F48661100CF00FA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCore;
+		};
+		47B6E7DE2F5AFDD800EF7441 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 473436392F48661100CF00FA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

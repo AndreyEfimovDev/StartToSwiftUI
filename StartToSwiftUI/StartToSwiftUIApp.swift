@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 import CloudKit
 import Firebase
+import FirebaseMessaging
 
 @main
 struct StartToSwiftUIApp: App {
@@ -99,15 +100,66 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         FirebaseApp.configure()
-
+        
+        // FCM delegate
+        Messaging.messaging().delegate = self
+        
+        // Request push notification permission
+        UNUserNotificationCenter.current().delegate = self
+        let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+        UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { granted, error in
+            log("🔔 Push notification permission: \(granted)", level: .info)
+        }
+        application.registerForRemoteNotifications()
+        
         return true
     }
     
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        
+    func application(_ application: UIApplication,
+        didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Messaging.messaging().apnsToken = deviceToken
+        log("🔔 APNs token received", level: .info)
+    }
+
+    func application(_ application: UIApplication,
+        didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        log("🔔 APNs registration failed: \(error)", level: .error)
     }
     
-    func applicationWillResignActive(_ application: UIApplication) {
-        
+    func applicationDidBecomeActive(_ application: UIApplication) {}
+    
+    func applicationWillResignActive(_ application: UIApplication) {}
+}
+
+// MARK: - UNUserNotificationCenterDelegate
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    
+    // Показывать уведомления когда приложение открыто
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        completionHandler([.banner, .sound, .badge])
+    }
+    
+    // Обработка тапа на уведомление
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        let userInfo = response.notification.request.content.userInfo
+        log("🔔 Push tapped: \(userInfo)", level: .info)
+        completionHandler()
+    }
+}
+
+// MARK: - MessagingDelegate
+extension AppDelegate: MessagingDelegate {
+    
+    // FCM токен обновился
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        log("🔔 FCM token: \(fcmToken ?? "nil")", level: .info)
     }
 }
