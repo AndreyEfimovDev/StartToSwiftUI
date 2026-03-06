@@ -10,15 +10,15 @@ import SwiftUI
 struct AboutApp: View {
     
     // MARK: - Dependencies
-    
     @EnvironmentObject private var coordinator: AppCoordinator
     
-    // MARK: - Constants
+    // MARK: - States
+    @State private var buttonTitleAppUpdate = "Check for a new App release"
     
+    // MARK: - Constants
     private let iconWidth: CGFloat = 18
     
     // MARK: - Body
-    
     var body: some View {
         FormCoordinatorToolbar(
             title: "About App",
@@ -60,10 +60,27 @@ struct AboutApp: View {
             }
             .customListRowStyle(iconName: "textformat.size.larger", iconWidth: iconWidth)
             
-            Button("Functionality") {                coordinator.pushModal(.functionality)
+            Button("Functionality") {
+                coordinator.pushModal(.functionality)
             }
             .customListRowStyle(iconName: "f.cursive", iconWidth: iconWidth)
 
+            // Link to the app's page in the App Store
+            Button(buttonTitleAppUpdate) {
+                Task {
+                    let hasUpdate = await AppStoreService.shared.isUpdateAvailable()
+                    await MainActor.run {
+                        if hasUpdate {
+                            if let url = URL(string: Constants.appStoreURL) {
+                                UIApplication.shared.open(url)
+                            }
+                        } else {
+                            buttonTitleAppUpdate = "The App is up to date"
+                        }
+                    }
+                }
+            }
+            .customListRowStyle(iconName: "gear.badge", iconWidth: iconWidth)
             
             Button("What's New") {
                 coordinator.pushModal(.whatIsNew)
