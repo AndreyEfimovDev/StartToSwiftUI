@@ -161,5 +161,10 @@ extension AppDelegate: MessagingDelegate {
     // FCM токен обновился
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         log("🔔 FCM token: \(fcmToken ?? "nil")", level: .info)
+        
+        Messaging.messaging().subscribe(toTopic: "all") { error in
+                log("🔔 Subscribed to topic 'all': \(String(describing: error))", level: .info)
+            }
+
     }
 }
