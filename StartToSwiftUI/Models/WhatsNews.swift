@@ -16,7 +16,7 @@ struct WhatsNews {
                 News(
                     title: "Added",
                     newsText: """
-                    - 
+                    - Push notifications via FCM (Firebase) — receive updates even when the app is closed 
                     """
                 ),
                 News(
