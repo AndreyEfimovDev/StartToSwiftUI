@@ -9,7 +9,7 @@ import Foundation
 import FirebaseFirestore
 
 // MARK: - Firestore Notices Manager
-actor FBNoticesManager: FBNoticesManagerProtocol {
+final class FBNoticesManager: FBNoticesManagerProtocol {
     
     init() {}
     

@@ -28,7 +28,7 @@ struct CheckForPostsUpdateView: View {
     // MARK: - Body
     var body: some View {
         FormCoordinatorToolbar(
-            title: "Check for posts update",
+            title: "Check for materials update",
             showHomeButton: true
         ) {
             VStack {
@@ -45,7 +45,6 @@ struct CheckForPostsUpdateView: View {
     }
     
     // MARK: Subviews
-    
     private var statusSection: some View {
         Section {
             HStack {
@@ -101,6 +100,7 @@ struct CheckForPostsUpdateView: View {
             Task {
                 await performImport()
                 statusText = "No updates available"
+                statusColor = Color.mycolor.myBlue
             }
         }
         .onChange(of: vm.allPosts.count) { oldValue, newValue in
