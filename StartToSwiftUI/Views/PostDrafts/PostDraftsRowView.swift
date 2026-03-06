@@ -35,10 +35,13 @@ struct PostDraftsRowView: View {
     }
     
     private var author: some View {
-        HStack {
+        HStack(alignment: .lastTextBaseline) {
             Text("@" + post.author + ", ") +
             Text("\(post.postDate?.formatted(date: .numeric, time: .omitted) ?? "date missed")") +
             Text(post.postType == .other ? "" : ", " + post.postType.displayName + " ")
+            Spacer()
+            Image(systemName: "ellipsis")
+                .font(.caption)
         }
         .font(.footnote)
         .padding(.vertical)

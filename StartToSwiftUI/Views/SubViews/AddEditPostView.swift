@@ -316,13 +316,6 @@ struct AddEditPostView: View {
                     .multilineTextAlignment(.center)
                     .foregroundColor(Color.mycolor.myAccent.opacity(0.8))
                 
-                
-                ClearCupsuleButton(
-                    primaryTitle: "Don't save",
-                    primaryTitleColor: Color.mycolor.myRed) {
-                        navigateBack()
-                    }
-                
                 ClearCupsuleButton(
                     primaryTitle: "Save draft",
                     primaryTitleColor: Color.mycolor.myBlue) {
@@ -332,6 +325,13 @@ struct AddEditPostView: View {
                         hapticManager.impact(style: .light)
                     }
                 
+                ClearCupsuleButton(
+                    primaryTitle: "Don't save",
+                    primaryTitleColor: Color.mycolor.myRed) {
+                        navigateBack()
+                    }
+                
+
                 ClearCupsuleButton(
                     primaryTitle: "Cancel",
                     primaryTitleColor: Color.mycolor.myAccent) {

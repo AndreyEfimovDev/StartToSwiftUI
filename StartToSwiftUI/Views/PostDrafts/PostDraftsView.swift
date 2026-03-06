@@ -17,7 +17,7 @@ struct PostDraftsView: View {
         
     var body: some View {
         FormCoordinatorToolbar(
-            title: "Post drafts",
+            title: "Drafts",
             showHomeButton: true
         ) {
             ZStack(alignment: .bottomTrailing) {
