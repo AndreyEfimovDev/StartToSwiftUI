@@ -185,7 +185,7 @@ struct PreferencesView: View {
     private var archivedMaterials: some View {
         Group {
             if vm.hasHidden || vm.hasDeleted {
-                Button("Archived materials (\(vm.hiddenCount + vm.deletedCount))") {
+                Button("Archived (\(vm.hiddenCount + vm.deletedCount))") {
                     coordinator.pushModal(.archivedPosts)
                 }
                 .customListRowStyle(
@@ -242,7 +242,7 @@ struct PreferencesView: View {
     private var erasePosts: some View {
         Group{
             if !vm.allPosts.isEmpty {
-                Button("Erase all materials") {
+                Button("Erase") {
                     coordinator.pushModal(.erasePosts)
                 }
                 .customListRowStyle(
