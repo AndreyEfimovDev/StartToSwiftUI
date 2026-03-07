@@ -8,7 +8,6 @@
 import Foundation
 
 // MARK: - Codable version of Post for JSON
-
 struct CodablePost: Codable {
     let id: String
     var category: String
@@ -24,9 +23,9 @@ struct CodablePost: Codable {
     var favoriteChoice: FavoriteChoice
     var postRating: PostRating?
     var notes: String
-    let origin: PostOrigin
+    let origin: OriginOptions
     var draft: Bool
-    var status: PostStatus
+    var status: StatusOptions
     let date: Date
     var addedDateStamp: Date?
     var startedDateStamp: Date?
@@ -64,7 +63,6 @@ extension CodablePost {
 }
 
 // MARK: - Test Helpers
-
 extension CodablePost {
     static func mock(
         id: String = UUID().uuidString,
@@ -81,9 +79,9 @@ extension CodablePost {
         favoriteChoice: FavoriteChoice = .no,
         postRating: PostRating? = nil,
         notes: String = "",
-        origin: PostOrigin = .cloud,
+        origin: OriginOptions = .cloud,
         draft: Bool = false,
-        status: PostStatus = .active,
+        status: StatusOptions = .active,
         date: Date = Date(),
         addedDateStamp: Date? = nil,
         startedDateStamp: Date? = nil,

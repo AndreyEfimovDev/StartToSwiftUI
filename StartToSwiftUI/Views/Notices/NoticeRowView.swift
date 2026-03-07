@@ -39,7 +39,7 @@ struct NoticeRowView: View {
 
 fileprivate struct NoticeRowPreView: View {
         
-    @EnvironmentObject private var noticevm: NoticeViewModel
+    @EnvironmentObject private var noticevm: NoticesViewModel
 
     var body: some View {
             ZStack {
@@ -64,7 +64,7 @@ fileprivate struct NoticeRowPreView: View {
     )
     let context = ModelContext(container)
     
-    let noticevm = NoticeViewModel(modelContext: context)
+    let noticevm = NoticesViewModel(modelContext: context)
     
     NavigationStack {
         NoticeRowPreView()

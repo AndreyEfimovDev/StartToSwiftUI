@@ -37,11 +37,11 @@ struct Acknowledgements: View {
             
             **\(Links.paulHudson)** – thank you for creating and sharing the *\(Links.unwrap)* app, which provided a structured path for my initial learning of all the fundamental features, and for the comprehensive *\(Links.byExample)* collection.
             
-            **\(Links.softwareAndersBlog)** – thank you for practical examples of using SwiftUI that provided a deeper understanding of SwiftUI in practice.
+            **\(Links.softwareAndersBlog)** – thank you for the practical examples of using SwiftUI that provided a deeper understanding of the framework in practice.
             
-            **\(Links.nickSarno)** – a special thank you for creating such extensive, clear, and well-organised learning materials which were invaluable for bridging the gap between theory and practice. Personally, Nick's resources have advanced my skills the most. If I were to start my learning journey again, I would begin with his materials.
+            **\(Links.nickSarno)** – a special thank you for creating such extensive, clear, and well-organised learning materials, which were invaluable for bridging the gap between theory and practice. Personally, Nick's resources have advanced my skills the most. If I were to start my learning journey again, I would begin with his materials.
             
-            Lastly, thank you to anyone I may have inadvertently missed, and to everyone who has accompanied me on this year-long journey.
+            Lastly, thank you to anyone I may have inadvertently missed, and to everyone who has accompanied me on this exciting journey.
             """)
     }
 }
@@ -51,10 +51,10 @@ struct Acknowledgements: View {
 private extension Acknowledgements {
     enum Links {
         static let seanAllen = link("Sean Allen", url: "https://www.youtube.com/c/SeanAllen")
-        static let absoluteBeginner = link("Swift Programming Tutorial (Absolute Beginner)", url: "https://www.youtube.com/watch?v=CwA1VWP0Ldw")
-        static let beginnerFriendly = link("SwiftUI Fundamentals (Beginner Friendly)", url: "https://www.youtube.com/watch?v=b1oC7sLIgpI")
-        static let basicTutorial = link("SwiftUI Basic Tutorial", url: "https://www.youtube.com/watch?v=HXoVSbwWUIk")
-        static let tips = link("37 Tips for Junior Software Developers", url: "https://www.youtube.com/watch?v=jZ_BzV0DA58")
+        static let absoluteBeginner = link("Absolute Beginner", url: "https://www.youtube.com/watch?v=CwA1VWP0Ldw")
+        static let beginnerFriendly = link("Beginner Friendly", url: "https://www.youtube.com/watch?v=b1oC7sLIgpI")
+        static let basicTutorial = link("Basic Tutorial", url: "https://www.youtube.com/watch?v=HXoVSbwWUIk")
+        static let tips = link("Tips", url: "https://www.youtube.com/watch?v=jZ_BzV0DA58")
         
         static let paulHudson = link("Paul Hudson", url: "https://www.hackingwithswift.com")
         static let unwrap = link("Unwrap", url: "https://apps.apple.com/ru/app/unwrap/id1440611372?l=en-GB")

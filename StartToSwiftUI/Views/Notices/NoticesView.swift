@@ -12,7 +12,7 @@ struct NoticesView: View {
     
     let isRootModal: Bool
     
-    @EnvironmentObject private var noticevm: NoticeViewModel
+    @EnvironmentObject private var noticevm: NoticesViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     private let hapticManager = HapticManager.shared
@@ -140,7 +140,7 @@ struct NoticesView: View {
     
     try? context.save()
     
-    let noticevm = NoticeViewModel(modelContext: context)
+    let noticevm = NoticesViewModel(modelContext: context)
     let coordinator = AppCoordinator()
     
     return Group {
@@ -195,7 +195,7 @@ struct NoticesView: View {
     
     try? context.save()
     
-    let noticevm = NoticeViewModel(modelContext: context)
+    let noticevm = NoticesViewModel(modelContext: context)
     let coordinator = AppCoordinator()
     
     return Group {
@@ -221,7 +221,7 @@ struct NoticesView: View {
                 configurations: ModelConfiguration(isStoredInMemoryOnly: true)
             )
             let emptyContext = ModelContext(emptyContainer)
-            let emptyNoticeVM = NoticeViewModel(modelContext: emptyContext)
+            let emptyNoticeVM = NoticesViewModel(modelContext: emptyContext)
             
             NoticesView(isRootModal: true)
                 .environmentObject(emptyNoticeVM)

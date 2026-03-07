@@ -12,7 +12,7 @@ struct PreferencesView: View {
     
     // MARK: - Dependencies
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var noticevm: NoticeViewModel
+    @EnvironmentObject private var noticevm: NoticesViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     @State private var hasPostsUpdate = false
@@ -322,7 +322,7 @@ struct PreferencesView: View {
     let context = ModelContext(container)
     
     let vm = PostsViewModel(modelContext: context)
-    let noticevm = NoticeViewModel(modelContext: context)
+    let noticevm = NoticesViewModel(modelContext: context)
     
     NavigationStack {
         PreferencesView ()

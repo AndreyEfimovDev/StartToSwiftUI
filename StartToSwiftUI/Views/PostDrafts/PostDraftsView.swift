@@ -41,11 +41,11 @@ struct PostDraftsView: View {
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         Button("Hide", systemImage: "eye.slash") {
                             vm.setPostHidden(post)
-                        }.tint(PostStatus.hidden.color)
+                        }.tint(StatusOptions.hidden.color)
                         
                         Button("Delete", systemImage: "archivebox") {
                             vm.setPostDeleted(post)
-                        }.tint(PostStatus.deleted.color)
+                        }.tint(StatusOptions.deleted.color)
                     }
             }
         }

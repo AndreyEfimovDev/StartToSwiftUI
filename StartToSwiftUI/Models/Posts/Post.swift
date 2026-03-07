@@ -68,13 +68,13 @@ final class Post {
         set { postRatingRawValue = newValue?.rawValue }
     }
     
-    var origin: PostOrigin {
-        get { PostOrigin(rawValue: originRawValue) ?? .cloudNew }
+    var origin: OriginOptions {
+        get { OriginOptions(rawValue: originRawValue) ?? .local }
         set { originRawValue = newValue.rawValue }
     }
     
-    var status: PostStatus {
-        get { PostStatus(rawValue: statusRawValue) ?? .active }
+    var status: StatusOptions {
+        get { StatusOptions(rawValue: statusRawValue) ?? .active }
         set { statusRawValue = newValue.rawValue }
     }
 
@@ -93,9 +93,9 @@ final class Post {
         favoriteChoice: FavoriteChoice = .no,
         postRating: PostRating? = nil,
         notes: String = "",
-        origin: PostOrigin = .local,
+        origin: OriginOptions = .local,
         draft: Bool = false,
-        status: PostStatus = .active,
+        status: StatusOptions = .active,
         date: Date = .now,
         addedDateStamp: Date? = nil,
         startedDateStamp: Date? = nil,

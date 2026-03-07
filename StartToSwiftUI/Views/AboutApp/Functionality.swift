@@ -64,9 +64,9 @@ struct Functionality: View {
                 \(FavoriteChoice.yes.icon) - yes
                 \(FavoriteChoice.no.icon) - no
                *Original source*
-                \(PostOrigin.local.icon) - created locally
-                \(PostOrigin.cloud.icon) - loaded from cloud (curated collection)
-                \(PostOrigin.cloudNew.icon) - recently loaded from cloud
+                \(OriginOptions.local.icon) - created locally
+                \(OriginOptions.cloud.icon) - loaded from cloud (curated collection)
+                \(OriginOptions.cloudNew.icon) - recently loaded from cloud
                *Study progress*
                 \(StudyProgress.added.icon) - added
                 \(StudyProgress.started.icon) - started 

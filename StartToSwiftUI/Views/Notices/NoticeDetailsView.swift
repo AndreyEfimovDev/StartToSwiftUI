@@ -10,7 +10,7 @@ import SwiftData
 
 struct NoticeDetailsView: View {
     
-    @EnvironmentObject private var noticevm: NoticeViewModel
+    @EnvironmentObject private var noticevm: NoticesViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     let noticeId: String
@@ -89,7 +89,7 @@ struct NoticeDetailsView: View {
 }
 
 #Preview {
-    let noticeVM = NoticeViewModel(dataSource: MockNoticesDataSource())
+    let noticeVM = NoticesViewModel(dataSource: MockNoticesDataSource())
     
     noticeVM.notices = PreviewData.sampleNotices
     

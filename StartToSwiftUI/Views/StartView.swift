@@ -13,7 +13,7 @@ struct StartView: View {
     
     // MARK: - Dependencies
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var noticevm: NoticeViewModel
+    @EnvironmentObject private var noticevm: NoticesViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     // MARK: - States
@@ -124,7 +124,7 @@ private struct StartViewPreview: View {
         return vm
     }()
     
-    @StateObject var noticesVM = NoticeViewModel(
+    @StateObject var noticesVM = NoticesViewModel(
         dataSource: MockNoticesDataSource(),
         fbNoticesManager: MockFBNoticesManager()
     )

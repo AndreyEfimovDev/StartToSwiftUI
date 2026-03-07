@@ -12,7 +12,7 @@ struct HomeView: View {
     
     // MARK: - Dependencies
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var noticevm: NoticeViewModel
+    @EnvironmentObject private var noticevm: NoticesViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     private let hapticManager = HapticManager.shared
@@ -188,7 +188,7 @@ struct HomeView: View {
     private func trailingSwipeActions(for post: Post) -> some View {
         Button("Hide", systemImage: "eye.slash") {
             vm.setPostHidden(post)
-        }.tint(PostStatus.hidden.color)
+        }.tint(StatusOptions.hidden.color)
         
         Button("Edit", systemImage: "pencil") {
             coordinator.push(.editPost(post))
@@ -393,7 +393,7 @@ private struct HomeViewPreview: View {
         return vm
     }()
     
-    @StateObject var noticesVM = NoticeViewModel(
+    @StateObject var noticesVM = NoticesViewModel(
         dataSource: MockNoticesDataSource(),
         fbNoticesManager: MockFBNoticesManager()
     )

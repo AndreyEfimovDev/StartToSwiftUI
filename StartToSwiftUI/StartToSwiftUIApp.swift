@@ -18,7 +18,9 @@ struct StartToSwiftUIApp: App {
     
     // MARK: - Dependencies
     @StateObject private var postsViewModel: PostsViewModel
-    @StateObject private var noticeViewModel: NoticeViewModel
+    @StateObject private var noticesViewModel: NoticesViewModel
+    @StateObject private var snippetViewModel: SnippetsViewModel
+
     @StateObject private var coordinator = AppCoordinator()
 
     private let hapticManager = HapticManager.shared
@@ -28,6 +30,7 @@ struct StartToSwiftUIApp: App {
         let schema = Schema([
             Post.self,
             Notice.self,
+            CodeSnippet.self,
             AppSyncState.self
         ])
         
@@ -50,7 +53,8 @@ struct StartToSwiftUIApp: App {
         
         let context = modelContainer.mainContext
         _postsViewModel = StateObject(wrappedValue: PostsViewModel(modelContext: context))
-        _noticeViewModel = StateObject(wrappedValue: NoticeViewModel(modelContext: context))
+        _noticesViewModel = StateObject(wrappedValue: NoticesViewModel(modelContext: context))
+        _snippetViewModel = StateObject)State(wrappedValue: SnippetsViewModel())
 
         configureNavigationBarAppearance()
     }
@@ -61,10 +65,11 @@ struct StartToSwiftUIApp: App {
                 .modelContainer(modelContainer)
                 .environmentObject(coordinator)
                 .environmentObject(postsViewModel)
-                .environmentObject(noticeViewModel)
+                .environmentObject(noticesViewModel)
+                .environmentObject(snippetViewModel)
                 .task {
                     postsViewModel.start()
-                    noticeViewModel.start()
+                    noticesViewModel.start()
                 }
         }
     }
@@ -134,7 +139,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 // MARK: - UNUserNotificationCenterDelegate
 extension AppDelegate: UNUserNotificationCenterDelegate {
     
-    // Показывать уведомления когда приложение открыто
+    // Show notifications when the app is open
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification,
@@ -143,7 +148,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         completionHandler([.banner, .sound, .badge])
     }
     
-    // Обработка тапа на уведомление
+    // Notification tap processing
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse,
@@ -158,13 +163,12 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 // MARK: - MessagingDelegate
 extension AppDelegate: MessagingDelegate {
     
-    // FCM токен обновился
+    // FCM token has been updated
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         log("🔔 FCM token: \(fcmToken ?? "nil")", level: .info)
         
         Messaging.messaging().subscribe(toTopic: "all") { error in
                 log("🔔 Subscribed to topic 'all': \(String(describing: error))", level: .info)
             }
-
     }
 }

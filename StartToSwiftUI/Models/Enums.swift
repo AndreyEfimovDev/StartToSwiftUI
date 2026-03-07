@@ -105,7 +105,7 @@ enum PostType: String, CaseIterable, Codable {
     case post
     case course
     case article
-    case solution  // для обратной совместимости
+    case solution  // for backward compatibility
     case bug
     case other
     
@@ -114,12 +114,12 @@ enum PostType: String, CaseIterable, Codable {
         case .post: return "Lesson"
         case .course: return "Course"
         case .article: return "Article"
-        case .solution: return "Article"  // показываем как Article
+        case .solution: return "Article"  // show it as an Article
         case .bug: return "Bug"
         case .other: return "Other"
         }
     }
-    // Исключаем solution из выбора в UI
+    // exclude 'solution' from the selection in в UI
     static var selectablePostTypeCases: [PostType] {
         [.post, .course, .article, .bug, .other]
     }
@@ -127,7 +127,7 @@ enum PostType: String, CaseIterable, Codable {
 }
 
 
-enum PostStatus: String, CaseIterable, Codable {
+enum StatusOptions: String, CaseIterable, Codable {
     case active
     case hidden
     case deleted
@@ -148,7 +148,7 @@ enum PostStatus: String, CaseIterable, Codable {
     }
 }
 
-enum PostOrigin: String, CaseIterable, Codable {
+enum OriginOptions: String, CaseIterable, Codable {
     case local
     case cloud
     case cloudNew

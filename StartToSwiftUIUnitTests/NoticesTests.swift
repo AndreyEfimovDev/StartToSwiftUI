@@ -14,7 +14,7 @@ final class NoticeViewModelTests: XCTestCase {
     
     var dataSource: MockNoticesDataSource!
     var networkService: MockFBNoticesManager!
-    var noticeVM: NoticeViewModel!
+    var noticeVM: NoticesViewModel!
     
     override func setUp() async throws {
         try await super.setUp()
@@ -31,7 +31,7 @@ final class NoticeViewModelTests: XCTestCase {
         networkService = MockFBNoticesManager.mockNotices([])
         
         // Инициализируем ViewModel с моками
-        noticeVM = NoticeViewModel(
+        noticeVM = NoticesViewModel(
             dataSource: dataSource
         )
         
@@ -55,7 +55,7 @@ final class NoticeViewModelTests: XCTestCase {
             FBNoticeModel.mock(noticeId: "2", title: "Notice 2", noticeDate: Date())
         ]
         let mockFB = MockFBNoticesManager.mockNotices(mockNotices)
-        let testVM = NoticeViewModel(
+        let testVM = NoticesViewModel(
             dataSource: MockNoticesDataSource(notices: []),
             fbNoticesManager: mockFB
         )
@@ -78,7 +78,7 @@ final class NoticeViewModelTests: XCTestCase {
             FBNoticeModel.mock(noticeId: "new", title: "New Notice")
         ]
         let mockFB = MockFBNoticesManager.mockNotices(mockNotices)
-        let testVM = NoticeViewModel(
+        let testVM = NoticesViewModel(
             dataSource: dataSource,
             fbNoticesManager: mockFB
         )
@@ -96,7 +96,7 @@ final class NoticeViewModelTests: XCTestCase {
     func testImportNoticesFromFirebase_WhenEmpty_DoesNotAddNotices() async {
         // Given
         let mockFB = MockFBNoticesManager.mockEmpty()
-        let testVM = NoticeViewModel(
+        let testVM = NoticesViewModel(
             dataSource: MockNoticesDataSource(notices: []),
             fbNoticesManager: mockFB
         )
@@ -114,7 +114,7 @@ final class NoticeViewModelTests: XCTestCase {
         let mockFB = MockFBNoticesManager.mockNotices(mockNotices)
         mockFB.shouldSimulateDelay = true
         
-        let testVM = NoticeViewModel(
+        let testVM = NoticesViewModel(
             dataSource: MockNoticesDataSource(notices: []),
             fbNoticesManager: mockFB
         )
