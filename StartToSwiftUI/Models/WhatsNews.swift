@@ -10,6 +10,17 @@ import SwiftUI
 struct WhatsNews {
     static let releases: [Release] = [
         Release(
+            release: "Release 1.4.1(6)",
+            news: [
+                News(
+                    title: "Fixed",
+                    newsText: """
+                    - Duplicate detection during cloud import now correctly checks both ID and title — previously a material with a duplicate title could slip through if its ID was new
+                    """
+                ),
+            ]
+        ),
+        Release(
             release: "Release 1.4.0(5)",
             news: [
                 News(
