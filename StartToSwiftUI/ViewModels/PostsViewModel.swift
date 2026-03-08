@@ -447,7 +447,7 @@ final class PostsViewModel: ObservableObject {
         let existingIds = Set(allPosts.map { $0.id })
         
         return cloudResponse
-            .filter { !existingTitles.contains($0.title) || !existingIds.contains($0.id) }
+            .filter { !existingTitles.contains($0.title) && !existingIds.contains($0.id) }
             .map { PostMigrationHelper.convertFromCodable($0) }
     }
     
@@ -456,7 +456,7 @@ final class PostsViewModel: ObservableObject {
         let existingIds = Set(allPosts.map { $0.id })
         
         return fbResponse
-            .filter { !existingTitles.contains($0.title) || !existingIds.contains($0.postId) }
+            .filter { !existingTitles.contains($0.title) && !existingIds.contains($0.postId) }
     }
 
     func filterUniquePosts(_ posts: [Post]) -> [Post] {
