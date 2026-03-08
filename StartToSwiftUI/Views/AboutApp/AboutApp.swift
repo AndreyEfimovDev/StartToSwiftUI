@@ -13,7 +13,7 @@ struct AboutApp: View {
     @EnvironmentObject private var coordinator: AppCoordinator
     
     // MARK: - States
-    @State private var buttonTitleAppUpdate = "Check for a new App release"
+    @State private var buttonTitleAppUpdate = "Check for App update"
     
     // MARK: - Constants
     private let iconWidth: CGFloat = 18
