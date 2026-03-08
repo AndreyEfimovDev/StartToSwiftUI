@@ -496,26 +496,4 @@ final class PostsViewModel: ObservableObject {
         log("❌ \(message): \(description)", level: .error)
     }
     
-    #warning("Delete this func loadDevData() before deployment to App Store")
-    // MARK: - DevData Import (creating posts for cloud)
-    func loadDevData() -> Int {
-        let newPosts = filterUniquePosts(DevData.postsForCloud)
-        
-        guard !newPosts.isEmpty else {
-            log("⚠️ DevData: No new unique posts to add", level: .info)
-            return 0
-        }
-        
-        for post in newPosts {
-            let datePrefix = DateFormatter.yyyyMMdd.string(from: post.date)
-            let trimmedUUID = String(post.id.suffix(from: post.id.index(post.id.startIndex, offsetBy: 11)))
-            post.id = "\(datePrefix)_\(trimmedUUID)"
-            dataSource.insert(post)
-        }
-        
-        saveContextAndReload()
-        log("✅ DevData: Loaded \(newPosts.count) posts from \(DevData.postsForCloud.count)", level: .info)
-        
-        return newPosts.count
-    }
 }

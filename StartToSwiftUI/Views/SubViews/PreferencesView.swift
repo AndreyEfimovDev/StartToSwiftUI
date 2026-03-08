@@ -23,32 +23,6 @@ struct PreferencesView: View {
     // MARK: - Body
     var body: some View {
         Form {
-#warning("Delete this button before deployment to App Store")
-#if DEBUG
-//                Button {
-//                    Task {
-//                        await vm.uploadDevDataPostsToFirebase()
-//                    }
-//                } label: {
-//                    Text("Upload DevData to Firebase")
-//                        .font(.headline)
-//                        .foregroundStyle(Color.mycolor.myAccent)
-//                        .frame(maxWidth: .infinity)
-//                        .frame(height: 55)
-//                        .background(Color.mycolor.myRed.opacity(0.3))
-//                        .cornerRadius(30)
-//                }
-#endif
-            
-#warning("Delete this code before deployment to App Store")
-//            Section(header: sectionHeader("Categories")) {
-                //                if UIDevice.isiPhone {
-                //                    Section(header: sectionHeader("Selected category")) {
-                //                        selectedCategory
-                //                    }
-                //                }
-                
-//            }
             Section(header: sectionHeader("Appearance")) {
                 themeAppearance
             }
@@ -104,34 +78,13 @@ struct PreferencesView: View {
     }
     
     // MARK: - Section Header
-    
     private func sectionHeader(_ text: String) -> some View {
                 
         return Text(text)
             .foregroundStyle(Color.mycolor.myAccent)
     }
-#warning("Delete this var before deployment to App Store")
-//    private var selectedCategory: some View {
-//        Group {
-//            if let list = vm.allCategories {
-//                CustomOneCapsulesLineSegmentedPicker(
-//                    selection: $vm.selectedCategory,
-//                    allItems: list,
-//                    titleForCase: { $0 },
-//                    selectedTextColor: Color.mycolor.myBackground,
-//                    unselectedTextColor: Color.mycolor.myAccent,
-//                    selectedBackground: Color.mycolor.myButtonBGBlue,
-//                    unselectedBackground: .clear,
-//                    showNilOption: true,
-//                    nilTitle: "All"
-//                )
-//                .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
-//            }
-//        }
-//    }
     
     // MARK: - Appearance
-    
     private var themeAppearance: some View {
         UnderlineSermentedPickerNotOptional(
             selection: $vm.selectedTheme,
@@ -143,7 +96,6 @@ struct PreferencesView: View {
     }
     
     // MARK: - Achievements
-    
     private var achievements: some View {
         Button("Study progress") {
             coordinator.pushModal(.studyProgress)
@@ -155,7 +107,6 @@ struct PreferencesView: View {
     }
     
     // MARK: - Notices
-    
     private var noticeMessages: some View {
         Button("Messages  (\(noticevm.unreadCount)/\(noticevm.notices.count))") {
             coordinator.pushModal(.notices)
