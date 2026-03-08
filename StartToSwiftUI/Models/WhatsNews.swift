@@ -11,6 +11,22 @@ struct WhatsNews {
 #warning("Add upated info before deployment to App Store")
     static let releases: [Release] = [
         Release(
+            release: "Release 1.4.1(6)",
+            news: [
+                News(
+                    title: "Added",
+                    newsText: """
+                    """
+                ),
+                News(
+                    title: "Fixed",
+                    newsText: """
+                    - Duplicate detection during cloud import now correctly checks both ID and title — previously a material with a duplicate title could slip through if its ID was new
+                    """
+                ),
+            ]
+        ),
+        Release(
             release: "Release 1.4.0(5)",
             news: [
                 News(
@@ -28,7 +44,6 @@ struct WhatsNews {
                 ),
             ]
         ),
-
         Release(
             release: "Release 1.3.0(4)",
             news: [

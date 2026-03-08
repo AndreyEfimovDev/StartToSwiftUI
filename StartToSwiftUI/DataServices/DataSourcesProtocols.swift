@@ -23,10 +23,10 @@ protocol NoticesDataSourceProtocol {
     func save() throws
 }
 @MainActor
-protocol SnippetDataSourceProtocol {
+protocol SnippetsDataSourceProtocol {
     func fetchSnippets() throws -> [CodeSnippet]
-    func insert(_ post: CodeSnippet)
-    func delete(_ post: CodeSnippet)
+    func insert(_ snippet: CodeSnippet)
+    func delete(_ snippet: CodeSnippet)
     func save() throws
 }
 

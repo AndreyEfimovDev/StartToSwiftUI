@@ -138,6 +138,23 @@
 		47B6E7EC2F5C001E00EF7441 /* SnippetsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7EB2F5C001E00EF7441 /* SnippetsViewModel.swift */; };
 		47B6E7F52F5D989100EF7441 /* FBAnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7F42F5D989100EF7441 /* FBAnalyticsManager.swift */; };
 		47B6E7F72F5D991200EF7441 /* PostsViewModel+FBImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7F62F5D991200EF7441 /* PostsViewModel+FBImport.swift */; };
+		47B6E7F92F5DA14600EF7441 /* SwiftDataSnippetsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7F82F5DA14600EF7441 /* SwiftDataSnippetsDataSource.swift */; };
+		47B6E7FC2F5DA44100EF7441 /* FBSnippetsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7FB2F5DA44100EF7441 /* FBSnippetsManager.swift */; };
+		47B6E7FE2F5DA59100EF7441 /* MockSnippetsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7FD2F5DA59100EF7441 /* MockSnippetsDataSource.swift */; };
+		47B6E8002F5DA98F00EF7441 /* FBSnippetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7FF2F5DA98F00EF7441 /* FBSnippetModel.swift */; };
+		47B6E8022F5DB6C700EF7441 /* SnippetsViewModel+Filtering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8012F5DB6C700EF7441 /* SnippetsViewModel+Filtering.swift */; };
+		47B6E8042F5DB6E800EF7441 /* SnippetsViewModel+FBImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8032F5DB6E800EF7441 /* SnippetsViewModel+FBImport.swift */; };
+		47B6E8062F5DB72300EF7441 /* SnippetsViewModel+BackupRestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8052F5DB72300EF7441 /* SnippetsViewModel+BackupRestore.swift */; };
+		47B6E8082F5DF5AD00EF7441 /* SnippetsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8072F5DF5AD00EF7441 /* SnippetsHomeView.swift */; };
+		47B6E80A2F5DF5CD00EF7441 /* SnippetsFiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8092F5DF5CD00EF7441 /* SnippetsFiltersView.swift */; };
+		47B6E80C2F5DF62700EF7441 /* MockFBSnippetsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E80B2F5DF62700EF7441 /* MockFBSnippetsManager.swift */; };
+		47B6E80E2F5DFAE500EF7441 /* SnippetRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E80D2F5DFAE500EF7441 /* SnippetRowView.swift */; };
+		47B6E8102F5DFB1700EF7441 /* SnippetViewRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E80F2F5DFB1700EF7441 /* SnippetViewRegistry.swift */; };
+		47B6E8122F5DFB3200EF7441 /* SnippetDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8112F5DFB3200EF7441 /* SnippetDetailsView.swift */; };
+		47B6E8142F5DFB6800EF7441 /* DemoViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8132F5DFB6800EF7441 /* DemoViews.swift */; };
+		47B6E8162F5DFB9700EF7441 /* ImportSnippetsFromCloudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8152F5DFB9700EF7441 /* ImportSnippetsFromCloudView.swift */; };
+		47B6E8182F5DFBB600EF7441 /* ArchivedSnippetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8172F5DFBB600EF7441 /* ArchivedSnippetsView.swift */; };
+		47B6E81B2F5DFEE800EF7441 /* SnippetNoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E81A2F5DFEE800EF7441 /* SnippetNoPreviewView.swift */; };
 		47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */; };
 		47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF09F2E5F9E9800287F10 /* MoreLessTextButton.swift */; };
 		47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF0A12E60485D00287F10 /* FavoriteButton.swift */; };
@@ -327,6 +344,23 @@
 		47B6E7EB2F5C001E00EF7441 /* SnippetsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsViewModel.swift; sourceTree = "<group>"; };
 		47B6E7F42F5D989100EF7441 /* FBAnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBAnalyticsManager.swift; sourceTree = "<group>"; };
 		47B6E7F62F5D991200EF7441 /* PostsViewModel+FBImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+FBImport.swift"; sourceTree = "<group>"; };
+		47B6E7F82F5DA14600EF7441 /* SwiftDataSnippetsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataSnippetsDataSource.swift; sourceTree = "<group>"; };
+		47B6E7FB2F5DA44100EF7441 /* FBSnippetsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBSnippetsManager.swift; sourceTree = "<group>"; };
+		47B6E7FD2F5DA59100EF7441 /* MockSnippetsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSnippetsDataSource.swift; sourceTree = "<group>"; };
+		47B6E7FF2F5DA98F00EF7441 /* FBSnippetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBSnippetModel.swift; sourceTree = "<group>"; };
+		47B6E8012F5DB6C700EF7441 /* SnippetsViewModel+Filtering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SnippetsViewModel+Filtering.swift"; sourceTree = "<group>"; };
+		47B6E8032F5DB6E800EF7441 /* SnippetsViewModel+FBImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SnippetsViewModel+FBImport.swift"; sourceTree = "<group>"; };
+		47B6E8052F5DB72300EF7441 /* SnippetsViewModel+BackupRestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SnippetsViewModel+BackupRestore.swift"; sourceTree = "<group>"; };
+		47B6E8072F5DF5AD00EF7441 /* SnippetsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsHomeView.swift; sourceTree = "<group>"; };
+		47B6E8092F5DF5CD00EF7441 /* SnippetsFiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsFiltersView.swift; sourceTree = "<group>"; };
+		47B6E80B2F5DF62700EF7441 /* MockFBSnippetsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFBSnippetsManager.swift; sourceTree = "<group>"; };
+		47B6E80D2F5DFAE500EF7441 /* SnippetRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetRowView.swift; sourceTree = "<group>"; };
+		47B6E80F2F5DFB1700EF7441 /* SnippetViewRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetViewRegistry.swift; sourceTree = "<group>"; };
+		47B6E8112F5DFB3200EF7441 /* SnippetDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetDetailsView.swift; sourceTree = "<group>"; };
+		47B6E8132F5DFB6800EF7441 /* DemoViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoViews.swift; sourceTree = "<group>"; };
+		47B6E8152F5DFB9700EF7441 /* ImportSnippetsFromCloudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportSnippetsFromCloudView.swift; sourceTree = "<group>"; };
+		47B6E8172F5DFBB600EF7441 /* ArchivedSnippetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedSnippetsView.swift; sourceTree = "<group>"; };
+		47B6E81A2F5DFEE800EF7441 /* SnippetNoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetNoPreviewView.swift; sourceTree = "<group>"; };
 		47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedCupsuleButton.swift; sourceTree = "<group>"; };
 		47BAF09F2E5F9E9800287F10 /* MoreLessTextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreLessTextButton.swift; sourceTree = "<group>"; };
 		47BAF0A12E60485D00287F10 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
@@ -458,7 +492,6 @@
 			isa = PBXGroup;
 			children = (
 				4791CE032E748DA200687126 /* AddEditPostView.swift */,
-				4791CDAE2E70187E00687126 /* PreferencesView.swift */,
 				4773545C2E65D03A001DEDEE /* FiltersView.swift */,
 				47BAF0A32E60613200287F10 /* SearchBarView.swift */,
 				47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */,
@@ -497,13 +530,13 @@
 			path = Firebase;
 			sourceTree = "<group>";
 		};
-		4734367D2F4A342200CF00FA /* AppSyncStateManager */ = {
+		4734367D2F4A342200CF00FA /* AppSyncState */ = {
 			isa = PBXGroup;
 			children = (
 				4734367E2F4A345500CF00FA /* AppSyncStateModel.swift */,
 				47EA14302EF530780064583B /* AppSyncStateManager.swift */,
 			);
-			path = AppSyncStateManager;
+			path = AppSyncState;
 			sourceTree = "<group>";
 		};
 		473436802F4B059200CF00FA /* Crashlytics */ = {
@@ -519,6 +552,7 @@
 			children = (
 				473436772F49BC1B00CF00FA /* FBPostModel.swift */,
 				473436752F48F18200CF00FA /* FBNoticeModel.swift */,
+				47B6E7FF2F5DA98F00EF7441 /* FBSnippetModel.swift */,
 			);
 			path = FirestoreModels;
 			sourceTree = "<group>";
@@ -528,6 +562,7 @@
 			children = (
 				473436792F49C49000CF00FA /* FBPostsManager.swift */,
 				473436732F48C96300CF00FA /* FBNoticeManager.swift */,
+				47B6E7FB2F5DA44100EF7441 /* FBSnippetsManager.swift */,
 			);
 			path = FirestoreManagers;
 			sourceTree = "<group>";
@@ -616,8 +651,8 @@
 				4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */,
 				475997722E5DA436008E20F0 /* Extensions */,
 				473436702F48A11300CF00FA /* Firebase */,
-				475CC64B2F216B480099CAA6 /* MockDataServices */,
-				4734367D2F4A342200CF00FA /* AppSyncStateManager */,
+				475CC64B2F216B480099CAA6 /* DataServices */,
+				4734367D2F4A342200CF00FA /* AppSyncState */,
 				4759976C2E5D931F008E20F0 /* Services */,
 				4751DB032F16517100EC9C53 /* Coordinator */,
 				475997592E5C86C5008E20F0 /* Components */,
@@ -657,6 +692,9 @@
 				474BFB922F3C8E2F006E639B /* PostsViewModel+Widget.swift */,
 				471BBFA02EC7251D0004AC45 /* NoticesViewModel.swift */,
 				47B6E7EB2F5C001E00EF7441 /* SnippetsViewModel.swift */,
+				47B6E8012F5DB6C700EF7441 /* SnippetsViewModel+Filtering.swift */,
+				47B6E8032F5DB6E800EF7441 /* SnippetsViewModel+FBImport.swift */,
+				47B6E8052F5DB72300EF7441 /* SnippetsViewModel+BackupRestore.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -704,18 +742,16 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		475CC64B2F216B480099CAA6 /* MockDataServices */ = {
+		475CC64B2F216B480099CAA6 /* DataServices */ = {
 			isa = PBXGroup;
 			children = (
 				475CC64C2F216B870099CAA6 /* DataSourcesProtocols.swift */,
 				475CC6972F22476D0099CAA6 /* SwiftDataPostsDataSource.swift */,
 				475CC6952F22472E0099CAA6 /* SwiftDataNoticesDataSource.swift */,
-				475CC6932F2246FB0099CAA6 /* MockPostsDataSource.swift */,
-				475CC6912F2246E00099CAA6 /* MockNoticesDataSource.swift */,
-				47939D7A2F50540800CBE432 /* MockFBPostsManager.swift */,
-				47939D7C2F50542A00CBE432 /* MockFBNoticesManager.swift */,
+				47B6E7F82F5DA14600EF7441 /* SwiftDataSnippetsDataSource.swift */,
+				47B6E7FA2F5DA15600EF7441 /* Mock */,
 			);
-			path = MockDataServices;
+			path = DataServices;
 			sourceTree = "<group>";
 		};
 		475CC68B2F217B890099CAA6 /* StartToSwiftUIUnitTests */ = {
@@ -807,6 +843,32 @@
 			path = Snippets;
 			sourceTree = "<group>";
 		};
+		47B6E7FA2F5DA15600EF7441 /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				475CC6932F2246FB0099CAA6 /* MockPostsDataSource.swift */,
+				475CC6912F2246E00099CAA6 /* MockNoticesDataSource.swift */,
+				47B6E7FD2F5DA59100EF7441 /* MockSnippetsDataSource.swift */,
+				47939D7A2F50540800CBE432 /* MockFBPostsManager.swift */,
+				47939D7C2F50542A00CBE432 /* MockFBNoticesManager.swift */,
+				47B6E80B2F5DF62700EF7441 /* MockFBSnippetsManager.swift */,
+			);
+			path = Mock;
+			sourceTree = "<group>";
+		};
+		47B6E8192F5DFBDD00EF7441 /* Preferences2 */ = {
+			isa = PBXGroup;
+			children = (
+				4791CDAE2E70187E00687126 /* PreferencesView.swift */,
+				47656BFA2EE1EBBD00F45AA6 /* StudyProgress */,
+				47C56FF02EC9CEA300F0796C /* Notices */,
+				471DCBDA2EBBC60E00AFA5F4 /* AboutApp */,
+				471DCBD72EBBB97000AFA5F4 /* LegalInformation */,
+				47870FB92ECC8628004175E4 /* Acknowledgements.swift */,
+			);
+			path = Preferences2;
+			sourceTree = "<group>";
+		};
 		47BAF09E2E5F9C4500287F10 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
@@ -830,13 +892,16 @@
 				47B4657F2E6867930059CCB7 /* HomeView.swift */,
 				473436362F449BC400CF00FA /* SubViews */,
 				4715FA2F2F263BE800ED732A /* PostDetails */,
-				47C56FF02EC9CEA300F0796C /* Notices */,
-				47656BFA2EE1EBBD00F45AA6 /* StudyProgress */,
+				47B6E8192F5DFBDD00EF7441 /* Preferences2 */,
 				47C56FEF2EC9CE8200F0796C /* ManagingPosts */,
-				47870FBB2ECCB927004175E4 /* PostDrafts */,
-				471DCBDA2EBBC60E00AFA5F4 /* AboutApp */,
-				471DCBD72EBBB97000AFA5F4 /* LegalInformation */,
-				47870FB92ECC8628004175E4 /* Acknowledgements.swift */,
+				47B6E8072F5DF5AD00EF7441 /* SnippetsHomeView.swift */,
+				47B6E80D2F5DFAE500EF7441 /* SnippetRowView.swift */,
+				47B6E8112F5DFB3200EF7441 /* SnippetDetailsView.swift */,
+				47B6E8132F5DFB6800EF7441 /* DemoViews.swift */,
+				47B6E8152F5DFB9700EF7441 /* ImportSnippetsFromCloudView.swift */,
+				47B6E8172F5DFBB600EF7441 /* ArchivedSnippetsView.swift */,
+				47B6E80F2F5DFB1700EF7441 /* SnippetViewRegistry.swift */,
+				47B6E8092F5DF5CD00EF7441 /* SnippetsFiltersView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -844,6 +909,7 @@
 		47C56FEF2EC9CE8200F0796C /* ManagingPosts */ = {
 			isa = PBXGroup;
 			children = (
+				47870FBB2ECCB927004175E4 /* PostDrafts */,
 				47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */,
 				47939D762F4EEB9E00CBE432 /* ArchivedPostsView.swift */,
 				4732FB2C2EAA2BFC0062269D /* ImportPostsFromCloudView.swift */,
@@ -851,6 +917,7 @@
 				47AA55892EA9741D000AF4E9 /* RestoreBackupView.swift */,
 				4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */,
 				473436372F449C7F00CF00FA /* Helpers */,
+				47B6E81A2F5DFEE800EF7441 /* SnippetNoPreviewView.swift */,
 			);
 			path = ManagingPosts;
 			sourceTree = "<group>";
@@ -1078,12 +1145,16 @@
 				4751DAFA2F1640C300EC9C53 /* StatCard.swift in Sources */,
 				4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */,
 				4751DAF82F16409B00EC9C53 /* StatsCardsView.swift in Sources */,
+				47B6E7FC2F5DA44100EF7441 /* FBSnippetsManager.swift in Sources */,
 				47B465802E6867930059CCB7 /* HomeView.swift in Sources */,
 				47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */,
 				47B6E7EC2F5C001E00EF7441 /* SnippetsViewModel.swift in Sources */,
+				47B6E8082F5DF5AD00EF7441 /* SnippetsHomeView.swift in Sources */,
 				47F68A4A2EFB0232003786D0 /* AppCoordinator.swift in Sources */,
+				47B6E8162F5DFB9700EF7441 /* ImportSnippetsFromCloudView.swift in Sources */,
 				471BBF9C2EC620D70004AC45 /* PostDraftsRowView.swift in Sources */,
 				47939D802F50591B00CBE432 /* MockFBPostsManager.swift in Sources */,
+				47B6E81B2F5DFEE800EF7441 /* SnippetNoPreviewView.swift in Sources */,
 				4751DAEE2F163BA600EC9C53 /* StudyProgressView.swift in Sources */,
 				471DCBDE2EBBC68500AFA5F4 /* WhatsNew.swift in Sources */,
 				47656BFE2EE1EC4D00F45AA6 /* StudyProgressDetailsView.swift in Sources */,
@@ -1097,6 +1168,7 @@
 				47C56FEC2EC9C66700F0796C /* NoticeDetailsView.swift in Sources */,
 				4773545D2E65D03A001DEDEE /* FiltersView.swift in Sources */,
 				47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */,
+				47B6E8122F5DFB3200EF7441 /* SnippetDetailsView.swift in Sources */,
 				47FF42592EE556DB0069D232 /* TapHandler.swift in Sources */,
 				475CC64D2F216B870099CAA6 /* DataSourcesProtocols.swift in Sources */,
 				4734367F2F4A345500CF00FA /* AppSyncStateModel.swift in Sources */,
@@ -1104,14 +1176,17 @@
 				472E05CC2EDDC9BA005D774E /* KeyboardManager.swift in Sources */,
 				471DCBD02EBB88A400AFA5F4 /* CopyrightPolicy.swift in Sources */,
 				47BAF0F82E64A77A00287F10 /* Enums.swift in Sources */,
+				47B6E8102F5DFB1700EF7441 /* SnippetViewRegistry.swift in Sources */,
 				475997552E5C7F81008E20F0 /* PreviewData.swift in Sources */,
 				4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */,
 				471DCBDC2EBBC67500AFA5F4 /* Introduction.swift in Sources */,
 				4791CE002E747B2E00687126 /* HapticManager.swift in Sources */,
 				475CC6A02F22B0790099CAA6 /* CodablePost.swift in Sources */,
 				475CC6922F2246E00099CAA6 /* MockNoticesDataSource.swift in Sources */,
+				47B6E8142F5DFB6800EF7441 /* DemoViews.swift in Sources */,
 				473436852F4B05EB00CF00FA /* FBCrashManager.swift in Sources */,
 				473436762F48F18600CF00FA /* FBNoticeModel.swift in Sources */,
+				47B6E8042F5DB6E800EF7441 /* SnippetsViewModel+FBImport.swift in Sources */,
 				4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */,
 				4751DAFE2F16410000EC9C53 /* CumulativeLegendView.swift in Sources */,
 				475CC6A22F22B0A90099CAA6 /* CodableNotice.swift in Sources */,
@@ -1124,6 +1199,7 @@
 				475CC6942F2246FB0099CAA6 /* MockPostsDataSource.swift in Sources */,
 				47AC34432F28F2360023C7AF /* Calendar.swift in Sources */,
 				47656BFC2EE1EBF000F45AA6 /* ProgressIndicatorView.swift in Sources */,
+				47B6E8182F5DFBB600EF7441 /* ArchivedSnippetsView.swift in Sources */,
 				47939D772F4EEB9E00CBE432 /* ArchivedPostsView.swift in Sources */,
 				471DCBCE2EBB83D200AFA5F4 /* LegalInformationView.swift in Sources */,
 				471DCBD42EBB8A6400AFA5F4 /* TermsOfUse.swift in Sources */,
@@ -1141,13 +1217,17 @@
 				475CC6982F22476D0099CAA6 /* SwiftDataPostsDataSource.swift in Sources */,
 				47542EB42EF2C8E400B0AB79 /* StartView.swift in Sources */,
 				4734367A2F49C49000CF00FA /* FBPostsManager.swift in Sources */,
+				47B6E7FE2F5DA59100EF7441 /* MockSnippetsDataSource.swift in Sources */,
 				47AC34452F28F39C0023C7AF /* SegmentedOneLinePickerNotOptional.swift in Sources */,
 				47E2AF4F2EBCD86000B0214F /* CategoryFilterView.swift in Sources */,
+				47B6E8062F5DB72300EF7441 /* SnippetsViewModel+BackupRestore.swift in Sources */,
 				478116462EBFF9DD00EF25F8 /* CustomProgressView.swift in Sources */,
+				47B6E8002F5DA98F00EF7441 /* FBSnippetModel.swift in Sources */,
 				47939D812F50592100CBE432 /* MockFBNoticesManager.swift in Sources */,
 				4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */,
 				4791CDFE2E747AC100687126 /* JSONFileManager.swift in Sources */,
 				470E63702EFB241D007B75B5 /* FormCoordinatorToolbar.swift in Sources */,
+				47B6E8022F5DB6C700EF7441 /* SnippetsViewModel+Filtering.swift in Sources */,
 				47B6E7E82F5BF85B00EF7441 /* CodeSnippet.swift in Sources */,
 				475997512E5C6C9D008E20F0 /* Post.swift in Sources */,
 				47C56FEE2EC9C94100F0796C /* NoticeRowView.swift in Sources */,
@@ -1163,9 +1243,11 @@
 				472A9B5B2EDC3B6F00ED3344 /* BackButtonView.swift in Sources */,
 				471DCBCA2EBB633300AFA5F4 /* PrivacyPolicy.swift in Sources */,
 				472243782EFFE31F0055461A /* GlobalMethods.swift in Sources */,
+				47B6E80A2F5DF5CD00EF7441 /* SnippetsFiltersView.swift in Sources */,
 				47F78A552F02DB12005394BE /* ModalNavigationContainerWrapper.swift in Sources */,
 				47EA14312EF530780064583B /* AppSyncStateManager.swift in Sources */,
 				47FF424B2EE4B5960069D232 /* RatingSelectionView.swift in Sources */,
+				47B6E7F92F5DA14600EF7441 /* SwiftDataSnippetsDataSource.swift in Sources */,
 				470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */,
 				470E63762EFD5044007B75B5 /* CountdownView.swift in Sources */,
 				471BBFA62EC7AB640004AC45 /* NoticesView.swift in Sources */,
@@ -1184,9 +1266,11 @@
 				47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */,
 				4791CDC12E708E1300687126 /* DocumentPicker.swift in Sources */,
 				474BFB932F3C8E2F006E639B /* PostsViewModel+Widget.swift in Sources */,
+				47B6E80E2F5DFAE500EF7441 /* SnippetRowView.swift in Sources */,
 				470E637A2EFDE1CF007B75B5 /* ModalNavigationContainer.swift in Sources */,
 				471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */,
 				47AA558A2EA9741D000AF4E9 /* RestoreBackupView.swift in Sources */,
+				47B6E80C2F5DF62700EF7441 /* MockFBSnippetsManager.swift in Sources */,
 				4751DAF62F16407200EC9C53 /* ChartDataPoint.swift in Sources */,
 				4791CDBB2E702E9700687126 /* EraseAllPostsView.swift in Sources */,
 				4732FB372EAA63810062269D /* Constants.swift in Sources */,
@@ -1386,7 +1470,7 @@
 				CODE_SIGN_ENTITLEMENTS = StartToSwiftUI/StartToSwiftUIDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -1409,7 +1493,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.0;
+				MARKETING_VERSION = 1.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = PELSH.StartToSwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1433,7 +1517,7 @@
 				CODE_SIGN_ENTITLEMENTS = StartToSwiftUI/StartToSwiftUIRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readwrite;
 				ENABLE_FILE_ACCESS_PICTURE_FOLDER = readwrite;
@@ -1468,7 +1552,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.0;
+				MARKETING_VERSION = 1.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = PELSH.StartToSwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1596,7 +1680,7 @@
 				CODE_SIGN_ENTITLEMENTS = StudyProgressWidgetExtensionDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StudyProgressWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StudyProgressWidget;
@@ -1607,7 +1691,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.4.0;
+				MARKETING_VERSION = 1.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = PELSH.StartToSwiftUI.StudyProgressWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1632,7 +1716,7 @@
 				CODE_SIGN_ENTITLEMENTS = StudyProgressWidgetExtensionRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StudyProgressWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StudyProgressWidget;
@@ -1643,7 +1727,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.4.0;
+				MARKETING_VERSION = 1.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = PELSH.StartToSwiftUI.StudyProgressWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

@@ -13,8 +13,7 @@ struct CodableCodeSnippet: Codable {
     var category: String
     var title: String
     var intro: String
-    var code: String
-    var codeDate: Date?
+    var codeSnippet: String
     var thanks: String?
     var githubLink: String?
     var origin: OriginOptions
@@ -30,8 +29,7 @@ extension CodableCodeSnippet {
         self.category = snippet.category
         self.title = snippet.title
         self.intro = snippet.intro
-        self.code = snippet.code
-        self.codeDate = snippet.codeDate
+        self.codeSnippet = snippet.codeSnippet
         self.thanks = snippet.thanks
         self.githubLink = snippet.githubLink
         self.origin = snippet.origin
@@ -49,8 +47,7 @@ enum SnippetMigrationHelper {
             category: c.category,
             title: c.title,
             intro: c.intro,
-            code: c.code,
-            codeDate: c.codeDate,
+            codeSnippet: c.codeSnippet,
             thanks: c.thanks,
             githubLink: c.githubLink,
             origin: c.origin,
@@ -60,4 +57,22 @@ enum SnippetMigrationHelper {
             addedDateStamp: c.addedDateStamp
         )
     }
+    
+    // Firebase conversion
+    static func convertFromFirebase(_ fb: FBSnippetModel) -> CodeSnippet {
+            CodeSnippet(
+                id: fb.snippetId,
+                category: fb.category,
+                title: fb.title,
+                intro: fb.intro,
+                codeSnippet: fb.codeSnippet,
+                thanks: fb.thanks,
+                githubLink: fb.githubUrlString,
+                origin: .cloudNew,
+                draft: false,
+                status: .active,
+                date: fb.date,
+                addedDateStamp: .now
+            )
+        }
 }

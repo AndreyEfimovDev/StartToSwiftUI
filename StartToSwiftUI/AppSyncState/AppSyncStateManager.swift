@@ -154,21 +154,24 @@ class AppSyncStateManager {
         return primaryState
     }
     
-    // MARK: - Methods for Notices
     
-    func getLastNoticeDate() -> Date? {
-        let appState = getOrCreateAppState()
-        return appState.latestNoticeDate
-        
+    private func saveContext() {
+        do {
+            try modelContext.save()
+        } catch {
+            log("❌ Error saving AppState: \(error)", level: .error)
+        }
     }
     
-    func updateLatestNoticeDate(_ date: Date) {
+    func getAppFirstLaunchDate() -> Date? {
         let appState = getOrCreateAppState()
-        appState.latestNoticeDate = date
-        saveContext()
+        return appState.appFirstLaunchDate
     }
 
-    // MARK: - Managing lastPostsFBUpdateDate
+}
+
+// MARK: - Methods for Posts
+extension AppSyncStateManager {
     
     /// Update the latest date of downloaded materials from the cloud
     func setLastDateOfPostsLoaded(_ date: Date) {
@@ -188,18 +191,43 @@ class AppSyncStateManager {
         let appState = getOrCreateAppState()
         return appState.lastPostsFBUpdateDate
     }
+
+}
+
+
+// MARK: - Methods for Notices
+extension AppSyncStateManager {
     
-    private func saveContext() {
-        do {
-            try modelContext.save()
-        } catch {
-            log("❌ Error saving AppState: \(error)", level: .error)
-        }
+    func getLastNoticeDate() -> Date? {
+        let appState = getOrCreateAppState()
+        return appState.latestNoticeDate
     }
     
-    func getAppFirstLaunchDate() -> Date? {
+    func updateLatestNoticeDate(_ date: Date) {
         let appState = getOrCreateAppState()
-        return appState.appFirstLaunchDate
+        appState.latestNoticeDate = date
+        saveContext()
+    }
+}
+
+
+// MARK: - Methods for Snippets
+extension AppSyncStateManager {
+
+    func setLastDateOfSnippetsLoaded(_ date: Date) {
+        let appState = getOrCreateAppState()
+        appState.lastSnippetsFBUpdateDate = date
+        saveContext()
     }
 
+    func resetLastDateOfSnippetsLoaded() {
+        let appState = getOrCreateAppState()
+        appState.lastSnippetsFBUpdateDate = Date(timeIntervalSince1970: 0)
+        saveContext()
+    }
+
+    func getLastDateOfSnippetsLoaded() -> Date? {
+        let appState = getOrCreateAppState()
+        return appState.lastSnippetsFBUpdateDate
+    }
 }

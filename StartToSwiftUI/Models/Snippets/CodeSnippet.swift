@@ -14,12 +14,12 @@ final class CodeSnippet {
     var category: String = Constants.mainCategory
     var title: String = ""
     var intro: String = ""
-    var code: String = ""
-    var codeDate: Date? = nil
+    var codeSnippet: String = ""
     var thanks: String? = nil
-    var githubLink: String? = nil
+    var githubUrlString: String? = nil
+    var notes: String = ""
+    var favoriteChoiceRawValue: String = "no"
     var originRawValue: String = "local"
-    var draft: Bool = false
     var statusRawValue: String = "active"
     var date: Date = Date()
     var addedDateStamp: Date?
@@ -35,17 +35,22 @@ final class CodeSnippet {
         set { statusRawValue = newValue.rawValue }
     }
     
+    var favoriteChoice: FavoriteChoice {
+        get { FavoriteChoice(rawValue: favoriteChoiceRawValue) ?? .no }
+        set { favoriteChoiceRawValue = newValue.rawValue }
+    }
+
     init(
         id: String = UUID().uuidString,
         category: String = Constants.mainCategory,
         title: String = "",
         intro: String,
-        code: String = "",
-        codeDate: Date? = nil,
+        codeSnippet: String = "",
         thanks: String? = nil,
-        githubLink: String? = nil,
+        githubUrlString: String? = nil,
+        notes: String = "",
+        favoriteChoice: FavoriteChoice = .no,
         origin: OriginOptions = .local,
-        draft: Bool = false,
         status: StatusOptions = .active,
         date: Date = .now,
         addedDateStamp: Date? = nil
@@ -54,12 +59,12 @@ final class CodeSnippet {
         self.category = category
         self.title = title
         self.intro = intro
-        self.code = code
-        self.codeDate = codeDate
+        self.codeSnippet = codeSnippet
         self.thanks = thanks
-        self.githubLink = githubLink
+        self.githubUrlString = githubUrlString
+        self.notes = notes
+        self.favoriteChoice = favoriteChoice
         self.origin = origin
-        self.draft = draft
         self.status = status
         self.date = date
         self.addedDateStamp = addedDateStamp

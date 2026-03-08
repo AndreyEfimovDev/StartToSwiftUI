@@ -1,0 +1,171 @@
+//
+//  SnippetDetailsView.swift
+//  StartToSwiftUI
+//
+//  Created by Andrey Efimov on 08.03.2026.
+//
+
+import SwiftUI
+
+struct SnippetDetailsView: View {
+
+    // MARK: - Dependencies
+    @EnvironmentObject private var vm: SnippetsViewModel
+    @EnvironmentObject private var coordinator: AppCoordinator
+
+    private let hapticManager = HapticManager.shared
+
+    // MARK: - Constants
+    let snippet: CodeSnippet
+
+    // MARK: - State
+    @State private var showCodeSheet = false
+    @State private var codeCopied = false
+
+    // MARK: - Body
+
+    var body: some View {
+        SnippetViewRegistry.view(for: snippet)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .toolbar { toolbar }
+            .sheet(isPresented: $showCodeSheet) { codeSheet }
+            .onAppear {
+                FBAnalyticsManager.shared.logScreen(name: "SnippetDetailsView_\(snippet.id)")
+            }
+    }
+
+    // MARK: - Toolbar
+
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+
+        // ← Back (iPhone only — iPad uses split view)
+        ToolbarItem(placement: .topBarLeading) {
+            if UIDevice.isiPhone {
+                BackButtonView { coordinator.pop() }
+            }
+        }
+
+        ToolbarItemGroup(placement: .topBarTrailing) {
+
+            // ⭐ Favourite
+            CircleStrokeButtonView(
+                iconName: snippet.favoriteChoice == .yes ? "star.fill" : "star",
+                iconFont: .headline,
+                imageColorPrimary: snippet.favoriteChoice == .yes
+                    ? Color.mycolor.myYellow
+                    : Color.mycolor.myAccent,
+                isShownCircle: false
+            ) {
+                vm.favoriteToggle(snippet)
+                hapticManager.impact(style: .light)
+            }
+
+            // </> View code
+            CircleStrokeButtonView(
+                iconName: "chevron.left.forwardslash.chevron.right",
+                isShownCircle: false
+            ) {
+                showCodeSheet = true
+                hapticManager.impact(style: .light)
+            }
+
+            // 📋 Copy code
+            CircleStrokeButtonView(
+                iconName: codeCopied ? "checkmark" : "doc.on.doc",
+                imageColorPrimary: codeCopied ? Color.mycolor.myGreen : Color.mycolor.myAccent,
+                isShownCircle: false
+            ) {
+                UIPasteboard.general.string = snippet.codeSnippet
+                hapticManager.notification(type: .success)
+                withAnimation { codeCopied = true }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    withAnimation { codeCopied = false }
+                }
+            }
+
+            // GitHub link — Phase 2
+            // if let link = snippet.githubLink, let url = URL(string: link) {
+            //     Link(destination: url) {
+            //         Image(systemName: "chevron.left.forwardslash.chevron.right")
+            //     }
+            // }
+        }
+    }
+
+    // MARK: - Code Sheet
+
+    private var codeSheet: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    // Header
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(snippet.title)
+                            .font(.headline)
+                        Text(snippet.intro)
+                            .font(.subheadline)
+                            .foregroundStyle(Color.mycolor.myAccent.opacity(0.7))
+                    }
+                    .padding(.horizontal)
+                    .padding(.top)
+
+                    Divider()
+
+                    // Code block
+                    Text(snippet.codeSnippet)
+                        .font(.system(.footnote, design: .monospaced))
+                        .foregroundStyle(Color.mycolor.myAccent)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(Color.mycolor.mySecondary.opacity(0.12))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .padding(.horizontal)
+
+                    if let thanks = snippet.thanks, !thanks.isEmpty {
+                        Text("Source: @\(thanks)")
+                            .font(.caption)
+                            .foregroundStyle(Color.mycolor.myAccent.opacity(0.5))
+                            .padding(.horizontal)
+                    }
+                }
+                .padding(.bottom, 30)
+            }
+            .navigationTitle("Code")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                // Copy button inside sheet
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        UIPasteboard.general.string = snippet.codeSnippet
+                        hapticManager.notification(type: .success)
+                    } label: {
+                        Image(systemName: "doc.on.doc")
+                            .foregroundStyle(Color.mycolor.myAccent)
+                    }
+                }
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Done") { showCodeSheet = false }
+                        .foregroundStyle(Color.mycolor.myAccent)
+                }
+            }
+        }
+        .presentationDragIndicator(.visible)
+        .presentationDetents([.medium, .large])
+    }
+}
+
+// MARK: - Preview
+
+#Preview("Snippet Details") {
+    let vm = SnippetsViewModel(
+        dataSource: MockSnippetsDataSource(snippets: PreviewData.sampleSnippets),
+        fbSnippetsManager: MockFBSnippetsManager()
+    )
+    NavigationStack {
+        SnippetDetailsView(snippet: PreviewData.sampleSnippet1)
+            .environmentObject(vm)
+            .environmentObject(AppCoordinator())
+    }
+}

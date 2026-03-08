@@ -62,6 +62,11 @@ struct ModalNavigationContainer: View {
             RestoreBackupView()
         case .erasePosts:
             EraseAllPostsView()
+
+        case .importSnippetsFromCloud:
+            ImportSnippetsFromCloudView()
+        case .archivedSnippets:
+            ArchivedSnippetsView()
             
         case .acknowledgements:
             Acknowledgements()
