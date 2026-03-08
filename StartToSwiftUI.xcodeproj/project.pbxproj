@@ -144,7 +144,6 @@
 		47B6E8002F5DA98F00EF7441 /* FBSnippetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7FF2F5DA98F00EF7441 /* FBSnippetModel.swift */; };
 		47B6E8022F5DB6C700EF7441 /* SnippetsViewModel+Filtering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8012F5DB6C700EF7441 /* SnippetsViewModel+Filtering.swift */; };
 		47B6E8042F5DB6E800EF7441 /* SnippetsViewModel+FBImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8032F5DB6E800EF7441 /* SnippetsViewModel+FBImport.swift */; };
-		47B6E8062F5DB72300EF7441 /* SnippetsViewModel+BackupRestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8052F5DB72300EF7441 /* SnippetsViewModel+BackupRestore.swift */; };
 		47B6E8082F5DF5AD00EF7441 /* SnippetsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8072F5DF5AD00EF7441 /* SnippetsHomeView.swift */; };
 		47B6E80A2F5DF5CD00EF7441 /* SnippetsFiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8092F5DF5CD00EF7441 /* SnippetsFiltersView.swift */; };
 		47B6E80C2F5DF62700EF7441 /* MockFBSnippetsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E80B2F5DF62700EF7441 /* MockFBSnippetsManager.swift */; };
@@ -350,7 +349,6 @@
 		47B6E7FF2F5DA98F00EF7441 /* FBSnippetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBSnippetModel.swift; sourceTree = "<group>"; };
 		47B6E8012F5DB6C700EF7441 /* SnippetsViewModel+Filtering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SnippetsViewModel+Filtering.swift"; sourceTree = "<group>"; };
 		47B6E8032F5DB6E800EF7441 /* SnippetsViewModel+FBImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SnippetsViewModel+FBImport.swift"; sourceTree = "<group>"; };
-		47B6E8052F5DB72300EF7441 /* SnippetsViewModel+BackupRestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SnippetsViewModel+BackupRestore.swift"; sourceTree = "<group>"; };
 		47B6E8072F5DF5AD00EF7441 /* SnippetsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsHomeView.swift; sourceTree = "<group>"; };
 		47B6E8092F5DF5CD00EF7441 /* SnippetsFiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsFiltersView.swift; sourceTree = "<group>"; };
 		47B6E80B2F5DF62700EF7441 /* MockFBSnippetsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFBSnippetsManager.swift; sourceTree = "<group>"; };
@@ -694,7 +692,6 @@
 				47B6E7EB2F5C001E00EF7441 /* SnippetsViewModel.swift */,
 				47B6E8012F5DB6C700EF7441 /* SnippetsViewModel+Filtering.swift */,
 				47B6E8032F5DB6E800EF7441 /* SnippetsViewModel+FBImport.swift */,
-				47B6E8052F5DB72300EF7441 /* SnippetsViewModel+BackupRestore.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1220,7 +1217,6 @@
 				47B6E7FE2F5DA59100EF7441 /* MockSnippetsDataSource.swift in Sources */,
 				47AC34452F28F39C0023C7AF /* SegmentedOneLinePickerNotOptional.swift in Sources */,
 				47E2AF4F2EBCD86000B0214F /* CategoryFilterView.swift in Sources */,
-				47B6E8062F5DB72300EF7441 /* SnippetsViewModel+BackupRestore.swift in Sources */,
 				478116462EBFF9DD00EF25F8 /* CustomProgressView.swift in Sources */,
 				47B6E8002F5DA98F00EF7441 /* FBSnippetModel.swift in Sources */,
 				47939D812F50592100CBE432 /* MockFBNoticesManager.swift in Sources */,

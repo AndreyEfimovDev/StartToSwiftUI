@@ -256,9 +256,14 @@ final class SnippetsViewModel: ObservableObject {
     func filterUniqueSnippets(from fbResponse: [FBSnippetModel]) -> [FBSnippetModel] {
         let existingTitles = Set(allSnippets.map { $0.title })
         let existingIds = Set(allSnippets.map { $0.id })
-        return fbResponse.filter {
-            !existingTitles.contains($0.title) && !existingIds.contains($0.snippetId)
-        }
+        return fbResponse
+            .filter { !existingTitles.contains($0.title) && !existingIds.contains($0.snippetId) }
+    }
+
+    func filterUniqueSnippets(_ snippets: [CodeSnippet]) -> [CodeSnippet] {
+        let existingTitles = Set(allSnippets.map { $0.title })
+        let existingIds = Set(allSnippets.map { $0.id })
+        return snippets.filter { !existingTitles.contains($0.title) && !existingIds.contains($0.id) }
     }
 
     func getLatestDateFromSnippets(_ snippets: [CodeSnippet]) -> Date? {
