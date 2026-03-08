@@ -19,7 +19,7 @@ struct StartToSwiftUIApp: App {
     // MARK: - Dependencies
     @StateObject private var postsViewModel: PostsViewModel
     @StateObject private var noticesViewModel: NoticesViewModel
-    @StateObject private var snippetViewModel: SnippetsViewModel
+//    @StateObject private var snippetViewModel: SnippetsViewModel
 
     @StateObject private var coordinator = AppCoordinator()
 
@@ -54,7 +54,7 @@ struct StartToSwiftUIApp: App {
         let context = modelContainer.mainContext
         _postsViewModel = StateObject(wrappedValue: PostsViewModel(modelContext: context))
         _noticesViewModel = StateObject(wrappedValue: NoticesViewModel(modelContext: context))
-        _snippetViewModel = StateObject)State(wrappedValue: SnippetsViewModel())
+//        _snippetViewModel = StateObject)State(wrappedValue: SnippetsViewModel())
 
         configureNavigationBarAppearance()
     }
@@ -66,7 +66,7 @@ struct StartToSwiftUIApp: App {
                 .environmentObject(coordinator)
                 .environmentObject(postsViewModel)
                 .environmentObject(noticesViewModel)
-                .environmentObject(snippetViewModel)
+//                .environmentObject(snippetViewModel)
                 .task {
                     postsViewModel.start()
                     noticesViewModel.start()

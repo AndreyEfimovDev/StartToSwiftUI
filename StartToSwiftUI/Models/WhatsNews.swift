@@ -16,21 +16,14 @@ struct WhatsNews {
                 News(
                     title: "Added",
                     newsText: """
-                    - Push notifications via FCM (Firebase) — receive updates even when the app is closed
-                    - A new button 'Check for a new App release' in the About App section to quickly verify if a newer version is available
+                    - Push notifications — get notified about new events even when the app is closed
+                    - 'Check for App Update' button in About App section to quickly verify if a newer version is available
                     """
                 ),
                 News(
                     title: "Improved",
                     newsText: """
-                    - Improved URL format validation for source links
-                    - 
-                    """
-                ),
-                News(
-                    title: "Fixed",
-                    newsText: """
-                    - 
+                    - URL format validation for source links
                     """
                 ),
             ]
