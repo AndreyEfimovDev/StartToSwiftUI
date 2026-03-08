@@ -70,7 +70,6 @@ struct StartToSwiftUIApp: App {
     }
     
     // MARK: - Configuration Methods
-    
     private func configureNavigationBarAppearance() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
