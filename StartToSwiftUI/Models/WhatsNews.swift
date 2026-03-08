@@ -24,18 +24,10 @@ struct WhatsNews {
                     title: "Improved",
                     newsText: """
                     - Improved URL format validation for source links
-                    - 
-                    """
-                ),
-                News(
-                    title: "Fixed",
-                    newsText: """
-                    - 
                     """
                 ),
             ]
         ),
-
         Release(
             release: "Release 1.3.0(4)",
             news: [
