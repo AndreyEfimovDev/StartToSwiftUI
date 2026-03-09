@@ -33,7 +33,7 @@ struct WhatsNews {
                     title: "Added",
                     newsText: """
                     - Push notifications — get notified about new events even when the app is closed
-                    - 'Check for App Update' button in About App section to quickly verify if a newer version is available
+                    - Check for App Update button in About App section to quickly verify if a newer version is available
                     """
                 ),
                 News(

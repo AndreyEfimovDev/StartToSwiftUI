@@ -85,8 +85,7 @@ struct ArchivedSnippetsView: View {
 // MARK: - Preview
 
 #Preview {
-    let hiddenSnippet = PreviewData.sampleSnippet1
-    hiddenSnippet.status = .hidden
+    let hiddenSnippet = PreviewData.sampleSnippetHidden
 
     let vm = SnippetsViewModel(
         dataSource: MockSnippetsDataSource(snippets: [hiddenSnippet, PreviewData.sampleSnippet2]),
@@ -94,7 +93,7 @@ struct ArchivedSnippetsView: View {
     )
     vm.loadSnippetsFromSwiftData()
 
-    NavigationStack {
+    return NavigationStack {
         ArchivedSnippetsView()
             .environmentObject(vm)
             .environmentObject(AppCoordinator())

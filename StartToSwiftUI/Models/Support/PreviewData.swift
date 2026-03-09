@@ -208,6 +208,37 @@ extension PreviewData {
 
 extension PreviewData {
 
+    static let sampleSnippetHidden: CodeSnippet = CodeSnippet(
+        id: "snippet_001",
+        category: "SwiftUI",
+        title: "Custom ViewModifier",
+        intro: "A reusable modifier that applies a card-style background with shadow — great for list rows and info panels.",
+        codeSnippet: """
+        struct CardModifier: ViewModifier {
+            func body(content: Content) -> some View {
+                content
+                    .padding()
+                    .background(.ultraThinMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+            }
+        }
+
+        extension View {
+            func cardStyle() -> some View {
+                modifier(CardModifier())
+            }
+        }
+        """,
+        thanks: "Paul Hudson",
+        notes: "#Paul Hudson notes",
+        origin: .cloudNew,
+        status: .hidden,
+        date: Date.from(year: 2025, month: 11, day: 10) ?? Date(),
+        addedDateStamp: .now
+
+    )
+    
     static let sampleSnippets: [CodeSnippet] = [
         sampleSnippet1, sampleSnippet2, sampleSnippet3
     ]
@@ -235,7 +266,7 @@ extension PreviewData {
         }
         """,
         thanks: "Paul Hudson",
-        githubLink: "https://github.com/example/CardModifier",
+        githubUrlString: "https://github.com/example/CardModifier",
         origin: .cloudNew,
         date: Date.from(year: 2025, month: 11, day: 10) ?? Date(),
         addedDateStamp: .now

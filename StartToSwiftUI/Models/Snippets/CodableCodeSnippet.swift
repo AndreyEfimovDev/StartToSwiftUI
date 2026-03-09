@@ -15,9 +15,10 @@ struct CodableCodeSnippet: Codable {
     var intro: String
     var codeSnippet: String
     var thanks: String?
-    var githubLink: String?
+    var githubUrlString: String?
+    var notes: String
+    var favoriteChoice: FavoriteChoice
     var origin: OriginOptions
-    var draft: Bool
     var status: StatusOptions
     var date: Date
     var addedDateStamp: Date?
@@ -31,9 +32,10 @@ extension CodableCodeSnippet {
         self.intro = snippet.intro
         self.codeSnippet = snippet.codeSnippet
         self.thanks = snippet.thanks
-        self.githubLink = snippet.githubLink
+        self.githubUrlString = snippet.githubUrlString
+        self.notes = snippet.notes
+        self.favoriteChoice = snippet.favoriteChoice
         self.origin = snippet.origin
-        self.draft = snippet.draft
         self.status = snippet.status
         self.date = snippet.date
         self.addedDateStamp = snippet.addedDateStamp
@@ -49,9 +51,10 @@ enum SnippetMigrationHelper {
             intro: c.intro,
             codeSnippet: c.codeSnippet,
             thanks: c.thanks,
-            githubLink: c.githubLink,
+            githubUrlString: c.githubUrlString,
+            notes: c.notes,
+            favoriteChoice: c.favoriteChoice,
             origin: c.origin,
-            draft: c.draft,
             status: c.status,
             date: c.date,
             addedDateStamp: c.addedDateStamp
@@ -67,9 +70,10 @@ enum SnippetMigrationHelper {
                 intro: fb.intro,
                 codeSnippet: fb.codeSnippet,
                 thanks: fb.thanks,
-                githubLink: fb.githubUrlString,
+                githubUrlString: fb.githubUrlString,
+                notes: fb.notes,
+                favoriteChoice: .no,
                 origin: .cloudNew,
-                draft: false,
                 status: .active,
                 date: fb.date,
                 addedDateStamp: .now

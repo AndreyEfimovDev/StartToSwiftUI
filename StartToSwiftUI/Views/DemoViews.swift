@@ -1,303 +1,112 @@
 //
-//  CardModifierDemoView.swift
+//  DemoViews.swift
 //  StartToSwiftUI
 //
-//  Created by Andrey Efimov on 08.03.2026.
+//  Created by Andrey Efimov on 09.03.2026.
 //
-//  Place in Views/Snippets/Demos/
+//  Place in Views/SnippetsDemoViews/
+//
+//  Thin wrappers that embed original demo components into
+//  the SnippetDetailsView context (header, live demo, source credit).
+//  Original files A001_... and A002_... are not modified.
 
 import SwiftUI
 
-// MARK: - Card Modifier Demo
-// Snippet ID: "snippet_001"
+// MARK: - Shared helper views
 
-struct CardModifierDemoView: View {
-
+private struct SnippetDemoHeader: View {
     let snippet: CodeSnippet
 
-    // MARK: - The modifier being demonstrated
-
-    private struct CardModifier: ViewModifier {
-        func body(content: Content) -> some View {
-            content
-                .padding()
-                .background(.ultraThinMaterial)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
-        }
-    }
-
-    // MARK: - Body
-
     var body: some View {
-        ScrollView {
-            VStack(spacing: 24) {
-                header
-
-                // Live Demo
-                demoSection
-
-                descriptionSection
-            }
-            .padding(.horizontal)
-            .padding(.top)
-            .foregroundStyle(Color.mycolor.myAccent)
-        }
-    }
-
-    private var header: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 8) {
             Text(snippet.title)
                 .font(.title2)
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
             Text(snippet.intro)
                 .font(.subheadline)
-                .foregroundStyle(Color.mycolor.myAccent.opacity(0.7))
-        }
-        .cardBackground()
-    }
-
-    private var demoSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Live Demo")
-                .font(.headline)
-
-            // Applying the modifier to different content
-            Text("Simple text with .cardStyle()")
-                .modifier(CardModifier())
-
-            HStack {
-                Image(systemName: "star.fill")
-                    .foregroundStyle(Color.mycolor.myYellow)
-                Text("HStack with .cardStyle()")
-            }
-            .modifier(CardModifier())
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text("VStack with .cardStyle()")
-                    .fontWeight(.semibold)
-                Text("Subtitle content here")
-                    .font(.caption)
-                    .foregroundStyle(Color.mycolor.myAccent.opacity(0.6))
-            }
-            .modifier(CardModifier())
-        }
-        .cardBackground()
-    }
-
-    private var descriptionSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("How it works")
-                .font(.headline)
-            Text("ViewModifier wraps any View in a reusable style. The .cardStyle() extension makes the syntax clean at the call site — just chain it like any built-in modifier.")
-                .font(.subheadline)
-                .foregroundStyle(Color.mycolor.myAccent.opacity(0.8))
+                .foregroundStyle(Color.mycolor.myAccent.opacity(0.75))
         }
         .cardBackground()
     }
 }
 
-// MARK: - Async Image Demo
-// Snippet ID: "snippet_002"
-
-struct AsyncImageDemoView: View {
-
-    let snippet: CodeSnippet
-
-    private let sampleURL = "https://picsum.photos/seed/swiftui/200/200"
+private struct SnippetThanksView: View {
+    let thanks: String
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 24) {
-                headerCard
-
-                demoSection
-
-                descriptionSection
-            }
-            .padding(.horizontal)
-            .padding(.top)
-            .foregroundStyle(Color.mycolor.myAccent)
-        }
-    }
-
-    private var headerCard: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(snippet.title)
-                .font(.title2)
-                .fontWeight(.semibold)
-            Text(snippet.intro)
-                .font(.subheadline)
-                .foregroundStyle(Color.mycolor.myAccent.opacity(0.7))
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .cardBackground()
-    }
-
-    private var demoSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Live Demo")
-                .font(.headline)
-
-            HStack(spacing: 16) {
-                // The actual AsyncImage from the snippet
-                AsyncImage(url: URL(string: sampleURL)) { phase in
-                    switch phase {
-                    case .empty:
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.secondary.opacity(0.2))
-                            .overlay { ProgressView() }
-                    case .success(let image):
-                        image.resizable().scaledToFill()
-                    case .failure:
-                        Image(systemName: "photo")
-                            .foregroundStyle(.secondary)
-                    @unknown default:
-                        EmptyView()
-                    }
-                }
-                .frame(width: 80, height: 80)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Remote Image")
-                        .fontWeight(.semibold)
-                    Text("Loaded asynchronously with a placeholder while downloading.")
-                        .font(.caption)
-                        .foregroundStyle(Color.mycolor.myAccent.opacity(0.7))
-                }
-            }
-        }
-        .cardBackground()
-    }
-
-    private var descriptionSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("How it works")
-                .font(.headline)
-            Text("AsyncImage handles three phases automatically: .empty (placeholder), .success (loaded image) and .failure (error state). No extra packages needed — it's built into SwiftUI.")
-                .font(.subheadline)
-                .foregroundStyle(Color.mycolor.myAccent.opacity(0.8))
-        }
-        .cardBackground()
+        Text("Source: @\(thanks)")
+            .font(.caption)
+            .foregroundStyle(Color.mycolor.myAccent.opacity(0.5))
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .padding(.horizontal, 4)
     }
 }
 
-// MARK: - Debounced Search Demo
-// Snippet ID: "snippet_003"
+// MARK: - A001_ProgressViewIndicatorsDemoView
 
-struct DebouncedSearchDemoView: View {
+struct A001_ProgressViewIndicatorsDemoView: View {
 
     let snippet: CodeSnippet
 
-    @State private var searchText = ""
-    @State private var displayedQuery = ""
-
-    private let items = [
-        "SwiftUI", "Swift", "Combine", "NavigationStack",
-        "ViewModifier", "AsyncAwait", "MVVM", "SwiftData",
-        "Coordinator", "EnvironmentObject"
-    ]
-
-    private var filteredItems: [String] {
-        searchText.isEmpty ? items : items.filter {
-            $0.localizedCaseInsensitiveContains(searchText)
-        }
-    }
-
     var body: some View {
-        ScrollView {
-            VStack(spacing: 24) {
-                headerCard
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 20) {
+                SnippetDemoHeader(snippet: snippet)
 
-                demoSection
+                // Live demo — original component, untouched
+                A001_ProgressViewIndicators()
+                    .cardBackground()
 
-                descriptionSection
+                if let thanks = snippet.thanks, !thanks.isEmpty {
+                    SnippetThanksView(thanks: thanks)
+                }
             }
             .padding(.horizontal)
-            .padding(.top)
+            .padding(.vertical)
             .foregroundStyle(Color.mycolor.myAccent)
         }
     }
+}
 
-    private var headerCard: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(snippet.title)
-                .font(.title2)
-                .fontWeight(.semibold)
-            Text(snippet.intro)
-                .font(.subheadline)
-                .foregroundStyle(Color.mycolor.myAccent.opacity(0.7))
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .cardBackground()
-    }
+// MARK: - A002_TrimIndicatorDemoView
 
-    private var demoSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Live Demo")
-                .font(.headline)
+struct A002_TrimIndicatorDemoView: View {
 
-            TextField("Type to filter...", text: $searchText)
-                .padding(10)
-                .background(.ultraThinMaterial)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                // Debounce with .onChange — same effect as Combine debounce
-                .onChange(of: searchText) { _, newValue in
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        if newValue == searchText {
-                            displayedQuery = newValue
-                        }
-                    }
+    let snippet: CodeSnippet
+
+    var body: some View {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 20) {
+                SnippetDemoHeader(snippet: snippet)
+
+                // Live demo — original component, untouched
+                A002_TrimIndicator()
+                    .cardBackground()
+
+                if let thanks = snippet.thanks, !thanks.isEmpty {
+                    SnippetThanksView(thanks: thanks)
                 }
-
-            if !displayedQuery.isEmpty {
-                Text("Filtering after 0.5s pause: \"\(displayedQuery)\"")
-                    .font(.caption)
-                    .foregroundStyle(Color.mycolor.myBlue)
             }
-
-            ForEach(filteredItems, id: \.self) { item in
-                Text(item)
-                    .padding(.vertical, 4)
-                Divider()
-            }
+            .padding(.horizontal)
+            .padding(.vertical)
+            .foregroundStyle(Color.mycolor.myAccent)
         }
-        .cardBackground()
-    }
-
-    private var descriptionSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("How it works")
-                .font(.headline)
-            Text("Debounce delays the filter until the user stops typing (0.5s pause). Without it, every keystroke triggers an expensive filter or network call. In a ViewModel, Combine's .debounce() operator handles this elegantly.")
-                .font(.subheadline)
-                .foregroundStyle(Color.mycolor.myAccent.opacity(0.8))
-        }
-        .cardBackground()
     }
 }
 
 // MARK: - Previews
 
-#Preview("Card Modifier") {
+#Preview("A001 Progress Indicators") {
     NavigationStack {
-        CardModifierDemoView(snippet: PreviewData.sampleSnippet1)
+        A001_ProgressViewIndicatorsDemoView(snippet: PreviewData.sampleSnippet1)
             .environmentObject(AppCoordinator())
     }
 }
 
-#Preview("Async Image") {
+#Preview("A002 Trim Indicator") {
     NavigationStack {
-        AsyncImageDemoView(snippet: PreviewData.sampleSnippet2)
-            .environmentObject(AppCoordinator())
-    }
-}
-
-#Preview("Debounced Search") {
-    NavigationStack {
-        DebouncedSearchDemoView(snippet: PreviewData.sampleSnippet3)
+        A002_TrimIndicatorDemoView(snippet: PreviewData.sampleSnippet2)
             .environmentObject(AppCoordinator())
     }
 }

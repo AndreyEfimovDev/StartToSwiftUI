@@ -18,10 +18,9 @@ struct SnippetViewRegistry {
     @ViewBuilder
     static func view(for snippet: CodeSnippet) -> some View {
         switch snippet.id {
-        case "snippet_001": CardModifierDemoView(snippet: snippet)
-        case "snippet_002": AsyncImageDemoView(snippet: snippet)
-        case "snippet_003": DebouncedSearchDemoView(snippet: snippet)
-        default:            SnippetNoPreviewView(snippet: snippet)
+        case "A001": A001_ProgressViewIndicatorsDemoView(snippet: snippet)
+        case "A002": A002_TrimIndicatorDemoView(snippet: snippet)
+        default: SnippetNoPreviewView(snippet: snippet)
         }
     }
 }

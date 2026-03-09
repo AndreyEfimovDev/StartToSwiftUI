@@ -54,7 +54,12 @@ struct StartToSwiftUIApp: App {
         let context = modelContainer.mainContext
         _postsViewModel = StateObject(wrappedValue: PostsViewModel(modelContext: context))
         _noticesViewModel = StateObject(wrappedValue: NoticesViewModel(modelContext: context))
-        _snippetsViewModel = StateObject(wrappedValue: SnippetsViewModel(modelContext: context))
+//        _snippetsViewModel = StateObject(wrappedValue: SnippetsViewModel(modelContext: context))
+        // Временно для теста UI
+        _snippetsViewModel = StateObject(wrappedValue: SnippetsViewModel(
+            dataSource: MockSnippetsDataSource(snippets: PreviewData.sampleSnippets),
+            fbSnippetsManager: MockFBSnippetsManager()
+        ))
 
         configureNavigationBarAppearance()
     }

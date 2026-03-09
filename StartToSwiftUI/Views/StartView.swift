@@ -53,21 +53,33 @@ struct StartView: View {
     }
     
     // iPhone: single NavigationStack, root switches with activeSection
+    @ViewBuilder
     private var iPhoneContent: some View {
-        NavigationStack(path: $coordinator.path) {
-            HomeView(selectedCategory: vm.selectedCategory)
-                .navigationDestination(for: AppRoute.self) { route in
-                    destinationView(for: route)
-                }
+        switch coordinator.activeSection {
+        case .materials:
+            NavigationStack(path: $coordinator.path) {
+                HomeView(selectedCategory: vm.selectedCategory)
+                    .navigationDestination(for: AppRoute.self) { destinationView(for: $0) }
+            }
+        case .snippets:
+            NavigationStack(path: $coordinator.path) {
+                SnippetsHomeView()
+                    .navigationDestination(for: AppRoute.self) { destinationView(for: $0) }
+            }
         }
     }
 
     // iPad: NavigationSplitView — same section switch in the primary column
+    @ViewBuilder
     private var iPadContent: some View {
         NavigationSplitView(columnVisibility: $visibility) {
-            NavigationStack(path: $coordinator.path) {
-                sectionRootView
-                    .navigationDestination(for: AppRoute.self) { destinationView(for: $0) }
+            Group {
+            switch coordinator.activeSection {
+                case .materials:
+                    HomeView(selectedCategory: vm.selectedCategory)
+                case .snippets:
+                    SnippetsHomeView()
+                }
             }
             .navigationSplitViewColumnWidth(430)
         } detail: {

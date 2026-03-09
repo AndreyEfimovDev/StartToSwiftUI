@@ -13,35 +13,50 @@ struct DevData {
 
         
 // MARK: NEW
-        // MARK: 2026-03-08
+        
         Post(
-            title: "SwiftUI Crypto App",
+            title: "Swift for Complete Beginners",
             intro: """
-                Build a cryptocurrency app that downloads live price data from an API and saves the current user's portfolio. Get comfortable with Combine, Core Data, and MVVM.
-                """,
-            author: "Swiftful Thinking",
+                 All the core concepts required to get started building apps with Swift and SwiftUI.
+                 """,
+            author: "Paul Hudson",
             postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
+            urlString: "https://www.youtube.com/playlist?list=PLuoeXyslFTuaYpVr3S9wG6PkIvYn_yHbg",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 6, day: 21),
-            studyLevel: .middle,
-            origin: .cloudNew
-        ),
-        Post(
-            title: "SwiftUI + Firebase",
-            intro: """
-            Set up user authentication, connect to a remote database, and track your app's performance in real-time.
-            
-            Learn how to integrate Firebase into your iOS app with Swift code.
-            """,
-            author: "Swiftful Thinking",
-            postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphl8ly0oi0aHx0v2B7UvDK0",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2023, month: 4, day: 28),
-            studyLevel: .middle,
+            postDate: Date.from(year: 2021, month: 10, day: 14),
             origin: .cloudNew,
+            date: Date.from(year: 2026, month: 02, day: 06) ?? Date()
         ),
+        
+        // MARK: 2026-03-08
+//        Post(
+//            title: "SwiftUI Crypto App",
+//            intro: """
+//                Build a cryptocurrency app that downloads live price data from an API and saves the current user's portfolio. Get comfortable with Combine, Core Data, and MVVM.
+//                """,
+//            author: "Swiftful Thinking",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2021, month: 6, day: 21),
+//            studyLevel: .middle,
+//            origin: .cloudNew
+//        ),
+//        Post(
+//            title: "SwiftUI + Firebase",
+//            intro: """
+//            Set up user authentication, connect to a remote database, and track your app's performance in real-time.
+//            
+//            Learn how to integrate Firebase into your iOS app with Swift code.
+//            """,
+//            author: "Swiftful Thinking",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphl8ly0oi0aHx0v2B7UvDK0",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2023, month: 4, day: 28),
+//            studyLevel: .middle,
+//            origin: .cloudNew,
+//        ),
 
         
         // MARK: 2026-02-26
