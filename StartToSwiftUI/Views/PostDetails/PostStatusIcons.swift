@@ -10,13 +10,14 @@ import SwiftUI
 
 struct PostStatusIcons: View {
     let post: Post
+    let showFavorite: Bool
     
     var body: some View {
         Group {
             if post.draft {
                 Image(systemName: "square.stack.3d.up")
             }
-            if post.favoriteChoice == .yes {
+            if post.favoriteChoice == .yes && showFavorite {
                 Image(systemName: "star")
                     .foregroundStyle(Color.mycolor.myRed)
             }
@@ -33,5 +34,5 @@ struct PostStatusIcons: View {
 }
 
 #Preview {
-    PostStatusIcons(post: PreviewData.samplePost1)
+    PostStatusIcons(post: PreviewData.samplePost1, showFavorite: true)
 }

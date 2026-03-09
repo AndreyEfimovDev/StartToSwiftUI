@@ -209,25 +209,3 @@ extension AppSyncStateManager {
         saveContext()
     }
 }
-
-
-// MARK: - Methods for Snippets
-extension AppSyncStateManager {
-
-    func setLastDateOfSnippetsLoaded(_ date: Date) {
-        let appState = getOrCreateAppState()
-        appState.lastSnippetsFBUpdateDate = date
-        saveContext()
-    }
-
-    func resetLastDateOfSnippetsLoaded() {
-        let appState = getOrCreateAppState()
-        appState.lastSnippetsFBUpdateDate = Date(timeIntervalSince1970: 0)
-        saveContext()
-    }
-
-    func getLastDateOfSnippetsLoaded() -> Date? {
-        let appState = getOrCreateAppState()
-        return appState.lastSnippetsFBUpdateDate
-    }
-}

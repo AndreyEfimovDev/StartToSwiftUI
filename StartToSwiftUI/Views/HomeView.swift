@@ -63,7 +63,7 @@ struct HomeView: View {
                 navigationToolbar()
             }
             .safeAreaInset(edge: .top) {
-                SearchBarView()
+                SearchBarView(searchText: $vm.searchText)
             }
             .sheet(isPresented: $isFilterButtonPressed) {
                 filtersSheet

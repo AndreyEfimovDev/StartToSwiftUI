@@ -10,6 +10,7 @@ import SwiftUI
 struct SnippetRowView: View {
 
     let snippet: CodeSnippet
+    let isFavorite: Bool
 
     // MARK: - Computed Properties
 
@@ -52,16 +53,6 @@ struct SnippetRowView: View {
 
             Spacer()
 
-            if snippet.origin == .cloudNew {
-                Text("NEW")
-                    .font(.system(size: 9, weight: .bold))
-                    .foregroundStyle(Color.mycolor.myBackground)
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 3)
-                    .background(Color.mycolor.myAccent)
-                    .clipShape(Capsule())
-                    .padding(.top, 12)
-            }
         }
     }
 
@@ -82,7 +73,7 @@ struct SnippetRowView: View {
             Spacer()
 
             HStack(spacing: 6) {
-                if snippet.favoriteChoice == .yes {
+                if isFavorite {
                     Image(systemName: "star.fill")
                         .foregroundStyle(Color.mycolor.myYellow)
                 }
@@ -103,9 +94,8 @@ struct SnippetRowView: View {
         ZStack {
             Color.pink.opacity(0.1).ignoresSafeArea()
             VStack {
-                SnippetRowView(snippet: PreviewData.sampleSnippet1)
-                SnippetRowView(snippet: PreviewData.sampleSnippet2)
-                SnippetRowView(snippet: PreviewData.sampleSnippet3)
+                SnippetRowView(snippet: SnippetsRepository.a001, isFavorite: true)
+                SnippetRowView(snippet: SnippetsRepository.a002, isFavorite: false)
             }
         }
     }

@@ -17,7 +17,6 @@ final class AppSyncState {
     // Date of last notices
     var latestNoticeDate: Date?
     var lastPostsFBUpdateDate: Date?
-    var lastSnippetsFBUpdateDate: Date?
     
     var lastCloudSyncDateToMergeDuplicate: Date?
     var appFirstLaunchDate: Date?

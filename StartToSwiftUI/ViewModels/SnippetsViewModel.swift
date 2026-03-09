@@ -2,76 +2,37 @@
 //  SnippetsViewModel.swift
 //  StartToSwiftUI
 //
-//  Created by Andrey Efimov on 08.03.2026.
+//  Created by Andrey Efimov on 09.03.2026.
 //
 
 import SwiftUI
-import SwiftData
 import Combine
-import CoreData
-
-// MARK: - SnippetsViewModel
-//
-// Simplified compared to PostsViewModel because snippets are curated-only:
-// - No add / edit / delete by user
-// - No draft, progress, rating, studyLevel
-// - StatusOptions: .active and .hidden only (no .deleted)
-// - FavoriteChoice: available
-// - Origin: .local not used (all snippets come from Firestore → .cloudNew / .cloud)
 
 @MainActor
 final class SnippetsViewModel: ObservableObject {
 
-    // MARK: - Properties
-    let dataSource: SnippetsDataSourceProtocol
-    let hapticManager = HapticManager.shared
-    let appStateManager: AppSyncStateManager?
-    let fbSnippetsManager: FBSnippetsManagerProtocol
+    // MARK: - Dependencies
+    private let favoritesService = SnippetFavoritesService.shared
+    private let hapticManager = HapticManager.shared
 
-    /// All snippets from SwiftData (.active + .hidden)
-    @Published var allSnippets: [CodeSnippet] = []
-
-    /// Snippets after filtering, search, sort — only .active
+    // MARK: - Data
+    @Published var allSnippets: [CodeSnippet] = SnippetsRepository.all
     @Published var filteredSnippets: [CodeSnippet] = []
-
     @Published var selectedSnippet: CodeSnippet? = nil
     @Published var searchText: String = ""
     @Published var isFiltersEmpty: Bool = true
     @Published var reshuffleToken = UUID()
 
-    @Published var errorMessage: String?
-    @Published var showErrorMessageAlert = false
+    private var cancellables = Set<AnyCancellable>()
+    private var randomSortOrder: [String] = []
 
-    var cancellables = Set<AnyCancellable>()
-    var utcCalendar = Calendar.current
-
-    var allYears: [String]? = nil
-    var allCategories: [String]? = nil
-    let mainCategory: String = Constants.mainCategory
-    var randomSortOrder: [String] = []
-    var dispatchTime: DispatchTime { .now() + 1.5 }
-
-    private var lastLoadTime: Date = Date(timeIntervalSince1970: 0)
-    private let minLoadInterval: TimeInterval = 3
-
-    // MARK: - Computed Properties
-    var swiftDataSource: SwiftDataSnippetsDataSource? {
-        dataSource as? SwiftDataSnippetsDataSource
-    }
-    var isSwiftData: Bool { swiftDataSource != nil }
-
-    // MARK: - AppStorage (prefix "snippet_" avoids collision with PostsViewModel)
-    @AppStorage("snippet_storedCategory") var storedCategory: String?
+    // MARK: - Filters (AppStorage — persisted between sessions)
+    @AppStorage("snippet_storedCategory") private var storedCategory: String?
     @Published var selectedCategory: String? = nil {
         didSet { storedCategory = selectedCategory }
     }
 
-    @AppStorage("snippet_storedYear") var storedYear: String?
-    @Published var selectedYear: String? = nil {
-        didSet { storedYear = selectedYear }
-    }
-
-    @AppStorage("snippet_storedSortOption") var storedSortOption: SortOption = .notSorted
+    @AppStorage("snippet_storedSortOption") private var storedSortOption: SortOption = .notSorted
     @Published var selectedSortOption: SortOption = .notSorted {
         didSet {
             storedSortOption = selectedSortOption
@@ -79,218 +40,117 @@ final class SnippetsViewModel: ObservableObject {
         }
     }
 
-    // MARK: - Computed Properties for UI
-
-    var hasHidden: Bool { allSnippets.contains { $0.status == .hidden } }
-    var hiddenCount: Int { allSnippets.filter { $0.status == .hidden }.count }
-
-    var cloudSnippetsCount: Int {
-        allSnippets.filter { $0.origin == .cloud || $0.origin == .cloudNew }.count
-    }
-    var hasCloudSnippets: Bool {
-        allSnippets.contains { $0.origin == .cloud || $0.origin == .cloudNew }
-    }
-    var shouldShowImportFromCloud: Bool { !hasCloudSnippets }
-
-    var lastDateSnippetsLoaded: Date? {
-        appStateManager?.getLastDateOfSnippetsLoaded()
-    }
-
-    // MARK: - Init
-    init(
-        dataSource: SnippetsDataSourceProtocol,
-        fbSnippetsManager: FBSnippetsManagerProtocol = FBSnippetsManager()
-    ) {
-        self.dataSource = dataSource
-        self.fbSnippetsManager = fbSnippetsManager
-
-        if let swiftDataSource = dataSource as? SwiftDataSnippetsDataSource {
-            self.appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
-        } else {
-            self.appStateManager = nil
-        }
-
-        setupTimezone()
-        restoreFilters()
-    }
-
-    convenience init(
-        modelContext: ModelContext,
-        fbSnippetsManager: FBSnippetsManagerProtocol = FBSnippetsManager()
-    ) {
-        self.init(
-            dataSource: SwiftDataSnippetsDataSource(modelContext: modelContext),
-            fbSnippetsManager: fbSnippetsManager
-        )
-    }
-
-    func start() {
-        setupSubscriptions()
-        setupSubscriptionForChangesInCloud()
-    }
-
-    // MARK: - Setup
-    private func setupTimezone() {
-        if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
-            utcCalendar.timeZone = utcTimeZone
-        }
-    }
-
-    // MARK: - iCloud Sync Subscription
-    private func setupSubscriptionForChangesInCloud() {
-        NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
-            .receive(on: DispatchQueue.main)
-            .debounce(for: .seconds(2), scheduler: DispatchQueue.main)
-            .sink { [weak self] _ in
-                guard let self else { return }
-                let now = Date()
-                guard now.timeIntervalSince(self.lastLoadTime) >= self.minLoadInterval else {
-                    log("Snippets cloud sync skipped (too soon)", level: .debug)
-                    return
-                }
-                self.loadSnippetsFromSwiftData()
-                log("Cloud snippets sync subscription run", level: .info)
-            }
-            .store(in: &cancellables)
-    }
-
-    func restoreFilters() {
-        selectedCategory = storedCategory
-        selectedYear = storedYear
-        selectedSortOption = storedSortOption
-        isFiltersEmpty = checkIfAllFiltersAreEmpty()
-    }
-
-    // MARK: - SwiftData Load
-    func loadSnippetsFromSwiftData() {
-        lastLoadTime = Date()
-        do {
-            allSnippets = try dataSource.fetchSnippets()
-            removeDuplicateSnippets()
-            allYears = getAllYears()
-            allCategories = getAllCategories()
-            log("📊 Loaded \(allSnippets.count) snippets from SwiftData", level: .debug)
-        } catch {
-            handleError(error, message: "Error loading snippets")
-        }
-    }
-
-    // MARK: - Duplicate Removal (two-pass, identical to PostsViewModel)
-    private func removeDuplicateSnippets() {
-        var toDelete: [CodeSnippet] = []
-
-        // Pass 1: by ID
-        let idGroups = Dictionary(grouping: allSnippets, by: \.id).filter { $0.value.count > 1 }
-        for (id, list) in idGroups {
-            if let keep = list.sorted(by: { $0.date < $1.date }).first {
-                for s in list where s.persistentModelID != keep.persistentModelID {
-                    toDelete.append(s)
-                    log("🗑️ Duplicate snippet by ID \(id): '\(s.title)'", level: .info)
-                }
-            }
-        }
-
-        // Pass 2: by title (excluding already-marked)
-        let markedIDs = Set(toDelete.map { $0.persistentModelID })
-        let remaining = allSnippets.filter { !markedIDs.contains($0.persistentModelID) }
-        let titleGroups = Dictionary(grouping: remaining, by: \.title).filter { $0.value.count > 1 }
-        for (title, list) in titleGroups {
-            if let keep = list.sorted(by: { $0.date < $1.date }).first {
-                for s in list where s.persistentModelID != keep.persistentModelID {
-                    toDelete.append(s)
-                    log("🗑️ Duplicate snippet by title '\(title)'", level: .info)
-                }
-            }
-        }
-
-        guard !toDelete.isEmpty else { return }
-        toDelete.forEach { dataSource.delete($0) }
-
-        do {
-            try dataSource.save()
-            allSnippets = try dataSource.fetchSnippets()
-            log("✅ Removed \(toDelete.count) duplicate snippets", level: .info)
-        } catch {
-            handleError(error, message: "Error removing duplicate snippets")
-        }
-    }
-
-    // MARK: - Status Management
-    func setSnippetActive(_ snippet: CodeSnippet) {
-        snippet.status = .active
-        saveContextAndReload()
-    }
-
-    func setSnippetHidden(_ snippet: CodeSnippet) {
-        snippet.status = .hidden
-        saveContextAndReload()
-    }
-
-    // MARK: - Favourite
-    func favoriteToggle(_ snippet: CodeSnippet) {
-        snippet.favoriteChoice = snippet.favoriteChoice == .yes ? .no : .yes
-        saveContextAndReload()
-    }
-
-    // MARK: - Origin
-    /// Mark as .cloud after user opens a .cloudNew snippet for the first time
-    func updateSnippetOrigin(_ snippet: CodeSnippet) {
-        snippet.origin = .cloud
-        saveContextAndReload()
-    }
-
-    // MARK: - Helpers
-    func getSnippet(id: String) -> CodeSnippet? {
-        allSnippets.first { $0.id == id }
-    }
-
-    func saveContextAndReload() {
-        do {
-            try dataSource.save()
-            loadSnippetsFromSwiftData()
-        } catch {
-            handleError(error, message: "Error saving snippet data")
-        }
-    }
-
-    func filterUniqueSnippets(from fbResponse: [FBSnippetModel]) -> [FBSnippetModel] {
-        let existingTitles = Set(allSnippets.map { $0.title })
-        let existingIds = Set(allSnippets.map { $0.id })
-        return fbResponse
-            .filter { !existingTitles.contains($0.title) && !existingIds.contains($0.snippetId) }
-    }
-
-    func filterUniqueSnippets(_ snippets: [CodeSnippet]) -> [CodeSnippet] {
-        let existingTitles = Set(allSnippets.map { $0.title })
-        let existingIds = Set(allSnippets.map { $0.id })
-        return snippets.filter { !existingTitles.contains($0.title) && !existingIds.contains($0.id) }
-    }
-
-    func getLatestDateFromSnippets(_ snippets: [CodeSnippet]) -> Date? {
-        snippets.max { $0.date < $1.date }?.date
-    }
-
-    private func getAllYears() -> [String]? {
-        let years = allSnippets.map { String(utcCalendar.component(.year, from: $0.date)) }
-        let unique = Array(Set(years)).sorted()
-        return unique.isEmpty ? nil : unique
-    }
-
-    private func getAllCategories() -> [String]? {
+    // MARK: - Computed Properties
+    var allCategories: [String]? {
         let cats = Array(Set(allSnippets.map { $0.category })).sorted()
         return cats.isEmpty ? nil : cats
     }
 
-    func clearError() {
-        errorMessage = nil
-        showErrorMessageAlert = false
+    var allYears: [String]? {
+        let years = Array(Set(allSnippets.map {
+            String(Calendar.current.component(.year, from: $0.date))
+        })).sorted()
+        return years.isEmpty ? nil : years
     }
 
-    func handleError(_ error: Error?, message: String) {
-        let description = error?.localizedDescription ?? message
-        errorMessage = description
-        showErrorMessageAlert = true
-        hapticManager.notification(type: .error)
-        log("❌ \(message): \(description)", level: .error)
+    // MARK: - Init
+    init() {
+        restoreFilters()
+        setupSubscriptions()
+    }
+
+    // MARK: - Favorites
+    func isFavorite(_ snippet: CodeSnippet) -> Bool {
+        favoritesService.isFavorite(snippet.id)
+    }
+
+    func favoriteToggle(_ snippet: CodeSnippet) {
+        favoritesService.toggle(snippet.id)
+        hapticManager.impact(style: .light)
+        objectWillChange.send()
+    }
+
+    // MARK: - Filters
+    func checkIfAllFiltersAreEmpty() -> Bool {
+        selectedCategory == nil &&
+        selectedSortOption == .notSorted
+    }
+
+    func resetAllFilters() {
+        selectedCategory = nil
+        selectedSortOption = .notSorted
+    }
+
+    func reshuffleSnippets() {
+        randomSortOrder = allSnippets.map { $0.id }.shuffled()
+        reshuffleToken = UUID()
+    }
+
+    // MARK: - Restore
+    private func restoreFilters() {
+        selectedCategory = storedCategory
+        selectedSortOption = storedSortOption
+        isFiltersEmpty = checkIfAllFiltersAreEmpty()
+    }
+
+    // MARK: - Combine Pipeline
+    private func setupSubscriptions() {
+        let filters = $selectedCategory
+            .combineLatest($selectedSortOption)
+
+        let debouncedSearch = $searchText
+            .debounce(for: .seconds(0.3), scheduler: RunLoop.main)
+
+        $allSnippets
+            .combineLatest(debouncedSearch, filters, $reshuffleToken)
+            .map { [weak self] snippets, search, filterData, _ -> [CodeSnippet] in
+                guard let self else { return snippets }
+                let (category, sortOption) = filterData
+                let filtered = self.applyFilters(snippets: snippets, category: category)
+                let searched = self.applySearch(snippets: filtered, query: search)
+                return self.applySort(snippets: searched, option: sortOption)
+            }
+            .sink { [weak self] result in
+                guard let self else { return }
+                self.filteredSnippets = result
+                self.isFiltersEmpty = self.checkIfAllFiltersAreEmpty()
+            }
+            .store(in: &cancellables)
+    }
+
+    // MARK: - Private Helpers
+    private func applyFilters(
+        snippets: [CodeSnippet],
+        category: String?
+    ) -> [CodeSnippet] {
+        guard category != nil else { return snippets }
+        return snippets.filter { snippet in
+            let matchesCategory = category == nil || snippet.category == category
+            return matchesCategory
+        }
+    }
+
+    private func applySearch(snippets: [CodeSnippet], query: String) -> [CodeSnippet] {
+        guard !query.isEmpty else { return snippets }
+        let q = query.lowercased()
+        return snippets.filter {
+            $0.title.lowercased().contains(q) ||
+            $0.intro.lowercased().contains(q) ||
+            $0.category.lowercased().contains(q)
+        }
+    }
+
+    private func applySort(snippets: [CodeSnippet], option: SortOption) -> [CodeSnippet] {
+        switch option {
+        case .notSorted:   return snippets
+        case .newestFirst: return snippets.sorted { $0.date > $1.date }
+        case .oldestFirst: return snippets.sorted { $0.date < $1.date }
+        case .random:
+            return snippets.sorted { a, b in
+                let ia = randomSortOrder.firstIndex(of: a.id) ?? Int.max
+                let ib = randomSortOrder.firstIndex(of: b.id) ?? Int.max
+                return ia < ib
+            }
+        }
     }
 }

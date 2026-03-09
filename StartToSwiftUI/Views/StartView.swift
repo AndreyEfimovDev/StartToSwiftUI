@@ -123,12 +123,6 @@ struct StartView: View {
         case .snippetDetails(let snippet):
             SnippetDetailsView(snippet: snippet)
                 .environmentObject(snippetsvm)
-        case .importSnippetsFromCloud:
-            ImportSnippetsFromCloudView()
-                .environmentObject(snippetsvm)
-        case .archivedSnippets:
-            ArchivedSnippetsView()
-                .environmentObject(snippetsvm)
 
         default:
             EmptyView()
@@ -220,24 +214,17 @@ private struct StartViewPreview: View {
         return vm
     }()
     @StateObject var noticesVM = NoticesViewModel(dataSource: MockNoticesDataSource(), fbNoticesManager: MockFBNoticesManager())
-    @StateObject var snippetsVM: SnippetsViewModel = {
-        let vm = SnippetsViewModel(dataSource: MockSnippetsDataSource(), fbSnippetsManager: MockFBSnippetsManager())
-        vm.start()
-        return vm
-    }()
-
     var body: some View {
         StartView()
             .environmentObject(AppCoordinator())
             .environmentObject(vm)
             .environmentObject(noticesVM)
-            .environmentObject(snippetsVM)
     }
 }
 
 #Preview("With Mock Data") {
     let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppSyncState.self, CodeSnippet.self,
+        for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     StartViewPreview().modelContainer(container)

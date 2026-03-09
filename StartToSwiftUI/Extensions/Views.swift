@@ -194,9 +194,12 @@ extension View {
 
 extension View {
     func cardBackground() -> some View {
-        self.background(
-            .thinMaterial,
-            in: RoundedRectangle(cornerRadius: 15)
+        self
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding()
+            .background(
+                .thinMaterial,
+                in: RoundedRectangle(cornerRadius: 15)
         )
     }
 }

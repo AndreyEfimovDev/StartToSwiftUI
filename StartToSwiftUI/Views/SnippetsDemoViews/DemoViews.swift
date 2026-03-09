@@ -23,6 +23,8 @@ private struct SnippetDemoHeader: View {
                 .font(.title2)
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
+//            Text(snippet.date.formatted(date: .numeric, time: .omitted))
+//                .font(.caption)
             Text(snippet.intro)
                 .font(.subheadline)
                 .foregroundStyle(Color.mycolor.myAccent.opacity(0.75))
@@ -62,8 +64,7 @@ struct A001_ProgressViewIndicatorsDemoView: View {
                     SnippetThanksView(thanks: thanks)
                 }
             }
-            .padding(.horizontal)
-            .padding(.vertical)
+            .padding()
             .foregroundStyle(Color.mycolor.myAccent)
         }
     }
@@ -88,8 +89,7 @@ struct A002_TrimIndicatorDemoView: View {
                     SnippetThanksView(thanks: thanks)
                 }
             }
-            .padding(.horizontal)
-            .padding(.vertical)
+            .padding()
             .foregroundStyle(Color.mycolor.myAccent)
         }
     }
@@ -99,14 +99,14 @@ struct A002_TrimIndicatorDemoView: View {
 
 #Preview("A001 Progress Indicators") {
     NavigationStack {
-        A001_ProgressViewIndicatorsDemoView(snippet: PreviewData.sampleSnippet1)
+        A001_ProgressViewIndicatorsDemoView(snippet: SnippetsRepository.a001)
             .environmentObject(AppCoordinator())
     }
 }
 
 #Preview("A002 Trim Indicator") {
     NavigationStack {
-        A002_TrimIndicatorDemoView(snippet: PreviewData.sampleSnippet2)
+        A002_TrimIndicatorDemoView(snippet: SnippetsRepository.a002)
             .environmentObject(AppCoordinator())
     }
 }

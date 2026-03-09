@@ -32,6 +32,10 @@ struct PostDetailsView: View {
     @State private var tabWidth: CGFloat = 0
     @State private var expandedWidth: CGFloat = 0
     
+    private var isFavorite: Bool {
+            post.favoriteChoice == .yes
+    }
+    
     // MARK: - Constants
     
     let post: Post
@@ -135,7 +139,7 @@ struct PostDetailsView: View {
             
             Spacer()
             
-            PostStatusIcons(post: post)
+            PostStatusIcons(post: post, showFavorite: false)
         }
         .font(.caption)
     }
@@ -230,14 +234,29 @@ struct PostDetailsView: View {
         }
         
         ToolbarItemGroup(placement: .topBarTrailing) {
+            
+            // ⭐ Favourite
             CircleStrokeButtonView(
-                iconName: post.favoriteChoice == .yes ? "star.slash" : "star",
+                iconName: isFavorite ? "star.fill" : "star",
                 iconFont: .headline,
+                imageColorPrimary: isFavorite
+                    ? Color.mycolor.myYellow
+                    : Color.mycolor.myAccent,
                 isShownCircle: false
             ) {
                 vm.favoriteToggle(post)
                 hapticManager.impact(style: .light)
             }
+
+//            
+//            CircleStrokeButtonView(
+//                iconName: post.favoriteChoice == .yes ? "star.slash" : "star",
+//                iconFont: .headline,
+//                isShownCircle: false
+//            ) {
+//                vm.favoriteToggle(post)
+//                hapticManager.impact(style: .light)
+//            }
             
             CircleStrokeButtonView(
                 iconName: "pencil",

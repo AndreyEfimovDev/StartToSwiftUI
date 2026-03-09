@@ -134,28 +134,20 @@
 		47B6E7DF2F5AFDD800EF7441 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 47B6E7DE2F5AFDD800EF7441 /* FirebaseMessaging */; };
 		47B6E7E32F5B0B2D00EF7441 /* AppStoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7E22F5B0B2D00EF7441 /* AppStoreService.swift */; };
 		47B6E7E82F5BF85B00EF7441 /* CodeSnippet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7E72F5BF85B00EF7441 /* CodeSnippet.swift */; };
-		47B6E7EA2F5BFEB900EF7441 /* CodableCodeSnippet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7E92F5BFEB900EF7441 /* CodableCodeSnippet.swift */; };
 		47B6E7EC2F5C001E00EF7441 /* SnippetsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7EB2F5C001E00EF7441 /* SnippetsViewModel.swift */; };
 		47B6E7F52F5D989100EF7441 /* FBAnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7F42F5D989100EF7441 /* FBAnalyticsManager.swift */; };
 		47B6E7F72F5D991200EF7441 /* PostsViewModel+FBImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7F62F5D991200EF7441 /* PostsViewModel+FBImport.swift */; };
-		47B6E7F92F5DA14600EF7441 /* SwiftDataSnippetsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7F82F5DA14600EF7441 /* SwiftDataSnippetsDataSource.swift */; };
-		47B6E7FC2F5DA44100EF7441 /* FBSnippetsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7FB2F5DA44100EF7441 /* FBSnippetsManager.swift */; };
-		47B6E7FE2F5DA59100EF7441 /* MockSnippetsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7FD2F5DA59100EF7441 /* MockSnippetsDataSource.swift */; };
-		47B6E8002F5DA98F00EF7441 /* FBSnippetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7FF2F5DA98F00EF7441 /* FBSnippetModel.swift */; };
-		47B6E8022F5DB6C700EF7441 /* SnippetsViewModel+Filtering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8012F5DB6C700EF7441 /* SnippetsViewModel+Filtering.swift */; };
-		47B6E8042F5DB6E800EF7441 /* SnippetsViewModel+FBImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8032F5DB6E800EF7441 /* SnippetsViewModel+FBImport.swift */; };
 		47B6E8082F5DF5AD00EF7441 /* SnippetsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8072F5DF5AD00EF7441 /* SnippetsHomeView.swift */; };
 		47B6E80A2F5DF5CD00EF7441 /* SnippetsFiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8092F5DF5CD00EF7441 /* SnippetsFiltersView.swift */; };
-		47B6E80C2F5DF62700EF7441 /* MockFBSnippetsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E80B2F5DF62700EF7441 /* MockFBSnippetsManager.swift */; };
 		47B6E80E2F5DFAE500EF7441 /* SnippetRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E80D2F5DFAE500EF7441 /* SnippetRowView.swift */; };
 		47B6E8102F5DFB1700EF7441 /* SnippetViewRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E80F2F5DFB1700EF7441 /* SnippetViewRegistry.swift */; };
 		47B6E8122F5DFB3200EF7441 /* SnippetDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8112F5DFB3200EF7441 /* SnippetDetailsView.swift */; };
 		47B6E8142F5DFB6800EF7441 /* DemoViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8132F5DFB6800EF7441 /* DemoViews.swift */; };
-		47B6E8162F5DFB9700EF7441 /* ImportSnippetsFromCloudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8152F5DFB9700EF7441 /* ImportSnippetsFromCloudView.swift */; };
-		47B6E8182F5DFBB600EF7441 /* ArchivedSnippetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8172F5DFBB600EF7441 /* ArchivedSnippetsView.swift */; };
 		47B6E81B2F5DFEE800EF7441 /* SnippetNoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E81A2F5DFEE800EF7441 /* SnippetNoPreviewView.swift */; };
 		47B6E81E2F5EB4DB00EF7441 /* A001_ProgressViewIndicators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E81D2F5EB4DB00EF7441 /* A001_ProgressViewIndicators.swift */; };
 		47B6E8202F5ECFC200EF7441 /* A002_TrimIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E81F2F5ECFC200EF7441 /* A002_TrimIndicator.swift */; };
+		47B6E8222F5EF33B00EF7441 /* SnippetFavoritesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8212F5EF33B00EF7441 /* SnippetFavoritesService.swift */; };
+		47B6E8242F5EF3B700EF7441 /* SnippetsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8232F5EF3B700EF7441 /* SnippetsRepository.swift */; };
 		47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */; };
 		47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF09F2E5F9E9800287F10 /* MoreLessTextButton.swift */; };
 		47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF0A12E60485D00287F10 /* FavoriteButton.swift */; };
@@ -341,28 +333,20 @@
 		47B65CDC2F4C90C9002FB480 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		47B6E7E22F5B0B2D00EF7441 /* AppStoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreService.swift; sourceTree = "<group>"; };
 		47B6E7E72F5BF85B00EF7441 /* CodeSnippet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeSnippet.swift; sourceTree = "<group>"; };
-		47B6E7E92F5BFEB900EF7441 /* CodableCodeSnippet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableCodeSnippet.swift; sourceTree = "<group>"; };
 		47B6E7EB2F5C001E00EF7441 /* SnippetsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsViewModel.swift; sourceTree = "<group>"; };
 		47B6E7F42F5D989100EF7441 /* FBAnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBAnalyticsManager.swift; sourceTree = "<group>"; };
 		47B6E7F62F5D991200EF7441 /* PostsViewModel+FBImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+FBImport.swift"; sourceTree = "<group>"; };
-		47B6E7F82F5DA14600EF7441 /* SwiftDataSnippetsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataSnippetsDataSource.swift; sourceTree = "<group>"; };
-		47B6E7FB2F5DA44100EF7441 /* FBSnippetsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBSnippetsManager.swift; sourceTree = "<group>"; };
-		47B6E7FD2F5DA59100EF7441 /* MockSnippetsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSnippetsDataSource.swift; sourceTree = "<group>"; };
-		47B6E7FF2F5DA98F00EF7441 /* FBSnippetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBSnippetModel.swift; sourceTree = "<group>"; };
-		47B6E8012F5DB6C700EF7441 /* SnippetsViewModel+Filtering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SnippetsViewModel+Filtering.swift"; sourceTree = "<group>"; };
-		47B6E8032F5DB6E800EF7441 /* SnippetsViewModel+FBImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SnippetsViewModel+FBImport.swift"; sourceTree = "<group>"; };
 		47B6E8072F5DF5AD00EF7441 /* SnippetsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsHomeView.swift; sourceTree = "<group>"; };
 		47B6E8092F5DF5CD00EF7441 /* SnippetsFiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsFiltersView.swift; sourceTree = "<group>"; };
-		47B6E80B2F5DF62700EF7441 /* MockFBSnippetsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFBSnippetsManager.swift; sourceTree = "<group>"; };
 		47B6E80D2F5DFAE500EF7441 /* SnippetRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetRowView.swift; sourceTree = "<group>"; };
 		47B6E80F2F5DFB1700EF7441 /* SnippetViewRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetViewRegistry.swift; sourceTree = "<group>"; };
 		47B6E8112F5DFB3200EF7441 /* SnippetDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetDetailsView.swift; sourceTree = "<group>"; };
 		47B6E8132F5DFB6800EF7441 /* DemoViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoViews.swift; sourceTree = "<group>"; };
-		47B6E8152F5DFB9700EF7441 /* ImportSnippetsFromCloudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportSnippetsFromCloudView.swift; sourceTree = "<group>"; };
-		47B6E8172F5DFBB600EF7441 /* ArchivedSnippetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedSnippetsView.swift; sourceTree = "<group>"; };
 		47B6E81A2F5DFEE800EF7441 /* SnippetNoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetNoPreviewView.swift; sourceTree = "<group>"; };
 		47B6E81D2F5EB4DB00EF7441 /* A001_ProgressViewIndicators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A001_ProgressViewIndicators.swift; sourceTree = "<group>"; };
 		47B6E81F2F5ECFC200EF7441 /* A002_TrimIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A002_TrimIndicator.swift; sourceTree = "<group>"; };
+		47B6E8212F5EF33B00EF7441 /* SnippetFavoritesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetFavoritesService.swift; sourceTree = "<group>"; };
+		47B6E8232F5EF3B700EF7441 /* SnippetsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsRepository.swift; sourceTree = "<group>"; };
 		47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedCupsuleButton.swift; sourceTree = "<group>"; };
 		47BAF09F2E5F9E9800287F10 /* MoreLessTextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreLessTextButton.swift; sourceTree = "<group>"; };
 		47BAF0A12E60485D00287F10 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
@@ -495,6 +479,7 @@
 			children = (
 				4791CE032E748DA200687126 /* AddEditPostView.swift */,
 				4773545C2E65D03A001DEDEE /* FiltersView.swift */,
+				47B6E8092F5DF5CD00EF7441 /* SnippetsFiltersView.swift */,
 				47BAF0A32E60613200287F10 /* SearchBarView.swift */,
 				47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */,
 				47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */,
@@ -554,7 +539,6 @@
 			children = (
 				473436772F49BC1B00CF00FA /* FBPostModel.swift */,
 				473436752F48F18200CF00FA /* FBNoticeModel.swift */,
-				47B6E7FF2F5DA98F00EF7441 /* FBSnippetModel.swift */,
 			);
 			path = FirestoreModels;
 			sourceTree = "<group>";
@@ -564,7 +548,6 @@
 			children = (
 				473436792F49C49000CF00FA /* FBPostsManager.swift */,
 				473436732F48C96300CF00FA /* FBNoticeManager.swift */,
-				47B6E7FB2F5DA44100EF7441 /* FBSnippetsManager.swift */,
 			);
 			path = FirestoreManagers;
 			sourceTree = "<group>";
@@ -695,8 +678,6 @@
 				474BFB922F3C8E2F006E639B /* PostsViewModel+Widget.swift */,
 				471BBFA02EC7251D0004AC45 /* NoticesViewModel.swift */,
 				47B6E7EB2F5C001E00EF7441 /* SnippetsViewModel.swift */,
-				47B6E8012F5DB6C700EF7441 /* SnippetsViewModel+Filtering.swift */,
-				47B6E8032F5DB6E800EF7441 /* SnippetsViewModel+FBImport.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -750,7 +731,6 @@
 				475CC64C2F216B870099CAA6 /* DataSourcesProtocols.swift */,
 				475CC6972F22476D0099CAA6 /* SwiftDataPostsDataSource.swift */,
 				475CC6952F22472E0099CAA6 /* SwiftDataNoticesDataSource.swift */,
-				47B6E7F82F5DA14600EF7441 /* SwiftDataSnippetsDataSource.swift */,
 				47B6E7FA2F5DA15600EF7441 /* Mock */,
 			);
 			path = DataServices;
@@ -839,7 +819,6 @@
 			isa = PBXGroup;
 			children = (
 				47B6E7E72F5BF85B00EF7441 /* CodeSnippet.swift */,
-				47B6E7E92F5BFEB900EF7441 /* CodableCodeSnippet.swift */,
 			);
 			path = Snippets;
 			sourceTree = "<group>";
@@ -849,10 +828,8 @@
 			children = (
 				475CC6932F2246FB0099CAA6 /* MockPostsDataSource.swift */,
 				475CC6912F2246E00099CAA6 /* MockNoticesDataSource.swift */,
-				47B6E7FD2F5DA59100EF7441 /* MockSnippetsDataSource.swift */,
 				47939D7A2F50540800CBE432 /* MockFBPostsManager.swift */,
 				47939D7C2F50542A00CBE432 /* MockFBNoticesManager.swift */,
-				47B6E80B2F5DF62700EF7441 /* MockFBSnippetsManager.swift */,
 			);
 			path = Mock;
 			sourceTree = "<group>";
@@ -873,10 +850,23 @@
 		47B6E81C2F5EB4BF00EF7441 /* SnippetsDemoViews */ = {
 			isa = PBXGroup;
 			children = (
+				47B6E8132F5DFB6800EF7441 /* DemoViews.swift */,
+				47B6E8232F5EF3B700EF7441 /* SnippetsRepository.swift */,
+				47B6E80F2F5DFB1700EF7441 /* SnippetViewRegistry.swift */,
 				47B6E81D2F5EB4DB00EF7441 /* A001_ProgressViewIndicators.swift */,
 				47B6E81F2F5ECFC200EF7441 /* A002_TrimIndicator.swift */,
 			);
 			path = SnippetsDemoViews;
+			sourceTree = "<group>";
+		};
+		47B6E8252F5F0DF100EF7441 /* SnippetDetails */ = {
+			isa = PBXGroup;
+			children = (
+				47B6E80D2F5DFAE500EF7441 /* SnippetRowView.swift */,
+				47B6E8112F5DFB3200EF7441 /* SnippetDetailsView.swift */,
+				47B6E8212F5EF33B00EF7441 /* SnippetFavoritesService.swift */,
+			);
+			path = SnippetDetails;
 			sourceTree = "<group>";
 		};
 		47BAF09E2E5F9C4500287F10 /* Buttons */ = {
@@ -900,18 +890,12 @@
 			children = (
 				47542EB32EF2C8E400B0AB79 /* StartView.swift */,
 				47B4657F2E6867930059CCB7 /* HomeView.swift */,
+				47B6E8072F5DF5AD00EF7441 /* SnippetsHomeView.swift */,
 				473436362F449BC400CF00FA /* SubViews */,
 				4715FA2F2F263BE800ED732A /* PostDetails */,
+				47B6E8252F5F0DF100EF7441 /* SnippetDetails */,
 				47B6E8192F5DFBDD00EF7441 /* Preferences2 */,
 				47C56FEF2EC9CE8200F0796C /* ManagingPosts */,
-				47B6E8072F5DF5AD00EF7441 /* SnippetsHomeView.swift */,
-				47B6E80D2F5DFAE500EF7441 /* SnippetRowView.swift */,
-				47B6E8112F5DFB3200EF7441 /* SnippetDetailsView.swift */,
-				47B6E8132F5DFB6800EF7441 /* DemoViews.swift */,
-				47B6E8152F5DFB9700EF7441 /* ImportSnippetsFromCloudView.swift */,
-				47B6E8172F5DFBB600EF7441 /* ArchivedSnippetsView.swift */,
-				47B6E80F2F5DFB1700EF7441 /* SnippetViewRegistry.swift */,
-				47B6E8092F5DF5CD00EF7441 /* SnippetsFiltersView.swift */,
 				47B6E81C2F5EB4BF00EF7441 /* SnippetsDemoViews */,
 			);
 			path = Views;
@@ -1156,13 +1140,11 @@
 				4751DAFA2F1640C300EC9C53 /* StatCard.swift in Sources */,
 				4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */,
 				4751DAF82F16409B00EC9C53 /* StatsCardsView.swift in Sources */,
-				47B6E7FC2F5DA44100EF7441 /* FBSnippetsManager.swift in Sources */,
 				47B465802E6867930059CCB7 /* HomeView.swift in Sources */,
 				47AE6C812E7D7FD0006230DA /* Modifiers.swift in Sources */,
 				47B6E7EC2F5C001E00EF7441 /* SnippetsViewModel.swift in Sources */,
 				47B6E8082F5DF5AD00EF7441 /* SnippetsHomeView.swift in Sources */,
 				47F68A4A2EFB0232003786D0 /* AppCoordinator.swift in Sources */,
-				47B6E8162F5DFB9700EF7441 /* ImportSnippetsFromCloudView.swift in Sources */,
 				471BBF9C2EC620D70004AC45 /* PostDraftsRowView.swift in Sources */,
 				47939D802F50591B00CBE432 /* MockFBPostsManager.swift in Sources */,
 				47B6E81B2F5DFEE800EF7441 /* SnippetNoPreviewView.swift in Sources */,
@@ -1197,7 +1179,6 @@
 				47B6E8142F5DFB6800EF7441 /* DemoViews.swift in Sources */,
 				473436852F4B05EB00CF00FA /* FBCrashManager.swift in Sources */,
 				473436762F48F18600CF00FA /* FBNoticeModel.swift in Sources */,
-				47B6E8042F5DB6E800EF7441 /* SnippetsViewModel+FBImport.swift in Sources */,
 				4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */,
 				4751DAFE2F16410000EC9C53 /* CumulativeLegendView.swift in Sources */,
 				475CC6A22F22B0A90099CAA6 /* CodableNotice.swift in Sources */,
@@ -1208,16 +1189,17 @@
 				47B6E8202F5ECFC200EF7441 /* A002_TrimIndicator.swift in Sources */,
 				4725A52B2EDD757F00235C40 /* UIDevice.swift in Sources */,
 				473436782F49BC1B00CF00FA /* FBPostModel.swift in Sources */,
+				47B6E8222F5EF33B00EF7441 /* SnippetFavoritesService.swift in Sources */,
 				475CC6942F2246FB0099CAA6 /* MockPostsDataSource.swift in Sources */,
 				47AC34432F28F2360023C7AF /* Calendar.swift in Sources */,
 				47656BFC2EE1EBF000F45AA6 /* ProgressIndicatorView.swift in Sources */,
-				47B6E8182F5DFBB600EF7441 /* ArchivedSnippetsView.swift in Sources */,
 				47939D772F4EEB9E00CBE432 /* ArchivedPostsView.swift in Sources */,
 				471DCBCE2EBB83D200AFA5F4 /* LegalInformationView.swift in Sources */,
 				471DCBD42EBB8A6400AFA5F4 /* TermsOfUse.swift in Sources */,
 				4715FA2E2F263BB000ED732A /* FormSectionViewWraper.swift in Sources */,
 				47B6E7E32F5B0B2D00EF7441 /* AppStoreService.swift in Sources */,
 				474BFB8D2F3C8DF2006E639B /* PostsViewModel+Filtering.swift in Sources */,
+				47B6E8242F5EF3B700EF7441 /* SnippetsRepository.swift in Sources */,
 				4765A9BE2F4DAD1D00A0FB37 /* StudyProgressRow.swift in Sources */,
 				47BAF0FA2E64CC8700287F10 /* UnderlineSermentedPicker.swift in Sources */,
 				4764A1F82EAD1DAA00D76C3A /* ClearCupsuleButton.swift in Sources */,
@@ -1229,16 +1211,13 @@
 				475CC6982F22476D0099CAA6 /* SwiftDataPostsDataSource.swift in Sources */,
 				47542EB42EF2C8E400B0AB79 /* StartView.swift in Sources */,
 				4734367A2F49C49000CF00FA /* FBPostsManager.swift in Sources */,
-				47B6E7FE2F5DA59100EF7441 /* MockSnippetsDataSource.swift in Sources */,
 				47AC34452F28F39C0023C7AF /* SegmentedOneLinePickerNotOptional.swift in Sources */,
 				47E2AF4F2EBCD86000B0214F /* CategoryFilterView.swift in Sources */,
 				478116462EBFF9DD00EF25F8 /* CustomProgressView.swift in Sources */,
-				47B6E8002F5DA98F00EF7441 /* FBSnippetModel.swift in Sources */,
 				47939D812F50592100CBE432 /* MockFBNoticesManager.swift in Sources */,
 				4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */,
 				4791CDFE2E747AC100687126 /* JSONFileManager.swift in Sources */,
 				470E63702EFB241D007B75B5 /* FormCoordinatorToolbar.swift in Sources */,
-				47B6E8022F5DB6C700EF7441 /* SnippetsViewModel+Filtering.swift in Sources */,
 				47B6E7E82F5BF85B00EF7441 /* CodeSnippet.swift in Sources */,
 				475997512E5C6C9D008E20F0 /* Post.swift in Sources */,
 				47C56FEE2EC9C94100F0796C /* NoticeRowView.swift in Sources */,
@@ -1258,7 +1237,6 @@
 				47F78A552F02DB12005394BE /* ModalNavigationContainerWrapper.swift in Sources */,
 				47EA14312EF530780064583B /* AppSyncStateManager.swift in Sources */,
 				47FF424B2EE4B5960069D232 /* RatingSelectionView.swift in Sources */,
-				47B6E7F92F5DA14600EF7441 /* SwiftDataSnippetsDataSource.swift in Sources */,
 				470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */,
 				470E63762EFD5044007B75B5 /* CountdownView.swift in Sources */,
 				471BBFA62EC7AB640004AC45 /* NoticesView.swift in Sources */,
@@ -1267,7 +1245,6 @@
 				47BAF0F62E6485B000287F10 /* SegmentedOneLinePicker.swift in Sources */,
 				471BBF9A2EC5F6170004AC45 /* PostDraftsView.swift in Sources */,
 				4791CDAF2E70187E00687126 /* PreferencesView.swift in Sources */,
-				47B6E7EA2F5BFEB900EF7441 /* CodableCodeSnippet.swift in Sources */,
 				47453E042EAB73A9000D2C16 /* Date.swift in Sources */,
 				47069F002EAFF6210082AE12 /* LaunchView.swift in Sources */,
 				471DCBD62EBBAD9700AFA5F4 /* AboutApp.swift in Sources */,
@@ -1282,7 +1259,6 @@
 				47B6E81E2F5EB4DB00EF7441 /* A001_ProgressViewIndicators.swift in Sources */,
 				471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */,
 				47AA558A2EA9741D000AF4E9 /* RestoreBackupView.swift in Sources */,
-				47B6E80C2F5DF62700EF7441 /* MockFBSnippetsManager.swift in Sources */,
 				4751DAF62F16407200EC9C53 /* ChartDataPoint.swift in Sources */,
 				4791CDBB2E702E9700687126 /* EraseAllPostsView.swift in Sources */,
 				4732FB372EAA63810062269D /* Constants.swift in Sources */,

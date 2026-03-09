@@ -23,7 +23,6 @@ struct SnippetsFiltersView: View {
             VStack(spacing: 0) {
                 sortOptions
                 categoryFilter
-                yearFilter
             }
             .padding(.horizontal, UIDevice.isiPad ? 15 : 0)
 
@@ -64,19 +63,6 @@ struct SnippetsFiltersView: View {
                 filterSectionOptionalNonCaseIterable(
                     title: "Category:",
                     selection: $vm.selectedCategory,
-                    allItems: list,
-                    titleForCase: { $0 }
-                )
-            }
-        }
-    }
-
-    private var yearFilter: some View {
-        Group {
-            if let list = vm.allYears, list.count > 1 {
-                filterSectionOptionalNonCaseIterable(
-                    title: "Year:",
-                    selection: $vm.selectedYear,
                     allItems: list,
                     titleForCase: { $0 }
                 )

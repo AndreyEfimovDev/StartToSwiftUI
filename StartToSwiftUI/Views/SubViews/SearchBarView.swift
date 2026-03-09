@@ -11,9 +11,10 @@ import SwiftData
 
 struct SearchBarView: View {
     
-    @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject private var vm: PostsViewModel
+//    @Environment(\.modelContext) private var modelContext
+//    @EnvironmentObject private var vm: PostsViewModel
     
+    @Binding var searchText: String
     @FocusState private var isFocusedOnSearchBar: Bool
     
     let offOpacity: Double = 0.5
@@ -27,7 +28,7 @@ struct SearchBarView: View {
                         isFocusedOnSearchBar ? Color.mycolor.myAccent : Color.mycolor.mySecondary
                     )
 
-                TextField("Search here ...", text: $vm.searchText)
+                TextField("Search here ...", text: $searchText)
                     .foregroundStyle(Color.mycolor.myAccent)
                     .autocorrectionDisabled(true)
                     .frame(height: isFocusedOnSearchBar ? 50 : 35)
@@ -68,7 +69,7 @@ struct SearchBarView: View {
             .opacity(isFocusedOnSearchBar ? 1 : 0)
             .onTapGesture {
                 isFocusedOnSearchBar = false
-                vm.searchText = ""
+                searchText = ""
             }
     }
 //    
@@ -78,6 +79,7 @@ struct SearchBarView: View {
 }
 
 #Preview {
+    @Previewable @State var searchText = ""
     
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
@@ -90,7 +92,7 @@ struct SearchBarView: View {
     ZStack {
         Color.pink.opacity(0.1)
             .ignoresSafeArea()
-        SearchBarView()
+        SearchBarView(searchText: $searchText)
             .environmentObject(vm)
     }
     

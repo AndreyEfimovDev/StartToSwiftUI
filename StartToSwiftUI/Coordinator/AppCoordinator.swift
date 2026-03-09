@@ -168,8 +168,6 @@ enum AppRoute: Hashable, Identifiable {
     
     // MARK: Snippets
     case snippetDetails(snippet: CodeSnippet)
-    case importSnippetsFromCloud
-    case archivedSnippets           // hidden snippets only
 
     // MARK: About / Legal
     case acknowledgements
@@ -212,8 +210,6 @@ enum AppRoute: Hashable, Identifiable {
         case .restoreBackup:            return "restoreBackup"
         case .erasePosts:               return "erasePosts"
         case .snippetDetails(let s):    return "snippetDetails_\(s.id)"
-        case .importSnippetsFromCloud:  return "importSnippetsFromCloud"
-        case .archivedSnippets:         return "archivedSnippets"
         case .acknowledgements:         return "acknowledgements"
         case .aboutApp:                 return "aboutApp"
         case .welcome:                  return "welcome"

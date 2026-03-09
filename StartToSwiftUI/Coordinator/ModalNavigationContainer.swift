@@ -63,10 +63,6 @@ struct ModalNavigationContainer: View {
         case .erasePosts:
             EraseAllPostsView()
 
-        case .importSnippetsFromCloud:
-            ImportSnippetsFromCloudView()
-        case .archivedSnippets:
-            ArchivedSnippetsView()
         case .snippetDetails(let snippet):
             // Opened via main NavigationStack, not modally
             SnippetDetailsView(snippet: snippet)

@@ -52,7 +52,7 @@ struct SnippetNoPreviewView: View {
 
 #Preview {
     NavigationStack {
-        SnippetNoPreviewView(snippet: PreviewData.sampleSnippet2)
+        SnippetNoPreviewView(snippet: SnippetsRepository.a001)
             .environmentObject(AppCoordinator())
     }
 }

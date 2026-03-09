@@ -21,6 +21,7 @@ struct SnippetDetailsView: View {
     // MARK: - State
     @State private var showCodeSheet = false
     @State private var codeCopied = false
+    @State private var isFavorite: Bool = false
 
     // MARK: - Body
 
@@ -32,6 +33,7 @@ struct SnippetDetailsView: View {
             .sheet(isPresented: $showCodeSheet) { codeSheet }
             .onAppear {
                 FBAnalyticsManager.shared.logScreen(name: "SnippetDetailsView_\(snippet.id)")
+                isFavorite = vm.isFavorite(snippet)
             }
     }
 
@@ -51,14 +53,15 @@ struct SnippetDetailsView: View {
 
             // ⭐ Favourite
             CircleStrokeButtonView(
-                iconName: snippet.favoriteChoice == .yes ? "star.fill" : "star",
+                iconName: isFavorite ? "star.fill" : "star",
                 iconFont: .headline,
-                imageColorPrimary: snippet.favoriteChoice == .yes
+                imageColorPrimary: isFavorite
                     ? Color.mycolor.myYellow
                     : Color.mycolor.myAccent,
                 isShownCircle: false
             ) {
                 vm.favoriteToggle(snippet)
+                isFavorite.toggle()
                 hapticManager.impact(style: .light)
             }
 
@@ -136,17 +139,36 @@ struct SnippetDetailsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 // Copy button inside sheet
+                
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
+                    CircleStrokeButtonView(
+                        iconName: codeCopied ? "checkmark" : "doc.on.doc",
+                        imageColorPrimary: codeCopied ? Color.mycolor.myGreen : Color.mycolor.myAccent,
+                        isShownCircle: false
+                    ) {
                         UIPasteboard.general.string = snippet.codeSnippet
                         hapticManager.notification(type: .success)
-                    } label: {
-                        Image(systemName: "doc.on.doc")
-                            .foregroundStyle(Color.mycolor.myAccent)
+                        withAnimation { codeCopied = true }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            withAnimation {
+                                codeCopied = false
+                                showCodeSheet = false
+                            }
+                        }
                     }
+//
+//                    Button {
+//                        UIPasteboard.general.string = snippet.codeSnippet
+//                        hapticManager.notification(type: .success)
+//                    } label: {
+//                        Image(systemName: "doc.on.doc")
+//                            .foregroundStyle(Color.mycolor.myAccent)
+//                    }
                 }
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Done") { showCodeSheet = false }
+                    Button("Done") {
+                        showCodeSheet = false
+                    }
                         .foregroundStyle(Color.mycolor.myAccent)
                 }
             }
@@ -159,12 +181,9 @@ struct SnippetDetailsView: View {
 // MARK: - Preview
 
 #Preview("Snippet Details") {
-    let vm = SnippetsViewModel(
-        dataSource: MockSnippetsDataSource(snippets: PreviewData.sampleSnippets),
-        fbSnippetsManager: MockFBSnippetsManager()
-    )
+    let vm = SnippetsViewModel()
     NavigationStack {
-        SnippetDetailsView(snippet: PreviewData.sampleSnippet1)
+        SnippetDetailsView(snippet: SnippetsRepository.a001)
             .environmentObject(vm)
             .environmentObject(AppCoordinator())
     }

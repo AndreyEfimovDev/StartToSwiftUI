@@ -6,12 +6,11 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct SnippetsHomeView: View {
 
     // MARK: - Dependencies
-    @EnvironmentObject private var vm: SnippetsViewModel
+    @EnvironmentObject private var snippetvm: SnippetsViewModel
     @EnvironmentObject private var noticevm: NoticesViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
 
@@ -27,9 +26,9 @@ struct SnippetsHomeView: View {
         GeometryReader { _ in
             ScrollViewReader { scrollProxy in
                 ZStack(alignment: .bottom) {
-                    if vm.allSnippets.isEmpty {
+                    if snippetvm.allSnippets.isEmpty {
                         allSnippetsIsEmpty
-                    } else if vm.filteredSnippets.isEmpty {
+                    } else if snippetvm.filteredSnippets.isEmpty {
                         filteredSnippetsIsEmpty
                     } else {
                         listContent
@@ -41,18 +40,10 @@ struct SnippetsHomeView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar { navigationToolbar() }
-            .safeAreaInset(edge: .top) { searchBar }
+            .safeAreaInset(edge: .top) {
+                SearchBarView(searchText: $snippetvm.searchText)
+            }
             .sheet(isPresented: $isFilterButtonPressed) { filtersSheet }
-            .alert("Error", isPresented: $vm.showErrorMessageAlert) {
-                Button("OK") {}
-            } message: {
-                if let msg = vm.errorMessage { Text(msg) }
-            }
-            .task {
-                FBAnalyticsManager.shared.logScreen(name: "SnippetsHomeView")
-                vm.loadSnippetsFromSwiftData()
-                hasSnippetsUpdate = await vm.checkFBSnippetsForUpdates()
-            }
         }
     }
 
@@ -60,8 +51,8 @@ struct SnippetsHomeView: View {
 
     private var listContent: some View {
         List {
-            ForEach(vm.filteredSnippets) { snippet in
-                SnippetRowView(snippet: snippet)
+            ForEach(snippetvm.filteredSnippets) { snippet in
+                SnippetRowView(snippet: snippet, isFavorite: snippetvm.isFavorite(snippet))
                     .id(snippet.id)
                     .background(trackingFirstSnippet(snippet: snippet))
                     .background(.black.opacity(0.001))
@@ -76,17 +67,12 @@ struct SnippetsHomeView: View {
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
         }
         .listStyle(.plain)
-        .refreshControl {
-            vm.loadSnippetsFromSwiftData()
-            Task { hasSnippetsUpdate = await vm.checkFBSnippetsForUpdates() }
-        }
     }
 
     // MARK: - Tap
 
     private func handleTap(on snippet: CodeSnippet) {
-        vm.selectedSnippet = snippet
-        if snippet.origin == .cloudNew { vm.updateSnippetOrigin(snippet) }
+        snippetvm.selectedSnippet = snippet
         if UIDevice.isiPhone {
             coordinator.push(.snippetDetails(snippet: snippet))
         }
@@ -97,29 +83,29 @@ struct SnippetsHomeView: View {
     @ViewBuilder
     private func leadingSwipeActions(for snippet: CodeSnippet) -> some View {
         Button(
-            snippet.favoriteChoice == .yes ? "Unmark" : "Mark",
-            systemImage: snippet.favoriteChoice == .yes ? "star.slash" : "star"
+            snippetvm.isFavorite(snippet) ? "Unmark" : "Mark",
+            systemImage: snippetvm.isFavorite(snippet) ? "star.slash" : "star"
         ) {
-            vm.favoriteToggle(snippet)
+            snippetvm.favoriteToggle(snippet)
         }
-        .tint(snippet.favoriteChoice == .yes ? Color.mycolor.myAccent : Color.mycolor.mySecondary)
+        .tint(snippetvm.isFavorite(snippet) ? Color.mycolor.myAccent : Color.mycolor.mySecondary)
     }
-
+    
     // MARK: - Search Bar
 
-    private var searchBar: some View {
-        HStack {
-            Image(systemName: "magnifyingglass")
-                .foregroundStyle(Color.mycolor.myAccent.opacity(0.5))
-            TextField("Search snippets", text: $vm.searchText)
-                .foregroundStyle(Color.mycolor.myAccent)
-        }
-        .padding(10)
-        .background(.ultraThinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-        .padding(.horizontal)
-        .padding(.vertical, 6)
-    }
+//    private var searchBar: some View {
+//        HStack {
+//            Image(systemName: "magnifyingglass")
+//                .foregroundStyle(Color.mycolor.myAccent.opacity(0.5))
+//            TextField("Search snippets", text: $snippetvm.searchText)
+//                .foregroundStyle(Color.mycolor.myAccent)
+//        }
+//        .padding(10)
+//        .background(.ultraThinMaterial)
+//        .clipShape(RoundedRectangle(cornerRadius: 12))
+//        .padding(.horizontal)
+//        .padding(.vertical, 6)
+//    }
 
     // MARK: - Toolbar
 
@@ -134,42 +120,18 @@ struct SnippetsHomeView: View {
 
         ToolbarItemGroup(placement: .navigationBarTrailing) {
             // ⋯ Manage menu
-            manageMenu
 
             // ≡ Filter
-            if !vm.allSnippets.isEmpty {
-                CircleStrokeButtonView(
-                    iconName: "line.3.horizontal.decrease",
-                    isIconColorToChange: !vm.isFiltersEmpty,
-                    isShownCircle: false
-                ) {
-                    isFilterButtonPressed.toggle()
-                    hapticManager.impact(style: .light)
-                }
-            }
-        }
-    }
-
-    // MARK: - Manage Menu (⋯)
-
-    private var manageMenu: some View {
-        Menu {
-            if vm.shouldShowImportFromCloud {
-                Button("Download curated collection", systemImage: "icloud.and.arrow.down") {
-                    coordinator.push(.importSnippetsFromCloud)
-                }
-            } else if hasSnippetsUpdate {
-                Button("Check for updates", systemImage: "arrow.trianglehead.counterclockwise") {
-                    coordinator.push(.importSnippetsFromCloud)
-                }
-            }
-            if vm.hasHidden {
-                Button("Archived (\(vm.hiddenCount))", systemImage: "archivebox") {
-                    coordinator.push(.archivedSnippets)
-                }
-            }
-        } label: {
-            CircleStrokeButtonView(iconName: "ellipsis", isShownCircle: false) {}
+//            if !snippetvm.allSnippets.isEmpty {
+//                CircleStrokeButtonView(
+//                    iconName: "line.3.horizontal.decrease",
+//                    isIconColorToChange: !snippetvm.isFiltersEmpty,
+//                    isShownCircle: false
+//                ) {
+//                    isFilterButtonPressed.toggle()
+//                    hapticManager.impact(style: .light)
+//                }
+//            }
         }
     }
 
@@ -200,7 +162,7 @@ struct SnippetsHomeView: View {
         GeometryReader { geo in
             Color.clear
                 .onChange(of: geo.frame(in: .global).minY) { _, newY in
-                    if snippet.id == vm.filteredSnippets.first?.id {
+                    if snippet.id == snippetvm.filteredSnippets.first?.id {
                         showOnTopButton = newY < 0
                     }
                 }
@@ -218,7 +180,7 @@ struct SnippetsHomeView: View {
                 heightIn: 55
             ) {
                 withAnimation {
-                    if let firstID = vm.filteredSnippets.first?.id {
+                    if let firstID = snippetvm.filteredSnippets.first?.id {
                         proxy.scrollTo(firstID, anchor: .top)
                     }
                 }
@@ -243,36 +205,14 @@ struct SnippetsHomeView: View {
     }
 }
 
-// MARK: - Preview
-
-private struct SnippetsHomeViewPreview: View {
-    @StateObject var vm: SnippetsViewModel = {
-        let vm = SnippetsViewModel(
-            dataSource: MockSnippetsDataSource(snippets: PreviewData.sampleSnippets),
-            fbSnippetsManager: MockFBSnippetsManager()
-        )
-        vm.start()
-        return vm
-    }()
-    @StateObject var noticesVM = NoticesViewModel(
-        dataSource: MockNoticesDataSource(),
-        fbNoticesManager: MockFBNoticesManager()
-    )
-
-    var body: some View {
-        NavigationStack {
-            SnippetsHomeView()
-                .environmentObject(AppCoordinator())
-                .environmentObject(vm)
-                .environmentObject(noticesVM)
-        }
-    }
-}
-
 #Preview("With Mock Snippets") {
-    let container = try! ModelContainer(
-        for: CodeSnippet.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-    )
-    SnippetsHomeViewPreview().modelContainer(container)
+    NavigationStack {
+        SnippetsHomeView()
+            .environmentObject(SnippetsViewModel())
+            .environmentObject(NoticesViewModel(
+                dataSource: MockNoticesDataSource(),
+                fbNoticesManager: MockFBNoticesManager()
+            ))
+            .environmentObject(AppCoordinator())
+    }
 }
