@@ -45,6 +45,15 @@ struct SnippetsHomeView: View {
             }
             .sheet(isPresented: $isFilterButtonPressed) { filtersSheet }
         }
+        .task {
+            FBAnalyticsManager.shared.logScreen(name: "SnippetsHomeView")
+            
+//            vm.loadPostsFromSwiftData()
+            noticevm.loadNoticesFromSwiftData()
+//            vm.updateWidgetData()
+            await noticevm.importNoticesFromFirebase()
+        }
+
     }
 
     // MARK: - List

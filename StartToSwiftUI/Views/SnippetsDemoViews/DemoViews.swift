@@ -14,8 +14,34 @@ import SwiftUI
 
 // MARK: - Shared helper views
 
+//private struct SnippetDemoHeader: View {
+//    let snippet: CodeSnippet
+//
+//    var body: some View {
+//        VStack(alignment: .leading, spacing: 8) {
+//            Text(snippet.title)
+//                .font(.title2)
+//                .fontWeight(.semibold)
+//                .frame(maxWidth: .infinity, alignment: .leading)
+////            Text(snippet.date.formatted(date: .numeric, time: .omitted))
+////                .font(.caption)
+//            Text(snippet.intro)
+//                .font(.subheadline)
+//                .foregroundStyle(Color.mycolor.myAccent.opacity(0.75))
+//        }
+//        .cardBackground()
+//    }
+//}
+
 private struct SnippetDemoHeader: View {
     let snippet: CodeSnippet
+
+    @State private var showFullIntro: Bool = false
+    @State private var lineCountIntro: Int = 0
+
+    private let introFont: Font = .subheadline
+    private let introLineSpacing: CGFloat = 0
+    private let introLinesLimit: Int = 3
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -23,11 +49,33 @@ private struct SnippetDemoHeader: View {
                 .font(.title2)
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
-//            Text(snippet.date.formatted(date: .numeric, time: .omitted))
-//                .font(.caption)
-            Text(snippet.intro)
-                .font(.subheadline)
-                .foregroundStyle(Color.mycolor.myAccent.opacity(0.75))
+
+            VStack(spacing: 0) {
+                Text(snippet.intro)
+                    .font(introFont)
+                    .lineLimit(showFullIntro ? nil : introLinesLimit)
+                    .lineSpacing(introLineSpacing)
+                    .frame(minHeight: 55, alignment: .topLeading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(
+                        // Невидимый текст без ограничений — только для подсчёта строк
+                        Text(snippet.intro)
+                            .font(introFont)
+                            .lineSpacing(introLineSpacing)
+                            .lineLimit(nil)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .hidden()
+                            .onLineCountChanged(font: introFont, lineSpacing: introLineSpacing) { count in
+                                lineCountIntro = count - 1
+                            }
+                    )
+                if lineCountIntro > introLinesLimit {
+                    HStack(alignment: .top) {
+                        Spacer()
+                        MoreLessTextButton(showText: $showFullIntro)
+                    }
+                }
+            }
         }
         .cardBackground()
     }
@@ -49,12 +97,19 @@ private struct SnippetThanksView: View {
 
 struct A001_ProgressViewIndicatorsDemoView: View {
 
+//    @State private var isHeaderExpanded = true
     let snippet: CodeSnippet
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 20) {
                 SnippetDemoHeader(snippet: snippet)
+//                    .onTapGesture {
+//                        withAnimation(.spring) { isHeaderExpanded.toggle() }
+//                    }
+//                    .frame(height: isHeaderExpanded ? nil : 44)
+//                    .clipped()
+                
 
                 // Live demo — original component, untouched
                 A001_ProgressViewIndicators()

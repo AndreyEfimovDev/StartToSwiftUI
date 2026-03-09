@@ -85,7 +85,9 @@ struct PostDetailsView: View {
                     .padding(.top, 30)
                 
                 intro(for: post)
+                    .padding()
                     .cardBackground()
+                
                 
                 goToTheSourceButton(urlString: post.urlString)
                     .frame(maxWidth: 250)
@@ -148,26 +150,32 @@ struct PostDetailsView: View {
     
     private func intro(for post: Post) -> some View {
         VStack(spacing: 0) {
-            Text (post.intro)
+            Text(post.intro)
                 .font(introFont)
                 .lineLimit(showFullIntro ? nil : introLinesLimit)
                 .lineSpacing(introLineSpacing)
                 .frame(minHeight: 55, alignment: .topLeading)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .onLineCountChanged(font: introFont, lineSpacing: introLineSpacing) { count in
-                    lineCountIntro = count - 1
-                }
                 .padding(.top, 8)
-            
+                .background(
+                    Text(post.intro)
+                        .font(introFont)
+                        .lineSpacing(introLineSpacing)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .hidden()
+                        .onLineCountChanged(font: introFont, lineSpacing: introLineSpacing) { count in
+                            lineCountIntro = count - 1
+                        }
+                )
+
             if lineCountIntro > introLinesLimit {
-                
                 HStack(alignment: .top) {
                     Spacer()
                     MoreLessTextButton(showText: $showFullIntro)
                 }
             }
         }
-        .padding()
     }
     
     // MARK: - Notes

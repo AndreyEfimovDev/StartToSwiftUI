@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - App Section
 
-enum AppSection {
+enum AppSection: String {
     case materials
     case snippets
 
@@ -31,8 +31,7 @@ final class AppCoordinator: ObservableObject {
     private let hapticManager = HapticManager.shared
 
     // MARK: - Section
-    @Published var activeSection: AppSection = .materials
-
+    @AppStorage("activeSection") var activeSection: AppSection = .materials
     
     // MARK: - Navigation
     /// For main stack navigation

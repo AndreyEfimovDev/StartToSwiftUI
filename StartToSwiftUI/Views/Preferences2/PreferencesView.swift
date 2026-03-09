@@ -60,15 +60,15 @@ struct PreferencesView: View {
                     noticeMessages
                 }
             }
-//            Section(header: sectionHeader("Manage materials (\(vm.allPosts.count))")) {
-//                postDrafts
-//                archivedMaterials
-//                importFromCloud
-//                shareBackup
-//                restoreBackup
-//                erasePosts
-//                makeAllCuratedAvailable
-//            }
+            Section(header: sectionHeader("Manage materials (\(vm.allPosts.count))")) {
+                postDrafts
+                archivedMaterials
+                importFromCloud
+                shareBackup
+                restoreBackup
+                erasePosts
+                makeAllCuratedAvailable
+            }
             Section(header: sectionHeader("Сommunication")){
                 acknowledgements
                 aboutApplication
