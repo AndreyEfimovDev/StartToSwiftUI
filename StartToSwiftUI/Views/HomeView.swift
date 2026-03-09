@@ -59,15 +59,9 @@ struct HomeView: View {
             .navigationTitle(vm.selectedCategory ?? Constants.mainCategory)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .toolbar {
-                navigationToolbar()
-            }
-            .safeAreaInset(edge: .top) {
-                SearchBarView(searchText: $vm.searchText)
-            }
-            .sheet(isPresented: $isFilterButtonPressed) {
-                filtersSheet
-            }
+            .toolbar { navigationToolbar()}
+            .safeAreaInset(edge: .top) { searchBarStack }
+            .sheet(isPresented: $isFilterButtonPressed) {filtersSheet }
             .overlay { gestureOverlays(proxy: proxy) }
             .alert("Error", isPresented: $vm.showErrorMessageAlert, actions: {
                 Button("OK") {}
@@ -96,6 +90,50 @@ struct HomeView: View {
     }
     
     // MARK: Subviews
+    
+    private var searchBarStack: some View {
+        HStack {
+            SearchBarView(searchText: $vm.searchText)
+            // Add a new post
+            CircleStrokeButtonView(
+                iconName: "plus",
+                isShownCircle: false
+            ){
+                coordinator.push(.addPost)
+                hapticManager.impact(style: .light)
+            }
+            .background(.ultraThinMaterial)
+            .clipShape(.circle)
+            .background(
+                Circle()
+                    .stroke(
+                        Color.mycolor.mySecondary,
+                        lineWidth: 1)
+            )
+
+            // Fliters for posts
+            if !vm.allPosts.isEmpty {
+                CircleStrokeButtonView(
+                    iconName: "line.3.horizontal.decrease",
+                    isIconColorToChange: !vm.isFiltersEmpty,
+                    isShownCircle: false
+                ) {
+                    isFilterButtonPressed.toggle()
+                    hapticManager.impact(style: .light)
+                }
+                .background(.ultraThinMaterial)
+                .clipShape(.circle)
+                .background(
+                    Circle()
+                        .stroke(
+                            Color.mycolor.mySecondary,
+                            lineWidth: 1)
+                )
+            }
+        }
+        .padding(.horizontal)
+    }
+    
     private var listPostRowsContent: some View {
         List {
             ForEach(postsToDisplay.filter { $0.status == .active && !$0.draft }) { post in
@@ -226,27 +264,29 @@ struct HomeView: View {
 //            }
 //        }
   
-        ToolbarItemGroup(placement: .navigationBarTrailing) {
+//        ToolbarItemGroup(placement: .navigationBarTrailing) {
+            
+            
             // Add a new post
-            CircleStrokeButtonView(
-                iconName: "plus",
-                isShownCircle: false
-            ){
-                coordinator.push(.addPost)
-                hapticManager.impact(style: .light)
-            }
-            // Fliters for posts
-            if !vm.allPosts.isEmpty {
-                CircleStrokeButtonView(
-                    iconName: "line.3.horizontal.decrease",
-                    isIconColorToChange: !vm.isFiltersEmpty,
-                    isShownCircle: false
-                ) {
-                    isFilterButtonPressed.toggle()
-                    hapticManager.impact(style: .light)
-                }
-            }
-        }
+//            CircleStrokeButtonView(
+//                iconName: "plus",
+//                isShownCircle: false
+//            ){
+//                coordinator.push(.addPost)
+//                hapticManager.impact(style: .light)
+//            }
+//            // Fliters for posts
+//            if !vm.allPosts.isEmpty {
+//                CircleStrokeButtonView(
+//                    iconName: "line.3.horizontal.decrease",
+//                    isIconColorToChange: !vm.isFiltersEmpty,
+//                    isShownCircle: false
+//                ) {
+//                    isFilterButtonPressed.toggle()
+//                    hapticManager.impact(style: .light)
+//                }
+//            }
+//        }
     }
     
 //    private var noticeButton: some View {

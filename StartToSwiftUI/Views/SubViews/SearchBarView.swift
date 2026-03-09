@@ -6,15 +6,11 @@
 //
 
 import SwiftUI
-import SwiftData
-//import Speech
 
 struct SearchBarView: View {
     
-//    @Environment(\.modelContext) private var modelContext
-//    @EnvironmentObject private var vm: PostsViewModel
-    
     @Binding var searchText: String
+    
     @FocusState private var isFocusedOnSearchBar: Bool
     
     let offOpacity: Double = 0.5
@@ -31,7 +27,7 @@ struct SearchBarView: View {
                 TextField("Search here ...", text: $searchText)
                     .foregroundStyle(Color.mycolor.myAccent)
                     .autocorrectionDisabled(true)
-                    .frame(height: isFocusedOnSearchBar ? 50 : 35)
+                    .frame(height: 35)
                     .focused($isFocusedOnSearchBar)
                     .submitLabel(.search)
                     .padding(.leading, isFocusedOnSearchBar ? 8 : 0)
@@ -39,32 +35,27 @@ struct SearchBarView: View {
                 xmarkButton
             }
             .font(.body)
-            .padding(.leading, 8)
-            .padding(.trailing, isFocusedOnSearchBar ? 0 : 8)
+            .padding(.horizontal, 8)
             .background(.ultraThinMaterial)
             .clipShape(Capsule())
             .background(
-                ZStack {
-                    Capsule()
-                        .stroke(
-                            isFocusedOnSearchBar ? Color.mycolor.myBlue : Color.mycolor.mySecondary,
-                            lineWidth: isFocusedOnSearchBar ? 5 : 1
-                        )
-                }
+                Capsule()
+                    .stroke(
+                        isFocusedOnSearchBar ? Color.mycolor.myBlue : Color.mycolor.mySecondary,
+                        lineWidth: isFocusedOnSearchBar ? 5 : 1)
             )
-            .padding(.horizontal)
+            .padding(.trailing)
             .padding(.vertical, 8)
         }
         .animation(.easeInOut, value: isFocusedOnSearchBar)
     }
-    
     
     private var xmarkButton: some View {
         
         Image(systemName: "xmark")
             .imageScale(.large)
             .foregroundStyle(Color.mycolor.myRed)
-            .padding(isFocusedOnSearchBar ? 15 : 0)
+            .padding(.horizontal, 6)
             .background(.black.opacity(0.001))
             .opacity(isFocusedOnSearchBar ? 1 : 0)
             .onTapGesture {
@@ -72,28 +63,15 @@ struct SearchBarView: View {
                 searchText = ""
             }
     }
-//    
-//    private func removeDoubleSpaces(_ string: String) -> String {
-//        return string.replacingOccurrences(of: "  ", with: " ")
-//    }
 }
 
 #Preview {
+    
     @Previewable @State var searchText = ""
-    
-    let container = try! ModelContainer(
-        for: Post.self, Notice.self, AppSyncState.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-    )
-    let context = ModelContext(container)
-    
-    let vm = PostsViewModel(modelContext: context)
-    
     ZStack {
         Color.pink.opacity(0.1)
             .ignoresSafeArea()
         SearchBarView(searchText: $searchText)
-            .environmentObject(vm)
     }
     
 }

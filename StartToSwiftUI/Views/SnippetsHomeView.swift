@@ -118,7 +118,7 @@ struct SnippetsHomeView: View {
         // ⇄ switch section
         SharedToolbarSwitchItem()
 
-        ToolbarItemGroup(placement: .navigationBarTrailing) {
+//        ToolbarItemGroup(placement: .navigationBarTrailing) {
             // ⋯ Manage menu
 
             // ≡ Filter
@@ -132,7 +132,7 @@ struct SnippetsHomeView: View {
 //                    hapticManager.impact(style: .light)
 //                }
 //            }
-        }
+//        }
     }
 
     // MARK: - Filters Sheet

@@ -146,7 +146,7 @@ struct SharedToolbarLeadingItems: ToolbarContent {
 
     var body: some ToolbarContent {
         // ⚙️ Preferences
-        ToolbarItem(placement: .navigationBarLeading) {
+        ToolbarItem(placement: .topBarLeading) {
             CircleStrokeButtonView(iconName: "gearshape", isShownCircle: false) {
                 coordinator.push(.preferences)
             }
@@ -194,7 +194,7 @@ struct SharedToolbarSwitchItem: ToolbarContent {
 
     var body: some ToolbarContent {
         // ⇄ Switch section — always visible, shows icon hinting at the OTHER section
-        ToolbarItem(placement: .navigationBarLeading) {
+        ToolbarItem(placement: .topBarTrailing) {
             CircleStrokeButtonView(
                 iconName: coordinator.activeSection.switchLabel,
                 isShownCircle: false
