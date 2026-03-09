@@ -80,11 +80,11 @@ struct HomeView: View {
             .task {
                 FBAnalyticsManager.shared.logScreen(name: "HomeView")
                 
-                vm.loadPostsFromSwiftData()
-                noticevm.loadNoticesFromSwiftData()
-                vm.updateWidgetData()
-                vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                await noticevm.importNoticesFromFirebase()
+//                vm.loadPostsFromSwiftData()
+//                noticevm.loadNoticesFromSwiftData()
+//                vm.updateWidgetData()
+//                vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
+//                await noticevm.importNoticesFromFirebase()
             }
         }
     }

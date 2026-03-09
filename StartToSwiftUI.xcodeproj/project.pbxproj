@@ -148,6 +148,8 @@
 		47B6E8202F5ECFC200EF7441 /* A002_TrimIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E81F2F5ECFC200EF7441 /* A002_TrimIndicator.swift */; };
 		47B6E8222F5EF33B00EF7441 /* SnippetFavoritesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8212F5EF33B00EF7441 /* SnippetFavoritesService.swift */; };
 		47B6E8242F5EF3B700EF7441 /* SnippetsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8232F5EF3B700EF7441 /* SnippetsRepository.swift */; };
+		47B6E8282F5F267C00EF7441 /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = 47B6E8272F5F267C00EF7441 /* Splash */; };
+		47B6E82A2F5F26BB00EF7441 /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8292F5F26BB00EF7441 /* AttributedString.swift */; };
 		47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */; };
 		47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF09F2E5F9E9800287F10 /* MoreLessTextButton.swift */; };
 		47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF0A12E60485D00287F10 /* FavoriteButton.swift */; };
@@ -347,6 +349,7 @@
 		47B6E81F2F5ECFC200EF7441 /* A002_TrimIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A002_TrimIndicator.swift; sourceTree = "<group>"; };
 		47B6E8212F5EF33B00EF7441 /* SnippetFavoritesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetFavoritesService.swift; sourceTree = "<group>"; };
 		47B6E8232F5EF3B700EF7441 /* SnippetsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsRepository.swift; sourceTree = "<group>"; };
+		47B6E8292F5F26BB00EF7441 /* AttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedString.swift; sourceTree = "<group>"; };
 		47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedCupsuleButton.swift; sourceTree = "<group>"; };
 		47BAF09F2E5F9E9800287F10 /* MoreLessTextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreLessTextButton.swift; sourceTree = "<group>"; };
 		47BAF0A12E60485D00287F10 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
@@ -375,6 +378,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4734363F2F48661100CF00FA /* FirebaseCrashlytics in Frameworks */,
+				47B6E8282F5F267C00EF7441 /* Splash in Frameworks */,
 				473436412F48661100CF00FA /* FirebaseFirestore in Frameworks */,
 				47B6E7DF2F5AFDD800EF7441 /* FirebaseMessaging in Frameworks */,
 				473436432F48661100CF00FA /* FirebasePerformance in Frameworks */,
@@ -721,6 +725,7 @@
 				47AE6C802E7D7FD0006230DA /* Modifiers.swift */,
 				47AC34422F28F2360023C7AF /* Calendar.swift */,
 				47939D782F4F2CDE00CBE432 /* DateFormater.swift */,
+				47B6E8292F5F26BB00EF7441 /* AttributedString.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -954,6 +959,7 @@
 				473436422F48661100CF00FA /* FirebasePerformance */,
 				47B65CDE2F4C98D4002FB480 /* FirebaseCore */,
 				47B6E7DE2F5AFDD800EF7441 /* FirebaseMessaging */,
+				47B6E8272F5F267C00EF7441 /* Splash */,
 			);
 			productName = StartToSwiftUI;
 			productReference = 4759973B2E5C6901008E20F0 /* StartToSwiftUI.app */;
@@ -1056,6 +1062,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				473436392F48661100CF00FA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				47B6E8262F5F267C00EF7441 /* XCRemoteSwiftPackageReference "Splash" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4759973C2E5C6901008E20F0 /* Products */;
@@ -1250,6 +1257,7 @@
 				471DCBD62EBBAD9700AFA5F4 /* AboutApp.swift in Sources */,
 				4759975F2E5CA789008E20F0 /* CountingLinesInTextBlock.swift in Sources */,
 				4791CE042E748DA200687126 /* AddEditPostView.swift in Sources */,
+				47B6E82A2F5F26BB00EF7441 /* AttributedString.swift in Sources */,
 				4781D72E2ED716AE00B74F85 /* Bundle.swift in Sources */,
 				47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */,
 				4791CDC12E708E1300687126 /* DocumentPicker.swift in Sources */,
@@ -1791,6 +1799,14 @@
 				minimumVersion = 12.9.0;
 			};
 		};
+		47B6E8262F5F267C00EF7441 /* XCRemoteSwiftPackageReference "Splash" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/JohnSundell/Splash";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.16.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1828,6 +1844,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 473436392F48661100CF00FA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseMessaging;
+		};
+		47B6E8272F5F267C00EF7441 /* Splash */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 47B6E8262F5F267C00EF7441 /* XCRemoteSwiftPackageReference "Splash" */;
+			productName = Splash;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

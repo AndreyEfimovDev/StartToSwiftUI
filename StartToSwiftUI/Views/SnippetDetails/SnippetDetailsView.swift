@@ -87,13 +87,6 @@ struct SnippetDetailsView: View {
                     withAnimation { codeCopied = false }
                 }
             }
-
-            // GitHub link — Phase 2
-            // if let link = snippet.githubLink, let url = URL(string: link) {
-            //     Link(destination: url) {
-            //         Image(systemName: "chevron.left.forwardslash.chevron.right")
-            //     }
-            // }
         }
     }
 
@@ -109,20 +102,19 @@ struct SnippetDetailsView: View {
                             .font(.headline)
                         Text(snippet.intro)
                             .font(.subheadline)
-                            .foregroundStyle(Color.mycolor.myAccent.opacity(0.7))
                     }
+                    .foregroundStyle(Color.mycolor.myAccent)
                     .padding(.horizontal)
                     .padding(.top)
 
                     Divider()
 
                     // Code block
-                    Text(snippet.codeSnippet)
+                    Text(AttributedString.splashHighlighted(snippet.codeSnippet))
                         .font(.system(.footnote, design: .monospaced))
-                        .foregroundStyle(Color.mycolor.myAccent)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding()
-                        .background(Color.mycolor.mySecondary.opacity(0.12))
+                        .background(Color.mycolor.mySecondary.opacity(0.05))
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                         .padding(.horizontal)
 
@@ -139,7 +131,6 @@ struct SnippetDetailsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 // Copy button inside sheet
-                
                 ToolbarItem(placement: .topBarTrailing) {
                     CircleStrokeButtonView(
                         iconName: codeCopied ? "checkmark" : "doc.on.doc",
@@ -156,14 +147,6 @@ struct SnippetDetailsView: View {
                             }
                         }
                     }
-//
-//                    Button {
-//                        UIPasteboard.general.string = snippet.codeSnippet
-//                        hapticManager.notification(type: .success)
-//                    } label: {
-//                        Image(systemName: "doc.on.doc")
-//                            .foregroundStyle(Color.mycolor.myAccent)
-//                    }
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     Button("Done") {
@@ -173,6 +156,7 @@ struct SnippetDetailsView: View {
                 }
             }
         }
+        .preferredColorScheme(.dark)
         .presentationDragIndicator(.visible)
         .presentationDetents([.medium, .large])
     }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Splash
 
 struct SnippetsHomeView: View {
 
@@ -15,6 +16,13 @@ struct SnippetsHomeView: View {
     @EnvironmentObject private var coordinator: AppCoordinator
 
     private let hapticManager = HapticManager.shared
+    
+    
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var splashTheme: Splash.Theme {
+        .midnight(withFont: .init(size: 13))
+    }
 
     // MARK: - States
     @State private var showOnTopButton = false
@@ -48,10 +56,8 @@ struct SnippetsHomeView: View {
         .task {
             FBAnalyticsManager.shared.logScreen(name: "SnippetsHomeView")
             
-//            vm.loadPostsFromSwiftData()
-            noticevm.loadNoticesFromSwiftData()
-//            vm.updateWidgetData()
-            await noticevm.importNoticesFromFirebase()
+//            noticevm.loadNoticesFromSwiftData()
+//            await noticevm.importNoticesFromFirebase()
         }
 
     }
@@ -99,49 +105,15 @@ struct SnippetsHomeView: View {
         }
         .tint(snippetvm.isFavorite(snippet) ? Color.mycolor.myAccent : Color.mycolor.mySecondary)
     }
-    
-    // MARK: - Search Bar
-
-//    private var searchBar: some View {
-//        HStack {
-//            Image(systemName: "magnifyingglass")
-//                .foregroundStyle(Color.mycolor.myAccent.opacity(0.5))
-//            TextField("Search snippets", text: $snippetvm.searchText)
-//                .foregroundStyle(Color.mycolor.myAccent)
-//        }
-//        .padding(10)
-//        .background(.ultraThinMaterial)
-//        .clipShape(RoundedRectangle(cornerRadius: 12))
-//        .padding(.horizontal)
-//        .padding(.vertical, 6)
-//    }
 
     // MARK: - Toolbar
 
     @ToolbarContentBuilder
     private func navigationToolbar() -> some ToolbarContent {
-
         // ⚙️ and 🔔 — shared items from StartView
         SharedToolbarLeadingItems()
-
         // ⇄ switch section
         SharedToolbarSwitchItem()
-
-//        ToolbarItemGroup(placement: .navigationBarTrailing) {
-            // ⋯ Manage menu
-
-            // ≡ Filter
-//            if !snippetvm.allSnippets.isEmpty {
-//                CircleStrokeButtonView(
-//                    iconName: "line.3.horizontal.decrease",
-//                    isIconColorToChange: !snippetvm.isFiltersEmpty,
-//                    isShownCircle: false
-//                ) {
-//                    isFilterButtonPressed.toggle()
-//                    hapticManager.impact(style: .light)
-//                }
-//            }
-//        }
     }
 
     // MARK: - Filters Sheet
