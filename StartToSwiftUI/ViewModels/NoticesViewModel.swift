@@ -116,7 +116,7 @@ final class NoticesViewModel: ObservableObject {
         FBPerformanceManager.shared.startTrace(name: "import_notices_firebase")
         FBCrashManager.shared.addLog("loadNoticesFromFirebase: started, notices count: \(notices.count)")
 
-        // MARK: - Fetch from Firebase
+        // MARK: - Set filter date
         let filterDate: Date
         if let appStateManager {
             let rawLastDate = appStateManager.getLastNoticeDate() ?? Date(timeIntervalSince1970: 0)
@@ -132,11 +132,12 @@ final class NoticesViewModel: ObservableObject {
         } else {
             filterDate = Date(timeIntervalSince1970: 0)
         }
-
-        let fetchResult = await fbNoticesManager.fetchFBNotices(after: filterDate)
-
-        // MARK: - Handle network errors
+        
+        // MARK: - Fetch from Firebase & handle network errors
         let relevantNotices: [FBNoticeModel]
+        
+        let fetchResult = await fbNoticesManager.fetchFBNotices(after: filterDate)
+        // MARK: - Handle network errors
         switch fetchResult {
         case .success(let notices):
             relevantNotices = notices
