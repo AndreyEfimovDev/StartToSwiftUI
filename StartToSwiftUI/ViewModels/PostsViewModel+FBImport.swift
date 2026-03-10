@@ -43,8 +43,7 @@ extension PostsViewModel {
                 log("ℹ️ No new posts from \(sourceName)", level: .info)
                 
                 // Migration: If the date has not yet been set, we take it from local posts
-                // TODO: Remove this migration block after v?.? — one-time fix for users
-                // who had lastPostsFBUpdateDate = nil before saveContext() was added
+                // One-time fix for users who had lastPostsFBUpdateDate = nil before saveContext() was added
                 if let appStateManager {
                     let lastDate = appStateManager.getLastDateOfPostsLoaded()
                     if lastDate == nil || (lastDate ?? Date()) <= Date(timeIntervalSince1970: 1) {
