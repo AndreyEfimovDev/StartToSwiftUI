@@ -67,7 +67,6 @@ final class NoticesViewModel: ObservableObject {
         )
     }
     
-    
     func start() {
         setupSubscriptionForChangesInCloud()
     }
@@ -106,8 +105,6 @@ final class NoticesViewModel: ObservableObject {
             self.notices = try dataSource.fetchNotices()
             FBCrashManager.shared.addLog("loadNoticesFromSwiftData: notices count after fetch from SwiftData: \(notices.count)")
             updateUnreadStatus()  // ← always update status when fetch notices
-//          let duration = Date().timeIntervalSince(startTime)
-//          log("🍉 ✅ Download completed in \(String(format: "%.2f", duration))s. Notifications: \(fetchedNotices.count)", level: .info)
         } catch {
             FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error loading notices")
@@ -117,64 +114,72 @@ final class NoticesViewModel: ObservableObject {
     
     func importNoticesFromFirebase() async {
         FBPerformanceManager.shared.startTrace(name: "import_notices_firebase")
-        // Filter by date (SwiftData only)
-        let relevantNotices: [FBNoticeModel]
         FBCrashManager.shared.addLog("loadNoticesFromFirebase: started, notices count: \(notices.count)")
 
+        // MARK: - Fetch from Firebase
+        let filterDate: Date
         if let appStateManager {
-            // Take a maximum of two dates — the date of the last notice and the date of the application installation
-            // At the first launch, the user will not receive all the old notiсes, but only those that were created after app first launch
-            // Note: timeIntervalSince1970 is the number of seconds that have passed since January 1, 1970 00:00:00 UTC
-            // this point is called the Unix Epoch
             let rawLastDate = appStateManager.getLastNoticeDate() ?? Date(timeIntervalSince1970: 0)
             let lastNoticeDate = Date(timeIntervalSince1970: rawLastDate.timeIntervalSince1970.rounded(.down))
             log("🔥 LastNoticeDate from appStateManager \(lastNoticeDate)", level: .info)
-            
+
             let rawFirstLaunch = appStateManager.getAppFirstLaunchDate() ?? Date(timeIntervalSince1970: 0)
             let firstLaunchDate = Date(timeIntervalSince1970: rawFirstLaunch.timeIntervalSince1970.rounded(.down))
             log("🔥 FirstLaunchDate from appStateManager \(firstLaunchDate)", level: .info)
-            
-            let filterDate = max(lastNoticeDate, firstLaunchDate)
-            log("🔥 filterDate from appStateManager \(filterDate)", level: .info)
 
-            relevantNotices = await fbNoticesManager.fetchFBNotices(after: filterDate)
+            filterDate = max(lastNoticeDate, firstLaunchDate)
+            log("🔥 filterDate from appStateManager \(filterDate)", level: .info)
         } else {
-            relevantNotices = await fbNoticesManager.fetchFBNotices(after: Date(timeIntervalSince1970: 0))
+            filterDate = Date(timeIntervalSince1970: 0)
         }
+
+        let fetchResult = await fbNoticesManager.fetchFBNotices(after: filterDate)
+
+        // MARK: - Handle network errors
+        let relevantNotices: [FBNoticeModel]
+        switch fetchResult {
+        case .success(let notices):
+            relevantNotices = notices
+        case .failure(.networkUnavailable):
+            handleError(nil, message: "No internet connection. Please check your network and try again.")
+            FBPerformanceManager.shared.stopTrace(name: "import_notices_firebase")
+            return
+        case .failure(.unknown(let error)):
+            handleError(error, message: "Failed to load notices from Firebase")
+            FBPerformanceManager.shared.stopTrace(name: "import_notices_firebase")
+            return
+        }
+
         FBCrashManager.shared.addLog("loadNoticesFromFirebase: in progress, notices imported: \(relevantNotices.count)")
 
-        // sync with Cloud
+        // MARK: - Sync & filter duplicates
         loadNoticesFromSwiftData()
-        
-        // Filter by ID (general logic)
         let existingIDs = Set(notices.map { $0.id })
         let newNotices = relevantNotices.filter { !existingIDs.contains($0.noticeId) }
         FBCrashManager.shared.addLog("loadNoticesFromFirebase: in progress, new notices found count: \(newNotices.count)")
 
-        // Update latest date regardless of whether there are new notices
-        // This prevents reprocessing the same notices on next launch
-        if let appStateManager {
-            if let latestDate = relevantNotices.map({ $0.noticeDate }).max() {
-                appStateManager.updateLatestNoticeDate(latestDate.addingTimeInterval(1))
-                FBCrashManager.shared.addLog("loadNoticesFromFirebase: latest notices date updated: \(latestDate)")
-                log("🔥 LastNoticeDate updated in appStateManager \(latestDate)", level: .info)
-            }
+        // MARK: - Update latest date
+        if let appStateManager,
+           let latestDate = relevantNotices.map({ $0.noticeDate }).max() {
+            appStateManager.updateLatestNoticeDate(latestDate.addingTimeInterval(1))
+            FBCrashManager.shared.addLog("loadNoticesFromFirebase: latest notices date updated: \(latestDate)")
+            log("🔥 LastNoticeDate updated in appStateManager \(latestDate)", level: .info)
         }
+
         guard !newNotices.isEmpty else {
             FBPerformanceManager.shared.stopTrace(name: "import_notices_firebase")
             return
         }
-        
-        // Adding new notices
+
+        // MARK: - Save new notices
         for firebaseNotice in newNotices {
             dataSource.insert(NoticeMigrationHelper.convertFromFirebase(firebaseNotice))
         }
-        
-        // Updating and saving the state
+
         if isShowBadgeForNewNotices {
             sendLocalNotification(count: newNotices.count)
         }
-        
+
         saveContext()
         loadNoticesFromSwiftData(removeDuplicates: false)
         log("🍉 ✅ Import complete: \(newNotices.count) notices added", level: .info)
@@ -186,6 +191,77 @@ final class NoticesViewModel: ObservableObject {
         FBPerformanceManager.shared.stopTrace(name: "import_notices_firebase")
     }
     
+//    func importNoticesFromFirebase() async {
+//        FBPerformanceManager.shared.startTrace(name: "import_notices_firebase")
+//        // Filter by date (SwiftData only)
+//        let relevantNotices: [FBNoticeModel]
+//        FBCrashManager.shared.addLog("loadNoticesFromFirebase: started, notices count: \(notices.count)")
+//
+//        if let appStateManager {
+//            // Take a maximum of two dates — the date of the last notice and the date of the application installation
+//            // At the first launch, the user will not receive all the old notiсes, but only those that were created after app first launch
+//            // Note: timeIntervalSince1970 is the number of seconds that have passed since January 1, 1970 00:00:00 UTC
+//            // this point is called the Unix Epoch
+//            let rawLastDate = appStateManager.getLastNoticeDate() ?? Date(timeIntervalSince1970: 0)
+//            let lastNoticeDate = Date(timeIntervalSince1970: rawLastDate.timeIntervalSince1970.rounded(.down))
+//            log("🔥 LastNoticeDate from appStateManager \(lastNoticeDate)", level: .info)
+//            
+//            let rawFirstLaunch = appStateManager.getAppFirstLaunchDate() ?? Date(timeIntervalSince1970: 0)
+//            let firstLaunchDate = Date(timeIntervalSince1970: rawFirstLaunch.timeIntervalSince1970.rounded(.down))
+//            log("🔥 FirstLaunchDate from appStateManager \(firstLaunchDate)", level: .info)
+//            
+//            let filterDate = max(lastNoticeDate, firstLaunchDate)
+//            log("🔥 filterDate from appStateManager \(filterDate)", level: .info)
+//
+//            relevantNotices = await fbNoticesManager.fetchFBNotices(after: filterDate)
+//        } else {
+//            relevantNotices = await fbNoticesManager.fetchFBNotices(after: Date(timeIntervalSince1970: 0))
+//        }
+//        FBCrashManager.shared.addLog("loadNoticesFromFirebase: in progress, notices imported: \(relevantNotices.count)")
+//
+//        // sync with Cloud
+//        loadNoticesFromSwiftData()
+//        
+//        // Filter by ID (general logic)
+//        let existingIDs = Set(notices.map { $0.id })
+//        let newNotices = relevantNotices.filter { !existingIDs.contains($0.noticeId) }
+//        FBCrashManager.shared.addLog("loadNoticesFromFirebase: in progress, new notices found count: \(newNotices.count)")
+//
+//        // Update latest date regardless of whether there are new notices
+//        // This prevents reprocessing the same notices on next launch
+//        if let appStateManager {
+//            if let latestDate = relevantNotices.map({ $0.noticeDate }).max() {
+//                appStateManager.updateLatestNoticeDate(latestDate.addingTimeInterval(1))
+//                FBCrashManager.shared.addLog("loadNoticesFromFirebase: latest notices date updated: \(latestDate)")
+//                log("🔥 LastNoticeDate updated in appStateManager \(latestDate)", level: .info)
+//            }
+//        }
+//        guard !newNotices.isEmpty else {
+//            FBPerformanceManager.shared.stopTrace(name: "import_notices_firebase")
+//            return
+//        }
+//        
+//        // Adding new notices
+//        for firebaseNotice in newNotices {
+//            dataSource.insert(NoticeMigrationHelper.convertFromFirebase(firebaseNotice))
+//        }
+//        
+//        // Updating and saving the state
+//        if isShowBadgeForNewNotices {
+//            sendLocalNotification(count: newNotices.count)
+//        }
+//        
+//        saveContext()
+//        loadNoticesFromSwiftData(removeDuplicates: false)
+//        log("🍉 ✅ Import complete: \(newNotices.count) notices added", level: .info)
+//        FBPerformanceManager.shared.setValue(
+//            name: "import_notices_firebase",
+//            value: "\(newNotices.count)/\(relevantNotices.count)",
+//            forAttribute: "notices_new_of_received"
+//        )
+//        FBPerformanceManager.shared.stopTrace(name: "import_notices_firebase")
+//    }
+//    
     // MARK: - Remove Duplicates
     /// Remove duplicate notifications in SwiftUI, leaving only one instance of each ID
     /// Passing Swift DataSource as a parameter avoids double-checking

@@ -863,11 +863,11 @@
 			children = (
 				47B6E8132F5DFB6800EF7441 /* SnippetDemoViews.swift */,
 				47B6E8232F5EF3B700EF7441 /* SnippetsRepository.swift */,
-				470823E12F60545E00D8C073 /* A00x_CardSwipTinder.swift */,
 				47B6E81D2F5EB4DB00EF7441 /* A001_ProgressViewIndicators.swift */,
 				47B6E81F2F5ECFC200EF7441 /* A002_TrimIndicator.swift */,
 				470823DD2F6038B600D8C073 /* A003_StaticBrokenCircleProgress.swift */,
 				470823DF2F60397800D8C073 /* A004_StaticBrokenCircleProgress.swift */,
+				470823E12F60545E00D8C073 /* A00x_CardSwipTinder.swift */,
 			);
 			path = SnippetsDemoViews;
 			sourceTree = "<group>";

@@ -55,11 +55,7 @@ struct SnippetsHomeView: View {
         }
         .task {
             FBAnalyticsManager.shared.logScreen(name: "SnippetsHomeView")
-            
-//            noticevm.loadNoticesFromSwiftData()
-//            await noticevm.importNoticesFromFirebase()
         }
-
     }
 
     // MARK: - List

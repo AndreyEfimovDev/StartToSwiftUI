@@ -31,17 +31,12 @@ struct StartView: View {
                 mainContent
                     .task {
                         vm.selectedCategory = vm.mainCategory
-
-                        // Один раз при запуске приложения
                         noticevm.loadNoticesFromSwiftData()
                         await noticevm.importNoticesFromFirebase()
-                        
                         vm.loadPostsFromSwiftData()
                         vm.updateWidgetData()
                         vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
                     }
-//                    .onAppear {
-//                    }
             }
         }
         .preferredColorScheme(vm.selectedTheme.colorScheme)

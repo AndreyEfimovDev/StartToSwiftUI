@@ -79,12 +79,6 @@ struct HomeView: View {
             })
             .task {
                 FBAnalyticsManager.shared.logScreen(name: "HomeView")
-                
-//                vm.loadPostsFromSwiftData()
-//                noticevm.loadNoticesFromSwiftData()
-//                vm.updateWidgetData()
-//                vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-//                await noticevm.importNoticesFromFirebase()
             }
         }
     }
@@ -251,42 +245,6 @@ struct HomeView: View {
         SharedToolbarLeadingItems()
         SharedToolbarSwitchItem()
 
-        
-//        ToolbarItem(placement: .navigationBarLeading) {
-//            CircleStrokeButtonView(iconName: "gearshape", isShownCircle: false) {
-//                coordinator.push(.preferences)
-//                hapticManager.impact(style: .light)
-//            }
-//        }
-//        if noticevm.unreadCount != 0  {
-//            ToolbarItem(placement: .navigationBarLeading) {
-//                noticeButton
-//            }
-//        }
-  
-//        ToolbarItemGroup(placement: .navigationBarTrailing) {
-            
-            
-            // Add a new post
-//            CircleStrokeButtonView(
-//                iconName: "plus",
-//                isShownCircle: false
-//            ){
-//                coordinator.push(.addPost)
-//                hapticManager.impact(style: .light)
-//            }
-//            // Fliters for posts
-//            if !vm.allPosts.isEmpty {
-//                CircleStrokeButtonView(
-//                    iconName: "line.3.horizontal.decrease",
-//                    isIconColorToChange: !vm.isFiltersEmpty,
-//                    isShownCircle: false
-//                ) {
-//                    isFilterButtonPressed.toggle()
-//                    hapticManager.impact(style: .light)
-//                }
-//            }
-//        }
     }
     
 //    private var noticeButton: some View {
