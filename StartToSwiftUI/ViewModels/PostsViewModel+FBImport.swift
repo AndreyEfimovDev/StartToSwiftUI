@@ -36,7 +36,6 @@ extension PostsViewModel {
             return false
             
         case .success(let fbResponse):
-            // ... дальше существующая логика
             let fbResponseChecked = filterUniquePosts(from: fbResponse)
             guard !fbResponseChecked.isEmpty else {
                 hapticManager.impact(style: .light)
@@ -56,7 +55,6 @@ extension PostsViewModel {
                         }
                     }
                 }
-                
                 return true
             }
             
@@ -73,7 +71,6 @@ extension PostsViewModel {
                let latestDate = fbResponseChecked.max(by: { $0.date < $1.date })?.date {
                 appStateManager.setLastDateOfPostsLoaded(latestDate.addingTimeInterval(1))
                 log("🔥 lastPostsFBUpdateDate updated in appStateManager \(latestDate)", level: .info)
-                
             }
             
             hapticManager.notification(type: .success)
