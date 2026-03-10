@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 import CloudKit
 import Firebase
+import FirebaseAnalytics
 import FirebaseMessaging
 
 @main
@@ -54,6 +55,9 @@ struct StartToSwiftUIApp: App {
         _postsViewModel = StateObject(wrappedValue: PostsViewModel(modelContext: context))
         _noticesViewModel = StateObject(wrappedValue: NoticesViewModel(modelContext: context))
 
+#if DEBUG
+        Analytics.setAnalyticsCollectionEnabled(false)
+#endif
         configureNavigationBarAppearance()
     }
     
