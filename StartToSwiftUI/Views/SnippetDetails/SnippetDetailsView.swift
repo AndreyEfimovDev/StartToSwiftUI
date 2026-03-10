@@ -10,7 +10,7 @@ import SwiftUI
 struct SnippetDetailsView: View {
 
     // MARK: - Dependencies
-    @EnvironmentObject private var vm: SnippetsViewModel
+    @EnvironmentObject private var snippetvm: SnippetsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
 
     private let hapticManager = HapticManager.shared
@@ -24,7 +24,6 @@ struct SnippetDetailsView: View {
     @State private var isFavorite: Bool = false
 
     // MARK: - Body
-
     var body: some View {
         SnippetViewRegistry.view(for: snippet)
             .navigationBarTitleDisplayMode(.inline)
@@ -33,12 +32,11 @@ struct SnippetDetailsView: View {
             .sheet(isPresented: $showCodeSheet) { codeSheet }
             .onAppear {
                 FBAnalyticsManager.shared.logScreen(name: "SnippetDetailsView_\(snippet.id)")
-                isFavorite = vm.isFavorite(snippet)
+                isFavorite = snippetvm.isFavorite(snippet)
             }
     }
 
     // MARK: - Toolbar
-
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
 
@@ -60,7 +58,7 @@ struct SnippetDetailsView: View {
                     : Color.mycolor.myAccent,
                 isShownCircle: false
             ) {
-                vm.favoriteToggle(snippet)
+                snippetvm.favoriteToggle(snippet)
                 isFavorite.toggle()
                 hapticManager.impact(style: .light)
             }
@@ -73,42 +71,14 @@ struct SnippetDetailsView: View {
                 showCodeSheet = true
                 hapticManager.impact(style: .light)
             }
-
-            // 📋 Copy code
-            CircleStrokeButtonView(
-                iconName: codeCopied ? "checkmark" : "doc.on.doc",
-                imageColorPrimary: codeCopied ? Color.mycolor.myGreen : Color.mycolor.myAccent,
-                isShownCircle: false
-            ) {
-                UIPasteboard.general.string = snippet.codeSnippet
-                hapticManager.notification(type: .success)
-                withAnimation { codeCopied = true }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    withAnimation { codeCopied = false }
-                }
-            }
         }
     }
 
     // MARK: - Code Sheet
-
     private var codeSheet: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    // Header
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(snippet.title)
-                            .font(.headline)
-                        Text(snippet.intro)
-                            .font(.subheadline)
-                    }
-                    .foregroundStyle(Color.mycolor.myAccent)
-                    .padding(.horizontal)
-                    .padding(.top)
-
-                    Divider()
-
                     // Code block
                     Text(AttributedString.splashHighlighted(snippet.codeSnippet))
                         .font(.system(.footnote, design: .monospaced))
@@ -158,7 +128,7 @@ struct SnippetDetailsView: View {
         }
         .preferredColorScheme(.dark)
         .presentationDragIndicator(.visible)
-        .presentationDetents([.medium, .large])
+        .presentationDetents(UIDevice.isiPad ? [.large] : [.medium, .large])
     }
 }
 

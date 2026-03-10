@@ -17,7 +17,6 @@ struct SnippetsRepository {
     static let all: [CodeSnippet] = [a001, a002]
 
     // MARK: - A001
-
     static let a001 = CodeSnippet(
         id: "A001",
         category: Constants.mainCategory,
@@ -129,7 +128,6 @@ struct SnippetsRepository {
     )
 
     // MARK: - A002
-
     static let a002 = CodeSnippet(
         id: "A002",
         category: Constants.mainCategory,

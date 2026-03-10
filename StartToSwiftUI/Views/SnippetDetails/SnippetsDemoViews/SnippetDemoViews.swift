@@ -12,27 +12,56 @@
 
 import SwiftUI
 
+// MARK: - A002_TrimIndicatorDemoView
+struct A002_TrimIndicatorDemoView: View {
+
+    let snippet: CodeSnippet
+
+    var body: some View {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 20) {
+                SnippetDemoHeader(snippet: snippet)
+
+                // Live demo — original component, untouched
+                A002_TrimIndicator()
+                    .cardBackground()
+
+                if let thanks = snippet.thanks, !thanks.isEmpty {
+                    SnippetThanksView(thanks: thanks)
+                }
+            }
+            .padding()
+            .foregroundStyle(Color.mycolor.myAccent)
+        }
+    }
+}
+
+// MARK: - A001_ProgressViewIndicatorsDemoView
+struct A001_ProgressViewIndicatorsDemoView: View {
+
+    let snippet: CodeSnippet
+
+    var body: some View {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 20) {
+                SnippetDemoHeader(snippet: snippet)
+
+                // Live demo — original component, untouched
+                A001_ProgressViewIndicators()
+                    .cardBackground()
+
+                if let thanks = snippet.thanks, !thanks.isEmpty {
+                    SnippetThanksView(thanks: thanks)
+                }
+            }
+            .padding()
+            .foregroundStyle(Color.mycolor.myAccent)
+        }
+    }
+}
+
+
 // MARK: - Shared helper views
-
-//private struct SnippetDemoHeader: View {
-//    let snippet: CodeSnippet
-//
-//    var body: some View {
-//        VStack(alignment: .leading, spacing: 8) {
-//            Text(snippet.title)
-//                .font(.title2)
-//                .fontWeight(.semibold)
-//                .frame(maxWidth: .infinity, alignment: .leading)
-////            Text(snippet.date.formatted(date: .numeric, time: .omitted))
-////                .font(.caption)
-//            Text(snippet.intro)
-//                .font(.subheadline)
-//                .foregroundStyle(Color.mycolor.myAccent.opacity(0.75))
-//        }
-//        .cardBackground()
-//    }
-//}
-
 private struct SnippetDemoHeader: View {
     let snippet: CodeSnippet
 
@@ -93,62 +122,6 @@ private struct SnippetThanksView: View {
     }
 }
 
-// MARK: - A001_ProgressViewIndicatorsDemoView
-
-struct A001_ProgressViewIndicatorsDemoView: View {
-
-//    @State private var isHeaderExpanded = true
-    let snippet: CodeSnippet
-
-    var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 20) {
-                SnippetDemoHeader(snippet: snippet)
-//                    .onTapGesture {
-//                        withAnimation(.spring) { isHeaderExpanded.toggle() }
-//                    }
-//                    .frame(height: isHeaderExpanded ? nil : 44)
-//                    .clipped()
-                
-
-                // Live demo — original component, untouched
-                A001_ProgressViewIndicators()
-                    .cardBackground()
-
-                if let thanks = snippet.thanks, !thanks.isEmpty {
-                    SnippetThanksView(thanks: thanks)
-                }
-            }
-            .padding()
-            .foregroundStyle(Color.mycolor.myAccent)
-        }
-    }
-}
-
-// MARK: - A002_TrimIndicatorDemoView
-
-struct A002_TrimIndicatorDemoView: View {
-
-    let snippet: CodeSnippet
-
-    var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 20) {
-                SnippetDemoHeader(snippet: snippet)
-
-                // Live demo — original component, untouched
-                A002_TrimIndicator()
-                    .cardBackground()
-
-                if let thanks = snippet.thanks, !thanks.isEmpty {
-                    SnippetThanksView(thanks: thanks)
-                }
-            }
-            .padding()
-            .foregroundStyle(Color.mycolor.myAccent)
-        }
-    }
-}
 
 // MARK: - Previews
 
