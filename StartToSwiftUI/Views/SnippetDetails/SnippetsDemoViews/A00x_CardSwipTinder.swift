@@ -66,7 +66,12 @@ struct A00x_CardSwipTinder: View {
 }
 
 #Preview {
-    A00x_CardSwipTinder()
+    A00x_CardSwipTinder(cards: [])
+}
+
+
+enum SwipeDirection {
+    case left, right, top, bottom
 }
 
 struct ExampleCardView: View {
