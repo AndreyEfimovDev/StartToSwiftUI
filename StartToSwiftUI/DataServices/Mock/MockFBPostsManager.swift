@@ -13,6 +13,7 @@ final class MockFBPostsManager: FBPostsManagerProtocol {
     var postsToReturn: [FBPostModel] = []
     var fetchCallCount = 0
     var shouldSimulateDelay = false
+    var shouldSimulateNetworkError = false  // ← новое
     
     // MARK: - Factory Methods
     static func mockPosts(_ posts: [FBPostModel]) -> MockFBPostsManager {
@@ -25,14 +26,23 @@ final class MockFBPostsManager: FBPostsManagerProtocol {
         MockFBPostsManager()
     }
     
+    static func mockNetworkError() -> MockFBPostsManager {  // ← новое
+        let mock = MockFBPostsManager()
+        mock.shouldSimulateNetworkError = true
+        return mock
+    }
+    
     // MARK: - Protocol Implementation
-    func fetchFBPosts(after: Date?) async -> [FBPostModel] {
+    func fetchFBPosts(after: Date?) async -> Result<[FBPostModel], FBFetchError> {
         fetchCallCount += 1
         if shouldSimulateDelay {
             try? await Task.sleep(nanoseconds: 500_000_000)
         }
-        guard let after else { return postsToReturn }
-        return postsToReturn.filter { $0.date > after }
+        if shouldSimulateNetworkError {
+            return .failure(.networkUnavailable)
+        }
+        guard let after else { return .success(postsToReturn) }
+        return .success(postsToReturn.filter { $0.date > after })
     }
     
     func uploadDevDataPostsToFirebase() async {}

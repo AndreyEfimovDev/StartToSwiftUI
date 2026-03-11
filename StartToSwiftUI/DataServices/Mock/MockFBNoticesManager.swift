@@ -13,6 +13,7 @@ final class MockFBNoticesManager: FBNoticesManagerProtocol {
     var noticesToReturn: [FBNoticeModel] = []
     var fetchCallCount = 0
     var shouldSimulateDelay = false
+    var shouldSimulateNetworkError = false  // ← новое
     
     // MARK: - Factory Methods
     static func mockNotices(_ notices: [FBNoticeModel]) -> MockFBNoticesManager {
@@ -25,13 +26,22 @@ final class MockFBNoticesManager: FBNoticesManagerProtocol {
         MockFBNoticesManager()
     }
     
+    static func mockNetworkError() -> MockFBNoticesManager {  // ← новое
+        let mock = MockFBNoticesManager()
+        mock.shouldSimulateNetworkError = true
+        return mock
+    }
+    
     // MARK: - Protocol Implementation
-    func fetchFBNotices(after: Date) async -> [FBNoticeModel] {
+    func fetchFBNotices(after: Date) async -> Result<[FBNoticeModel], FBFetchError> {
         fetchCallCount += 1
         if shouldSimulateDelay {
             try? await Task.sleep(nanoseconds: 500_000_000)
         }
-        return noticesToReturn.filter { $0.noticeDate > after }
+        if shouldSimulateNetworkError {
+            return .failure(.networkUnavailable)
+        }
+        return .success(noticesToReturn.filter { $0.noticeDate > after })
     }
 }
 
