@@ -38,14 +38,9 @@ struct WhatsNews {
             release: "Release 1.4.1(6)",
             news: [
                 News(
-                    title: "Added",
-                    newsText: """
-                    """
-                ),
-                News(
                     title: "Fixed",
                     newsText: """
-                    - Duplicate detection during cloud import now correctly checks both ID and title — previously a material with a duplicate title could slip through if its ID was new
+                    - Duplicate detection during cloud import now correctly checks both ID and title, previously a material with a duplicate title could slip through if its ID was new
                     """
                 ),
             ]
