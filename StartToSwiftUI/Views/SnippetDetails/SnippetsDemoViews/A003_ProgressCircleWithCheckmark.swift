@@ -36,24 +36,18 @@ struct A003_ProgressCircleWithCheckmarkDemo: View {
                 .tint(.green)
             
             HStack(spacing: 16) {
-                
                 Button {
                     isRunning ? pauseDemo() : startDemo()
                 } label: {
                     Text(isRunning ? "Pause" : "Start")
                         .font(.headline)
-                        .foregroundColor(isRunning ? .yellow : .green)
+                        .foregroundColor(isRunning ? Color.mycolor.myBlue : Color.mycolor.myGreen)
                         .padding(.vertical, 8)
                         .frame(height: 55)
                         .frame(maxWidth: .infinity)
-                        .background(.thinMaterial)
-                        .clipShape(Capsule())
-                        .overlay(
-                            Capsule()
-                                .stroke(Color.mycolor.myBlue, lineWidth: 1)
-                        )
+                        .background(.ultraThinMaterial, in: Capsule())
+                        .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
                 }
-
                 Button {
                     pauseDemo()
                     progress = 0
@@ -64,12 +58,8 @@ struct A003_ProgressCircleWithCheckmarkDemo: View {
                         .padding(.vertical, 8)
                         .frame(height: 55)
                         .frame(maxWidth: .infinity)
-                        .background(.thinMaterial)
-                        .clipShape(Capsule())
-                        .overlay(
-                            Capsule()
-                                .stroke(Color.mycolor.myBlue, lineWidth: 1)
-                        )
+                        .background(.ultraThinMaterial, in: Capsule())
+                        .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
                 }
             }
         }

@@ -52,35 +52,43 @@ struct A002_TrimIndicatorDemo: View {
     }
     
     private var plusButton: some View {
-        Button("+") {
+        Button {
             if proportion != 0 && timer != nil {
                 startProgressIndicator = false
                 buttonCaption = buttonCaption == "Start" ? "Stop" : "Start"
             }
             proportion += 0.1
             proportion = min(proportion,1)
+        } label: {
+            Image(systemName: "plus")
+                .font(.headline)
+                .foregroundStyle(Color.mycolor.myBlue)
+                .frame(width: 55, height: 55)
+                .background(.ultraThinMaterial, in: Circle())
+                .overlay(Circle().stroke(Color.mycolor.myBlue, lineWidth: 1))
         }
-        .padding()
-        .background(.black.opacity(0.03))
-        .clipShape(.circle)
     }
     
     private var minusButton: some View {
-        Button("-") {
+        Button {
             if proportion != 0 && timer != nil {
                 startProgressIndicator = false
                 buttonCaption = buttonCaption == "Start" ? "Stop" : "Start"
             }
             proportion -= 0.1
             proportion = max(self.proportion,0)
+        } label: {
+            Image(systemName: "minus")
+                .font(.headline)
+                .foregroundStyle(Color.mycolor.myBlue)
+                .frame(width: 55, height: 55)
+                .background(.ultraThinMaterial, in: Circle())
+                .overlay(Circle().stroke(Color.mycolor.myBlue, lineWidth: 1))
         }
-        .padding()
-        .background(.black.opacity(0.03))
-        .clipShape(.circle)
     }
     
     private var actionButton: some View {
-        Button(buttonCaption) {
+        Button {
             switch buttonCaption {
             case "Start":
                 startProgressIndicator = true
@@ -91,21 +99,36 @@ struct A002_TrimIndicatorDemo: View {
             default: break
             }
             buttonCaption = buttonCaption == "Start" ? "Stop" : "Start"
+        } label: {
+            Text(buttonCaption)
+                .font(.headline)
+                .foregroundColor(startProgressIndicator ? Color.mycolor.myBlue : Color.mycolor.myGreen)
+                .padding(.vertical, 8)
+                .frame(height: 55)
+                .frame(maxWidth: 150)
+                .background(.thinMaterial)
+                .clipShape(Capsule())
+                .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
         }
-        .padding()
-        .frame(maxWidth: 150)
-        .background(.black.opacity(0.03))
-        .clipShape(.capsule)
     }
     
     private var resetButton: some View {
-        Button("Reset") {
+        Button {
             stopTimer()
             startProgressIndicator = false
             buttonCaption = "Start"
             proportion = 0.0
+        } label: {
+            Text("Reset")
+                .font(.headline)
+                .foregroundColor(Color.mycolor.myRed)
+                .padding(.vertical, 8)
+                .frame(height: 55)
+                .frame(maxWidth: 150)
+                .background(.thinMaterial)
+                .clipShape(Capsule())
+                .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
         }
-        .a002_formater(frameSize: frameSize)
     }
 }
 
@@ -148,13 +171,4 @@ struct A002_ProgressIndicatorView: View {
     }
 }
 
-extension View {
-    func a002_formater (frameSize: CGFloat) -> some View {
-        self
-            .padding()
-            .frame(maxWidth: frameSize)
-            .background(Color.mycolor.myButtonBGGray)
-            .clipShape(.capsule)
-    }
-}
 
