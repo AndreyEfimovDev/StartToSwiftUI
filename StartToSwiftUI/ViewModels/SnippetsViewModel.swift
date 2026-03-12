@@ -17,7 +17,7 @@ final class SnippetsViewModel: ObservableObject {
     private let hapticManager = HapticManager.shared
 
     // MARK: - Data
-    @Published var allSnippets: [CodeSnippet] = SnippetsRepository.all
+    @Published var allSnippets: [CodeSnippet] = SnippetsRepository.allDemoCodeSnippet
     @Published var filteredSnippets: [CodeSnippet] = []
     @Published var selectedSnippet: CodeSnippet? = nil
     @Published var searchText: String = ""
@@ -58,7 +58,7 @@ final class SnippetsViewModel: ObservableObject {
     // MARK: - Init
     init(appStateManager: AppSyncStateManager? = nil) {
         self.appStateManager = appStateManager
-        restoreFilters()
+        restoreSnippetFilters()
         setupSubscriptions()
         if let appStateManager {
             SnippetFavoritesService.shared.configure(with: appStateManager)
@@ -78,12 +78,10 @@ final class SnippetsViewModel: ObservableObject {
 
     // MARK: - Filters
     func checkIfAllFiltersAreEmpty() -> Bool {
-        selectedCategory == nil &&
         selectedSortOption == .notSorted
     }
 
     func resetAllFilters() {
-        selectedCategory = nil
         selectedSortOption = .notSorted
     }
 
@@ -93,7 +91,7 @@ final class SnippetsViewModel: ObservableObject {
     }
 
     // MARK: - Restore
-    private func restoreFilters() {
+    private func restoreSnippetFilters() {
         selectedCategory = storedCategory
         selectedSortOption = storedSortOption
         isFiltersEmpty = checkIfAllFiltersAreEmpty()

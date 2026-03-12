@@ -59,7 +59,7 @@ struct HomeView: View {
             .navigationTitle(vm.selectedCategory ?? Constants.mainCategory)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .toolbar { navigationToolbar()}
+            .toolbar { SharedToolbarLeadingItems() }
             .safeAreaInset(edge: .top) { searchBarStack }
             .sheet(isPresented: $isFilterButtonPressed) {filtersSheet }
             .overlay { gestureOverlays(proxy: proxy) }
@@ -84,49 +84,6 @@ struct HomeView: View {
     }
     
     // MARK: Subviews
-    
-    private var searchBarStack: some View {
-        HStack {
-            SearchBarView(searchText: $vm.searchText)
-            // Add a new post
-            CircleStrokeButtonView(
-                iconName: "plus",
-                isShownCircle: false
-            ){
-                coordinator.push(.addPost)
-                hapticManager.impact(style: .light)
-            }
-            .background(.ultraThinMaterial)
-            .clipShape(.circle)
-            .background(
-                Circle()
-                    .stroke(
-                        Color.mycolor.mySecondary,
-                        lineWidth: 1)
-            )
-
-            // Fliters for posts
-            if !vm.allPosts.isEmpty {
-                CircleStrokeButtonView(
-                    iconName: "line.3.horizontal.decrease",
-                    isIconColorToChange: !vm.isFiltersEmpty,
-                    isShownCircle: false
-                ) {
-                    isFilterButtonPressed.toggle()
-                    hapticManager.impact(style: .light)
-                }
-                .background(.ultraThinMaterial)
-                .clipShape(.circle)
-                .background(
-                    Circle()
-                        .stroke(
-                            Color.mycolor.mySecondary,
-                            lineWidth: 1)
-                )
-            }
-        }
-        .padding(.horizontal)
-    }
     
     private var listPostRowsContent: some View {
         List {
@@ -237,14 +194,48 @@ struct HomeView: View {
         .tint(post.favoriteChoice.color)
     }
     
-    // MARK: - Toolbar
+    // MARK: - Search Bar Stack
+    private var searchBarStack: some View {
+        HStack {
+            SearchBarView(searchText: $vm.searchText)
+            // Add a new post
+            CircleStrokeButtonView(
+                iconName: "plus",
+                isShownCircle: false
+            ){
+                coordinator.push(.addPost)
+                hapticManager.impact(style: .light)
+            }
+            .background(.ultraThinMaterial)
+            .clipShape(.circle)
+            .background(
+                Circle().stroke(Color.mycolor.mySecondary,lineWidth: 1)
+            )
 
-    @ToolbarContentBuilder
-    private func navigationToolbar() -> some ToolbarContent {
-        SharedToolbarLeadingItems()
-        SharedToolbarSwitchItem()
+            // Fliters for posts
+            if !vm.allPosts.isEmpty {
+                CircleStrokeButtonView(
+                    iconName: "line.3.horizontal.decrease",
+                    isIconColorToChange: !vm.isFiltersEmpty,
+                    isShownCircle: false
+                ) {
+                    isFilterButtonPressed.toggle()
+                    hapticManager.impact(style: .light)
+                }
+                .background(.ultraThinMaterial)
+                .clipShape(.circle)
+                .background(
+                    Circle()
+                        .stroke(
+                            Color.mycolor.mySecondary,
+                            lineWidth: 1)
+                )
+            }
+        }
+        .padding(.horizontal)
     }
     
+
     // MARK: - Overlays
     
     @ViewBuilder
@@ -276,7 +267,7 @@ struct HomeView: View {
     // MARK: - Filters View
 
     private var filtersSheet: some View {
-        FiltersView(isFilterButtonPressed: $isFilterButtonPressed)
+        PostsFilterView(isFilterButtonPressed: $isFilterButtonPressed)
             .overlay(alignment: .top) {
                 if UIDevice.isiPhone {
                     LinearGradient(

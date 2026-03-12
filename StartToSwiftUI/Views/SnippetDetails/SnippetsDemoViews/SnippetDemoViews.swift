@@ -13,6 +13,30 @@
 import SwiftUI
 
 // MARK: - A003_ProgressCircleWithCheckmark DemoView
+struct A004_ArcProgressDinamicGapDemoView: View {
+
+    let snippet: CodeSnippet
+
+    var body: some View {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 20) {
+                SnippetDemoHeader(snippet: snippet)
+
+                // Live demo — original component, untouched
+                A004_ArcProgressDinamycGapDemo()
+                    .cardBackground()
+
+                if let thanks = snippet.thanks, !thanks.isEmpty {
+                    SnippetThanksView(thanks: thanks)
+                }
+            }
+            .padding()
+            .foregroundStyle(Color.mycolor.myAccent)
+        }
+    }
+}
+
+// MARK: - A003_ProgressCircleWithCheckmark DemoView
 struct A003_ProgressCircleWithCheckmarkDemoView: View {
 
     let snippet: CodeSnippet
@@ -23,7 +47,7 @@ struct A003_ProgressCircleWithCheckmarkDemoView: View {
                 SnippetDemoHeader(snippet: snippet)
 
                 // Live demo — original component, untouched
-                A003_ProgressCircleWithCheckmark()
+                A003_ProgressCircleWithCheckmarkDemo()
                     .cardBackground()
 
                 if let thanks = snippet.thanks, !thanks.isEmpty {
@@ -47,7 +71,7 @@ struct A002_TrimIndicatorDemoView: View {
                 SnippetDemoHeader(snippet: snippet)
 
                 // Live demo — original component, untouched
-                A002_TrimIndicator()
+                A002_TrimIndicatorDemo()
                     .cardBackground()
 
                 if let thanks = snippet.thanks, !thanks.isEmpty {
@@ -71,7 +95,7 @@ struct A001_ProgressViewIndicatorsDemoView: View {
                 SnippetDemoHeader(snippet: snippet)
 
                 // Live demo — original component, untouched
-                A001_ProgressViewIndicators()
+                A001_ProgressViewIndicatorsDemo()
                     .cardBackground()
 
                 if let thanks = snippet.thanks, !thanks.isEmpty {

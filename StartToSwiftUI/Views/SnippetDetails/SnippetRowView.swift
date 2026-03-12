@@ -14,7 +14,7 @@ struct SnippetRowView: View {
 
     // MARK: - Computed Properties
 
-    private var subtitleText: String {
+    private var snippetDate: String {
         var parts: [String] = []
         parts.append(snippet.date.formatted(date: .numeric, time: .omitted))
         if let thanks = snippet.thanks, !thanks.isEmpty {
@@ -22,17 +22,20 @@ struct SnippetRowView: View {
         }
         return parts.joined(separator: "  ·  ")
     }
-
+        
     // MARK: - Body
 
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
+            titleRow
+                .foregroundStyle(Color.mycolor.myAccent)
             Group {
-                titleRow
-                subtitleRow
-                bottomRow
+                dateLine
+                statusRow
             }
-            .foregroundStyle(Color.mycolor.myAccent)
+            .font(.footnote)
+            .fontWeight(.medium)
+            .foregroundStyle(Color.mycolor.myAccent.opacity(0.5))
         }
         .padding(8)
         .padding(.horizontal, 8)
@@ -50,39 +53,27 @@ struct SnippetRowView: View {
                 .minimumScaleFactor(0.75)
                 .lineLimit(1)
                 .padding(.top, 12)
-
             Spacer()
-
         }
     }
 
-    private var subtitleRow: some View {
-        Text(subtitleText)
-            .font(.footnote)
-            .minimumScaleFactor(0.75)
-            .lineLimit(1)
-    }
-
-    private var bottomRow: some View {
+    private var dateLine: some View {
         HStack {
-            Text(snippet.category)
-                .font(.footnote)
-                .fontWeight(.medium)
-                .foregroundStyle(Color.mycolor.myAccent.opacity(0.6))
-
+            Text(snippetDate)
             Spacer()
-
-            HStack(spacing: 6) {
-                if isFavorite {
-                    Image(systemName: "star.fill")
-                        .foregroundStyle(Color.mycolor.myYellow)
-                }
-                if snippet.githubUrlString != nil {
-                    Image(systemName: "chevron.left.forwardslash.chevron.right")
-                        .foregroundStyle(Color.mycolor.myAccent.opacity(0.4))
-                }
+        }
+    }
+    private var statusRow: some View {
+        HStack(spacing: 3) {
+            Text(snippet.id)
+            Text("-")
+            Text(snippet.category)
+            
+            Spacer()
+            if isFavorite {
+                Image(systemName: "star.fill")
+                    .foregroundStyle(Color.mycolor.myYellow)
             }
-            .font(.caption)
         }
     }
 }

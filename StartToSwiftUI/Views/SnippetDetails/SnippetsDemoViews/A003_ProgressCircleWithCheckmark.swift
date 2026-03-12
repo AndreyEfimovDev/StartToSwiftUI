@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct A003_ProgressCircleWithCheckmark: View {
+// MARK: - Demo
+struct A003_ProgressCircleWithCheckmarkDemo: View {
     
     @State private var progress: Double = 0
     @State private var isRunning = false
@@ -35,18 +36,41 @@ struct A003_ProgressCircleWithCheckmark: View {
                 .tint(.green)
             
             HStack(spacing: 16) {
-                Button(isRunning ? "Pause" : "Auto") {
-                    isRunning ? pauseDemo() : startDemo()
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.green)
                 
-                Button("Reset") {
+                Button {
+                    isRunning ? pauseDemo() : startDemo()
+                } label: {
+                    Text(isRunning ? "Pause" : "Start")
+                        .font(.headline)
+                        .foregroundColor(isRunning ? .yellow : .green)
+                        .padding(.vertical, 8)
+                        .frame(height: 55)
+                        .frame(maxWidth: .infinity)
+                        .background(.thinMaterial)
+                        .clipShape(Capsule())
+                        .overlay(
+                            Capsule()
+                                .stroke(Color.mycolor.myBlue, lineWidth: 1)
+                        )
+                }
+
+                Button {
                     pauseDemo()
                     progress = 0
+                } label: {
+                    Text("Reset")
+                        .font(.headline)
+                        .foregroundColor(Color.mycolor.myRed)
+                        .padding(.vertical, 8)
+                        .frame(height: 55)
+                        .frame(maxWidth: .infinity)
+                        .background(.thinMaterial)
+                        .clipShape(Capsule())
+                        .overlay(
+                            Capsule()
+                                .stroke(Color.mycolor.myBlue, lineWidth: 1)
+                        )
                 }
-                .buttonStyle(.bordered)
-                .tint(.red)
             }
         }
         .padding()
@@ -71,9 +95,11 @@ struct A003_ProgressCircleWithCheckmark: View {
     }
 }
 
-// MARK: - Preview / Demo
+// MARK: - Preview
 #Preview {
-    A003_ProgressCircleWithCheckmark()
+    NavigationStack {
+        A003_ProgressCircleWithCheckmarkDemo()
+    }
 }
 
 // MARK: - Code Snippet

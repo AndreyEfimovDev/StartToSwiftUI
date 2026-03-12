@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct SnippetsFiltersView: View {
+struct SnippetsFilterView: View {
 
-    @EnvironmentObject private var vm: SnippetsViewModel
+    @EnvironmentObject private var snippetvm: SnippetsViewModel
     @Binding var isPresented: Bool
 
     private let selectedFont: Font = .caption.bold()
@@ -22,7 +22,8 @@ struct SnippetsFiltersView: View {
 
             VStack(spacing: 0) {
                 sortOptions
-                categoryFilter
+#warning("Remove before deployment to App Store")
+//                categoryFilter
             }
             .padding(.horizontal, UIDevice.isiPad ? 15 : 0)
 
@@ -41,7 +42,7 @@ struct SnippetsFiltersView: View {
         .foregroundStyle(Color.mycolor.myAccent)
         .padding(.horizontal)
         .onDisappear {
-            vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
+            snippetvm.isFiltersEmpty = snippetvm.checkIfAllFiltersAreEmpty()
             isPresented = false
         }
     }
@@ -51,18 +52,18 @@ struct SnippetsFiltersView: View {
     private var sortOptions: some View {
         filterSectionNonOptional(
             title: "Sort:",
-            selection: $vm.selectedSortOption,
+            selection: $snippetvm.selectedSortOption,
             allItems: SortOption.allCases,
             titleForCase: { $0.displayName }
         )
     }
-
+    
     private var categoryFilter: some View {
         Group {
-            if let list = vm.allCategories, list.count > 1 {
+            if let list = snippetvm.allCategories, list.count > 1 {
                 filterSectionOptionalNonCaseIterable(
                     title: "Category:",
-                    selection: $vm.selectedCategory,
+                    selection: $snippetvm.selectedCategory,
                     allItems: list,
                     titleForCase: { $0 }
                 )
@@ -134,13 +135,13 @@ struct SnippetsFiltersView: View {
 
     private var resetButton: some View {
         ClearCupsuleButton(primaryTitle: "Reset All", primaryTitleColor: Color.mycolor.myRed) {
-            vm.resetAllFilters()
+            snippetvm.resetAllFilters()
         }
     }
 
     private var resetAndExitButton: some View {
         ClearCupsuleButton(primaryTitle: "Reset & Exit", primaryTitleColor: Color.mycolor.myRed) {
-            vm.resetAllFilters()
+            snippetvm.resetAllFilters()
             isPresented.toggle()
         }
     }

@@ -47,11 +47,8 @@ struct SnippetsHomeView: View {
             .navigationTitle("Code Snippets")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .toolbar { navigationToolbar() }
-            .safeAreaInset(edge: .top) {
-                SearchBarView(searchText: $snippetvm.searchText)
-                    .padding(.horizontal)
-            }
+            .toolbar { SharedToolbarLeadingItems() }
+            .safeAreaInset(edge: .top) { searchBarStack }
             .sheet(isPresented: $isFilterButtonPressed) { filtersSheet }
         }
         .task {
@@ -100,23 +97,41 @@ struct SnippetsHomeView: View {
         ) {
             snippetvm.favoriteToggle(snippet)
         }
-        .tint(snippetvm.isFavorite(snippet) ? Color.mycolor.myAccent : Color.mycolor.mySecondary)
+        .tint(snippetvm.isFavorite(snippet) ? FavoriteChoice.yes.color : FavoriteChoice.no.color)
     }
 
-    // MARK: - Toolbar
+    // MARK: - Search Bar Stack
+    private var searchBarStack: some View {
+        HStack {
+            SearchBarView(searchText: $snippetvm.searchText)
 
-    @ToolbarContentBuilder
-    private func navigationToolbar() -> some ToolbarContent {
-        // ⚙️ and 🔔 — shared items from StartView
-        SharedToolbarLeadingItems()
-        // ⇄ switch section
-        SharedToolbarSwitchItem()
+            // Fliters for posts
+            if !snippetvm.allSnippets.isEmpty {
+                CircleStrokeButtonView(
+                    iconName: "line.3.horizontal.decrease",
+                    isIconColorToChange: !snippetvm.isFiltersEmpty,
+                    isShownCircle: false
+                ) {
+                    isFilterButtonPressed.toggle()
+                    hapticManager.impact(style: .light)
+                }
+                .background(.ultraThinMaterial)
+                .clipShape(.circle)
+                .background(
+                    Circle()
+                        .stroke(
+                            Color.mycolor.mySecondary,
+                            lineWidth: 1)
+                )
+            }
+        }
+        .padding(.horizontal)
     }
 
     // MARK: - Filters Sheet
 
     private var filtersSheet: some View {
-        SnippetsFiltersView(isPresented: $isFilterButtonPressed)
+        SnippetsFilterView(isPresented: $isFilterButtonPressed)
             .overlay(alignment: .top) {
                 if UIDevice.isiPhone {
                     LinearGradient(

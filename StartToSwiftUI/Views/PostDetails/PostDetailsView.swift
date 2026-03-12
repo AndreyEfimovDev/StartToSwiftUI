@@ -22,6 +22,7 @@ struct PostDetailsView: View {
     @State private var showFullIntro: Bool = false
     @State private var showFullNotes: Bool = false
     @State private var lineCountIntro: Int = 0
+    @State private var lineCountNotes: Int = 0
     
     @State private var showRatingTab: Bool = false
     @State private var showProgressTab: Bool = false
@@ -43,6 +44,11 @@ struct PostDetailsView: View {
     private let introFont: Font = .subheadline
     private let introLineSpacing: CGFloat = 0
     private let introLinesLimit: Int = 10
+    
+    private let notesFont: Font = .footnote
+    private let notesLineSpacing: CGFloat = 0
+    private let notesLinesLimit: Int = 3
+    
     private let widthRatio: CGFloat = 0.55
     
     // MARK: - Computed Properties
@@ -84,10 +90,10 @@ struct PostDetailsView: View {
                     .cardBackground()
                     .padding(.top, 30)
                 
-                intro(for: post)
-                    .padding()
-                    .cardBackground()
-                
+                if !post.intro.isEmpty {
+                    intro(for: post)
+                        .cardBackground()
+                }
                 
                 goToTheSourceButton(urlString: post.urlString)
                     .frame(maxWidth: 250)
@@ -119,7 +125,6 @@ struct PostDetailsView: View {
             
             headerBottomLine(for: post)
         }
-        .padding(8)
     }
     
     @ViewBuilder
@@ -150,13 +155,16 @@ struct PostDetailsView: View {
     
     private func intro(for post: Post) -> some View {
         VStack(spacing: 0) {
+            Text("Intro")
+                .font(.headline)
+                .frame(height: 55)
+                .frame(maxWidth: .infinity, alignment: .leading)
             Text(post.intro)
                 .font(introFont)
                 .lineLimit(showFullIntro ? nil : introLinesLimit)
                 .lineSpacing(introLineSpacing)
                 .frame(minHeight: 55, alignment: .topLeading)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.top, 8)
                 .background(
                     Text(post.intro)
                         .font(introFont)
@@ -168,7 +176,6 @@ struct PostDetailsView: View {
                             lineCountIntro = count - 1
                         }
                 )
-
             if lineCountIntro > introLinesLimit {
                 HStack(alignment: .top) {
                     Spacer()
@@ -182,32 +189,34 @@ struct PostDetailsView: View {
     
     private func notes(for post: Post) -> some View {
         VStack(spacing: 0) {
-            HStack {
-                Text("Notes")
-                    .font(.headline)
-                    .frame(height: 55)
+            Text("Notes")
+                .font(.headline)
+                .frame(height: 55)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            VStack(spacing: 0) {
+                Text(post.notes)
+                    .font(notesFont)
+                    .lineLimit(showFullNotes ? nil : notesLinesLimit)
+                    .lineSpacing(notesLineSpacing)
+                    .frame(minHeight: 55, alignment: .topLeading)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 8)
+                    .background(
+                        Text(post.intro)
+                            .font(notesFont)
+                            .lineSpacing(notesLineSpacing)
+                            .lineLimit(nil)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .hidden()
+                            .onLineCountChanged(font: notesFont, lineSpacing: notesLineSpacing) { count in
+                                lineCountNotes = count - 1
+                            }
+                    )
                 
-                Spacer()
-                
-                if !showFullNotes {
-                    MoreLessTextButton(showText: $showFullNotes)
-                }
-            }
-            
-            if showFullNotes {
-                VStack {
-                    Text(post.notes)
-                        .font(.footnote)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 8)
-                    
+                if lineCountNotes > notesLinesLimit {
                     HStack(alignment: .top) {
                         Spacer()
                         MoreLessTextButton(showText: $showFullNotes)
                     }
-                    .offset(y: -10)
                 }
             }
         }

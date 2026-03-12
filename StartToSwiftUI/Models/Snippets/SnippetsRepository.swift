@@ -14,13 +14,13 @@ import Foundation
 
 struct SnippetsRepository {
 
-    static let all: [CodeSnippet] = [a001, a002, a003]
+    static let allDemoCodeSnippet: [CodeSnippet] = [a001, a002, a003, a004]
 
     // MARK: - A001
     static let a001 = CodeSnippet(
         id: "A001",
         category: Constants.mainCategory,
-        title: "Loading Indicators Collection",
+        title: "Progress indicators collection",
         intro: "A collection of five loading animations including wave patterns (both outward and inward), a pulsing circle, jumping dots, and a rotating ring. Demonstrates various SwiftUI animation techniques.",
         thanks: nil,
         githubUrlString: nil,
@@ -28,43 +28,32 @@ struct SnippetsRepository {
         date: Date.from(year: 2026, month: 3, day: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
-        
-        struct A001_ProgressViewIndicators: View {
+
+        // MARK: - Demo
+        struct A001_ProgressViewIndicatorsDemo: View {
             
             @State private var isLoading = false
             
             var body: some View {
                 VStack(spacing: 30) {
-                    toggleButton
-            
-                    if isLoading {
-                        VStack(spacing: 30) {
-                            A001_WaveOut()
-                            A001_WaveIn()
-                            A001_PulsingCircle()
-                            A001_JumpingDots()
-                            A001_RotatingRing()
-                        }
-                    }
-                }
-            }
-            
-            private var toggleButton: some View {
-                Button {
-                    isLoading.toggle()
-                } label: {
-                    Text(isLoading ? "Stop" : "Start")
-                        .font(.headline)
-                        .foregroundStyle(isLoading ? Color.mycolor.myRed : Color.mycolor.myBlue)
-                        .padding()
-                        .background(.ultraThinMaterial)
-                        .clipShape(.capsule)
-                        .padding(.horizontal)
+                    A001_Wave()
+                    A001_PulsingCircle()
+                    A001_JumpingDots()
+                    A001_JumpingLetters()
+                    A001_RotatingRingWithTrace()
                 }
             }
         }
 
-        struct A001_WaveOut: View {
+        // MARK: - Preview
+        #Preview {
+            NavigationStack {
+                A001_ProgressViewIndicatorsDemo()
+            }
+        }
+
+        // MARK: - Code Snippets
+        struct A001_Wave: View {
             
             @State private var scales: [CGFloat] = [0.5, 0.5, 0.5, 0.5, 0.5]
             
@@ -72,7 +61,7 @@ struct SnippetsRepository {
                 HStack(spacing: 3) {
                     ForEach(0..<5, id: \\.self) { index in
                         RoundedRectangle(cornerRadius: 2)
-                            .fill(Color.blue)
+                            .fill(Color.mycolor.myBlue)
                             .frame(width: 3, height: 12 * scales[index])
                             .animation(
                                 .easeInOut(duration: 0.6)
@@ -90,40 +79,18 @@ struct SnippetsRepository {
             }
         }
 
-        struct A001_WaveIn: View {
-            
-            @State private var animate = false
-            
-            var body: some View {
-                HStack(spacing: 3) {
-                    ForEach(0..<5, id: \\.self) { index in
-                        RoundedRectangle(cornerRadius: 1)
-                            .fill(Color.blue)
-                            .frame(width: 3, height: animate ? 16 : 8)
-                            .animation(
-                                .easeInOut(duration: 0.5)
-                                .repeatForever(autoreverses: true)
-                                .delay(Double(index) * 0.1), value: animate)
-                    }
-                }
-                .onAppear {
-                    animate = true
-                }
-            }
-        }
-
         struct A001_PulsingCircle: View {
             @State private var scale: CGFloat = 0.5
             
             var body: some View {
                 Circle()
-                    .fill(Color.blue)
+                    .fill(Color.mycolor.myBlue)
                     .frame(width: 16, height: 16)
                     .scaleEffect(scale)
-                    .opacity(max(scale, 1))
+                    .opacity((1.4 - min(scale, 1)))
                     .onAppear {
                         withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
-                            scale = 1
+                            scale = 1.5
                         }
                     }
             }
@@ -136,7 +103,7 @@ struct SnippetsRepository {
                 HStack(spacing: 6) {
                     ForEach(0..<3, id: \\.self) { index in
                         Circle()
-                            .fill(.blue)
+                            .fill(Color.mycolor.myBlue)
                             .frame(width: 6, height: 6)
                             .scaleEffect(scale[index] ? 1.0 : 0.5)
                     }
@@ -154,16 +121,67 @@ struct SnippetsRepository {
                     }
                 }
             }
-
         }
 
-        struct A001_RotatingRing: View {
+        import Combine
+
+        struct A001_JumpingLetters: View {
+            
+            @State private var counter: Int = 0
+            @State private var cancellable: AnyCancellable?
+
+            private let loadingString: [String] = "........... loading ...........".map { String($0) }
+            
+            // MARK: BODY
+            var body: some View {
+                ZStack {
+                        HStack(spacing: 0) {
+                            ForEach(loadingString.indices, id: \\.self) { index in
+                                Text(loadingString[index])
+                                    .offset(y: counter == index ? -11 : 0)
+                            }
+                        }
+                        .font(.subheadline)
+                }
+                .foregroundColor(Color.mycolor.myBlue)
+                .onAppear {
+                    cancellable = Timer
+                        .publish(every: 0.1, on: .main, in: .common)
+                        .autoconnect()
+                        .sink { _ in
+                            withAnimation {
+                                counter = (counter + 1) % loadingString.count
+                            }
+                        }
+                }
+                .onDisappear {
+                    cancellable?.cancel()
+                    cancellable = nil
+                }
+            }
+        }
+
+        struct A001_RotatingRingWithTrace: View {
             @State private var isRotating = false
             
             var body: some View {
                 Circle()
                     .trim(from: 0.0, to: 0.7)
-                    .stroke(Color.blue, lineWidth: 3)
+                    .stroke(
+                        AngularGradient(
+                            stops: [
+                                .init(color: .clear, location: 0.0),  // tail
+                                .init(color: Color.mycolor.myBlue.opacity(0.3), location: 0.3),  // trace
+                                .init(color: Color.mycolor.myBlue, location: 0.7),  // head
+                                .init(color: .clear, location: 1.0),  // remove a dot
+                            ],
+                            center: .center,
+                            startAngle: .degrees(0),
+                            endAngle: .degrees(360)
+                        ),
+                        style: StrokeStyle(lineWidth: 3, lineCap: .round)
+                    )
+
                     .frame(width: 20, height: 20)
                     .rotationEffect(Angle(degrees: isRotating ? 360 : 0))
                     .animation(
@@ -174,10 +192,6 @@ struct SnippetsRepository {
                     .onAppear { isRotating = true }
             }
         }
-        
-        #Preview {
-            A001_ProgressViewIndicators()
-        }
         """
     )
 
@@ -185,7 +199,7 @@ struct SnippetsRepository {
     static let a002 = CodeSnippet(
         id: "A002",
         category: Constants.mainCategory,
-        title: "Progressive Trim Indicators",
+        title: "Progress Trim indicator",
         intro: "An enhanced circular progress indicator with manual +/− controls, an animated auto-increment timer, and a reset button. Demonstrates Timer integration within SwiftUI state.",
         thanks: nil,
         githubUrlString: nil,
@@ -194,7 +208,8 @@ struct SnippetsRepository {
         codeSnippet: """
         import SwiftUI
 
-        struct A002_TrimIndicator: View {
+        // MARK: - Demo
+        struct A002_TrimIndicatorDemo: View {
             
             @State private var proportion: CGFloat = 0.0
             @State private var startProgressIndicator = false
@@ -204,7 +219,7 @@ struct SnippetsRepository {
             
             var body: some View {
                 VStack {
-                    A002_ProgressIndicator(trim: $proportion)
+                    A002_ProgressIndicatorView(trim: $proportion)
                         .frame(width: frameSize, height: frameSize)
                         .padding()
                     
@@ -295,7 +310,15 @@ struct SnippetsRepository {
             }
         }
 
-        struct A002_ProgressIndicator: View {
+        // MARK: - Preview
+        #Preview {
+            NavigationStack {
+                A002_TrimIndicatorDemo()
+            }
+        }
+
+        // MARK: - Code Snippet
+        struct A002_ProgressIndicatorView: View {
             
             @Binding var trim: CGFloat
             let lineWidth: CGFloat = 15.0
@@ -335,10 +358,6 @@ struct SnippetsRepository {
                     .clipShape(.capsule)
             }
         }
-
-        #Preview {
-            A002_TrimIndicator()
-        }
         """
     )
     
@@ -346,7 +365,7 @@ struct SnippetsRepository {
     static let a003 = CodeSnippet(
         id: "A003",
         category: Constants.mainCategory,
-        title: "Progress Circle with Animated Checkmark",
+        title: "Progress Circle with animated checkmark",
         intro: "An interactive circular progress indicator that transforms into a spring-animated checkmark upon completion. Features multiple size/color variants, a progress slider, and auto-increment timer with pause/resume controls. Demonstrates advanced state management and coordinated animations.",
         thanks: nil,
         githubUrlString: nil,
@@ -355,7 +374,8 @@ struct SnippetsRepository {
         codeSnippet: """
         import SwiftUI
 
-        struct A003_ProgressCircleWithCheckmark: View {
+        // MARK: - Demo
+        struct A003_ProgressCircleWithCheckmarkDemo: View {
             
             @State private var progress: Double = 0
             @State private var isRunning = false
@@ -383,7 +403,7 @@ struct SnippetsRepository {
                         .tint(.green)
                     
                     HStack(spacing: 16) {
-                        Button(isRunning ? "Pause" : "Auto") {
+                        Button(isRunning ? "Pause" : "Start") {
                             isRunning ? pauseDemo() : startDemo()
                         }
                         .buttonStyle(.borderedProminent)
@@ -419,9 +439,11 @@ struct SnippetsRepository {
             }
         }
 
-        // MARK: - Preview / Demo
+        // MARK: - Preview
         #Preview {
-            A003_ProgressCircleWithCheckmark()
+            NavigationStack {
+                A003_ProgressCircleWithCheckmarkDemo()
+            }
         }
 
         // MARK: - Code Snippet
@@ -499,6 +521,135 @@ struct SnippetsRepository {
                     .foregroundStyle(color)
                     .scaleEffect(showCheckmark ? 1 : 0.3)
                     .opacity(showCheckmark ? 1 : 0)
+            }
+        }
+        """
+    )
+    
+    // MARK: - A004
+    static let a004 = CodeSnippet(
+        id: "A004",
+        category: Constants.mainCategory,
+        title: "Progress Arc with dynamic gap",
+        intro: ". Demonstrates various SwiftUI animation techniques.",
+        thanks: nil,
+        githubUrlString: nil,
+        notes: "",
+        date: Date.from(year: 2026, month: 3, day: 8) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        // MARK: - Demo
+        struct A004_ArcProgressDinamycGapDemo: View {
+            var body: some View {
+                A004_ArcProgressDinamycGapView(lineWidth: 10, diameter: 100)
+            }
+        }
+
+        // MARK: - Preview
+        #Preview {
+            A004_ArcProgressDinamycGapDemo()
+        }
+
+        // MARK: - Code Snippet
+        /// Winding effect: head races ahead (arc grows), tail catches up (arc shrinks).
+        /// Both ends move strictly clockwise — zero backward motion, zero jitter.
+        ///
+        /// Seamless loop constraint:
+        ///   rotationsPerCycle + (maxArc − minArc) must equal an integer.
+        ///   At cycle boundary, the jump in `base` and the jump in `tailExtra`
+        ///   cancel each other out exactly (both are multiples of 360°).
+        ///
+        ///   Here: 1.5 + 0.5 = 2 ✓
+        struct A004_ArcProgressDinamycGapView: View {
+            
+            var lineWidth: CGFloat = 3
+            var diameter: CGFloat = 40
+            var color: Color = Color.mycolor.myBlue
+            var cycleDuration: Double = 1.4
+            
+            // Arc length bounds — difference MUST equal frac(rotationsPerCycle)
+            private let minArc: Double = 0.01   // smallest arc  (0–1 fraction of circle)
+            private let maxArc: Double = 0.56   // largest  arc  0.56 − 0.06 = 0.50 ✓
+            private let rotationsPerCycle: Double = 1.5  // 1.5 mod 1 = 0.5 ✓
+            
+            @State private var startDate = Date()
+            
+            var body: some View {
+                TimelineView(.animation) { timeline in
+                    let elapsed = timeline.date.timeIntervalSince(startDate)
+                    let phase = (elapsed / cycleDuration)
+                        .truncatingRemainder(dividingBy: 1.0)
+                    arcCanvas(phase: phase)
+                }
+                .onAppear { startDate = Date() }
+            }
+            
+            // MARK: - Easing
+            
+            private func easeInOut(_ t: Double) -> Double {
+                t < 0.5 ? 2 * t * t : 1 - pow(-2 * t + 2, 2) / 2
+            }
+            
+            // MARK: - Angle calculation
+            
+            private func angles(for phase: Double) -> (start: Double, end: Double) {
+                let spread = (maxArc - minArc) * 360   // degrees the arc grows by = 180°
+                
+                // Base rotation: linear, 0 → rotationsPerCycle*360 over one cycle
+                let base = phase * rotationsPerCycle * 360
+                
+                // Phase 0.0 → 0.5 : head races ahead (arc grows), tail is parked
+                // Phase 0.5 → 1.0 : head is parked, tail catches up (arc shrinks)
+                let headExtra: Double = phase < 0.5
+                ? easeInOut(phase * 2) * spread
+                : spread
+                
+                let tailExtra: Double = phase < 0.5
+                ? 0
+                : easeInOut((phase - 0.5) * 2) * spread
+                
+                // At phase ≈ 1 → 0 transition:
+                //   base jumps   by −rotationsPerCycle*360 = −540°
+                //   tailExtra jumps by −spread             = −180°
+                //   total jump = −720° ≡ 0  (mod 360°)  → perfectly seamless ✓
+                
+                let startAngle = base + tailExtra - 90
+                let endAngle   = base + minArc * 360 + headExtra - 90
+                return (startAngle, endAngle)
+            }
+            
+            // MARK: - Canvas
+            
+            @ViewBuilder
+            private func arcCanvas(phase: Double) -> some View {
+                let (startDeg, endDeg) = angles(for: phase)
+                /* Canvas context parameters:
+                 context.stroke(path, with: .color(.red), style: ...) - tracing the path
+                 context.fill(path, with: .color(.blue)) - filling
+                 context.draw(image, at: point) - drawing an image
+                 context.opacity - current transparency
+                 context.transform - current transformation
+                 */
+                Canvas { context, size in
+                    let center = CGPoint(x: size.width / 2, y: size.height / 2)
+                    let radius = (min(size.width, size.height) - lineWidth) / 2
+                    
+                    var path = Path()
+                    path.addArc(
+                        center: center,
+                        radius: radius,
+                        startAngle: .degrees(startDeg),
+                        endAngle:   .degrees(endDeg),
+                        clockwise: false
+                    )
+                    context.stroke(
+                        path,
+                        with: .color(color),
+                        style: StrokeStyle(lineWidth: lineWidth, lineCap: .round)
+                    )
+                }
+                .frame(width: diameter, height: diameter)
             }
         }
         """

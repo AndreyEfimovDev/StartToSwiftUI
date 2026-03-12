@@ -6,6 +6,7 @@
 // #2A5FB4 #3765AF
 
 import SwiftUI
+import Combine
 
 struct LaunchView: View {
     
@@ -14,9 +15,9 @@ struct LaunchView: View {
     
     // MARK: - Constants
     let completion: () -> ()
-    private let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
     
     // MARK: - States
+    @State private var cancellable: AnyCancellable?
     @State private var showLoadingProgress: Bool = false
     @State private var counter: Int = 0
     @State private var loadingString: [String] = "........... loading ...........".map { String($0) }
@@ -47,20 +48,26 @@ struct LaunchView: View {
         }
         .foregroundColor(Color.launch.accent)
         .onAppear {
-            showLoadingProgress.toggle()
-        }
-        .onDisappear{
-            hapticManager.impact(style: .light)
-        }
-        .onReceive(timer) { _ in
-            withAnimation() {
-                let lastIndex = loadingString.count - 1
-                if counter == lastIndex {
-                    completion()
-                } else {
-                    counter += 1
+            showLoadingProgress = true
+            cancellable = Timer
+                .publish(every: 0.1, on: .main, in: .common)
+                .autoconnect()
+                .sink { _ in
+                    withAnimation {
+                        if counter == loadingString.count - 1 {
+                            cancellable?.cancel()  // ← cancel timer before completion()
+                            cancellable = nil
+                            completion()
+                        } else {
+                            counter += 1
+                        }
+                    }
                 }
-            }
+        }
+        .onDisappear {
+            cancellable?.cancel()  // ← cancel timer for su
+            cancellable = nil
+            hapticManager.impact(style: .light)
         }
     }
 }

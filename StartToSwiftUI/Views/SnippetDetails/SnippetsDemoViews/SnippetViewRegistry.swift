@@ -21,6 +21,8 @@ struct SnippetViewRegistry {
         case "A001": A001_ProgressViewIndicatorsDemoView(snippet: snippet)
         case "A002": A002_TrimIndicatorDemoView(snippet: snippet)
         case "A003": A003_ProgressCircleWithCheckmarkDemoView(snippet: snippet)
+        case "A004": A004_ArcProgressDinamicGapDemoView(snippet: snippet)
+
         default: SnippetNoPreviewView(snippet: snippet)
         }
     }

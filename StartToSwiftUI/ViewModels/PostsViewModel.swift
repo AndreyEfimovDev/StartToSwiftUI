@@ -150,7 +150,7 @@ final class PostsViewModel: ObservableObject {
         self.fbPostsManager = fbPostsManager
         
         setupTimezone()
-        restoreFilters()
+        restorePostFilters()
     }
     /// Convenience initialiser for backward compatibility
     convenience init(
@@ -168,11 +168,6 @@ final class PostsViewModel: ObservableObject {
     func start() {
         setupSubscriptions()
         setupSubscriptionForChangesInCloud()
-        
-        Task { [weak self] in
-            guard let self else { return }
-            await self.initializeAppState()
-        }
     }
     
     // MARK: - Setup
@@ -185,8 +180,8 @@ final class PostsViewModel: ObservableObject {
     // MARK: - CloudKit Sync
     private func setupSubscriptionForChangesInCloud() {
         NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
+            .debounce(for: .seconds(2), scheduler: DispatchQueue.global(qos: .utility))
             .receive(on: DispatchQueue.main)
-            .debounce(for: .seconds(2), scheduler: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self else { return }
                 let now = Date()
@@ -200,7 +195,7 @@ final class PostsViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func restoreFilters() {
+    func restorePostFilters() {
         selectedCategory = storedCategory
         selectedLevel = storedLevel
         selectedFavorite = storedFavorite
@@ -210,30 +205,7 @@ final class PostsViewModel: ObservableObject {
         selectedSortOption = storedSortOption
         isFiltersEmpty = checkIfAllFiltersAreEmpty()
     }
-        
-    private func initializeAppState() async {
-        guard let appStateManager else {
-            log("⚠️ init PostViewModel: dataSource is not SwiftData", level: .info)
-            return
-        }
-        // To folow the next order in important
-        /* Step1:
-        Ensure AppState exists (creates with appFirstLaunchDate if first launch).
-        Search for AppSyncState in SwiftData - it guarantees the existence of the AppState:
-        - The first launch will not find it, it will create a new one with appFirstLaunchDate = Date() and save it to the database.
-        - Restart — it will find an existing one and return it.
-        */
-        _ = appStateManager.getOrCreateAppState()
-        FBCrashManager.shared.addLog(
-            "initializeAppState: firstLaunchDate \(appStateManager.getAppFirstLaunchDate() ?? Date(timeIntervalSince1970: 0)), postsCount \(allPosts.count)"
-        )
-        /* Step2:
-        Clean dublicates if any. iCloud sync can create multiple appsyncstates on different devices.
-        This function finds duplicates, merges their data into one (the oldest), and deletes the rest.
-         */
-        appStateManager.cleanupDuplicateAppStates()
-    }
-        
+                
     // MARK: - SwiftData Operations
     
     /// Load posts from SwiftData
@@ -352,7 +324,6 @@ final class PostsViewModel: ObservableObject {
         post.status = .deleted
         saveContextAndReload()
     }
-
 
     /// Erase a post
     func erasePost(_ post: Post?) {
