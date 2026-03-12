@@ -50,6 +50,7 @@ struct SnippetsHomeView: View {
             .toolbar { navigationToolbar() }
             .safeAreaInset(edge: .top) {
                 SearchBarView(searchText: $snippetvm.searchText)
+                    .padding(.horizontal)
             }
             .sheet(isPresented: $isFilterButtonPressed) { filtersSheet }
         }

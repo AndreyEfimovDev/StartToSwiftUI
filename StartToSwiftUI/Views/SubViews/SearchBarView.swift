@@ -44,7 +44,7 @@ struct SearchBarView: View {
                         isFocusedOnSearchBar ? Color.mycolor.myBlue : Color.mycolor.mySecondary,
                         lineWidth: isFocusedOnSearchBar ? 5 : 1)
             )
-            .padding(.trailing)
+//            .padding(.trailing)
             .padding(.vertical, 8)
         }
         .animation(.easeInOut, value: isFocusedOnSearchBar)

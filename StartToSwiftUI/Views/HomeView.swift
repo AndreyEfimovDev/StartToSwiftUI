@@ -241,43 +241,9 @@ struct HomeView: View {
 
     @ToolbarContentBuilder
     private func navigationToolbar() -> some ToolbarContent {
-        
         SharedToolbarLeadingItems()
         SharedToolbarSwitchItem()
-
     }
-    
-//    private var noticeButton: some View {
-//        CircleStrokeButtonView(iconName: "message", isShownCircle: false) {
-//            coordinator.push(.notices)
-//        }
-//        .overlay {
-//            Capsule()
-//                .fill(Color.mycolor.myRed)
-//                .frame(maxWidth: 15, maxHeight: 10)
-//                .overlay {
-//                    Text("\(noticevm.unreadCount)")
-//                        .font(.system(size: 8, weight: .bold))
-//                        .foregroundStyle(Color.mycolor.myButtonTextPrimary)
-//                }
-//                .offset(x: 6, y: -9)
-//        }
-//        .background(noticeButtonAnimationBackground)
-//    }
-//
-//    private var noticeButtonAnimationBackground: some View {
-//        Circle()
-//            .stroke(
-//                Color.mycolor.myRed,
-//                lineWidth: noticevm.shouldAnimateNoticeButton ? 3 : 0
-//            )
-//            .scaleEffect(noticevm.shouldAnimateNoticeButton ? 1.2 : 0.8)
-//            .opacity(noticevm.shouldAnimateNoticeButton ? 0.0 : 1.0)
-//            .animation(
-//                noticevm.shouldAnimateNoticeButton ? .easeOut(duration: 1.0) : .none,
-//                value: noticevm.shouldAnimateNoticeButton
-//            )
-//    }
     
     // MARK: - Overlays
     
