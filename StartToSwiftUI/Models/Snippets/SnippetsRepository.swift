@@ -35,36 +35,15 @@ struct SnippetsRepository {
             
             var body: some View {
                 VStack(spacing: 30) {
-                    toggleButton
-            
-                    if isLoading {
-                        VStack(spacing: 30) {
-                            A001_WaveOut()
-                            A001_WaveIn()
-                            A001_PulsingCircle()
-                            A001_JumpingDots()
-                            A001_RotatingRing()
-                        }
-                    }
-                }
-            }
-            
-            private var toggleButton: some View {
-                Button {
-                    isLoading.toggle()
-                } label: {
-                    Text(isLoading ? "Stop" : "Start")
-                        .font(.headline)
-                        .foregroundStyle(isLoading ? Color.mycolor.myRed : Color.mycolor.myBlue)
-                        .padding()
-                        .background(.ultraThinMaterial)
-                        .clipShape(.capsule)
-                        .padding(.horizontal)
+                    A001_Wave()
+                    A001_PulsingCircle()
+                    A001_JumpingDots()
+                    A001_RotatingRing()
                 }
             }
         }
 
-        struct A001_WaveOut: View {
+        struct A001_Wave: View {
             
             @State private var scales: [CGFloat] = [0.5, 0.5, 0.5, 0.5, 0.5]
             

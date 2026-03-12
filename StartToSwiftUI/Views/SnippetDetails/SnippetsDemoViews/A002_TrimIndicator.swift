@@ -151,5 +151,7 @@ extension View {
 
 
 #Preview {
-    A002_TrimIndicator()
+    NavigationStack {
+        A002_TrimIndicator()
+    }
 }

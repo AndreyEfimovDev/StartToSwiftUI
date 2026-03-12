@@ -73,7 +73,9 @@ struct A003_ProgressCircleWithCheckmark: View {
 
 // MARK: - Preview / Demo
 #Preview {
-    A003_ProgressCircleWithCheckmark()
+    NavigationStack {
+        A003_ProgressCircleWithCheckmark()
+    }
 }
 
 // MARK: - Code Snippet
