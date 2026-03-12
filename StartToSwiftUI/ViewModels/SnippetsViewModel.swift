@@ -17,7 +17,7 @@ final class SnippetsViewModel: ObservableObject {
     private let hapticManager = HapticManager.shared
 
     // MARK: - Data
-    @Published var allSnippets: [CodeSnippet] = SnippetsRepository.all
+    @Published var allSnippets: [CodeSnippet] = SnippetsRepository.allDemoCodeSnippet
     @Published var filteredSnippets: [CodeSnippet] = []
     @Published var selectedSnippet: CodeSnippet? = nil
     @Published var searchText: String = ""

@@ -10,11 +10,8 @@ import SwiftUI
 // MARK: - Demo
 struct A004_ArcProgressDinamycGapDemo: View {
     var body: some View {
-        VStack {
-            A004_ArcProgressDinamycGapView(lineWidth: 2, diameter: 20)
-            A004_ArcProgressDinamycGapView(lineWidth: 4, diameter: 40)
-            A004_ArcProgressDinamycGapView(lineWidth: 6, diameter: 60)
-        }
+        A004_ArcProgressDinamycGapView(lineWidth: 10, diameter: 100)
+            .padding(30)
     }
 }
 

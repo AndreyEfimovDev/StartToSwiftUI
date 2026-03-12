@@ -14,13 +14,13 @@ import Foundation
 
 struct SnippetsRepository {
 
-    static let all: [CodeSnippet] = [a001, a002, a003, a004]
+    static let allDemoCodeSnippet: [CodeSnippet] = [a001, a002, a003, a004]
 
     // MARK: - A001
     static let a001 = CodeSnippet(
         id: "A001",
         category: Constants.mainCategory,
-        title: "Loading Indicators collection",
+        title: "Progress indicators collection",
         intro: "A collection of five loading animations including wave patterns (both outward and inward), a pulsing circle, jumping dots, and a rotating ring. Demonstrates various SwiftUI animation techniques.",
         thanks: nil,
         githubUrlString: nil,
@@ -199,7 +199,7 @@ struct SnippetsRepository {
     static let a002 = CodeSnippet(
         id: "A002",
         category: Constants.mainCategory,
-        title: "Progressive Trim indicator",
+        title: "Progress Trim indicator",
         intro: "An enhanced circular progress indicator with manual +/− controls, an animated auto-increment timer, and a reset button. Demonstrates Timer integration within SwiftUI state.",
         thanks: nil,
         githubUrlString: nil,
@@ -403,7 +403,7 @@ struct SnippetsRepository {
                         .tint(.green)
                     
                     HStack(spacing: 16) {
-                        Button(isRunning ? "Pause" : "Auto") {
+                        Button(isRunning ? "Pause" : "Start") {
                             isRunning ? pauseDemo() : startDemo()
                         }
                         .buttonStyle(.borderedProminent)
@@ -542,11 +542,7 @@ struct SnippetsRepository {
         // MARK: - Demo
         struct A004_ArcProgressDinamycGapDemo: View {
             var body: some View {
-                VStack {
-                    A004_ArcProgressDinamycGapView(lineWidth: 2, diameter: 20)
-                    A004_ArcProgressDinamycGapView(lineWidth: 4, diameter: 40)
-                    A004_ArcProgressDinamycGapView(lineWidth: 6, diameter: 60)
-                }
+                A004_ArcProgressDinamycGapView(lineWidth: 10, diameter: 100)
             }
         }
 

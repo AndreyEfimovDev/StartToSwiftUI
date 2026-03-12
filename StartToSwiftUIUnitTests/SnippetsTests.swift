@@ -44,24 +44,24 @@ final class SnippetsTests: XCTestCase {
     // MARK: - SnippetsRepository
 
     func test_repository_notEmpty() {
-        XCTAssertFalse(SnippetsRepository.all.isEmpty)
+        XCTAssertFalse(SnippetsRepository.allDemoCodeSnippet.isEmpty)
     }
 
     func test_repository_ids_areUnique() {
-        let ids = SnippetsRepository.all.map { $0.id }
+        let ids = SnippetsRepository.allDemoCodeSnippet.map { $0.id }
         XCTAssertEqual(ids.count, Set(ids).count, "Duplicate snippet IDs found")
     }
 
     func test_repository_allSnippets_haveNonEmptyTitles() {
-        XCTAssertTrue(SnippetsRepository.all.allSatisfy { !$0.title.isEmpty })
+        XCTAssertTrue(SnippetsRepository.allDemoCodeSnippet.allSatisfy { !$0.title.isEmpty })
     }
 
     func test_repository_a001_exists() {
-        XCTAssertNotNil(SnippetsRepository.all.first { $0.id == "A001" })
+        XCTAssertNotNil(SnippetsRepository.allDemoCodeSnippet.first { $0.id == "A001" })
     }
 
     func test_repository_a002_exists() {
-        XCTAssertNotNil(SnippetsRepository.all.first { $0.id == "A002" })
+        XCTAssertNotNil(SnippetsRepository.allDemoCodeSnippet.first { $0.id == "A002" })
     }
 
     // MARK: - SnippetsViewModel — Initial State

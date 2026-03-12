@@ -34,12 +34,13 @@ struct SnippetDetailsView: View {
                 FBAnalyticsManager.shared.logScreen(name: "SnippetDetailsView_\(snippet.id)")
                 isFavorite = snippetvm.isFavorite(snippet)
             }
+            .navigationTitle(snippet.id)
+            .navigationBarTitleDisplayMode(.inline)
     }
 
     // MARK: - Toolbar
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-
         // ← Back (iPhone only — iPad uses split view)
         ToolbarItem(placement: .topBarLeading) {
             if UIDevice.isiPhone {
@@ -48,7 +49,6 @@ struct SnippetDetailsView: View {
         }
 
         ToolbarItemGroup(placement: .topBarTrailing) {
-
             // ⭐ Favourite
             CircleStrokeButtonView(
                 iconName: isFavorite ? "star.fill" : "star",
@@ -62,8 +62,7 @@ struct SnippetDetailsView: View {
                 isFavorite.toggle()
                 hapticManager.impact(style: .light)
             }
-
-            // </> View code
+            // {} View code
             CircleStrokeButtonView(
                 iconName: "curlybraces",
                 isShownCircle: false

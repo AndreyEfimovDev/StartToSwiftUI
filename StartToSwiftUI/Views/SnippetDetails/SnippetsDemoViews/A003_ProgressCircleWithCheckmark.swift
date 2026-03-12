@@ -36,18 +36,41 @@ struct A003_ProgressCircleWithCheckmarkDemo: View {
                 .tint(.green)
             
             HStack(spacing: 16) {
-                Button(isRunning ? "Pause" : "Auto") {
-                    isRunning ? pauseDemo() : startDemo()
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.green)
                 
-                Button("Reset") {
+                Button {
+                    isRunning ? pauseDemo() : startDemo()
+                } label: {
+                    Text(isRunning ? "Pause" : "Start")
+                        .font(.headline)
+                        .foregroundColor(isRunning ? .yellow : .green)
+                        .padding(.vertical, 8)
+                        .frame(height: 55)
+                        .frame(maxWidth: .infinity)
+                        .background(.thinMaterial)
+                        .clipShape(Capsule())
+                        .overlay(
+                            Capsule()
+                                .stroke(Color.mycolor.myBlue, lineWidth: 1)
+                        )
+                }
+
+                Button {
                     pauseDemo()
                     progress = 0
+                } label: {
+                    Text("Reset")
+                        .font(.headline)
+                        .foregroundColor(Color.mycolor.myRed)
+                        .padding(.vertical, 8)
+                        .frame(height: 55)
+                        .frame(maxWidth: .infinity)
+                        .background(.thinMaterial)
+                        .clipShape(Capsule())
+                        .overlay(
+                            Capsule()
+                                .stroke(Color.mycolor.myBlue, lineWidth: 1)
+                        )
                 }
-                .buttonStyle(.bordered)
-                .tint(.red)
             }
         }
         .padding()
