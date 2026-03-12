@@ -34,9 +34,9 @@ struct StartView: View {
                         noticevm.loadNoticesFromSwiftData()
                         await noticevm.importNoticesFromFirebase()
                         vm.loadPostsFromSwiftData()
-//                        await vm.importPostsFromFirebase()
                         vm.updateWidgetData()
                         vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
+                        snippetsvm.isFiltersEmpty = snippetsvm.checkIfAllFiltersAreEmpty()
                     }
             }
         }
