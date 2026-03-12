@@ -223,28 +223,22 @@ struct PostsFilterView: View {
 
     // MARK: Buttons
     private var applyFiltersButton: some View {
-#warning("Delete the line with 'category' before deployment to App Store")
-        ClearCupsuleButton(
-            primaryTitle: "Apply",
-            primaryTitleColor: Color.mycolor.myBlue) {
+        ClearCupsuleButton(primaryTitle: "Apply", primaryTitleColor: Color.mycolor.myBlue) {
                 FBAnalyticsManager.shared.logEvent(name: "filter_applied", params: [
                     "level": vm.selectedLevel?.rawValue ?? "",
                     "favorite": vm.selectedFavorite?.rawValue ?? "",
                     "type": vm.selectedType?.rawValue ?? "",
                     "platform": vm.selectedPlatform?.rawValue ?? "",
                     "year": vm.selectedYear ?? "",
-                    "sort": vm.selectedSortOption.rawValue
-//                    "category": vm.selectedCategory ?? ""
+                    "sort": vm.selectedSortOption.rawValue,
+                    "category": vm.selectedCategory ?? ""
                 ])
                 isFilterButtonPressed.toggle()
             }
     }
     
     private var resetAllFiltersButton: some View {
-        
-        ClearCupsuleButton(
-            primaryTitle: "Reset All",
-            primaryTitleColor: Color.mycolor.myRed) {
+        ClearCupsuleButton(primaryTitle: "Reset All", primaryTitleColor: Color.mycolor.myRed) {
                 vm.selectedLevel = nil
                 vm.selectedFavorite = nil
                 vm.selectedType = nil
@@ -257,9 +251,7 @@ struct PostsFilterView: View {
     
     private var resetAllFiltersAndExitButton: some View {
         
-        ClearCupsuleButton(
-            primaryTitle: "Reset All & Exit",
-            primaryTitleColor: Color.mycolor.myRed) {
+        ClearCupsuleButton(primaryTitle: "Reset All & Exit", primaryTitleColor: Color.mycolor.myRed) {
                 vm.selectedLevel = nil
                 vm.selectedFavorite = nil
                 vm.selectedType = nil

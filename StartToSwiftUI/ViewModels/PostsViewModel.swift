@@ -150,7 +150,7 @@ final class PostsViewModel: ObservableObject {
         self.fbPostsManager = fbPostsManager
         
         setupTimezone()
-        restoreFilters()
+        restorePostFilters()
     }
     /// Convenience initialiser for backward compatibility
     convenience init(
@@ -185,8 +185,8 @@ final class PostsViewModel: ObservableObject {
     // MARK: - CloudKit Sync
     private func setupSubscriptionForChangesInCloud() {
         NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
+            .debounce(for: .seconds(2), scheduler: DispatchQueue.global(qos: .utility))
             .receive(on: DispatchQueue.main)
-            .debounce(for: .seconds(2), scheduler: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self else { return }
                 let now = Date()
@@ -200,7 +200,7 @@ final class PostsViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func restoreFilters() {
+    func restorePostFilters() {
         selectedCategory = storedCategory
         selectedLevel = storedLevel
         selectedFavorite = storedFavorite
@@ -352,7 +352,6 @@ final class PostsViewModel: ObservableObject {
         post.status = .deleted
         saveContextAndReload()
     }
-
 
     /// Erase a post
     func erasePost(_ post: Post?) {

@@ -22,7 +22,8 @@ struct SnippetsFilterView: View {
 
             VStack(spacing: 0) {
                 sortOptions
-                categoryFilter
+#warning("Remove before deployment to App Store")
+//                categoryFilter
             }
             .padding(.horizontal, UIDevice.isiPad ? 15 : 0)
 
@@ -56,7 +57,7 @@ struct SnippetsFilterView: View {
             titleForCase: { $0.displayName }
         )
     }
-
+    
     private var categoryFilter: some View {
         Group {
             if let list = snippetvm.allCategories, list.count > 1 {

@@ -48,10 +48,7 @@ struct SnippetsHomeView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar { navigationToolbar() }
-            .safeAreaInset(edge: .top) {
-                SearchBarView(searchText: $snippetvm.searchText)
-                    .padding(.horizontal)
-            }
+            .safeAreaInset(edge: .top) { searchBarStack }
             .sheet(isPresented: $isFilterButtonPressed) { filtersSheet }
         }
         .task {
@@ -111,6 +108,34 @@ struct SnippetsHomeView: View {
         SharedToolbarLeadingItems()
         // ⇄ switch section
         SharedToolbarSwitchItem()
+    }
+
+    // MARK: - Search Bar Stack
+    private var searchBarStack: some View {
+        HStack {
+            SearchBarView(searchText: $snippetvm.searchText)
+
+            // Fliters for posts
+            if !snippetvm.allSnippets.isEmpty {
+                CircleStrokeButtonView(
+                    iconName: "line.3.horizontal.decrease",
+                    isIconColorToChange: !snippetvm.isFiltersEmpty,
+                    isShownCircle: false
+                ) {
+                    isFilterButtonPressed.toggle()
+                    hapticManager.impact(style: .light)
+                }
+                .background(.ultraThinMaterial)
+                .clipShape(.circle)
+                .background(
+                    Circle()
+                        .stroke(
+                            Color.mycolor.mySecondary,
+                            lineWidth: 1)
+                )
+            }
+        }
+        .padding(.horizontal)
     }
 
     // MARK: - Filters Sheet
