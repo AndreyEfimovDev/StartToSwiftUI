@@ -97,7 +97,7 @@ struct SnippetsHomeView: View {
         ) {
             snippetvm.favoriteToggle(snippet)
         }
-        .tint(snippetvm.isFavorite(snippet) ? Color.mycolor.myAccent : Color.mycolor.mySecondary)
+        .tint(snippetvm.isFavorite(snippet) ? FavoriteChoice.yes.color : FavoriteChoice.no.color)
     }
 
     // MARK: - Toolbar

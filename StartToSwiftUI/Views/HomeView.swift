@@ -85,49 +85,6 @@ struct HomeView: View {
     
     // MARK: Subviews
     
-    private var searchBarStack: some View {
-        HStack {
-            SearchBarView(searchText: $vm.searchText)
-            // Add a new post
-            CircleStrokeButtonView(
-                iconName: "plus",
-                isShownCircle: false
-            ){
-                coordinator.push(.addPost)
-                hapticManager.impact(style: .light)
-            }
-            .background(.ultraThinMaterial)
-            .clipShape(.circle)
-            .background(
-                Circle()
-                    .stroke(
-                        Color.mycolor.mySecondary,
-                        lineWidth: 1)
-            )
-
-            // Fliters for posts
-            if !vm.allPosts.isEmpty {
-                CircleStrokeButtonView(
-                    iconName: "line.3.horizontal.decrease",
-                    isIconColorToChange: !vm.isFiltersEmpty,
-                    isShownCircle: false
-                ) {
-                    isFilterButtonPressed.toggle()
-                    hapticManager.impact(style: .light)
-                }
-                .background(.ultraThinMaterial)
-                .clipShape(.circle)
-                .background(
-                    Circle()
-                        .stroke(
-                            Color.mycolor.mySecondary,
-                            lineWidth: 1)
-                )
-            }
-        }
-        .padding(.horizontal)
-    }
-    
     private var listPostRowsContent: some View {
         List {
             ForEach(postsToDisplay.filter { $0.status == .active && !$0.draft }) { post in
@@ -238,13 +195,54 @@ struct HomeView: View {
     }
     
     // MARK: - Toolbar
-
     @ToolbarContentBuilder
     private func navigationToolbar() -> some ToolbarContent {
         SharedToolbarLeadingItems()
         SharedToolbarSwitchItem()
     }
     
+    // MARK: - Search Bar Stack
+    private var searchBarStack: some View {
+        HStack {
+            SearchBarView(searchText: $vm.searchText)
+            // Add a new post
+            CircleStrokeButtonView(
+                iconName: "plus",
+                isShownCircle: false
+            ){
+                coordinator.push(.addPost)
+                hapticManager.impact(style: .light)
+            }
+            .background(.ultraThinMaterial)
+            .clipShape(.circle)
+            .background(
+                Circle().stroke(Color.mycolor.mySecondary,lineWidth: 1)
+            )
+
+            // Fliters for posts
+            if !vm.allPosts.isEmpty {
+                CircleStrokeButtonView(
+                    iconName: "line.3.horizontal.decrease",
+                    isIconColorToChange: !vm.isFiltersEmpty,
+                    isShownCircle: false
+                ) {
+                    isFilterButtonPressed.toggle()
+                    hapticManager.impact(style: .light)
+                }
+                .background(.ultraThinMaterial)
+                .clipShape(.circle)
+                .background(
+                    Circle()
+                        .stroke(
+                            Color.mycolor.mySecondary,
+                            lineWidth: 1)
+                )
+            }
+        }
+        .padding(.horizontal)
+    }
+    
+
     // MARK: - Overlays
     
     @ViewBuilder
