@@ -32,6 +32,12 @@ struct WhatsNews {
                     - Intro text in material and snippet detail views now supports expand/collapse
                     """
                 ),
+                News(
+                    title: "Fixed",
+                    newsText: """
+                    - New notices briefly appeared, then disappeared after the next sync
+                    """
+                )
             ]
         ),
         Release(
