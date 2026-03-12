@@ -13,6 +13,7 @@
 		470823E22F60545E00D8C073 /* A004_CardSwipTinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470823E12F60545E00D8C073 /* A004_CardSwipTinder.swift */; };
 		470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */; };
 		470DB64F2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470DB64E2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift */; };
+		470DB6512F62A61F0034464D /* SnippetsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470DB6502F62A61F0034464D /* SnippetsTests.swift */; };
 		470E63702EFB241D007B75B5 /* FormCoordinatorToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470E636F2EFB241D007B75B5 /* FormCoordinatorToolbar.swift */; };
 		470E63762EFD5044007B75B5 /* CountdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470E63752EFD5044007B75B5 /* CountdownView.swift */; };
 		470E637A2EFDE1CF007B75B5 /* ModalNavigationContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470E63792EFDE1CF007B75B5 /* ModalNavigationContainer.swift */; };
@@ -220,6 +221,7 @@
 		470823E12F60545E00D8C073 /* A004_CardSwipTinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A004_CardSwipTinder.swift; sourceTree = "<group>"; };
 		470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleStrokeButtonView.swift; sourceTree = "<group>"; };
 		470DB64E2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A003_ProgressCircleWithCheckmark.swift; sourceTree = "<group>"; };
+		470DB6502F62A61F0034464D /* SnippetsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsTests.swift; sourceTree = "<group>"; };
 		470E636F2EFB241D007B75B5 /* FormCoordinatorToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormCoordinatorToolbar.swift; sourceTree = "<group>"; };
 		470E63752EFD5044007B75B5 /* CountdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownView.swift; sourceTree = "<group>"; };
 		470E63792EFDE1CF007B75B5 /* ModalNavigationContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalNavigationContainer.swift; sourceTree = "<group>"; };
@@ -752,10 +754,11 @@
 		475CC68B2F217B890099CAA6 /* StartToSwiftUIUnitTests */ = {
 			isa = PBXGroup;
 			children = (
-				475CC6882F217B890099CAA6 /* PostTests.swift */,
 				475CC6872F217B890099CAA6 /* PostsViewModelTests.swift */,
 				475CC68A2F217B890099CAA6 /* UtilityTests.swift */,
+				475CC6882F217B890099CAA6 /* PostTests.swift */,
 				475CC6862F217B890099CAA6 /* NoticesTests.swift */,
+				470DB6502F62A61F0034464D /* SnippetsTests.swift */,
 			);
 			path = StartToSwiftUIUnitTests;
 			sourceTree = "<group>";
@@ -1301,6 +1304,7 @@
 				475CC68C2F217B890099CAA6 /* NoticesTests.swift in Sources */,
 				475CC68D2F217B890099CAA6 /* PostsViewModelTests.swift in Sources */,
 				475CC68E2F217B890099CAA6 /* PostTests.swift in Sources */,
+				470DB6512F62A61F0034464D /* SnippetsTests.swift in Sources */,
 				475CC6902F217B890099CAA6 /* UtilityTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
