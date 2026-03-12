@@ -17,19 +17,16 @@ struct WhatsNews {
                     title: "Added",
                     newsText: """
                     - Code Snippets — a new section with live SwiftUI UI demos showcasing modern interface techniques
-                    - Switch between Materials and Code Snippets sections using the ⇄ button in the toolbar
+                    - Switch between Materials and Code Snippets sections using the right top button in the shared toolbar
                     - Each snippet includes an interactive demo, description, and copyable source code
                     - Syntax highlighted code viewer with dark theme powered by Splash
-                    - Snippets can be marked as favourites and persist between sessions
+                    - Snippets can be marked as favourites and persist between sessions and synced across devices
                     """
                 ),
                 News(
                     title: "Improved",
                     newsText: """
-                    - Search bar and filter controls moved inline for a cleaner toolbar layout
-                    - App remembers the last active section (Materials or Code Snippets) between launches
-                    - Notices and posts are now loaded once at startup instead of on every section switch
-                    - Intro text in material and snippet detail views now supports expand/collapse
+                    - Search bar and filter controls moved inline for a cleaner shared toolbar layout
                     """
                 ),
                 News(
