@@ -124,12 +124,10 @@ final class NoticesViewModel: ObservableObject {
         // Set filter date
         let filterDate: Date
         if let appStateManager {
-            let rawLastDate = appStateManager.getLastNoticeDate() ?? Date(timeIntervalSince1970: 0)
-            let lastNoticeDate = Date(timeIntervalSince1970: rawLastDate.timeIntervalSince1970.rounded(.down))
+            let lastNoticeDate = appStateManager.getLastNoticeDate() ?? Date(timeIntervalSince1970: 0)
             log("🔥 LastNoticeDate from appStateManager \(lastNoticeDate)", level: .info)
 
-            let rawFirstLaunch = appStateManager.getAppFirstLaunchDate() ?? Date(timeIntervalSince1970: 0)
-            let firstLaunchDate = Date(timeIntervalSince1970: rawFirstLaunch.timeIntervalSince1970.rounded(.down))
+            let firstLaunchDate = appStateManager.getAppFirstLaunchDate() ?? Date(timeIntervalSince1970: 0)
             log("🔥 FirstLaunchDate from appStateManager \(firstLaunchDate)", level: .info)
 
             filterDate = max(lastNoticeDate, firstLaunchDate)
@@ -166,7 +164,7 @@ final class NoticesViewModel: ObservableObject {
         // Update latest date
         if let appStateManager,
            let latestDate = relevantNotices.map({ $0.noticeDate }).max() {
-            appStateManager.updateLatestNoticeDate(latestDate.addingTimeInterval(1))
+            appStateManager.updateLatestNoticeDate(latestDate)
             FBCrashManager.shared.addLog("loadNoticesFromFirebase: latest notices date updated: \(latestDate)")
             log("🔥 LastNoticeDate updated in appStateManager \(latestDate)", level: .info)
         }

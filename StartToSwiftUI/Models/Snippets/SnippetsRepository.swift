@@ -13,9 +13,9 @@
 import Foundation
 
 struct SnippetsRepository {
-
+    
     static let allDemoCodeSnippet: [CodeSnippet] = [a001, a002, a003, a004]
-
+    
     // MARK: - A001
     static let a001 = CodeSnippet(
         id: "A001",
@@ -28,7 +28,7 @@ struct SnippetsRepository {
         date: Date.from(year: 2026, month: 3, day: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
-
+        
         // MARK: - Demo
         struct A001_ProgressViewIndicatorsDemo: View {
             
@@ -44,14 +44,14 @@ struct SnippetsRepository {
                 }
             }
         }
-
+        
         // MARK: - Preview
         #Preview {
             NavigationStack {
                 A001_ProgressViewIndicatorsDemo()
             }
         }
-
+        
         // MARK: - Code Snippets
         struct A001_Wave: View {
             
@@ -78,7 +78,7 @@ struct SnippetsRepository {
                 }
             }
         }
-
+        
         struct A001_PulsingCircle: View {
             @State private var scale: CGFloat = 0.5
             
@@ -95,7 +95,7 @@ struct SnippetsRepository {
                     }
             }
         }
-
+        
         struct A001_JumpingDots: View {
             @State private var scale: [Bool] = [false, false, false]
             
@@ -122,14 +122,14 @@ struct SnippetsRepository {
                 }
             }
         }
-
+        
         import Combine
-
+        
         struct A001_JumpingLetters: View {
             
             @State private var counter: Int = 0
             @State private var cancellable: AnyCancellable?
-
+        
             private let loadingString: [String] = "........... loading ...........".map { String($0) }
             
             // MARK: BODY
@@ -160,7 +160,7 @@ struct SnippetsRepository {
                 }
             }
         }
-
+        
         struct A001_RotatingRingWithTrace: View {
             @State private var isRotating = false
             
@@ -181,7 +181,7 @@ struct SnippetsRepository {
                         ),
                         style: StrokeStyle(lineWidth: 3, lineCap: .round)
                     )
-
+        
                     .frame(width: 20, height: 20)
                     .rotationEffect(Angle(degrees: isRotating ? 360 : 0))
                     .animation(
@@ -194,7 +194,7 @@ struct SnippetsRepository {
         }
         """
     )
-
+    
     // MARK: - A002
     static let a002 = CodeSnippet(
         id: "A002",
@@ -253,35 +253,43 @@ struct SnippetsRepository {
             }
             
             private var plusButton: some View {
-                Button("+") {
+                Button {
                     if proportion != 0 && timer != nil {
                         startProgressIndicator = false
                         buttonCaption = buttonCaption == "Start" ? "Stop" : "Start"
                     }
                     proportion += 0.1
                     proportion = min(proportion,1)
+                } label: {
+                    Image(systemName: "plus")
+                        .font(.headline)
+                        .foregroundStyle(Color.mycolor.myBlue)
+                        .frame(width: 55, height: 55)
+                        .background(.ultraThinMaterial, in: Circle())
+                        .overlay(Circle().stroke(Color.mycolor.myBlue, lineWidth: 1))
                 }
-                .padding()
-                .background(.black.opacity(0.03))
-                .clipShape(.circle)
             }
             
             private var minusButton: some View {
-                Button("-") {
+                Button {
                     if proportion != 0 && timer != nil {
                         startProgressIndicator = false
                         buttonCaption = buttonCaption == "Start" ? "Stop" : "Start"
                     }
                     proportion -= 0.1
                     proportion = max(self.proportion,0)
+                } label: {
+                    Image(systemName: "minus")
+                        .font(.headline)
+                        .foregroundStyle(Color.mycolor.myBlue)
+                        .frame(width: 55, height: 55)
+                        .background(.ultraThinMaterial, in: Circle())
+                        .overlay(Circle().stroke(Color.mycolor.myBlue, lineWidth: 1))
                 }
-                .padding()
-                .background(.black.opacity(0.03))
-                .clipShape(.circle)
             }
             
             private var actionButton: some View {
-                Button(buttonCaption) {
+                Button {
                     switch buttonCaption {
                     case "Start":
                         startProgressIndicator = true
@@ -292,21 +300,36 @@ struct SnippetsRepository {
                     default: break
                     }
                     buttonCaption = buttonCaption == "Start" ? "Stop" : "Start"
+                } label: {
+                    Text(buttonCaption)
+                        .font(.headline)
+                        .foregroundColor(startProgressIndicator ? Color.mycolor.myBlue : Color.mycolor.myGreen)
+                        .padding(.vertical, 8)
+                        .frame(height: 55)
+                        .frame(maxWidth: 150)
+                        .background(.thinMaterial)
+                        .clipShape(Capsule())
+                        .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
                 }
-                .padding()
-                .frame(maxWidth: 150)
-                .background(.black.opacity(0.03))
-                .clipShape(.capsule)
             }
             
             private var resetButton: some View {
-                Button("Reset") {
+                Button {
                     stopTimer()
                     startProgressIndicator = false
                     buttonCaption = "Start"
                     proportion = 0.0
+                } label: {
+                    Text("Reset")
+                        .font(.headline)
+                        .foregroundColor(Color.mycolor.myRed)
+                        .padding(.vertical, 8)
+                        .frame(height: 55)
+                        .frame(maxWidth: 150)
+                        .background(.thinMaterial)
+                        .clipShape(Capsule())
+                        .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
                 }
-                .a002_formater(frameSize: frameSize)
             }
         }
 
@@ -346,16 +369,6 @@ struct SnippetsRepository {
                     .font(.headline)
                     .foregroundColor(Color.red)
                 }
-            }
-        }
-
-        extension View {
-            func a002_formater (frameSize: CGFloat) -> some View {
-                self
-                    .padding()
-                    .frame(maxWidth: frameSize)
-                    .background(Color.mycolor.myButtonBGGray)
-                    .clipShape(.capsule)
             }
         }
         """
@@ -403,18 +416,31 @@ struct SnippetsRepository {
                         .tint(.green)
                     
                     HStack(spacing: 16) {
-                        Button(isRunning ? "Pause" : "Start") {
+                        Button {
                             isRunning ? pauseDemo() : startDemo()
+                        } label: {
+                            Text(isRunning ? "Pause" : "Start")
+                                .font(.headline)
+                                .foregroundColor(isRunning ? Color.mycolor.myBlue : Color.mycolor.myGreen)
+                                .padding(.vertical, 8)
+                                .frame(height: 55)
+                                .frame(maxWidth: .infinity)
+                                .background(.ultraThinMaterial, in: Capsule())
+                                .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(.green)
-                        
-                        Button("Reset") {
+                        Button {
                             pauseDemo()
                             progress = 0
+                        } label: {
+                            Text("Reset")
+                                .font(.headline)
+                                .foregroundColor(Color.mycolor.myRed)
+                                .padding(.vertical, 8)
+                                .frame(height: 55)
+                                .frame(maxWidth: .infinity)
+                                .background(.ultraThinMaterial, in: Capsule())
+                                .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
                         }
-                        .buttonStyle(.bordered)
-                        .tint(.red)
                     }
                 }
                 .padding()
@@ -535,22 +561,22 @@ struct SnippetsRepository {
         thanks: nil,
         githubUrlString: nil,
         notes: "",
-        date: Date.from(year: 2026, month: 3, day: 8) ?? Date(),
+        date: Date.from(year: 2026, month: 3, day: 12) ?? Date(),
         codeSnippet: """
         import SwiftUI
-
+        
         // MARK: - Demo
         struct A004_ArcProgressDinamycGapDemo: View {
             var body: some View {
                 A004_ArcProgressDinamycGapView(lineWidth: 10, diameter: 100)
             }
         }
-
+        
         // MARK: - Preview
         #Preview {
             A004_ArcProgressDinamycGapDemo()
         }
-
+        
         // MARK: - Code Snippet
         /// Winding effect: head races ahead (arc grows), tail catches up (arc shrinks).
         /// Both ends move strictly clockwise — zero backward motion, zero jitter.
@@ -654,5 +680,5 @@ struct SnippetsRepository {
         }
         """
     )
-
+    
 }
