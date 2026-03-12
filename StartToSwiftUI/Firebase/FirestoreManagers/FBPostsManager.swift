@@ -8,6 +8,12 @@
 import Foundation
 import FirebaseFirestore
 
+
+enum FBFetchError: Error {
+    case networkUnavailable
+    case unknown(Error)
+}
+
 // MARK: - Firestore Manager
 final class FBPostsManager: FBPostsManagerProtocol {
     
@@ -15,7 +21,7 @@ final class FBPostsManager: FBPostsManagerProtocol {
     
     private let postsCollection: CollectionReference = Firestore.firestore().collection("posts")
 
-    func fetchFBPosts(after date: Date?) async -> [FBPostModel] {
+    func fetchFBPosts(after date: Date?) async -> Result<[FBPostModel], FBFetchError> {
         do {
             let query: Query
             if let date {
@@ -27,10 +33,16 @@ final class FBPostsManager: FBPostsManagerProtocol {
             let snapshot = try await query.getDocuments()
             let posts = snapshot.documents.compactMap{ FBPostModel(document: $0) }
             log("🔥 Firebase: received \(posts.count) posts", level: .info)
-            return posts
-        } catch {
-            log("❌ Firebase: getAllPosts_after_date error: \(error.localizedDescription)", level: .error)
-            return []
+            return .success(posts)
+        } catch let error as NSError {
+            // Firestore offline error code = 14 (unavailable)
+            if error.domain == FirestoreErrorDomain,
+               error.code == FirestoreErrorCode.unavailable.rawValue {
+                log("📵 Firebase: network unavailable", level: .warning)
+                return .failure(.networkUnavailable)
+            }
+            log("❌ Firebase: error: \(error.localizedDescription)", level: .error)
+            return .failure(.unknown(error))
         }
     }
 
@@ -66,6 +78,6 @@ final class FBPostsManager: FBPostsManagerProtocol {
 
 // MARK: - Firestore Posts Manager Protocol
 protocol FBPostsManagerProtocol {
-    func fetchFBPosts(after: Date?) async -> [FBPostModel]
+    func fetchFBPosts(after: Date?) async -> Result<[FBPostModel], FBFetchError>
     func uploadDevDataPostsToFirebase() async
 }

@@ -18,9 +18,9 @@ struct ArchivedPostsView: View {
     
     @State private var selectedPostToDelete: Post?
     @State private var isShowingDeleteConfirmation: Bool = false
-    @State private var selectedTab: PostStatus = .hidden
+    @State private var selectedTab: StatusOptions = .hidden
    
-    let tabs: [PostStatus] = [.hidden, .deleted]
+    let tabs: [StatusOptions] = [.hidden, .deleted]
 
     // MARK: - Computed Properties
     private var hiddenPosts: [Post] {
@@ -159,7 +159,7 @@ extension ArchivedPostsView {
                     Button("Delete", systemImage: "archivebox") {
                         vm.setPostDeleted(post)
                     }
-                    .tint(PostStatus.deleted.color)
+                    .tint(StatusOptions.deleted.color)
                     
                     Button("Restore", systemImage: "arrow.uturn.left") {
                         vm.setPostActive(post)

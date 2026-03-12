@@ -7,28 +7,58 @@
 
 import SwiftUI
 
+// MARK: - App Section
+
+enum AppSection: String {
+    case materials
+    case snippets
+
+    var switchIcon: String { "arrow.left.arrow.right" }
+
+    /// Icon that hints at the OTHER section (what you'll switch TO)
+    var switchLabel: String {
+        switch self {
+        case .materials: return "ellipsis.curlybraces" // chevron.left.forwardslash.chevron.right 
+        case .snippets:  return "book" // graduationcap
+        }
+    }
+}
+
+// MARK: - AppCoordinator
+
 final class AppCoordinator: ObservableObject {
     
     private let hapticManager = HapticManager.shared
 
-    // For main stack navigation
+    // MARK: - Section
+    @AppStorage("activeSection") var activeSection: AppSection = .materials
+    
+    // MARK: - Navigation
+    /// For main stack navigation
     @Published var path = NavigationPath() {
         didSet {
             log("Coordinator: path changed. Count: \(path.count)", level: .info)
         }
     }
-    
-    // For modal stack navigation
+    /// For modal stack navigation
     @Published var modalPath = NavigationPath()  {
         didSet {
             log("Modal Coordinator: path changed. Count: \(modalPath.count)", level: .info)
         }
     }
-
-    // For modal Views
+    /// For modal Views
     @Published var presentedSheet: AppRoute?
     
-    // MARK: Main Stack Navigation Methods - in fact for PostDetails only so far
+    
+    // MARK: - Section Switch
+    /// Switches between Materials and Snippets, resetting the navigation path.
+    func switchSection() {
+        path = NavigationPath()
+        activeSection = activeSection == .materials ? .snippets : .materials
+        hapticManager.impact(style: .light)
+        log("Switched to section: \(activeSection)", level: .info)
+    }
+    // MARK: - Main Stack
     /// One level back
     func pop() {
         guard !path.isEmpty else {
@@ -49,19 +79,13 @@ final class AppCoordinator: ObservableObject {
     }
     
     /// Current navigation depth (how many Views are in the stack)
-    var currentDepth: Int {
-        path.count
-    }
+    var currentDepth: Int { path.count }
 
     /// Check if we are on the root screen (HomeView)?
-    var isAtRoot: Bool {
-        path.isEmpty
-    }
+    var isAtRoot: Bool { path.isEmpty }
 
     /// Return to HomeView
-    func popToRoot() {
-        path = NavigationPath()
-    }
+    func popToRoot() { path = NavigationPath() }
     
     /// Replace the current View
     func replace(with route: AppRoute) {
@@ -81,6 +105,8 @@ final class AppCoordinator: ObservableObject {
                  presentedSheet = route
                  modalPath = NavigationPath()
              }
+         case .snippetDetails:
+             path.append(route)   // push on main stack
          default:
              presentedSheet = route  // ALL others are modal, opens a modal view
              modalPath = NavigationPath()  // Resets the modal stack, resetting the modal path when a new View opens
@@ -103,9 +129,7 @@ final class AppCoordinator: ObservableObject {
     }
 
     /// Return to the root of modal navigation (Preferences)
-    func popModalToRoot() {
-        modalPath = NavigationPath()
-    }
+    func popModalToRoot() { modalPath = NavigationPath() }
 
     ///  Close modal View and return to HomeView
     func closeModal() {
@@ -117,24 +141,22 @@ final class AppCoordinator: ObservableObject {
 // MARK: - Navigation Routes
 enum AppRoute: Hashable, Identifiable {
     
-    // Dealing with details
+    // MARK: Posts
     case postDetails(post: Post)
-    
-    // Adding and editing posts
     case addPost
     case editPost(Post)
-        
-    // Preferences
+
+    // MARK: Preferences (modal root)
     case preferences
-    
-    // Managing notices
-    case notices // called from HomeView and Preferences
+
+    // MARK: Notices
+    case notices
     case noticeDetails(noticeId: String)
 
-    // Study progress
+    // MARK: Study progress
     case studyProgress
     
-    // Managing posts
+    // MARK: Managing posts (modal)
     case postDrafts
     case archivedPosts
     case checkForUpdates
@@ -143,23 +165,22 @@ enum AppRoute: Hashable, Identifiable {
     case restoreBackup
     case erasePosts
     
-    // Gratitude
+    // MARK: Snippets
+    case snippetDetails(snippet: CodeSnippet)
+
+    // MARK: About / Legal
     case acknowledgements
-    
-    // About App
     case aboutApp
     case welcome
     case introduction
     case functionality
     case whatIsNew
-    
-    // Legal information
     case legalInfo
     case termsOfUse
     case privacyPolicy
     case copyrightPolicy
     case fairUseNotice
-    
+
     // Set root modal Views to manage different behaviour
     var isRootModal: Bool {
         switch self {
@@ -170,58 +191,35 @@ enum AppRoute: Hashable, Identifiable {
         }
     }
 
+    // MARK: id
     var id: String {
         switch self {
-        case .postDetails(let postId):
-            return "postDetails_\(postId)"
-        case .addPost:
-            return "addPost"
-        case .editPost(let post):
-            return "editPost_\(post.id)"
-        case .preferences:
-            return "preferences"
-        case .notices:
-            return "notices"
-        case .noticeDetails(let noticeId):
-            return "noticeDetails_\(noticeId)"
-        case .studyProgress:
-            return "studyProgress"
-        case .postDrafts:
-            return "postDrafts"
-        case .archivedPosts:
-            return "archivedPosts"
-        case .checkForUpdates:
-            return "checkForUpdates"
-        case .importFromCloud:
-            return "importFromCloud"
-        case .shareBackup:
-            return "shareBackup"
-        case .restoreBackup:
-            return "restoreBackup"
-        case .erasePosts:
-            return "erasePosts"
-        case .acknowledgements:
-            return "acknowledgements"
-        case .aboutApp:
-            return "aboutApp"
-        case .welcome:
-            return "welcome"
-        case .introduction:
-            return "introduction"
-        case .functionality:
-            return "functionality"
-        case .whatIsNew:
-            return "whatIsNew"
-        case .legalInfo:
-            return "legalInfo"
-        case .termsOfUse:
-            return "termsOfUse"
-        case .privacyPolicy:
-            return "privacyPolicy"
-        case .copyrightPolicy:
-            return "copyrightPolicy"
-        case .fairUseNotice:
-            return "fairUseNotice"
+        case .postDetails(let p):       return "postDetails_\(p.id)"
+        case .addPost:                  return "addPost"
+        case .editPost(let p):          return "editPost_\(p.id)"
+        case .preferences:              return "preferences"
+        case .notices:                  return "notices"
+        case .noticeDetails(let id):    return "noticeDetails_\(id)"
+        case .studyProgress:            return "studyProgress"
+        case .postDrafts:               return "postDrafts"
+        case .archivedPosts:            return "archivedPosts"
+        case .checkForUpdates:          return "checkForUpdates"
+        case .importFromCloud:          return "importFromCloud"
+        case .shareBackup:              return "shareBackup"
+        case .restoreBackup:            return "restoreBackup"
+        case .erasePosts:               return "erasePosts"
+        case .snippetDetails(let s):    return "snippetDetails_\(s.id)"
+        case .acknowledgements:         return "acknowledgements"
+        case .aboutApp:                 return "aboutApp"
+        case .welcome:                  return "welcome"
+        case .introduction:             return "introduction"
+        case .functionality:            return "functionality"
+        case .whatIsNew:                return "whatIsNew"
+        case .legalInfo:                return "legalInfo"
+        case .termsOfUse:               return "termsOfUse"
+        case .privacyPolicy:            return "privacyPolicy"
+        case .copyrightPolicy:          return "copyrightPolicy"
+        case .fairUseNotice:            return "fairUseNotice"
         }
     }
 }

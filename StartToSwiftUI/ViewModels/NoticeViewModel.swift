@@ -12,7 +12,7 @@ import AudioToolbox
 import Combine
 
 @MainActor
-final class NoticeViewModel: ObservableObject {
+final class NoticesViewModel: ObservableObject {
     
     private let dataSource: NoticesDataSourceProtocol
     private let hapticManager = HapticManager.shared

@@ -76,7 +76,7 @@ struct PostRowView: View {
             
             Spacer()
             
-            PostStatusIcons(post: post)
+            PostStatusIcons(post: post, showFavorite: true)
                 .font(.caption)
         }
     }

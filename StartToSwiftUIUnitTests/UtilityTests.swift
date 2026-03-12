@@ -403,7 +403,7 @@ final class UtilityTests: XCTestCase {
 
     // Тест для проверки всех enum значений
     func testJSONDecoderAllEnumValues() {
-        let testCases: [(String, PostType, Platform, StudyLevel, StudyProgress, FavoriteChoice, PostOrigin)] = [
+        let testCases: [(String, PostType, Platform, StudyLevel, StudyProgress, FavoriteChoice, OriginOptions)] = [
             ("post-youtube-beginner", .post, .youtube, .beginner, .added, .no, .cloud),
             ("article-website-middle", .post, .website, .middle, .started, .yes, .local),
             ("course-medium-advanced", .course, .website, .advanced, .studied, .yes, .cloudNew)
@@ -752,7 +752,7 @@ final class UtilityTests: XCTestCase {
                 postRating = nil
             }
             
-            let origins: [PostOrigin] = [.local, .cloud, .cloudNew]
+            let origins: [OriginOptions] = [.local, .cloud, .cloudNew]
             let post = CodablePost(
                 id: "test-\(i)",
                 category: "Category \(i % 5)",

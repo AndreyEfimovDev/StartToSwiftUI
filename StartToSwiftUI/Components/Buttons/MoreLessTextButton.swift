@@ -22,7 +22,7 @@ struct MoreLessTextButton: View {
                 .fontWeight(.semibold)
                 .foregroundStyle(Color.mycolor.myBlue)
                 .frame(minWidth: 60, alignment: .leading)
-                .padding(8)
+//                .padding(8)
         } // label
     }
 }

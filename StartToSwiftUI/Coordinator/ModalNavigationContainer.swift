@@ -62,6 +62,10 @@ struct ModalNavigationContainer: View {
             RestoreBackupView()
         case .erasePosts:
             EraseAllPostsView()
+
+        case .snippetDetails(let snippet):
+            // Opened via main NavigationStack, not modally
+            SnippetDetailsView(snippet: snippet)
             
         case .acknowledgements:
             Acknowledgements()

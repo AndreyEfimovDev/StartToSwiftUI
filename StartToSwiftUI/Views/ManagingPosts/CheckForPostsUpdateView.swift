@@ -38,7 +38,7 @@ struct CheckForPostsUpdateView: View {
                 }
             }
             .task {
-                try? await Task.sleep(for: .seconds(vm.dispatchFor))
+                try? await Task.sleep(for: .seconds(Constants.dispatchFor))
                 await checkForUpdates()
             }
         }
@@ -125,7 +125,7 @@ struct CheckForPostsUpdateView: View {
             statusColor = Color.mycolor.myGreen
             isUpdated = true
             Task {
-                try? await Task.sleep(for: .seconds(vm.dispatchFor))
+                try? await Task.sleep(for: .seconds(Constants.dispatchFor))
                 await MainActor.run {
                     coordinator.closeModal()
                 }
@@ -143,7 +143,7 @@ struct CheckForPostsUpdateView: View {
             isImported = true
             hapticManager.notification(type: .success)
             Task {
-                try? await Task.sleep(for: .seconds(vm.dispatchFor))
+                try? await Task.sleep(for: .seconds(Constants.dispatchFor))
                 await MainActor.run {
                     coordinator.closeModal()
                 }

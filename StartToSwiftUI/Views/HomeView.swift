@@ -12,7 +12,7 @@ struct HomeView: View {
     
     // MARK: - Dependencies
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var noticevm: NoticeViewModel
+    @EnvironmentObject private var noticevm: NoticesViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     private let hapticManager = HapticManager.shared
@@ -59,15 +59,9 @@ struct HomeView: View {
             .navigationTitle(vm.selectedCategory ?? Constants.mainCategory)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .toolbar {
-                navigationToolbar()
-            }
-            .safeAreaInset(edge: .top) {
-                SearchBarView()
-            }
-            .sheet(isPresented: $isFilterButtonPressed) {
-                filtersSheet
-            }
+            .toolbar { navigationToolbar()}
+            .safeAreaInset(edge: .top) { searchBarStack }
+            .sheet(isPresented: $isFilterButtonPressed) {filtersSheet }
             .overlay { gestureOverlays(proxy: proxy) }
             .alert("Error", isPresented: $vm.showErrorMessageAlert, actions: {
                 Button("OK") {}
@@ -85,17 +79,55 @@ struct HomeView: View {
             })
             .task {
                 FBAnalyticsManager.shared.logScreen(name: "HomeView")
-                
-                vm.loadPostsFromSwiftData()
-                noticevm.loadNoticesFromSwiftData()
-                vm.updateWidgetData()
-                vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                await noticevm.importNoticesFromFirebase()
             }
         }
     }
     
     // MARK: Subviews
+    
+    private var searchBarStack: some View {
+        HStack {
+            SearchBarView(searchText: $vm.searchText)
+            // Add a new post
+            CircleStrokeButtonView(
+                iconName: "plus",
+                isShownCircle: false
+            ){
+                coordinator.push(.addPost)
+                hapticManager.impact(style: .light)
+            }
+            .background(.ultraThinMaterial)
+            .clipShape(.circle)
+            .background(
+                Circle()
+                    .stroke(
+                        Color.mycolor.mySecondary,
+                        lineWidth: 1)
+            )
+
+            // Fliters for posts
+            if !vm.allPosts.isEmpty {
+                CircleStrokeButtonView(
+                    iconName: "line.3.horizontal.decrease",
+                    isIconColorToChange: !vm.isFiltersEmpty,
+                    isShownCircle: false
+                ) {
+                    isFilterButtonPressed.toggle()
+                    hapticManager.impact(style: .light)
+                }
+                .background(.ultraThinMaterial)
+                .clipShape(.circle)
+                .background(
+                    Circle()
+                        .stroke(
+                            Color.mycolor.mySecondary,
+                            lineWidth: 1)
+                )
+            }
+        }
+        .padding(.horizontal)
+    }
+    
     private var listPostRowsContent: some View {
         List {
             ForEach(postsToDisplay.filter { $0.status == .active && !$0.draft }) { post in
@@ -188,7 +220,7 @@ struct HomeView: View {
     private func trailingSwipeActions(for post: Post) -> some View {
         Button("Hide", systemImage: "eye.slash") {
             vm.setPostHidden(post)
-        }.tint(PostStatus.hidden.color)
+        }.tint(StatusOptions.hidden.color)
         
         Button("Edit", systemImage: "pencil") {
             coordinator.push(.editPost(post))
@@ -209,72 +241,8 @@ struct HomeView: View {
 
     @ToolbarContentBuilder
     private func navigationToolbar() -> some ToolbarContent {
-        
-        ToolbarItem(placement: .navigationBarLeading) {
-            CircleStrokeButtonView(iconName: "gearshape", isShownCircle: false) {
-                coordinator.push(.preferences)
-                hapticManager.impact(style: .light)
-            }
-        }
-        if noticevm.unreadCount != 0  {
-            ToolbarItem(placement: .navigationBarLeading) {
-                noticeButton
-            }
-        }
-  
-        ToolbarItemGroup(placement: .navigationBarTrailing) {
-            // Add a new post
-            CircleStrokeButtonView(
-                iconName: "plus",
-                isShownCircle: false
-            ){
-                coordinator.push(.addPost)
-                hapticManager.impact(style: .light)
-            }
-            // Fliters for posts
-            if !vm.allPosts.isEmpty {
-                CircleStrokeButtonView(
-                    iconName: "line.3.horizontal.decrease",
-                    isIconColorToChange: !vm.isFiltersEmpty,
-                    isShownCircle: false
-                ) {
-                    isFilterButtonPressed.toggle()
-                    hapticManager.impact(style: .light)
-                }
-            }
-        }
-    }
-    
-    private var noticeButton: some View {
-        CircleStrokeButtonView(iconName: "message", isShownCircle: false) {
-            coordinator.push(.notices)
-        }
-        .overlay {
-            Capsule()
-                .fill(Color.mycolor.myRed)
-                .frame(maxWidth: 15, maxHeight: 10)
-                .overlay {
-                    Text("\(noticevm.unreadCount)")
-                        .font(.system(size: 8, weight: .bold))
-                        .foregroundStyle(Color.mycolor.myButtonTextPrimary)
-                }
-                .offset(x: 6, y: -9)
-        }
-        .background(noticeButtonAnimationBackground)
-    }
-
-    private var noticeButtonAnimationBackground: some View {
-        Circle()
-            .stroke(
-                Color.mycolor.myRed,
-                lineWidth: noticevm.shouldAnimateNoticeButton ? 3 : 0
-            )
-            .scaleEffect(noticevm.shouldAnimateNoticeButton ? 1.2 : 0.8)
-            .opacity(noticevm.shouldAnimateNoticeButton ? 0.0 : 1.0)
-            .animation(
-                noticevm.shouldAnimateNoticeButton ? .easeOut(duration: 1.0) : .none,
-                value: noticevm.shouldAnimateNoticeButton
-            )
+        SharedToolbarLeadingItems()
+        SharedToolbarSwitchItem()
     }
     
     // MARK: - Overlays
@@ -393,7 +361,7 @@ private struct HomeViewPreview: View {
         return vm
     }()
     
-    @StateObject var noticesVM = NoticeViewModel(
+    @StateObject var noticesVM = NoticesViewModel(
         dataSource: MockNoticesDataSource(),
         fbNoticesManager: MockFBNoticesManager()
     )
