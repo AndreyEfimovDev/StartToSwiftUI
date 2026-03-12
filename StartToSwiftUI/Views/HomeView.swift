@@ -59,7 +59,7 @@ struct HomeView: View {
             .navigationTitle(vm.selectedCategory ?? Constants.mainCategory)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .toolbar { navigationToolbar()}
+            .toolbar { SharedToolbarLeadingItems() }
             .safeAreaInset(edge: .top) { searchBarStack }
             .sheet(isPresented: $isFilterButtonPressed) {filtersSheet }
             .overlay { gestureOverlays(proxy: proxy) }
@@ -192,13 +192,6 @@ struct HomeView: View {
             vm.favoriteToggle(post)
         }
         .tint(post.favoriteChoice.color)
-    }
-    
-    // MARK: - Toolbar
-    @ToolbarContentBuilder
-    private func navigationToolbar() -> some ToolbarContent {
-        SharedToolbarLeadingItems()
-        SharedToolbarSwitchItem()
     }
     
     // MARK: - Search Bar Stack

@@ -47,7 +47,7 @@ struct SnippetsHomeView: View {
             .navigationTitle("Code Snippets")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .toolbar { navigationToolbar() }
+            .toolbar { SharedToolbarLeadingItems() }
             .safeAreaInset(edge: .top) { searchBarStack }
             .sheet(isPresented: $isFilterButtonPressed) { filtersSheet }
         }
@@ -98,16 +98,6 @@ struct SnippetsHomeView: View {
             snippetvm.favoriteToggle(snippet)
         }
         .tint(snippetvm.isFavorite(snippet) ? FavoriteChoice.yes.color : FavoriteChoice.no.color)
-    }
-
-    // MARK: - Toolbar
-
-    @ToolbarContentBuilder
-    private func navigationToolbar() -> some ToolbarContent {
-        // ⚙️ and 🔔 — shared items from StartView
-        SharedToolbarLeadingItems()
-        // ⇄ switch section
-        SharedToolbarSwitchItem()
     }
 
     // MARK: - Search Bar Stack
