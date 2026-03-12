@@ -10,8 +10,9 @@
 		47069F002EAFF6210082AE12 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47069EFF2EAFF6210082AE12 /* LaunchView.swift */; };
 		470823DE2F6038B600D8C073 /* A003_StaticBrokenCircleProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470823DD2F6038B600D8C073 /* A003_StaticBrokenCircleProgress.swift */; };
 		470823E02F60397800D8C073 /* A004_StaticBrokenCircleProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470823DF2F60397800D8C073 /* A004_StaticBrokenCircleProgress.swift */; };
-		470823E22F60545E00D8C073 /* A00x_CardSwipTinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470823E12F60545E00D8C073 /* A00x_CardSwipTinder.swift */; };
+		470823E22F60545E00D8C073 /* A004_CardSwipTinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470823E12F60545E00D8C073 /* A004_CardSwipTinder.swift */; };
 		470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */; };
+		470DB64F2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470DB64E2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift */; };
 		470E63702EFB241D007B75B5 /* FormCoordinatorToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470E636F2EFB241D007B75B5 /* FormCoordinatorToolbar.swift */; };
 		470E63762EFD5044007B75B5 /* CountdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470E63752EFD5044007B75B5 /* CountdownView.swift */; };
 		470E637A2EFDE1CF007B75B5 /* ModalNavigationContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470E63792EFDE1CF007B75B5 /* ModalNavigationContainer.swift */; };
@@ -216,8 +217,9 @@
 		47069EFF2EAFF6210082AE12 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		470823DD2F6038B600D8C073 /* A003_StaticBrokenCircleProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A003_StaticBrokenCircleProgress.swift; sourceTree = "<group>"; };
 		470823DF2F60397800D8C073 /* A004_StaticBrokenCircleProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A004_StaticBrokenCircleProgress.swift; sourceTree = "<group>"; };
-		470823E12F60545E00D8C073 /* A00x_CardSwipTinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A00x_CardSwipTinder.swift; sourceTree = "<group>"; };
+		470823E12F60545E00D8C073 /* A004_CardSwipTinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A004_CardSwipTinder.swift; sourceTree = "<group>"; };
 		470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleStrokeButtonView.swift; sourceTree = "<group>"; };
+		470DB64E2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A003_ProgressCircleWithCheckmark.swift; sourceTree = "<group>"; };
 		470E636F2EFB241D007B75B5 /* FormCoordinatorToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormCoordinatorToolbar.swift; sourceTree = "<group>"; };
 		470E63752EFD5044007B75B5 /* CountdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownView.swift; sourceTree = "<group>"; };
 		470E63792EFDE1CF007B75B5 /* ModalNavigationContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalNavigationContainer.swift; sourceTree = "<group>"; };
@@ -830,6 +832,7 @@
 			isa = PBXGroup;
 			children = (
 				47B6E7E72F5BF85B00EF7441 /* CodeSnippet.swift */,
+				47B6E8232F5EF3B700EF7441 /* SnippetsRepository.swift */,
 			);
 			path = Snippets;
 			sourceTree = "<group>";
@@ -861,13 +864,14 @@
 		47B6E81C2F5EB4BF00EF7441 /* SnippetsDemoViews */ = {
 			isa = PBXGroup;
 			children = (
+				47B6E80F2F5DFB1700EF7441 /* SnippetViewRegistry.swift */,
 				47B6E8132F5DFB6800EF7441 /* SnippetDemoViews.swift */,
-				47B6E8232F5EF3B700EF7441 /* SnippetsRepository.swift */,
 				47B6E81D2F5EB4DB00EF7441 /* A001_ProgressViewIndicators.swift */,
 				47B6E81F2F5ECFC200EF7441 /* A002_TrimIndicator.swift */,
+				470DB64E2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift */,
+				470823E12F60545E00D8C073 /* A004_CardSwipTinder.swift */,
 				470823DD2F6038B600D8C073 /* A003_StaticBrokenCircleProgress.swift */,
 				470823DF2F60397800D8C073 /* A004_StaticBrokenCircleProgress.swift */,
-				470823E12F60545E00D8C073 /* A00x_CardSwipTinder.swift */,
 			);
 			path = SnippetsDemoViews;
 			sourceTree = "<group>";
@@ -877,7 +881,6 @@
 			children = (
 				47B6E80D2F5DFAE500EF7441 /* SnippetRowView.swift */,
 				47B6E8112F5DFB3200EF7441 /* SnippetDetailsView.swift */,
-				47B6E80F2F5DFB1700EF7441 /* SnippetViewRegistry.swift */,
 				47B6E8212F5EF33B00EF7441 /* SnippetFavoritesService.swift */,
 				47B6E81C2F5EB4BF00EF7441 /* SnippetsDemoViews */,
 			);
@@ -1248,7 +1251,7 @@
 				4791CE082E75AAB000687126 /* UnderlineSermentedPickerNotOptional.swift in Sources */,
 				47FF425B2EE578DD0069D232 /* ProgressSelectionView.swift in Sources */,
 				471DCBD22EBB89E000AFA5F4 /* FairUseNotice.swift in Sources */,
-				470823E22F60545E00D8C073 /* A00x_CardSwipTinder.swift in Sources */,
+				470823E22F60545E00D8C073 /* A004_CardSwipTinder.swift in Sources */,
 				472A9B5B2EDC3B6F00ED3344 /* BackButtonView.swift in Sources */,
 				471DCBCA2EBB633300AFA5F4 /* PrivacyPolicy.swift in Sources */,
 				472243782EFFE31F0055461A /* GlobalMethods.swift in Sources */,
@@ -1273,6 +1276,7 @@
 				4781D72E2ED716AE00B74F85 /* Bundle.swift in Sources */,
 				47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */,
 				4791CDC12E708E1300687126 /* DocumentPicker.swift in Sources */,
+				470DB64F2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift in Sources */,
 				474BFB932F3C8E2F006E639B /* PostsViewModel+Widget.swift in Sources */,
 				47B6E80E2F5DFAE500EF7441 /* SnippetRowView.swift in Sources */,
 				470E637A2EFDE1CF007B75B5 /* ModalNavigationContainer.swift in Sources */,

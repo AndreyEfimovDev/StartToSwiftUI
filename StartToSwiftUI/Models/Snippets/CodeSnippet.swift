@@ -12,11 +12,11 @@ struct CodeSnippet: Identifiable, Hashable {
     let category: String
     let title: String
     let intro: String
-    let codeSnippet: String
     let thanks: String?
     let githubUrlString: String?
     let notes: String
     let date: Date
+    let codeSnippet: String
 }
 
 

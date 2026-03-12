@@ -20,6 +20,7 @@ struct SnippetViewRegistry {
         switch snippet.id {
         case "A001": A001_ProgressViewIndicatorsDemoView(snippet: snippet)
         case "A002": A002_TrimIndicatorDemoView(snippet: snippet)
+        case "A003": A003_ProgressCircleWithCheckmarkDemoView(snippet: snippet)
         default: SnippetNoPreviewView(snippet: snippet)
         }
     }

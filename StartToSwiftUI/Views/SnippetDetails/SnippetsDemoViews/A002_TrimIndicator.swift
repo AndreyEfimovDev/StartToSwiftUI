@@ -17,7 +17,7 @@ struct A002_TrimIndicator: View {
     
     var body: some View {
         VStack {
-            A002_ProgressIndicator(trim: $proportion)
+            A002_ProgressIndicatorView(trim: $proportion)
                 .frame(width: frameSize, height: frameSize)
                 .padding()
             
@@ -108,7 +108,7 @@ struct A002_TrimIndicator: View {
     }
 }
 
-struct A002_ProgressIndicator: View {
+struct A002_ProgressIndicatorView: View {
     
     @Binding var trim: CGFloat
     let lineWidth: CGFloat = 15.0

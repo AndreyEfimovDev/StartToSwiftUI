@@ -65,7 +65,7 @@ struct SnippetDetailsView: View {
 
             // </> View code
             CircleStrokeButtonView(
-                iconName: "chevron.left.forwardslash.chevron.right",
+                iconName: "curlybraces",
                 isShownCircle: false
             ) {
                 showCodeSheet = true
@@ -128,7 +128,8 @@ struct SnippetDetailsView: View {
         }
         .preferredColorScheme(.dark)
         .presentationDragIndicator(.visible)
-        .presentationDetents(UIDevice.isiPad ? [.large] : [.medium, .large])
+        .presentationDetents([.large])
+//        .presentationDetents(UIDevice.isiPad ? [.large] : [.medium, .large])
     }
 }
 

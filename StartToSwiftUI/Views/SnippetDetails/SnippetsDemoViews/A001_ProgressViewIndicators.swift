@@ -13,6 +13,8 @@ struct A001_ProgressViewIndicators: View {
     
     var body: some View {
         VStack(spacing: 30) {
+            toggleButton
+
             if isLoading {
                 VStack(spacing: 30) {
                     A001_WaveOut()
@@ -22,7 +24,6 @@ struct A001_ProgressViewIndicators: View {
                     A001_RotatingRing()
                 }
             }
-            toggleButton
         }
     }
     
@@ -151,7 +152,6 @@ struct A001_RotatingRing: View {
             .onAppear { isRotating = true }
     }
 }
-
 
 #Preview {
     A001_ProgressViewIndicators()

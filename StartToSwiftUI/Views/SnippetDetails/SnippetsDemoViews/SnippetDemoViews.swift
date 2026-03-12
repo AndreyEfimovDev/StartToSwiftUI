@@ -12,7 +12,31 @@
 
 import SwiftUI
 
-// MARK: - A002_TrimIndicatorDemoView
+// MARK: - A003_ProgressCircleWithCheckmark DemoView
+struct A003_ProgressCircleWithCheckmarkDemoView: View {
+
+    let snippet: CodeSnippet
+
+    var body: some View {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 20) {
+                SnippetDemoHeader(snippet: snippet)
+
+                // Live demo — original component, untouched
+                A003_ProgressCircleWithCheckmark()
+                    .cardBackground()
+
+                if let thanks = snippet.thanks, !thanks.isEmpty {
+                    SnippetThanksView(thanks: thanks)
+                }
+            }
+            .padding()
+            .foregroundStyle(Color.mycolor.myAccent)
+        }
+    }
+}
+
+// MARK: - A002_TrimIndicator DemoView
 struct A002_TrimIndicatorDemoView: View {
 
     let snippet: CodeSnippet
@@ -36,7 +60,7 @@ struct A002_TrimIndicatorDemoView: View {
     }
 }
 
-// MARK: - A001_ProgressViewIndicatorsDemoView
+// MARK: - A001_ProgressViewIndicators DemoView
 struct A001_ProgressViewIndicatorsDemoView: View {
 
     let snippet: CodeSnippet

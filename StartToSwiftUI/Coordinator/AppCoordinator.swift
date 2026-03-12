@@ -18,8 +18,8 @@ enum AppSection: String {
     /// Icon that hints at the OTHER section (what you'll switch TO)
     var switchLabel: String {
         switch self {
-        case .materials: return "chevron.left.forwardslash.chevron.right"
-        case .snippets:  return "book"
+        case .materials: return "ellipsis.curlybraces" // chevron.left.forwardslash.chevron.right 
+        case .snippets:  return "book" // graduationcap
         }
     }
 }

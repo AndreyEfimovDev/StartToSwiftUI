@@ -1,5 +1,5 @@
 //
-//  A00x_CardSwipTinder.swift
+//  A004_CardSwipTinder.swift
 //  StartToSwiftUI
 //
 //  Created by Andrey Efimov on 10.03.2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct A00x_CardSwipTinder: View {
+struct A004_CardSwipTinder: View {
     @State var cards: [ExampleCardView]
     
     var body: some View {
@@ -66,7 +66,7 @@ struct A00x_CardSwipTinder: View {
 }
 
 #Preview {
-    A00x_CardSwipTinder(cards: [])
+    A004_CardSwipTinder(cards: [])
 }
 
 
