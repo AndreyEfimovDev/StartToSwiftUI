@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct FiltersView: View {
+struct PostsFilterView: View {
     
     // MARK: Dependencies
     @EnvironmentObject var vm: PostsViewModel
@@ -277,7 +277,7 @@ struct FiltersView: View {
         dataSource: MockPostsDataSource(posts: PreviewData.samplePosts)
     )
     ZStack {
-        FiltersView(
+        PostsFilterView(
             isFilterButtonPressed: .constant(true)
         )
         .environmentObject(vm)

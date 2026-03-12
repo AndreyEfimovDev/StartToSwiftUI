@@ -276,7 +276,7 @@ struct HomeView: View {
     // MARK: - Filters View
 
     private var filtersSheet: some View {
-        FiltersView(isFilterButtonPressed: $isFilterButtonPressed)
+        PostsFilterView(isFilterButtonPressed: $isFilterButtonPressed)
             .overlay(alignment: .top) {
                 if UIDevice.isiPhone {
                     LinearGradient(

@@ -116,7 +116,7 @@ struct SnippetsHomeView: View {
     // MARK: - Filters Sheet
 
     private var filtersSheet: some View {
-        SnippetsFiltersView(isPresented: $isFilterButtonPressed)
+        SnippetsFilterView(isPresented: $isFilterButtonPressed)
             .overlay(alignment: .top) {
                 if UIDevice.isiPhone {
                     LinearGradient(
