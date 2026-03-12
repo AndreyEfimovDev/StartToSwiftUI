@@ -63,11 +63,11 @@ class AppSyncStateManager {
                 
                 // TODO: Remove after v?.? — migration for users with distantPast date in Firestore
                 // Date.distantPast caused 'Timestamp seconds out of range' crash in Firestore
-//                if let date = existingState.lastPostsFBUpdateDate, date < Date(timeIntervalSince1970: 0) {
-//                    existingState.lastPostsFBUpdateDate = Date(timeIntervalSince1970: 0)
-//                    saveContext()
-//                    log("🔥 Migration: lastPostsFBUpdateDate fixed from distantPast", level: .info)
-//                }
+                if let date = existingState.lastPostsFBUpdateDate, date < Date(timeIntervalSince1970: 0) {
+                    existingState.lastPostsFBUpdateDate = Date(timeIntervalSince1970: 0)
+                    saveContext()
+                    log("🔥 Migration: lastPostsFBUpdateDate fixed from distantPast", level: .info)
+                }
 
                 return existingState
             }
@@ -140,6 +140,12 @@ class AppSyncStateManager {
         primaryState.appFirstLaunchDate = earliestDate
         primaryState.lastCloudSyncDateToMergeDuplicate = latestSyncDate
         
+        // Merge snippet favorites — union of all duplicates
+        let mergedFavorites = sortedStates
+            .flatMap { $0.snippetFavoriteIDs }
+        let uniqueFavorites = Array(Set(mergedFavorites)) // remove duplicates
+        primaryState.snippetFavoriteIDs = uniqueFavorites // collect all id from unique favorites
+        
         log("  ✅ Combined data:", level: .info)
         
         // Remove duplicates
@@ -207,5 +213,30 @@ extension AppSyncStateManager {
         let appState = getOrCreateAppState()
         appState.latestNoticeDate = date
         saveContext()
+    }
+}
+
+
+// MARK: - Methods for Snippet Favorites
+extension AppSyncStateManager {
+    
+    func getSnippetFavoriteIDs() -> Set<String> {
+        let appState = getOrCreateAppState()
+        return Set(appState.snippetFavoriteIDs)
+    }
+    
+    func toggleSnippetFavorite(_ id: String) {
+        let appState = getOrCreateAppState()
+        if appState.snippetFavoriteIDs.contains(id) {
+            appState.snippetFavoriteIDs.removeAll { $0 == id }
+        } else {
+            appState.snippetFavoriteIDs.append(id)
+        }
+        saveContext()
+    }
+    
+    func isSnippetFavorite(_ id: String) -> Bool {
+        let appState = getOrCreateAppState()
+        return appState.snippetFavoriteIDs.contains(id)
     }
 }

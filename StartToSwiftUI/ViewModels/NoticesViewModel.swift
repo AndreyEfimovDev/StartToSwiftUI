@@ -17,6 +17,8 @@ final class NoticesViewModel: ObservableObject {
     private let dataSource: NoticesDataSourceProtocol
     private let hapticManager = HapticManager.shared
     private let fbNoticesManager: FBNoticesManagerProtocol
+    private let appStateManager: AppSyncStateManager?
+
     
     @Published var notices: [Notice] = []
     @Published var hasUnreadNotices: Bool = false
@@ -36,9 +38,6 @@ final class NoticesViewModel: ObservableObject {
         dataSource as? SwiftDataNoticesDataSource
     }
     
-    private var appStateManager: AppSyncStateManager? {
-        swiftDataSource.map { AppSyncStateManager(modelContext: $0.modelContext) }
-    }
     
     var unreadCount: Int {
         notices.filter { !$0.isRead }.count
@@ -51,23 +50,27 @@ final class NoticesViewModel: ObservableObject {
     
     init(
         dataSource: NoticesDataSourceProtocol,
-        fbNoticesManager: FBNoticesManagerProtocol = FBNoticesManager()
+        appStateManager: AppSyncStateManager? = nil,
+        fbNoticesManager: FBNoticesManagerProtocol = FBNoticesManager(),
     ) {
         self.dataSource = dataSource
+        self.appStateManager = appStateManager
         self.fbNoticesManager = fbNoticesManager
     }
-    
+
     /// Convenience initializer for backward compatibility
     convenience init(
         modelContext: ModelContext,
+        appStateManager: AppSyncStateManager? = nil,
         fbNoticesManager: FBNoticesManagerProtocol = FBNoticesManager()
     ) {
         self.init(
             dataSource: SwiftDataNoticesDataSource(modelContext: modelContext),
+            appStateManager: appStateManager,
             fbNoticesManager: fbNoticesManager
         )
     }
-    
+
     func start() {
         setupSubscriptionForChangesInCloud()
     }

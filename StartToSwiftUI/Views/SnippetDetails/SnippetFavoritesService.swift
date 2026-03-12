@@ -7,32 +7,21 @@
 
 import Foundation
 
-
 final class SnippetFavoritesService {
     
     static let shared = SnippetFavoritesService()
     
-    private let key = "snippet_favorites"
+    private var appSyncStateManager: AppSyncStateManager? = nil
     
-    private var favoriteIDs: Set<String> {
-        get {
-            let array = UserDefaults.standard.stringArray(forKey: key) ?? []
-            return Set(array)
-        }
-        set {
-            UserDefaults.standard.set(Array(newValue), forKey: key)
-        }
+    func configure(with manager: AppSyncStateManager) {
+        appSyncStateManager = manager
     }
     
-    func isFavorite(_ id: String) -> Bool { favoriteIDs.contains(id) }
+    @MainActor func isFavorite(_ id: String) -> Bool {
+        appSyncStateManager?.isSnippetFavorite(id) ?? false
+    }
     
-    func toggle(_ id: String) {
-        var ids = favoriteIDs
-        if ids.contains(id) {
-            ids.remove(id)
-        } else {
-            ids.insert(id)
-        }
-        favoriteIDs = ids
+    @MainActor func toggle(_ id: String) {
+        appSyncStateManager?.toggleSnippetFavorite(id)
     }
 }

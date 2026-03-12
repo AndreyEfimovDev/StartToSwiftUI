@@ -21,6 +21,14 @@ final class AppSyncState {
     var lastCloudSyncDateToMergeDuplicate: Date?
     var appFirstLaunchDate: Date?
     
+    // CloudKit does not support [String] directly in SwiftData
+    // It is stored as a String separated by commas
+    var snippetFavoriteIDsRaw: String = ""
+    var snippetFavoriteIDs: [String] {
+        get { snippetFavoriteIDsRaw.isEmpty ? [] : snippetFavoriteIDsRaw.components(separatedBy: ",") }
+        set { snippetFavoriteIDsRaw = newValue.joined(separator: ",") }
+    }
+
     // For internal purposes:
     // - cleanupDuplicateAppStates()
     // - getOrCreateAppState()

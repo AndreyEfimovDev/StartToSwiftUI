@@ -20,11 +20,11 @@ struct StartToSwiftUIApp: App {
     // MARK: - Dependencies
     @StateObject private var postsViewModel: PostsViewModel
     @StateObject private var noticesViewModel: NoticesViewModel
-    @StateObject private var snippetsViewModel: SnippetsViewModel = SnippetsViewModel()
-
+    @StateObject private var snippetsViewModel: SnippetsViewModel
     @StateObject private var coordinator = AppCoordinator()
 
     private let hapticManager = HapticManager.shared
+    private let appStateManager: AppSyncStateManager
     
     // MARK: - SwiftData Container with sync via iCloud
     let modelContainer: ModelContainer = {
@@ -52,8 +52,21 @@ struct StartToSwiftUIApp: App {
     init() {
         
         let context = modelContainer.mainContext
-        _postsViewModel = StateObject(wrappedValue: PostsViewModel(modelContext: context))
-        _noticesViewModel = StateObject(wrappedValue: NoticesViewModel(modelContext: context))
+        let stateManager = AppSyncStateManager(modelContext: context)
+        
+        self.appStateManager = stateManager
+        
+        _postsViewModel = StateObject(wrappedValue: PostsViewModel(
+            modelContext: context,
+            appStateManager: stateManager
+        ))
+        _noticesViewModel = StateObject(wrappedValue: NoticesViewModel(
+            modelContext: context,
+            appStateManager: stateManager
+        ))
+        _snippetsViewModel = StateObject(wrappedValue: SnippetsViewModel(
+            appStateManager: stateManager
+        ))
 
 #if DEBUG
         Analytics.setAnalyticsCollectionEnabled(false)

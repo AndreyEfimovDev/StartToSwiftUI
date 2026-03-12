@@ -12,6 +12,7 @@ import Combine
 final class SnippetsViewModel: ObservableObject {
 
     // MARK: - Dependencies
+    private let appStateManager: AppSyncStateManager?
     private let favoritesService = SnippetFavoritesService.shared
     private let hapticManager = HapticManager.shared
 
@@ -33,6 +34,7 @@ final class SnippetsViewModel: ObservableObject {
     }
 
     @AppStorage("snippet_storedSortOption") private var storedSortOption: SortOption = .notSorted
+    
     @Published var selectedSortOption: SortOption = .notSorted {
         didSet {
             storedSortOption = selectedSortOption
@@ -54,9 +56,13 @@ final class SnippetsViewModel: ObservableObject {
     }
 
     // MARK: - Init
-    init() {
+    init(appStateManager: AppSyncStateManager? = nil) {
+        self.appStateManager = appStateManager
         restoreFilters()
         setupSubscriptions()
+        if let appStateManager {
+            SnippetFavoritesService.shared.configure(with: appStateManager)
+        }
     }
 
     // MARK: - Favorites

@@ -142,26 +142,25 @@ final class PostsViewModel: ObservableObject {
     // MARK: - Init
     init(
         dataSource: PostsDataSourceProtocol,
+        appStateManager: AppSyncStateManager? = nil,
         fbPostsManager: FBPostsManagerProtocol = FBPostsManager()
     ) {
         self.dataSource = dataSource
+        self.appStateManager = appStateManager
         self.fbPostsManager = fbPostsManager
         
-        if let swiftDataSource = dataSource as? SwiftDataPostsDataSource {
-            self.appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
-        } else {
-            self.appStateManager = nil
-        }
         setupTimezone()
         restoreFilters()
     }
     /// Convenience initialiser for backward compatibility
     convenience init(
         modelContext: ModelContext,
+        appStateManager: AppSyncStateManager? = nil,
         fbPostsManager: FBPostsManagerProtocol = FBPostsManager()
     ) {
         self.init(
             dataSource: SwiftDataPostsDataSource(modelContext: modelContext),
+            appStateManager: appStateManager,
             fbPostsManager: fbPostsManager
         )
     }
