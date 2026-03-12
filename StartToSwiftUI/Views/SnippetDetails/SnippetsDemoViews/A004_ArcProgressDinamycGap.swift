@@ -7,19 +7,33 @@
 
 import SwiftUI
 
-// MARK: - Arc Progress View
-//
-// Winding effect: head races ahead (arc grows), tail catches up (arc shrinks).
-// Both ends move strictly clockwise — zero backward motion, zero jitter.
-//
-// Seamless loop constraint:
-//   rotationsPerCycle + (maxArc − minArc) must equal an integer.
-//   At cycle boundary, the jump in `base` and the jump in `tailExtra`
-//   cancel each other out exactly (both are multiples of 360°).
-//
-//   Here: 1.5 + 0.5 = 2 ✓
+// MARK: - Demo
+struct A004_ArcProgressDinamycGapDemo: View {
+    var body: some View {
+        VStack {
+            A004_ArcProgressDinamycGapView(lineWidth: 2, diameter: 20)
+            A004_ArcProgressDinamycGapView(lineWidth: 4, diameter: 40)
+            A004_ArcProgressDinamycGapView(lineWidth: 6, diameter: 60)
+        }
+    }
+}
 
-struct ArcProgressDinamicGapView: View {
+// MARK: - Preview
+#Preview {
+    A004_ArcProgressDinamycGapDemo()
+}
+
+// MARK: - Code Snippet
+/// Winding effect: head races ahead (arc grows), tail catches up (arc shrinks).
+/// Both ends move strictly clockwise — zero backward motion, zero jitter.
+///
+/// Seamless loop constraint:
+///   rotationsPerCycle + (maxArc − minArc) must equal an integer.
+///   At cycle boundary, the jump in `base` and the jump in `tailExtra`
+///   cancel each other out exactly (both are multiples of 360°).
+///
+///   Here: 1.5 + 0.5 = 2 ✓
+struct A004_ArcProgressDinamycGapView: View {
     
     var lineWidth: CGFloat = 3
     var diameter: CGFloat = 40
@@ -111,8 +125,3 @@ struct ArcProgressDinamicGapView: View {
     }
 }
 
-// MARK: - Preview
-
-#Preview {
-    ArcProgressDinamicGapView(lineWidth: 3, diameter: 40)
-}

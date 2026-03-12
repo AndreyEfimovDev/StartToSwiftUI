@@ -14,7 +14,7 @@
 		470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */; };
 		470DB64F2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470DB64E2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift */; };
 		470DB6512F62A61F0034464D /* SnippetsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470DB6502F62A61F0034464D /* SnippetsTests.swift */; };
-		470DB6592F62D8160034464D /* ArcProgressDinamicGapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470DB6582F62D8160034464D /* ArcProgressDinamicGapView.swift */; };
+		470DB6592F62D8160034464D /* A004_ArcProgressDinamycGap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470DB6582F62D8160034464D /* A004_ArcProgressDinamycGap.swift */; };
 		470DB65D2F62E23C0034464D /* SharedToolbarLeadingItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470DB65C2F62E23C0034464D /* SharedToolbarLeadingItems.swift */; };
 		470E63702EFB241D007B75B5 /* FormCoordinatorToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470E636F2EFB241D007B75B5 /* FormCoordinatorToolbar.swift */; };
 		470E63762EFD5044007B75B5 /* CountdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470E63752EFD5044007B75B5 /* CountdownView.swift */; };
@@ -224,7 +224,7 @@
 		470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleStrokeButtonView.swift; sourceTree = "<group>"; };
 		470DB64E2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A003_ProgressCircleWithCheckmark.swift; sourceTree = "<group>"; };
 		470DB6502F62A61F0034464D /* SnippetsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsTests.swift; sourceTree = "<group>"; };
-		470DB6582F62D8160034464D /* ArcProgressDinamicGapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcProgressDinamicGapView.swift; sourceTree = "<group>"; };
+		470DB6582F62D8160034464D /* A004_ArcProgressDinamycGap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A004_ArcProgressDinamycGap.swift; sourceTree = "<group>"; };
 		470DB65C2F62E23C0034464D /* SharedToolbarLeadingItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedToolbarLeadingItems.swift; sourceTree = "<group>"; };
 		470E636F2EFB241D007B75B5 /* FormCoordinatorToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormCoordinatorToolbar.swift; sourceTree = "<group>"; };
 		470E63752EFD5044007B75B5 /* CountdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownView.swift; sourceTree = "<group>"; };
@@ -877,7 +877,7 @@
 				47B6E81D2F5EB4DB00EF7441 /* A001_ProgressViewIndicators.swift */,
 				47B6E81F2F5ECFC200EF7441 /* A002_TrimIndicator.swift */,
 				470DB64E2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift */,
-				470DB6582F62D8160034464D /* ArcProgressDinamicGapView.swift */,
+				470DB6582F62D8160034464D /* A004_ArcProgressDinamycGap.swift */,
 				470823E12F60545E00D8C073 /* A004_CardSwipTinder.swift */,
 				470823DD2F6038B600D8C073 /* A003_StaticBrokenCircleProgress.swift */,
 				470823DF2F60397800D8C073 /* A004_StaticBrokenCircleProgress.swift */,
@@ -1182,7 +1182,7 @@
 				474BFB952F3C8E46006E639B /* PostsViewModel.swift in Sources */,
 				47F38B1F2ED480B0006DEDBE /* DevData.swift in Sources */,
 				47BAF0A42E60613200287F10 /* SearchBarView.swift in Sources */,
-				470DB6592F62D8160034464D /* ArcProgressDinamicGapView.swift in Sources */,
+				470DB6592F62D8160034464D /* A004_ArcProgressDinamycGap.swift in Sources */,
 				4791CD862E6ED58B00687126 /* ShrinkIconButtonStyle.swift in Sources */,
 				4751DAEC2F1534B800EC9C53 /* StudyProgressChartView.swift in Sources */,
 				4732FB332EAA5A9E0062269D /* ActivityView.swift in Sources */,

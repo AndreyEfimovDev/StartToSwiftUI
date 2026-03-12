@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct A001_ProgressViewIndicators: View {
+// MARK: - Demo
+struct A001_ProgressViewIndicatorsDemo: View {
     
     @State private var isLoading = false
     
@@ -22,6 +23,14 @@ struct A001_ProgressViewIndicators: View {
     }
 }
 
+// MARK: - Preview
+#Preview {
+    NavigationStack {
+        A001_ProgressViewIndicatorsDemo()
+    }
+}
+
+// MARK: - Code Snippets
 struct A001_Wave: View {
     
     @State private var scales: [CGFloat] = [0.5, 0.5, 0.5, 0.5, 0.5]
@@ -159,11 +168,5 @@ struct A001_RotatingRingWithTrace: View {
                 value: isRotating
             )
             .onAppear { isRotating = true }
-    }
-}
-
-#Preview {
-    NavigationStack {
-        A001_ProgressViewIndicators()
     }
 }

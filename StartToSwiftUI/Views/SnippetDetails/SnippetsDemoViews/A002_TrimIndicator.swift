@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct A002_TrimIndicator: View {
+// MARK: - Demo
+struct A002_TrimIndicatorDemo: View {
     
     @State private var proportion: CGFloat = 0.0
     @State private var startProgressIndicator = false
@@ -108,6 +109,14 @@ struct A002_TrimIndicator: View {
     }
 }
 
+// MARK: - Preview
+#Preview {
+    NavigationStack {
+        A002_TrimIndicatorDemo()
+    }
+}
+
+// MARK: - Code Snippet
 struct A002_ProgressIndicatorView: View {
     
     @Binding var trim: CGFloat
@@ -149,9 +158,3 @@ extension View {
     }
 }
 
-
-#Preview {
-    NavigationStack {
-        A002_TrimIndicator()
-    }
-}

@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct A003_ProgressCircleWithCheckmark: View {
+// MARK: - Demo
+struct A003_ProgressCircleWithCheckmarkDemo: View {
     
     @State private var progress: Double = 0
     @State private var isRunning = false
@@ -71,10 +72,10 @@ struct A003_ProgressCircleWithCheckmark: View {
     }
 }
 
-// MARK: - Preview / Demo
+// MARK: - Preview
 #Preview {
     NavigationStack {
-        A003_ProgressCircleWithCheckmark()
+        A003_ProgressCircleWithCheckmarkDemo()
     }
 }
 
