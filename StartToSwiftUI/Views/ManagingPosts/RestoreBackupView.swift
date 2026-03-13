@@ -57,13 +57,6 @@ struct RestoreBackupView: View {
             .sheet(isPresented: $showDocumentPicker) {
                 documentPicker
             }
-            .alert("Error", isPresented: $vm.showErrorMessageAlert) {
-                Button("OK", role: .cancel) {
-                    coordinator.pop()
-                }
-            } message: {
-                Text(vm.errorMessage ?? "Unknown error")
-            }
         }
     }
     

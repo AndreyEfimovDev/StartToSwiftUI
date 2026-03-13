@@ -16,6 +16,8 @@ struct StartView: View {
     @EnvironmentObject private var noticevm: NoticesViewModel
     @EnvironmentObject private var snippetsvm: SnippetsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
+    
+    @StateObject private var errorManager = ErrorManager.shared
 
     // MARK: - States
     @State private var showLaunchView: Bool = true
@@ -29,6 +31,11 @@ struct StartView: View {
                 .transition(.move(edge: .leading))
             } else {
                 mainContent
+                    .alert("Error", isPresented: $errorManager.showAlert) {
+                        Button("OK") {}
+                    } message: {
+                        Text(errorManager.errorMessage ?? "")
+                    }
                     .task {
                         vm.selectedCategory = vm.mainCategory
                         noticevm.loadNoticesFromSwiftData()

@@ -24,9 +24,9 @@ final class NoticesViewModel: ObservableObject {
     @Published var hasUnreadNotices: Bool = false
     @Published var shouldAnimateNoticeButton = false
     
-    @Published var errorMessage: String?
-    @Published var showErrorMessageAlert: Bool = false
-    
+//    @Published var errorMessage: String?
+//    @Published var showErrorMessageAlert: Bool = false
+//    
     @AppStorage("isNotificationOn") var isShowBadgeForNewNotices: Bool = true
 
     private var cancellables = Set<AnyCancellable>()
@@ -118,9 +118,12 @@ final class NoticesViewModel: ObservableObject {
     
     // MARK: - Import Notices from Firebase
     func importNoticesFromFirebase() async {
+        
         FBPerformanceManager.shared.startTrace(name: "import_notices_firebase")
         FBCrashManager.shared.addLog("loadNoticesFromFirebase: started, notices count: \(notices.count)")
-
+        
+        clearError()
+        
         // MARK: Set filter date
         // Take a maximum of two dates — the date of the last notice and the date of the application installation
         // At the first launch, the user will not receive all the old notiсes, but only those that were created after app first launch
@@ -315,13 +318,15 @@ final class NoticesViewModel: ObservableObject {
             handleError(error, message: "Error saving notices")
         }
     }
-    
+
+    // MARK: - Handle Errors
+    func clearError() {
+        ErrorManager.shared.clear()
+    }
+
     private func handleError(_ error: Error?, message: String) {
-        let description = error?.localizedDescription ?? message
-        errorMessage = description
-        showErrorMessageAlert = true
         hapticManager.notification(type: .error)
-        log("🍉 ❌ \(message): \(description)", level: .error)
+        ErrorManager.shared.handle(error, message: message)
     }
 
     // MARK: - Notifications

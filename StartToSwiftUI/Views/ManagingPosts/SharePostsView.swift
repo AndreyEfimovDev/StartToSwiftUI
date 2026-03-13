@@ -59,14 +59,6 @@ struct SharePostsView: View {
                     sharingActivityView(for: url)
                 }
             }
-            .alert("Sharing Error", isPresented: $vm.showErrorMessageAlert) {
-                Button("OK", role: .cancel) {
-                    vm.errorMessage = nil
-                    isInProgress = false
-                }
-            } message: {
-                Text(vm.errorMessage ?? "Unknown error")
-            }
         }
     }
     
