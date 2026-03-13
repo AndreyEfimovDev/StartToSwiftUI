@@ -59,14 +59,6 @@ struct SharePostsView: View {
                     sharingActivityView(for: url)
                 }
             }
-            .alert("Sharing Error", isPresented: $vm.showErrorMessageAlert) {
-                Button("OK", role: .cancel) {
-                    vm.errorMessage = nil
-                    isInProgress = false
-                }
-            } message: {
-                Text(vm.errorMessage ?? "Unknown error")
-            }
         }
     }
     
@@ -92,9 +84,8 @@ struct SharePostsView: View {
             showActivityView = true
         case .failure(let error):
             isInProgress = false
-            vm.errorMessage = error.localizedDescription
             hapticManager.notification(type: .error)
-            vm.showErrorMessageAlert = true
+            ErrorManager.shared.handle(error, message: "Failed to export posts")
         }
     }
     
@@ -117,10 +108,9 @@ struct SharePostsView: View {
             isInProgress = false
             
         case .failure(let error):
-            vm.errorMessage = error.localizedDescription
-            vm.showErrorMessageAlert = true
-            hapticManager.notification(type: .error)
             isInProgress = false
+            hapticManager.notification(type: .error)
+            ErrorManager.shared.handle(error, message: "Failed to export posts")
         }
     }
     

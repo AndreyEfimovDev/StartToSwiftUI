@@ -29,10 +29,7 @@ final class PostsViewModel: ObservableObject {
     @Published var selectedRating: PostRating? = nil
     @Published var selectedStudyProgress: StudyProgress = .added
     @Published var reshuffleToken = UUID()
-    
-    @Published var errorMessage: String?
-    @Published var showErrorMessageAlert = false
-    
+      
     var cancellables = Set<AnyCancellable>()
     var utcCalendar = Calendar.current
     
@@ -165,12 +162,12 @@ final class PostsViewModel: ObservableObject {
         )
     }
     
+    // MARK: - Setup
     func start() {
         setupSubscriptions()
         setupSubscriptionForChangesInCloud()
     }
     
-    // MARK: - Setup
     private func setupTimezone() {
         if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
             utcCalendar.timeZone = utcTimeZone
@@ -451,18 +448,15 @@ final class PostsViewModel: ObservableObject {
         let categories = Array(Set(allPosts.map { $0.category })).sorted()
         return categories.isEmpty ? nil : categories
     }
-    
+
+    // MARK: - Handle Errors
     func clearError() {
-        errorMessage = nil
-        showErrorMessageAlert = false
+        ErrorManager.shared.clear()
     }
     
     func handleError(_ error: Error?, message: String) {
-        let description = error?.localizedDescription ?? message
-        errorMessage = description
-        showErrorMessageAlert = true
         hapticManager.notification(type: .error)
-        log("❌ \(message): \(description)", level: .error)
+        ErrorManager.shared.handle(error, message: message)
     }
     
     #warning("Delete this func loadDevData() before deployment to App Store")

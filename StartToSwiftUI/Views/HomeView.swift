@@ -63,20 +63,6 @@ struct HomeView: View {
             .safeAreaInset(edge: .top) { searchBarStack }
             .sheet(isPresented: $isFilterButtonPressed) {filtersSheet }
             .overlay { gestureOverlays(proxy: proxy) }
-            .alert("Error", isPresented: $vm.showErrorMessageAlert, actions: {
-                Button("OK") {}
-            }, message: {
-                if let errorMessage = vm.errorMessage {
-                    Text(errorMessage)
-                }
-            })
-            .alert("Error", isPresented: $noticevm.showErrorMessageAlert, actions: {
-                Button("OK") {}
-            }, message: {
-                if let errorMessage = noticevm.errorMessage {
-                    Text(errorMessage)
-                }
-            })
             .task {
                 FBAnalyticsManager.shared.logScreen(name: "HomeView")
             }

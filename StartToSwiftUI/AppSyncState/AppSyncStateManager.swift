@@ -240,3 +240,6 @@ extension AppSyncStateManager {
         return appState.snippetFavoriteIDs.contains(id)
     }
 }
+
+@MainActor
+extension AppSyncStateManager: AppSyncStateManagerProtocol {}
