@@ -334,4 +334,11 @@ final class NoticesViewModel: ObservableObject {
         hapticManager.notification(type: .success)
         log("🍉 🔔 Local notification sent: \(count) new", level: .info)
     }
+    
+    func resetLatestNoticeDate() {
+        if let appStateManager {
+            appStateManager.resetLatestNoticeDate()
+            log("🍉 Reset Latest Notice Date", level: .info)
+        }
+    }
 }

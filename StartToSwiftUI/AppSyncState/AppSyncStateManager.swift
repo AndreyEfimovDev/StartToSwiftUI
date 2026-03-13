@@ -214,6 +214,13 @@ extension AppSyncStateManager {
         appState.latestNoticeDate = date
         saveContext()
     }
+    
+    // for tests purpose
+    func resetLatestNoticeDate() {
+        let appState = getOrCreateAppState()
+        appState.latestNoticeDate = nil
+        saveContext()
+    }
 }
 
 
