@@ -21,6 +21,7 @@ struct WhatsNews {
                     - Each snippet includes an interactive demo, description, and copyable source code
                     - Syntax highlighted code viewer with dark theme powered by Splash
                     - Snippets can be marked as favourites and persist between sessions and synced across devices
+                    - Confirmation dialog before erasing a notice to prevent accidental deletions
                     """
                 ),
                 News(

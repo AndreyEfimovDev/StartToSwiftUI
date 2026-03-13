@@ -17,6 +17,14 @@ struct NoticesView: View {
     
     private let hapticManager = HapticManager.shared
     
+    @State private var noticeToDelete: Notice? = nil
+    private var showDeleteConfirmation: Binding<Bool> {
+        Binding(
+            get: { noticeToDelete != nil },
+            set: { if !$0 { noticeToDelete = nil } }
+        )
+    }
+    
     var body: some View {
         
         ZStack {
@@ -45,19 +53,38 @@ struct NoticesView: View {
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         Button("Erase", systemImage: "trash") {
-                            withAnimation {
-                                noticevm.deleteErase(notice)
-                            }
+                            noticeToDelete = notice
                         }.tint(Color.mycolor.myRed)
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: false) {
-                        Button(notice.isRead ? "Unread" : "Read", systemImage: notice.isRead ?  "eye.slash.circle" : "eye.circle") {
+                        Button(
+                            notice.isRead ? "Unread" : "Read",
+                            systemImage: notice.isRead ?  "eye.slash.circle" : "eye.circle"
+                        ) {
                             noticevm.toggleReadStatus(notice)
                         }
                         .tint(notice.isRead ? Color.mycolor.mySecondary : Color.mycolor.myBlue)
                     }
             }
         }
+        .confirmationDialog(
+            "Erase notice?",
+            isPresented: showDeleteConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("Erase", role: .destructive) {
+                if let notice = noticeToDelete {
+                    withAnimation { noticevm.deleteErase(notice) }
+                    noticeToDelete = nil
+                }
+            }
+            Button("Cancel", role: .cancel) {
+                noticeToDelete = nil
+            }
+        } message: {
+            Text("This action cannot be undone")
+        }
+
     }
     
     @ToolbarContentBuilder
