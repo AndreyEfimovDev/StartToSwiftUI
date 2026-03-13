@@ -7,8 +7,8 @@
 
 import Foundation
 
+#if DEBUG
 final class MockFBPostsManager: FBPostsManagerProtocol {
-    
     // MARK: - Control Properties
     var postsToReturn: [FBPostModel] = []
     var fetchCallCount = 0
@@ -82,3 +82,4 @@ extension FBPostModel {
     static let mockMiddle = FBPostModel.mock(title: "Middle Post", studyLevel: .middle)
     static let mockAdvanced = FBPostModel.mock(title: "Advanced Post", studyLevel: .advanced)
 }
+#endif

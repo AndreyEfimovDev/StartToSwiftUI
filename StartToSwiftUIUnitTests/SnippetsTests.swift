@@ -11,14 +11,11 @@ import Combine
 @testable import StartToSwiftUI
 
 /*
- 
  27 tests in four groups:
-
   Repository — the data is correct, the ID is unique, and A001/A002 exists
   ViewModel initial state — filters are empty, filteredSnippets is the same as allSnippets
   Filtering & Search & Sorting — all combinations
   FavoritesService + ViewModel integration — toggle, idempotency, ID independence
- 
 */
 
 @MainActor

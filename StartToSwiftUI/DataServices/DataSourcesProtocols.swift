@@ -24,3 +24,9 @@ protocol NoticesDataSourceProtocol {
 }
 
 
+protocol AppSyncStateManagerProtocol {
+    func getLastNoticeDate() -> Date?
+    func getAppFirstLaunchDate() -> Date?
+    func updateLatestNoticeDate(_ date: Date)
+}
+

@@ -17,7 +17,7 @@ final class NoticesViewModel: ObservableObject {
     private let dataSource: NoticesDataSourceProtocol
     private let hapticManager = HapticManager.shared
     private let fbNoticesManager: FBNoticesManagerProtocol
-    private let appStateManager: AppSyncStateManager?
+    private let appStateManager: AppSyncStateManagerProtocol?
 
     
     @Published var notices: [Notice] = []
@@ -50,7 +50,7 @@ final class NoticesViewModel: ObservableObject {
     
     init(
         dataSource: NoticesDataSourceProtocol,
-        appStateManager: AppSyncStateManager? = nil,
+        appStateManager: AppSyncStateManagerProtocol? = nil,
         fbNoticesManager: FBNoticesManagerProtocol = FBNoticesManager(),
     ) {
         self.dataSource = dataSource

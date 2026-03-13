@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+#if DEBUG
 // MARK: - Mock Implementation
 final class MockPostsDataSource: PostsDataSourceProtocol {
     
@@ -33,3 +33,4 @@ final class MockPostsDataSource: PostsDataSourceProtocol {
         // Mock - ничего не делаем
     }
 }
+#endif
