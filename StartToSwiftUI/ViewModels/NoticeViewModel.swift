@@ -106,8 +106,6 @@ final class NoticeViewModel: ObservableObject {
             self.notices = try dataSource.fetchNotices()
             FBCrashManager.shared.addLog("loadNoticesFromSwiftData: notices count after fetch from SwiftData: \(notices.count)")
             updateUnreadStatus()  // ← always update status when fetch notices
-//          let duration = Date().timeIntervalSince(startTime)
-//          log("🍉 ✅ Download completed in \(String(format: "%.2f", duration))s. Notifications: \(fetchedNotices.count)", level: .info)
         } catch {
             FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error loading notices")
