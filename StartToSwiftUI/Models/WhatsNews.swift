@@ -27,6 +27,7 @@ struct WhatsNews {
                     title: "Improved",
                     newsText: """
                     - Search bar and filter controls moved inline for a cleaner shared toolbar layout
+                    - ??? Master SwiftUI with structured lessons, live examples, and code snippets — synced across all your devices ???
                     """
                 ),
             ]

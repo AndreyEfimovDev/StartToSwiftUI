@@ -121,7 +121,10 @@ final class NoticesViewModel: ObservableObject {
         FBPerformanceManager.shared.startTrace(name: "import_notices_firebase")
         FBCrashManager.shared.addLog("loadNoticesFromFirebase: started, notices count: \(notices.count)")
 
-        // Set filter date
+        // MARK: Set filter date
+        // Take a maximum of two dates — the date of the last notice and the date of the application installation
+        // At the first launch, the user will not receive all the old notiсes, but only those that were created after app first launch
+        // Note: timeIntervalSince1970 is the number of seconds that have passed since January 1, 1970 00:00:00 UTC
         let filterDate: Date
         if let appStateManager {
             let lastNoticeDate = appStateManager.getLastNoticeDate() ?? Date(timeIntervalSince1970: 0)
