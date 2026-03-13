@@ -91,7 +91,7 @@ struct RestoreBackupView: View {
             isRestored = true
             isInProgress = false
             
-            if !vm.showErrorMessageAlert {
+            if !ErrorManager.shared.showAlert {
                 DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
                     coordinator.closeModal()
                 }

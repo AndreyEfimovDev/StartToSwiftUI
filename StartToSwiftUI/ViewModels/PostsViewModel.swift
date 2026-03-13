@@ -29,10 +29,7 @@ final class PostsViewModel: ObservableObject {
     @Published var selectedRating: PostRating? = nil
     @Published var selectedStudyProgress: StudyProgress = .added
     @Published var reshuffleToken = UUID()
-    
-//    @Published var errorMessage: String?
-//    @Published var showErrorMessageAlert = false
-    
+      
     var cancellables = Set<AnyCancellable>()
     var utcCalendar = Calendar.current
     
@@ -165,12 +162,12 @@ final class PostsViewModel: ObservableObject {
         )
     }
     
+    // MARK: - Setup
     func start() {
         setupSubscriptions()
         setupSubscriptionForChangesInCloud()
     }
     
-    // MARK: - Setup
     private func setupTimezone() {
         if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
             utcCalendar.timeZone = utcTimeZone

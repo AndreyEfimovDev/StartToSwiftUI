@@ -19,25 +19,22 @@ final class NoticesViewModel: ObservableObject {
     private let fbNoticesManager: FBNoticesManagerProtocol
     private let appStateManager: AppSyncStateManagerProtocol?
 
-    
+    private var cancellables = Set<AnyCancellable>()
+
     @Published var notices: [Notice] = []
     @Published var hasUnreadNotices: Bool = false
     @Published var shouldAnimateNoticeButton = false
     
-//    @Published var errorMessage: String?
-//    @Published var showErrorMessageAlert: Bool = false
-//    
+    // MARK: - AppStorage
     @AppStorage("isNotificationOn") var isShowBadgeForNewNotices: Bool = true
 
-    private var cancellables = Set<AnyCancellable>()
-    
     private var lastLoadTime: Date = Date(timeIntervalSince1970: 0)
     private let minLoadInterval: TimeInterval = 3
-    
+        
+    // MARK: - Computed Properties
     private var swiftDataSource: SwiftDataNoticesDataSource? {
         dataSource as? SwiftDataNoticesDataSource
     }
-    
     
     var unreadCount: Int {
         notices.filter { !$0.isRead }.count
@@ -47,7 +44,7 @@ final class NoticesViewModel: ObservableObject {
         notices.sorted { $0.noticeDate > $1.noticeDate }
     }
 
-    
+    // MARK: - Init
     init(
         dataSource: NoticesDataSourceProtocol,
         appStateManager: AppSyncStateManagerProtocol? = nil,
@@ -71,6 +68,7 @@ final class NoticesViewModel: ObservableObject {
         )
     }
 
+    // MARK: - Setup
     func start() {
         setupSubscriptionForChangesInCloud()
     }
