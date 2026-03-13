@@ -11,7 +11,7 @@ struct WhatsNews {
 #warning("Add upated info before deployment to App Store")
     static let releases: [Release] = [
         Release(
-            release: "Release 1.5.0(7)",
+            release: "Release 2.1.0(8)",
             news: [
                 News(
                     title: "Added",
@@ -29,6 +29,11 @@ struct WhatsNews {
                     - Search bar and filter controls moved inline for a cleaner shared toolbar layout
                     """
                 ),
+            ]
+        ),
+        Release(
+            release: "Release 1.4.2(7)",
+            news: [
                 News(
                     title: "Fixed",
                     newsText: """
