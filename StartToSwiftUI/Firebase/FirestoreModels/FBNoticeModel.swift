@@ -43,9 +43,7 @@ extension FBNoticeModel {
         self.noticeId = document.documentID
         self.title = title
         self.message = message
-        // Truncate to seconds — remove nanoseconds from Firestore Timestamp
-        let rawDate = timestamp.dateValue()
-        self.noticeDate = Date(timeIntervalSince1970: rawDate.timeIntervalSince1970.rounded(.down))
+        self.noticeDate = timestamp.dateValue()
     }
 }
 

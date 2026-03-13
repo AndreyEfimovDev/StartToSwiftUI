@@ -63,11 +63,11 @@ class AppSyncStateManager {
                 
                 // TODO: Remove after v?.? — migration for users with distantPast date in Firestore
                 // Date.distantPast caused 'Timestamp seconds out of range' crash in Firestore
-//                if let date = existingState.lastPostsFBUpdateDate, date < Date(timeIntervalSince1970: 0) {
-//                    existingState.lastPostsFBUpdateDate = Date(timeIntervalSince1970: 0)
-//                    saveContext()
-//                    log("🔥 Migration: lastPostsFBUpdateDate fixed from distantPast", level: .info)
-//                }
+                if let date = existingState.lastPostsFBUpdateDate, date < Date(timeIntervalSince1970: 0) {
+                    existingState.lastPostsFBUpdateDate = Date(timeIntervalSince1970: 0)
+                    saveContext()
+                    log("🔥 Migration: lastPostsFBUpdateDate fixed from distantPast", level: .info)
+                }
 
                 return existingState
             }

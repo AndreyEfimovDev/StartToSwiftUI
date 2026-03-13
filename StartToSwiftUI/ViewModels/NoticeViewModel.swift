@@ -115,6 +115,7 @@ final class NoticeViewModel: ObservableObject {
         FBPerformanceManager.shared.stopTrace(name: "load_notices_swiftdata")
     }
     
+    // MARK: - Import Notices from Firebase
     func importNoticesFromFirebase() async {
         FBPerformanceManager.shared.startTrace(name: "import_notices_firebase")
         // Filter by date (SwiftData only)
@@ -126,17 +127,15 @@ final class NoticeViewModel: ObservableObject {
             // At the first launch, the user will not receive all the old notiсes, but only those that were created after app first launch
             // Note: timeIntervalSince1970 is the number of seconds that have passed since January 1, 1970 00:00:00 UTC
             // this point is called the Unix Epoch
-            let rawLastDate = appStateManager.getLastNoticeDate() ?? Date(timeIntervalSince1970: 0)
-            let lastNoticeDate = Date(timeIntervalSince1970: rawLastDate.timeIntervalSince1970.rounded(.down))
+            let lastNoticeDate = appStateManager.getLastNoticeDate() ?? Date(timeIntervalSince1970: 0)
             log("🔥 LastNoticeDate from appStateManager \(lastNoticeDate)", level: .info)
-            
-            let rawFirstLaunch = appStateManager.getAppFirstLaunchDate() ?? Date(timeIntervalSince1970: 0)
-            let firstLaunchDate = Date(timeIntervalSince1970: rawFirstLaunch.timeIntervalSince1970.rounded(.down))
+
+            let firstLaunchDate = appStateManager.getAppFirstLaunchDate() ?? Date(timeIntervalSince1970: 0)
             log("🔥 FirstLaunchDate from appStateManager \(firstLaunchDate)", level: .info)
-            
+
             let filterDate = max(lastNoticeDate, firstLaunchDate)
             log("🔥 filterDate from appStateManager \(filterDate)", level: .info)
-
+            
             relevantNotices = await fbNoticesManager.fetchFBNotices(after: filterDate)
         } else {
             relevantNotices = await fbNoticesManager.fetchFBNotices(after: Date(timeIntervalSince1970: 0))
@@ -155,7 +154,7 @@ final class NoticeViewModel: ObservableObject {
         // This prevents reprocessing the same notices on next launch
         if let appStateManager {
             if let latestDate = relevantNotices.map({ $0.noticeDate }).max() {
-                appStateManager.updateLatestNoticeDate(latestDate.addingTimeInterval(1))
+                appStateManager.updateLatestNoticeDate(latestDate)
                 FBCrashManager.shared.addLog("loadNoticesFromFirebase: latest notices date updated: \(latestDate)")
                 log("🔥 LastNoticeDate updated in appStateManager \(latestDate)", level: .info)
             }
