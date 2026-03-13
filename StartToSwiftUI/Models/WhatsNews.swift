@@ -15,7 +15,7 @@ struct WhatsNews {
                 News(
                     title: "Fixed",
                     newsText: """
-                    - Duplicate detection during cloud import now correctly checks both ID and title — previously a material with a duplicate title could slip through if its ID was new
+                    - New notices briefly appeared, then disappeared after the next sync
                     """
                 ),
             ]
