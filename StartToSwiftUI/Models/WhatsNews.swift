@@ -11,7 +11,7 @@ struct WhatsNews {
 #warning("Add upated info before deployment to App Store")
     static let releases: [Release] = [
         Release(
-            release: "Release 2.1.0(8)",
+            release: "Release 1.5.0(8)",
             news: [
                 News(
                     title: "Added",
@@ -29,9 +29,14 @@ struct WhatsNews {
                     newsText: """
                     - Search bar and filter controls moved inline for a cleaner shared toolbar layout
                     - Connection errors now show a clear message instead of silently failing
-                    - ??? Master SwiftUI with structured lessons, live examples, and code snippets — synced across all your devices ???
                     """
                 ),
+                News(
+                    title: "Fixed",
+                    newsText: """
+                    - Fixed an issue where changes made on one device were not syncing to other devices via iCloud
+                    """
+                )
             ]
         ),
         Release(
