@@ -57,18 +57,13 @@ struct StartToSwiftUIApp: App {
         self.appStateManager = stateManager
         
         // Initialisation of AppState — once at startup
-        /* Step1:
+        /* 
         Ensure AppState exists (creates with appFirstLaunchDate if first launch).
         Search for AppSyncState in SwiftData - it guarantees the existence of the AppState:
         - The first launch will not find it, it will create a new one with appFirstLaunchDate = Date() and save it to the database.
         - Restart — it will find an existing one and return it.
         */
         _ = appStateManager.getOrCreateAppState()
-        /* Step2:
-        Clean dublicates if any. iCloud sync can create multiple appsyncstates on different devices.
-        This function finds duplicates, merges their data into one (the oldest), and deletes the rest.
-         */
-        appStateManager.cleanupDuplicateAppStates()
 
         _postsViewModel = StateObject(wrappedValue: PostsViewModel(
             modelContext: context,

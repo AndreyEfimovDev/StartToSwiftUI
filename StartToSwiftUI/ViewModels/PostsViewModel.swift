@@ -41,7 +41,9 @@ final class PostsViewModel: ObservableObject {
     
     private var lastLoadTime: Date = Date(timeIntervalSince1970: 0)
     private let minLoadInterval: TimeInterval = 3
-
+    private var pendingCloudUpdate = false
+    private var isStarted = false
+    
     // MARK: - Computed Properties
     var swiftDataSource: SwiftDataPostsDataSource? {
         dataSource as? SwiftDataPostsDataSource
@@ -162,12 +164,17 @@ final class PostsViewModel: ObservableObject {
         )
     }
     
-    // MARK: - Setup
+    // MARK: - Setup for Posts
     func start() {
+        guard !isStarted else {
+            log("⚠️ PostsViewModel.start() called again — skipped", level: .debug)
+            return
+        }
+        isStarted = true
         setupSubscriptions()
         setupSubscriptionForChangesInCloud()
     }
-    
+
     private func setupTimezone() {
         if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
             utcCalendar.timeZone = utcTimeZone
@@ -180,19 +187,31 @@ final class PostsViewModel: ObservableObject {
             .debounce(for: .seconds(2), scheduler: DispatchQueue.global(qos: .utility))
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                print("🔔 NSPersistentStoreRemoteChange received on this device")
                 guard let self else { return }
                 let now = Date()
+                
                 guard now.timeIntervalSince(self.lastLoadTime) >= self.minLoadInterval else {
-                    log("Cloud sync skipped (too soon)", level: .debug)
+                    self.pendingCloudUpdate = true
+                    log("Cloud sync skipped (too soon) — marked as pending", level: .debug)
+                    
+                    // ✅ Современный способ — Task вместо DispatchQueue
+                    Task { [weak self] in
+                        try? await Task.sleep(for: .seconds(self?.minLoadInterval ?? 3))
+                        guard let self, self.pendingCloudUpdate else { return }
+                        self.pendingCloudUpdate = false
+                        self.loadPostsFromSwiftData(removeDuplicates: false)
+                        log("Cloud sync: pending update executed", level: .info)
+                    }
                     return
                 }
+
+                self.pendingCloudUpdate = false
                 self.loadPostsFromSwiftData(removeDuplicates: false)
                 log("Cloud posts sync subscription run", level: .info)
             }
             .store(in: &cancellables)
     }
-    
+
     func restorePostFilters() {
         selectedCategory = storedCategory
         selectedLevel = storedLevel
@@ -241,7 +260,7 @@ final class PostsViewModel: ObservableObject {
         
         /* persistentModelID is a unique internal identifier of SwiftData, which each @Model object receives automatically. It is unique even if your id and title are the same */
         for (id, postsList) in idGroups {
-            if let postToKeep = postsList.sorted(by: { $0.date < $1.date }).first {
+            if let postToKeep = postsList.sorted(by: { $0.date > $1.date }).first {
                 for post in postsList where post.persistentModelID != postToKeep.persistentModelID {
                     postsToDelete.append(post)
                     log("🗑️ Duplicate by ID \(id): '\(post.title)'", level: .info)

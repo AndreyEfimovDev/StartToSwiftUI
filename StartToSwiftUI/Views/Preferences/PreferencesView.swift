@@ -38,7 +38,7 @@ struct PreferencesView: View {
 //                        .background(Color.mycolor.myRed.opacity(0.3))
 //                        .cornerRadius(30)
 //                }
-//            Button("Reset latestNoticeDate", systemImage: "arrow.counterclockwise") {
+//            Button("Reset lastNoticesFBUpdateDate", systemImage: "arrow.counterclockwise") {
 //                noticevm.resetLatestNoticeDate()
 //            }
 
