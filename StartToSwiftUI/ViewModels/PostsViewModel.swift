@@ -180,13 +180,14 @@ final class PostsViewModel: ObservableObject {
             .debounce(for: .seconds(2), scheduler: DispatchQueue.global(qos: .utility))
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
+                print("🔔 NSPersistentStoreRemoteChange received on this device")
                 guard let self else { return }
                 let now = Date()
                 guard now.timeIntervalSince(self.lastLoadTime) >= self.minLoadInterval else {
                     log("Cloud sync skipped (too soon)", level: .debug)
                     return
                 }
-                self.loadPostsFromSwiftData()
+                self.loadPostsFromSwiftData(removeDuplicates: false)
                 log("Cloud posts sync subscription run", level: .info)
             }
             .store(in: &cancellables)
@@ -206,14 +207,18 @@ final class PostsViewModel: ObservableObject {
     // MARK: - SwiftData Operations
     
     /// Load posts from SwiftData
-    func loadPostsFromSwiftData() {
+    func loadPostsFromSwiftData(removeDuplicates: Bool = true) {
         FBPerformanceManager.shared.startTrace(name: "load_posts_swiftdata")
         lastLoadTime = Date()
         
         do {
             allPosts = try dataSource.fetchPosts()
             FBCrashManager.shared.addLog("loadPostsFromSwiftData: loaded local posts: \(allPosts.count)")
-            removeDuplicatePosts()
+            
+            if removeDuplicates {
+                removeDuplicatePosts()
+            }
+            
             FBCrashManager.shared.addLog("loadPostsFromSwiftData: posts count after check for duplicates: \(allPosts.count)")
             allYears = getAllYears()
             allCategories = getAllCategories()

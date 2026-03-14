@@ -7,7 +7,7 @@
 
 import Foundation
 
-#if DEBUG
+//#if DEBUG
 // MARK: - MockNoticesDataSource Mock Implementation
 final class MockNoticesDataSource: NoticesDataSourceProtocol {
 
@@ -47,4 +47,4 @@ extension FBNoticeModel {
     }
 }
 
-#endif
+//#endif

@@ -7,7 +7,7 @@
 
 import Foundation
 
-#if DEBUG
+//#if DEBUG
 // MARK: - MockFBNoticesManager
 final class MockFBNoticesManager: FBNoticesManagerProtocol {
 
@@ -36,4 +36,4 @@ final class MockFBNoticesManager: FBNoticesManagerProtocol {
         MockFBNoticesManager()
     }
 }
-#endif
+//#endif

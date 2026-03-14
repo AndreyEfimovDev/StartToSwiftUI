@@ -38,12 +38,12 @@ struct StartView: View {
                     }
                     .task {
                         vm.selectedCategory = vm.mainCategory
-                        noticevm.loadNoticesFromSwiftData()
-                        await noticevm.importNoticesFromFirebase()
                         vm.loadPostsFromSwiftData()
+                        noticevm.loadNoticesFromSwiftData()
                         vm.updateWidgetData()
                         vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
                         snippetsvm.isFiltersEmpty = snippetsvm.checkIfAllFiltersAreEmpty()
+                        await noticevm.importNoticesFromFirebase()
                     }
             }
         }
