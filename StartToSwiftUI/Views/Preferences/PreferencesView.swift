@@ -38,9 +38,9 @@ struct PreferencesView: View {
 //                        .background(Color.mycolor.myRed.opacity(0.3))
 //                        .cornerRadius(30)
 //                }
-            Button("Reset latestNoticeDate", systemImage: "arrow.counterclockwise") {
-                noticevm.resetLatestNoticeDate()
-            }
+//            Button("Reset latestNoticeDate", systemImage: "arrow.counterclockwise") {
+//                noticevm.resetLatestNoticeDate()
+//            }
 
 #endif
             
@@ -60,7 +60,7 @@ struct PreferencesView: View {
                 achievements
             }
             if noticevm.notices.count > 0 {
-                Section(header: sectionHeader("Notices")) {
+                Section(header: sectionHeader("Notices (\(noticevm.unreadCount)/\(noticevm.notices.count))")) {
                     noticeMessages
                 }
             }
@@ -161,7 +161,7 @@ struct PreferencesView: View {
     // MARK: - Notices
     
     private var noticeMessages: some View {
-        Button("Messages  (\(noticevm.unreadCount)/\(noticevm.notices.count))") {
+        Button("Messages") {
             coordinator.pushModal(.notices)
         }
         .accessibilityIdentifier("MessagesButton")
