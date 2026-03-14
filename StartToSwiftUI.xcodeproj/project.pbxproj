@@ -871,6 +871,7 @@
 				4791CDAE2E70187E00687126 /* PreferencesView.swift */,
 				47656BFA2EE1EBBD00F45AA6 /* StudyProgress */,
 				47C56FF02EC9CEA300F0796C /* Notices */,
+				47C56FEF2EC9CE8200F0796C /* ManagingPosts */,
 				471DCBDA2EBBC60E00AFA5F4 /* AboutApp */,
 				471DCBD72EBBB97000AFA5F4 /* LegalInformation */,
 				47870FB92ECC8628004175E4 /* Acknowledgements.swift */,
@@ -931,7 +932,6 @@
 				4715FA2F2F263BE800ED732A /* PostDetails */,
 				47B6E8252F5F0DF100EF7441 /* SnippetDetails */,
 				47B6E8192F5DFBDD00EF7441 /* Preferences */,
-				47C56FEF2EC9CE8200F0796C /* ManagingPosts */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1506,7 +1506,7 @@
 				CODE_SIGN_ENTITLEMENTS = StartToSwiftUI/StartToSwiftUIDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -1553,7 +1553,7 @@
 				CODE_SIGN_ENTITLEMENTS = StartToSwiftUI/StartToSwiftUIRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readwrite;
 				ENABLE_FILE_ACCESS_PICTURE_FOLDER = readwrite;
@@ -1716,7 +1716,7 @@
 				CODE_SIGN_ENTITLEMENTS = StudyProgressWidgetExtensionDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StudyProgressWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StudyProgressWidget;
@@ -1752,7 +1752,7 @@
 				CODE_SIGN_ENTITLEMENTS = StudyProgressWidgetExtensionRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StudyProgressWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StudyProgressWidget;

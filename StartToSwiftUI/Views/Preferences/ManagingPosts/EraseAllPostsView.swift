@@ -74,7 +74,7 @@ struct EraseAllPostsView: View {
         VStack(spacing: 0) {
             Text("""
             You are about
-            to delete all the study content.
+            to erase all the study content.
             
             """
             )
