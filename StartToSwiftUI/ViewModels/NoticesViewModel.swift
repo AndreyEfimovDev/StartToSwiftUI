@@ -30,7 +30,9 @@ final class NoticesViewModel: ObservableObject {
 
     private var lastLoadTime: Date = Date(timeIntervalSince1970: 0)
     private let minLoadInterval: TimeInterval = 3
-        
+    private var pendingCloudUpdate = false
+    private var isStarted = false
+    
     // MARK: - Computed Properties
     private var swiftDataSource: SwiftDataNoticesDataSource? {
         dataSource as? SwiftDataNoticesDataSource
@@ -68,23 +70,38 @@ final class NoticesViewModel: ObservableObject {
         )
     }
 
-    // MARK: - Setup
+    // MARK: - Setup for Notices
     func start() {
+        guard !isStarted else {
+            log("⚠️ NoticesViewModel.start() called again — skipped", level: .debug)
+            return
+        }
+        isStarted = true
         setupSubscriptionForChangesInCloud()
     }
-    
+
     // MARK: - CloudKit Sync
     private func setupSubscriptionForChangesInCloud() {
         NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
+            .debounce(for: .seconds(2), scheduler: DispatchQueue.global(qos: .utility))
             .receive(on: DispatchQueue.main)
-            .debounce(for: .seconds(2), scheduler: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self else { return }
                 let now = Date()
                 guard now.timeIntervalSince(self.lastLoadTime) >= self.minLoadInterval else {
-                    log("Cloud sync skipped (too soon)", level: .debug)
+                    self.pendingCloudUpdate = true
+                    log("Cloud sync skipped (too soon) — marked as pending", level: .debug)
+                    
+                    Task { [weak self] in
+                        try? await Task.sleep(for: .seconds(self?.minLoadInterval ?? 3))
+                        guard let self, self.pendingCloudUpdate else { return }
+                        self.pendingCloudUpdate = false
+                        self.loadNoticesFromSwiftData(removeDuplicates: false)
+                        log("Cloud notices sync: pending update executed", level: .info)
+                    }
                     return
                 }
+                self.pendingCloudUpdate = false
                 self.loadNoticesFromSwiftData()
                 log("Cloud notices sync subscription run", level: .info)
             }

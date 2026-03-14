@@ -15,7 +15,7 @@ final class AppSyncState {
     var id: String = "app_state_singleton" // Always one copy
     
     // Date of last notices
-    var latestNoticeDate: Date?
+    var lastNoticesFBUpdateDate: Date?
     var lastPostsFBUpdateDate: Date?
     
     var lastCloudSyncDateToMergeDuplicate: Date?
@@ -46,7 +46,7 @@ final class AppSyncState {
     ) {
         self.id = id
         
-        self.latestNoticeDate = lastNoticeDate
+        self.lastNoticesFBUpdateDate = lastNoticeDate
         self.lastPostsFBUpdateDate = lastPostsFBUpdateDate
         
         self.lastCloudSyncDateToMergeDuplicate = lastCloudSyncDateToMergeDuplicate

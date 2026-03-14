@@ -119,15 +119,12 @@ class AppSyncStateManager {
         var latestSyncDate: Date?
         
         for state in sortedStates {
-            
-            
             // Earliest launch date
             if let date = state.appFirstLaunchDate {
                 if earliestDate == nil || date < earliestDate! {
                     earliestDate = date
                 }
             }
-            
             // Latest synchronization
             if let date = state.lastCloudSyncDateToMergeDuplicate {
                 if latestSyncDate == nil || date > latestSyncDate! {
@@ -140,6 +137,17 @@ class AppSyncStateManager {
         primaryState.appFirstLaunchDate = earliestDate
         primaryState.lastCloudSyncDateToMergeDuplicate = latestSyncDate
         
+        let latestPostsDate = sortedStates
+            .compactMap { $0.lastPostsFBUpdateDate }
+            .max()
+        primaryState.lastPostsFBUpdateDate = latestPostsDate
+
+        let latestNoticeDate = sortedStates
+            .compactMap { $0.lastNoticesFBUpdateDate }
+            .max()
+        primaryState.lastNoticesFBUpdateDate = latestNoticeDate
+
+
         // Merge snippet favorites — union of all duplicates
         let mergedFavorites = sortedStates
             .flatMap { $0.snippetFavoriteIDs }
@@ -206,19 +214,19 @@ extension AppSyncStateManager {
     
     func getLastNoticeDate() -> Date? {
         let appState = getOrCreateAppState()
-        return appState.latestNoticeDate
+        return appState.lastNoticesFBUpdateDate
     }
     
     func updateLatestNoticeDate(_ date: Date) {
         let appState = getOrCreateAppState()
-        appState.latestNoticeDate = date
+        appState.lastNoticesFBUpdateDate = date
         saveContext()
     }
     
     // for tests purpose
     func resetLatestNoticeDate() {
         let appState = getOrCreateAppState()
-        appState.latestNoticeDate = nil
+        appState.lastNoticesFBUpdateDate = nil
         saveContext()
     }
 }
