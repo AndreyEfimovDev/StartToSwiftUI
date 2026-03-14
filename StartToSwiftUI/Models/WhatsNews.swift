@@ -11,7 +11,7 @@ struct WhatsNews {
 #warning("Add upated info before deployment to App Store")
     static let releases: [Release] = [
         Release(
-            release: "Release 1.5.0(8)",
+            release: "Release 1.4.3(8)",
             news: [
                 News(
                     title: "Added",
@@ -34,7 +34,7 @@ struct WhatsNews {
                 News(
                     title: "Fixed",
                     newsText: """
-                    - Fixed an issue where changes made on one device were not syncing to other devices via iCloud
+                    - An issue where changes made on one device were not syncing to other devices via iCloud
                     """
                 )
             ]
