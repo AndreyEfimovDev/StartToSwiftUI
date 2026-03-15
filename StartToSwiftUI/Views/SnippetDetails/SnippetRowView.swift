@@ -87,6 +87,10 @@ struct SnippetRowView: View {
             VStack {
                 SnippetRowView(snippet: SnippetsRepository.a001, isFavorite: true)
                 SnippetRowView(snippet: SnippetsRepository.a002, isFavorite: false)
+                SnippetRowView(snippet: SnippetsRepository.a003, isFavorite: false)
+                SnippetRowView(snippet: SnippetsRepository.a004, isFavorite: false)
+                SnippetRowView(snippet: SnippetsRepository.a005, isFavorite: false)
+
             }
         }
     }

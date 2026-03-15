@@ -16,7 +16,7 @@ struct SnippetsRepository {
     
     static let allDemoCodeSnippet: [CodeSnippet] = [a001, a002, a003, a004, a005]
     
-    // MARK: - A001
+    // MARK: - A001 Progress indicators collection
     static let a001 = CodeSnippet(
         id: "A001",
         category: Constants.mainCategory,
@@ -296,7 +296,7 @@ struct SnippetsRepository {
         """
     )
     
-    // MARK: - A002
+    // MARK: - A002 Progress Trim indicator
     static let a002 = CodeSnippet(
         id: "A002",
         category: Constants.mainCategory,
@@ -475,11 +475,11 @@ struct SnippetsRepository {
         """
     )
     
-    // MARK: - A003
+    // MARK: - A003 Progress circle with animated checkmark
     static let a003 = CodeSnippet(
         id: "A003",
         category: Constants.mainCategory,
-        title: "Progress Circle with animated checkmark",
+        title: "Progress Circle with animated Checkmark",
         intro: "An interactive circular progress indicator that transforms into a spring-animated checkmark upon completion. Features multiple size/color variants, a progress slider, and auto-increment timer with pause/resume controls. Demonstrates advanced state management and coordinated animations.",
         thanks: nil,
         githubUrlString: nil,
@@ -653,50 +653,50 @@ struct SnippetsRepository {
         """
     )
     
-    // MARK: - A004
+    // MARK: - A004 Shrinking Button
     static let a004 = CodeSnippet(
         id: "A004",
         category: Constants.mainCategory,
-        title: "Shrinking Button",
-        intro: "Button with a custom shrinking effect. Two versions: regular for standard use, and a ScrollView-optimised one. Because ScrollView absorbs touches, we use DragGesture for the ScrollView version to avoid this effect.",
+        title: "Shrinking button",
+        intro: "Button with a custom shrinking effect. Two versions: regular and ScrollView-compatible. Because ScrollView absorbs touches, the regular shrinking button does not work — so we use DragGesture for the ScrollView version to avoid this effect.",
         thanks: nil,
         githubUrlString: nil,
         notes: "",
         date: Date.from(year: 2026, month: 3, day: 15) ?? Date(),
         codeSnippet: """
         import SwiftUI
-        
+
         // MARK: - Demo
-        struct A004_PressableButtonForScrollViewDemo: View {
-        
+        struct A004_ShrinkingButtonForScrollViewDemo: View {
+            
             @GestureState private var isPressed = false
             
             var body: some View {
                 Label("PRESS ME", systemImage: "star.fill")
-                           .foregroundStyle(Color.mycolor.myAccent)
-                           .frame(maxWidth: 250)
-                           .frame(height: 55)
-                           .background(Color.mycolor.myBlue.opacity(0.3), in: .capsule)
-                           .padding(.horizontal)
-                           .scaleEffect(isPressed ? 0.85 : 1.0)
-                           .animation(
-                               isPressed
-                                   ? .spring(response: 0.15, dampingFraction: 0.5)
-                                   : .spring(response: 0.25, dampingFraction: 0.6),
-                               value: isPressed
-                           )
-                           .gesture(
-                               DragGesture(minimumDistance: 0)
-                                   .updating($isPressed) { _, state, _ in state = true }
-                           )
-                           .onTapGesture {
-                               // your actions
-                           }
+                    .foregroundStyle(Color.mycolor.myAccent)
+                    .frame(maxWidth: 250)
+                    .frame(height: 55)
+                    .background(Color.mycolor.myBlue.opacity(0.3), in: .capsule)
+                    .padding(.horizontal)
+                    .scaleEffect(isPressed ? 0.85 : 1.0)
+                    .animation(
+                        isPressed
+                        ? .spring(response: 0.15, dampingFraction: 0.5)
+                        : .spring(response: 0.25, dampingFraction: 0.6),
+                        value: isPressed
+                    )
+                    .gesture(
+                        DragGesture(minimumDistance: 0)
+                            .updating($isPressed) { _, state, _ in state = true }
+                    )
+                    .onTapGesture {
+                        // your actions
+                    }
             }
         }
-        
-        struct A004_PressableButtonRegularDemo: View {
-        
+
+        struct A004_ShrinkingButtonRegularDemo: View {
+            
             @GestureState private var isPressed = false
             
             var body: some View {
@@ -713,16 +713,16 @@ struct SnippetsRepository {
                 .buttonStyle(ShrinkIconButtonStyle())
             }
         }
-        
+
         // MARK: - Preview
         #Preview {
-            A004_PressableButtonForScrollViewDemo()
-            A004_PressableButtonRegularDemo()
+            A004_ShrinkingButtonForScrollViewDemo()
+            A004_ShrinkingButtonRegularDemo()
         }
-        
+
         // MARK: - Code Snippet
-        struct PressableButtonStyle: ButtonStyle {
-        
+        struct ShrinkingButtonStyle: ButtonStyle {
+            
             func makeBody(configuration: Configuration) -> some View {
                 configuration.label
                     .scaleEffect(configuration.isPressed ? 0.85 : 1.0) // shrink when pressed
@@ -732,13 +732,13 @@ struct SnippetsRepository {
         """
     )
     
-    // MARK: - A005
+    // MARK: - A005 SF Symbol Animation Effects
     static let a005 = CodeSnippet(
         id: "A005",
         category: Constants.mainCategory,
         title: "SF Symbol built-in animation effects",
         intro: """
-        This code showcases various symbolEffect modifiers:
+        This code showcases various symbol effect modifiers:
         - .pulse — gentle opacity pulsing
         - .bounce — playful scaling animation
         - .replace with .contentTransition — smooth transition between different symbols (trash ↔ trash.slash)

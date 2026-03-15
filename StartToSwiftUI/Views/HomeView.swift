@@ -313,7 +313,7 @@ struct HomeView: View {
         ContentUnavailableView(
             "No Study Materials",
             systemImage: "tray",
-            description: Text("Materials will appear here once you create them yourself.")
+            description: Text("Materials will appear here once you create them yourself or download curated content.")
         )
     }
     

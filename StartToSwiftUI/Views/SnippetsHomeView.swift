@@ -17,7 +17,6 @@ struct SnippetsHomeView: View {
 
     private let hapticManager = HapticManager.shared
     
-    
     @Environment(\.colorScheme) private var colorScheme
 
     private var splashTheme: Splash.Theme {

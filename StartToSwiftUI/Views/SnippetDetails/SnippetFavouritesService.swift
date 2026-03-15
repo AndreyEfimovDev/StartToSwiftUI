@@ -7,9 +7,9 @@
 
 import Foundation
 
-final class SnippetFavoritesService {
+final class SnippetFavouritesService {
     
-    static let shared = SnippetFavoritesService()
+    static let shared = SnippetFavouritesService()
     
     private var appSyncStateManager: AppSyncStateManager? = nil
     
