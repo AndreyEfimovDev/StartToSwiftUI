@@ -12,8 +12,9 @@
 
 import SwiftUI
 
+
 // MARK: - A003_ProgressCircleWithCheckmark DemoView
-struct A004_ArcProgressDinamicGapDemoView: View {
+struct A005_SFSymbolEffectsDemoView: View {
 
     let snippet: CodeSnippet
 
@@ -22,10 +23,9 @@ struct A004_ArcProgressDinamicGapDemoView: View {
             VStack(spacing: 20) {
                 SnippetDemoHeader(snippet: snippet)
 
-                // Live demo — original component, untouched
-                A004_ArcProgressDinamycGapDemo()
-                    .cardBackground()
-
+                // Live demo — original component
+                A005_SFSymbolEffectsDemo()
+                
                 if let thanks = snippet.thanks, !thanks.isEmpty {
                     SnippetThanksView(thanks: thanks)
                 }
@@ -33,6 +33,47 @@ struct A004_ArcProgressDinamicGapDemoView: View {
             .padding()
             .foregroundStyle(Color.mycolor.myAccent)
         }
+    }
+}
+
+// MARK: - A004_PressableButton DemoView
+struct A004_PressableButtonDemoView: View {
+
+    let snippet: CodeSnippet
+
+    var body: some View {
+        VStack {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                    
+                    // Live demo — original component
+                    Text("Version for use within ScrollView")
+                        .font(.headline)
+                        .cardBackground()
+                    A004_PressableButtonForScrollViewDemo()
+                    
+                    if let thanks = snippet.thanks, !thanks.isEmpty {
+                        SnippetThanksView(thanks: thanks)
+                    }
+                }
+                .padding()
+            }
+            .frame(maxHeight: 350)
+            
+            Group {
+                Text("Version for regular use")
+                    .font(.headline)
+                    .cardBackground()
+                    .frame(maxHeight: 55)
+                    .padding()
+                
+                A004_PressableButtonRegularDemo()
+            }
+            .foregroundStyle(Color.mycolor.myAccent)
+            .frame(maxWidth: .infinity, alignment: .top)
+        }
+        .frame(maxHeight: .infinity, alignment: .top)
     }
 }
 
@@ -46,9 +87,8 @@ struct A003_ProgressCircleWithCheckmarkDemoView: View {
             VStack(spacing: 20) {
                 SnippetDemoHeader(snippet: snippet)
 
-                // Live demo — original component, untouched
+                // Live demo — original component
                 A003_ProgressCircleWithCheckmarkDemo()
-                    .cardBackground()
 
                 if let thanks = snippet.thanks, !thanks.isEmpty {
                     SnippetThanksView(thanks: thanks)
@@ -70,9 +110,8 @@ struct A002_TrimIndicatorDemoView: View {
             VStack(spacing: 20) {
                 SnippetDemoHeader(snippet: snippet)
 
-                // Live demo — original component, untouched
+                // Live demo — original component
                 A002_TrimIndicatorDemo()
-                    .cardBackground()
 
                 if let thanks = snippet.thanks, !thanks.isEmpty {
                     SnippetThanksView(thanks: thanks)
@@ -94,9 +133,8 @@ struct A001_ProgressViewIndicatorsDemoView: View {
             VStack(spacing: 20) {
                 SnippetDemoHeader(snippet: snippet)
 
-                // Live demo — original component, untouched
+                // Live demo — original component
                 A001_ProgressViewIndicatorsDemo()
-                    .cardBackground()
 
                 if let thanks = snippet.thanks, !thanks.isEmpty {
                     SnippetThanksView(thanks: thanks)
@@ -125,6 +163,8 @@ private struct SnippetDemoHeader: View {
             Text(snippet.title)
                 .font(.title2)
                 .fontWeight(.semibold)
+                .minimumScaleFactor(0.75)
+                .lineLimit(showFullIntro ? nil : 1)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             VStack(spacing: 0) {
@@ -135,7 +175,7 @@ private struct SnippetDemoHeader: View {
                     .frame(minHeight: 55, alignment: .topLeading)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(
-                        // Невидимый текст без ограничений — только для подсчёта строк
+                        // Invisible text without restrictions - only for line counting
                         Text(snippet.intro)
                             .font(introFont)
                             .lineSpacing(introLineSpacing)
@@ -183,6 +223,18 @@ private struct SnippetThanksView: View {
 #Preview("A002 Trim Indicator") {
     NavigationStack {
         A002_TrimIndicatorDemoView(snippet: SnippetsRepository.a002)
+            .environmentObject(AppCoordinator())
+    }
+}
+#Preview("A003 Progress Circle With Checkmark") {
+    NavigationStack {
+        A003_ProgressCircleWithCheckmarkDemoView(snippet: SnippetsRepository.a003)
+            .environmentObject(AppCoordinator())
+    }
+}
+#Preview("A004_Pressable Button") {
+    NavigationStack {
+        A004_PressableButtonDemoView(snippet: SnippetsRepository.a004)
             .environmentObject(AppCoordinator())
     }
 }
