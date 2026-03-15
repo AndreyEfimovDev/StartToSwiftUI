@@ -51,7 +51,7 @@ struct A004_PressableButtonDemoView: View {
                     Text("Version for use within ScrollView")
                         .font(.headline)
                         .cardBackground()
-                    A004_PressableButtonForScrollViewDemo()
+                    A004_ShrinkingButtonForScrollViewDemo()
                     
                     if let thanks = snippet.thanks, !thanks.isEmpty {
                         SnippetThanksView(thanks: thanks)
@@ -68,7 +68,7 @@ struct A004_PressableButtonDemoView: View {
                     .frame(maxHeight: 55)
                     .padding()
                 
-                A004_PressableButtonRegularDemo()
+                A004_ShrinkingButtonRegularDemo()
             }
             .foregroundStyle(Color.mycolor.myAccent)
             .frame(maxWidth: .infinity, alignment: .top)

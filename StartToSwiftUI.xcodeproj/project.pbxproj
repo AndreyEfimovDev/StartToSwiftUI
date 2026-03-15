@@ -55,7 +55,7 @@
 		473436852F4B05EB00CF00FA /* FBCrashManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436842F4B05EB00CF00FA /* FBCrashManager.swift */; };
 		4734368A2F4B24FA00CF00FA /* FBPerformanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436892F4B24FA00CF00FA /* FBPerformanceManager.swift */; };
 		47453E042EAB73A9000D2C16 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47453E032EAB73A9000D2C16 /* Date.swift */; };
-		474637FD2F6699F800DF011B /* A004_PressableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474637FC2F6699F800DF011B /* A004_PressableButton.swift */; };
+		474637FD2F6699F800DF011B /* A004_ShrinkingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474637FC2F6699F800DF011B /* A004_ShrinkingButton.swift */; };
 		474637FF2F66D58F00DF011B /* A005_SFSymbolEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474637FE2F66D58F00DF011B /* A005_SFSymbolEffects.swift */; };
 		474638012F66F27600DF011B /* A006_AnimationTiming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474638002F66F27600DF011B /* A006_AnimationTiming.swift */; };
 		474638052F6726CC00DF011B /* Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474638042F6726CC00DF011B /* Transition.swift */; };
@@ -274,7 +274,7 @@
 		473436842F4B05EB00CF00FA /* FBCrashManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBCrashManager.swift; sourceTree = "<group>"; };
 		473436892F4B24FA00CF00FA /* FBPerformanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBPerformanceManager.swift; sourceTree = "<group>"; };
 		47453E032EAB73A9000D2C16 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
-		474637FC2F6699F800DF011B /* A004_PressableButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A004_PressableButton.swift; sourceTree = "<group>"; };
+		474637FC2F6699F800DF011B /* A004_ShrinkingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A004_ShrinkingButton.swift; sourceTree = "<group>"; };
 		474637FE2F66D58F00DF011B /* A005_SFSymbolEffects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A005_SFSymbolEffects.swift; sourceTree = "<group>"; };
 		474638002F66F27600DF011B /* A006_AnimationTiming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A006_AnimationTiming.swift; sourceTree = "<group>"; };
 		474638042F6726CC00DF011B /* Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transition.swift; sourceTree = "<group>"; };
@@ -907,7 +907,7 @@
 				47B6E81D2F5EB4DB00EF7441 /* A001_ProgressViewIndicators.swift */,
 				47B6E81F2F5ECFC200EF7441 /* A002_TrimIndicator.swift */,
 				470DB64E2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift */,
-				474637FC2F6699F800DF011B /* A004_PressableButton.swift */,
+				474637FC2F6699F800DF011B /* A004_ShrinkingButton.swift */,
 				474637FE2F66D58F00DF011B /* A005_SFSymbolEffects.swift */,
 				474638002F66F27600DF011B /* A006_AnimationTiming.swift */,
 				474638042F6726CC00DF011B /* Transition.swift */,
@@ -1233,7 +1233,7 @@
 				47FF42592EE556DB0069D232 /* TapHandler.swift in Sources */,
 				475CC64D2F216B870099CAA6 /* DataSourcesProtocols.swift in Sources */,
 				4734367F2F4A345500CF00FA /* AppSyncStateModel.swift in Sources */,
-				474637FD2F6699F800DF011B /* A004_PressableButton.swift in Sources */,
+				474637FD2F6699F800DF011B /* A004_ShrinkingButton.swift in Sources */,
 				47AC34412F28D9F40023C7AF /* Functionality.swift in Sources */,
 				472E05CC2EDDC9BA005D774E /* KeyboardManager.swift in Sources */,
 				471DCBD02EBB88A400AFA5F4 /* CopyrightPolicy.swift in Sources */,

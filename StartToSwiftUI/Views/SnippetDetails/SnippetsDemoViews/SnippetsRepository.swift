@@ -665,38 +665,38 @@ struct SnippetsRepository {
         date: Date.from(year: 2026, month: 3, day: 15) ?? Date(),
         codeSnippet: """
         import SwiftUI
-        
+
         // MARK: - Demo
-        struct A004_PressableButtonForScrollViewDemo: View {
-        
+        struct A004_ShrinkingButtonForScrollViewDemo: View {
+            
             @GestureState private var isPressed = false
             
             var body: some View {
                 Label("PRESS ME", systemImage: "star.fill")
-                           .foregroundStyle(Color.mycolor.myAccent)
-                           .frame(maxWidth: 250)
-                           .frame(height: 55)
-                           .background(Color.mycolor.myBlue.opacity(0.3), in: .capsule)
-                           .padding(.horizontal)
-                           .scaleEffect(isPressed ? 0.85 : 1.0)
-                           .animation(
-                               isPressed
-                                   ? .spring(response: 0.15, dampingFraction: 0.5)
-                                   : .spring(response: 0.25, dampingFraction: 0.6),
-                               value: isPressed
-                           )
-                           .gesture(
-                               DragGesture(minimumDistance: 0)
-                                   .updating($isPressed) { _, state, _ in state = true }
-                           )
-                           .onTapGesture {
-                               // your actions
-                           }
+                    .foregroundStyle(Color.mycolor.myAccent)
+                    .frame(maxWidth: 250)
+                    .frame(height: 55)
+                    .background(Color.mycolor.myBlue.opacity(0.3), in: .capsule)
+                    .padding(.horizontal)
+                    .scaleEffect(isPressed ? 0.85 : 1.0)
+                    .animation(
+                        isPressed
+                        ? .spring(response: 0.15, dampingFraction: 0.5)
+                        : .spring(response: 0.25, dampingFraction: 0.6),
+                        value: isPressed
+                    )
+                    .gesture(
+                        DragGesture(minimumDistance: 0)
+                            .updating($isPressed) { _, state, _ in state = true }
+                    )
+                    .onTapGesture {
+                        // your actions
+                    }
             }
         }
-        
-        struct A004_PressableButtonRegularDemo: View {
-        
+
+        struct A004_ShrinkingButtonRegularDemo: View {
+            
             @GestureState private var isPressed = false
             
             var body: some View {
@@ -713,16 +713,16 @@ struct SnippetsRepository {
                 .buttonStyle(ShrinkIconButtonStyle())
             }
         }
-        
+
         // MARK: - Preview
         #Preview {
-            A004_PressableButtonForScrollViewDemo()
-            A004_PressableButtonRegularDemo()
+            A004_ShrinkingButtonForScrollViewDemo()
+            A004_ShrinkingButtonRegularDemo()
         }
-        
+
         // MARK: - Code Snippet
-        struct PressableButtonStyle: ButtonStyle {
-        
+        struct ShrinkingButtonStyle: ButtonStyle {
+            
             func makeBody(configuration: Configuration) -> some View {
                 configuration.label
                     .scaleEffect(configuration.isPressed ? 0.85 : 1.0) // shrink when pressed
