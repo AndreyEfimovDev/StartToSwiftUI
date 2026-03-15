@@ -11,14 +11,14 @@ struct ContextMenu: View {
     
     var body: some View {
         VStack {
-            Text("Turtle Rock")
+            Text("PRESS ON ME")
                 .foregroundColor(.blue)
                 .padding()
                 .contextMenu {
                     Button {
                         // Add this item to a list of favorites.
                     } label: {
-                        Label("Add to Favorites", systemImage: "heart")
+                        Label("Add to Favourites", systemImage: "heart")
                     }
                     Button {
                         // Open Maps and center it on this item.

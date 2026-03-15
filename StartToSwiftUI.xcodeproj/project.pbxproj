@@ -64,7 +64,7 @@
 		4746380B2F67348E00DF011B /* AlignmentGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4746380A2F67348E00DF011B /* AlignmentGallery.swift */; };
 		4746380D2F67357000DF011B /* AlignmentGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4746380C2F67357000DF011B /* AlignmentGuide.swift */; };
 		4746380F2F6735CB00DF011B /* Mask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4746380E2F6735CB00DF011B /* Mask.swift */; };
-		474638112F67363300DF011B /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474638102F67363300DF011B /* Timer.swift */; };
+		474638112F67363300DF011B /* TimerPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474638102F67363300DF011B /* TimerPublisher.swift */; };
 		474638132F67382E00DF011B /* VisualEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474638122F67382E00DF011B /* VisualEffect.swift */; };
 		474BFB8D2F3C8DF2006E639B /* PostsViewModel+Filtering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB8C2F3C8DF2006E639B /* PostsViewModel+Filtering.swift */; };
 		474BFB912F3C8E20006E639B /* PostsViewModel+BackupRestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB902F3C8E20006E639B /* PostsViewModel+BackupRestore.swift */; };
@@ -166,7 +166,7 @@
 		47B6E81B2F5DFEE800EF7441 /* SnippetNoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E81A2F5DFEE800EF7441 /* SnippetNoPreviewView.swift */; };
 		47B6E81E2F5EB4DB00EF7441 /* A001_ProgressViewIndicators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E81D2F5EB4DB00EF7441 /* A001_ProgressViewIndicators.swift */; };
 		47B6E8202F5ECFC200EF7441 /* A002_TrimIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E81F2F5ECFC200EF7441 /* A002_TrimIndicator.swift */; };
-		47B6E8222F5EF33B00EF7441 /* SnippetFavoritesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8212F5EF33B00EF7441 /* SnippetFavoritesService.swift */; };
+		47B6E8222F5EF33B00EF7441 /* SnippetFavouritesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8212F5EF33B00EF7441 /* SnippetFavouritesService.swift */; };
 		47B6E8242F5EF3B700EF7441 /* SnippetsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8232F5EF3B700EF7441 /* SnippetsRepository.swift */; };
 		47B6E8282F5F267C00EF7441 /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = 47B6E8272F5F267C00EF7441 /* Splash */; };
 		47B6E82A2F5F26BB00EF7441 /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8292F5F26BB00EF7441 /* AttributedString.swift */; };
@@ -283,7 +283,7 @@
 		4746380A2F67348E00DF011B /* AlignmentGallery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignmentGallery.swift; sourceTree = "<group>"; };
 		4746380C2F67357000DF011B /* AlignmentGuide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignmentGuide.swift; sourceTree = "<group>"; };
 		4746380E2F6735CB00DF011B /* Mask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mask.swift; sourceTree = "<group>"; };
-		474638102F67363300DF011B /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
+		474638102F67363300DF011B /* TimerPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerPublisher.swift; sourceTree = "<group>"; };
 		474638122F67382E00DF011B /* VisualEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffect.swift; sourceTree = "<group>"; };
 		474BFB8C2F3C8DF2006E639B /* PostsViewModel+Filtering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+Filtering.swift"; sourceTree = "<group>"; };
 		474BFB902F3C8E20006E639B /* PostsViewModel+BackupRestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+BackupRestore.swift"; sourceTree = "<group>"; };
@@ -387,7 +387,7 @@
 		47B6E81A2F5DFEE800EF7441 /* SnippetNoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetNoPreviewView.swift; sourceTree = "<group>"; };
 		47B6E81D2F5EB4DB00EF7441 /* A001_ProgressViewIndicators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A001_ProgressViewIndicators.swift; sourceTree = "<group>"; };
 		47B6E81F2F5ECFC200EF7441 /* A002_TrimIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A002_TrimIndicator.swift; sourceTree = "<group>"; };
-		47B6E8212F5EF33B00EF7441 /* SnippetFavoritesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetFavoritesService.swift; sourceTree = "<group>"; };
+		47B6E8212F5EF33B00EF7441 /* SnippetFavouritesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetFavouritesService.swift; sourceTree = "<group>"; };
 		47B6E8232F5EF3B700EF7441 /* SnippetsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsRepository.swift; sourceTree = "<group>"; };
 		47B6E8292F5F26BB00EF7441 /* AttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedString.swift; sourceTree = "<group>"; };
 		47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedCupsuleButton.swift; sourceTree = "<group>"; };
@@ -869,7 +869,6 @@
 			isa = PBXGroup;
 			children = (
 				47B6E7E72F5BF85B00EF7441 /* CodeSnippet.swift */,
-				47B6E8232F5EF3B700EF7441 /* SnippetsRepository.swift */,
 			);
 			path = Snippets;
 			sourceTree = "<group>";
@@ -902,6 +901,7 @@
 		47B6E81C2F5EB4BF00EF7441 /* SnippetsDemoViews */ = {
 			isa = PBXGroup;
 			children = (
+				47B6E8232F5EF3B700EF7441 /* SnippetsRepository.swift */,
 				47B6E80F2F5DFB1700EF7441 /* SnippetViewRegistry.swift */,
 				47B6E8132F5DFB6800EF7441 /* SnippetDemoViews.swift */,
 				47B6E81D2F5EB4DB00EF7441 /* A001_ProgressViewIndicators.swift */,
@@ -916,7 +916,7 @@
 				4746380A2F67348E00DF011B /* AlignmentGallery.swift */,
 				4746380C2F67357000DF011B /* AlignmentGuide.swift */,
 				4746380E2F6735CB00DF011B /* Mask.swift */,
-				474638102F67363300DF011B /* Timer.swift */,
+				474638102F67363300DF011B /* TimerPublisher.swift */,
 				474638122F67382E00DF011B /* VisualEffect.swift */,
 				470823E12F60545E00D8C073 /* A004_CardSwipTinder.swift */,
 				470823DD2F6038B600D8C073 /* A003_StaticBrokenCircleProgress.swift */,
@@ -930,7 +930,7 @@
 			children = (
 				47B6E80D2F5DFAE500EF7441 /* SnippetRowView.swift */,
 				47B6E8112F5DFB3200EF7441 /* SnippetDetailsView.swift */,
-				47B6E8212F5EF33B00EF7441 /* SnippetFavoritesService.swift */,
+				47B6E8212F5EF33B00EF7441 /* SnippetFavouritesService.swift */,
 				47B6E81C2F5EB4BF00EF7441 /* SnippetsDemoViews */,
 			);
 			path = SnippetDetails;
@@ -1254,7 +1254,7 @@
 				473436762F48F18600CF00FA /* FBNoticeModel.swift in Sources */,
 				4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */,
 				4751DAFE2F16410000EC9C53 /* CumulativeLegendView.swift in Sources */,
-				474638112F67363300DF011B /* Timer.swift in Sources */,
+				474638112F67363300DF011B /* TimerPublisher.swift in Sources */,
 				475CC6A22F22B0A90099CAA6 /* CodableNotice.swift in Sources */,
 				4734368A2F4B24FA00CF00FA /* FBPerformanceManager.swift in Sources */,
 				47939D792F4F2CDE00CBE432 /* DateFormater.swift in Sources */,
@@ -1263,7 +1263,7 @@
 				47B6E8202F5ECFC200EF7441 /* A002_TrimIndicator.swift in Sources */,
 				4725A52B2EDD757F00235C40 /* UIDevice.swift in Sources */,
 				473436782F49BC1B00CF00FA /* FBPostModel.swift in Sources */,
-				47B6E8222F5EF33B00EF7441 /* SnippetFavoritesService.swift in Sources */,
+				47B6E8222F5EF33B00EF7441 /* SnippetFavouritesService.swift in Sources */,
 				470823DE2F6038B600D8C073 /* A003_StaticBrokenCircleProgress.swift in Sources */,
 				475CC6942F2246FB0099CAA6 /* MockPostsDataSource.swift in Sources */,
 				47AC34432F28F2360023C7AF /* Calendar.swift in Sources */,

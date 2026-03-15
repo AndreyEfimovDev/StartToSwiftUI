@@ -8,21 +8,21 @@
 import SwiftUI
 
 struct SnippetDetailsView: View {
-
+    
     // MARK: - Dependencies
     @EnvironmentObject private var snippetvm: SnippetsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
-
+    
     private let hapticManager = HapticManager.shared
-
+    
     // MARK: - Constants
     let snippet: CodeSnippet
-
+    
     // MARK: - State
     @State private var showCodeSheet = false
     @State private var codeCopied = false
     @State private var isFavorite: Bool = false
-
+    
     // MARK: - Body
     var body: some View {
         SnippetViewRegistry.view(for: snippet)
@@ -37,7 +37,7 @@ struct SnippetDetailsView: View {
             .navigationTitle(snippet.id)
             .navigationBarTitleDisplayMode(.inline)
     }
-
+    
     // MARK: - Toolbar
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
@@ -47,15 +47,15 @@ struct SnippetDetailsView: View {
                 BackButtonView { coordinator.pop() }
             }
         }
-
+        
         ToolbarItemGroup(placement: .topBarTrailing) {
             // ⭐ Favourite
             CircleStrokeButtonView(
                 iconName: isFavorite ? "star.fill" : "star",
                 iconFont: .headline,
                 imageColorPrimary: isFavorite
-                    ? Color.mycolor.myYellow
-                    : Color.mycolor.myAccent,
+                ? Color.mycolor.myYellow
+                : Color.mycolor.myAccent,
                 isShownCircle: false
             ) {
                 snippetvm.favoriteToggle(snippet)
@@ -72,7 +72,7 @@ struct SnippetDetailsView: View {
             }
         }
     }
-
+    
     // MARK: - Code Sheet
     private var codeSheet: some View {
         NavigationStack {
@@ -86,7 +86,7 @@ struct SnippetDetailsView: View {
                         .background(Color.mycolor.mySecondary.opacity(0.05))
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                         .padding(.horizontal)
-
+                    
                     if let thanks = snippet.thanks, !thanks.isEmpty {
                         Text("Source: @\(thanks)")
                             .font(.caption)
@@ -121,20 +121,18 @@ struct SnippetDetailsView: View {
                     Button("Done") {
                         showCodeSheet = false
                     }
-                        .foregroundStyle(Color.mycolor.myAccent)
+                    .foregroundStyle(Color.mycolor.myAccent)
                 }
             }
         }
         .preferredColorScheme(.dark)
         .presentationDragIndicator(.visible)
         .presentationDetents([.large])
-//        .presentationDetents(UIDevice.isiPad ? [.large] : [.medium, .large])
     }
 }
 
 // MARK: - Preview
-
-#Preview("Snippet Details") {
+#Preview("Code Snippet Details") {
     let vm = SnippetsViewModel()
     NavigationStack {
         SnippetDetailsView(snippet: SnippetsRepository.a001)

@@ -13,7 +13,7 @@ final class SnippetsViewModel: ObservableObject {
 
     // MARK: - Dependencies
     private let appStateManager: AppSyncStateManager?
-    private let favoritesService = SnippetFavoritesService.shared
+    private let favoritesService = SnippetFavouritesService.shared
     private let hapticManager = HapticManager.shared
 
     // MARK: - Data
@@ -61,7 +61,7 @@ final class SnippetsViewModel: ObservableObject {
         restoreSnippetFilters()
         setupSubscriptions()
         if let appStateManager {
-            SnippetFavoritesService.shared.configure(with: appStateManager)
+            SnippetFavouritesService.shared.configure(with: appStateManager)
         }
     }
 

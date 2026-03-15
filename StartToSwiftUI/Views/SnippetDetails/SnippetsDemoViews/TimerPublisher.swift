@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TimerView: View {
+struct TimerPublisherDemo: View {
     
     let timer = Timer.publish(every: 3.0, on: .main, in: .common).autoconnect()
     
@@ -53,5 +53,5 @@ struct TimerView: View {
 }
 
 #Preview {
-    TimerView()
+    TimerPublisherDemo()
 }

@@ -155,21 +155,21 @@ final class SnippetsTests: XCTestCase {
     // MARK: - SnippetFavoritesService
 
     func test_favorites_toggle_addsFavorite() {
-        let service = SnippetFavoritesService.shared
+        let service = SnippetFavouritesService.shared
         service.toggle("A001")
         XCTAssertTrue(service.isFavorite("A001"))
         service.toggle("A001") // cleanup
     }
 
     func test_favorites_toggle_removesFavorite() {
-        let service = SnippetFavoritesService.shared
+        let service = SnippetFavouritesService.shared
         service.toggle("A001")
         service.toggle("A001")
         XCTAssertFalse(service.isFavorite("A001"))
     }
 
     func test_favorites_toggle_idempotentMultipleTimes() {
-        let service = SnippetFavoritesService.shared
+        let service = SnippetFavouritesService.shared
         service.toggle("A002")
         service.toggle("A002")
         service.toggle("A002")
@@ -178,7 +178,7 @@ final class SnippetsTests: XCTestCase {
     }
 
     func test_favorites_differentIDs_independant() {
-        let service = SnippetFavoritesService.shared
+        let service = SnippetFavouritesService.shared
         service.toggle("A001")
         XCTAssertTrue(service.isFavorite("A001"))
         XCTAssertFalse(service.isFavorite("A002"))
