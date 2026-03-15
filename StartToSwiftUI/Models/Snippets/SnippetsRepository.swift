@@ -14,7 +14,7 @@ import Foundation
 
 struct SnippetsRepository {
     
-    static let allDemoCodeSnippet: [CodeSnippet] = [a001, a002, a003, a004]
+    static let allDemoCodeSnippet: [CodeSnippet] = [a001, a002, a003, a004, a005]
     
     // MARK: - A001
     static let a001 = CodeSnippet(
@@ -28,6 +28,7 @@ struct SnippetsRepository {
         date: Date.from(year: 2026, month: 3, day: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
+        import Combine
         
         // MARK: - Demo
         struct A001_ProgressViewIndicatorsDemo: View {
@@ -40,6 +41,7 @@ struct SnippetsRepository {
                     A001_PulsingCircle()
                     A001_JumpingDots()
                     A001_JumpingLetters()
+                    A001_ArcProgressDinamycGapView(lineWidth: 3, diameter: 30)
                     A001_RotatingRingWithTrace()
                 }
             }
@@ -123,8 +125,6 @@ struct SnippetsRepository {
             }
         }
         
-        import Combine
-        
         struct A001_JumpingLetters: View {
             
             @State private var counter: Int = 0
@@ -182,7 +182,7 @@ struct SnippetsRepository {
                         style: StrokeStyle(lineWidth: 3, lineCap: .round)
                     )
         
-                    .frame(width: 20, height: 20)
+                    .frame(width: 30, height: 30)
                     .rotationEffect(Angle(degrees: isRotating ? 360 : 0))
                     .animation(
                         .linear(duration: 1.0)
@@ -190,6 +190,107 @@ struct SnippetsRepository {
                         value: isRotating
                     )
                     .onAppear { isRotating = true }
+            }
+        }
+        
+        /// Winding effect: head races ahead (arc grows), tail catches up (arc shrinks).
+        /// Both ends move strictly clockwise — zero backward motion, zero jitter.
+        ///
+        /// Seamless loop constraint:
+        ///   rotationsPerCycle + (maxArc − minArc) must equal an integer.
+        ///   At cycle boundary, the jump in `base` and the jump in `tailExtra`
+        ///   cancel each other out exactly (both are multiples of 360°).
+        ///
+        ///   Here: 1.5 + 0.5 = 2 ✓
+        struct A001_ArcProgressDinamycGapView: View {
+            
+            var lineWidth: CGFloat = 3
+            var diameter: CGFloat = 40
+            var color: Color = Color.mycolor.myBlue
+            var cycleDuration: Double = 1.4
+            
+            // Arc length bounds — difference MUST equal frac(rotationsPerCycle)
+            private let minArc: Double = 0.01   // smallest arc  (0–1 fraction of circle)
+            private let maxArc: Double = 0.56   // largest  arc  0.56 − 0.06 = 0.50 ✓
+            private let rotationsPerCycle: Double = 1.5  // 1.5 mod 1 = 0.5 ✓
+            
+            @State private var startDate = Date()
+            
+            var body: some View {
+                TimelineView(.animation) { timeline in
+                    let elapsed = timeline.date.timeIntervalSince(startDate)
+                    let phase = (elapsed / cycleDuration)
+                        .truncatingRemainder(dividingBy: 1.0)
+                    arcCanvas(phase: phase)
+                }
+                .onAppear { startDate = Date() }
+            }
+            
+            // MARK: - Easing
+            
+            private func easeInOut(_ t: Double) -> Double {
+                t < 0.5 ? 2 * t * t : 1 - pow(-2 * t + 2, 2) / 2
+            }
+            
+            // MARK: - Angle calculation
+            
+            private func angles(for phase: Double) -> (start: Double, end: Double) {
+                let spread = (maxArc - minArc) * 360   // degrees the arc grows by = 180°
+                
+                // Base rotation: linear, 0 → rotationsPerCycle*360 over one cycle
+                let base = phase * rotationsPerCycle * 360
+                
+                // Phase 0.0 → 0.5 : head races ahead (arc grows), tail is parked
+                // Phase 0.5 → 1.0 : head is parked, tail catches up (arc shrinks)
+                let headExtra: Double = phase < 0.5
+                ? easeInOut(phase * 2) * spread
+                : spread
+                
+                let tailExtra: Double = phase < 0.5
+                ? 0
+                : easeInOut((phase - 0.5) * 2) * spread
+                
+                // At phase ≈ 1 → 0 transition:
+                //   base jumps   by −rotationsPerCycle*360 = −540°
+                //   tailExtra jumps by −spread             = −180°
+                //   total jump = −720° ≡ 0  (mod 360°)  → perfectly seamless ✓
+                
+                let startAngle = base + tailExtra - 90
+                let endAngle   = base + minArc * 360 + headExtra - 90
+                return (startAngle, endAngle)
+            }
+            
+            // MARK: - Canvas
+            
+            @ViewBuilder
+            private func arcCanvas(phase: Double) -> some View {
+                let (startDeg, endDeg) = angles(for: phase)
+                /* Canvas context parameters:
+                 context.stroke(path, with: .color(.red), style: ...) - tracing the path
+                 context.fill(path, with: .color(.blue)) - filling
+                 context.draw(image, at: point) - drawing an image
+                 context.opacity - current transparency
+                 context.transform - current transformation
+                 */
+                Canvas { context, size in
+                    let center = CGPoint(x: size.width / 2, y: size.height / 2)
+                    let radius = (min(size.width, size.height) - lineWidth) / 2
+                    
+                    var path = Path()
+                    path.addArc(
+                        center: center,
+                        radius: radius,
+                        startAngle: .degrees(startDeg),
+                        endAngle:   .degrees(endDeg),
+                        clockwise: false
+                    )
+                    context.stroke(
+                        path,
+                        with: .color(color),
+                        style: StrokeStyle(lineWidth: lineWidth, lineCap: .round)
+                    )
+                }
+                .frame(width: diameter, height: diameter)
             }
         }
         """
@@ -207,7 +308,7 @@ struct SnippetsRepository {
         date: Date.from(year: 2026, month: 3, day: 9) ?? Date(),
         codeSnippet: """
         import SwiftUI
-
+        
         // MARK: - Demo
         struct A002_TrimIndicatorDemo: View {
             
@@ -332,14 +433,14 @@ struct SnippetsRepository {
                 }
             }
         }
-
+        
         // MARK: - Preview
         #Preview {
             NavigationStack {
                 A002_TrimIndicatorDemo()
             }
         }
-
+        
         // MARK: - Code Snippet
         struct A002_ProgressIndicatorView: View {
             
@@ -386,7 +487,7 @@ struct SnippetsRepository {
         date: Date.from(year: 2026, month: 3, day: 9) ?? Date(),
         codeSnippet: """
         import SwiftUI
-
+        
         // MARK: - Demo
         struct A003_ProgressCircleWithCheckmarkDemo: View {
             
@@ -464,14 +565,14 @@ struct SnippetsRepository {
                 timer = nil
             }
         }
-
+        
         // MARK: - Preview
         #Preview {
             NavigationStack {
                 A003_ProgressCircleWithCheckmarkDemo()
             }
         }
-
+        
         // MARK: - Code Snippet
         struct A003_ProgressCircleWithCheckmarkView: View {
             
@@ -556,129 +657,157 @@ struct SnippetsRepository {
     static let a004 = CodeSnippet(
         id: "A004",
         category: Constants.mainCategory,
-        title: "Progress Arc with dynamic gap",
-        intro: ". Demonstrates various SwiftUI animation techniques.",
+        title: "Shrinking Button",
+        intro: "Button with a custom shrinking effect. Two versions: regular for standard use, and a ScrollView-optimised one. Because ScrollView absorbs touches, we use DragGesture for the ScrollView version to avoid this effect.",
         thanks: nil,
         githubUrlString: nil,
         notes: "",
-        date: Date.from(year: 2026, month: 3, day: 12) ?? Date(),
+        date: Date.from(year: 2026, month: 3, day: 15) ?? Date(),
         codeSnippet: """
         import SwiftUI
         
         // MARK: - Demo
-        struct A004_ArcProgressDinamycGapDemo: View {
+        struct A004_PressableButtonForScrollViewDemo: View {
+        
+            @GestureState private var isPressed = false
+            
             var body: some View {
-                A004_ArcProgressDinamycGapView(lineWidth: 10, diameter: 100)
+                Label("PRESS ME", systemImage: "star.fill")
+                           .foregroundStyle(Color.mycolor.myAccent)
+                           .frame(maxWidth: 250)
+                           .frame(height: 55)
+                           .background(Color.mycolor.myBlue.opacity(0.3), in: .capsule)
+                           .padding(.horizontal)
+                           .scaleEffect(isPressed ? 0.85 : 1.0)
+                           .animation(
+                               isPressed
+                                   ? .spring(response: 0.15, dampingFraction: 0.5)
+                                   : .spring(response: 0.25, dampingFraction: 0.6),
+                               value: isPressed
+                           )
+                           .gesture(
+                               DragGesture(minimumDistance: 0)
+                                   .updating($isPressed) { _, state, _ in state = true }
+                           )
+                           .onTapGesture {
+                               // your actions
+                           }
+            }
+        }
+        
+        struct A004_PressableButtonRegularDemo: View {
+        
+            @GestureState private var isPressed = false
+            
+            var body: some View {
+                Button {
+                    // your actions
+                } label: {
+                    Label("PRESS ME", systemImage: "star.fill")
+                        .foregroundStyle(Color.mycolor.myAccent)
+                        .frame(maxWidth: 250)
+                        .frame(height: 55)
+                        .background(Color.mycolor.myYellow.opacity(0.3), in: .capsule)
+                        .padding(.horizontal)
+                }
+                .buttonStyle(ShrinkIconButtonStyle())
             }
         }
         
         // MARK: - Preview
         #Preview {
-            A004_ArcProgressDinamycGapDemo()
+            A004_PressableButtonForScrollViewDemo()
+            A004_PressableButtonRegularDemo()
         }
         
         // MARK: - Code Snippet
-        /// Winding effect: head races ahead (arc grows), tail catches up (arc shrinks).
-        /// Both ends move strictly clockwise — zero backward motion, zero jitter.
-        ///
-        /// Seamless loop constraint:
-        ///   rotationsPerCycle + (maxArc − minArc) must equal an integer.
-        ///   At cycle boundary, the jump in `base` and the jump in `tailExtra`
-        ///   cancel each other out exactly (both are multiples of 360°).
-        ///
-        ///   Here: 1.5 + 0.5 = 2 ✓
-        struct A004_ArcProgressDinamycGapView: View {
-            
-            var lineWidth: CGFloat = 3
-            var diameter: CGFloat = 40
-            var color: Color = Color.mycolor.myBlue
-            var cycleDuration: Double = 1.4
-            
-            // Arc length bounds — difference MUST equal frac(rotationsPerCycle)
-            private let minArc: Double = 0.01   // smallest arc  (0–1 fraction of circle)
-            private let maxArc: Double = 0.56   // largest  arc  0.56 − 0.06 = 0.50 ✓
-            private let rotationsPerCycle: Double = 1.5  // 1.5 mod 1 = 0.5 ✓
-            
-            @State private var startDate = Date()
-            
-            var body: some View {
-                TimelineView(.animation) { timeline in
-                    let elapsed = timeline.date.timeIntervalSince(startDate)
-                    let phase = (elapsed / cycleDuration)
-                        .truncatingRemainder(dividingBy: 1.0)
-                    arcCanvas(phase: phase)
-                }
-                .onAppear { startDate = Date() }
-            }
-            
-            // MARK: - Easing
-            
-            private func easeInOut(_ t: Double) -> Double {
-                t < 0.5 ? 2 * t * t : 1 - pow(-2 * t + 2, 2) / 2
-            }
-            
-            // MARK: - Angle calculation
-            
-            private func angles(for phase: Double) -> (start: Double, end: Double) {
-                let spread = (maxArc - minArc) * 360   // degrees the arc grows by = 180°
-                
-                // Base rotation: linear, 0 → rotationsPerCycle*360 over one cycle
-                let base = phase * rotationsPerCycle * 360
-                
-                // Phase 0.0 → 0.5 : head races ahead (arc grows), tail is parked
-                // Phase 0.5 → 1.0 : head is parked, tail catches up (arc shrinks)
-                let headExtra: Double = phase < 0.5
-                ? easeInOut(phase * 2) * spread
-                : spread
-                
-                let tailExtra: Double = phase < 0.5
-                ? 0
-                : easeInOut((phase - 0.5) * 2) * spread
-                
-                // At phase ≈ 1 → 0 transition:
-                //   base jumps   by −rotationsPerCycle*360 = −540°
-                //   tailExtra jumps by −spread             = −180°
-                //   total jump = −720° ≡ 0  (mod 360°)  → perfectly seamless ✓
-                
-                let startAngle = base + tailExtra - 90
-                let endAngle   = base + minArc * 360 + headExtra - 90
-                return (startAngle, endAngle)
-            }
-            
-            // MARK: - Canvas
-            
-            @ViewBuilder
-            private func arcCanvas(phase: Double) -> some View {
-                let (startDeg, endDeg) = angles(for: phase)
-                /* Canvas context parameters:
-                 context.stroke(path, with: .color(.red), style: ...) - tracing the path
-                 context.fill(path, with: .color(.blue)) - filling
-                 context.draw(image, at: point) - drawing an image
-                 context.opacity - current transparency
-                 context.transform - current transformation
-                 */
-                Canvas { context, size in
-                    let center = CGPoint(x: size.width / 2, y: size.height / 2)
-                    let radius = (min(size.width, size.height) - lineWidth) / 2
-                    
-                    var path = Path()
-                    path.addArc(
-                        center: center,
-                        radius: radius,
-                        startAngle: .degrees(startDeg),
-                        endAngle:   .degrees(endDeg),
-                        clockwise: false
-                    )
-                    context.stroke(
-                        path,
-                        with: .color(color),
-                        style: StrokeStyle(lineWidth: lineWidth, lineCap: .round)
-                    )
-                }
-                .frame(width: diameter, height: diameter)
+        struct PressableButtonStyle: ButtonStyle {
+        
+            func makeBody(configuration: Configuration) -> some View {
+                configuration.label
+                    .scaleEffect(configuration.isPressed ? 0.85 : 1.0) // shrink when pressed
+                    .animation(.spring(response: 0.25, dampingFraction: 0.5), value: configuration.isPressed)
             }
         }
         """
     )
+    
+    // MARK: - A005
+    static let a005 = CodeSnippet(
+        id: "A005",
+        category: Constants.mainCategory,
+        title: "SF Symbol built-in animation effects",
+        intro: """
+        This code showcases various symbolEffect modifiers:
+        - .pulse — gentle opacity pulsing
+        - .bounce — playful scaling animation
+        - .replace with .contentTransition — smooth transition between different symbols (trash ↔ trash.slash)
+        - .variableColor — WiFi symbol animation with three variations:
+            * Standard variable colour
+            * .iterative — sequential filling
+            * .hideInactiveLayers — hides inactive segments
+        """,
+        thanks: nil,
+        githubUrlString: nil,
+        notes: "",
+        date: Date.from(year: 2026, month: 3, day: 15) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        struct A005_SFSymbolEffectsDemo: View {
+            
+            @State var isAnimated: Bool = false
+            
+            var body: some View {
+                VStack {
+                    Image(systemName: "trash")
+                        .font(.system(size: 50, weight: .bold))
+                        .symbolEffect(.pulse, value: isAnimated)
+                        .padding()
+
+                    Image(systemName: "trash")
+                        .font(.system(size: 50, weight: .bold))
+                        .symbolEffect(.bounce, value: isAnimated)
+                        .padding()
+                                
+                    HStack {
+                        Image(systemName: "wifi")
+                            .font(.system(size: 50, weight: .bold))
+                            .symbolEffect(.variableColor, value: isAnimated)
+                        Image(systemName: "wifi")
+                            .font(.system(size: 50, weight: .bold))
+                            .symbolEffect(.variableColor.iterative, value: isAnimated)
+                        
+                        Image(systemName: "wifi")
+                            .font(.system(size: 50, weight: .bold))
+                            .symbolEffect(.variableColor.hideInactiveLayers, value: isAnimated)
+                    }
+                    .padding()
+
+                    Button {
+                        isAnimated.toggle()
+                    }label: {
+                        Text("Animate")
+                            .font(.headline)
+                            .foregroundStyle(Color.mycolor.myButtonTextPrimary)
+                            .padding()
+                            .background(Color.mycolor.myBlue, in: .capsule)
+                    }
+                    .padding()
+
+                    Image(systemName: isAnimated ? "trash.slash" : "trash")
+                        .font(.system(size: 50, weight: .bold))
+                        .contentTransition(.symbolEffect(.replace))
+                        .padding()
+                }
+            }
+        }
+
+        #Preview {
+            A005_SFSymbolEffectsDemo()
+        }
+        """
+    )
+    
     
 }
