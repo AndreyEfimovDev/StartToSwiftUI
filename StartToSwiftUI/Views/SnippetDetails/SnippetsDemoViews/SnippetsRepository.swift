@@ -21,7 +21,17 @@ struct SnippetsRepository {
         id: "A001",
         category: Constants.mainCategory,
         title: "Progress indicators collection",
-        intro: "A collection of seven loading animations including wave patterns (both symmetrical and asymmentrical), a pulsing circle, jumping dots and letters, a rotating ring with trace and a dinamyc gap.",
+        intro: """
+        A collection of custom loading animations in SwiftUI:
+        - Wave patterns — symmetrical & asymmetrical (sine-based)
+        - Pulsing circle — scale & opacity
+        - Jumping dots & letters — sequential bounce
+        - Rotating ring with trace and dinamyc gap - gradient & rotation
+        - Dynamic gap arc — winding effect with TimelineView & Canvas
+        - Gauge progress — native gauges with percentage updates
+        
+        Techniques: Timer publishers, phase animations, staggered delays, TimelineView, Canvas drawing, state-driven animations, and native gauges.
+        """,
         thanks: nil,
         githubUrlString: nil,
         notes: "",
@@ -36,9 +46,9 @@ struct SnippetsRepository {
             @State private var isLoading = false
             
             var body: some View {
-                VStack(spacing: 30) {
+                VStack(spacing: 16) {
                     A001_WaveSymmetrical()
-                    A002_WaveAsymmetrical()
+                    A001_WaveAsymmetrical()
                     A001_PulsingCircle()
                     A001_JumpingDots()
                     A001_JumpingLetters()
@@ -112,7 +122,7 @@ struct SnippetsRepository {
              }
         }
 
-        struct A002_WaveAsymmetrical: View {
+        struct A001_WaveAsymmetrical: View {
             /*
              How it works:
              - phase increments every 0.15seconds — the wave shifts from left to right
@@ -379,6 +389,51 @@ struct SnippetsRepository {
                     )
                 }
                 .frame(width: diameter, height: diameter)
+            }
+        }
+        
+        struct A001_GaugeProgress: View {
+            
+            @State private var progress: Double = 0
+            @State private var cancellable: AnyCancellable? = nil
+            
+            var body: some View {
+                HStack(spacing: 20) {
+                    Gauge(value: progress, in: 0...1) {
+                        EmptyView()
+                    } currentValueLabel: {
+                        Text("\\(Int(progress * 100))%")
+                            .font(.system(size: 10))
+                            .foregroundStyle(Color.mycolor.myBlue)
+                    }
+                    .gaugeStyle(.accessoryCircularCapacity)
+                    .tint(Color.mycolor.myBlue)
+                    .frame(width: 50, height: 50)
+                    
+                    Gauge(value: progress, in: 0...1) {
+                        EmptyView()
+                    } currentValueLabel: {
+                        Text("\\(Int(progress * 100))%")
+                            .font(.system(size: 10))
+                            .foregroundStyle(Color.mycolor.myBlue)
+                    }
+                    .gaugeStyle(.accessoryCircular)
+                    .tint(Color.mycolor.myBlue)
+                    .frame(width: 50, height: 50)
+                }
+                .onAppear {
+                    cancellable = Timer
+                        .publish(every: 0.05, on: .main, in: .common)
+                        .autoconnect()
+                        .sink { _ in
+                            progress = progress >= 1.0 ? 0.0 : min(progress + 0.01, 1.0)
+                        }
+                }
+                .onDisappear {
+                    // cancel the timer publisher to prevent memory leak
+                    cancellable?.cancel()
+                    cancellable = nil
+                }
             }
         }
         """
