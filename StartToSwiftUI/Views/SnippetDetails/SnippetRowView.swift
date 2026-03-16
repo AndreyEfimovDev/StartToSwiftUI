@@ -30,12 +30,12 @@ struct SnippetRowView: View {
             titleRow
                 .foregroundStyle(Color.mycolor.myAccent)
             Group {
-                dateLine
                 statusRow
+                dateLine
             }
             .font(.footnote)
             .fontWeight(.medium)
-            .foregroundStyle(Color.mycolor.myAccent.opacity(0.5))
+            .foregroundStyle(Color.mycolor.myAccent.opacity(0.8))
         }
         .padding(8)
         .padding(.horizontal, 8)

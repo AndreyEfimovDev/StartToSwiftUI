@@ -62,7 +62,6 @@
 		474638072F672F7800DF011B /* Actionsheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474638062F672F7800DF011B /* Actionsheet.swift */; };
 		474638092F6732EA00DF011B /* ContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474638082F6732EA00DF011B /* ContextMenu.swift */; };
 		4746380B2F67348E00DF011B /* AlignmentGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4746380A2F67348E00DF011B /* AlignmentGallery.swift */; };
-		4746380D2F67357000DF011B /* AlignmentGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4746380C2F67357000DF011B /* AlignmentGuide.swift */; };
 		4746380F2F6735CB00DF011B /* Mask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4746380E2F6735CB00DF011B /* Mask.swift */; };
 		474638112F67363300DF011B /* TimerPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474638102F67363300DF011B /* TimerPublisher.swift */; };
 		474638132F67382E00DF011B /* VisualEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474638122F67382E00DF011B /* VisualEffect.swift */; };
@@ -282,7 +281,6 @@
 		474638062F672F7800DF011B /* Actionsheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Actionsheet.swift; sourceTree = "<group>"; };
 		474638082F6732EA00DF011B /* ContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenu.swift; sourceTree = "<group>"; };
 		4746380A2F67348E00DF011B /* AlignmentGallery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignmentGallery.swift; sourceTree = "<group>"; };
-		4746380C2F67357000DF011B /* AlignmentGuide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignmentGuide.swift; sourceTree = "<group>"; };
 		4746380E2F6735CB00DF011B /* Mask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mask.swift; sourceTree = "<group>"; };
 		474638102F67363300DF011B /* TimerPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerPublisher.swift; sourceTree = "<group>"; };
 		474638122F67382E00DF011B /* VisualEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffect.swift; sourceTree = "<group>"; };
@@ -917,7 +915,6 @@
 				474638062F672F7800DF011B /* Actionsheet.swift */,
 				474638082F6732EA00DF011B /* ContextMenu.swift */,
 				4746380A2F67348E00DF011B /* AlignmentGallery.swift */,
-				4746380C2F67357000DF011B /* AlignmentGuide.swift */,
 				4746380E2F6735CB00DF011B /* Mask.swift */,
 				474638102F67363300DF011B /* TimerPublisher.swift */,
 				474638122F67382E00DF011B /* VisualEffect.swift */,
@@ -1247,7 +1244,6 @@
 				474638052F6726CC00DF011B /* A006_SheetTransition.swift in Sources */,
 				471DCBDC2EBBC67500AFA5F4 /* Introduction.swift in Sources */,
 				4791CE002E747B2E00687126 /* HapticManager.swift in Sources */,
-				4746380D2F67357000DF011B /* AlignmentGuide.swift in Sources */,
 				475CC6A02F22B0790099CAA6 /* CodablePost.swift in Sources */,
 				475CC6922F2246E00099CAA6 /* MockNoticesDataSource.swift in Sources */,
 				474638072F672F7800DF011B /* Actionsheet.swift in Sources */,
