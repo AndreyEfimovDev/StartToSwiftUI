@@ -28,7 +28,6 @@ struct A006_SheetTransitionDemo: View {
                 A006_SheetSliderTransition()
             }
         }
-        .padding(.horizontal)
     }
 }
 
@@ -38,9 +37,9 @@ struct A006_SheetTransitionDemo: View {
 
 struct A006_SheetBottomTransition: View {
     
-    @State var showView: Bool = false
+    @State private var showView: Bool = false
     
-    let height = UIScreen.main.bounds.height * 0.5
+    private let height = UIScreen.main.bounds.height * 0.35
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -54,6 +53,7 @@ struct A006_SheetBottomTransition: View {
                         .foregroundStyle(Color.mycolor.myRed)
                         .padding()
                         .background(.ultraThinMaterial, in: .capsule)
+                        .overlay(Capsule().stroke(Color.mycolor.myRed, lineWidth: 1))
                 }
                 Spacer()
             }
@@ -63,6 +63,7 @@ struct A006_SheetBottomTransition: View {
                 .offset(y: showView ? 0 : height)
                 .animation(.easeInOut(duration: 0.5), value: showView)
         }
+        .padding(.top)
         .edgesIgnoringSafeArea(.bottom)
     }
 }
@@ -75,12 +76,12 @@ struct A006_SheetBottomRightTransition: View {
      - Disappearance → offset = -width (moves left)
      - asyncAfter resets the offset back to width while the view is hidden
      */
-    @State var showView: Bool = false
-    @State var offset: CGSize = CGSize(width: 0, height: UIScreen.main.bounds.height * 0.5)
+    @State private var showView: Bool = false
+    @State private var offset: CGSize = CGSize(width: 0, height: UIScreen.main.bounds.height * 0.5)
     
-    let height = UIScreen.main.bounds.height * 0.5
-    let width = UIScreen.main.bounds.width
-    let duration: Double = 0.5
+    private let height = UIScreen.main.bounds.height * 0.35
+    private let width = UIScreen.main.bounds.width
+    private let duration: Double = 0.5
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -109,6 +110,7 @@ struct A006_SheetBottomRightTransition: View {
                         .foregroundStyle(Color.mycolor.myGreen)
                         .padding()
                         .background(.ultraThinMaterial, in: .capsule)
+                        .overlay(Capsule().stroke(Color.mycolor.myGreen, lineWidth: 1))
                 }
                 Spacer()
             }
@@ -123,15 +125,16 @@ struct A006_SheetBottomRightTransition: View {
                 .offset(offset)
             }
         }
+        .padding(.top)
         .edgesIgnoringSafeArea(.bottom)
     }
-    
 }
 
 struct A006_SheetRightRightTransition: View {
-    @State var showView: Bool = false
     
-    let height = UIScreen.main.bounds.height * 0.5
+    @State private var showView: Bool = false
+    
+    private let height = UIScreen.main.bounds.height * 0.35
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -144,6 +147,7 @@ struct A006_SheetRightRightTransition: View {
                         .font(.headline)
                         .padding()
                         .background(.ultraThinMaterial, in: .capsule)
+                        .overlay(Capsule().stroke(Color.mycolor.myOrange, lineWidth: 1))
                 }
                 Spacer()
             }
@@ -153,17 +157,19 @@ struct A006_SheetRightRightTransition: View {
                 .offset(x: showView ? 0 : UIScreen.main.bounds.width) // from right to left
                 .animation(.easeInOut(duration: 0.5), value: showView)
         }
+        .padding(.top)
         .edgesIgnoringSafeArea(.bottom)
     }
 }
 
 struct A006_SheetSliderTransition: View {
-    @State var showView: Bool = false
-    @State var offset: CGFloat = UIScreen.main.bounds.width // старт справа
     
-    let height = UIScreen.main.bounds.height * 0.5
-    let width = UIScreen.main.bounds.width
-    let duration: Double = 0.5
+    @State private var showView: Bool = false
+    @State private var offset: CGFloat = UIScreen.main.bounds.width // start on the right
+    
+    private let height = UIScreen.main.bounds.height * 0.35
+    private let width = UIScreen.main.bounds.width
+    private let duration: Double = 0.5
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -192,6 +198,7 @@ struct A006_SheetSliderTransition: View {
                         .font(.headline)
                         .padding()
                         .background(.ultraThinMaterial, in: .capsule)
+                        .overlay(Capsule().stroke(Color.mycolor.myPurple, lineWidth: 1))
                 }
                 Spacer()
             }
@@ -203,6 +210,7 @@ struct A006_SheetSliderTransition: View {
                     .offset(x: offset)
             }
         }
+        .padding(.top)
         .edgesIgnoringSafeArea(.bottom)
     }
 }

@@ -829,11 +829,11 @@ struct SnippetsRepository {
         This code showcases various symbol effect modifiers:
         - .pulse — gentle opacity pulsing
         - .bounce — playful scaling animation
-        - .replace with .contentTransition — smooth transition between different symbols (trash ↔ trash.slash)
-        - .variableColor — WiFi symbol animation with three variations:
-            * Standard variable colour
-            * .iterative — sequential filling
-            * .hideInactiveLayers — hides inactive segments
+        - .replace with .contentTransition — smooth transition between different symbols (microphone ↔ microphone.slash)
+        - Antenna Radiowaves symbol animation with three variations:
+            * .variableColor - animation of the opacity of variable layers in a repeatable sequence
+            * .variableColor.iterative — sequential filling
+            * .variableColor.hideInactiveLayers — hides inactive segments
         """,
         thanks: nil,
         githubUrlString: nil,
@@ -903,10 +903,10 @@ struct SnippetsRepository {
         title: "Sheet Transition",
         intro: """
         This code demonstrates four different sheet transition:
-        - Bottom in, bottom out — standard sheet behaviour
-        - Bottom in, right out — enters from bottom, exits to the right
-        - Right in, right out — slides in/out from the right edge
-        - Right in, left out — slider-style navigation (enters right, exits left)
+        - Bottom-Bottom — standard sheet behaviour
+        - Bottom-Right — enters from bottom, exits to the right
+        - Right-Right — slides in/out from the right edge
+        - Slider — slider-style navigation
         
         Each transition is implemented using .offset modifier with different combinations of enter/exit directions.
         """,
@@ -938,7 +938,6 @@ struct SnippetsRepository {
                         A006_SheetSliderTransition()
                     }
                 }
-                .padding(.horizontal)
             }
         }
 
@@ -948,9 +947,9 @@ struct SnippetsRepository {
 
         struct A006_SheetBottomTransition: View {
             
-            @State var showView: Bool = false
+            @State private var showView: Bool = false
             
-            let height = UIScreen.main.bounds.height * 0.5
+            private let height = UIScreen.main.bounds.height * 0.35
             
             var body: some View {
                 ZStack(alignment: .bottom) {
@@ -964,6 +963,7 @@ struct SnippetsRepository {
                                 .foregroundStyle(Color.mycolor.myRed)
                                 .padding()
                                 .background(.ultraThinMaterial, in: .capsule)
+                                .overlay(Capsule().stroke(Color.mycolor.myRed, lineWidth: 1))
                         }
                         Spacer()
                     }
@@ -973,6 +973,7 @@ struct SnippetsRepository {
                         .offset(y: showView ? 0 : height)
                         .animation(.easeInOut(duration: 0.5), value: showView)
                 }
+                .padding(.top)
                 .edgesIgnoringSafeArea(.bottom)
             }
         }
@@ -985,12 +986,12 @@ struct SnippetsRepository {
              - Disappearance → offset = -width (moves left)
              - asyncAfter resets the offset back to width while the view is hidden
              */
-            @State var showView: Bool = false
-            @State var offset: CGSize = CGSize(width: 0, height: UIScreen.main.bounds.height * 0.5)
+            @State private var showView: Bool = false
+            @State private var offset: CGSize = CGSize(width: 0, height: UIScreen.main.bounds.height * 0.5)
             
-            let height = UIScreen.main.bounds.height * 0.5
-            let width = UIScreen.main.bounds.width
-            let duration: Double = 0.5
+            private let height = UIScreen.main.bounds.height * 0.35
+            private let width = UIScreen.main.bounds.width
+            private let duration: Double = 0.5
             
             var body: some View {
                 ZStack(alignment: .bottom) {
@@ -1019,6 +1020,7 @@ struct SnippetsRepository {
                                 .foregroundStyle(Color.mycolor.myGreen)
                                 .padding()
                                 .background(.ultraThinMaterial, in: .capsule)
+                                .overlay(Capsule().stroke(Color.mycolor.myGreen, lineWidth: 1))
                         }
                         Spacer()
                     }
@@ -1033,15 +1035,16 @@ struct SnippetsRepository {
                         .offset(offset)
                     }
                 }
+                .padding(.top)
                 .edgesIgnoringSafeArea(.bottom)
             }
-            
         }
 
         struct A006_SheetRightRightTransition: View {
-            @State var showView: Bool = false
             
-            let height = UIScreen.main.bounds.height * 0.5
+            @State private var showView: Bool = false
+            
+            private let height = UIScreen.main.bounds.height * 0.35
             
             var body: some View {
                 ZStack(alignment: .bottom) {
@@ -1054,6 +1057,7 @@ struct SnippetsRepository {
                                 .font(.headline)
                                 .padding()
                                 .background(.ultraThinMaterial, in: .capsule)
+                                .overlay(Capsule().stroke(Color.mycolor.myOrange, lineWidth: 1))
                         }
                         Spacer()
                     }
@@ -1063,17 +1067,19 @@ struct SnippetsRepository {
                         .offset(x: showView ? 0 : UIScreen.main.bounds.width) // from right to left
                         .animation(.easeInOut(duration: 0.5), value: showView)
                 }
+                .padding(.top)
                 .edgesIgnoringSafeArea(.bottom)
             }
         }
 
         struct A006_SheetSliderTransition: View {
-            @State var showView: Bool = false
-            @State var offset: CGFloat = UIScreen.main.bounds.width // старт справа
             
-            let height = UIScreen.main.bounds.height * 0.5
-            let width = UIScreen.main.bounds.width
-            let duration: Double = 0.5
+            @State private var showView: Bool = false
+            @State private var offset: CGFloat = UIScreen.main.bounds.width // start on the right
+            
+            private let height = UIScreen.main.bounds.height * 0.35
+            private let width = UIScreen.main.bounds.width
+            private let duration: Double = 0.5
             
             var body: some View {
                 ZStack(alignment: .bottom) {
@@ -1102,6 +1108,7 @@ struct SnippetsRepository {
                                 .font(.headline)
                                 .padding()
                                 .background(.ultraThinMaterial, in: .capsule)
+                                .overlay(Capsule().stroke(Color.mycolor.myPurple, lineWidth: 1))
                         }
                         Spacer()
                     }
@@ -1113,6 +1120,7 @@ struct SnippetsRepository {
                             .offset(x: offset)
                     }
                 }
+                .padding(.top)
                 .edgesIgnoringSafeArea(.bottom)
             }
         }

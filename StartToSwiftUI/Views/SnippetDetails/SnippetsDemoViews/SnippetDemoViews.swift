@@ -17,7 +17,7 @@ import SwiftUI
 struct A006_SheetTransitionDemoView: View {
 
     let snippet: CodeSnippet
-
+    
     var body: some View {
         VStack(spacing: 0) {
             ScrollView(showsIndicators: false) {
@@ -73,36 +73,31 @@ struct A004_ShrinkingButtonDemoView: View {
     let snippet: CodeSnippet
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 20) {
                     SnippetDemoHeader(snippet: snippet)
-                    
-                    // Live demo — original component
-                    Text("Version for use within ScrollView")
-                        .font(.headline)
-                    A004_ShrinkingButtonForScrollViewDemo()
+                        .padding()
                     
                     if let thanks = snippet.thanks, !thanks.isEmpty {
                         SnippetThanksView(thanks: thanks)
+                            .padding(.horizontal)
                     }
                 }
-                .padding()
             }
-            .frame(maxHeight: 350)
+            .fixedSize(horizontal: false, vertical: true)
             
-            Group {
-                Text("Version for regular use")
+            VStack {
+                Text("Version for use within ScrollView")
                     .font(.headline)
-                    .frame(maxHeight: 55)
-                    .padding()
-                
+                A004_ShrinkingButtonForScrollViewDemo()
+                                
+                Text("Version for regular use")
                 A004_ShrinkingButtonRegularDemo()
             }
-            .foregroundStyle(Color.mycolor.myAccent)
-            .frame(maxWidth: .infinity, alignment: .top)
+            .frame(maxHeight: .infinity, alignment: .top)
         }
-        .frame(maxHeight: .infinity, alignment: .top)
+        .foregroundStyle(Color.mycolor.myAccent)
     }
 }
 
@@ -112,20 +107,24 @@ struct A003_ProgressCircleWithCheckmarkDemoView: View {
     let snippet: CodeSnippet
 
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 20) {
-                SnippetDemoHeader(snippet: snippet)
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
 
-                // Live demo — original component
-                A003_ProgressCircleWithCheckmarkDemo()
-
-                if let thanks = snippet.thanks, !thanks.isEmpty {
-                    SnippetThanksView(thanks: thanks)
+                    if let thanks = snippet.thanks, !thanks.isEmpty {
+                        SnippetThanksView(thanks: thanks)
+                            .padding(.horizontal)
+                    }
                 }
             }
-            .padding()
-            .foregroundStyle(Color.mycolor.myAccent)
+            .fixedSize(horizontal: false, vertical: true)
+            
+            A003_ProgressCircleWithCheckmarkDemo()
+                .frame(maxHeight: .infinity)
         }
+        .foregroundStyle(Color.mycolor.myAccent)
     }
 }
 
@@ -135,20 +134,24 @@ struct A002_TrimIndicatorDemoView: View {
     let snippet: CodeSnippet
 
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 20) {
-                SnippetDemoHeader(snippet: snippet)
-
-                // Live demo — original component
-                A002_TrimIndicatorDemo()
-
-                if let thanks = snippet.thanks, !thanks.isEmpty {
-                    SnippetThanksView(thanks: thanks)
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                    
+                    if let thanks = snippet.thanks, !thanks.isEmpty {
+                        SnippetThanksView(thanks: thanks)
+                            .padding(.horizontal)
+                    }
                 }
             }
-            .padding()
-            .foregroundStyle(Color.mycolor.myAccent)
+            .fixedSize(horizontal: false, vertical: true)
+            
+            A002_TrimIndicatorDemo()
+                .frame(maxHeight: .infinity)
         }
+        .foregroundStyle(Color.mycolor.myAccent)
     }
 }
 
@@ -158,20 +161,24 @@ struct A001_ProgressViewIndicatorsDemoView: View {
     let snippet: CodeSnippet
 
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 20) {
-                SnippetDemoHeader(snippet: snippet)
-
-                // Live demo — original component
-                A001_ProgressViewIndicatorsDemo()
-
-                if let thanks = snippet.thanks, !thanks.isEmpty {
-                    SnippetThanksView(thanks: thanks)
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                    
+                    if let thanks = snippet.thanks, !thanks.isEmpty {
+                        SnippetThanksView(thanks: thanks)
+                            .padding(.horizontal)
+                    }
                 }
             }
-            .padding()
-            .foregroundStyle(Color.mycolor.myAccent)
+            .fixedSize(horizontal: false, vertical: true)
+            
+            A001_ProgressViewIndicatorsDemo()
+                .frame(maxHeight: .infinity)
         }
+        .foregroundStyle(Color.mycolor.myAccent)
     }
 }
 
