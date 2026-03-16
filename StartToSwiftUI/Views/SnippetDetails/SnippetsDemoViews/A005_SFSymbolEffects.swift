@@ -13,16 +13,21 @@ struct A005_SFSymbolEffectsDemo: View {
     
     var body: some View {
         VStack {
-            Image(systemName: "sun.max.fill")
+            Image(systemName: isAnimated ? "microphone.slash.fill" : "microphone.fill") // microphone.slash.fill
                 .font(.system(size: 50, weight: .bold))
-                .symbolEffect(.pulse, value: isAnimated)
+                .contentTransition(.symbolEffect(.replace))
                 .padding()
 
-            Image(systemName: "sun.max.fill")
-                .font(.system(size: 50, weight: .bold))
-                .symbolEffect(.bounce, value: isAnimated)
-                .padding()
-                        
+            HStack {
+                Image(systemName: "sun.max.fill")
+                    .font(.system(size: 50, weight: .bold))
+                    .symbolEffect(.pulse, value: isAnimated)
+                Image(systemName: "sun.max.fill")
+                    .font(.system(size: 50, weight: .bold))
+                    .symbolEffect(.bounce, value: isAnimated)
+            }
+            .padding()
+
             HStack {
                 Image(systemName: "antenna.radiowaves.left.and.right")
                     .font(.system(size: 50, weight: .bold))
@@ -30,18 +35,11 @@ struct A005_SFSymbolEffectsDemo: View {
                 Image(systemName: "antenna.radiowaves.left.and.right")
                     .font(.system(size: 50, weight: .bold))
                     .symbolEffect(.variableColor.iterative, value: isAnimated)
-                
                 Image(systemName: "antenna.radiowaves.left.and.right")
                     .font(.system(size: 50, weight: .bold))
                     .symbolEffect(.variableColor.hideInactiveLayers, value: isAnimated)
             }
             .padding()
-
-            Image(systemName: isAnimated ? "microphone.slash.fill" : "microphone.fill") // microphone.slash.fill
-                .font(.system(size: 50, weight: .bold))
-                .contentTransition(.symbolEffect(.replace))
-                .padding()
-
             
             Button {
                 isAnimated.toggle()
@@ -53,7 +51,6 @@ struct A005_SFSymbolEffectsDemo: View {
                     .background(Color.mycolor.myBlue, in: .capsule)
             }
             .padding()
-
         }
     }
 }
