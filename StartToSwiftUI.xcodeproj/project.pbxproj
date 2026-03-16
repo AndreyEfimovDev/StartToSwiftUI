@@ -57,8 +57,8 @@
 		47453E042EAB73A9000D2C16 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47453E032EAB73A9000D2C16 /* Date.swift */; };
 		474637FD2F6699F800DF011B /* A004_ShrinkingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474637FC2F6699F800DF011B /* A004_ShrinkingButton.swift */; };
 		474637FF2F66D58F00DF011B /* A005_SFSymbolEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474637FE2F66D58F00DF011B /* A005_SFSymbolEffects.swift */; };
-		474638012F66F27600DF011B /* A006_AnimationTiming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474638002F66F27600DF011B /* A006_AnimationTiming.swift */; };
-		474638052F6726CC00DF011B /* Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474638042F6726CC00DF011B /* Transition.swift */; };
+		474638012F66F27600DF011B /* AnimationTiming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474638002F66F27600DF011B /* AnimationTiming.swift */; };
+		474638052F6726CC00DF011B /* A006_SheetTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474638042F6726CC00DF011B /* A006_SheetTransition.swift */; };
 		474638072F672F7800DF011B /* Actionsheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474638062F672F7800DF011B /* Actionsheet.swift */; };
 		474638092F6732EA00DF011B /* ContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474638082F6732EA00DF011B /* ContextMenu.swift */; };
 		4746380B2F67348E00DF011B /* AlignmentGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4746380A2F67348E00DF011B /* AlignmentGallery.swift */; };
@@ -276,8 +276,8 @@
 		47453E032EAB73A9000D2C16 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		474637FC2F6699F800DF011B /* A004_ShrinkingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A004_ShrinkingButton.swift; sourceTree = "<group>"; };
 		474637FE2F66D58F00DF011B /* A005_SFSymbolEffects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A005_SFSymbolEffects.swift; sourceTree = "<group>"; };
-		474638002F66F27600DF011B /* A006_AnimationTiming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A006_AnimationTiming.swift; sourceTree = "<group>"; };
-		474638042F6726CC00DF011B /* Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transition.swift; sourceTree = "<group>"; };
+		474638002F66F27600DF011B /* AnimationTiming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationTiming.swift; sourceTree = "<group>"; };
+		474638042F6726CC00DF011B /* A006_SheetTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A006_SheetTransition.swift; sourceTree = "<group>"; };
 		474638062F672F7800DF011B /* Actionsheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Actionsheet.swift; sourceTree = "<group>"; };
 		474638082F6732EA00DF011B /* ContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenu.swift; sourceTree = "<group>"; };
 		4746380A2F67348E00DF011B /* AlignmentGallery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignmentGallery.swift; sourceTree = "<group>"; };
@@ -909,8 +909,8 @@
 				470DB64E2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift */,
 				474637FC2F6699F800DF011B /* A004_ShrinkingButton.swift */,
 				474637FE2F66D58F00DF011B /* A005_SFSymbolEffects.swift */,
-				474638002F66F27600DF011B /* A006_AnimationTiming.swift */,
-				474638042F6726CC00DF011B /* Transition.swift */,
+				474638042F6726CC00DF011B /* A006_SheetTransition.swift */,
+				474638002F66F27600DF011B /* AnimationTiming.swift */,
 				474638062F672F7800DF011B /* Actionsheet.swift */,
 				474638082F6732EA00DF011B /* ContextMenu.swift */,
 				4746380A2F67348E00DF011B /* AlignmentGallery.swift */,
@@ -1241,7 +1241,7 @@
 				47B6E8102F5DFB1700EF7441 /* SnippetViewRegistry.swift in Sources */,
 				475997552E5C7F81008E20F0 /* PreviewData.swift in Sources */,
 				4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */,
-				474638052F6726CC00DF011B /* Transition.swift in Sources */,
+				474638052F6726CC00DF011B /* A006_SheetTransition.swift in Sources */,
 				471DCBDC2EBBC67500AFA5F4 /* Introduction.swift in Sources */,
 				4791CE002E747B2E00687126 /* HapticManager.swift in Sources */,
 				4746380D2F67357000DF011B /* AlignmentGuide.swift in Sources */,
@@ -1343,7 +1343,7 @@
 				471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */,
 				47AA558A2EA9741D000AF4E9 /* RestoreBackupView.swift in Sources */,
 				4751DAF62F16407200EC9C53 /* ChartDataPoint.swift in Sources */,
-				474638012F66F27600DF011B /* A006_AnimationTiming.swift in Sources */,
+				474638012F66F27600DF011B /* AnimationTiming.swift in Sources */,
 				4791CDBB2E702E9700687126 /* EraseAllPostsView.swift in Sources */,
 				4732FB372EAA63810062269D /* Constants.swift in Sources */,
 				4773AC902F269D4B00A713EF /* PostStatusIcons.swift in Sources */,

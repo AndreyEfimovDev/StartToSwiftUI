@@ -14,7 +14,7 @@ import Foundation
 
 struct SnippetsRepository {
     
-    static let allDemoCodeSnippet: [CodeSnippet] = [a001, a002, a003, a004, a005]
+    static let allDemoCodeSnippet: [CodeSnippet] = [a001, a002, a003, a004, a005, a006]
     
     // MARK: - A001 Progress indicators collection
     static let a001 = CodeSnippet(
@@ -896,5 +896,152 @@ struct SnippetsRepository {
         """
     )
     
-    
+    // MARK: - A006 SF Symbol Animation Effects
+    static let a006 = CodeSnippet(
+        id: "A006",
+        category: Constants.mainCategory,
+        title: "Sheet Transition",
+        intro: """
+        This code showcases sheet transition in different directions using .offset:
+        - bottom in, bottom out
+        - bottom in, right out
+        - right in, right out
+        - right in, left out (slider)
+        """,
+        thanks: nil,
+        githubUrlString: nil,
+        notes: "",
+        date: Date.from(year: 2026, month: 3, day: 16) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        struct A006_SheetTransitionDemo: View {
+            
+            var body: some View {
+                TabView {
+                    Tab("", systemImage: "1.circle") {
+                        A006_SheetBottomTransition()
+                    }
+                    Tab("", systemImage: "2.circle") {
+                        A006_SheetBottomRightTransition()
+                    }
+                    Tab("", systemImage: "3.circle") {
+                        A006_SheetSliderTransition()
+                    }
+                }
+            }
+        }
+
+        #Preview {
+            A006_SheetTransitionDemo()
+        }
+
+        struct A006_SheetBottomTransition: View {
+            @State var showView: Bool = false
+            
+            let height = UIScreen.main.bounds.height * 0.5
+            
+            var body: some View {
+                ZStack(alignment: .bottom) {
+                    
+                    VStack {
+                        Button {
+                            showView.toggle()
+                        }
+                        label: {
+                            Text("ANIMATE SHEET")
+                                .font(.headline)
+                                .padding()
+                        }
+                        Spacer()
+                    }
+                    
+                    RoundedRectangle(cornerRadius: 30)
+                        .frame(height: height)
+                        .offset(y: showView ? 0 : height)
+                        .animation(.easeInOut(duration: 0.5), value: showView)
+                }
+                .edgesIgnoringSafeArea(.bottom)
+            }
+        }
+
+        struct A006_SheetBottomRightTransition: View {
+            @State var showView: Bool = false
+            @State var offset: CGSize = CGSize(width: 0, height: UIScreen.main.bounds.height * 0.5)
+            
+            let height = UIScreen.main.bounds.height * 0.5
+            let width = UIScreen.main.bounds.width
+            let duration: Double = 0.5
+            
+            var body: some View {
+                ZStack(alignment: .bottom) {
+                    VStack {
+                        Button {
+                            if !showView {
+                                // appearance from the bottom
+                                showView = true
+                                withAnimation(.easeInOut(duration: duration)) {
+                                    offset = .zero
+                                }
+                            } else {
+                                // исчезновение вправо
+                                withAnimation(.easeInOut(duration: duration)) {
+                                    offset = CGSize(width: width, height: 0)
+                                }
+                                // resetting the position back down after disappearing
+                                DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                                    showView = false
+                                    offset = CGSize(width: 0, height: height)
+                                }
+                            }
+                        } label: {
+                            Text("ANIMATE SHEET")
+                                .font(.headline)
+                                .padding()
+                        }
+                        Spacer()
+                    }
+                    
+                    if showView {
+                        UnevenRoundedRectangle(cornerRadii: .init(
+                            topLeading: 30,
+                            topTrailing: 30
+                        ))
+                        .frame(height: height)
+                        .offset(offset)
+                    }
+                }
+                .edgesIgnoringSafeArea(.bottom)
+            }
+            
+        }
+
+        struct A006_SheetSliderTransition: View {
+            @State var showView: Bool = false
+            
+            let height = UIScreen.main.bounds.height * 0.5
+            
+            var body: some View {
+                ZStack(alignment: .bottom) {
+                    VStack {
+                        Button {
+                            showView.toggle()
+                        } label: {
+                            Text("ANIMATE SHEET")
+                                .font(.headline)
+                                .padding()
+                        }
+                        Spacer()
+                    }
+                    RoundedRectangle(cornerRadius: 30)
+                        .frame(height: height)
+                        .offset(x: showView ? 0 : UIScreen.main.bounds.width) // справа налево
+                        .animation(.easeInOut(duration: 0.5), value: showView)
+                }
+                .edgesIgnoringSafeArea(.bottom)
+            }
+        }
+        """
+    )
+
 }

@@ -13,31 +13,62 @@
 import SwiftUI
 
 
-// MARK: - A003_ProgressCircleWithCheckmark DemoView
+// MARK: - A005 SheetTransition DemoView
+struct A006_SheetTransitionDemoView: View {
+
+    let snippet: CodeSnippet
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+
+                    if let thanks = snippet.thanks, !thanks.isEmpty {
+                        SnippetThanksView(thanks: thanks)
+                            .padding(.horizontal)
+                    }
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            
+            A006_SheetTransitionDemo()
+                .frame(maxHeight: .infinity)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
+
+// MARK: - A005 SFSymbolEffects DemoView
 struct A005_SFSymbolEffectsDemoView: View {
 
     let snippet: CodeSnippet
 
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 20) {
-                SnippetDemoHeader(snippet: snippet)
-
-                // Live demo — original component
-                A005_SFSymbolEffectsDemo()
-                
-                if let thanks = snippet.thanks, !thanks.isEmpty {
-                    SnippetThanksView(thanks: thanks)
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                    
+                    if let thanks = snippet.thanks, !thanks.isEmpty {
+                        SnippetThanksView(thanks: thanks)
+                            .padding(.horizontal)
+                    }
                 }
             }
-            .padding()
-            .foregroundStyle(Color.mycolor.myAccent)
+            .fixedSize(horizontal: false, vertical: true)
+            
+            A005_SFSymbolEffectsDemo()
+                .frame(maxHeight: .infinity)
         }
+        .foregroundStyle(Color.mycolor.myAccent)
     }
 }
 
 // MARK: - A004_PressableButton DemoView
-struct A004_PressableButtonDemoView: View {
+struct A004_ShrinkingButtonDemoView: View {
 
     let snippet: CodeSnippet
 
@@ -230,9 +261,15 @@ private struct SnippetThanksView: View {
             .environmentObject(AppCoordinator())
     }
 }
-#Preview("A004_Pressable Button") {
+#Preview("A004_Shrinking Button") {
     NavigationStack {
-        A004_PressableButtonDemoView(snippet: SnippetsRepository.a004)
+        A004_ShrinkingButtonDemoView(snippet: SnippetsRepository.a004)
+            .environmentObject(AppCoordinator())
+    }
+}
+#Preview("A005_Sheet Transition") {
+    NavigationStack {
+        A006_SheetTransitionDemoView(snippet: SnippetsRepository.a006)
             .environmentObject(AppCoordinator())
     }
 }
