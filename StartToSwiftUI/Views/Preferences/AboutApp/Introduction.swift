@@ -45,6 +45,9 @@ struct Introduction: View {
                - Add personal notes to the content
                - Save drafts for later completion
                
+               **CODE SNIPPETS**:
+               - Curated code snippets demonstrating advanced SwiftUI features
+               
                **LEARNING MANAGEMENT**:
                - Put on the own shelve: Lesson, Course, Article, Bug, Other
                - Track progress: 'Added' → 'Started' → 'Learnt' → 'Practiced'

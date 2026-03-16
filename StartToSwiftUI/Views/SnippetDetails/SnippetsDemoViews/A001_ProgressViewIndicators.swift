@@ -14,13 +14,15 @@ struct A001_ProgressViewIndicatorsDemo: View {
     @State private var isLoading = false
     
     var body: some View {
-        VStack(spacing: 30) {
-            A001_Wave()
+        VStack(spacing: 16) {
+            A001_WaveSymmetrical()
+            A001_WaveAsymmetrical()
             A001_PulsingCircle()
             A001_JumpingDots()
             A001_JumpingLetters()
-            A001_ArcProgressDinamycGapView(lineWidth: 3, diameter: 30)
             A001_RotatingRingWithTrace()
+            A001_ArcProgressDinamycGapView(lineWidth: 3, diameter: 30)
+            A001_GaugeProgress()
         }
     }
 }
@@ -33,31 +35,113 @@ struct A001_ProgressViewIndicatorsDemo: View {
 }
 
 // MARK: - Code Snippets
-struct A001_Wave: View {
+struct A001_WaveSymmetrical: View {
+    /*
+     - states contains 4 frames, %4 gives an infinite loop
+     - duration: 0.45 slightly less than the timer interval of 0.5 — the animation manages to finish before the next step
+     */
+    private let barCount = 5
+    private let maxHeight: CGFloat = 30
+    private let minHeight: CGFloat = 3
     
-    @State private var scales: [CGFloat] = [0.5, 0.5, 0.5, 0.5, 0.5]
+    @State private var phase: CGFloat = 0
+    @State private var cancellable: AnyCancellable? = nil
+    
+    // the distance of each stick from the center: [2, 1, 0, 1, 2]
+    private let distancesFromCenter: [CGFloat] = [2, 1, 0, 1, 2]
     
     var body: some View {
         HStack(spacing: 3) {
-            ForEach(0..<5, id: \.self) { index in
+            ForEach(0..<barCount, id: \.self) { index in
                 RoundedRectangle(cornerRadius: 2)
                     .fill(Color.mycolor.myBlue)
-                    .frame(width: 3, height: 12 * scales[index])
-                    .animation(
-                        .easeInOut(duration: 0.6)
-                        .repeatForever(autoreverses: true)
-                        .delay(Double(index) * 0.1), value: scales[index])
+                    .frame(width: 3, height: barHeight(for: index))
+                    .frame(height: maxHeight)
+                    .clipped()
+                    .animation(.linear(duration: 0.08), value: phase)
             }
         }
         .onAppear {
-            for i in 0..<scales.count {
-                DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.1) {
-                    scales[i] = 1.0
+            cancellable = Timer
+                .publish(every: 0.08, on: .main, in: .common)
+                .autoconnect()
+                .sink { _ in
+                    /*
+                     The bigger the step, the faster the wave. You can vary it:
+                     0.1 — slow
+                     0.15 is normal
+                     0.3 — fast
+                     0.5 is very fast
+                     */
+                    phase += 0.3
                 }
-            }
+        }
+        .onDisappear {
+            // cancel the timer publisher to prevent memory leak
+            cancellable?.cancel()
+            cancellable = nil
         }
     }
+    
+    private func barHeight(for index: Int) -> CGFloat {
+        // symmetry: the same distance from the center = the same height
+        let angle = phase + distancesFromCenter[index] * (.pi / 2)
+        let normalized = (sin(angle) + 1) / 2  // 0...1
+        return minHeight + normalized * (maxHeight - minHeight)
+    }
 }
+
+struct A001_WaveAsymmetrical: View {
+    /*
+     How it works:
+     - phase increments every 0.15seconds — the wave shifts from left to right
+     - sin() gives a smooth wave, * (.pi /3) is the step between adjacent sticks of 90°, i.e. 4 sticks = a full cycle
+     - normalized translates sin from -1...1 to 0...1, then scale to minHeight...maxHeight
+     
+     You can play with the angle pitch.:
+     - .pi/3 is a more gentle wave
+     - .pi/2 is a steep wave (fast transition)
+     */
+    
+    private let barCount = 5
+    private let maxHeight: CGFloat = 30
+    private let minHeight: CGFloat = 3
+    
+    @State private var phase: CGFloat = 0
+    @State private var cancellable: AnyCancellable? = nil
+    
+    var body: some View {
+        HStack(spacing: 3) {
+            ForEach(0..<barCount, id: \.self) { index in
+                RoundedRectangle(cornerRadius: 2)
+                    .fill(Color.mycolor.myBlue)
+                    .frame(width: 3, height: barHeight(for: index))
+                    .frame(height: maxHeight)
+                    .animation(.easeInOut(duration: 0.3), value: phase)
+            }
+        }
+        .onAppear {
+            cancellable = Timer
+                .publish(every: 0.08, on: .main, in: .common)
+                .autoconnect()
+                .sink { _ in
+                    phase += 0.4
+                }
+        }
+        .onDisappear {
+            // cancel the timer publisher to prevent memory leak
+            cancellable?.cancel()
+            cancellable = nil
+        }
+    }
+    
+    private func barHeight(for index: Int) -> CGFloat {
+        let angle = (CGFloat(index) - phase) * (.pi / 3)
+        let normalized = (sin(angle) + 1) / 2  // 0...1
+        return minHeight + normalized * (maxHeight - minHeight)
+    }
+}
+
 
 struct A001_PulsingCircle: View {
     @State private var scale: CGFloat = 0.5
@@ -107,19 +191,20 @@ struct A001_JumpingLetters: View {
     
     @State private var counter: Int = 0
     @State private var cancellable: AnyCancellable?
-
+    
     private let loadingString: [String] = "........... loading ...........".map { String($0) }
     
     // MARK: BODY
     var body: some View {
         ZStack {
-                HStack(spacing: 0) {
-                    ForEach(loadingString.indices, id: \.self) { index in
-                        Text(loadingString[index])
-                            .offset(y: counter == index ? -11 : 0)
-                    }
+            HStack(spacing: 0) {
+                ForEach(loadingString.indices, id: \.self) { index in
+                    Text(loadingString[index])
+                        .font(.headline)
+                        .offset(y: counter == index ? -11 : 0)
                 }
-                .font(.subheadline)
+            }
+            .font(.subheadline)
         }
         .foregroundColor(Color.mycolor.myBlue)
         .onAppear {
@@ -151,7 +236,7 @@ struct A001_RotatingRingWithTrace: View {
                         .init(color: .clear, location: 0.0),  // tail
                         .init(color: Color.mycolor.myBlue.opacity(0.3), location: 0.3),  // trace
                         .init(color: Color.mycolor.myBlue, location: 0.7),  // head
-                        .init(color: .clear, location: 1.0),  // remove a dot
+                        .init(color: .clear, location: 1.0),  // remove a dot at the end of the tail
                     ],
                     center: .center,
                     startAngle: .degrees(0),
@@ -159,7 +244,6 @@ struct A001_RotatingRingWithTrace: View {
                 ),
                 style: StrokeStyle(lineWidth: 3, lineCap: .round)
             )
-
             .frame(width: 30, height: 30)
             .rotationEffect(Angle(degrees: isRotating ? 360 : 0))
             .animation(
@@ -168,6 +252,11 @@ struct A001_RotatingRingWithTrace: View {
                 value: isRotating
             )
             .onAppear { isRotating = true }
+            .overlay {
+                Text("A")
+                    .font(.headline)
+                    .foregroundStyle(Color.mycolor.myBlue)
+            }
     }
 }
 
@@ -269,5 +358,50 @@ struct A001_ArcProgressDinamycGapView: View {
             )
         }
         .frame(width: diameter, height: diameter)
+    }
+}
+
+struct A001_GaugeProgress: View {
+    
+    @State private var progress: Double = 0
+    @State private var cancellable: AnyCancellable? = nil
+    
+    var body: some View {
+        HStack(spacing: 20) {
+            Gauge(value: progress, in: 0...1) {
+                EmptyView()
+            } currentValueLabel: {
+                Text("\(Int(progress * 100))%")
+                    .font(.system(size: 10))
+                    .foregroundStyle(Color.mycolor.myBlue)
+            }
+            .gaugeStyle(.accessoryCircularCapacity)
+            .tint(Color.mycolor.myBlue)
+            .frame(width: 50, height: 50)
+            
+            Gauge(value: progress, in: 0...1) {
+                EmptyView()
+            } currentValueLabel: {
+                Text("\(Int(progress * 100))%")
+                    .font(.system(size: 10))
+                    .foregroundStyle(Color.mycolor.myBlue)
+            }
+            .gaugeStyle(.accessoryCircular)
+            .tint(Color.mycolor.myBlue)
+            .frame(width: 50, height: 50)
+        }
+        .onAppear {
+            cancellable = Timer
+                .publish(every: 0.05, on: .main, in: .common)
+                .autoconnect()
+                .sink { _ in
+                    progress = progress >= 1.0 ? 0.0 : min(progress + 0.01, 1.0)
+                }
+        }
+        .onDisappear {
+            // cancel the timer publisher to prevent memory leak
+            cancellable?.cancel()
+            cancellable = nil
+        }
     }
 }

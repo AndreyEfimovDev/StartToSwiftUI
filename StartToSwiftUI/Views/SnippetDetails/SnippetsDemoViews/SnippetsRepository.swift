@@ -14,14 +14,24 @@ import Foundation
 
 struct SnippetsRepository {
     
-    static let allDemoCodeSnippet: [CodeSnippet] = [a001, a002, a003, a004, a005]
+    static let allDemoCodeSnippet: [CodeSnippet] = [a001, a002, a003, a004, a005, a006]
     
     // MARK: - A001 Progress indicators collection
     static let a001 = CodeSnippet(
         id: "A001",
         category: Constants.mainCategory,
         title: "Progress indicators collection",
-        intro: "A collection of five loading animations including wave patterns (both outward and inward), a pulsing circle, jumping dots, and a rotating ring. Demonstrates various SwiftUI animation techniques.",
+        intro: """
+        A collection of custom loading animations in SwiftUI:
+        - Wave patterns — symmetrical & asymmetrical (sine-based)
+        - Pulsing circle — scale & opacity
+        - Jumping dots & letters — sequential bounce
+        - Rotating ring with trace and dinamyc gap - gradient & rotation
+        - Dynamic gap arc — winding effect with TimelineView & Canvas
+        - Gauge progress — native gauges with percentage updates
+        
+        Techniques: Timer publishers, phase animations, staggered delays, TimelineView, Canvas drawing, state-driven animations, and native gauges.
+        """,
         thanks: nil,
         githubUrlString: nil,
         notes: "",
@@ -29,58 +39,141 @@ struct SnippetsRepository {
         codeSnippet: """
         import SwiftUI
         import Combine
-        
+
         // MARK: - Demo
         struct A001_ProgressViewIndicatorsDemo: View {
             
             @State private var isLoading = false
             
             var body: some View {
-                VStack(spacing: 30) {
-                    A001_Wave()
+                VStack(spacing: 16) {
+                    A001_WaveSymmetrical()
+                    A001_WaveAsymmetrical()
                     A001_PulsingCircle()
                     A001_JumpingDots()
                     A001_JumpingLetters()
-                    A001_ArcProgressDinamycGapView(lineWidth: 3, diameter: 30)
                     A001_RotatingRingWithTrace()
+                    A001_ArcProgressDinamycGapView(lineWidth: 3, diameter: 30)
                 }
             }
         }
-        
+
         // MARK: - Preview
         #Preview {
             NavigationStack {
                 A001_ProgressViewIndicatorsDemo()
             }
         }
-        
+
         // MARK: - Code Snippets
-        struct A001_Wave: View {
+        struct A001_WaveSymmetrical: View {
+            /*
+             - states contains 4 frames, %4 gives an infinite loop
+             - duration: 0.45 slightly less than the timer interval of 0.5 — the animation manages to finish before the next step
+             */
+            private let barCount = 5
+             private let maxHeight: CGFloat = 30
+             private let minHeight: CGFloat = 3
+             
+             @State private var phase: CGFloat = 0
+             @State private var cancellable: AnyCancellable? = nil
+             
+             // the distance of each stick from the center: [2, 1, 0, 1, 2]
+             private let distancesFromCenter: [CGFloat] = [2, 1, 0, 1, 2]
+             
+             var body: some View {
+                 HStack(spacing: 3) {
+                     ForEach(0..<barCount, id: \\.self) { index in
+                         RoundedRectangle(cornerRadius: 2)
+                             .fill(Color.mycolor.myBlue)
+                             .frame(width: 3, height: barHeight(for: index))
+                             .frame(height: maxHeight)
+                             .clipped()
+                             .animation(.linear(duration: 0.08), value: phase)
+                     }
+                 }
+                 .onAppear {
+                     cancellable = Timer
+                         .publish(every: 0.08, on: .main, in: .common)
+                         .autoconnect()
+                         .sink { _ in
+                             /*
+                              The bigger the step, the faster the wave. You can vary it:
+                                0.1 — slow
+                                0.15 is normal
+                                0.3 — fast
+                                0.5 is very fast
+                              */
+                             phase += 0.3
+                         }
+                 }
+                 .onDisappear {
+                     // cancel the timer publisher to prevent memory leak
+                     cancellable?.cancel()
+                     cancellable = nil
+                 }
+             }
+             
+             private func barHeight(for index: Int) -> CGFloat {
+                 // symmetry: the same distance from the center = the same height
+                 let angle = phase + distancesFromCenter[index] * (.pi / 2)
+                 let normalized = (sin(angle) + 1) / 2  // 0...1
+                 return minHeight + normalized * (maxHeight - minHeight)
+             }
+        }
+
+        struct A001_WaveAsymmetrical: View {
+            /*
+             How it works:
+             - phase increments every 0.15seconds — the wave shifts from left to right
+             - sin() gives a smooth wave, * (.pi /3) is the step between adjacent sticks of 90°, i.e. 4 sticks = a full cycle
+             - normalized translates sin from -1...1 to 0...1, then scale to minHeight...maxHeight
+
+             You can play with the angle pitch.:
+             - .pi/3 is a more gentle wave
+             - .pi/2 is a steep wave (fast transition)
+             */
             
-            @State private var scales: [CGFloat] = [0.5, 0.5, 0.5, 0.5, 0.5]
+            private let barCount = 5
+            private let maxHeight: CGFloat = 30
+            private let minHeight: CGFloat = 3
+            
+            @State private var phase: CGFloat = 0
+            @State private var cancellable: AnyCancellable? = nil
             
             var body: some View {
                 HStack(spacing: 3) {
-                    ForEach(0..<5, id: \\.self) { index in
+                    ForEach(0..<barCount, id: \\.self) { index in
                         RoundedRectangle(cornerRadius: 2)
                             .fill(Color.mycolor.myBlue)
-                            .frame(width: 3, height: 12 * scales[index])
-                            .animation(
-                                .easeInOut(duration: 0.6)
-                                .repeatForever(autoreverses: true)
-                                .delay(Double(index) * 0.1), value: scales[index])
+                            .frame(width: 3, height: barHeight(for: index))
+                            .frame(height: maxHeight)
+                            .animation(.easeInOut(duration: 0.3), value: phase)
                     }
                 }
                 .onAppear {
-                    for i in 0..<scales.count {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.1) {
-                            scales[i] = 1.0
+                    cancellable = Timer
+                        .publish(every: 0.08, on: .main, in: .common)
+                        .autoconnect()
+                        .sink { _ in
+                            phase += 0.4
                         }
-                    }
+                }
+                .onDisappear {
+                    // cancel the timer publisher to prevent memory leak
+                    cancellable?.cancel()
+                    cancellable = nil
                 }
             }
+            
+            private func barHeight(for index: Int) -> CGFloat {
+                let angle = (CGFloat(index) - phase) * (.pi / 3)
+                let normalized = (sin(angle) + 1) / 2  // 0...1
+                return minHeight + normalized * (maxHeight - minHeight)
+            }
         }
-        
+
+
         struct A001_PulsingCircle: View {
             @State private var scale: CGFloat = 0.5
             
@@ -97,7 +190,7 @@ struct SnippetsRepository {
                     }
             }
         }
-        
+
         struct A001_JumpingDots: View {
             @State private var scale: [Bool] = [false, false, false]
             
@@ -124,12 +217,12 @@ struct SnippetsRepository {
                 }
             }
         }
-        
+
         struct A001_JumpingLetters: View {
             
             @State private var counter: Int = 0
             @State private var cancellable: AnyCancellable?
-        
+
             private let loadingString: [String] = "........... loading ...........".map { String($0) }
             
             // MARK: BODY
@@ -138,6 +231,7 @@ struct SnippetsRepository {
                         HStack(spacing: 0) {
                             ForEach(loadingString.indices, id: \\.self) { index in
                                 Text(loadingString[index])
+                                    .font(.headline)
                                     .offset(y: counter == index ? -11 : 0)
                             }
                         }
@@ -160,7 +254,7 @@ struct SnippetsRepository {
                 }
             }
         }
-        
+
         struct A001_RotatingRingWithTrace: View {
             @State private var isRotating = false
             
@@ -173,7 +267,7 @@ struct SnippetsRepository {
                                 .init(color: .clear, location: 0.0),  // tail
                                 .init(color: Color.mycolor.myBlue.opacity(0.3), location: 0.3),  // trace
                                 .init(color: Color.mycolor.myBlue, location: 0.7),  // head
-                                .init(color: .clear, location: 1.0),  // remove a dot
+                                .init(color: .clear, location: 1.0),  // remove a dot at the end of the tail
                             ],
                             center: .center,
                             startAngle: .degrees(0),
@@ -181,7 +275,6 @@ struct SnippetsRepository {
                         ),
                         style: StrokeStyle(lineWidth: 3, lineCap: .round)
                     )
-        
                     .frame(width: 30, height: 30)
                     .rotationEffect(Angle(degrees: isRotating ? 360 : 0))
                     .animation(
@@ -190,9 +283,14 @@ struct SnippetsRepository {
                         value: isRotating
                     )
                     .onAppear { isRotating = true }
+                    .overlay {
+                        Text("A")
+                            .font(.headline)
+                            .foregroundStyle(Color.mycolor.myBlue)
+                    }
             }
         }
-        
+
         /// Winding effect: head races ahead (arc grows), tail catches up (arc shrinks).
         /// Both ends move strictly clockwise — zero backward motion, zero jitter.
         ///
@@ -291,6 +389,51 @@ struct SnippetsRepository {
                     )
                 }
                 .frame(width: diameter, height: diameter)
+            }
+        }
+        
+        struct A001_GaugeProgress: View {
+            
+            @State private var progress: Double = 0
+            @State private var cancellable: AnyCancellable? = nil
+            
+            var body: some View {
+                HStack(spacing: 20) {
+                    Gauge(value: progress, in: 0...1) {
+                        EmptyView()
+                    } currentValueLabel: {
+                        Text("\\(Int(progress * 100))%")
+                            .font(.system(size: 10))
+                            .foregroundStyle(Color.mycolor.myBlue)
+                    }
+                    .gaugeStyle(.accessoryCircularCapacity)
+                    .tint(Color.mycolor.myBlue)
+                    .frame(width: 50, height: 50)
+                    
+                    Gauge(value: progress, in: 0...1) {
+                        EmptyView()
+                    } currentValueLabel: {
+                        Text("\\(Int(progress * 100))%")
+                            .font(.system(size: 10))
+                            .foregroundStyle(Color.mycolor.myBlue)
+                    }
+                    .gaugeStyle(.accessoryCircular)
+                    .tint(Color.mycolor.myBlue)
+                    .frame(width: 50, height: 50)
+                }
+                .onAppear {
+                    cancellable = Timer
+                        .publish(every: 0.05, on: .main, in: .common)
+                        .autoconnect()
+                        .sink { _ in
+                            progress = progress >= 1.0 ? 0.0 : min(progress + 0.01, 1.0)
+                        }
+                }
+                .onDisappear {
+                    // cancel the timer publisher to prevent memory leak
+                    cancellable?.cancel()
+                    cancellable = nil
+                }
             }
         }
         """
@@ -741,11 +884,11 @@ struct SnippetsRepository {
         This code showcases various symbol effect modifiers:
         - .pulse — gentle opacity pulsing
         - .bounce — playful scaling animation
-        - .replace with .contentTransition — smooth transition between different symbols (trash ↔ trash.slash)
-        - .variableColor — WiFi symbol animation with three variations:
-            * Standard variable colour
-            * .iterative — sequential filling
-            * .hideInactiveLayers — hides inactive segments
+        - .replace with .contentTransition — smooth transition between different symbols (microphone ↔ microphone.slash)
+        - Antenna Radiowaves symbol animation with three variations:
+            * .variableColor - animation of the opacity of variable layers in a repeatable sequence
+            * .variableColor.iterative — sequential filling
+            * .variableColor.hideInactiveLayers — hides inactive segments
         """,
         thanks: nil,
         githubUrlString: nil,
@@ -760,30 +903,34 @@ struct SnippetsRepository {
             
             var body: some View {
                 VStack {
-                    Image(systemName: "trash")
+                    Image(systemName: isAnimated ? "microphone.slash.fill" : "microphone.fill") // microphone.slash.fill
                         .font(.system(size: 50, weight: .bold))
-                        .symbolEffect(.pulse, value: isAnimated)
+                        .contentTransition(.symbolEffect(.replace))
                         .padding()
 
-                    Image(systemName: "trash")
-                        .font(.system(size: 50, weight: .bold))
-                        .symbolEffect(.bounce, value: isAnimated)
-                        .padding()
-                                
                     HStack {
-                        Image(systemName: "wifi")
+                        Image(systemName: "sun.max.fill")
+                            .font(.system(size: 50, weight: .bold))
+                            .symbolEffect(.pulse, value: isAnimated)
+                        Image(systemName: "sun.max.fill")
+                            .font(.system(size: 50, weight: .bold))
+                            .symbolEffect(.bounce, value: isAnimated)
+                    }
+                    .padding()
+
+                    HStack {
+                        Image(systemName: "antenna.radiowaves.left.and.right")
                             .font(.system(size: 50, weight: .bold))
                             .symbolEffect(.variableColor, value: isAnimated)
-                        Image(systemName: "wifi")
+                        Image(systemName: "antenna.radiowaves.left.and.right")
                             .font(.system(size: 50, weight: .bold))
                             .symbolEffect(.variableColor.iterative, value: isAnimated)
-                        
-                        Image(systemName: "wifi")
+                        Image(systemName: "antenna.radiowaves.left.and.right")
                             .font(.system(size: 50, weight: .bold))
                             .symbolEffect(.variableColor.hideInactiveLayers, value: isAnimated)
                     }
                     .padding()
-
+                    
                     Button {
                         isAnimated.toggle()
                     }label: {
@@ -794,11 +941,6 @@ struct SnippetsRepository {
                             .background(Color.mycolor.myBlue, in: .capsule)
                     }
                     .padding()
-
-                    Image(systemName: isAnimated ? "trash.slash" : "trash")
-                        .font(.system(size: 50, weight: .bold))
-                        .contentTransition(.symbolEffect(.replace))
-                        .padding()
                 }
             }
         }
@@ -809,5 +951,235 @@ struct SnippetsRepository {
         """
     )
     
-    
+    // MARK: - A006 Sheet Transition
+    static let a006 = CodeSnippet(
+        id: "A006",
+        category: Constants.mainCategory,
+        title: "Sheet Transition",
+        intro: """
+        This code demonstrates four different sheet transition:
+        - Bottom-Bottom — standard sheet behaviour
+        - Bottom-Right — enters from bottom, exits to the right
+        - Right-Right — slides in/out from the right edge
+        - Slider — slider-style navigation
+        
+        Each transition is implemented using .offset modifier with different combinations of enter/exit directions.
+        """,
+        thanks: nil,
+        githubUrlString: nil,
+        notes: "",
+        date: Date.from(year: 2026, month: 3, day: 16) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        struct A006_SheetTransitionDemo: View {
+            
+            var body: some View {
+                TabView {
+                    // bottom in, bottom out
+                    Tab("Bottom-Bottom", systemImage: "1.circle") {
+                        A006_SheetBottomTransition()
+                    }
+                    // bottom in, right out
+                    Tab("Bottom-Right", systemImage: "2.circle") {
+                        A006_SheetBottomRightTransition()
+                    }
+                    // right in, right out
+                    Tab("Right-Right", systemImage: "3.circle") {
+                        A006_SheetRightRightTransition()
+                    }
+                    // right in, left out (slider)
+                    Tab("Slider", systemImage: "4.circle") {
+                        A006_SheetSliderTransition()
+                    }
+                }
+            }
+        }
+
+        #Preview {
+            A006_SheetTransitionDemo()
+        }
+
+        struct A006_SheetBottomTransition: View {
+            
+            @State private var showView: Bool = false
+            
+            private let height = UIScreen.main.bounds.height * 0.35
+            
+            var body: some View {
+                ZStack(alignment: .bottom) {
+                    VStack {
+                        Button {
+                            showView.toggle()
+                        }
+                        label: {
+                            Text("ANIMATE SHEET")
+                                .font(.headline)
+                                .foregroundStyle(Color.mycolor.myRed)
+                                .padding()
+                                .background(.ultraThinMaterial, in: .capsule)
+                                .overlay(Capsule().stroke(Color.mycolor.myRed, lineWidth: 1))
+                        }
+                        Spacer()
+                    }
+                    RoundedRectangle(cornerRadius: 30)
+                        .fill(Color.mycolor.myRed.opacity(0.1))
+                        .frame(height: height)
+                        .offset(y: showView ? 0 : height)
+                        .animation(.easeInOut(duration: 0.5), value: showView)
+                }
+                .padding(.top)
+                .edgesIgnoringSafeArea(.bottom)
+            }
+        }
+
+        struct A006_SheetBottomRightTransition: View {
+            /*
+             Logic:
+             - Initial offset = width — hidden behind the right edge
+             - Appearance → offset = 0 (moves from right to left)
+             - Disappearance → offset = -width (moves left)
+             - asyncAfter resets the offset back to width while the view is hidden
+             */
+            @State private var showView: Bool = false
+            @State private var offset: CGSize = CGSize(width: 0, height: UIScreen.main.bounds.height * 0.5)
+            
+            private let height = UIScreen.main.bounds.height * 0.35
+            private let width = UIScreen.main.bounds.width
+            private let duration: Double = 0.5
+            
+            var body: some View {
+                ZStack(alignment: .bottom) {
+                    VStack {
+                        Button {
+                            if !showView {
+                                // appearance from the bottom
+                                showView = true
+                                withAnimation(.easeInOut(duration: duration)) {
+                                    offset = .zero
+                                }
+                            } else {
+                                // disappearance to the right
+                                withAnimation(.easeInOut(duration: duration)) {
+                                    offset = CGSize(width: width, height: 0)
+                                }
+                                // resetting the position back down after disappearing
+                                DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                                    showView = false
+                                    offset = CGSize(width: 0, height: height)
+                                }
+                            }
+                        } label: {
+                            Text("ANIMATE SHEET")
+                                .font(.headline)
+                                .foregroundStyle(Color.mycolor.myGreen)
+                                .padding()
+                                .background(.ultraThinMaterial, in: .capsule)
+                                .overlay(Capsule().stroke(Color.mycolor.myGreen, lineWidth: 1))
+                        }
+                        Spacer()
+                    }
+                    
+                    if showView {
+                        UnevenRoundedRectangle(cornerRadii: .init(
+                            topLeading: 30,
+                            topTrailing: 30
+                        ))
+                        .fill(Color.mycolor.myGreen.opacity(0.1))
+                        .frame(height: height)
+                        .offset(offset)
+                    }
+                }
+                .padding(.top)
+                .edgesIgnoringSafeArea(.bottom)
+            }
+        }
+
+        struct A006_SheetRightRightTransition: View {
+            
+            @State private var showView: Bool = false
+            
+            private let height = UIScreen.main.bounds.height * 0.35
+            
+            var body: some View {
+                ZStack(alignment: .bottom) {
+                    VStack {
+                        Button {
+                            showView.toggle()
+                        } label: {
+                            Text("ANIMATE SHEET")
+                                .foregroundStyle(Color.mycolor.myOrange)
+                                .font(.headline)
+                                .padding()
+                                .background(.ultraThinMaterial, in: .capsule)
+                                .overlay(Capsule().stroke(Color.mycolor.myOrange, lineWidth: 1))
+                        }
+                        Spacer()
+                    }
+                    RoundedRectangle(cornerRadius: 30)
+                        .fill(Color.mycolor.myOrange.opacity(0.1))
+                        .frame(height: height)
+                        .offset(x: showView ? 0 : UIScreen.main.bounds.width) // from right to left
+                        .animation(.easeInOut(duration: 0.5), value: showView)
+                }
+                .padding(.top)
+                .edgesIgnoringSafeArea(.bottom)
+            }
+        }
+
+        struct A006_SheetSliderTransition: View {
+            
+            @State private var showView: Bool = false
+            @State private var offset: CGFloat = UIScreen.main.bounds.width // start on the right
+            
+            private let height = UIScreen.main.bounds.height * 0.35
+            private let width = UIScreen.main.bounds.width
+            private let duration: Double = 0.5
+            
+            var body: some View {
+                ZStack(alignment: .bottom) {
+                    VStack {
+                        Button {
+                            if !showView {
+                                // appearance from the right
+                                showView = true
+                                withAnimation(.easeInOut(duration: duration)) {
+                                    offset = 0
+                                }
+                            } else {
+                                // disappearance to the left
+                                withAnimation(.easeInOut(duration: duration)) {
+                                    offset = -width
+                                }
+                                // reset position back to the right after disappearing
+                                DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                                    showView = false
+                                    offset = width
+                                }
+                            }
+                        } label: {
+                            Text("ANIMATE SHEET")
+                                .foregroundStyle(Color.mycolor.myPurple)
+                                .font(.headline)
+                                .padding()
+                                .background(.ultraThinMaterial, in: .capsule)
+                                .overlay(Capsule().stroke(Color.mycolor.myPurple, lineWidth: 1))
+                        }
+                        Spacer()
+                    }
+                    
+                    if showView {
+                        RoundedRectangle(cornerRadius: 30)
+                            .fill(Color.mycolor.myPurple.opacity(0.1))
+                            .frame(height: height)
+                            .offset(x: offset)
+                    }
+                }
+                .padding(.top)
+                .edgesIgnoringSafeArea(.bottom)
+            }
+        }
+        """
+    )
+
 }
