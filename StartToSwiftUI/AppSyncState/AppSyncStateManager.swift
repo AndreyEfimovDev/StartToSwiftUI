@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 
-@MainActor
+//@MainActor
 class AppSyncStateManager {
     
     private let modelContext: ModelContext

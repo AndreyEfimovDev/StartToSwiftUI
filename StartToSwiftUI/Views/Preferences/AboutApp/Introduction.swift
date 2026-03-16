@@ -44,7 +44,6 @@ struct Introduction: View {
                - Create and manage your personal study library of SwiftUI materials matching your learning style
                - Categorise resources by topics, difficulty levels of study, etc.
                - Add personal notes to materials, save drafts, and organise everything exactly how you want
-               - Save drafts for later completion
                
                **CODE SNIPPETS**:
                - Curated code snippets demonstrating advanced SwiftUI features
