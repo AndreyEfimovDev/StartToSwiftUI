@@ -11,19 +11,70 @@ struct WhatsNews {
 #warning("Add upated info before deployment to App Store")
     static let releases: [Release] = [
         Release(
-            release: "Release 1.4.0(5)",
+            release: "Release 1.4.3(8)",
             news: [
                 News(
                     title: "Added",
                     newsText: """
-                    - Push notifications via FCM (Firebase) — receive updates even when the app is closed
-                    - A new button 'Check for a new App release' in the About App section to quickly verify if a newer version is available
+                    - Code Snippets — a new section with live SwiftUI UI demos showcasing modern interface techniques
+                    - Switch between Materials and Code Snippets sections using the right top button in the shared toolbar
+                    - Each snippet includes an interactive demo, description, and copyable source code
+                    - Syntax highlighted code viewer with dark theme powered by Splash
+                    - Snippets can be marked as favourites and persist between sessions and synced across devices
+                    - Confirmation dialog before erasing a notice to prevent accidental deletions
                     """
                 ),
                 News(
                     title: "Improved",
                     newsText: """
-                    - Improved URL format validation for source links
+                    - Search bar and filter controls moved inline for a cleaner shared toolbar layout
+                    - Connection errors now show a clear message instead of silently failing
+                    """
+                ),
+                News(
+                    title: "Fixed",
+                    newsText: """
+                    - An issue where changes made on one device were not syncing to other devices via iCloud
+                    """
+                )
+            ]
+        ),
+        Release(
+            release: "Release 1.4.2(7)",
+            news: [
+                News(
+                    title: "Fixed",
+                    newsText: """
+                    - New notices briefly appeared, then disappeared after the next sync
+                    """
+                )
+            ]
+        ),
+        Release(
+            release: "Release 1.4.1(6)",
+            news: [
+                News(
+                    title: "Fixed",
+                    newsText: """
+                    - Duplicate detection during cloud import now correctly checks both ID and title, previously a material with a duplicate title could slip through if its ID was new
+                    """
+                ),
+            ]
+        ),
+        Release(
+            release: "Release 1.4.0(5)",
+            news: [
+                News(
+                    title: "Added",
+                    newsText: """
+                    - Push notifications — get notified about new events even when the app is closed
+                    - Check for App Update button in About App section to quickly verify if a newer version is available
+                    """
+                ),
+                News(
+                    title: "Improved",
+                    newsText: """
+                    - URL format validation for source links
                     """
                 ),
             ]
