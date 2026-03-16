@@ -41,8 +41,9 @@ struct Introduction: View {
                The app offers the following features:
                         
                **CONTENT CREATION**:
-               - Build a personal study library with full editing capabilities
-               - Add personal notes to the content
+               - Create and manage your personal study library of SwiftUI materials matching your learning style
+               - Categorise resources by topics, difficulty levels of study, etc.
+               - Add personal notes to materials, save drafts, and organise everything exactly how you want
                - Save drafts for later completion
                
                **CODE SNIPPETS**:
@@ -54,7 +55,6 @@ struct Introduction: View {
                - Rate materials: Good / Great / Excellent
                - Organise by difficulty level: Beginner / Intermediate / Advanced
                - Mark favourites for quick access
-               - Voice search
                
                **ANALYTICS & PROGRESS**:
                - Visual study progress dashboard
@@ -64,7 +64,7 @@ struct Introduction: View {
                - Selective filtering for study progress review
                
                **CROSS-DEVICE**:
-               - Full iCloud sync between iPhone and iPad devices
+               - Full iCloud sync between iPhone and iPad (iOS) devices
                
                **WIDGET SUPPORT**:
                - Home Screen widgets: Small, Medium, and Large
