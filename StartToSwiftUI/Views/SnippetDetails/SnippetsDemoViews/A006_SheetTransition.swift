@@ -28,6 +28,7 @@ struct A006_SheetTransitionDemo: View {
                 A006_SheetSliderTransition()
             }
         }
+        .padding(.horizontal)
     }
 }
 

@@ -896,17 +896,19 @@ struct SnippetsRepository {
         """
     )
     
-    // MARK: - A006 SF Symbol Animation Effects
+    // MARK: - A006 Sheet Transition
     static let a006 = CodeSnippet(
         id: "A006",
         category: Constants.mainCategory,
         title: "Sheet Transition",
         intro: """
-        This code showcases sheet transition in different directions using .offset:
-        - bottom in, bottom out
-        - bottom in, right out
-        - right in, right out
-        - right in, left out (slider)
+        This code demonstrates four different sheet transition:
+        - Bottom in, bottom out — standard sheet behaviour
+        - Bottom in, right out — enters from bottom, exits to the right
+        - Right in, right out — slides in/out from the right edge
+        - Right in, left out — slider-style navigation (enters right, exits left)
+        
+        Each transition is implemented using .offset modifier with different combinations of enter/exit directions.
         """,
         thanks: nil,
         githubUrlString: nil,
@@ -919,16 +921,24 @@ struct SnippetsRepository {
             
             var body: some View {
                 TabView {
-                    Tab("", systemImage: "1.circle") {
+                    // bottom in, bottom out
+                    Tab("Bottom-Bottom", systemImage: "1.circle") {
                         A006_SheetBottomTransition()
                     }
-                    Tab("", systemImage: "2.circle") {
+                    // bottom in, right out
+                    Tab("Bottom-Right", systemImage: "2.circle") {
                         A006_SheetBottomRightTransition()
                     }
-                    Tab("", systemImage: "3.circle") {
+                    // right in, right out
+                    Tab("Right-Right", systemImage: "3.circle") {
+                        A006_SheetRightRightTransition()
+                    }
+                    // right in, left out (slider)
+                    Tab("Slider", systemImage: "4.circle") {
                         A006_SheetSliderTransition()
                     }
                 }
+                .padding(.horizontal)
             }
         }
 
@@ -937,13 +947,13 @@ struct SnippetsRepository {
         }
 
         struct A006_SheetBottomTransition: View {
+            
             @State var showView: Bool = false
             
             let height = UIScreen.main.bounds.height * 0.5
             
             var body: some View {
                 ZStack(alignment: .bottom) {
-                    
                     VStack {
                         Button {
                             showView.toggle()
@@ -951,12 +961,14 @@ struct SnippetsRepository {
                         label: {
                             Text("ANIMATE SHEET")
                                 .font(.headline)
+                                .foregroundStyle(Color.mycolor.myRed)
                                 .padding()
+                                .background(.ultraThinMaterial, in: .capsule)
                         }
                         Spacer()
                     }
-                    
                     RoundedRectangle(cornerRadius: 30)
+                        .fill(Color.mycolor.myRed.opacity(0.1))
                         .frame(height: height)
                         .offset(y: showView ? 0 : height)
                         .animation(.easeInOut(duration: 0.5), value: showView)
@@ -966,6 +978,13 @@ struct SnippetsRepository {
         }
 
         struct A006_SheetBottomRightTransition: View {
+            /*
+             Logic:
+             - Initial offset = width — hidden behind the right edge
+             - Appearance → offset = 0 (moves from right to left)
+             - Disappearance → offset = -width (moves left)
+             - asyncAfter resets the offset back to width while the view is hidden
+             */
             @State var showView: Bool = false
             @State var offset: CGSize = CGSize(width: 0, height: UIScreen.main.bounds.height * 0.5)
             
@@ -984,7 +1003,7 @@ struct SnippetsRepository {
                                     offset = .zero
                                 }
                             } else {
-                                // исчезновение вправо
+                                // disappearance to the right
                                 withAnimation(.easeInOut(duration: duration)) {
                                     offset = CGSize(width: width, height: 0)
                                 }
@@ -997,7 +1016,9 @@ struct SnippetsRepository {
                         } label: {
                             Text("ANIMATE SHEET")
                                 .font(.headline)
+                                .foregroundStyle(Color.mycolor.myGreen)
                                 .padding()
+                                .background(.ultraThinMaterial, in: .capsule)
                         }
                         Spacer()
                     }
@@ -1007,6 +1028,7 @@ struct SnippetsRepository {
                             topLeading: 30,
                             topTrailing: 30
                         ))
+                        .fill(Color.mycolor.myGreen.opacity(0.1))
                         .frame(height: height)
                         .offset(offset)
                     }
@@ -1016,7 +1038,7 @@ struct SnippetsRepository {
             
         }
 
-        struct A006_SheetSliderTransition: View {
+        struct A006_SheetRightRightTransition: View {
             @State var showView: Bool = false
             
             let height = UIScreen.main.bounds.height * 0.5
@@ -1028,15 +1050,68 @@ struct SnippetsRepository {
                             showView.toggle()
                         } label: {
                             Text("ANIMATE SHEET")
+                                .foregroundStyle(Color.mycolor.myOrange)
                                 .font(.headline)
                                 .padding()
+                                .background(.ultraThinMaterial, in: .capsule)
                         }
                         Spacer()
                     }
                     RoundedRectangle(cornerRadius: 30)
+                        .fill(Color.mycolor.myOrange.opacity(0.1))
                         .frame(height: height)
-                        .offset(x: showView ? 0 : UIScreen.main.bounds.width) // справа налево
+                        .offset(x: showView ? 0 : UIScreen.main.bounds.width) // from right to left
                         .animation(.easeInOut(duration: 0.5), value: showView)
+                }
+                .edgesIgnoringSafeArea(.bottom)
+            }
+        }
+
+        struct A006_SheetSliderTransition: View {
+            @State var showView: Bool = false
+            @State var offset: CGFloat = UIScreen.main.bounds.width // старт справа
+            
+            let height = UIScreen.main.bounds.height * 0.5
+            let width = UIScreen.main.bounds.width
+            let duration: Double = 0.5
+            
+            var body: some View {
+                ZStack(alignment: .bottom) {
+                    VStack {
+                        Button {
+                            if !showView {
+                                // appearance from the right
+                                showView = true
+                                withAnimation(.easeInOut(duration: duration)) {
+                                    offset = 0
+                                }
+                            } else {
+                                // disappearance to the left
+                                withAnimation(.easeInOut(duration: duration)) {
+                                    offset = -width
+                                }
+                                // reset position back to the right after disappearing
+                                DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                                    showView = false
+                                    offset = width
+                                }
+                            }
+                        } label: {
+                            Text("ANIMATE SHEET")
+                                .foregroundStyle(Color.mycolor.myPurple)
+                                .font(.headline)
+                                .padding()
+                                .background(.ultraThinMaterial, in: .capsule)
+                        }
+                        Spacer()
+                    }
+                    
+                    if showView {
+                        RoundedRectangle(cornerRadius: 30)
+                            .fill(Color.mycolor.myPurple.opacity(0.1))
+                            .frame(height: height)
+                            .offset(x: offset)
+                    }
                 }
                 .edgesIgnoringSafeArea(.bottom)
             }
