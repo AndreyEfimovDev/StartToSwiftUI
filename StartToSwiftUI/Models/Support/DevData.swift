@@ -14,105 +14,150 @@ struct DevData {
         
 // MARK: NEW
         
-        // MARK: 2026-02-26
         Post(
-            title: "Struct vs Class vs Actor, Value vs Reference Types, Stack vs Heap",
+            title: "Swift for Complete Beginners",
             intro: """
-                The lesson covers the differences between different data types in context of and far beyond Swift Concurrency:
-                (1) Structs vs Classes vs Actors
-                (2) Value vs Reference Types
-                (3) Stack vs Heap memory
-                (4) Automatic Reference Counting (ARC) in Swift
-                (5) Weak vs Strong References
-                """,
-            author: "Swiftful Thinking",
-            postType: .post,
-            urlString: "https://youtu.be/-JLenSTKEcA?si=T10f05je27bNKRPD",
+                 All the core concepts required to get started building apps with Swift and SwiftUI.
+                 """,
+            author: "Paul Hudson",
+            postType: .course,
+            urlString: "https://www.youtube.com/playlist?list=PLuoeXyslFTuaYpVr3S9wG6PkIvYn_yHbg",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2022, month: 5, day: 18),
-            studyLevel: .middle,
+            postDate: Date.from(year: 2021, month: 10, day: 14),
             origin: .cloudNew,
-            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
+            date: Date.from(year: 2026, month: 02, day: 06) ?? Date()
         ),
-        Post(
-            title: "Download images with @escaping, Combine and Async/Await",
-            intro: """
-                In this lesson you start using async and await taking a look at the 3 main ways to write asynchronous code in Swift, by an example of downloading an image using:
-                (1) @escaping closures
-                (2) Combine
-                (3) Async / Await
-                """,
-            author: "Swiftful Thinking",
-            postType: .post,
-            urlString: "https://youtu.be/9fXI6o39jLQ?si=SlBHPxUZWyIl_pgf",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2022, month: 4, day: 27),
-            studyLevel: .middle,
-            origin: .cloudNew,
-            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
-        ),
-        Post(
-            title: "Dependency Injection in SwiftUI",
-            intro: """
-                Using Dependency Injection in your apps becomes extremely important when creating scalable and testable apps. In this video, we will implement Dependency Injection into the project using Protocols.
-                
-                We will also talk about the downfalls of Singleton's and how Dependency Injection can solve them.
-                """,
-            author: "Swiftful Thinking",
-            postType: .post,
-            urlString: "https://youtu.be/E3x07blYvdE?si=PdJgvPFksjMLZNHk",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 10, day: 22),
-            studyLevel: .advanced,
-            origin: .cloudNew,
-            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
-        ),
-        Post(
-            title: "Protocols in Swift",
-            intro: """
-                In this video we jump into the wild world of Protocols in Swift. We will learn how to create custom protocols and then walk through a few real-world implementations.
-                
-                Apple's definition of a Protocol:
+        
+        // MARK: 2026-03-08
+//        Post(
+//            title: "SwiftUI Crypto App",
+//            intro: """
+//                Build a cryptocurrency app that downloads live price data from an API and saves the current user's portfolio. Get comfortable with Combine, Core Data, and MVVM.
+//                """,
+//            author: "Swiftful Thinking",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2021, month: 6, day: 21),
+//            studyLevel: .middle,
+//            origin: .cloudNew
+//        ),
+//        Post(
+//            title: "SwiftUI + Firebase",
+//            intro: """
+//            Set up user authentication, connect to a remote database, and track your app's performance in real-time.
+//            
+//            Learn how to integrate Firebase into your iOS app with Swift code.
+//            """,
+//            author: "Swiftful Thinking",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphl8ly0oi0aHx0v2B7UvDK0",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2023, month: 4, day: 28),
+//            studyLevel: .middle,
+//            origin: .cloudNew,
+//        ),
 
-                A protocol defines a blueprint of methods, properties, and other requirements that suit a particular task or piece of functionality. The protocol can then be adopted by a class, structure, or enumeration to provide an actual implementation of those requirements. Any type that satisfies the requirements of a protocol is said to conform to that protocol.
-                """,
-            author: "Swiftful Thinking",
-            postType: .post,
-            urlString: "https://youtu.be/0gM1wmW1Xvc?si=27QofcQFa8SyOZAT",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 10, day: 20),
-            studyLevel: .advanced,
-            origin: .cloudNew,
-            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
-        ),
-        Post(
-            title: "@escaping closures in Swift",
-            intro: """
-                We use @escaping closures to deal with returning from functions when using asynchronous code. This is code that does NOT execute immediately, but rather at a future point in time. This becomes extremely important when we need to download data from the internet!
-                """,
-            author: "Swiftful Thinking",
-            postType: .post,
-            urlString: "https://youtu.be/7gg8iBH2fg4?si=SLRsHGWRVsAbzJd5",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 04, day: 20),
-            studyLevel: .middle,
-            origin: .cloudNew,
-            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
-        ),
-        Post(
-            title: "[weak self] in Swift",
-            intro: """
-                Swift uses Automatic Reference Counting (ARC) to manage your app’s memory usage. As a developer, you want to try to keep the ARC count as low as possible, which will keep your app running fast and efficiently. In this video we will learn how to use "weak references" instead of "strong references" to keep our count low!
-                """,
-            author: "Swiftful Thinking",
-            postType: .post,
-            urlString: "https://youtu.be/TPHp9kR0Go8?si=McEbTyD9-OrebNO_",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 04, day: 18),
-            studyLevel: .middle,
-            origin: .cloudNew,
-            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
-        ),
+        
+        // MARK: 2026-02-26
+//        Post(
+//            title: "Struct vs Class vs Actor, Value vs Reference Types, Stack vs Heap",
+//            intro: """
+//                The lesson covers the differences between different data types in context of and far beyond Swift Concurrency:
+//                (1) Structs vs Classes vs Actors
+//                (2) Value vs Reference Types
+//                (3) Stack vs Heap memory
+//                (4) Automatic Reference Counting (ARC) in Swift
+//                (5) Weak vs Strong References
+//                """,
+//            author: "Swiftful Thinking",
+//            postType: .post,
+//            urlString: "https://youtu.be/-JLenSTKEcA?si=T10f05je27bNKRPD",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2022, month: 5, day: 18),
+//            studyLevel: .middle,
+//            origin: .cloudNew,
+//            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
+//        ),
+//        Post(
+//            title: "Download images with @escaping, Combine and Async/Await",
+//            intro: """
+//                In this lesson you start using async and await taking a look at the 3 main ways to write asynchronous code in Swift, by an example of downloading an image using:
+//                (1) @escaping closures
+//                (2) Combine
+//                (3) Async / Await
+//                """,
+//            author: "Swiftful Thinking",
+//            postType: .post,
+//            urlString: "https://youtu.be/9fXI6o39jLQ?si=SlBHPxUZWyIl_pgf",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2022, month: 4, day: 27),
+//            studyLevel: .middle,
+//            origin: .cloudNew,
+//            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
+//        ),
+//        Post(
+//            title: "Dependency Injection in SwiftUI",
+//            intro: """
+//                Using Dependency Injection in your apps becomes extremely important when creating scalable and testable apps. In this video, we will implement Dependency Injection into the project using Protocols.
+//                
+//                We will also talk about the downfalls of Singleton's and how Dependency Injection can solve them.
+//                """,
+//            author: "Swiftful Thinking",
+//            postType: .post,
+//            urlString: "https://youtu.be/E3x07blYvdE?si=PdJgvPFksjMLZNHk",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2021, month: 10, day: 22),
+//            studyLevel: .advanced,
+//            origin: .cloudNew,
+//            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
+//        ),
+//        Post(
+//            title: "Protocols in Swift",
+//            intro: """
+//                In this video we jump into the wild world of Protocols in Swift. We will learn how to create custom protocols and then walk through a few real-world implementations.
+//                
+//                Apple's definition of a Protocol:
+//
+//                A protocol defines a blueprint of methods, properties, and other requirements that suit a particular task or piece of functionality. The protocol can then be adopted by a class, structure, or enumeration to provide an actual implementation of those requirements. Any type that satisfies the requirements of a protocol is said to conform to that protocol.
+//                """,
+//            author: "Swiftful Thinking",
+//            postType: .post,
+//            urlString: "https://youtu.be/0gM1wmW1Xvc?si=27QofcQFa8SyOZAT",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2021, month: 10, day: 20),
+//            studyLevel: .advanced,
+//            origin: .cloudNew,
+//            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
+//        ),
+//        Post(
+//            title: "@escaping closures in Swift",
+//            intro: """
+//                We use @escaping closures to deal with returning from functions when using asynchronous code. This is code that does NOT execute immediately, but rather at a future point in time. This becomes extremely important when we need to download data from the internet!
+//                """,
+//            author: "Swiftful Thinking",
+//            postType: .post,
+//            urlString: "https://youtu.be/7gg8iBH2fg4?si=SLRsHGWRVsAbzJd5",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2021, month: 04, day: 20),
+//            studyLevel: .middle,
+//            origin: .cloudNew,
+//            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
+//        ),
+//        Post(
+//            title: "[weak self] in Swift",
+//            intro: """
+//                Swift uses Automatic Reference Counting (ARC) to manage your app’s memory usage. As a developer, you want to try to keep the ARC count as low as possible, which will keep your app running fast and efficiently. In this video we will learn how to use "weak references" instead of "strong references" to keep our count low!
+//                """,
+//            author: "Swiftful Thinking",
+//            postType: .post,
+//            urlString: "https://youtu.be/TPHp9kR0Go8?si=McEbTyD9-OrebNO_",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2021, month: 04, day: 18),
+//            studyLevel: .middle,
+//            origin: .cloudNew,
+//            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
+//        ),
         // MARK: 2026-02-13
 //        Post(
 //            title: "SwiftUI Continued Learning",

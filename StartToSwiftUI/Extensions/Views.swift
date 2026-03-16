@@ -108,14 +108,6 @@ extension View {
 // MARK: CUSTOM BACKGROUND
 
 extension View {
-    func mySsectionBackground() -> some View {
-        self
-            .background(Color.mycolor.mySectionBackground)
-            .cornerRadius(8)
-    }
-}
-
-extension View {
     func menuFormater(
         cornerRadius: CGFloat = 30,
         borderColor: Color = Color.mycolor.myBlue,
@@ -127,7 +119,6 @@ extension View {
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .stroke(borderColor.opacity(0.3), lineWidth: lineWidth)
             )
-
     }
 }
 
@@ -162,8 +153,7 @@ extension View {
     }
 }
 
-// MARK: - View Modifier for styling Preferences List Rows
-
+// MARK: - Styling Preferences List Rows
 extension View {
     
     func customListRowStyle(iconName: String, iconWidth: CGFloat) -> some View {
@@ -176,8 +166,7 @@ extension View {
     }
 }
 
-// MARK: - View Modifier for processing Single and Double tap on PostRow
-
+// MARK: - Processing Single and Double tap on PostRow
 extension View {
     func onTapAndDoubleTap(
         singleTap: @escaping () -> Void,
@@ -191,15 +180,6 @@ extension View {
 }
 
 // MARK: - For PostDetails
-
-extension View {
-    func cardBackground() -> some View {
-        self.background(
-            .thinMaterial,
-            in: RoundedRectangle(cornerRadius: 15)
-        )
-    }
-}
 extension View {
     func itemBackground() -> some View {
         self
@@ -215,4 +195,17 @@ extension View {
 
     }
 }
+
+// MARK: - For SnippetDetails
+extension View {
+    func cardBackground() -> some View {
+        self
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding()
+            .background(.thinMaterial,
+                in: RoundedRectangle(cornerRadius: 15)
+        )
+    }
+}
+
 

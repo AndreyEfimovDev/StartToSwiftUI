@@ -29,10 +29,7 @@ final class PostsViewModel: ObservableObject {
     @Published var selectedRating: PostRating? = nil
     @Published var selectedStudyProgress: StudyProgress = .added
     @Published var reshuffleToken = UUID()
-    
-    @Published var errorMessage: String?
-    @Published var showErrorMessageAlert = false
-    
+      
     var cancellables = Set<AnyCancellable>()
     var utcCalendar = Calendar.current
     
@@ -41,11 +38,12 @@ final class PostsViewModel: ObservableObject {
     let mainCategory: String = Constants.mainCategory
     var randomSortOrder: [String] = []
     var dispatchTime: DispatchTime { .now() + 1.5 }
-    var dispatchFor: Double = 2.5 // for async methods
     
     private var lastLoadTime: Date = Date(timeIntervalSince1970: 0)
     private let minLoadInterval: TimeInterval = 3
-
+    private var pendingCloudUpdate = false
+    private var isStarted = false
+    
     // MARK: - Computed Properties
     var swiftDataSource: SwiftDataPostsDataSource? {
         dataSource as? SwiftDataPostsDataSource
@@ -143,41 +141,40 @@ final class PostsViewModel: ObservableObject {
     // MARK: - Init
     init(
         dataSource: PostsDataSourceProtocol,
+        appStateManager: AppSyncStateManager? = nil,
         fbPostsManager: FBPostsManagerProtocol = FBPostsManager()
     ) {
         self.dataSource = dataSource
+        self.appStateManager = appStateManager
         self.fbPostsManager = fbPostsManager
         
-        if let swiftDataSource = dataSource as? SwiftDataPostsDataSource {
-            self.appStateManager = AppSyncStateManager(modelContext: swiftDataSource.modelContext)
-        } else {
-            self.appStateManager = nil
-        }
         setupTimezone()
-        restoreFilters()
+        restorePostFilters()
     }
     /// Convenience initialiser for backward compatibility
     convenience init(
         modelContext: ModelContext,
+        appStateManager: AppSyncStateManager? = nil,
         fbPostsManager: FBPostsManagerProtocol = FBPostsManager()
     ) {
         self.init(
             dataSource: SwiftDataPostsDataSource(modelContext: modelContext),
+            appStateManager: appStateManager,
             fbPostsManager: fbPostsManager
         )
     }
     
+    // MARK: - Setup for Posts
     func start() {
+        guard !isStarted else {
+            log("⚠️ PostsViewModel.start() called again — skipped", level: .debug)
+            return
+        }
+        isStarted = true
         setupSubscriptions()
         setupSubscriptionForChangesInCloud()
-        
-        Task { [weak self] in
-            guard let self else { return }
-            await self.initializeAppState()
-        }
     }
-    
-    // MARK: - Setup
+
     private func setupTimezone() {
         if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
             utcCalendar.timeZone = utcTimeZone
@@ -187,22 +184,35 @@ final class PostsViewModel: ObservableObject {
     // MARK: - CloudKit Sync
     private func setupSubscriptionForChangesInCloud() {
         NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
+            .debounce(for: .seconds(2), scheduler: DispatchQueue.global(qos: .utility))
             .receive(on: DispatchQueue.main)
-            .debounce(for: .seconds(2), scheduler: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self else { return }
                 let now = Date()
+                
                 guard now.timeIntervalSince(self.lastLoadTime) >= self.minLoadInterval else {
-                    log("Cloud sync skipped (too soon)", level: .debug)
+                    self.pendingCloudUpdate = true
+                    log("Cloud sync skipped (too soon) — marked as pending", level: .debug)
+                    
+                    // ✅ Современный способ — Task вместо DispatchQueue
+                    Task { [weak self] in
+                        try? await Task.sleep(for: .seconds(self?.minLoadInterval ?? 3))
+                        guard let self, self.pendingCloudUpdate else { return }
+                        self.pendingCloudUpdate = false
+                        self.loadPostsFromSwiftData(removeDuplicates: false)
+                        log("Cloud sync: pending update executed", level: .info)
+                    }
                     return
                 }
-                self.loadPostsFromSwiftData()
+
+                self.pendingCloudUpdate = false
+                self.loadPostsFromSwiftData(removeDuplicates: false)
                 log("Cloud posts sync subscription run", level: .info)
             }
             .store(in: &cancellables)
     }
-    
-    func restoreFilters() {
+
+    func restorePostFilters() {
         selectedCategory = storedCategory
         selectedLevel = storedLevel
         selectedFavorite = storedFavorite
@@ -212,41 +222,22 @@ final class PostsViewModel: ObservableObject {
         selectedSortOption = storedSortOption
         isFiltersEmpty = checkIfAllFiltersAreEmpty()
     }
-        
-    private func initializeAppState() async {
-        guard let appStateManager else {
-            log("⚠️ init PostViewModel: dataSource is not SwiftData", level: .info)
-            return
-        }
-        // To folow the next order in important
-        /* Step1:
-        Ensure AppState exists (creates with appFirstLaunchDate if first launch).
-        Search for AppSyncState in SwiftData - it guarantees the existence of the AppState:
-        - The first launch will not find it, it will create a new one with appFirstLaunchDate = Date() and save it to the database.
-        - Restart — it will find an existing one and return it.
-        */
-        _ = appStateManager.getOrCreateAppState()
-        FBCrashManager.shared.addLog(
-            "initializeAppState: firstLaunchDate \(appStateManager.getAppFirstLaunchDate() ?? Date(timeIntervalSince1970: 0)), postsCount \(allPosts.count)"
-        )
-        /* Step2:
-        Clean dublicates if any. iCloud sync can create multiple appsyncstates on different devices.
-        This function finds duplicates, merges their data into one (the oldest), and deletes the rest.
-         */
-        appStateManager.cleanupDuplicateAppStates()
-    }
-        
+                
     // MARK: - SwiftData Operations
     
     /// Load posts from SwiftData
-    func loadPostsFromSwiftData() {
+    func loadPostsFromSwiftData(removeDuplicates: Bool = true) {
         FBPerformanceManager.shared.startTrace(name: "load_posts_swiftdata")
         lastLoadTime = Date()
         
         do {
             allPosts = try dataSource.fetchPosts()
             FBCrashManager.shared.addLog("loadPostsFromSwiftData: loaded local posts: \(allPosts.count)")
-            removeDuplicatePosts()
+            
+            if removeDuplicates {
+                removeDuplicatePosts()
+            }
+            
             FBCrashManager.shared.addLog("loadPostsFromSwiftData: posts count after check for duplicates: \(allPosts.count)")
             allYears = getAllYears()
             allCategories = getAllCategories()
@@ -269,7 +260,7 @@ final class PostsViewModel: ObservableObject {
         
         /* persistentModelID is a unique internal identifier of SwiftData, which each @Model object receives automatically. It is unique even if your id and title are the same */
         for (id, postsList) in idGroups {
-            if let postToKeep = postsList.sorted(by: { $0.date < $1.date }).first {
+            if let postToKeep = postsList.sorted(by: { $0.date > $1.date }).first {
                 for post in postsList where post.persistentModelID != postToKeep.persistentModelID {
                     postsToDelete.append(post)
                     log("🗑️ Duplicate by ID \(id): '\(post.title)'", level: .info)
@@ -354,7 +345,6 @@ final class PostsViewModel: ObservableObject {
         post.status = .deleted
         saveContextAndReload()
     }
-
 
     /// Erase a post
     func erasePost(_ post: Post?) {
@@ -447,7 +437,7 @@ final class PostsViewModel: ObservableObject {
         let existingIds = Set(allPosts.map { $0.id })
         
         return cloudResponse
-            .filter { !existingTitles.contains($0.title) || !existingIds.contains($0.id) }
+            .filter { !existingTitles.contains($0.title) && !existingIds.contains($0.id) }
             .map { PostMigrationHelper.convertFromCodable($0) }
     }
     
@@ -456,7 +446,7 @@ final class PostsViewModel: ObservableObject {
         let existingIds = Set(allPosts.map { $0.id })
         
         return fbResponse
-            .filter { !existingTitles.contains($0.title) || !existingIds.contains($0.postId) }
+            .filter { !existingTitles.contains($0.title) && !existingIds.contains($0.postId) }
     }
 
     func filterUniquePosts(_ posts: [Post]) -> [Post] {
@@ -482,18 +472,15 @@ final class PostsViewModel: ObservableObject {
         let categories = Array(Set(allPosts.map { $0.category })).sorted()
         return categories.isEmpty ? nil : categories
     }
-    
+
+    // MARK: - Handle Errors
     func clearError() {
-        errorMessage = nil
-        showErrorMessageAlert = false
+        ErrorManager.shared.clear()
     }
     
     func handleError(_ error: Error?, message: String) {
-        let description = error?.localizedDescription ?? message
-        errorMessage = description
-        showErrorMessageAlert = true
         hapticManager.notification(type: .error)
-        log("❌ \(message): \(description)", level: .error)
+        ErrorManager.shared.handle(error, message: message)
     }
     
     #warning("Delete this func loadDevData() before deployment to App Store")

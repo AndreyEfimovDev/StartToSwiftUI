@@ -22,6 +22,7 @@ struct PostDetailsView: View {
     @State private var showFullIntro: Bool = false
     @State private var showFullNotes: Bool = false
     @State private var lineCountIntro: Int = 0
+    @State private var lineCountNotes: Int = 0
     
     @State private var showRatingTab: Bool = false
     @State private var showProgressTab: Bool = false
@@ -32,6 +33,10 @@ struct PostDetailsView: View {
     @State private var tabWidth: CGFloat = 0
     @State private var expandedWidth: CGFloat = 0
     
+    private var isFavorite: Bool {
+            post.favoriteChoice == .yes
+    }
+    
     // MARK: - Constants
     
     let post: Post
@@ -39,6 +44,11 @@ struct PostDetailsView: View {
     private let introFont: Font = .subheadline
     private let introLineSpacing: CGFloat = 0
     private let introLinesLimit: Int = 10
+    
+    private let notesFont: Font = .footnote
+    private let notesLineSpacing: CGFloat = 0
+    private let notesLinesLimit: Int = 3
+    
     private let widthRatio: CGFloat = 0.55
     
     // MARK: - Computed Properties
@@ -80,8 +90,10 @@ struct PostDetailsView: View {
                     .cardBackground()
                     .padding(.top, 30)
                 
-                intro(for: post)
-                    .cardBackground()
+                if !post.intro.isEmpty {
+                    intro(for: post)
+                        .cardBackground()
+                }
                 
                 goToTheSourceButton(urlString: post.urlString)
                     .frame(maxWidth: 250)
@@ -113,7 +125,6 @@ struct PostDetailsView: View {
             
             headerBottomLine(for: post)
         }
-        .padding(8)
     }
     
     @ViewBuilder
@@ -135,7 +146,7 @@ struct PostDetailsView: View {
             
             Spacer()
             
-            PostStatusIcons(post: post)
+            PostStatusIcons(post: post, showFavorite: false)
         }
         .font(.caption)
     }
@@ -144,58 +155,68 @@ struct PostDetailsView: View {
     
     private func intro(for post: Post) -> some View {
         VStack(spacing: 0) {
-            Text (post.intro)
+            Text("Intro")
+                .font(.headline)
+                .frame(height: 55)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Text(post.intro)
                 .font(introFont)
                 .lineLimit(showFullIntro ? nil : introLinesLimit)
                 .lineSpacing(introLineSpacing)
                 .frame(minHeight: 55, alignment: .topLeading)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .onLineCountChanged(font: introFont, lineSpacing: introLineSpacing) { count in
-                    lineCountIntro = count - 1
-                }
-                .padding(.top, 8)
-            
+                .background(
+                    Text(post.intro)
+                        .font(introFont)
+                        .lineSpacing(introLineSpacing)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .hidden()
+                        .onLineCountChanged(font: introFont, lineSpacing: introLineSpacing) { count in
+                            lineCountIntro = count - 1
+                        }
+                )
             if lineCountIntro > introLinesLimit {
-                
                 HStack(alignment: .top) {
                     Spacer()
                     MoreLessTextButton(showText: $showFullIntro)
                 }
             }
         }
-        .padding()
     }
     
     // MARK: - Notes
     
     private func notes(for post: Post) -> some View {
         VStack(spacing: 0) {
-            HStack {
-                Text("Notes")
-                    .font(.headline)
-                    .frame(height: 55)
+            Text("Notes")
+                .font(.headline)
+                .frame(height: 55)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            VStack(spacing: 0) {
+                Text(post.notes)
+                    .font(notesFont)
+                    .lineLimit(showFullNotes ? nil : notesLinesLimit)
+                    .lineSpacing(notesLineSpacing)
+                    .frame(minHeight: 55, alignment: .topLeading)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 8)
+                    .background(
+                        Text(post.intro)
+                            .font(notesFont)
+                            .lineSpacing(notesLineSpacing)
+                            .lineLimit(nil)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .hidden()
+                            .onLineCountChanged(font: notesFont, lineSpacing: notesLineSpacing) { count in
+                                lineCountNotes = count - 1
+                            }
+                    )
                 
-                Spacer()
-                
-                if !showFullNotes {
-                    MoreLessTextButton(showText: $showFullNotes)
-                }
-            }
-            
-            if showFullNotes {
-                VStack {
-                    Text(post.notes)
-                        .font(.footnote)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 8)
-                    
+                if lineCountNotes > notesLinesLimit {
                     HStack(alignment: .top) {
                         Spacer()
                         MoreLessTextButton(showText: $showFullNotes)
                     }
-                    .offset(y: -10)
                 }
             }
         }
@@ -230,14 +251,29 @@ struct PostDetailsView: View {
         }
         
         ToolbarItemGroup(placement: .topBarTrailing) {
+            
+            // ⭐ Favourite
             CircleStrokeButtonView(
-                iconName: post.favoriteChoice == .yes ? "star.slash" : "star",
+                iconName: isFavorite ? "star.fill" : "star",
                 iconFont: .headline,
+                imageColorPrimary: isFavorite
+                    ? Color.mycolor.myYellow
+                    : Color.mycolor.myAccent,
                 isShownCircle: false
             ) {
                 vm.favoriteToggle(post)
                 hapticManager.impact(style: .light)
             }
+
+//            
+//            CircleStrokeButtonView(
+//                iconName: post.favoriteChoice == .yes ? "star.slash" : "star",
+//                iconFont: .headline,
+//                isShownCircle: false
+//            ) {
+//                vm.favoriteToggle(post)
+//                hapticManager.impact(style: .light)
+//            }
             
             CircleStrokeButtonView(
                 iconName: "pencil",

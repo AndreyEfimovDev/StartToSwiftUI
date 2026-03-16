@@ -12,7 +12,7 @@ struct HomeView: View {
     
     // MARK: - Dependencies
     @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var noticevm: NoticeViewModel
+    @EnvironmentObject private var noticevm: NoticesViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     private let hapticManager = HapticManager.shared
@@ -59,43 +59,18 @@ struct HomeView: View {
             .navigationTitle(vm.selectedCategory ?? Constants.mainCategory)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .toolbar {
-                navigationToolbar()
-            }
-            .safeAreaInset(edge: .top) {
-                SearchBarView()
-            }
-            .sheet(isPresented: $isFilterButtonPressed) {
-                filtersSheet
-            }
+            .toolbar { SharedToolbarLeadingItems() }
+            .safeAreaInset(edge: .top) { searchBarStack }
+            .sheet(isPresented: $isFilterButtonPressed) {filtersSheet }
             .overlay { gestureOverlays(proxy: proxy) }
-            .alert("Error", isPresented: $vm.showErrorMessageAlert, actions: {
-                Button("OK") {}
-            }, message: {
-                if let errorMessage = vm.errorMessage {
-                    Text(errorMessage)
-                }
-            })
-            .alert("Error", isPresented: $noticevm.showErrorMessageAlert, actions: {
-                Button("OK") {}
-            }, message: {
-                if let errorMessage = noticevm.errorMessage {
-                    Text(errorMessage)
-                }
-            })
             .task {
                 FBAnalyticsManager.shared.logScreen(name: "HomeView")
-                
-                vm.loadPostsFromSwiftData()
-                noticevm.loadNoticesFromSwiftData()
-                vm.updateWidgetData()
-                vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                await noticevm.importNoticesFromFirebase()
             }
         }
     }
     
     // MARK: Subviews
+    
     private var listPostRowsContent: some View {
         List {
             ForEach(postsToDisplay.filter { $0.status == .active && !$0.draft }) { post in
@@ -188,7 +163,7 @@ struct HomeView: View {
     private func trailingSwipeActions(for post: Post) -> some View {
         Button("Hide", systemImage: "eye.slash") {
             vm.setPostHidden(post)
-        }.tint(PostStatus.hidden.color)
+        }.tint(StatusOptions.hidden.color)
         
         Button("Edit", systemImage: "pencil") {
             coordinator.push(.editPost(post))
@@ -205,24 +180,10 @@ struct HomeView: View {
         .tint(post.favoriteChoice.color)
     }
     
-    // MARK: - Toolbar
-
-    @ToolbarContentBuilder
-    private func navigationToolbar() -> some ToolbarContent {
-        
-        ToolbarItem(placement: .navigationBarLeading) {
-            CircleStrokeButtonView(iconName: "gearshape", isShownCircle: false) {
-                coordinator.push(.preferences)
-                hapticManager.impact(style: .light)
-            }
-        }
-        if noticevm.unreadCount != 0  {
-            ToolbarItem(placement: .navigationBarLeading) {
-                noticeButton
-            }
-        }
-  
-        ToolbarItemGroup(placement: .navigationBarTrailing) {
+    // MARK: - Search Bar Stack
+    private var searchBarStack: some View {
+        HStack {
+            SearchBarView(searchText: $vm.searchText)
             // Add a new post
             CircleStrokeButtonView(
                 iconName: "plus",
@@ -231,6 +192,12 @@ struct HomeView: View {
                 coordinator.push(.addPost)
                 hapticManager.impact(style: .light)
             }
+            .background(.ultraThinMaterial)
+            .clipShape(.circle)
+            .background(
+                Circle().stroke(Color.mycolor.mySecondary,lineWidth: 1)
+            )
+
             // Fliters for posts
             if !vm.allPosts.isEmpty {
                 CircleStrokeButtonView(
@@ -241,42 +208,20 @@ struct HomeView: View {
                     isFilterButtonPressed.toggle()
                     hapticManager.impact(style: .light)
                 }
+                .background(.ultraThinMaterial)
+                .clipShape(.circle)
+                .background(
+                    Circle()
+                        .stroke(
+                            Color.mycolor.mySecondary,
+                            lineWidth: 1)
+                )
             }
         }
+        .padding(.horizontal)
     }
     
-    private var noticeButton: some View {
-        CircleStrokeButtonView(iconName: "message", isShownCircle: false) {
-            coordinator.push(.notices)
-        }
-        .overlay {
-            Capsule()
-                .fill(Color.mycolor.myRed)
-                .frame(maxWidth: 15, maxHeight: 10)
-                .overlay {
-                    Text("\(noticevm.unreadCount)")
-                        .font(.system(size: 8, weight: .bold))
-                        .foregroundStyle(Color.mycolor.myButtonTextPrimary)
-                }
-                .offset(x: 6, y: -9)
-        }
-        .background(noticeButtonAnimationBackground)
-    }
 
-    private var noticeButtonAnimationBackground: some View {
-        Circle()
-            .stroke(
-                Color.mycolor.myRed,
-                lineWidth: noticevm.shouldAnimateNoticeButton ? 3 : 0
-            )
-            .scaleEffect(noticevm.shouldAnimateNoticeButton ? 1.2 : 0.8)
-            .opacity(noticevm.shouldAnimateNoticeButton ? 0.0 : 1.0)
-            .animation(
-                noticevm.shouldAnimateNoticeButton ? .easeOut(duration: 1.0) : .none,
-                value: noticevm.shouldAnimateNoticeButton
-            )
-    }
-    
     // MARK: - Overlays
     
     @ViewBuilder
@@ -308,7 +253,7 @@ struct HomeView: View {
     // MARK: - Filters View
 
     private var filtersSheet: some View {
-        FiltersView(isFilterButtonPressed: $isFilterButtonPressed)
+        PostsFilterView(isFilterButtonPressed: $isFilterButtonPressed)
             .overlay(alignment: .top) {
                 if UIDevice.isiPhone {
                     LinearGradient(
@@ -368,7 +313,7 @@ struct HomeView: View {
         ContentUnavailableView(
             "No Study Materials",
             systemImage: "tray",
-            description: Text("Materials will appear here once you create them yourself.")
+            description: Text("Materials will appear here once you create them yourself or download curated content.")
         )
     }
     
@@ -393,7 +338,7 @@ private struct HomeViewPreview: View {
         return vm
     }()
     
-    @StateObject var noticesVM = NoticeViewModel(
+    @StateObject var noticesVM = NoticesViewModel(
         dataSource: MockNoticesDataSource(),
         fbNoticesManager: MockFBNoticesManager()
     )
