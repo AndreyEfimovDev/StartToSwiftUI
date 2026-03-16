@@ -6,11 +6,11 @@
 //
 
 import SwiftUI
+import Combine
 
 struct TimerPublisherDemo: View {
     
-    let timer = Timer.publish(every: 3.0, on: .main, in: .common).autoconnect()
-    
+    @State private var cancellable: AnyCancellable? = nil
     // Animation counter
     @State var count: Int = 1
     
@@ -44,11 +44,20 @@ struct TimerPublisherDemo: View {
                 .frame(height: 200)
                 .tabViewStyle(PageTabViewStyle())
         }
-        .onReceive(timer, perform: { _ in
-            withAnimation(.default) {
-                count = count == 5 ? 1 : count + 1
-            }
-        })
+        .onAppear {
+            cancellable = Timer // save the link to the timer publisher
+                .publish(every: 0.4, on: .main, in: .common)
+                .autoconnect()
+                .sink { _ in
+                    count = count == 5 ? 1 : count + 1
+                }
+        }
+        .onDisappear {
+            // cancel the timer publisher to prevent memory leak
+            cancellable?.cancel()
+            cancellable = nil
+        }
+
     }
 }
 

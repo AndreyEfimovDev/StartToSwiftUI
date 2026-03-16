@@ -50,7 +50,6 @@ struct A004_PressableButtonDemoView: View {
                     // Live demo — original component
                     Text("Version for use within ScrollView")
                         .font(.headline)
-                        .cardBackground()
                     A004_ShrinkingButtonForScrollViewDemo()
                     
                     if let thanks = snippet.thanks, !thanks.isEmpty {
@@ -64,7 +63,6 @@ struct A004_PressableButtonDemoView: View {
             Group {
                 Text("Version for regular use")
                     .font(.headline)
-                    .cardBackground()
                     .frame(maxHeight: 55)
                     .padding()
                 
