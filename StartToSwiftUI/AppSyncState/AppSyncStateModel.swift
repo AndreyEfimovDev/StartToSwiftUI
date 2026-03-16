@@ -37,7 +37,7 @@ final class AppSyncState {
     init(
         id: String = "app_state_singleton",
         
-        lastNoticeDate: Date? = nil,
+        lastNoticesFBUpdateDate: Date? = nil,
         lastPostsFBUpdateDate: Date? = nil,
 
         lastCloudSyncDateToMergeDuplicate: Date? = nil,
@@ -46,7 +46,7 @@ final class AppSyncState {
     ) {
         self.id = id
         
-        self.lastNoticesFBUpdateDate = lastNoticeDate
+        self.lastNoticesFBUpdateDate = lastNoticesFBUpdateDate
         self.lastPostsFBUpdateDate = lastPostsFBUpdateDate
         
         self.lastCloudSyncDateToMergeDuplicate = lastCloudSyncDateToMergeDuplicate

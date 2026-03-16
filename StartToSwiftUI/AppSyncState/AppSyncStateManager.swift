@@ -176,12 +176,6 @@ class AppSyncStateManager {
             log("❌ Error saving AppState: \(error)", level: .error)
         }
     }
-    
-    func getAppFirstLaunchDate() -> Date? {
-        let appState = getOrCreateAppState()
-        return appState.appFirstLaunchDate
-    }
-
 }
 
 // MARK: - Methods for Posts
