@@ -977,42 +977,46 @@ struct SnippetsRepository {
             @State private var selectedTab: FrameTab = .bottomBottom
             
             enum FrameTab: CaseIterable {
-                case bottomBottom, bottomRight, rightRight, slider
+                case bottomBottom, bottomRight, rightRight, sliderStyle
             }
 
             var body: some View {
-                
-                VStack(spacing: 0) {
+                GeometryReader { geo in
                     
-                    SegmentedOneLinePickerNotOptional(
-                        selection: $selectedTab,
-                        allItems: FrameTab.allCases,
-                        titleForCase: { tab in
-                            switch tab {
-                            case .bottomBottom: return "↑↓"
-                            case .bottomRight:  return "↑→"
-                            case .rightRight:   return "←→"
-                            case .slider:       return "←←"
+                    let availableHeight = geo.size.height * 0.5
+                    let availableWidth = geo.size.width
+                    
+                    VStack(spacing: 0) {
+                        
+                        SegmentedOneLinePickerNotOptional(
+                            selection: $selectedTab,
+                            allItems: FrameTab.allCases,
+                            titleForCase: { tab in
+                                switch tab {
+                                case .bottomBottom: return "↑↓"
+                                case .bottomRight:  return "↑→"
+                                case .rightRight:   return "←→"
+                                case .sliderStyle:       return "←←"
+                                }
                             }
+                        )
+                        .padding(.horizontal)
+                        .padding(.top, 8)
+                        
+                        switch selectedTab {
+                            // bottom in, bottom out
+                        case .bottomBottom: A006_FrameBottomTransition(height: availableHeight)
+                            // bottom in, right out
+                        case .bottomRight:  A006_FrameBottomRightTransition(height: availableHeight, width: availableWidth)
+                            // right in, right out
+                        case .rightRight:   A006_FrameRightRightTransition(height: availableHeight)
+                            // right in, left out (slider)
+                        case .sliderStyle:       A006_FrameSliderTransition(height: availableHeight, width: availableWidth)
                         }
-                    )
-                    .padding(.horizontal)
-                    .padding(.top, 8)
-                    
-                    switch selectedTab {
-                    // bottom in, bottom out
-                    case .bottomBottom: A006_FrameBottomTransition()
-                    // bottom in, right out
-                    case .bottomRight:  A006_FrameBottomRightTransition()
-                    // right in, right out
-                    case .rightRight:   A006_FrameRightRightTransition()
-                    // right in, left out (slider)
-                    case .slider:       A006_FrameSliderTransition()
                     }
                 }
             }
         }
-
 
         #Preview {
             A006_FrameTransitionDemo()
@@ -1022,7 +1026,7 @@ struct SnippetsRepository {
             
             @State private var showView: Bool = false
             
-            private let height = UIScreen.main.bounds.height * 0.25
+            let height: CGFloat
             
             var body: some View {
                 ZStack(alignment: .bottom) {
@@ -1060,12 +1064,19 @@ struct SnippetsRepository {
              - asyncAfter resets the offset back to width while the view is hidden
              */
             @State private var showView: Bool = false
-            @State private var offset: CGSize = CGSize(width: 0, height: UIScreen.main.bounds.height * 0.5)
+            @State private var offset: CGSize
             
-            private let height = UIScreen.main.bounds.height * 0.35
-            private let width = UIScreen.main.bounds.width
+            let height: CGFloat
+            let width: CGFloat
+            
             private let duration: Double = 0.5
             
+            init(height: CGFloat, width: CGFloat) {
+                    self.height = height
+                    self.width = width
+                    _offset = State(initialValue: CGSize(width: 0, height: height))
+                }
+
             var body: some View {
                 ZStack(alignment: .bottom) {
                     VStack {
@@ -1117,8 +1128,8 @@ struct SnippetsRepository {
             
             @State private var showView: Bool = false
             
-            private let height = UIScreen.main.bounds.height * 0.35
-            
+            let height: CGFloat
+
             var body: some View {
                 ZStack(alignment: .bottom) {
                     VStack {
@@ -1148,11 +1159,18 @@ struct SnippetsRepository {
         struct A006_FrameSliderTransition: View {
             
             @State private var showView: Bool = false
-            @State private var offset: CGFloat = UIScreen.main.bounds.width // start on the right
+            @State private var offset: CGSize
+
+            let height: CGFloat
+            let width: CGFloat
             
-            private let height = UIScreen.main.bounds.height * 0.35
-            private let width = UIScreen.main.bounds.width
             private let duration: Double = 0.5
+            
+            init(height: CGFloat, width: CGFloat) {
+                    self.height = height
+                    self.width = width
+                    _offset = State(initialValue: CGSize(width: 0, height: height))
+                }
             
             var body: some View {
                 ZStack(alignment: .bottom) {
@@ -1162,17 +1180,17 @@ struct SnippetsRepository {
                                 // appearance from the right
                                 showView = true
                                 withAnimation(.easeInOut(duration: duration)) {
-                                    offset = 0
+                                    offset = .zero
                                 }
                             } else {
                                 // disappearance to the left
                                 withAnimation(.easeInOut(duration: duration)) {
-                                    offset = -width
+                                    offset = CGSize(width: -width, height: 0)
                                 }
                                 // reset position back to the right after disappearing
                                 DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                                     showView = false
-                                    offset = width
+                                    offset = CGSize(width: width, height: 0)
                                 }
                             }
                         } label: {
@@ -1190,7 +1208,7 @@ struct SnippetsRepository {
                         RoundedRectangle(cornerRadius: 30)
                             .fill(Color.mycolor.myPurple.verticalGradient())
                             .frame(height: height)
-                            .offset(x: offset)
+                            .offset(offset)
                     }
                 }
                 .padding(.top)

@@ -12,7 +12,7 @@ struct A006_FrameTransitionDemo: View {
     @State private var selectedTab: FrameTab = .bottomBottom
     
     enum FrameTab: CaseIterable {
-        case bottomBottom, bottomRight, rightRight, slider
+        case bottomBottom, bottomRight, rightRight, sliderStyle
     }
 
     var body: some View {
@@ -31,7 +31,7 @@ struct A006_FrameTransitionDemo: View {
                         case .bottomBottom: return "↑↓"
                         case .bottomRight:  return "↑→"
                         case .rightRight:   return "←→"
-                        case .slider:       return "←←"
+                        case .sliderStyle:       return "←←"
                         }
                     }
                 )
@@ -46,13 +46,12 @@ struct A006_FrameTransitionDemo: View {
                     // right in, right out
                 case .rightRight:   A006_FrameRightRightTransition(height: availableHeight)
                     // right in, left out (slider)
-                case .slider:       A006_FrameSliderTransition(height: availableHeight, width: availableWidth)
+                case .sliderStyle:       A006_FrameSliderTransition(height: availableHeight, width: availableWidth)
                 }
             }
         }
     }
 }
-
 
 #Preview {
     A006_FrameTransitionDemo()
