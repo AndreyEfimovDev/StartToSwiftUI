@@ -16,11 +16,13 @@ struct PostRowView: View {
     // MARK: - Computed Properties
     
     private var subtitleText: String {
-        var parts = ["@\(post.author)"]
+        var parts = [post.category]
         
         if let postDate = post.postDate {
             parts.append(postDate.formatted(date: .numeric, time: .omitted))
         }
+        
+        parts.append("@\(post.author)")
         
         if post.postType != .other {
             parts.append(post.postType.displayName)
@@ -62,7 +64,7 @@ struct PostRowView: View {
     
     private var subtitle: some View {
         Text(subtitleText)
-            .font(.footnote)
+            .font(.caption)
             .minimumScaleFactor(0.75)
             .lineLimit(1)
     }
@@ -70,7 +72,7 @@ struct PostRowView: View {
     private var statusRow: some View {
         HStack {
             Text("\(post.studyLevel.displayName.capitalized)")
-                .font(.footnote)
+                .font(.caption)
                 .fontWeight(.medium)
                 .foregroundStyle(post.studyLevel.color)
             

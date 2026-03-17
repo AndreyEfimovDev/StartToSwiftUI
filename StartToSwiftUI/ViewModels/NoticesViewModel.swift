@@ -26,8 +26,9 @@ final class NoticesViewModel: ObservableObject {
     @Published var shouldAnimateNoticeButton = false
     
     // MARK: - AppStorage
+    @AppStorage("appFirstLaunchDate") private var appFirstLaunchDateTimestamp: Double = 0
     @AppStorage("isNotificationOn") var isShowBadgeForNewNotices: Bool = true
-
+    
     private var lastLoadTime: Date = Date(timeIntervalSince1970: 0)
     private let minLoadInterval: TimeInterval = 3
     private var pendingCloudUpdate = false
@@ -38,6 +39,15 @@ final class NoticesViewModel: ObservableObject {
         dataSource as? SwiftDataNoticesDataSource
     }
     
+    private var appFirstLaunchDate: Date {
+        if appFirstLaunchDateTimestamp == 0 {
+            let now = Date()
+            appFirstLaunchDateTimestamp = now.timeIntervalSince1970
+            return now
+        }
+        return Date(timeIntervalSince1970: appFirstLaunchDateTimestamp)
+    }
+
     var unreadCount: Int {
         notices.filter { !$0.isRead }.count
     }
@@ -148,7 +158,7 @@ final class NoticesViewModel: ObservableObject {
             let lastNoticeDate = appStateManager.getLastNoticeDate() ?? Date(timeIntervalSince1970: 0)
             log("🔥 LastNoticeDate from appStateManager \(lastNoticeDate)", level: .info)
 
-            let firstLaunchDate = appStateManager.getAppFirstLaunchDate() ?? Date(timeIntervalSince1970: 0)
+            let firstLaunchDate = appFirstLaunchDate
             log("🔥 FirstLaunchDate from appStateManager \(firstLaunchDate)", level: .info)
 
             filterDate = max(lastNoticeDate, firstLaunchDate)

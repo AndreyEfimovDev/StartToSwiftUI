@@ -43,7 +43,8 @@ struct StartView: View {
                         vm.updateWidgetData()
                         vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
                         snippetsvm.isFiltersEmpty = snippetsvm.checkIfAllFiltersAreEmpty()
-                        /* Clean dublicates if any. iCloud sync can create multiple appsyncstates on different devices. This function finds duplicates, merges their data into one (the oldest), and deletes the rest. */
+                        /* Clean dublicates if any. iCloud sync may create multiple appSyncStates on different devices. This function finds duplicates, merges their data into one (the oldest), and deletes the rest.
+                         */
                         vm.appStateManager?.cleanupDuplicateAppStates()
                         await noticevm.importNoticesFromFirebase()
                     }
@@ -73,7 +74,7 @@ struct StartView: View {
         switch coordinator.activeSection {
         case .materials:
             NavigationStack(path: $coordinator.path) {
-                HomeView(selectedCategory: vm.selectedCategory)
+                MaterialsHomeView(selectedCategory: vm.selectedCategory)
                     .navigationDestination(for: AppRoute.self) { destinationView(for: $0) }
             }
         case .snippets:
@@ -91,7 +92,7 @@ struct StartView: View {
             Group {
             switch coordinator.activeSection {
                 case .materials:
-                    HomeView(selectedCategory: vm.selectedCategory)
+                    MaterialsHomeView(selectedCategory: vm.selectedCategory)
                 case .snippets:
                     SnippetsHomeView()
                 }
@@ -120,7 +121,7 @@ struct StartView: View {
     private var sectionRootView: some View {
         switch coordinator.activeSection {
         case .materials:
-            HomeView(selectedCategory: vm.selectedCategory)
+            MaterialsHomeView(selectedCategory: vm.selectedCategory)
         case .snippets:
             SnippetsHomeView()
         }
