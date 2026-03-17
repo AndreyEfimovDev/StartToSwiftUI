@@ -27,8 +27,8 @@ struct WhatsNews {
                 News(
                     title: "Improved",
                     newsText: """
-                    - Search bar and filter controls moved inline for a cleaner shared toolbar layout
                     - Removed the Hide action when deleting a material, now the deletion process is shorter: move materials to Deleted, then erase them permanently or restore back anytime
+                    - Search bar and filter controls moved inline for a cleaner shared toolbar layout
                     - Connection errors now show a clear message instead of silently failing
                     """
                 ),
