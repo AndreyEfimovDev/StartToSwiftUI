@@ -39,7 +39,7 @@ struct ArchiveDeletedPostsView: View {
                         .scrollContentBackground(.hidden)
                 }
             }
-            .background(Color.mycolor.myRed.opacity(0.3))
+            .background(StatusOptions.deleted.color.opacity(0.5))
             .disabled(isShowingDeleteConfirmation)
             .overlay {
                 if isShowingDeleteConfirmation {

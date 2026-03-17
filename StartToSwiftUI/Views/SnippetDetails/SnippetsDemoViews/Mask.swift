@@ -21,8 +21,8 @@ struct Mask: View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 Rectangle()
-//                    .foregroundColor(.yellow)
-                    .fill(LinearGradient(gradient: Gradient(colors: [Color.green, Color.blue]), startPoint: .leading, endPoint: .trailing))
+//                    .foregroundColor(Color.mycolor.myYellow)
+                    .fill(LinearGradient(gradient: Gradient(colors: [Color.mycolor.myGreen, Color.mycolor.myBlue]), startPoint: .leading, endPoint: .trailing))
                     .frame(width: CGFloat(rating) / 5 * geometry.size.width)
             }
         }
@@ -34,7 +34,7 @@ struct Mask: View {
             ForEach(1..<6) { index in
                 Image(systemName: "star.fill")
                     .font(.largeTitle)
-                    .foregroundColor(Color.gray)
+                    .foregroundColor(Color.mycolor.mySecondary)
                     .onTapGesture {
                         withAnimation(.easeInOut) {
                             rating = index

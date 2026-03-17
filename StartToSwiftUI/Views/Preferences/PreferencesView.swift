@@ -188,8 +188,8 @@ struct PreferencesView: View {
     }
     private var deletedMaterials: some View {
         Group {
-            if vm.hasHidden || vm.hasDeleted {
-                Button("Deleted (\(vm.hiddenCount + vm.deletedCount))") {
+            if vm.hasDeleted {
+                Button("Deleted (\(vm.deletedCount))") {
                     coordinator.pushModal(.archivedPosts)
                 }
                 .customListRowStyle(

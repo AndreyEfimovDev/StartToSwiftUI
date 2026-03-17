@@ -6,7 +6,7 @@
 //
 //  Single source of truth for all code snippets.
 //  To add a new snippet:
-//  1. Create DemoView in SnippetsDemoViews/ (e.g. A003_...)
+//  1. Create DemoView in SnippetsDemoViews/ (e.g. A001_...)
 //  2. Add a case in SnippetViewRegistry
 //  3. Add a CodeSnippet entry here
 
@@ -33,8 +33,6 @@ struct SnippetsRepository {
         Techniques: Timer publishers, phase animations, staggered delays, TimelineView, Canvas drawing, state-driven animations, and native gauges.
         """,
         thanks: nil,
-        githubUrlString: nil,
-        notes: "",
         date: Date.from(year: 2026, month: 3, day: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
@@ -54,6 +52,7 @@ struct SnippetsRepository {
                     A001_JumpingLetters()
                     A001_RotatingRingWithTrace()
                     A001_ArcProgressDinamycGapView(lineWidth: 3, diameter: 30)
+                    A001_GaugeProgress()
                 }
             }
         }
@@ -72,54 +71,54 @@ struct SnippetsRepository {
              - duration: 0.45 slightly less than the timer interval of 0.5 — the animation manages to finish before the next step
              */
             private let barCount = 5
-             private let maxHeight: CGFloat = 30
-             private let minHeight: CGFloat = 3
-             
-             @State private var phase: CGFloat = 0
-             @State private var cancellable: AnyCancellable? = nil
-             
-             // the distance of each stick from the center: [2, 1, 0, 1, 2]
-             private let distancesFromCenter: [CGFloat] = [2, 1, 0, 1, 2]
-             
-             var body: some View {
-                 HStack(spacing: 3) {
-                     ForEach(0..<barCount, id: \\.self) { index in
-                         RoundedRectangle(cornerRadius: 2)
-                             .fill(Color.mycolor.myBlue)
-                             .frame(width: 3, height: barHeight(for: index))
-                             .frame(height: maxHeight)
-                             .clipped()
-                             .animation(.linear(duration: 0.08), value: phase)
-                     }
-                 }
-                 .onAppear {
-                     cancellable = Timer
-                         .publish(every: 0.08, on: .main, in: .common)
-                         .autoconnect()
-                         .sink { _ in
-                             /*
-                              The bigger the step, the faster the wave. You can vary it:
-                                0.1 — slow
-                                0.15 is normal
-                                0.3 — fast
-                                0.5 is very fast
-                              */
-                             phase += 0.3
-                         }
-                 }
-                 .onDisappear {
-                     // cancel the timer publisher to prevent memory leak
-                     cancellable?.cancel()
-                     cancellable = nil
-                 }
-             }
-             
-             private func barHeight(for index: Int) -> CGFloat {
-                 // symmetry: the same distance from the center = the same height
-                 let angle = phase + distancesFromCenter[index] * (.pi / 2)
-                 let normalized = (sin(angle) + 1) / 2  // 0...1
-                 return minHeight + normalized * (maxHeight - minHeight)
-             }
+            private let maxHeight: CGFloat = 30
+            private let minHeight: CGFloat = 3
+            
+            @State private var phase: CGFloat = 0
+            @State private var cancellable: AnyCancellable? = nil
+            
+            // the distance of each stick from the center: [2, 1, 0, 1, 2]
+            private let distancesFromCenter: [CGFloat] = [2, 1, 0, 1, 2]
+            
+            var body: some View {
+                HStack(spacing: 3) {
+                    ForEach(0..<barCount, id: \\.self) { index in
+                        RoundedRectangle(cornerRadius: 2)
+                            .fill(Color.mycolor.myBlue)
+                            .frame(width: 3, height: barHeight(for: index))
+                            .frame(height: maxHeight)
+                            .clipped()
+                            .animation(.linear(duration: 0.08), value: phase)
+                    }
+                }
+                .onAppear {
+                    cancellable = Timer
+                        .publish(every: 0.08, on: .main, in: .common)
+                        .autoconnect()
+                        .sink { _ in
+                            /*
+                             The bigger the step, the faster the wave. You can vary it:
+                             0.1 — slow
+                             0.15 is normal
+                             0.3 — fast
+                             0.5 is very fast
+                             */
+                            phase += 0.3
+                        }
+                }
+                .onDisappear {
+                    // cancel the timer publisher to prevent memory leak
+                    cancellable?.cancel()
+                    cancellable = nil
+                }
+            }
+            
+            private func barHeight(for index: Int) -> CGFloat {
+                // symmetry: the same distance from the center = the same height
+                let angle = phase + distancesFromCenter[index] * (.pi / 2)
+                let normalized = (sin(angle) + 1) / 2  // 0...1
+                return minHeight + normalized * (maxHeight - minHeight)
+            }
         }
 
         struct A001_WaveAsymmetrical: View {
@@ -128,7 +127,7 @@ struct SnippetsRepository {
              - phase increments every 0.15seconds — the wave shifts from left to right
              - sin() gives a smooth wave, * (.pi /3) is the step between adjacent sticks of 90°, i.e. 4 sticks = a full cycle
              - normalized translates sin from -1...1 to 0...1, then scale to minHeight...maxHeight
-
+             
              You can play with the angle pitch.:
              - .pi/3 is a more gentle wave
              - .pi/2 is a steep wave (fast transition)
@@ -222,20 +221,20 @@ struct SnippetsRepository {
             
             @State private var counter: Int = 0
             @State private var cancellable: AnyCancellable?
-
+            
             private let loadingString: [String] = "........... loading ...........".map { String($0) }
             
             // MARK: BODY
             var body: some View {
                 ZStack {
-                        HStack(spacing: 0) {
-                            ForEach(loadingString.indices, id: \\.self) { index in
-                                Text(loadingString[index])
-                                    .font(.headline)
-                                    .offset(y: counter == index ? -11 : 0)
-                            }
+                    HStack(spacing: 0) {
+                        ForEach(loadingString.indices, id: \\.self) { index in
+                            Text(loadingString[index])
+                                .font(.headline)
+                                .offset(y: counter == index ? -11 : 0)
                         }
-                        .font(.subheadline)
+                    }
+                    .font(.subheadline)
                 }
                 .foregroundColor(Color.mycolor.myBlue)
                 .onAppear {
@@ -391,7 +390,7 @@ struct SnippetsRepository {
                 .frame(width: diameter, height: diameter)
             }
         }
-        
+
         struct A001_GaugeProgress: View {
             
             @State private var progress: Double = 0
@@ -446,12 +445,10 @@ struct SnippetsRepository {
         title: "Progress Trim indicator",
         intro: "An enhanced circular progress indicator with manual +/− controls, an animated auto-increment timer, and a reset button. Demonstrates Timer integration within SwiftUI state.",
         thanks: nil,
-        githubUrlString: nil,
-        notes: "Timer is stored as @State var timer: Timer? so it can be invalidated on .onDisappear — preventing memory leaks when the view leaves the screen. stopTimer() is always called before startTimer() to avoid running multiple timers simultaneously.",
         date: Date.from(year: 2026, month: 3, day: 9) ?? Date(),
         codeSnippet: """
         import SwiftUI
-        
+
         // MARK: - Demo
         struct A002_TrimIndicatorDemo: View {
             
@@ -576,14 +573,14 @@ struct SnippetsRepository {
                 }
             }
         }
-        
+
         // MARK: - Preview
         #Preview {
             NavigationStack {
                 A002_TrimIndicatorDemo()
             }
         }
-        
+
         // MARK: - Code Snippet
         struct A002_ProgressIndicatorView: View {
             
@@ -595,7 +592,7 @@ struct SnippetsRepository {
                     Circle()
                         .stroke(lineWidth: lineWidth)
                         .opacity(0.3)
-                        .foregroundColor(Color.green)
+                        .foregroundColor(Color.mycolor.myGreen)
                     
                     Circle()
                         .trim(from: 0, to: self.trim)
@@ -603,7 +600,7 @@ struct SnippetsRepository {
                             lineWidth: lineWidth,
                             lineCap: .round,
                             lineJoin: .round))
-                        .foregroundColor(Color.green)
+                        .foregroundColor(Color.mycolor.myGreen)
                         .rotationEffect(Angle(degrees: -90))
                     HStack(alignment: .lastTextBaseline, spacing: 0) {
                         Text(String(format: "%.0f", trim * 100))
@@ -611,7 +608,7 @@ struct SnippetsRepository {
                             .font(.caption2)
                     }
                     .font(.headline)
-                    .foregroundColor(Color.red)
+                    .foregroundColor(Color.mycolor.myRed)
                 }
             }
         }
@@ -625,12 +622,10 @@ struct SnippetsRepository {
         title: "Progress Circle with animated Checkmark",
         intro: "An interactive circular progress indicator that transforms into a spring-animated checkmark upon completion. Features multiple size/color variants, a progress slider, and auto-increment timer with pause/resume controls. Demonstrates advanced state management and coordinated animations.",
         thanks: nil,
-        githubUrlString: nil,
-        notes: "Uses a dynamic gap calculation based on progress: gapDegrees = gapStartDegrees * (1.0 - progress), creating a closing arc effect. The circle rotates continuously during progress (isSpinning state) with a .repeatForever linear animation. Upon reaching 100%, spinning stops and a checkmark appears with a spring animation after a slight delay. The onChange(of: isComplete) modifier orchestrates the transition between states, disabling rotation and triggering the checkmark animation. Multiple animation types are coordinated: linear rotation, spring for checkmark, and easing for opacity/scale changes.",
         date: Date.from(year: 2026, month: 3, day: 9) ?? Date(),
         codeSnippet: """
         import SwiftUI
-        
+
         // MARK: - Demo
         struct A003_ProgressCircleWithCheckmarkDemo: View {
             
@@ -646,9 +641,9 @@ struct SnippetsRepository {
                     
                     // Samples with different sizes / colors
                     HStack(spacing: 32) {
-                        A003_ProgressCircleWithCheckmarkView(progress: progress, size: 36, color: .blue)
-                        A003_ProgressCircleWithCheckmarkView(progress: progress, lineWidth: 6, size: 52, color: .green)
-                        A003_ProgressCircleWithCheckmarkView(progress: progress, lineWidth: 8, size: 72, color: .orange)
+                        A003_ProgressCircleWithCheckmarkView(progress: progress, size: 36, color: Color.mycolor.myBlue)
+                        A003_ProgressCircleWithCheckmarkView(progress: progress, lineWidth: 6, size: 52, color: Color.mycolor.myGreen)
+                        A003_ProgressCircleWithCheckmarkView(progress: progress, lineWidth: 8, size: 72, color: Color.mycolor.myOrange)
                     }
                     
                     Text(String(format: "%.0f%%", progress * 100))
@@ -657,7 +652,7 @@ struct SnippetsRepository {
                     
                     Slider(value: $progress, in: 0...1)
                         .padding(.horizontal, 40)
-                        .tint(.green)
+                        .tint(Color.mycolor.myGreen)
                     
                     HStack(spacing: 16) {
                         Button {
@@ -708,14 +703,14 @@ struct SnippetsRepository {
                 timer = nil
             }
         }
-        
+
         // MARK: - Preview
         #Preview {
             NavigationStack {
                 A003_ProgressCircleWithCheckmarkDemo()
             }
         }
-        
+
         // MARK: - Code Snippet
         struct A003_ProgressCircleWithCheckmarkView: View {
             
@@ -723,7 +718,7 @@ struct SnippetsRepository {
             var progress: Double
             var lineWidth: CGFloat = 5
             var size: CGFloat = 52
-            var color: Color = .green
+            var color: Color = Color.mycolor.myGreen
             
             // MARK: - States vars
             @State private var isSpinning: Bool = false
@@ -803,8 +798,6 @@ struct SnippetsRepository {
         title: "Shrinking button",
         intro: "Button with a custom shrinking effect. Two versions: regular and ScrollView-compatible. Because ScrollView absorbs touches, the regular shrinking button does not work — so we use DragGesture for the ScrollView version to avoid this effect.",
         thanks: nil,
-        githubUrlString: nil,
-        notes: "",
         date: Date.from(year: 2026, month: 3, day: 15) ?? Date(),
         codeSnippet: """
         import SwiftUI
@@ -891,8 +884,6 @@ struct SnippetsRepository {
             * .variableColor.hideInactiveLayers — hides inactive segments
         """,
         thanks: nil,
-        githubUrlString: nil,
-        notes: "",
         date: Date.from(year: 2026, month: 3, day: 15) ?? Date(),
         codeSnippet: """
         import SwiftUI
@@ -903,11 +894,11 @@ struct SnippetsRepository {
             
             var body: some View {
                 VStack {
-                    Image(systemName: isAnimated ? "microphone.slash.fill" : "microphone.fill") // microphone.slash.fill
+                    Image(systemName: isAnimated ? "microphone.slash.fill" : "microphone.fill")
                         .font(.system(size: 50, weight: .bold))
                         .contentTransition(.symbolEffect(.replace))
                         .padding()
-
+                    
                     HStack {
                         Image(systemName: "sun.max.fill")
                             .font(.system(size: 50, weight: .bold))
@@ -917,7 +908,7 @@ struct SnippetsRepository {
                             .symbolEffect(.bounce, value: isAnimated)
                     }
                     .padding()
-
+                    
                     HStack {
                         Image(systemName: "antenna.radiowaves.left.and.right")
                             .font(.system(size: 50, weight: .bold))
@@ -936,12 +927,13 @@ struct SnippetsRepository {
                     }label: {
                         Text("Animate")
                             .font(.headline)
-                            .foregroundStyle(Color.mycolor.myButtonTextPrimary)
                             .padding()
-                            .background(Color.mycolor.myBlue, in: .capsule)
+                            .background(.ultraThinMaterial, in: .capsule)
+                            .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
                     }
                     .padding()
                 }
+                .foregroundStyle(Color.mycolor.myAccent)
             }
         }
 
@@ -966,8 +958,6 @@ struct SnippetsRepository {
         Each transition is implemented using .offset modifier with different combinations of enter/exit directions.
         """,
         thanks: nil,
-        githubUrlString: nil,
-        notes: "",
         date: Date.from(year: 2026, month: 3, day: 16) ?? Date(),
         codeSnippet: """
         import SwiftUI

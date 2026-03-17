@@ -81,23 +81,23 @@ struct ExampleCardView: View {
     var body: some View {
 
         RoundedRectangle(cornerRadius: 20)
-            .fill(Color.white)
+            .fill(Color.mycolor.myButtonTextPrimary)
             .overlay(
                 VStack(spacing: 10) {
                     Image(systemName: "heart.fill")
                         .font(.system(size: 50))
-                        .foregroundColor(.pink)
+                        .foregroundColor(Color.mycolor.myPurple)
                     Text("Example Card \(index)")
                         .font(.title)
                         .bold()
                     Text("This is an example card with some beautiful UI.")
                         .multilineTextAlignment(.center)
                         .font(.body)
-                        .foregroundColor(.gray)
+                        .foregroundColor(Color.mycolor.mySecondary)
                 }
                 .padding()
             )
-            .shadow(color: .gray, radius: 5)
+            .shadow(color: Color.mycolor.mySecondary, radius: 5)
     }
 }
 

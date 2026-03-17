@@ -59,7 +59,7 @@ fileprivate struct SegmentedOneLinePickerNotOptionalPreview: View {
                 selection: $theme,
                 allItems: Theme.allCases,
                 titleForCase: { $0.displayName },
-//                selectedTextColor: .white,
+//                selectedTextColor: Color.mycolor.myButtonTextPrimary,
 //                unselectedTextColor: .red,
 //                selectedBackground: .red,
 //                unselectedBackground: Color(.systemGray6)

@@ -13,8 +13,6 @@ struct CodeSnippet: Identifiable, Hashable {
     let title: String
     let intro: String
     let thanks: String?
-    let githubUrlString: String?
-    let notes: String
     let date: Date
     let codeSnippet: String
 }

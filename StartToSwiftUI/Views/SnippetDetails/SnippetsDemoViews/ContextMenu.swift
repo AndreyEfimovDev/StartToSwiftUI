@@ -12,7 +12,7 @@ struct ContextMenu: View {
     var body: some View {
         VStack {
             Text("PRESS ON ME")
-                .foregroundColor(.blue)
+                .foregroundColor(Color.mycolor.myBlue)
                 .padding()
                 .contextMenu {
                     Button {

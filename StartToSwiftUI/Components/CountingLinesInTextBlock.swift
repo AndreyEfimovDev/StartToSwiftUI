@@ -17,7 +17,7 @@ struct CountingLinesInTextBlock: View {
             how many lines a Text
             will actually use.
             """)
-            .border(.red, width: 1)
+            .border(Color.mycolor.myRed, width: 1)
             .font(.body)
             .lineSpacing(1)
             .frame(width: 200) // constrain width for wrapping
@@ -26,7 +26,7 @@ struct CountingLinesInTextBlock: View {
             }
             
             Text("Line count: \(lineCount)")
-                .foregroundColor(.blue)
+                .foregroundColor(Color.mycolor.myBlue)
                 .padding(.top)
                 .opacity(lineCount > 3 ? 0.5 : 1)
         }

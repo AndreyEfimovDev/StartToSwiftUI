@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		47069F002EAFF6210082AE12 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47069EFF2EAFF6210082AE12 /* LaunchView.swift */; };
-		470823DE2F6038B600D8C073 /* A003_StaticBrokenCircleProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470823DD2F6038B600D8C073 /* A003_StaticBrokenCircleProgress.swift */; };
-		470823E02F60397800D8C073 /* A004_StaticBrokenCircleProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470823DF2F60397800D8C073 /* A004_StaticBrokenCircleProgress.swift */; };
 		470823E22F60545E00D8C073 /* A004_CardSwipTinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470823E12F60545E00D8C073 /* A004_CardSwipTinder.swift */; };
 		470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */; };
 		470DB64F2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470DB64E2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift */; };
@@ -230,8 +228,6 @@
 
 /* Begin PBXFileReference section */
 		47069EFF2EAFF6210082AE12 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
-		470823DD2F6038B600D8C073 /* A003_StaticBrokenCircleProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A003_StaticBrokenCircleProgress.swift; sourceTree = "<group>"; };
-		470823DF2F60397800D8C073 /* A004_StaticBrokenCircleProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A004_StaticBrokenCircleProgress.swift; sourceTree = "<group>"; };
 		470823E12F60545E00D8C073 /* A004_CardSwipTinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A004_CardSwipTinder.swift; sourceTree = "<group>"; };
 		470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleStrokeButtonView.swift; sourceTree = "<group>"; };
 		470DB64E2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A003_ProgressCircleWithCheckmark.swift; sourceTree = "<group>"; };
@@ -916,8 +912,6 @@
 				474638102F67363300DF011B /* TimerPublisher.swift */,
 				474638122F67382E00DF011B /* VisualEffect.swift */,
 				470823E12F60545E00D8C073 /* A004_CardSwipTinder.swift */,
-				470823DD2F6038B600D8C073 /* A003_StaticBrokenCircleProgress.swift */,
-				470823DF2F60397800D8C073 /* A004_StaticBrokenCircleProgress.swift */,
 			);
 			path = SnippetsDemoViews;
 			sourceTree = "<group>";
@@ -1245,7 +1239,6 @@
 				475CC6922F2246E00099CAA6 /* MockNoticesDataSource.swift in Sources */,
 				474638072F672F7800DF011B /* Actionsheet.swift in Sources */,
 				47B6E8142F5DFB6800EF7441 /* SnippetDemoViews.swift in Sources */,
-				470823E02F60397800D8C073 /* A004_StaticBrokenCircleProgress.swift in Sources */,
 				473436852F4B05EB00CF00FA /* FBCrashManager.swift in Sources */,
 				473436762F48F18600CF00FA /* FBNoticeModel.swift in Sources */,
 				4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */,
@@ -1260,7 +1253,6 @@
 				4725A52B2EDD757F00235C40 /* UIDevice.swift in Sources */,
 				473436782F49BC1B00CF00FA /* FBPostModel.swift in Sources */,
 				47B6E8222F5EF33B00EF7441 /* SnippetFavouritesService.swift in Sources */,
-				470823DE2F6038B600D8C073 /* A003_StaticBrokenCircleProgress.swift in Sources */,
 				475CC6942F2246FB0099CAA6 /* MockPostsDataSource.swift in Sources */,
 				47AC34432F28F2360023C7AF /* Calendar.swift in Sources */,
 				47656BFC2EE1EBF000F45AA6 /* ProgressIndicatorView.swift in Sources */,

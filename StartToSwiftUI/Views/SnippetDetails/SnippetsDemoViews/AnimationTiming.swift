@@ -21,7 +21,7 @@ struct AnimationTiming: View {
                 """)
                 .font(.caption)
             RoundedRectangle(cornerRadius: 20)
-                .fill(.blue)
+                .fill(Color.mycolor.myBlue)
                 .frame(width: isAnimating ? 250 : 50, height: 15)
                 .animation(.spring(
                     response: 3.0,
@@ -32,7 +32,7 @@ struct AnimationTiming: View {
                 .font(.caption)
                 .padding(.top, 10)
             RoundedRectangle(cornerRadius: 20)
-                .fill(.blue)
+                .fill(Color.mycolor.myBlue)
                 .frame(width: isAnimating ? 250 : 50, height: 15)
                 .animation(.spring(
                     response: 1.0,
@@ -43,7 +43,7 @@ struct AnimationTiming: View {
                 .font(.caption)
                 .padding(.top, 10)
             RoundedRectangle(cornerRadius: 20)
-                .fill(.blue)
+                .fill(Color.mycolor.myBlue)
                 .frame(width: isAnimating ? 250 : 50, height: 15)
                 .animation(.spring(
                     response: 0.5,

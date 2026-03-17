@@ -163,7 +163,7 @@ struct MaterialsHomeView: View {
     private func trailingSwipeActions(for post: Post) -> some View {
         Button("Delete", systemImage: "archivebox") {
             vm.setPostDeleted(post)
-        }.tint(StatusOptions.hidden.color)
+        }.tint(StatusOptions.deleted.color)
         
         Button("Edit", systemImage: "pencil") {
             coordinator.push(.editPost(post))

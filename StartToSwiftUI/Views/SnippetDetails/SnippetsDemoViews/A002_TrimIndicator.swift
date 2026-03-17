@@ -150,7 +150,7 @@ struct A002_ProgressIndicatorView: View {
             Circle()
                 .stroke(lineWidth: lineWidth)
                 .opacity(0.3)
-                .foregroundColor(Color.green)
+                .foregroundColor(Color.mycolor.myGreen)
             
             Circle()
                 .trim(from: 0, to: self.trim)
@@ -158,7 +158,7 @@ struct A002_ProgressIndicatorView: View {
                     lineWidth: lineWidth,
                     lineCap: .round,
                     lineJoin: .round))
-                .foregroundColor(Color.green)
+                .foregroundColor(Color.mycolor.myGreen)
                 .rotationEffect(Angle(degrees: -90))
             HStack(alignment: .lastTextBaseline, spacing: 0) {
                 Text(String(format: "%.0f", trim * 100))
@@ -166,7 +166,7 @@ struct A002_ProgressIndicatorView: View {
                     .font(.caption2)
             }
             .font(.headline)
-            .foregroundColor(Color.red)
+            .foregroundColor(Color.mycolor.myRed)
         }
     }
 }

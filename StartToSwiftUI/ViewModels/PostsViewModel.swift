@@ -104,18 +104,10 @@ final class PostsViewModel: ObservableObject {
         allPosts.contains { $0.draft }
     }
     
-    var hasHidden: Bool {
-        allPosts.contains { $0.status == .hidden }
-    }
-
     var hasDeleted: Bool {
         allPosts.contains { $0.status == .deleted }
     }
     
-    var hiddenCount: Int {
-        allPosts.filter { $0.status == .hidden }.count
-    }
-
     var deletedCount: Int {
         allPosts.filter { $0.status == .deleted }.count
     }
@@ -340,10 +332,7 @@ final class PostsViewModel: ObservableObject {
         post.status = .active
         saveContextAndReload()
     }
-//    func setPostHidden(_ post: Post) {
-//        post.status = .hidden
-//        saveContextAndReload()
-//    }
+
     func setPostDeleted(_ post: Post) {
         post.status = .deleted
         saveContextAndReload()

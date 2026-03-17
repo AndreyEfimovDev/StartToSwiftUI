@@ -21,28 +21,28 @@ struct TimerPublisherDemo: View {
                 center: .center,
                 startRadius: 5,
                 endRadius: 500)
-                .ignoresSafeArea()
+            .ignoresSafeArea()
             
             TabView(selection: $count,
                     content:  {
-                        Rectangle()
-                            .foregroundColor(.red)
-                            .tag(1)
-                        Rectangle()
-                            .foregroundColor(.blue)
-                            .tag(2)
-                        Rectangle()
-                            .foregroundColor(.green)
-                            .tag(3)
-                        Rectangle()
-                            .foregroundColor(.orange)
-                            .tag(4)
-                        Rectangle()
-                            .foregroundColor(.pink)
-                            .tag(5)
-                    })
-                .frame(height: 200)
-                .tabViewStyle(PageTabViewStyle())
+                Rectangle()
+                    .foregroundColor(Color.mycolor.myRed)
+                    .tag(1)
+                Rectangle()
+                    .foregroundColor(Color.mycolor.myBlue)
+                    .tag(2)
+                Rectangle()
+                    .foregroundColor(Color.mycolor.myGreen)
+                    .tag(3)
+                Rectangle()
+                    .foregroundColor(Color.mycolor.myOrange)
+                    .tag(4)
+                Rectangle()
+                    .foregroundColor(Color.mycolor.myPurple)
+                    .tag(5)
+            })
+            .frame(height: 200)
+            .tabViewStyle(PageTabViewStyle())
         }
         .onAppear {
             cancellable = Timer // save the link to the timer publisher
@@ -57,7 +57,7 @@ struct TimerPublisherDemo: View {
             cancellable?.cancel()
             cancellable = nil
         }
-
+        
     }
 }
 
