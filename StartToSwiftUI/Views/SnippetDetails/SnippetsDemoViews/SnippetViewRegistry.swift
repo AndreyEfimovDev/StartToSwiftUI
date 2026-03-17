@@ -23,7 +23,7 @@ struct SnippetViewRegistry {
         case "A003": A003_ProgressCircleWithCheckmarkDemoView(snippet: snippet)
         case "A004": A004_ShrinkingButtonDemoView(snippet: snippet)
         case "A005": A005_SFSymbolEffectsDemoView(snippet: snippet)
-        case "A006": A006_SheetTransitionDemoView(snippet: snippet)
+        case "A006": A006_FrameTransitionDemoView(snippet: snippet)
 
         default: SnippetNoPreviewView(snippet: snippet)
         }

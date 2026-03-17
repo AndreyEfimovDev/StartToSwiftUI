@@ -550,7 +550,7 @@ struct SnippetsRepository {
                         .foregroundColor(startProgressIndicator ? Color.mycolor.myBlue : Color.mycolor.myGreen)
                         .padding(.vertical, 8)
                         .frame(height: 55)
-                        .frame(maxWidth: 150)
+                        .frame(width: 150)
                         .background(.thinMaterial)
                         .clipShape(Capsule())
                         .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
@@ -569,7 +569,7 @@ struct SnippetsRepository {
                         .foregroundColor(Color.mycolor.myRed)
                         .padding(.vertical, 8)
                         .frame(height: 55)
-                        .frame(maxWidth: 150)
+                        .frame(width: 150)
                         .background(.thinMaterial)
                         .clipShape(Capsule())
                         .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
@@ -668,7 +668,7 @@ struct SnippetsRepository {
                                 .foregroundColor(isRunning ? Color.mycolor.myBlue : Color.mycolor.myGreen)
                                 .padding(.vertical, 8)
                                 .frame(height: 55)
-                                .frame(maxWidth: .infinity)
+                                .frame(width: 150)
                                 .background(.ultraThinMaterial, in: Capsule())
                                 .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
                         }
@@ -681,7 +681,7 @@ struct SnippetsRepository {
                                 .foregroundColor(Color.mycolor.myRed)
                                 .padding(.vertical, 8)
                                 .frame(height: 55)
-                                .frame(maxWidth: .infinity)
+                                .frame(width: 150)
                                 .background(.ultraThinMaterial, in: Capsule())
                                 .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
                         }
@@ -951,13 +951,13 @@ struct SnippetsRepository {
         """
     )
     
-    // MARK: - A006 Sheet Transition
+    // MARK: - A006 Frame Transition
     static let a006 = CodeSnippet(
         id: "A006",
         category: Constants.mainCategory,
-        title: "Sheet Transition",
+        title: "Frame Transition",
         intro: """
-        This code demonstrates four different sheet transition:
+        This code demonstrates four different frame transition:
         - Bottom-Bottom — standard sheet behaviour
         - Bottom-Right — enters from bottom, exits to the right
         - Right-Right — slides in/out from the right edge
@@ -972,39 +972,57 @@ struct SnippetsRepository {
         codeSnippet: """
         import SwiftUI
 
-        struct A006_SheetTransitionDemo: View {
+        struct A006_FrameTransitionDemo: View {
             
+            @State private var selectedTab: FrameTab = .bottomBottom
+            
+            enum FrameTab: CaseIterable {
+                case bottomBottom, bottomRight, rightRight, slider
+            }
+
             var body: some View {
-                TabView {
+                
+                VStack(spacing: 0) {
+                    
+                    SegmentedOneLinePickerNotOptional(
+                        selection: $selectedTab,
+                        allItems: FrameTab.allCases,
+                        titleForCase: { tab in
+                            switch tab {
+                            case .bottomBottom: return "↑↓"
+                            case .bottomRight:  return "↑→"
+                            case .rightRight:   return "←→"
+                            case .slider:       return "←←"
+                            }
+                        }
+                    )
+                    .padding(.horizontal)
+                    .padding(.top, 8)
+                    
+                    switch selectedTab {
                     // bottom in, bottom out
-                    Tab("Bottom-Bottom", systemImage: "1.circle") {
-                        A006_SheetBottomTransition()
-                    }
+                    case .bottomBottom: A006_FrameBottomTransition()
                     // bottom in, right out
-                    Tab("Bottom-Right", systemImage: "2.circle") {
-                        A006_SheetBottomRightTransition()
-                    }
+                    case .bottomRight:  A006_FrameBottomRightTransition()
                     // right in, right out
-                    Tab("Right-Right", systemImage: "3.circle") {
-                        A006_SheetRightRightTransition()
-                    }
+                    case .rightRight:   A006_FrameRightRightTransition()
                     // right in, left out (slider)
-                    Tab("Slider", systemImage: "4.circle") {
-                        A006_SheetSliderTransition()
+                    case .slider:       A006_FrameSliderTransition()
                     }
                 }
             }
         }
 
+
         #Preview {
-            A006_SheetTransitionDemo()
+            A006_FrameTransitionDemo()
         }
 
-        struct A006_SheetBottomTransition: View {
+        struct A006_FrameBottomTransition: View {
             
             @State private var showView: Bool = false
             
-            private let height = UIScreen.main.bounds.height * 0.35
+            private let height = UIScreen.main.bounds.height * 0.25
             
             var body: some View {
                 ZStack(alignment: .bottom) {
@@ -1013,7 +1031,7 @@ struct SnippetsRepository {
                             showView.toggle()
                         }
                         label: {
-                            Text("ANIMATE SHEET")
+                            Text("Animate Bottom-Bottom")
                                 .font(.headline)
                                 .foregroundStyle(Color.mycolor.myRed)
                                 .padding()
@@ -1023,7 +1041,7 @@ struct SnippetsRepository {
                         Spacer()
                     }
                     RoundedRectangle(cornerRadius: 30)
-                        .fill(Color.mycolor.myRed.opacity(0.1))
+                        .fill(Color.mycolor.myRed.verticalGradient())
                         .frame(height: height)
                         .offset(y: showView ? 0 : height)
                         .animation(.easeInOut(duration: 0.5), value: showView)
@@ -1033,7 +1051,7 @@ struct SnippetsRepository {
             }
         }
 
-        struct A006_SheetBottomRightTransition: View {
+        struct A006_FrameBottomRightTransition: View {
             /*
              Logic:
              - Initial offset = width — hidden behind the right edge
@@ -1070,7 +1088,7 @@ struct SnippetsRepository {
                                 }
                             }
                         } label: {
-                            Text("ANIMATE SHEET")
+                            Text("Animate Bottom-Right")
                                 .font(.headline)
                                 .foregroundStyle(Color.mycolor.myGreen)
                                 .padding()
@@ -1085,7 +1103,7 @@ struct SnippetsRepository {
                             topLeading: 30,
                             topTrailing: 30
                         ))
-                        .fill(Color.mycolor.myGreen.opacity(0.1))
+                        .fill(Color.mycolor.myGreen.verticalGradient())
                         .frame(height: height)
                         .offset(offset)
                     }
@@ -1095,7 +1113,7 @@ struct SnippetsRepository {
             }
         }
 
-        struct A006_SheetRightRightTransition: View {
+        struct A006_FrameRightRightTransition: View {
             
             @State private var showView: Bool = false
             
@@ -1107,7 +1125,7 @@ struct SnippetsRepository {
                         Button {
                             showView.toggle()
                         } label: {
-                            Text("ANIMATE SHEET")
+                            Text("Animate Right-Right")
                                 .foregroundStyle(Color.mycolor.myOrange)
                                 .font(.headline)
                                 .padding()
@@ -1117,7 +1135,7 @@ struct SnippetsRepository {
                         Spacer()
                     }
                     RoundedRectangle(cornerRadius: 30)
-                        .fill(Color.mycolor.myOrange.opacity(0.1))
+                        .fill(Color.mycolor.myOrange.verticalGradient())
                         .frame(height: height)
                         .offset(x: showView ? 0 : UIScreen.main.bounds.width) // from right to left
                         .animation(.easeInOut(duration: 0.5), value: showView)
@@ -1127,7 +1145,7 @@ struct SnippetsRepository {
             }
         }
 
-        struct A006_SheetSliderTransition: View {
+        struct A006_FrameSliderTransition: View {
             
             @State private var showView: Bool = false
             @State private var offset: CGFloat = UIScreen.main.bounds.width // start on the right
@@ -1158,7 +1176,7 @@ struct SnippetsRepository {
                                 }
                             }
                         } label: {
-                            Text("ANIMATE SHEET")
+                            Text("Animate Slider")
                                 .foregroundStyle(Color.mycolor.myPurple)
                                 .font(.headline)
                                 .padding()
@@ -1170,7 +1188,7 @@ struct SnippetsRepository {
                     
                     if showView {
                         RoundedRectangle(cornerRadius: 30)
-                            .fill(Color.mycolor.myPurple.opacity(0.1))
+                            .fill(Color.mycolor.myPurple.verticalGradient())
                             .frame(height: height)
                             .offset(x: offset)
                     }
@@ -1179,6 +1197,59 @@ struct SnippetsRepository {
                 .edgesIgnoringSafeArea(.bottom)
             }
         }
+
+        //extension Color {
+        //    func verticalGradient() -> LinearGradient {
+        //        LinearGradient(
+        //            gradient: Gradient(stops: [
+        //                .init(color: self.opacity(0.1), location: 0.0),
+        //                .init(color: self.opacity(0.3), location: 0.3),
+        //                .init(color: self.opacity(0.7), location: 0.7),
+        //                .init(color: self.opacity(1.0), location: 1.0)
+        //            ]),
+        //            startPoint: .bottom,
+        //            endPoint: .top
+        //        )
+        //    }
+        //}
+
+        //struct SegmentedOneLinePickerNotOptional<T: Hashable>: View {
+        //    @Binding var selection: T
+        //    let allItems: [T]
+        //    let titleForCase: (T) -> String
+        //    
+        //    // Colors
+        //    var selectedFont: Font = .footnote
+        //    var selectedTextColor: Color = Color.mycolor.myBackground
+        //    var unselectedTextColor: Color = Color.mycolor.myAccent
+        //    var selectedBackground: Color = Color.mycolor.myButtonBGBlue
+        //    var unselectedBackground: Color = .clear
+        //    
+        //    var body: some View {
+        //        HStack(spacing: 0) {
+        //            // Regular buttons for enum's values
+        //            ForEach(allItems, id: \\.self) { item in
+        //                Button {
+        //                    withAnimation(.easeInOut) {
+        //                        selection = item
+        //                    }
+        //                } label: {
+        //                    Text(titleForCase(item))
+        //                        .font(selectedFont)
+        //                        .foregroundColor(selection == item ? selectedTextColor : unselectedTextColor)
+        //                        .frame(width: 60, height: 30)
+        //                        .frame(maxWidth: .infinity)
+        //                        .background(selection == item ? selectedBackground : unselectedBackground)
+        //                }
+        //            } //ForEach
+        //        } // HStack
+        //        .clipShape(RoundedRectangle(cornerRadius: 15))
+        //        .overlay(
+        //            RoundedRectangle(cornerRadius: 15)
+        //                .stroke(selectedBackground, lineWidth: 1)
+        //        )
+        //    }
+        //}
         """
     )
 

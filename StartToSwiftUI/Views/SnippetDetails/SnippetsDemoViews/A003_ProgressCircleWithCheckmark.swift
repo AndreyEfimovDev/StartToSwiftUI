@@ -44,7 +44,7 @@ struct A003_ProgressCircleWithCheckmarkDemo: View {
                         .foregroundColor(isRunning ? Color.mycolor.myBlue : Color.mycolor.myGreen)
                         .padding(.vertical, 8)
                         .frame(height: 55)
-                        .frame(maxWidth: .infinity)
+                        .frame(width: 150)
                         .background(.ultraThinMaterial, in: Capsule())
                         .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
                 }
@@ -57,7 +57,7 @@ struct A003_ProgressCircleWithCheckmarkDemo: View {
                         .foregroundColor(Color.mycolor.myRed)
                         .padding(.vertical, 8)
                         .frame(height: 55)
-                        .frame(maxWidth: .infinity)
+                        .frame(width: 150)
                         .background(.ultraThinMaterial, in: Capsule())
                         .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
                 }

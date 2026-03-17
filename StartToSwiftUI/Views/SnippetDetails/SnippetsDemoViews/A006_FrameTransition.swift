@@ -7,39 +7,62 @@
 
 import SwiftUI
 
-struct A006_SheetTransitionDemo: View {
+struct A006_FrameTransitionDemo: View {
     
+    @State private var selectedTab: FrameTab = .bottomBottom
+    
+    enum FrameTab: CaseIterable {
+        case bottomBottom, bottomRight, rightRight, slider
+    }
+
     var body: some View {
-        TabView {
-            // bottom in, bottom out
-            Tab("Bottom-Bottom", systemImage: "1.circle") {
-                A006_SheetBottomTransition()
-            }
-            // bottom in, right out
-            Tab("Bottom-Right", systemImage: "2.circle") {
-                A006_SheetBottomRightTransition()
-            }
-            // right in, right out
-            Tab("Right-Right", systemImage: "3.circle") {
-                A006_SheetRightRightTransition()
-            }
-            // right in, left out (slider)
-            Tab("Slider", systemImage: "4.circle") {
-                A006_SheetSliderTransition()
+        GeometryReader { geo in
+            
+            let availableHeight = geo.size.height * 0.5
+            let availableWidth = geo.size.width
+            
+            VStack(spacing: 0) {
+                
+                SegmentedOneLinePickerNotOptional(
+                    selection: $selectedTab,
+                    allItems: FrameTab.allCases,
+                    titleForCase: { tab in
+                        switch tab {
+                        case .bottomBottom: return "↑↓"
+                        case .bottomRight:  return "↑→"
+                        case .rightRight:   return "←→"
+                        case .slider:       return "←←"
+                        }
+                    }
+                )
+                .padding(.horizontal)
+                .padding(.top, 8)
+                
+                switch selectedTab {
+                    // bottom in, bottom out
+                case .bottomBottom: A006_FrameBottomTransition(height: availableHeight)
+                    // bottom in, right out
+                case .bottomRight:  A006_FrameBottomRightTransition(height: availableHeight, width: availableWidth)
+                    // right in, right out
+                case .rightRight:   A006_FrameRightRightTransition(height: availableHeight)
+                    // right in, left out (slider)
+                case .slider:       A006_FrameSliderTransition(height: availableHeight, width: availableWidth)
+                }
             }
         }
     }
 }
 
+
 #Preview {
-    A006_SheetTransitionDemo()
+    A006_FrameTransitionDemo()
 }
 
-struct A006_SheetBottomTransition: View {
+struct A006_FrameBottomTransition: View {
     
     @State private var showView: Bool = false
     
-    private let height = UIScreen.main.bounds.height * 0.35
+    let height: CGFloat
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -68,7 +91,7 @@ struct A006_SheetBottomTransition: View {
     }
 }
 
-struct A006_SheetBottomRightTransition: View {
+struct A006_FrameBottomRightTransition: View {
     /*
      Logic:
      - Initial offset = width — hidden behind the right edge
@@ -77,12 +100,19 @@ struct A006_SheetBottomRightTransition: View {
      - asyncAfter resets the offset back to width while the view is hidden
      */
     @State private var showView: Bool = false
-    @State private var offset: CGSize = CGSize(width: 0, height: UIScreen.main.bounds.height * 0.5)
+    @State private var offset: CGSize
     
-    private let height = UIScreen.main.bounds.height * 0.35
-    private let width = UIScreen.main.bounds.width
+    let height: CGFloat
+    let width: CGFloat
+    
     private let duration: Double = 0.5
     
+    init(height: CGFloat, width: CGFloat) {
+            self.height = height
+            self.width = width
+            _offset = State(initialValue: CGSize(width: 0, height: height))
+        }
+
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack {
@@ -130,12 +160,12 @@ struct A006_SheetBottomRightTransition: View {
     }
 }
 
-struct A006_SheetRightRightTransition: View {
+struct A006_FrameRightRightTransition: View {
     
     @State private var showView: Bool = false
     
-    private let height = UIScreen.main.bounds.height * 0.35
-    
+    let height: CGFloat
+
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack {
@@ -162,14 +192,21 @@ struct A006_SheetRightRightTransition: View {
     }
 }
 
-struct A006_SheetSliderTransition: View {
+struct A006_FrameSliderTransition: View {
     
     @State private var showView: Bool = false
-    @State private var offset: CGFloat = UIScreen.main.bounds.width // start on the right
+    @State private var offset: CGSize
+
+    let height: CGFloat
+    let width: CGFloat
     
-    private let height = UIScreen.main.bounds.height * 0.35
-    private let width = UIScreen.main.bounds.width
     private let duration: Double = 0.5
+    
+    init(height: CGFloat, width: CGFloat) {
+            self.height = height
+            self.width = width
+            _offset = State(initialValue: CGSize(width: 0, height: height))
+        }
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -179,17 +216,17 @@ struct A006_SheetSliderTransition: View {
                         // appearance from the right
                         showView = true
                         withAnimation(.easeInOut(duration: duration)) {
-                            offset = 0
+                            offset = .zero
                         }
                     } else {
                         // disappearance to the left
                         withAnimation(.easeInOut(duration: duration)) {
-                            offset = -width
+                            offset = CGSize(width: -width, height: 0)
                         }
                         // reset position back to the right after disappearing
                         DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                             showView = false
-                            offset = width
+                            offset = CGSize(width: width, height: 0)
                         }
                     }
                 } label: {
@@ -207,7 +244,7 @@ struct A006_SheetSliderTransition: View {
                 RoundedRectangle(cornerRadius: 30)
                     .fill(Color.mycolor.myPurple.verticalGradient())
                     .frame(height: height)
-                    .offset(x: offset)
+                    .offset(offset)
             }
         }
         .padding(.top)
@@ -226,6 +263,44 @@ struct A006_SheetSliderTransition: View {
 //            ]),
 //            startPoint: .bottom,
 //            endPoint: .top
+//        )
+//    }
+//}
+
+//struct SegmentedOneLinePickerNotOptional<T: Hashable>: View {
+//    @Binding var selection: T
+//    let allItems: [T]
+//    let titleForCase: (T) -> String
+//    
+//    // Colors
+//    var selectedFont: Font = .footnote
+//    var selectedTextColor: Color = Color.mycolor.myBackground
+//    var unselectedTextColor: Color = Color.mycolor.myAccent
+//    var selectedBackground: Color = Color.mycolor.myButtonBGBlue
+//    var unselectedBackground: Color = .clear
+//    
+//    var body: some View {
+//        HStack(spacing: 0) {
+//            // Regular buttons for enum's values
+//            ForEach(allItems, id: \.self) { item in
+//                Button {
+//                    withAnimation(.easeInOut) {
+//                        selection = item
+//                    }
+//                } label: {
+//                    Text(titleForCase(item))
+//                        .font(selectedFont)
+//                        .foregroundColor(selection == item ? selectedTextColor : unselectedTextColor)
+//                        .frame(width: 60, height: 30)
+//                        .frame(maxWidth: .infinity)
+//                        .background(selection == item ? selectedBackground : unselectedBackground)
+//                }
+//            } //ForEach
+//        } // HStack
+//        .clipShape(RoundedRectangle(cornerRadius: 15))
+//        .overlay(
+//            RoundedRectangle(cornerRadius: 15)
+//                .stroke(selectedBackground, lineWidth: 1)
 //        )
 //    }
 //}
