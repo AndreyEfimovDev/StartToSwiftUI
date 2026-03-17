@@ -46,10 +46,10 @@ struct Introduction: View {
                - Add personal notes to materials, save drafts, and organise everything exactly how you want
                
                **CODE SNIPPETS**:
-               - Curated code snippets demonstrating advanced SwiftUI features
+               - Curated code snippets demonstrating advanced SwiftUI techniques — learn by example, copy and apply
                
                **LEARNING MANAGEMENT**:
-               - Put on the own shelve: Lesson, Course, Article, Bug, Other
+               - Classify by type: Lesson, Course, Article, Bug, Other
                - Track progress: 'Added' → 'Started' → 'Learnt' → 'Practiced'
                - Rate materials: Good / Great / Excellent
                - Organise by difficulty level: Beginner / Intermediate / Advanced
@@ -62,15 +62,16 @@ struct Introduction: View {
                - Retrospective analysis across different time periods
                - Selective filtering for study progress review
                
-               **CROSS-DEVICE**:
-               - Full iCloud sync between iPhone and iPad (iOS) devices
+               **ALWAYS IN SYNC**:
+               - Full iCloud sync between iPhone and iPad
+               - Pick up right where you left off, on any device
                
                **WIDGET SUPPORT**:
                - Home Screen widgets: Small, Medium, and Large
                - Lock Screen widgets: Circular, Rectangular, and Inline
                - Real-time sync with main app
 
-               **DATA MANAGEMENT**:
+               **YOUR DATA, YOUR CONTROL**:
                - Move materials to Deleted, then erase them permanently or restore back to Active anytime
                - Share, backup, restore and delete materials as needed
 
