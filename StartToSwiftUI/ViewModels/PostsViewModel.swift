@@ -238,6 +238,9 @@ final class PostsViewModel: ObservableObject {
                 removeDuplicatePosts()
             }
             
+            // migrating post status scheem from active → hidden → deleted → erase to active → deleted → erase.
+            migrateHiddenToDeleted()
+            
             FBCrashManager.shared.addLog("loadPostsFromSwiftData: posts count after check for duplicates: \(allPosts.count)")
             allYears = getAllYears()
             allCategories = getAllCategories()
@@ -337,10 +340,10 @@ final class PostsViewModel: ObservableObject {
         post.status = .active
         saveContextAndReload()
     }
-    func setPostHidden(_ post: Post) {
-        post.status = .hidden
-        saveContextAndReload()
-    }
+//    func setPostHidden(_ post: Post) {
+//        post.status = .hidden
+//        saveContextAndReload()
+//    }
     func setPostDeleted(_ post: Post) {
         post.status = .deleted
         saveContextAndReload()

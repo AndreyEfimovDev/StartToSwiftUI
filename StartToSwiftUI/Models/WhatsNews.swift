@@ -11,12 +11,12 @@ struct WhatsNews {
 #warning("Add upated info before deployment to App Store")
     static let releases: [Release] = [
         Release(
-            release: "Release 1.4.3(8)",
+            release: "Release 1.5.0(8)",
             news: [
                 News(
                     title: "Added",
                     newsText: """
-                    - Code Snippets — a new section with live SwiftUI UI demos showcasing modern interface techniques
+                    - Code Snippets — a new section with live UI demos showcasing modern SwiftUI interface techniques
                     - Switch between Materials and Code Snippets sections using the right top button in the shared toolbar
                     - Each snippet includes an interactive demo, description, and copyable source code
                     - Syntax highlighted code viewer with dark theme powered by Splash
@@ -28,6 +28,7 @@ struct WhatsNews {
                     title: "Improved",
                     newsText: """
                     - Search bar and filter controls moved inline for a cleaner shared toolbar layout
+                    - Removed the Hide action when deleting a material, now the deletion process is shorter: move materials to Deleted, then erase them permanently or restore back anytime
                     - Connection errors now show a clear message instead of silently failing
                     """
                 ),

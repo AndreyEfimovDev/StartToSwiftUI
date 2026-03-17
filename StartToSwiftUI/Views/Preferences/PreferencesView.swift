@@ -66,7 +66,7 @@ struct PreferencesView: View {
             }
             Section(header: sectionHeader("Manage materials (\(vm.allPosts.count))")) {
                 postDrafts
-                archivedMaterials
+                deletedMaterials
                 importFromCloud
                 shareBackup
                 restoreBackup
@@ -186,10 +186,10 @@ struct PreferencesView: View {
             }
         }
     }
-    private var archivedMaterials: some View {
+    private var deletedMaterials: some View {
         Group {
             if vm.hasHidden || vm.hasDeleted {
-                Button("Archived (\(vm.hiddenCount + vm.deletedCount))") {
+                Button("Deleted (\(vm.hiddenCount + vm.deletedCount))") {
                     coordinator.pushModal(.archivedPosts)
                 }
                 .customListRowStyle(
