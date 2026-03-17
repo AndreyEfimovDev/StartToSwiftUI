@@ -13,8 +13,8 @@
 import SwiftUI
 
 
-// MARK: - A005 SheetTransition DemoView
-struct A006_SheetTransitionDemoView: View {
+// MARK: - A006 FrameTransition DemoView
+struct A006_FrameTransitionDemoView: View {
 
     let snippet: CodeSnippet
     
@@ -33,7 +33,7 @@ struct A006_SheetTransitionDemoView: View {
             }
             .fixedSize(horizontal: false, vertical: true)
             
-            A006_SheetTransitionDemo()
+            A006_FrameTransitionDemo()
                 .frame(maxHeight: .infinity)
         }
         .foregroundStyle(Color.mycolor.myAccent)
@@ -276,7 +276,7 @@ private struct SnippetThanksView: View {
 }
 #Preview("A005_Sheet Transition") {
     NavigationStack {
-        A006_SheetTransitionDemoView(snippet: SnippetsRepository.a006)
+        A006_FrameTransitionDemoView(snippet: SnippetsRepository.a006)
             .environmentObject(AppCoordinator())
     }
 }

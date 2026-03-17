@@ -488,7 +488,7 @@ struct AddEditPostView: View {
                     Button(editedPost.postDate == nil ? "Set date" : "Reset date") {
                         editedPost.postDate = editedPost.postDate == nil ? Date() : nil
                     }
-                    .foregroundColor(editedPost.postDate == nil ? .blue : .red)
+                    .foregroundColor(editedPost.postDate == nil ? Color.mycolor.myBlue : Color.mycolor.myRed)
                     .padding(8)
                     .background(
                         .ultraThinMaterial,

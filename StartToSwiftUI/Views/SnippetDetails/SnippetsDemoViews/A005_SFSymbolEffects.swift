@@ -13,31 +13,33 @@ struct A005_SFSymbolEffectsDemo: View {
     
     var body: some View {
         VStack {
-            Image(systemName: isAnimated ? "microphone.slash.fill" : "microphone.fill") // microphone.slash.fill
-                .font(.system(size: 50, weight: .bold))
-                .contentTransition(.symbolEffect(.replace))
+            Group {
+                Image(systemName: isAnimated ? "microphone.slash.fill" : "microphone.fill")
+                    .font(.system(size: 50, weight: .bold))
+                    .contentTransition(.symbolEffect(.replace))
+                    .padding()
+                
+                HStack {
+                    Image(systemName: "sun.max.fill")
+                        .font(.system(size: 50, weight: .bold))
+                        .symbolEffect(.pulse, value: isAnimated)
+                    Image(systemName: "sun.max.fill")
+                        .font(.system(size: 50, weight: .bold))
+                        .symbolEffect(.bounce, value: isAnimated)
+                }
                 .padding()
-
-            HStack {
-                Image(systemName: "sun.max.fill")
-                    .font(.system(size: 50, weight: .bold))
-                    .symbolEffect(.pulse, value: isAnimated)
-                Image(systemName: "sun.max.fill")
-                    .font(.system(size: 50, weight: .bold))
-                    .symbolEffect(.bounce, value: isAnimated)
-            }
-            .padding()
-
-            HStack {
-                Image(systemName: "antenna.radiowaves.left.and.right")
-                    .font(.system(size: 50, weight: .bold))
-                    .symbolEffect(.variableColor, value: isAnimated)
-                Image(systemName: "antenna.radiowaves.left.and.right")
-                    .font(.system(size: 50, weight: .bold))
-                    .symbolEffect(.variableColor.iterative, value: isAnimated)
-                Image(systemName: "antenna.radiowaves.left.and.right")
-                    .font(.system(size: 50, weight: .bold))
-                    .symbolEffect(.variableColor.hideInactiveLayers, value: isAnimated)
+                
+                HStack {
+                    Image(systemName: "antenna.radiowaves.left.and.right")
+                        .font(.system(size: 50, weight: .bold))
+                        .symbolEffect(.variableColor, value: isAnimated)
+                    Image(systemName: "antenna.radiowaves.left.and.right")
+                        .font(.system(size: 50, weight: .bold))
+                        .symbolEffect(.variableColor.iterative, value: isAnimated)
+                    Image(systemName: "antenna.radiowaves.left.and.right")
+                        .font(.system(size: 50, weight: .bold))
+                        .symbolEffect(.variableColor.hideInactiveLayers, value: isAnimated)
+                }
             }
             .padding()
             
@@ -46,9 +48,10 @@ struct A005_SFSymbolEffectsDemo: View {
             }label: {
                 Text("Animate")
                     .font(.headline)
-                    .foregroundStyle(Color.mycolor.myButtonTextPrimary)
+                    .foregroundStyle(Color.mycolor.myBlue)
                     .padding()
-                    .background(Color.mycolor.myBlue, in: .capsule)
+                    .background(.ultraThinMaterial, in: .capsule)
+                    .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
             }
             .padding()
         }

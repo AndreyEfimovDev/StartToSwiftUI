@@ -22,9 +22,9 @@ struct A003_ProgressCircleWithCheckmarkDemo: View {
             
             // Samples with different sizes / colors
             HStack(spacing: 32) {
-                A003_ProgressCircleWithCheckmarkView(progress: progress, size: 36, color: .blue)
-                A003_ProgressCircleWithCheckmarkView(progress: progress, lineWidth: 6, size: 52, color: .green)
-                A003_ProgressCircleWithCheckmarkView(progress: progress, lineWidth: 8, size: 72, color: .orange)
+                A003_ProgressCircleWithCheckmarkView(progress: progress, size: 36, color: Color.mycolor.myBlue)
+                A003_ProgressCircleWithCheckmarkView(progress: progress, lineWidth: 6, size: 52, color: Color.mycolor.myGreen)
+                A003_ProgressCircleWithCheckmarkView(progress: progress, lineWidth: 8, size: 72, color: Color.mycolor.myOrange)
             }
             
             Text(String(format: "%.0f%%", progress * 100))
@@ -33,7 +33,7 @@ struct A003_ProgressCircleWithCheckmarkDemo: View {
             
             Slider(value: $progress, in: 0...1)
                 .padding(.horizontal, 40)
-                .tint(.green)
+                .tint(Color.mycolor.myGreen)
             
             HStack(spacing: 16) {
                 Button {
@@ -44,7 +44,7 @@ struct A003_ProgressCircleWithCheckmarkDemo: View {
                         .foregroundColor(isRunning ? Color.mycolor.myBlue : Color.mycolor.myGreen)
                         .padding(.vertical, 8)
                         .frame(height: 55)
-                        .frame(maxWidth: .infinity)
+                        .frame(width: 150)
                         .background(.ultraThinMaterial, in: Capsule())
                         .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
                 }
@@ -57,7 +57,7 @@ struct A003_ProgressCircleWithCheckmarkDemo: View {
                         .foregroundColor(Color.mycolor.myRed)
                         .padding(.vertical, 8)
                         .frame(height: 55)
-                        .frame(maxWidth: .infinity)
+                        .frame(width: 150)
                         .background(.ultraThinMaterial, in: Capsule())
                         .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
                 }
@@ -99,7 +99,7 @@ struct A003_ProgressCircleWithCheckmarkView: View {
     var progress: Double
     var lineWidth: CGFloat = 5
     var size: CGFloat = 52
-    var color: Color = .green
+    var color: Color = Color.mycolor.myGreen
     
     // MARK: - States vars
     @State private var isSpinning: Bool = false

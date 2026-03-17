@@ -49,8 +49,8 @@ struct CategoryButtonStyle: ButtonStyle {
         configuration.label
             .padding(.horizontal, 12)
             .padding(.vertical, 6)
-            .background(isSelected ? Color.blue : Color.gray.opacity(0.2))
-            .foregroundColor(isSelected ? .white : .primary)
+            .background(isSelected ? Color.mycolor.myBlue : Color.mycolor.myBackground.opacity(0.2))
+            .foregroundColor(isSelected ? Color.mycolor.myButtonTextPrimary : Color.mycolor.myAccent)
             .cornerRadius(8)
     }
 }

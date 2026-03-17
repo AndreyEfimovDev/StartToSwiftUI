@@ -17,7 +17,7 @@ struct UnderlineSermentedPicker<T: Hashable>: View {
     var selectedFont: Font = .footnote
     var selectedTextColor: Color = Color.mycolor.myBlue
     var unselectedTextColor: Color = Color.mycolor.myAccent
-    var selectedBackground: Color = .red
+    var selectedBackground: Color = Color.mycolor.myRed
     var unselectedBackground: Color = .clear
     
     // parameters for optional values

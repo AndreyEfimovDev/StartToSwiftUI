@@ -12,11 +12,6 @@ struct LinkButtonURL: View {
     let buttonTitle: String
     let urlString: String
     
-//    private var validURL: URL? {
-//        guard let url = URL.withScheme(urlString) else { return nil }
-//        return url.isValidWebURL ? url : nil
-//    }
-    
     private var validURL: URL? {
         URL.withScheme(urlString).flatMap { $0.isValidWebURL ? $0 : nil }
     }
@@ -31,13 +26,12 @@ struct LinkButtonURL: View {
                     buttonLabel
                 }
             } else {
-                // Показываем задизейбленную кнопку вместо пустоты
                 buttonLabel
                     .opacity(0.4)
                     .overlay(
                         Text("Invalid URL")
                             .font(.caption)
-                            .foregroundStyle(.white)
+                            .foregroundStyle(Color.mycolor.myButtonTextPrimary)
                             .padding(.top, 36),
                         alignment: .center
                     )

@@ -42,7 +42,7 @@ struct CrossedImage: ViewModifier {
 }
 
 extension View {
-    func crossed(color: Color = .red, lineWidth: CGFloat = 2, isCrossed: Bool) -> some View {
+    func crossed(color: Color = Color.mycolor.myRed, lineWidth: CGFloat = 2, isCrossed: Bool) -> some View {
         modifier(CrossedImage(color: color, lineWidth: lineWidth, isCrossed: isCrossed))
     }
 }

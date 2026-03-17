@@ -28,8 +28,8 @@ struct AlignmentGallery: View {
         Text(name)
             .font(.system(.caption, design: .monospaced))
             .padding(2)
-            .foregroundColor(.white)
-            .background(.blue.opacity(0.8), in: Rectangle())
+            .foregroundColor(Color.mycolor.myButtonTextPrimary)
+            .background(Color.mycolor.myBlue.opacity(0.8), in: Rectangle())
     }
 }
 
@@ -39,17 +39,17 @@ private struct BackgroundView: View {
         Grid(horizontalSpacing: 0, verticalSpacing: 0) {
             GridRow {
                 Text("Some text in an upper quadrant")
-                Color.gray.opacity(0.3)
+                Color.mycolor.mySecondary.opacity(0.3)
                 
             }
             GridRow {
-                Color.gray.opacity(0.3)
+                Color.mycolor.mySecondary.opacity(0.3)
                 Text("More text in a lower quadrant")
             }
         }
         .aspectRatio(1, contentMode: .fit)
-        .foregroundColor(.secondary)
-        .border(.gray)
+        .foregroundColor(Color.mycolor.mySecondary)
+        .border(Color.mycolor.mySecondary)
     }
 }
 

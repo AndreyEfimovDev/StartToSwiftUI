@@ -15,9 +15,9 @@ struct CustomOneCapsulesLineSegmentedPicker<T: Hashable>: View {
 
     // Colors
     var selectedFont: Font = .footnote
-    var selectedTextColor: Color = .white
-    var unselectedTextColor: Color = .red
-    var selectedBackground: Color = .red
+    var selectedTextColor: Color = Color.mycolor.myButtonTextPrimary
+    var unselectedTextColor: Color = Color.mycolor.myRed
+    var selectedBackground: Color = Color.mycolor.myRed
     var unselectedBackground: Color = .clear
     
     // parameters for optional values

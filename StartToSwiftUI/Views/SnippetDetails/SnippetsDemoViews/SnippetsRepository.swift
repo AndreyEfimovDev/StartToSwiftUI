@@ -6,7 +6,7 @@
 //
 //  Single source of truth for all code snippets.
 //  To add a new snippet:
-//  1. Create DemoView in SnippetsDemoViews/ (e.g. A003_...)
+//  1. Create DemoView in SnippetsDemoViews/ (e.g. A001_...)
 //  2. Add a case in SnippetViewRegistry
 //  3. Add a CodeSnippet entry here
 
@@ -33,8 +33,6 @@ struct SnippetsRepository {
         Techniques: Timer publishers, phase animations, staggered delays, TimelineView, Canvas drawing, state-driven animations, and native gauges.
         """,
         thanks: nil,
-        githubUrlString: nil,
-        notes: "",
         date: Date.from(year: 2026, month: 3, day: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
@@ -54,6 +52,7 @@ struct SnippetsRepository {
                     A001_JumpingLetters()
                     A001_RotatingRingWithTrace()
                     A001_ArcProgressDinamycGapView(lineWidth: 3, diameter: 30)
+                    A001_GaugeProgress()
                 }
             }
         }
@@ -72,54 +71,54 @@ struct SnippetsRepository {
              - duration: 0.45 slightly less than the timer interval of 0.5 — the animation manages to finish before the next step
              */
             private let barCount = 5
-             private let maxHeight: CGFloat = 30
-             private let minHeight: CGFloat = 3
-             
-             @State private var phase: CGFloat = 0
-             @State private var cancellable: AnyCancellable? = nil
-             
-             // the distance of each stick from the center: [2, 1, 0, 1, 2]
-             private let distancesFromCenter: [CGFloat] = [2, 1, 0, 1, 2]
-             
-             var body: some View {
-                 HStack(spacing: 3) {
-                     ForEach(0..<barCount, id: \\.self) { index in
-                         RoundedRectangle(cornerRadius: 2)
-                             .fill(Color.mycolor.myBlue)
-                             .frame(width: 3, height: barHeight(for: index))
-                             .frame(height: maxHeight)
-                             .clipped()
-                             .animation(.linear(duration: 0.08), value: phase)
-                     }
-                 }
-                 .onAppear {
-                     cancellable = Timer
-                         .publish(every: 0.08, on: .main, in: .common)
-                         .autoconnect()
-                         .sink { _ in
-                             /*
-                              The bigger the step, the faster the wave. You can vary it:
-                                0.1 — slow
-                                0.15 is normal
-                                0.3 — fast
-                                0.5 is very fast
-                              */
-                             phase += 0.3
-                         }
-                 }
-                 .onDisappear {
-                     // cancel the timer publisher to prevent memory leak
-                     cancellable?.cancel()
-                     cancellable = nil
-                 }
-             }
-             
-             private func barHeight(for index: Int) -> CGFloat {
-                 // symmetry: the same distance from the center = the same height
-                 let angle = phase + distancesFromCenter[index] * (.pi / 2)
-                 let normalized = (sin(angle) + 1) / 2  // 0...1
-                 return minHeight + normalized * (maxHeight - minHeight)
-             }
+            private let maxHeight: CGFloat = 30
+            private let minHeight: CGFloat = 3
+            
+            @State private var phase: CGFloat = 0
+            @State private var cancellable: AnyCancellable? = nil
+            
+            // the distance of each stick from the center: [2, 1, 0, 1, 2]
+            private let distancesFromCenter: [CGFloat] = [2, 1, 0, 1, 2]
+            
+            var body: some View {
+                HStack(spacing: 3) {
+                    ForEach(0..<barCount, id: \\.self) { index in
+                        RoundedRectangle(cornerRadius: 2)
+                            .fill(Color.mycolor.myBlue)
+                            .frame(width: 3, height: barHeight(for: index))
+                            .frame(height: maxHeight)
+                            .clipped()
+                            .animation(.linear(duration: 0.08), value: phase)
+                    }
+                }
+                .onAppear {
+                    cancellable = Timer
+                        .publish(every: 0.08, on: .main, in: .common)
+                        .autoconnect()
+                        .sink { _ in
+                            /*
+                             The bigger the step, the faster the wave. You can vary it:
+                             0.1 — slow
+                             0.15 is normal
+                             0.3 — fast
+                             0.5 is very fast
+                             */
+                            phase += 0.3
+                        }
+                }
+                .onDisappear {
+                    // cancel the timer publisher to prevent memory leak
+                    cancellable?.cancel()
+                    cancellable = nil
+                }
+            }
+            
+            private func barHeight(for index: Int) -> CGFloat {
+                // symmetry: the same distance from the center = the same height
+                let angle = phase + distancesFromCenter[index] * (.pi / 2)
+                let normalized = (sin(angle) + 1) / 2  // 0...1
+                return minHeight + normalized * (maxHeight - minHeight)
+            }
         }
 
         struct A001_WaveAsymmetrical: View {
@@ -128,7 +127,7 @@ struct SnippetsRepository {
              - phase increments every 0.15seconds — the wave shifts from left to right
              - sin() gives a smooth wave, * (.pi /3) is the step between adjacent sticks of 90°, i.e. 4 sticks = a full cycle
              - normalized translates sin from -1...1 to 0...1, then scale to minHeight...maxHeight
-
+             
              You can play with the angle pitch.:
              - .pi/3 is a more gentle wave
              - .pi/2 is a steep wave (fast transition)
@@ -222,20 +221,20 @@ struct SnippetsRepository {
             
             @State private var counter: Int = 0
             @State private var cancellable: AnyCancellable?
-
+            
             private let loadingString: [String] = "........... loading ...........".map { String($0) }
             
             // MARK: BODY
             var body: some View {
                 ZStack {
-                        HStack(spacing: 0) {
-                            ForEach(loadingString.indices, id: \\.self) { index in
-                                Text(loadingString[index])
-                                    .font(.headline)
-                                    .offset(y: counter == index ? -11 : 0)
-                            }
+                    HStack(spacing: 0) {
+                        ForEach(loadingString.indices, id: \\.self) { index in
+                            Text(loadingString[index])
+                                .font(.headline)
+                                .offset(y: counter == index ? -11 : 0)
                         }
-                        .font(.subheadline)
+                    }
+                    .font(.subheadline)
                 }
                 .foregroundColor(Color.mycolor.myBlue)
                 .onAppear {
@@ -391,7 +390,7 @@ struct SnippetsRepository {
                 .frame(width: diameter, height: diameter)
             }
         }
-        
+
         struct A001_GaugeProgress: View {
             
             @State private var progress: Double = 0
@@ -446,12 +445,10 @@ struct SnippetsRepository {
         title: "Progress Trim indicator",
         intro: "An enhanced circular progress indicator with manual +/− controls, an animated auto-increment timer, and a reset button. Demonstrates Timer integration within SwiftUI state.",
         thanks: nil,
-        githubUrlString: nil,
-        notes: "Timer is stored as @State var timer: Timer? so it can be invalidated on .onDisappear — preventing memory leaks when the view leaves the screen. stopTimer() is always called before startTimer() to avoid running multiple timers simultaneously.",
         date: Date.from(year: 2026, month: 3, day: 9) ?? Date(),
         codeSnippet: """
         import SwiftUI
-        
+
         // MARK: - Demo
         struct A002_TrimIndicatorDemo: View {
             
@@ -550,7 +547,7 @@ struct SnippetsRepository {
                         .foregroundColor(startProgressIndicator ? Color.mycolor.myBlue : Color.mycolor.myGreen)
                         .padding(.vertical, 8)
                         .frame(height: 55)
-                        .frame(maxWidth: 150)
+                        .frame(width: 150)
                         .background(.thinMaterial)
                         .clipShape(Capsule())
                         .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
@@ -569,21 +566,21 @@ struct SnippetsRepository {
                         .foregroundColor(Color.mycolor.myRed)
                         .padding(.vertical, 8)
                         .frame(height: 55)
-                        .frame(maxWidth: 150)
+                        .frame(width: 150)
                         .background(.thinMaterial)
                         .clipShape(Capsule())
                         .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
                 }
             }
         }
-        
+
         // MARK: - Preview
         #Preview {
             NavigationStack {
                 A002_TrimIndicatorDemo()
             }
         }
-        
+
         // MARK: - Code Snippet
         struct A002_ProgressIndicatorView: View {
             
@@ -595,7 +592,7 @@ struct SnippetsRepository {
                     Circle()
                         .stroke(lineWidth: lineWidth)
                         .opacity(0.3)
-                        .foregroundColor(Color.green)
+                        .foregroundColor(Color.mycolor.myGreen)
                     
                     Circle()
                         .trim(from: 0, to: self.trim)
@@ -603,7 +600,7 @@ struct SnippetsRepository {
                             lineWidth: lineWidth,
                             lineCap: .round,
                             lineJoin: .round))
-                        .foregroundColor(Color.green)
+                        .foregroundColor(Color.mycolor.myGreen)
                         .rotationEffect(Angle(degrees: -90))
                     HStack(alignment: .lastTextBaseline, spacing: 0) {
                         Text(String(format: "%.0f", trim * 100))
@@ -611,7 +608,7 @@ struct SnippetsRepository {
                             .font(.caption2)
                     }
                     .font(.headline)
-                    .foregroundColor(Color.red)
+                    .foregroundColor(Color.mycolor.myRed)
                 }
             }
         }
@@ -625,12 +622,10 @@ struct SnippetsRepository {
         title: "Progress Circle with animated Checkmark",
         intro: "An interactive circular progress indicator that transforms into a spring-animated checkmark upon completion. Features multiple size/color variants, a progress slider, and auto-increment timer with pause/resume controls. Demonstrates advanced state management and coordinated animations.",
         thanks: nil,
-        githubUrlString: nil,
-        notes: "Uses a dynamic gap calculation based on progress: gapDegrees = gapStartDegrees * (1.0 - progress), creating a closing arc effect. The circle rotates continuously during progress (isSpinning state) with a .repeatForever linear animation. Upon reaching 100%, spinning stops and a checkmark appears with a spring animation after a slight delay. The onChange(of: isComplete) modifier orchestrates the transition between states, disabling rotation and triggering the checkmark animation. Multiple animation types are coordinated: linear rotation, spring for checkmark, and easing for opacity/scale changes.",
         date: Date.from(year: 2026, month: 3, day: 9) ?? Date(),
         codeSnippet: """
         import SwiftUI
-        
+
         // MARK: - Demo
         struct A003_ProgressCircleWithCheckmarkDemo: View {
             
@@ -646,9 +641,9 @@ struct SnippetsRepository {
                     
                     // Samples with different sizes / colors
                     HStack(spacing: 32) {
-                        A003_ProgressCircleWithCheckmarkView(progress: progress, size: 36, color: .blue)
-                        A003_ProgressCircleWithCheckmarkView(progress: progress, lineWidth: 6, size: 52, color: .green)
-                        A003_ProgressCircleWithCheckmarkView(progress: progress, lineWidth: 8, size: 72, color: .orange)
+                        A003_ProgressCircleWithCheckmarkView(progress: progress, size: 36, color: Color.mycolor.myBlue)
+                        A003_ProgressCircleWithCheckmarkView(progress: progress, lineWidth: 6, size: 52, color: Color.mycolor.myGreen)
+                        A003_ProgressCircleWithCheckmarkView(progress: progress, lineWidth: 8, size: 72, color: Color.mycolor.myOrange)
                     }
                     
                     Text(String(format: "%.0f%%", progress * 100))
@@ -657,7 +652,7 @@ struct SnippetsRepository {
                     
                     Slider(value: $progress, in: 0...1)
                         .padding(.horizontal, 40)
-                        .tint(.green)
+                        .tint(Color.mycolor.myGreen)
                     
                     HStack(spacing: 16) {
                         Button {
@@ -668,7 +663,7 @@ struct SnippetsRepository {
                                 .foregroundColor(isRunning ? Color.mycolor.myBlue : Color.mycolor.myGreen)
                                 .padding(.vertical, 8)
                                 .frame(height: 55)
-                                .frame(maxWidth: .infinity)
+                                .frame(width: 150)
                                 .background(.ultraThinMaterial, in: Capsule())
                                 .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
                         }
@@ -681,7 +676,7 @@ struct SnippetsRepository {
                                 .foregroundColor(Color.mycolor.myRed)
                                 .padding(.vertical, 8)
                                 .frame(height: 55)
-                                .frame(maxWidth: .infinity)
+                                .frame(width: 150)
                                 .background(.ultraThinMaterial, in: Capsule())
                                 .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
                         }
@@ -708,14 +703,14 @@ struct SnippetsRepository {
                 timer = nil
             }
         }
-        
+
         // MARK: - Preview
         #Preview {
             NavigationStack {
                 A003_ProgressCircleWithCheckmarkDemo()
             }
         }
-        
+
         // MARK: - Code Snippet
         struct A003_ProgressCircleWithCheckmarkView: View {
             
@@ -723,7 +718,7 @@ struct SnippetsRepository {
             var progress: Double
             var lineWidth: CGFloat = 5
             var size: CGFloat = 52
-            var color: Color = .green
+            var color: Color = Color.mycolor.myGreen
             
             // MARK: - States vars
             @State private var isSpinning: Bool = false
@@ -803,8 +798,6 @@ struct SnippetsRepository {
         title: "Shrinking button",
         intro: "Button with a custom shrinking effect. Two versions: regular and ScrollView-compatible. Because ScrollView absorbs touches, the regular shrinking button does not work — so we use DragGesture for the ScrollView version to avoid this effect.",
         thanks: nil,
-        githubUrlString: nil,
-        notes: "",
         date: Date.from(year: 2026, month: 3, day: 15) ?? Date(),
         codeSnippet: """
         import SwiftUI
@@ -891,8 +884,6 @@ struct SnippetsRepository {
             * .variableColor.hideInactiveLayers — hides inactive segments
         """,
         thanks: nil,
-        githubUrlString: nil,
-        notes: "",
         date: Date.from(year: 2026, month: 3, day: 15) ?? Date(),
         codeSnippet: """
         import SwiftUI
@@ -903,32 +894,35 @@ struct SnippetsRepository {
             
             var body: some View {
                 VStack {
-                    Image(systemName: isAnimated ? "microphone.slash.fill" : "microphone.fill") // microphone.slash.fill
-                        .font(.system(size: 50, weight: .bold))
-                        .contentTransition(.symbolEffect(.replace))
+                    Group {
+                        Image(systemName: isAnimated ? "microphone.slash.fill" : "microphone.fill")
+                            .font(.system(size: 50, weight: .bold))
+                            .contentTransition(.symbolEffect(.replace))
+                            .padding()
+                        
+                        HStack {
+                            Image(systemName: "sun.max.fill")
+                                .font(.system(size: 50, weight: .bold))
+                                .symbolEffect(.pulse, value: isAnimated)
+                            Image(systemName: "sun.max.fill")
+                                .font(.system(size: 50, weight: .bold))
+                                .symbolEffect(.bounce, value: isAnimated)
+                        }
                         .padding()
-
-                    HStack {
-                        Image(systemName: "sun.max.fill")
-                            .font(.system(size: 50, weight: .bold))
-                            .symbolEffect(.pulse, value: isAnimated)
-                        Image(systemName: "sun.max.fill")
-                            .font(.system(size: 50, weight: .bold))
-                            .symbolEffect(.bounce, value: isAnimated)
+                        
+                        HStack {
+                            Image(systemName: "antenna.radiowaves.left.and.right")
+                                .font(.system(size: 50, weight: .bold))
+                                .symbolEffect(.variableColor, value: isAnimated)
+                            Image(systemName: "antenna.radiowaves.left.and.right")
+                                .font(.system(size: 50, weight: .bold))
+                                .symbolEffect(.variableColor.iterative, value: isAnimated)
+                            Image(systemName: "antenna.radiowaves.left.and.right")
+                                .font(.system(size: 50, weight: .bold))
+                                .symbolEffect(.variableColor.hideInactiveLayers, value: isAnimated)
+                        }
                     }
-                    .padding()
-
-                    HStack {
-                        Image(systemName: "antenna.radiowaves.left.and.right")
-                            .font(.system(size: 50, weight: .bold))
-                            .symbolEffect(.variableColor, value: isAnimated)
-                        Image(systemName: "antenna.radiowaves.left.and.right")
-                            .font(.system(size: 50, weight: .bold))
-                            .symbolEffect(.variableColor.iterative, value: isAnimated)
-                        Image(systemName: "antenna.radiowaves.left.and.right")
-                            .font(.system(size: 50, weight: .bold))
-                            .symbolEffect(.variableColor.hideInactiveLayers, value: isAnimated)
-                    }
+                    .foregroundStyle(Color.mycolor.myAccent.opacity(0.8))
                     .padding()
                     
                     Button {
@@ -936,9 +930,10 @@ struct SnippetsRepository {
                     }label: {
                         Text("Animate")
                             .font(.headline)
-                            .foregroundStyle(Color.mycolor.myButtonTextPrimary)
+                            .foregroundStyle(Color.mycolor.myBlue)
                             .padding()
-                            .background(Color.mycolor.myBlue, in: .capsule)
+                            .background(.ultraThinMaterial, in: .capsule)
+                            .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
                     }
                     .padding()
                 }
@@ -951,13 +946,13 @@ struct SnippetsRepository {
         """
     )
     
-    // MARK: - A006 Sheet Transition
+    // MARK: - A006 Frame Transition
     static let a006 = CodeSnippet(
         id: "A006",
         category: Constants.mainCategory,
-        title: "Sheet Transition",
+        title: "Frame Transition",
         intro: """
-        This code demonstrates four different sheet transition:
+        This code demonstrates four different frame transition:
         - Bottom-Bottom — standard sheet behaviour
         - Bottom-Right — enters from bottom, exits to the right
         - Right-Right — slides in/out from the right edge
@@ -966,45 +961,65 @@ struct SnippetsRepository {
         Each transition is implemented using .offset modifier with different combinations of enter/exit directions.
         """,
         thanks: nil,
-        githubUrlString: nil,
-        notes: "",
         date: Date.from(year: 2026, month: 3, day: 16) ?? Date(),
         codeSnippet: """
         import SwiftUI
 
-        struct A006_SheetTransitionDemo: View {
+        struct A006_FrameTransitionDemo: View {
             
+            @State private var selectedTab: FrameTab = .bottomBottom
+            
+            enum FrameTab: CaseIterable {
+                case bottomBottom, bottomRight, rightRight, sliderStyle
+            }
+
             var body: some View {
-                TabView {
-                    // bottom in, bottom out
-                    Tab("Bottom-Bottom", systemImage: "1.circle") {
-                        A006_SheetBottomTransition()
-                    }
-                    // bottom in, right out
-                    Tab("Bottom-Right", systemImage: "2.circle") {
-                        A006_SheetBottomRightTransition()
-                    }
-                    // right in, right out
-                    Tab("Right-Right", systemImage: "3.circle") {
-                        A006_SheetRightRightTransition()
-                    }
-                    // right in, left out (slider)
-                    Tab("Slider", systemImage: "4.circle") {
-                        A006_SheetSliderTransition()
+                GeometryReader { geo in
+                    
+                    let availableHeight = geo.size.height * 0.5
+                    let availableWidth = geo.size.width
+                    
+                    VStack(spacing: 0) {
+                        
+                        SegmentedOneLinePickerNotOptional(
+                            selection: $selectedTab,
+                            allItems: FrameTab.allCases,
+                            titleForCase: { tab in
+                                switch tab {
+                                case .bottomBottom: return "↑↓"
+                                case .bottomRight:  return "↑→"
+                                case .rightRight:   return "←→"
+                                case .sliderStyle:       return "←←"
+                                }
+                            }
+                        )
+                        .padding(.horizontal)
+                        .padding(.top, 8)
+                        
+                        switch selectedTab {
+                            // bottom in, bottom out
+                        case .bottomBottom: A006_FrameBottomTransition(height: availableHeight)
+                            // bottom in, right out
+                        case .bottomRight:  A006_FrameBottomRightTransition(height: availableHeight, width: availableWidth)
+                            // right in, right out
+                        case .rightRight:   A006_FrameRightRightTransition(height: availableHeight)
+                            // right in, left out (slider)
+                        case .sliderStyle:       A006_FrameSliderTransition(height: availableHeight, width: availableWidth)
+                        }
                     }
                 }
             }
         }
 
         #Preview {
-            A006_SheetTransitionDemo()
+            A006_FrameTransitionDemo()
         }
 
-        struct A006_SheetBottomTransition: View {
+        struct A006_FrameBottomTransition: View {
             
             @State private var showView: Bool = false
             
-            private let height = UIScreen.main.bounds.height * 0.35
+            let height: CGFloat
             
             var body: some View {
                 ZStack(alignment: .bottom) {
@@ -1013,7 +1028,7 @@ struct SnippetsRepository {
                             showView.toggle()
                         }
                         label: {
-                            Text("ANIMATE SHEET")
+                            Text("Animate Bottom-Bottom")
                                 .font(.headline)
                                 .foregroundStyle(Color.mycolor.myRed)
                                 .padding()
@@ -1023,7 +1038,7 @@ struct SnippetsRepository {
                         Spacer()
                     }
                     RoundedRectangle(cornerRadius: 30)
-                        .fill(Color.mycolor.myRed.opacity(0.1))
+                        .fill(Color.mycolor.myRed.verticalGradient())
                         .frame(height: height)
                         .offset(y: showView ? 0 : height)
                         .animation(.easeInOut(duration: 0.5), value: showView)
@@ -1033,7 +1048,7 @@ struct SnippetsRepository {
             }
         }
 
-        struct A006_SheetBottomRightTransition: View {
+        struct A006_FrameBottomRightTransition: View {
             /*
              Logic:
              - Initial offset = width — hidden behind the right edge
@@ -1042,12 +1057,19 @@ struct SnippetsRepository {
              - asyncAfter resets the offset back to width while the view is hidden
              */
             @State private var showView: Bool = false
-            @State private var offset: CGSize = CGSize(width: 0, height: UIScreen.main.bounds.height * 0.5)
+            @State private var offset: CGSize
             
-            private let height = UIScreen.main.bounds.height * 0.35
-            private let width = UIScreen.main.bounds.width
+            let height: CGFloat
+            let width: CGFloat
+            
             private let duration: Double = 0.5
             
+            init(height: CGFloat, width: CGFloat) {
+                    self.height = height
+                    self.width = width
+                    _offset = State(initialValue: CGSize(width: 0, height: height))
+                }
+
             var body: some View {
                 ZStack(alignment: .bottom) {
                     VStack {
@@ -1070,7 +1092,7 @@ struct SnippetsRepository {
                                 }
                             }
                         } label: {
-                            Text("ANIMATE SHEET")
+                            Text("Animate Bottom-Right")
                                 .font(.headline)
                                 .foregroundStyle(Color.mycolor.myGreen)
                                 .padding()
@@ -1085,7 +1107,7 @@ struct SnippetsRepository {
                             topLeading: 30,
                             topTrailing: 30
                         ))
-                        .fill(Color.mycolor.myGreen.opacity(0.1))
+                        .fill(Color.mycolor.myGreen.verticalGradient())
                         .frame(height: height)
                         .offset(offset)
                     }
@@ -1095,19 +1117,19 @@ struct SnippetsRepository {
             }
         }
 
-        struct A006_SheetRightRightTransition: View {
+        struct A006_FrameRightRightTransition: View {
             
             @State private var showView: Bool = false
             
-            private let height = UIScreen.main.bounds.height * 0.35
-            
+            let height: CGFloat
+
             var body: some View {
                 ZStack(alignment: .bottom) {
                     VStack {
                         Button {
                             showView.toggle()
                         } label: {
-                            Text("ANIMATE SHEET")
+                            Text("Animate Right-Right")
                                 .foregroundStyle(Color.mycolor.myOrange)
                                 .font(.headline)
                                 .padding()
@@ -1117,7 +1139,7 @@ struct SnippetsRepository {
                         Spacer()
                     }
                     RoundedRectangle(cornerRadius: 30)
-                        .fill(Color.mycolor.myOrange.opacity(0.1))
+                        .fill(Color.mycolor.myOrange.verticalGradient())
                         .frame(height: height)
                         .offset(x: showView ? 0 : UIScreen.main.bounds.width) // from right to left
                         .animation(.easeInOut(duration: 0.5), value: showView)
@@ -1127,14 +1149,21 @@ struct SnippetsRepository {
             }
         }
 
-        struct A006_SheetSliderTransition: View {
+        struct A006_FrameSliderTransition: View {
             
             @State private var showView: Bool = false
-            @State private var offset: CGFloat = UIScreen.main.bounds.width // start on the right
+            @State private var offset: CGSize
+
+            let height: CGFloat
+            let width: CGFloat
             
-            private let height = UIScreen.main.bounds.height * 0.35
-            private let width = UIScreen.main.bounds.width
             private let duration: Double = 0.5
+            
+            init(height: CGFloat, width: CGFloat) {
+                    self.height = height
+                    self.width = width
+                    _offset = State(initialValue: CGSize(width: 0, height: height))
+                }
             
             var body: some View {
                 ZStack(alignment: .bottom) {
@@ -1144,21 +1173,21 @@ struct SnippetsRepository {
                                 // appearance from the right
                                 showView = true
                                 withAnimation(.easeInOut(duration: duration)) {
-                                    offset = 0
+                                    offset = .zero
                                 }
                             } else {
                                 // disappearance to the left
                                 withAnimation(.easeInOut(duration: duration)) {
-                                    offset = -width
+                                    offset = CGSize(width: -width, height: 0)
                                 }
                                 // reset position back to the right after disappearing
                                 DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                                     showView = false
-                                    offset = width
+                                    offset = CGSize(width: width, height: 0)
                                 }
                             }
                         } label: {
-                            Text("ANIMATE SHEET")
+                            Text("Animate Slider")
                                 .foregroundStyle(Color.mycolor.myPurple)
                                 .font(.headline)
                                 .padding()
@@ -1170,15 +1199,68 @@ struct SnippetsRepository {
                     
                     if showView {
                         RoundedRectangle(cornerRadius: 30)
-                            .fill(Color.mycolor.myPurple.opacity(0.1))
+                            .fill(Color.mycolor.myPurple.verticalGradient())
                             .frame(height: height)
-                            .offset(x: offset)
+                            .offset(offset)
                     }
                 }
                 .padding(.top)
                 .edgesIgnoringSafeArea(.bottom)
             }
         }
+
+        //extension Color {
+        //    func verticalGradient() -> LinearGradient {
+        //        LinearGradient(
+        //            gradient: Gradient(stops: [
+        //                .init(color: self.opacity(0.1), location: 0.0),
+        //                .init(color: self.opacity(0.3), location: 0.3),
+        //                .init(color: self.opacity(0.7), location: 0.7),
+        //                .init(color: self.opacity(1.0), location: 1.0)
+        //            ]),
+        //            startPoint: .bottom,
+        //            endPoint: .top
+        //        )
+        //    }
+        //}
+
+        //struct SegmentedOneLinePickerNotOptional<T: Hashable>: View {
+        //    @Binding var selection: T
+        //    let allItems: [T]
+        //    let titleForCase: (T) -> String
+        //    
+        //    // Colors
+        //    var selectedFont: Font = .footnote
+        //    var selectedTextColor: Color = Color.mycolor.myBackground
+        //    var unselectedTextColor: Color = Color.mycolor.myAccent
+        //    var selectedBackground: Color = Color.mycolor.myButtonBGBlue
+        //    var unselectedBackground: Color = .clear
+        //    
+        //    var body: some View {
+        //        HStack(spacing: 0) {
+        //            // Regular buttons for enum's values
+        //            ForEach(allItems, id: \\.self) { item in
+        //                Button {
+        //                    withAnimation(.easeInOut) {
+        //                        selection = item
+        //                    }
+        //                } label: {
+        //                    Text(titleForCase(item))
+        //                        .font(selectedFont)
+        //                        .foregroundColor(selection == item ? selectedTextColor : unselectedTextColor)
+        //                        .frame(width: 60, height: 30)
+        //                        .frame(maxWidth: .infinity)
+        //                        .background(selection == item ? selectedBackground : unselectedBackground)
+        //                }
+        //            } //ForEach
+        //        } // HStack
+        //        .clipShape(RoundedRectangle(cornerRadius: 15))
+        //        .overlay(
+        //            RoundedRectangle(cornerRadius: 15)
+        //                .stroke(selectedBackground, lineWidth: 1)
+        //        )
+        //    }
+        //}
         """
     )
 
