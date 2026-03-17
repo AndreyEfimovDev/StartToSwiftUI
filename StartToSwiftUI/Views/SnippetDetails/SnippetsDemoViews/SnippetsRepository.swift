@@ -894,32 +894,35 @@ struct SnippetsRepository {
             
             var body: some View {
                 VStack {
-                    Image(systemName: isAnimated ? "microphone.slash.fill" : "microphone.fill")
-                        .font(.system(size: 50, weight: .bold))
-                        .contentTransition(.symbolEffect(.replace))
+                    Group {
+                        Image(systemName: isAnimated ? "microphone.slash.fill" : "microphone.fill")
+                            .font(.system(size: 50, weight: .bold))
+                            .contentTransition(.symbolEffect(.replace))
+                            .padding()
+                        
+                        HStack {
+                            Image(systemName: "sun.max.fill")
+                                .font(.system(size: 50, weight: .bold))
+                                .symbolEffect(.pulse, value: isAnimated)
+                            Image(systemName: "sun.max.fill")
+                                .font(.system(size: 50, weight: .bold))
+                                .symbolEffect(.bounce, value: isAnimated)
+                        }
                         .padding()
-                    
-                    HStack {
-                        Image(systemName: "sun.max.fill")
-                            .font(.system(size: 50, weight: .bold))
-                            .symbolEffect(.pulse, value: isAnimated)
-                        Image(systemName: "sun.max.fill")
-                            .font(.system(size: 50, weight: .bold))
-                            .symbolEffect(.bounce, value: isAnimated)
+                        
+                        HStack {
+                            Image(systemName: "antenna.radiowaves.left.and.right")
+                                .font(.system(size: 50, weight: .bold))
+                                .symbolEffect(.variableColor, value: isAnimated)
+                            Image(systemName: "antenna.radiowaves.left.and.right")
+                                .font(.system(size: 50, weight: .bold))
+                                .symbolEffect(.variableColor.iterative, value: isAnimated)
+                            Image(systemName: "antenna.radiowaves.left.and.right")
+                                .font(.system(size: 50, weight: .bold))
+                                .symbolEffect(.variableColor.hideInactiveLayers, value: isAnimated)
+                        }
                     }
-                    .padding()
-                    
-                    HStack {
-                        Image(systemName: "antenna.radiowaves.left.and.right")
-                            .font(.system(size: 50, weight: .bold))
-                            .symbolEffect(.variableColor, value: isAnimated)
-                        Image(systemName: "antenna.radiowaves.left.and.right")
-                            .font(.system(size: 50, weight: .bold))
-                            .symbolEffect(.variableColor.iterative, value: isAnimated)
-                        Image(systemName: "antenna.radiowaves.left.and.right")
-                            .font(.system(size: 50, weight: .bold))
-                            .symbolEffect(.variableColor.hideInactiveLayers, value: isAnimated)
-                    }
+                    .foregroundStyle(Color.mycolor.myAccent.opacity(0.8))
                     .padding()
                     
                     Button {
@@ -927,13 +930,13 @@ struct SnippetsRepository {
                     }label: {
                         Text("Animate")
                             .font(.headline)
+                            .foregroundStyle(Color.mycolor.myBlue)
                             .padding()
                             .background(.ultraThinMaterial, in: .capsule)
                             .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
                     }
                     .padding()
                 }
-                .foregroundStyle(Color.mycolor.myAccent)
             }
         }
 
