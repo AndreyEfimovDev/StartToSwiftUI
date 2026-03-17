@@ -7,6 +7,22 @@
 
 import SwiftUI
 
+extension Color {
+    func verticalGradient() -> LinearGradient {
+        LinearGradient(
+            gradient: Gradient(stops: [
+                .init(color: self.opacity(0.1), location: 0.0),
+                .init(color: self.opacity(0.3), location: 0.3),
+                .init(color: self.opacity(0.7), location: 0.7),
+                .init(color: self.opacity(1.0), location: 1.0)
+            ]),
+            startPoint: .bottom,
+            endPoint: .top
+        )
+    }
+}
+
+
 struct CrossedImage: ViewModifier {
     var color: Color = Color.mycolor.myBlue
     var lineWidth: CGFloat = 2
@@ -22,16 +38,6 @@ struct CrossedImage: ViewModifier {
                     .opacity(isCrossed ? 1 : 0)
                     .animation(.easeInOut(duration: 0.3), value: isCrossed)
             )
-
-//            .overlay(
-//                GeometryReader { geometry in
-//                    Path { path in
-//                        path.move(to: CGPoint(x: 0, y: 0))
-//                        path.addLine(to: CGPoint(x: geometry.size.width, y: geometry.size.height))
-//                    }
-//                    .stroke(color, lineWidth: lineWidth)
-//                }
-//            )
     }
 }
 
