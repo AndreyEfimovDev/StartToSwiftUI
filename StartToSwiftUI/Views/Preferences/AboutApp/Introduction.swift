@@ -71,7 +71,7 @@ struct Introduction: View {
                - Real-time sync with main app
 
                **DATA MANAGEMENT**:
-               - Hide materials, move them to Deleted, or restore back to Active anytime
+               - Move materials to Deleted, then erase them permanently or restore back to Active anytime
                - Share, backup, restore and delete materials as needed
 
                For detailed functionality information, please visit the 'Functionality' section. 

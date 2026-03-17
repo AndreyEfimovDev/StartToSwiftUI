@@ -161,8 +161,8 @@ struct MaterialsHomeView: View {
     
     @ViewBuilder
     private func trailingSwipeActions(for post: Post) -> some View {
-        Button("Hide", systemImage: "eye.slash") {
-            vm.setPostHidden(post)
+        Button("Delete", systemImage: "archivebox") {
+            vm.setPostDeleted(post)
         }.tint(StatusOptions.hidden.color)
         
         Button("Edit", systemImage: "pencil") {

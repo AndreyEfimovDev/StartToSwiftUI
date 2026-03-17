@@ -39,10 +39,6 @@ struct PostDraftsView: View {
                         coordinator.pushModal(.editPost(post))
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        Button("Hide", systemImage: "eye.slash") {
-                            vm.setPostHidden(post)
-                        }.tint(StatusOptions.hidden.color)
-                        
                         Button("Delete", systemImage: "archivebox") {
                             vm.setPostDeleted(post)
                         }.tint(StatusOptions.deleted.color)

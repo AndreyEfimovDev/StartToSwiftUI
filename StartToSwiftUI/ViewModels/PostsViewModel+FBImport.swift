@@ -107,5 +107,16 @@ extension PostsViewModel {
     func uploadDevDataPostsToFirebase() async {
         await fbPostsManager.uploadDevDataPostsToFirebase()
     }
+    
+    // MARK: - Migration
+    func migrateHiddenToDeleted() {
+        let hiddenPosts = allPosts.filter { $0.status == .hidden }
+        guard !hiddenPosts.isEmpty else { return }
+        
+        hiddenPosts.forEach { $0.status = .deleted }
+        saveContextAndReload()
+        
+        log("🔄 Migrated \(hiddenPosts.count) posts: hidden → deleted", level: .info)
+    }
 
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct ArchivedPostsView: View {
+struct ArchiveDeletedPostsView: View {
     
     // MARK: - Dependencies
     @EnvironmentObject private var vm: PostsViewModel
@@ -18,82 +18,38 @@ struct ArchivedPostsView: View {
     
     @State private var selectedPostToDelete: Post?
     @State private var isShowingDeleteConfirmation: Bool = false
-    @State private var selectedTab: StatusOptions = .hidden
-   
-    let tabs: [StatusOptions] = [.hidden, .deleted]
 
     // MARK: - Computed Properties
-    private var hiddenPosts: [Post] {
-        vm.allPosts.filter { $0.status == .hidden }
-    }
-    
     private var deletedPosts: [Post] {
         vm.allPosts.filter { $0.status == .deleted }
-    }
-
-    private var disableView: Bool {
-        isShowingDeleteConfirmation
     }
 
     // MARK: Body
     var body: some View {
         FormCoordinatorToolbar(
-            title: "Archived materials",
+            title: "Deleted materials",
             showHomeButton: true
         ) {
-            VStack {
-                UnderlineSermentedPickerNotOptional(
-                    selection: $selectedTab,
-                    allItems: tabs,
-                    titleForCase: { $0.displayName },
-                    selectedFont: .headline
-                )
-                .padding()
-                .padding(.horizontal)
-
-                if selectedTab == .hidden {
-                    Group {
-                        if hiddenPosts.isEmpty {
-                            emptyView(text: "No Hidden Materials", subText: "")
-                        } else {
-                            List { hiddenSection }
-                                .scrollContentBackground(.hidden)
-                        }
-                    }.background(
-                        Color.mycolor.myPurple.opacity(0.3)
-                    )
+            
+            Group {
+                if deletedPosts.isEmpty {
+                    emptyView(text: "No Deleted Materials", subText: "")
                 } else {
-                    Group {
-                        if deletedPosts.isEmpty {
-                            emptyView(text: "No Deleted Materials", subText: "")
-                        } else {
-                            List { deletedSection }
-                                .scrollContentBackground(.hidden)
-                        }
-                    }
-                    .background(
-                        Color.mycolor.myRed.opacity(0.3)
-                    )
+                    List { deletedPostsSection }
+                        .scrollContentBackground(.hidden)
                 }
             }
-            .disabled(disableView)
-            .overlay { deleteConfirmationOverlay }
-            .onAppear {
-                if hiddenPosts.isEmpty {
-                    selectedTab = .deleted
+            .background(Color.mycolor.myRed.opacity(0.3))
+            .disabled(isShowingDeleteConfirmation)
+            .overlay {
+                if isShowingDeleteConfirmation {
+                    postEraseConfirmation
                 }
             }
         }
     }
-    
-    @ViewBuilder
-    private var deleteConfirmationOverlay: some View {
-        if isShowingDeleteConfirmation {
-            postDeletionConfirmation
-        }
-    }
-    
-    private var postDeletionConfirmation: some View {
+        
+    private var postEraseConfirmation: some View {
         ZStack {
             Color.mycolor.myAccent.opacity(0.001)
                 .ignoresSafeArea()
@@ -149,28 +105,10 @@ struct ArchivedPostsView: View {
 
 }
 
-extension ArchivedPostsView {
-        
-    @ViewBuilder
-    private var hiddenSection: some View {
-        ForEach(hiddenPosts) { post in
-            PostRowView(post: post)
-                .swipeActions(edge: .trailing) {
-                    Button("Delete", systemImage: "archivebox") {
-                        vm.setPostDeleted(post)
-                    }
-                    .tint(StatusOptions.deleted.color)
-                    
-                    Button("Restore", systemImage: "arrow.uturn.left") {
-                        vm.setPostActive(post)
-                    }
-                    .tint(Color.mycolor.myGreen)
-                }
-        }
-    }
+extension ArchiveDeletedPostsView {
     
     @ViewBuilder
-    private var deletedSection: some View {
+    private var deletedPostsSection: some View {
         ForEach(deletedPosts) { post in
             PostRowView(post: post)
                 .swipeActions(edge: .trailing) {
@@ -209,7 +147,7 @@ extension ArchivedPostsView {
     let vm = PostsViewModel(modelContext: context)
     vm.loadPostsFromSwiftData()
     
-    return ArchivedPostsView()
+    return ArchiveDeletedPostsView()
         .modelContainer(container)
         .environmentObject(vm)
         .environmentObject(AppCoordinator())
