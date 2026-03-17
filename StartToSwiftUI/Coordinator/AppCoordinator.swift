@@ -13,7 +13,7 @@ enum AppSection: String {
     case materials
     case snippets
 
-    var switchIcon: String { "arrow.left.arrow.right" }
+//    var switchIcon: String { "arrow.left.arrow.right" }
 
     /// Icon that hints at the OTHER section (what you'll switch TO)
     var switchLabel: String {
@@ -31,7 +31,7 @@ final class AppCoordinator: ObservableObject {
     private let hapticManager = HapticManager.shared
 
     // MARK: - Section
-    @AppStorage("activeSection") var activeSection: AppSection = .materials
+    @AppStorage("activeSection") var activeSection: AppSection = .snippets
     
     // MARK: - Navigation
     /// For main stack navigation

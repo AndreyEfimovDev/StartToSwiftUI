@@ -43,7 +43,8 @@ struct StartView: View {
                         vm.updateWidgetData()
                         vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
                         snippetsvm.isFiltersEmpty = snippetsvm.checkIfAllFiltersAreEmpty()
-                        /* Clean dublicates if any. iCloud sync can create multiple appsyncstates on different devices. This function finds duplicates, merges their data into one (the oldest), and deletes the rest. */
+                        /* Clean dublicates if any. iCloud sync may create multiple appSyncStates on different devices. This function finds duplicates, merges their data into one (the oldest), and deletes the rest.
+                         */
                         vm.appStateManager?.cleanupDuplicateAppStates()
                         await noticevm.importNoticesFromFirebase()
                     }
