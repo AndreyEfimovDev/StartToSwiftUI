@@ -48,7 +48,7 @@ struct A006_SheetBottomTransition: View {
                     showView.toggle()
                 }
                 label: {
-                    Text("ANIMATE SHEET")
+                    Text("Animate Bottom-Bottom")
                         .font(.headline)
                         .foregroundStyle(Color.mycolor.myRed)
                         .padding()
@@ -58,7 +58,7 @@ struct A006_SheetBottomTransition: View {
                 Spacer()
             }
             RoundedRectangle(cornerRadius: 30)
-                .fill(Color.mycolor.myRed.opacity(0.1))
+                .fill(Color.mycolor.myRed.verticalGradient())
                 .frame(height: height)
                 .offset(y: showView ? 0 : height)
                 .animation(.easeInOut(duration: 0.5), value: showView)
@@ -105,7 +105,7 @@ struct A006_SheetBottomRightTransition: View {
                         }
                     }
                 } label: {
-                    Text("ANIMATE SHEET")
+                    Text("Animate Bottom-Right")
                         .font(.headline)
                         .foregroundStyle(Color.mycolor.myGreen)
                         .padding()
@@ -120,7 +120,7 @@ struct A006_SheetBottomRightTransition: View {
                     topLeading: 30,
                     topTrailing: 30
                 ))
-                .fill(Color.mycolor.myGreen.opacity(0.1))
+                .fill(Color.mycolor.myGreen.verticalGradient())
                 .frame(height: height)
                 .offset(offset)
             }
@@ -142,7 +142,7 @@ struct A006_SheetRightRightTransition: View {
                 Button {
                     showView.toggle()
                 } label: {
-                    Text("ANIMATE SHEET")
+                    Text("Animate Right-Right")
                         .foregroundStyle(Color.mycolor.myOrange)
                         .font(.headline)
                         .padding()
@@ -152,7 +152,7 @@ struct A006_SheetRightRightTransition: View {
                 Spacer()
             }
             RoundedRectangle(cornerRadius: 30)
-                .fill(Color.mycolor.myOrange.opacity(0.1))
+                .fill(Color.mycolor.myOrange.verticalGradient())
                 .frame(height: height)
                 .offset(x: showView ? 0 : UIScreen.main.bounds.width) // from right to left
                 .animation(.easeInOut(duration: 0.5), value: showView)
@@ -193,7 +193,7 @@ struct A006_SheetSliderTransition: View {
                         }
                     }
                 } label: {
-                    Text("ANIMATE SHEET")
+                    Text("Animate Slider")
                         .foregroundStyle(Color.mycolor.myPurple)
                         .font(.headline)
                         .padding()
@@ -205,7 +205,7 @@ struct A006_SheetSliderTransition: View {
             
             if showView {
                 RoundedRectangle(cornerRadius: 30)
-                    .fill(Color.mycolor.myPurple.opacity(0.1))
+                    .fill(Color.mycolor.myPurple.verticalGradient())
                     .frame(height: height)
                     .offset(x: offset)
             }
@@ -215,4 +215,18 @@ struct A006_SheetSliderTransition: View {
     }
 }
 
+//extension Color {
+//    func verticalGradient() -> LinearGradient {
+//        LinearGradient(
+//            gradient: Gradient(stops: [
+//                .init(color: self.opacity(0.1), location: 0.0),
+//                .init(color: self.opacity(0.3), location: 0.3),
+//                .init(color: self.opacity(0.7), location: 0.7),
+//                .init(color: self.opacity(1.0), location: 1.0)
+//            ]),
+//            startPoint: .bottom,
+//            endPoint: .top
+//        )
+//    }
+//}
 

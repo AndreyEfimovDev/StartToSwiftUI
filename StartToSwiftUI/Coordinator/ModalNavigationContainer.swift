@@ -41,7 +41,7 @@ struct ModalNavigationContainer: View {
         case .preferences:
             PreferencesView()
         case .notices:
-            NoticesView(isRootModal: isRoot)  // true if called from HomeView, false - from Preferences
+            NoticesView(isRootModal: isRoot)  // true if called from MaterialsHomeView, false - from Preferences
         case .noticeDetails(let noticeId):
             NoticeDetailsView(noticeId: noticeId)
 

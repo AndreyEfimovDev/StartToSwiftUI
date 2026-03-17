@@ -90,7 +90,7 @@ struct NoticesView: View {
     @ToolbarContentBuilder
     private func navigationToolbar() -> some ToolbarContent {
         if isRootModal {
-            // Open as root View (from HomeView)
+            // Open as root View (from MaterialsHomeView)
             // Show Back button only
             ToolbarItem(placement: .topBarLeading) {
                 BackButtonView() {
@@ -127,7 +127,7 @@ struct NoticesView: View {
     
 }
 
-#Preview("Root Modal (from HomeView)"){
+#Preview("Root Modal (from MaterialsHomeView)"){
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)

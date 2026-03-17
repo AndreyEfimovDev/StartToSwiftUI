@@ -8,7 +8,7 @@
 import SwiftUI
 
 // MARK: - Shared Toolbar Items
-// Used by HomeView and SnippetsHomeView
+// Used by MaterialsHomeView and SnippetsHomeView
 struct SharedToolbarLeadingItems: ToolbarContent {
     
     @EnvironmentObject private var coordinator: AppCoordinator
