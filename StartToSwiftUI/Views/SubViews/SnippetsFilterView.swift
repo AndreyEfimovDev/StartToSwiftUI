@@ -22,8 +22,6 @@ struct SnippetsFilterView: View {
 
             VStack(spacing: 0) {
                 sortOptions
-#warning("Remove before deployment to App Store")
-//                categoryFilter
             }
             .padding(.horizontal, UIDevice.isiPad ? 15 : 0)
 

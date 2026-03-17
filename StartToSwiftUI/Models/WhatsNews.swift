@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct WhatsNews {
-#warning("Add upated info before deployment to App Store")
     static let releases: [Release] = [
         Release(
             release: "Release 1.5.0(8)",
