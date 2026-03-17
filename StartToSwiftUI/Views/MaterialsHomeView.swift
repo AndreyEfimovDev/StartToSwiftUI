@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct HomeView: View {
+struct MaterialsHomeView: View {
     
     // MARK: - Dependencies
     @EnvironmentObject private var vm: PostsViewModel
@@ -56,7 +56,7 @@ struct HomeView: View {
                 }
             }
             .disabled(disableHomeView)
-            .navigationTitle(vm.selectedCategory ?? Constants.mainCategory)
+            .navigationTitle("Materials")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar { SharedToolbarLeadingItems() }
@@ -64,7 +64,7 @@ struct HomeView: View {
             .sheet(isPresented: $isFilterButtonPressed) {filtersSheet }
             .overlay { gestureOverlays(proxy: proxy) }
             .task {
-                FBAnalyticsManager.shared.logScreen(name: "HomeView")
+                FBAnalyticsManager.shared.logScreen(name: "MaterialsHomeView")
             }
         }
     }
@@ -345,7 +345,7 @@ private struct HomeViewPreview: View {
     
     var body: some View {
         NavigationStack {
-            HomeView(selectedCategory: Constants.mainCategory)
+            MaterialsHomeView(selectedCategory: Constants.mainCategory)
                 .environmentObject(AppCoordinator())
                 .environmentObject(vm)
                 .environmentObject(noticesVM)

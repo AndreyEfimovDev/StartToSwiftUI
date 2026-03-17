@@ -48,7 +48,7 @@ extension View {
 }
 
 
-// MARK: Custom One/Two Taps for RowPost in HomeView
+// MARK: Custom One/Two Taps for RowPost in MaterialsHomeView
 
 struct TapAndDoubleTapModifier: ViewModifier {
     let singleTap: () -> Void

@@ -81,10 +81,10 @@ final class AppCoordinator: ObservableObject {
     /// Current navigation depth (how many Views are in the stack)
     var currentDepth: Int { path.count }
 
-    /// Check if we are on the root screen (HomeView)?
+    /// Check if we are on the root screen (MaterialsHomeView)?
     var isAtRoot: Bool { path.isEmpty }
 
-    /// Return to HomeView
+    /// Return to Home
     func popToRoot() { path = NavigationPath() }
     
     /// Replace the current View
@@ -131,7 +131,7 @@ final class AppCoordinator: ObservableObject {
     /// Return to the root of modal navigation (Preferences)
     func popModalToRoot() { modalPath = NavigationPath() }
 
-    ///  Close modal View and return to HomeView
+    ///  Close modal View and return to MaterialsHomeView
     func closeModal() {
         presentedSheet = nil
         modalPath = NavigationPath()

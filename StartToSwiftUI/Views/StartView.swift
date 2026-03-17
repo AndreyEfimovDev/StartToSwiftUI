@@ -74,7 +74,7 @@ struct StartView: View {
         switch coordinator.activeSection {
         case .materials:
             NavigationStack(path: $coordinator.path) {
-                HomeView(selectedCategory: vm.selectedCategory)
+                MaterialsHomeView(selectedCategory: vm.selectedCategory)
                     .navigationDestination(for: AppRoute.self) { destinationView(for: $0) }
             }
         case .snippets:
@@ -92,7 +92,7 @@ struct StartView: View {
             Group {
             switch coordinator.activeSection {
                 case .materials:
-                    HomeView(selectedCategory: vm.selectedCategory)
+                    MaterialsHomeView(selectedCategory: vm.selectedCategory)
                 case .snippets:
                     SnippetsHomeView()
                 }
@@ -121,7 +121,7 @@ struct StartView: View {
     private var sectionRootView: some View {
         switch coordinator.activeSection {
         case .materials:
-            HomeView(selectedCategory: vm.selectedCategory)
+            MaterialsHomeView(selectedCategory: vm.selectedCategory)
         case .snippets:
             SnippetsHomeView()
         }
