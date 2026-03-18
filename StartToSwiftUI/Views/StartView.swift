@@ -23,6 +23,12 @@ struct StartView: View {
     @State private var showLaunchView: Bool = true
     @State private var visibility: NavigationSplitViewVisibility = .doubleColumn
     
+    // MARK: - Section Transition State
+      /// A local copy of the section that we are changing through withAnimation
+      @State private var displayedSection: AppSection = .materials
+      /// true = forward (materials → snippets), false = backward
+      @State private var isGoingForward: Bool = true
+    
     // MARK: - Body
     var body: some View {
         ZStack {
@@ -48,6 +54,12 @@ struct StartView: View {
                         vm.appStateManager?.cleanupDuplicateAppStates()
                         await noticevm.importNoticesFromFirebase()
                     }
+                    .onChange(of: coordinator.activeSection) { oldSection, newSection in
+                        isGoingForward = newSection.transitionIndex > oldSection.transitionIndex
+                        withAnimation(.easeInOut(duration: 0.35)) {
+                            displayedSection = newSection
+                        }
+                    }
             }
         }
         .preferredColorScheme(vm.selectedTheme.colorScheme)
@@ -57,6 +69,16 @@ struct StartView: View {
         .environmentObject(snippetsvm)
     }
     
+    
+    // MARK: - Section Transition Helper          ← NEW
+    
+    private var sectionTransition: AnyTransition {
+        .asymmetric(
+            insertion: .move(edge: isGoingForward ? .trailing : .leading).combined(with: .opacity),
+            removal:   .move(edge: isGoingForward ? .leading  : .trailing).combined(with: .opacity)
+        )
+    }
+
     // MARK: Main Content
     
     @ViewBuilder
@@ -71,17 +93,19 @@ struct StartView: View {
     // iPhone: single NavigationStack, root switches with activeSection
     @ViewBuilder
     private var iPhoneContent: some View {
-        switch coordinator.activeSection {
+        switch displayedSection {
         case .materials:
             NavigationStack(path: $coordinator.path) {
                 MaterialsHomeView(selectedCategory: vm.selectedCategory)
                     .navigationDestination(for: AppRoute.self) { destinationView(for: $0) }
             }
+            .transition(sectionTransition)
         case .snippets:
             NavigationStack(path: $coordinator.path) {
                 SnippetsHomeView()
                     .navigationDestination(for: AppRoute.self) { destinationView(for: $0) }
             }
+            .transition(sectionTransition)
         }
     }
 
@@ -90,16 +114,18 @@ struct StartView: View {
     private var iPadContent: some View {
         NavigationSplitView(columnVisibility: $visibility) {
             Group {
-            switch coordinator.activeSection {
+                switch displayedSection {
                 case .materials:
                     MaterialsHomeView(selectedCategory: vm.selectedCategory)
+                        .transition(sectionTransition)
                 case .snippets:
                     SnippetsHomeView()
+                        .transition(sectionTransition)
                 }
             }
             .navigationSplitViewColumnWidth(430)
         } detail: {
-            switch coordinator.activeSection {
+            switch displayedSection {
             case .materials:
                 if let post = vm.selectedPost {
                     PostDetailsView(post: post).id(post.id)

@@ -264,16 +264,6 @@ struct PostDetailsView: View {
                 vm.favoriteToggle(post)
                 hapticManager.impact(style: .light)
             }
-
-//            
-//            CircleStrokeButtonView(
-//                iconName: post.favoriteChoice == .yes ? "star.slash" : "star",
-//                iconFont: .headline,
-//                isShownCircle: false
-//            ) {
-//                vm.favoriteToggle(post)
-//                hapticManager.impact(style: .light)
-//            }
             
             CircleStrokeButtonView(
                 iconName: "pencil",

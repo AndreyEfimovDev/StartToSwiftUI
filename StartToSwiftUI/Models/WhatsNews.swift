@@ -11,6 +11,31 @@ struct WhatsNews {
 #warning("Add upated info before deployment to App Store")
     static let releases: [Release] = [
         Release(
+            release: "Release 1.6.0(9)",
+            news: [
+                News(
+                    title: "Added",
+                    newsText: """
+                    - 
+                    """
+                ),
+                News(
+                    title: "Improved",
+                    newsText: """
+                    - Behaviour of 'Go to the Source' button when a url link is invalid 
+                    - Switching between Materials and Code Snippets now slides smoothly with a directional animation
+                    """
+                ),
+                News(
+                    title: "Fixed",
+                    newsText: """
+                    - 
+                    """
+                )
+            ]
+        ),
+
+        Release(
             release: "Release 1.5.0(8)",
             news: [
                 News(

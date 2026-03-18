@@ -23,27 +23,20 @@ struct LinkButtonURL: View {
         ZStack {
             if let url = validURL {
                 Link(destination: url){
-                    buttonLabel
+                    buttonLabel(title: buttonTitle)
                 }
             } else {
-                buttonLabel
-                    .opacity(0.4)
-                    .overlay(
-                        Text("Invalid URL")
-                            .font(.caption)
-                            .foregroundStyle(Color.mycolor.myButtonTextPrimary)
-                            .padding(.top, 36),
-                        alignment: .center
-                    )
+                buttonLabel(title: "Invalid URL")
             }
         }
     }
     
-    private var buttonLabel: some View {
-        Text(buttonTitle)
+    @ViewBuilder
+    private func buttonLabel(title: String) -> some View {
+        Text(title)
             .font(.title3)
             .fontWeight(.semibold)
-            .foregroundStyle(Color.mycolor.mySectionBackground)
+            .foregroundStyle(Color.mycolor.myButtonTextPrimary)
             .frame(height: 55)
             .frame(maxWidth: .infinity)
             .background(isValid ? Color.mycolor.myBlue : Color.mycolor.myRed, in: .capsule)
