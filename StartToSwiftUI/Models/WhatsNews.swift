@@ -22,13 +22,14 @@ struct WhatsNews {
                 News(
                     title: "Improved",
                     newsText: """
-                    - 'Go to the Source' button behaviour when a url link is invalid
+                    - Behaviour of 'Go to the Source' button when a url link is invalid 
+                    - Switching between Materials and Code Snippets now slides smoothly with a directional animation
                     """
                 ),
                 News(
                     title: "Fixed",
                     newsText: """
-                    - An issue where changes made on one device were not syncing to other devices via iCloud
+                    - 
                     """
                 )
             ]

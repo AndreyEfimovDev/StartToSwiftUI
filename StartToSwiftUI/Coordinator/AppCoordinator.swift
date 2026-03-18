@@ -12,16 +12,25 @@ import SwiftUI
 enum AppSection: String {
     case materials
     case snippets
-
-//    var switchIcon: String { "arrow.left.arrow.right" }
-
+    
+    //    var switchIcon: String { "arrow.left.arrow.right" }
+    
     /// Icon that hints at the OTHER section (what you'll switch TO)
     var switchLabel: String {
         switch self {
-        case .materials: return "ellipsis.curlybraces" // chevron.left.forwardslash.chevron.right 
+        case .materials: return "ellipsis.curlybraces" // chevron.left.forwardslash.chevron.right
         case .snippets:  return "book" // graduationcap
         }
     }
+    /// Порядок секций для расчёта направления перехода.
+    /// materials(0) → snippets(1) = вперёд (→ trailing)
+    var transitionIndex: Int {
+        switch self {
+        case .materials: return 0
+        case .snippets:  return 1
+        }
+    }
+    
 }
 
 // MARK: - AppCoordinator
