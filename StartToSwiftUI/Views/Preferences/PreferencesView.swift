@@ -178,7 +178,7 @@ struct PreferencesView: View {
         Toggle("Shimmer", isOn: $vm.shimmerWaveEnabled)
             .tint(Color.mycolor.myBlue)
             .customListRowStyle(
-                iconName: vm.shimmerWaveEnabled ? "waveform" : "waveform.slash",
+                iconName: vm.shimmerWaveEnabled ? "waveform" : "waveform.slash", // water.waves water.waves.slash
                 iconWidth: iconSize
             )
     }

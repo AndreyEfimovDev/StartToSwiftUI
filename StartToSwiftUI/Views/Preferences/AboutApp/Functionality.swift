@@ -58,11 +58,6 @@ struct Functionality: View {
                - Tap Add Widget, then tap Done
 
                **Icons**
-               *Drafts*
-                \(Image(systemName: "square.stack.3d.up")) - draft
-               *Favourite choice*
-                \(FavoriteChoice.yes.icon) - yes
-                \(FavoriteChoice.no.icon) - no
                *Original source*
                 \(OriginOptions.local.icon) - created locally
                 \(OriginOptions.cloud.icon) - loaded from cloud (curated collection)
