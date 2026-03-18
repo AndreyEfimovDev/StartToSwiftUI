@@ -65,6 +65,7 @@ struct PreferencesView: View {
                 }
             }
             Section(header: sectionHeader("Manage materials (\(vm.allPosts.count))")) {
+                shimmerToggle
                 postDrafts
                 deletedMaterials
                 importFromCloud
@@ -164,7 +165,7 @@ struct PreferencesView: View {
         Button("Messages") {
             coordinator.pushModal(.notices)
         }
-        .accessibilityIdentifier("MessagesButton")
+        .accessibilityIdentifier("MessagesButton") // for UI-testing
         .customListRowStyle(
             iconName: "message",
             iconWidth: iconSize
@@ -173,6 +174,15 @@ struct PreferencesView: View {
  
     // MARK: - Materials Management
   
+    private var shimmerToggle: some View {
+        Toggle("Shimmer", isOn: $vm.shimmerWaveEnabled)
+            .tint(Color.mycolor.myBlue)
+            .customListRowStyle(
+                iconName: vm.shimmerWaveEnabled ? "waveform" : "waveform.slash",
+                iconWidth: iconSize
+            )
+    }
+
     private var postDrafts: some View {
         Group {
             if vm.hasDrafts {

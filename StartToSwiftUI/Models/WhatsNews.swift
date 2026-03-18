@@ -16,14 +16,15 @@ struct WhatsNews {
                 News(
                     title: "Added",
                     newsText: """
-                    - 
+                    - New materials now shimmer — freshly imported content is highlighted with a subtle wave so you never miss new study material
+                    - Shimmer wave can be toggled in Preferences
                     """
                 ),
                 News(
                     title: "Improved",
                     newsText: """
-                    - Behaviour of 'Go to the Source' button when a url link is invalid 
                     - Switching between Materials and Code Snippets now slides smoothly with a directional animation
+                    - Behaviour of 'Go to the Source' button when a url link is invalid 
                     """
                 ),
                 News(

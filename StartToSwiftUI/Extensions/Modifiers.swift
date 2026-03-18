@@ -7,6 +7,83 @@
 
 import SwiftUI
 
+// MARK: - ShimmerWave ViewModifier
+
+struct ShimmerWave: ViewModifier {
+    
+    let enabled: Bool
+    
+    @State private var phase: CGFloat = 0
+    @State private var task: Task<Void, Never>?
+
+    func body(content: Content) -> some View {
+        if enabled {
+            content
+                .overlay(shimmerOverlay)
+                .clipped()
+                .task { await runLoop() }
+        } else {
+            content
+        }
+    }
+
+    private var shimmerOverlay: some View {
+        GeometryReader { geo in
+            let w = geo.size.width
+            let bandWidth = w * 0.4
+
+            LinearGradient(
+                stops: [
+                    .init(color: .clear, location: 0),
+                    .init(color: Color.mycolor.myAccent.opacity(0.06), location: 0.25),
+                    .init(color: Color.mycolor.myAccent.opacity(0.22), location: 0.5),
+                    .init(color: Color.mycolor.myAccent.opacity(0.06), location: 0.75),
+                    .init(color: .clear, location: 1),
+                ],
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+            .frame(width: bandWidth)
+            .offset(x: phase * (w + bandWidth) - bandWidth)
+            .allowsHitTesting(false)
+        }
+    }
+
+    private func runLoop() async {
+        /*
+         Как работает цикл:
+         ```
+         phase = 0 (полоса за левым краем)
+             │
+             ▼ withAnimation(.linear(duration: 0.5))
+         phase = 1 (полоса уходит за правый край)  ← 0.5 сек
+             │
+             ▼ Task.sleep(0.5) — ждём конца анимации
+         phase = 0 (мгновенный сброс, полоса за кадром)
+             │
+             ▼ Task.sleep(3.0) — тихая пауза
+             └── повтор
+         */
+        while !Task.isCancelled {
+            withAnimation(.linear(duration: 1.2)) { phase = 1 }
+            do {
+                try await Task.sleep(for: .seconds(1.2)) // wait for the end of sweep
+                phase = 0
+                try await Task.sleep(for: .seconds(3.0)) // pause between animations
+            } catch {
+                break  // CancellationError → exit imideatelly
+            }
+        }
+    }
+}
+
+extension View {
+    func shimmerWave(enabled: Bool = true) -> some View {
+        modifier(ShimmerWave(enabled: enabled))
+    }
+}
+
+
 extension Color {
     func verticalGradient() -> LinearGradient {
         LinearGradient(
