@@ -15,7 +15,7 @@ import SwiftUI
 
 // MARK: - A006 FrameTransition DemoView
 struct A006_FrameTransitionDemoView: View {
-
+    
     let snippet: CodeSnippet
     
     var body: some View {
@@ -24,7 +24,7 @@ struct A006_FrameTransitionDemoView: View {
                 VStack(spacing: 20) {
                     SnippetDemoHeader(snippet: snippet)
                         .padding()
-
+                    
                     if let thanks = snippet.thanks, !thanks.isEmpty {
                         SnippetThanksView(thanks: thanks)
                             .padding(.horizontal)
@@ -42,9 +42,9 @@ struct A006_FrameTransitionDemoView: View {
 
 // MARK: - A005 SFSymbolEffects DemoView
 struct A005_SFSymbolEffectsDemoView: View {
-
+    
     let snippet: CodeSnippet
-
+    
     var body: some View {
         VStack(spacing: 0) {
             ScrollView(showsIndicators: false) {
@@ -69,9 +69,9 @@ struct A005_SFSymbolEffectsDemoView: View {
 
 // MARK: - A004_PressableButton DemoView
 struct A004_ShrinkingButtonDemoView: View {
-
+    
     let snippet: CodeSnippet
-
+    
     var body: some View {
         VStack(spacing: 0) {
             ScrollView(showsIndicators: false) {
@@ -91,7 +91,7 @@ struct A004_ShrinkingButtonDemoView: View {
                 Text("Version for use within ScrollView")
                     .font(.headline)
                 A004_ShrinkingButtonForScrollViewDemo()
-                                
+                
                 Text("Version for regular use")
                 A004_ShrinkingButtonRegularDemo()
             }
@@ -103,16 +103,16 @@ struct A004_ShrinkingButtonDemoView: View {
 
 // MARK: - A003_ProgressCircleWithCheckmark DemoView
 struct A003_ProgressCircleWithCheckmarkDemoView: View {
-
+    
     let snippet: CodeSnippet
-
+    
     var body: some View {
         VStack(spacing: 0) {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 20) {
                     SnippetDemoHeader(snippet: snippet)
                         .padding()
-
+                    
                     if let thanks = snippet.thanks, !thanks.isEmpty {
                         SnippetThanksView(thanks: thanks)
                             .padding(.horizontal)
@@ -130,9 +130,9 @@ struct A003_ProgressCircleWithCheckmarkDemoView: View {
 
 // MARK: - A002_TrimIndicator DemoView
 struct A002_TrimIndicatorDemoView: View {
-
+    
     let snippet: CodeSnippet
-
+    
     var body: some View {
         VStack(spacing: 0) {
             ScrollView(showsIndicators: false) {
@@ -157,9 +157,9 @@ struct A002_TrimIndicatorDemoView: View {
 
 // MARK: - A001_ProgressViewIndicators DemoView
 struct A001_ProgressViewIndicatorsDemoView: View {
-
+    
     let snippet: CodeSnippet
-
+    
     var body: some View {
         VStack(spacing: 0) {
             ScrollView(showsIndicators: false) {
@@ -186,14 +186,14 @@ struct A001_ProgressViewIndicatorsDemoView: View {
 // MARK: - Shared helper views
 private struct SnippetDemoHeader: View {
     let snippet: CodeSnippet
-
+    
     @State private var showFullIntro: Bool = false
-    @State private var lineCountIntro: Int = 0
-
+    @State private var isTruncated = false
+    
     private let introFont: Font = .subheadline
     private let introLineSpacing: CGFloat = 0
     private let introLinesLimit: Int = 3
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(snippet.title)
@@ -202,41 +202,23 @@ private struct SnippetDemoHeader: View {
                 .minimumScaleFactor(0.75)
                 .lineLimit(showFullIntro ? nil : 1)
                 .frame(maxWidth: .infinity, alignment: .leading)
-
-            VStack(spacing: 0) {
-                Text(snippet.intro)
-                    .font(introFont)
-                    .lineLimit(showFullIntro ? nil : introLinesLimit)
-                    .lineSpacing(introLineSpacing)
-                    .frame(minHeight: 55, alignment: .topLeading)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(
-                        // Invisible text without restrictions - only for line counting
-                        Text(snippet.intro)
-                            .font(introFont)
-                            .lineSpacing(introLineSpacing)
-                            .lineLimit(nil)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .hidden()
-                            .onLineCountChanged(font: introFont, lineSpacing: introLineSpacing) { count in
-                                lineCountIntro = count - 1
-                            }
-                    )
-                if lineCountIntro > introLinesLimit {
-                    HStack(alignment: .top) {
-                        Spacer()
-                        MoreLessTextButton(showText: $showFullIntro)
-                    }
-                }
-            }
+            
+            ExpandableSection(
+                title: nil,
+                text: snippet.intro,
+                font: .subheadline,
+                lineSpacing: 0,
+                linesLimit: 3
+            )
         }
         .cardBackground()
     }
 }
 
+
 private struct SnippetThanksView: View {
     let thanks: String
-
+    
     var body: some View {
         Text("Source: @\(thanks)")
             .font(.caption)
@@ -245,6 +227,7 @@ private struct SnippetThanksView: View {
             .padding(.horizontal, 4)
     }
 }
+
 
 
 // MARK: - Previews
