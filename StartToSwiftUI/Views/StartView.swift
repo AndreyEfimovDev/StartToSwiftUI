@@ -29,11 +29,13 @@ struct StartView: View {
     /// true = forward (materials → snippets), false = backward
     @State private var isGoingForward: Bool = true
     
-    // MARK: - Section Transition Helper
+    // MARK: - Section Transition Helper (is not used)
     private var sectionTransition: AnyTransition {
         .asymmetric(
-            insertion: .move(edge: isGoingForward ? .trailing : .leading).combined(with: .opacity),
-            removal:   .move(edge: isGoingForward ? .leading  : .trailing).combined(with: .opacity)
+            insertion: .opacity.combined(with: .scale(scale: 0.97)),
+            removal:   .opacity.combined(with: .scale(scale: 0.97))
+//            insertion: .move(edge: isGoingForward ? .trailing : .leading).combined(with: .opacity),
+//            removal:   .move(edge: isGoingForward ? .leading  : .trailing).combined(with: .opacity)
         )
     }
     
@@ -65,7 +67,7 @@ struct StartView: View {
                     }
                     .onChange(of: coordinator.activeSection) { oldSection, newSection in
                         isGoingForward = newSection.transitionIndex > oldSection.transitionIndex
-                        withAnimation(.easeInOut(duration: 0.4)) {
+                        withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
                             displayedSection = newSection
                         }
                     }
