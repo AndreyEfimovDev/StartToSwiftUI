@@ -12,8 +12,33 @@
 
 import SwiftUI
 
-
-// MARK: - A006 FrameTransition DemoView
+// MARK: - A008 Expandable Section DemoView
+struct A008_ExpandableSectionDemoView: View {
+    
+    let snippet: CodeSnippet
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                    
+                    if let thanks = snippet.thanks, !thanks.isEmpty {
+                        SnippetThanksView(thanks: thanks)
+                            .padding(.horizontal)
+                    }
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            
+            A008_ExpandableSectionDemo()
+                .frame(maxHeight: .infinity)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
+// MARK: - A006 Frame Transition DemoView
 struct A006_FrameTransitionDemoView: View {
     
     let snippet: CodeSnippet
@@ -40,7 +65,7 @@ struct A006_FrameTransitionDemoView: View {
     }
 }
 
-// MARK: - A005 SFSymbolEffects DemoView
+// MARK: - A005 SF Symbol Effects DemoView
 struct A005_SFSymbolEffectsDemoView: View {
     
     let snippet: CodeSnippet
@@ -67,7 +92,7 @@ struct A005_SFSymbolEffectsDemoView: View {
     }
 }
 
-// MARK: - A004_PressableButton DemoView
+// MARK: - A004_Pressable Button DemoView
 struct A004_ShrinkingButtonDemoView: View {
     
     let snippet: CodeSnippet
@@ -101,7 +126,7 @@ struct A004_ShrinkingButtonDemoView: View {
     }
 }
 
-// MARK: - A003_ProgressCircleWithCheckmark DemoView
+// MARK: - A003_Progress Circle With Checkmark DemoView
 struct A003_ProgressCircleWithCheckmarkDemoView: View {
     
     let snippet: CodeSnippet
@@ -128,7 +153,7 @@ struct A003_ProgressCircleWithCheckmarkDemoView: View {
     }
 }
 
-// MARK: - A002_TrimIndicator DemoView
+// MARK: - A002_Trim Indicator DemoView
 struct A002_TrimIndicatorDemoView: View {
     
     let snippet: CodeSnippet
@@ -155,7 +180,7 @@ struct A002_TrimIndicatorDemoView: View {
     }
 }
 
-// MARK: - A001_ProgressViewIndicators DemoView
+// MARK: - A001_Progress View Indicators DemoView
 struct A001_ProgressViewIndicatorsDemoView: View {
     
     let snippet: CodeSnippet
@@ -231,35 +256,35 @@ private struct SnippetThanksView: View {
 
 
 // MARK: - Previews
-
-#Preview("A001 Progress Indicators") {
-    NavigationStack {
-        A001_ProgressViewIndicatorsDemoView(snippet: SnippetsRepository.a001)
-            .environmentObject(AppCoordinator())
-    }
-}
-
-#Preview("A002 Trim Indicator") {
-    NavigationStack {
-        A002_TrimIndicatorDemoView(snippet: SnippetsRepository.a002)
-            .environmentObject(AppCoordinator())
-    }
-}
-#Preview("A003 Progress Circle With Checkmark") {
-    NavigationStack {
-        A003_ProgressCircleWithCheckmarkDemoView(snippet: SnippetsRepository.a003)
-            .environmentObject(AppCoordinator())
-    }
-}
-#Preview("A004_Shrinking Button") {
-    NavigationStack {
-        A004_ShrinkingButtonDemoView(snippet: SnippetsRepository.a004)
-            .environmentObject(AppCoordinator())
-    }
-}
-#Preview("A005_Sheet Transition") {
-    NavigationStack {
-        A006_FrameTransitionDemoView(snippet: SnippetsRepository.a006)
-            .environmentObject(AppCoordinator())
-    }
-}
+//
+//#Preview("A001 Progress Indicators") {
+//    NavigationStack {
+//        A001_ProgressViewIndicatorsDemoView(snippet: SnippetsRepository.a001)
+//            .environmentObject(AppCoordinator())
+//    }
+//}
+//
+//#Preview("A002 Trim Indicator") {
+//    NavigationStack {
+//        A002_TrimIndicatorDemoView(snippet: SnippetsRepository.a002)
+//            .environmentObject(AppCoordinator())
+//    }
+//}
+//#Preview("A003 Progress Circle With Checkmark") {
+//    NavigationStack {
+//        A003_ProgressCircleWithCheckmarkDemoView(snippet: SnippetsRepository.a003)
+//            .environmentObject(AppCoordinator())
+//    }
+//}
+//#Preview("A004_Shrinking Button") {
+//    NavigationStack {
+//        A004_ShrinkingButtonDemoView(snippet: SnippetsRepository.a004)
+//            .environmentObject(AppCoordinator())
+//    }
+//}
+//#Preview("A005_Sheet Transition") {
+//    NavigationStack {
+//        A006_FrameTransitionDemoView(snippet: SnippetsRepository.a006)
+//            .environmentObject(AppCoordinator())
+//    }
+//}

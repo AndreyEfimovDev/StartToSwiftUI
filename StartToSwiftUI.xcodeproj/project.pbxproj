@@ -53,6 +53,8 @@
 		473436852F4B05EB00CF00FA /* FBCrashManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436842F4B05EB00CF00FA /* FBCrashManager.swift */; };
 		4734368A2F4B24FA00CF00FA /* FBPerformanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436892F4B24FA00CF00FA /* FBPerformanceManager.swift */; };
 		474245E52F6B39450053853A /* ExpandableSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474245E42F6B39450053853A /* ExpandableSection.swift */; };
+		474245E72F6BDD8E0053853A /* A007_Shimmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474245E62F6BDD8E0053853A /* A007_Shimmer.swift */; };
+		474245E92F6BDDDC0053853A /* A008_ExpandableSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474245E82F6BDDDC0053853A /* A008_ExpandableSection.swift */; };
 		47453E042EAB73A9000D2C16 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47453E032EAB73A9000D2C16 /* Date.swift */; };
 		474637FD2F6699F800DF011B /* A004_ShrinkingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474637FC2F6699F800DF011B /* A004_ShrinkingButton.swift */; };
 		474637FF2F66D58F00DF011B /* A005_SFSymbolEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474637FE2F66D58F00DF011B /* A005_SFSymbolEffects.swift */; };
@@ -270,6 +272,8 @@
 		473436842F4B05EB00CF00FA /* FBCrashManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBCrashManager.swift; sourceTree = "<group>"; };
 		473436892F4B24FA00CF00FA /* FBPerformanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBPerformanceManager.swift; sourceTree = "<group>"; };
 		474245E42F6B39450053853A /* ExpandableSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableSection.swift; sourceTree = "<group>"; };
+		474245E62F6BDD8E0053853A /* A007_Shimmer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A007_Shimmer.swift; sourceTree = "<group>"; };
+		474245E82F6BDDDC0053853A /* A008_ExpandableSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A008_ExpandableSection.swift; sourceTree = "<group>"; };
 		47453E032EAB73A9000D2C16 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		474637FC2F6699F800DF011B /* A004_ShrinkingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A004_ShrinkingButton.swift; sourceTree = "<group>"; };
 		474637FE2F66D58F00DF011B /* A005_SFSymbolEffects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A005_SFSymbolEffects.swift; sourceTree = "<group>"; };
@@ -906,6 +910,8 @@
 				474637FC2F6699F800DF011B /* A004_ShrinkingButton.swift */,
 				474637FE2F66D58F00DF011B /* A005_SFSymbolEffects.swift */,
 				474638042F6726CC00DF011B /* A006_FrameTransition.swift */,
+				474245E62F6BDD8E0053853A /* A007_Shimmer.swift */,
+				474245E82F6BDDDC0053853A /* A008_ExpandableSection.swift */,
 				474638002F66F27600DF011B /* AnimationTiming.swift */,
 				474638062F672F7800DF011B /* Actionsheet.swift */,
 				474638082F6732EA00DF011B /* ContextMenu.swift */,
@@ -1305,6 +1311,7 @@
 				472243782EFFE31F0055461A /* GlobalMethods.swift in Sources */,
 				47B6E80A2F5DF5CD00EF7441 /* SnippetsFilterView.swift in Sources */,
 				47F78A552F02DB12005394BE /* ModalNavigationContainerWrapper.swift in Sources */,
+				474245E92F6BDDDC0053853A /* A008_ExpandableSection.swift in Sources */,
 				47EA14312EF530780064583B /* AppSyncStateManager.swift in Sources */,
 				47FF424B2EE4B5960069D232 /* RatingSelectionView.swift in Sources */,
 				470A21C32E6E37F5006D2D66 /* CircleStrokeButtonView.swift in Sources */,
@@ -1325,6 +1332,7 @@
 				47B6E82A2F5F26BB00EF7441 /* AttributedString.swift in Sources */,
 				4781D72E2ED716AE00B74F85 /* Bundle.swift in Sources */,
 				47BAF0A02E5F9E9800287F10 /* MoreLessTextButton.swift in Sources */,
+				474245E72F6BDD8E0053853A /* A007_Shimmer.swift in Sources */,
 				4791CDC12E708E1300687126 /* DocumentPicker.swift in Sources */,
 				470DB64F2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift in Sources */,
 				474BFB932F3C8E2F006E639B /* PostsViewModel+Widget.swift in Sources */,

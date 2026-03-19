@@ -13,17 +13,14 @@ struct MoreLessTextButton: View {
     
     var body: some View {
         Button{
-            withAnimation(.smooth) {
-                showText.toggle()
-            }
+            showText.toggle()
         } label: {
             Text(showText ? "less... \(Image(systemName: "arrow.up.to.line.compact"))" : "...more \(Image(systemName: "arrow.down.to.line.compact"))")
                 .font(.subheadline)
                 .fontWeight(.semibold)
                 .foregroundStyle(Color.mycolor.myBlue)
                 .frame(minWidth: 60, alignment: .leading)
-//                .padding(8)
-        } // label
+        }
     }
 }
 
