@@ -19,13 +19,13 @@ struct CountdownView: View {
     
     var body: some View {
             Text("\(secondsRemaining)")
-                .font(.title)
+                .font(.largeTitle)
                 .foregroundColor(Color.mycolor.myAccent).opacity(0.5)
                 .frame(width: 155)
                 .padding()
             .onAppear {
                 Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-                    if secondsRemaining > 1 {
+                    if secondsRemaining >= 1 {
                         secondsRemaining -= 1
                     } else {
                         timer.invalidate()
