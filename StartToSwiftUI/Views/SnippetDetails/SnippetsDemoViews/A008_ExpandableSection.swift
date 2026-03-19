@@ -34,6 +34,8 @@ struct A008_ExpandableSectionDemo: View {
                 in: RoundedRectangle(cornerRadius: 15)
             )
             .padding()
+            
+            Spacer()
         }
     }
 }
