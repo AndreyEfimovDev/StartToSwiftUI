@@ -24,8 +24,8 @@ struct SnippetViewRegistry {
         case "A004": A004_ShrinkingButtonDemoView(snippet: snippet)
         case "A005": A005_SFSymbolEffectsDemoView(snippet: snippet)
         case "A006": A006_FrameTransitionDemoView(snippet: snippet)
+        case "A007": A007_ShimmerWaveDemoView(snippet: snippet)
         case "A008": A008_ExpandableSectionDemoView(snippet: snippet)
-
 
         default: SnippetNoPreviewView(snippet: snippet)
         }

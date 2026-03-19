@@ -38,6 +38,33 @@ struct A008_ExpandableSectionDemoView: View {
         .foregroundStyle(Color.mycolor.myAccent)
     }
 }
+
+// MARK: - A007 Shimmer Wave DemoView
+struct A007_ShimmerWaveDemoView: View {
+    
+    let snippet: CodeSnippet
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                    
+                    if let thanks = snippet.thanks, !thanks.isEmpty {
+                        SnippetThanksView(thanks: thanks)
+                            .padding(.horizontal)
+                    }
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            
+            A007_ShimmerWaveDemo()
+                .frame(maxHeight: .infinity)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
 // MARK: - A006 Frame Transition DemoView
 struct A006_FrameTransitionDemoView: View {
     

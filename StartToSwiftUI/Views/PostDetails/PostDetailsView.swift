@@ -11,19 +11,12 @@ import SwiftData
 struct PostDetailsView: View {
     
     // MARK: - Dependencies
-    
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     private let hapticManager = HapticManager.shared
     
     // MARK: - State
-    
-//    @State private var showFullIntro: Bool = false
-//    @State private var showFullNotes: Bool = false
-//    @State private var lineCountIntro: Int = 0
-//    @State private var lineCountNotes: Int = 0
-    
     @State private var showRatingTab: Bool = false
     @State private var showProgressTab: Bool = false
     @State private var zIndexBarRating: Double = 0
@@ -33,26 +26,17 @@ struct PostDetailsView: View {
     @State private var tabWidth: CGFloat = 0
     @State private var expandedWidth: CGFloat = 0
     
-    private var isFavorite: Bool {
-            post.favoriteChoice == .yes
-    }
-    
     // MARK: - Constants
-    
     let post: Post
-    
-//    private let introFont: Font = .subheadline
-//    private let introLineSpacing: CGFloat = 0
-//    private let introLinesLimit: Int = 10
-//    
-//    private let notesFont: Font = .footnote
-//    private let notesLineSpacing: CGFloat = 0
-//    private let notesLinesLimit: Int = 3
     
     private let widthRatio: CGFloat = 0.55
     
     // MARK: - Computed Properties
+    private var isFavorite: Bool {
+            post.favoriteChoice == .yes
+    }
     
+
     private var minHeight: CGFloat {
         UIDevice.isiPad ? 60 : 75
     }

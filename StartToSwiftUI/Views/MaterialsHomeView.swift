@@ -74,9 +74,10 @@ struct MaterialsHomeView: View {
     private var listPostRowsContent: some View {
         List {
             ForEach(postsToDisplay.filter { $0.status == .active && !$0.draft }) { post in
-                let row = PostRowView(post: post)
+                PostRowView(post: post)
                     .id(post.id)
                     .background(.black.opacity(0.001))
+                    .shimmerWave(enabled: vm.shimmerWaveEnabled && post.origin == .cloudNew)
                     .onLongPressGesture(
                         minimumDuration: longPressDuration,
                         maximumDistance: 50,
@@ -92,13 +93,7 @@ struct MaterialsHomeView: View {
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: false) {
                         leadingSwipeActions(for: post)
-                    }
-                
-                if post.origin == .cloudNew {
-                    row.shimmerWave(enabled: vm.shimmerWaveEnabled)
-                } else {
-                    row
-                }
+                    }                
             } // ForEach
             .listRowBackground(Color.clear)
             .listRowSeparatorTint(Color.mycolor.myAccent.opacity(0.35))

@@ -14,7 +14,7 @@ import Foundation
 
 struct SnippetsRepository {
     
-    static let allDemoCodeSnippet: [CodeSnippet] = [a001, a002, a003, a004, a005, a006, a008]
+    static let allDemoCodeSnippet: [CodeSnippet] = [a001, a002, a003, a004, a005, a006, a007, a008]
     
     // MARK: - A001 Progress indicators collection
     static let a001 = CodeSnippet(
@@ -1264,7 +1264,20 @@ struct SnippetsRepository {
         """
     )
 
-    
+    // MARK: - A007 Shimmer Wave
+    static let a007 = CodeSnippet(
+        id: "A007",
+        category: Constants.mainCategory,
+        title: "Shimmer Wave",
+        intro: """
+        You can apply this code 
+        """,
+        thanks: nil,
+        date: Date.from(year: 2026, month: 3, day: 19) ?? Date(),
+        codeSnippet: """
+        """
+    )
+
     // MARK: - A008 Expandable Section
     static let a008 = CodeSnippet(
         id: "A008",

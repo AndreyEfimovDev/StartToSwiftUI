@@ -51,18 +51,18 @@ struct ShimmerWave: ViewModifier {
 
     private func runLoop() async {
         /*
-         Как работает цикл:
+         How the cycle works:
          ```
-         phase = 0 (полоса за левым краем)
+         phase = 0 (the band goes beyond the left edge)
              │
              ▼ withAnimation(.linear(duration: 0.5))
-         phase = 1 (полоса уходит за правый край)  ← 0.5 сек
+         phase = 1 (the band goes beyond the right edge)  ← 0.5 sec
              │
-             ▼ Task.sleep(0.5) — ждём конца анимации
-         phase = 0 (мгновенный сброс, полоса за кадром)
+             ▼ Task.sleep(0.5) — waiting for the end of the animation
+         phase = 0 (instant reset, the strip behind the screen)
              │
-             ▼ Task.sleep(3.0) — тихая пауза
-             └── повтор
+             ▼ Task.sleep(3.0) — silent pause
+             └── repeat
          */
         while !Task.isCancelled {
             withAnimation(.linear(duration: 1.2)) { phase = 1 }
