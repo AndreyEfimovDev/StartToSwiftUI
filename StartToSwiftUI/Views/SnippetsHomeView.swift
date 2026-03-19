@@ -17,8 +17,8 @@ struct SnippetsHomeView: View {
 
     private let hapticManager = HapticManager.shared
     
-    @Environment(\.colorScheme) private var colorScheme
-
+//    @Environment(\.colorScheme) private var colorScheme
+//
     private var splashTheme: Splash.Theme {
         .midnight(withFont: .init(size: 13))
     }
@@ -62,7 +62,6 @@ struct SnippetsHomeView: View {
             ForEach(snippetvm.filteredSnippets) { snippet in
                 SnippetRowView(snippet: snippet, isFavorite: snippetvm.isFavorite(snippet))
                     .id(snippet.id)
-                    .background(trackingFirstSnippet(snippet: snippet))
                     .background(.black.opacity(0.001))
                     .onTapGesture { handleTap(on: snippet) }
                     .swipeActions(edge: .leading, allowsFullSwipe: true) {
@@ -75,6 +74,11 @@ struct SnippetsHomeView: View {
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
         }
         .listStyle(.plain)
+        .onScrollGeometryChange(for: CGFloat.self) { geo in
+            geo.contentOffset.y
+        } action: { _, newOffset in
+            showOnTopButton = newOffset > 100
+        }
     }
 
     // MARK: - Tap
@@ -150,18 +154,6 @@ struct SnippetsHomeView: View {
     // MARK: - Supporting Views
 
     @ViewBuilder
-    private func trackingFirstSnippet(snippet: CodeSnippet) -> some View {
-        GeometryReader { geo in
-            Color.clear
-                .onChange(of: geo.frame(in: .global).minY) { _, newY in
-                    if snippet.id == snippetvm.filteredSnippets.first?.id {
-                        showOnTopButton = newY < 0
-                    }
-                }
-        }
-    }
-
-    @ViewBuilder
     private func onTopButton(proxy: ScrollViewProxy) -> some View {
         if showOnTopButton {
             CircleStrokeButtonView(
@@ -172,9 +164,7 @@ struct SnippetsHomeView: View {
                 heightIn: 55
             ) {
                 withAnimation {
-                    if let firstID = snippetvm.filteredSnippets.first?.id {
-                        proxy.scrollTo(firstID, anchor: .top)
-                    }
+                    proxy.scrollTo(snippetvm.filteredSnippets.first?.id, anchor: .top)
                 }
             }
         }

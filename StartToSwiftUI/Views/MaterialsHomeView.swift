@@ -76,7 +76,6 @@ struct MaterialsHomeView: View {
             ForEach(postsToDisplay.filter { $0.status == .active && !$0.draft }) { post in
                 let row = PostRowView(post: post)
                     .id(post.id)
-                    .background(trackingFirstPostInList(post: post))
                     .background(.black.opacity(0.001))
                     .onLongPressGesture(
                         minimumDuration: longPressDuration,
@@ -107,9 +106,13 @@ struct MaterialsHomeView: View {
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
         } // List
         .listStyle(.plain)
-        .refreshControl {
-            refresh()
+        .coordinateSpace(name: "postsList")
+        .onScrollGeometryChange(for: CGFloat.self) { geo in
+            geo.contentOffset.y
+        } action: { _, newOffset in
+            showOnTopButton = newOffset > 100
         }
+        .refreshControl { refresh() }
     }
     
     // MARK: - Refresh
@@ -284,18 +287,6 @@ struct MaterialsHomeView: View {
 
     // MARK: - Supporting Views
 
-    @ViewBuilder
-    private func trackingFirstPostInList(post: Post) -> some View {
-        GeometryReader { geo in
-            Color.clear
-                .onChange(of: geo.frame(in: .global).minY) { oldY, newY in
-                    // Track first element position in the List
-                    if post.id == vm.filteredPosts.first?.id {
-                        showOnTopButton = newY < 0
-                    }
-                }
-        }
-    }
     
     @ViewBuilder
     private func onTopButton(proxy: ScrollViewProxy) -> some View {
@@ -307,9 +298,7 @@ struct MaterialsHomeView: View {
                 widthIn: 55,
                 heightIn: 55) {
                     withAnimation {
-                        if let firstID = vm.filteredPosts.first?.id {
-                            proxy.scrollTo(firstID, anchor: .top)
-                        }
+                        proxy.scrollTo(postsToDisplay.first?.id, anchor: .top)
                     }
                 }
         }
