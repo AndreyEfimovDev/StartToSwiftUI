@@ -13,10 +13,12 @@ struct ExpandableSection: View {
     let font: Font
     let lineSpacing: CGFloat
     let linesLimit: Int
-
+    
     @State private var showFull = false
     @State private var isTruncated = false
-
+    @State private var fullHeight: CGFloat = 0
+    @State private var limitedHeight: CGFloat = 0
+    
     var body: some View {
         VStack(spacing: 0) {
             if let title {
@@ -25,7 +27,7 @@ struct ExpandableSection: View {
                     .frame(height: 55)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-
+            
             Text(text)
                 .font(font)
                 .lineSpacing(lineSpacing)
@@ -33,27 +35,49 @@ struct ExpandableSection: View {
                 .frame(minHeight: 55, alignment: .topLeading)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .overlay(alignment: .topLeading) {
+                    // Measure full height
                     Text(text)
                         .font(font)
                         .lineSpacing(lineSpacing)
                         .lineLimit(nil)
                         .fixedSize(horizontal: false, vertical: true)
                         .hidden()
-                        .onLineCountChanged(font: font, lineSpacing: lineSpacing) { count in
-                            isTruncated = (count - 1) > linesLimit
-                        }
+                        .readSize { fullHeight = $0.height }
+                    
+                    // Measure limited height
+                    Text(text)
+                        .font(font)
+                        .lineSpacing(lineSpacing)
+                        .lineLimit(linesLimit)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .hidden()
+                        .readSize { limitedHeight = $0.height }
                 }
-                .animation(.easeInOut(duration: 0.25), value: showFull)
-
+                .onChange(of: fullHeight)    { isTruncated = fullHeight > limitedHeight }
+                .onChange(of: limitedHeight) { isTruncated = fullHeight > limitedHeight }
+            
             if isTruncated {
                 HStack {
                     Spacer()
-                    MoreLessTextButton(showText: $showFull)
+                    A008_MoreLessTextButton(showText: $showFull)
                 }
             }
         }
     }
 }
+
+extension View {
+    func readSize(onChange: @escaping (CGSize) -> Void) -> some View {
+        background(
+            GeometryReader { geo in
+                Color.clear
+                    .onAppear { onChange(geo.size) }
+                    .onChange(of: geo.size) { _, newSize in onChange(newSize) }
+            }
+        )
+    }
+}
+
 
 #Preview {
     ExpandableSection(

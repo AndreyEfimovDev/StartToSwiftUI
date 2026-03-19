@@ -143,7 +143,7 @@ struct PostDetailsView: View {
             text: post.intro,
             font: .subheadline,
             lineSpacing: 0,
-            linesLimit: 10
+            linesLimit: 5
         )
     }
     
