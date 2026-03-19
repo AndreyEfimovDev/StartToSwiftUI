@@ -21,6 +21,13 @@ struct WhatsNews {
                     """
                 ),
                 News(
+                    title: "New Code Snippets:",
+                    newsText: """
+                    - Shimmer — a row is highlighted in content with a subtle wave to pay attention of the row
+                    - 
+                    """
+                ),
+                News(
                     title: "Improved",
                     newsText: """
                     - Switching between Materials and Code Snippets now slides smoothly with a directional animation
