@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct ArchiveDeletedPostsView: View {
+struct DeletedPostsView: View {
     
     // MARK: - Dependencies
     @EnvironmentObject private var vm: PostsViewModel
@@ -105,7 +105,7 @@ struct ArchiveDeletedPostsView: View {
 
 }
 
-extension ArchiveDeletedPostsView {
+extension DeletedPostsView {
     
     @ViewBuilder
     private var deletedPostsSection: some View {
@@ -147,7 +147,7 @@ extension ArchiveDeletedPostsView {
     let vm = PostsViewModel(modelContext: context)
     vm.loadPostsFromSwiftData()
     
-    return ArchiveDeletedPostsView()
+    return DeletedPostsView()
         .modelContainer(container)
         .environmentObject(vm)
         .environmentObject(AppCoordinator())

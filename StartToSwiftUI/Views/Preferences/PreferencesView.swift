@@ -200,7 +200,7 @@ struct PreferencesView: View {
         Group {
             if vm.hasDeleted {
                 Button("Deleted (\(vm.deletedCount))") {
-                    coordinator.pushModal(.archivedPosts)
+                    coordinator.pushModal(.deletedPosts)
                 }
                 .customListRowStyle(
                     iconName: "archivebox",

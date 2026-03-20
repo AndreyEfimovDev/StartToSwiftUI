@@ -167,7 +167,7 @@ enum AppRoute: Hashable, Identifiable {
     
     // MARK: Managing posts (modal)
     case postDrafts
-    case archivedPosts
+    case deletedPosts
     case checkForUpdates
     case importFromCloud
     case shareBackup
@@ -211,7 +211,7 @@ enum AppRoute: Hashable, Identifiable {
         case .noticeDetails(let id):    return "noticeDetails_\(id)"
         case .studyProgress:            return "studyProgress"
         case .postDrafts:               return "postDrafts"
-        case .archivedPosts:            return "archivedPosts"
+        case .deletedPosts:            return "deletedPosts"
         case .checkForUpdates:          return "checkForUpdates"
         case .importFromCloud:          return "importFromCloud"
         case .shareBackup:              return "shareBackup"
