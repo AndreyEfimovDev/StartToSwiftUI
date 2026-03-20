@@ -34,12 +34,15 @@ struct MaterialsHomeView: View {
     }
     
     private var postsToDisplay: [Post] {
-        guard let category = selectedCategory else {
-            return vm.filteredPosts
+        let byCategory: [Post]
+        if let category = selectedCategory {
+            byCategory = vm.filteredPosts.filter { $0.category == category }
+        } else {
+            byCategory = vm.filteredPosts
         }
-        return vm.filteredPosts.filter { $0.category == category }
+        return byCategory.filter { $0.status == .active && !$0.draft }
     }
-    
+
     // MARK: BODY
     var body: some View {
         GeometryReader { proxy in
@@ -52,7 +55,9 @@ struct MaterialsHomeView: View {
                     } else {
                         listPostRowsContent
                         OnTopButton(isVisible: showOnTopButton) {
-                            scrollProxy.scrollTo(postsToDisplay.first?.id, anchor: .top)
+                            withAnimation(.easeInOut(duration: 0.5)) {
+                                scrollProxy.scrollTo(postsToDisplay.first?.id, anchor: .top)
+                            }
                         }
                     }
                 }
@@ -75,7 +80,7 @@ struct MaterialsHomeView: View {
     
     private var listPostRowsContent: some View {
         List {
-            ForEach(postsToDisplay.filter { $0.status == .active && !$0.draft }) { post in
+            ForEach(postsToDisplay) { post in
                 PostRowView(post: post)
                     .id(post.id)
                     .background(.black.opacity(0.001))

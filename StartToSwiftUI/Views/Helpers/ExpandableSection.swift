@@ -59,7 +59,7 @@ struct ExpandableSection: View {
             if isTruncated {
                 HStack {
                     Spacer()
-                    A008_MoreLessTextButton(showText: $showFull)
+                    MoreLessTextButton(showText: $showFull)
                 }
             }
         }

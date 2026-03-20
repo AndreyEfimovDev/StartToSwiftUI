@@ -39,7 +39,9 @@ struct SnippetsHomeView: View {
                 } else {
                     listContent
                     OnTopButton(isVisible: showOnTopButton) {
-                        scrollProxy.scrollTo(snippetvm.filteredSnippets.first?.id, anchor: .top)
+                        withAnimation(.easeInOut(duration: 0.5)) {
+                            scrollProxy.scrollTo(snippetvm.filteredSnippets.first?.id, anchor: .top)
+                        }
                     }
                 }
             }
