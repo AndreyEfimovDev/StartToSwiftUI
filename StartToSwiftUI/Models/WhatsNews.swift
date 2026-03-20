@@ -37,7 +37,8 @@ struct WhatsNews {
                 News(
                     title: "Fixed",
                     newsText: """
-                    - 
+                    - An issue where the app icon badge was not cleared after opening the app, the badge now resets automatically on launch and when returning from background
+                    - Auto-reset notification badge on app launch and foreground return
                     """
                 )
             ]
