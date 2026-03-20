@@ -84,6 +84,7 @@
 		4751DB052F16670E00EC9C53 /* LineMarkLegendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DB042F16670E00EC9C53 /* LineMarkLegendView.swift */; };
 		47542EB42EF2C8E400B0AB79 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47542EB32EF2C8E400B0AB79 /* StartView.swift */; };
 		47586ED62F6D6A4C00C1E942 /* OnTopButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47586ED52F6D6A4C00C1E942 /* OnTopButton.swift */; };
+		47586ED82F6D7C7F00C1E942 /* A010_Mask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47586ED72F6D7C7F00C1E942 /* A010_Mask.swift */; };
 		4759974D2E5C690B008E20F0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 475997492E5C690B008E20F0 /* Assets.xcassets */; };
 		4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */; };
 		475997512E5C6C9D008E20F0 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997502E5C6C9D008E20F0 /* Post.swift */; };
@@ -306,6 +307,7 @@
 		47542EB32EF2C8E400B0AB79 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 		47542EB52EF3171200B0AB79 /* StartToSwiftUIRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StartToSwiftUIRelease.entitlements; sourceTree = "<group>"; };
 		47586ED52F6D6A4C00C1E942 /* OnTopButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTopButton.swift; sourceTree = "<group>"; };
+		47586ED72F6D7C7F00C1E942 /* A010_Mask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A010_Mask.swift; sourceTree = "<group>"; };
 		4759973B2E5C6901008E20F0 /* StartToSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StartToSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		475997492E5C690B008E20F0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartToSwiftUIApp.swift; sourceTree = "<group>"; };
@@ -906,8 +908,8 @@
 			isa = PBXGroup;
 			children = (
 				47B6E8232F5EF3B700EF7441 /* SnippetsRepository.swift */,
-				47B6E80F2F5DFB1700EF7441 /* SnippetViewRegistry.swift */,
 				47B6E8132F5DFB6800EF7441 /* SnippetDemoViews.swift */,
+				47B6E80F2F5DFB1700EF7441 /* SnippetViewRegistry.swift */,
 				47B6E81D2F5EB4DB00EF7441 /* A001_ProgressViewIndicators.swift */,
 				47B6E81F2F5ECFC200EF7441 /* A002_TrimIndicator.swift */,
 				470DB64E2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift */,
@@ -917,6 +919,7 @@
 				474245E62F6BDD8E0053853A /* A007_ShimmerWave.swift */,
 				474245E82F6BDDDC0053853A /* A008_ExpandableSection.swift */,
 				474245EA2F6C158A0053853A /* A009_OnToButton.swift */,
+				47586ED72F6D7C7F00C1E942 /* A010_Mask.swift */,
 				474638002F66F27600DF011B /* AnimationTiming.swift */,
 				474638062F672F7800DF011B /* Actionsheet.swift */,
 				474638082F6732EA00DF011B /* ContextMenu.swift */,
@@ -1274,6 +1277,7 @@
 				47939D772F4EEB9E00CBE432 /* DeletedPostsView.swift in Sources */,
 				471DCBCE2EBB83D200AFA5F4 /* LegalInformationView.swift in Sources */,
 				471DCBD42EBB8A6400AFA5F4 /* TermsOfUse.swift in Sources */,
+				47586ED82F6D7C7F00C1E942 /* A010_Mask.swift in Sources */,
 				4715FA2E2F263BB000ED732A /* FormSectionViewWraper.swift in Sources */,
 				47B6E7E32F5B0B2D00EF7441 /* AppStoreService.swift in Sources */,
 				474BFB8D2F3C8DF2006E639B /* PostsViewModel+Filtering.swift in Sources */,

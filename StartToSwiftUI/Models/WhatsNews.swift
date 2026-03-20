@@ -26,6 +26,7 @@ struct WhatsNews {
                     - A007 Shimmer Wave — highlights a row with a subtle wave to draw attention to it
                     - A008 Expandable Section — a section is expandable from a fixed height to its full content height
                     - A009 OnToButton - it lets users jump back to the top of a long list with a single tap
+                    - A010 Mask - a beautiful sample of Rating using .mask
                     """
                 ),
                 News(

@@ -10,9 +10,9 @@ import SwiftUI
 struct A007_ShimmerWaveDemo: View {
     
     let rowSamples: [A007_RowModel] = [
-        A007_RowModel(title: "Row Sample 1", isShimmered: true),
-        A007_RowModel(title: "Row Sample 2", isShimmered: false),
-        A007_RowModel(title: "Row Sample 3", isShimmered: true)
+        A007_RowModel(title: "Row Sample 1 (shimmered)", isShimmered: true),
+        A007_RowModel(title: "Row Sample 2 (not shimmered)", isShimmered: false),
+        A007_RowModel(title: "Row Sample 3 (shimmered)", isShimmered: true)
     ]
     
     var body: some View {
