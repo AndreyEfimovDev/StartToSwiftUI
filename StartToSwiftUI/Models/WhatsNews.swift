@@ -33,14 +33,13 @@ struct WhatsNews {
                 News(
                     title: "Improved",
                     newsText: """
-                    - Switching between Materials and Code Snippets now slides smoothly with a directional animation
+                    - Switching between Materials and Code Snippets now goes smoothly with a directional animation
                     - Behaviour of 'Go to the Source' button when a url link is invalid 
                     """
                 ),
                 News(
                     title: "Fixed",
                     newsText: """
-                    - An issue where the app icon badge was not cleared after opening the app, the badge now resets automatically on launch and when returning from background
                     - Auto-reset notification badge on app launch and foreground return
                     - First slide-in was from the bottom instead of the right in SliderTransition
                     """
