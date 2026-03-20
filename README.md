@@ -23,7 +23,7 @@
 - Curated code snippets demonstrating advanced SwiftUI features
   
 ### Learning Management
-- Put on the own shelve: Lesson, Course, Article, Bug, Other
+- Put materials on the own shelve: Lesson, Course, Article, Bug, Other
 - Track progress: 'Added' → 'Started' → 'Learnt' → 'Practiced'
 - Rate materials: Good / Great / Excellent
 - Organise by difficulty level: Beginner / Intermediate / Advanced
