@@ -12,6 +12,34 @@
 
 import SwiftUI
 
+
+// MARK: - A009 Expandable Section DemoView
+struct A009_OnToButtonDemoView: View {
+    
+    let snippet: CodeSnippet
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                    
+                    if let thanks = snippet.thanks, !thanks.isEmpty {
+                        SnippetThanksView(thanks: thanks)
+                            .padding(.horizontal)
+                    }
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            
+            A009_OnToButtonDemo()
+                .frame(maxHeight: .infinity)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
+
 // MARK: - A008 Expandable Section DemoView
 struct A008_ExpandableSectionDemoView: View {
     

@@ -51,7 +51,9 @@ struct MaterialsHomeView: View {
                         filteredPostsIsEmpty
                     } else {
                         listPostRowsContent
-                        onTopButton(proxy: scrollProxy)
+                        OnTopButton(isVisible: showOnTopButton) {
+                            scrollProxy.scrollTo(postsToDisplay.first?.id, anchor: .top)
+                        }
                     }
                 }
             }
@@ -105,7 +107,9 @@ struct MaterialsHomeView: View {
         .onScrollGeometryChange(for: CGFloat.self) { geo in
             geo.contentOffset.y
         } action: { _, newOffset in
-            showOnTopButton = newOffset > 100
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                showOnTopButton = newOffset > 100
+            }
         }
         .refreshControl { refresh() }
     }
@@ -282,23 +286,6 @@ struct MaterialsHomeView: View {
 
     // MARK: - Supporting Views
 
-    
-    @ViewBuilder
-    private func onTopButton(proxy: ScrollViewProxy) -> some View {
-        if showOnTopButton {
-            CircleStrokeButtonView(
-                iconName: "control",
-                iconFont: .title,
-                imageColorPrimary: Color.mycolor.myBlue,
-                widthIn: 55,
-                heightIn: 55) {
-                    withAnimation {
-                        proxy.scrollTo(postsToDisplay.first?.id, anchor: .top)
-                    }
-                }
-        }
-    }
-    
     private var allPostsIsEmpty: some View {
         ContentUnavailableView(
             "No Study Materials",

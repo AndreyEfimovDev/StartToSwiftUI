@@ -14,7 +14,7 @@ import Foundation
 
 struct SnippetsRepository {
     
-    static let allDemoCodeSnippet: [CodeSnippet] = [a001, a002, a003, a004, a005, a006, a007, a008]
+    static let allDemoCodeSnippet: [CodeSnippet] = [a001, a002, a003, a004, a005, a006, a007, a008, a009]
     
     // MARK: - A001 Progress indicators collection
     static let a001 = CodeSnippet(
@@ -1545,9 +1545,79 @@ struct SnippetsRepository {
                 }
             }
         }
-
         """
     )
+
+    // MARK: - A009 OnTop Button for ScrollView
+    static let a009 = CodeSnippet(
+        id: "A009",
+        category: Constants.mainCategory,
+        title: "OnTop Button for ScrollView",
+        intro: """
+        When there is a long list of items in a ScrollView, the OnTop Button helps the user jump back to the top with a single tap. The button appears automatically when the user scrolls down, and disappears when they are already at the top.
+        """,
+        thanks: nil,
+        date: Date.from(year: 2026, month: 3, day: 20) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        struct A009_OnToButtonDemo: View {
+            
+            @State private var showOnTopButton = false
+            
+            // the threshold is 100pt, you can adjust it to your row height
+            private let threshold: CGFloat = 100
+            
+            var body: some View {
+                ScrollViewReader { proxy in
+                    ZStack(alignment: .bottom) {
+                        ScrollView {
+                            ForEach(1..<30) { index in
+                                Text("Row \\(index)")
+                                    .font(.headline)
+                                    .foregroundStyle(Color.mycolor.myAccent)
+                                    .frame(height: 55)
+                                    .frame(maxWidth: .infinity)
+                                    .background(
+                                        .ultraThinMaterial,
+                                        in: RoundedRectangle(cornerRadius: 8)
+                                    )
+                                    .padding(.horizontal)
+                                    .id(index)
+                            }
+                        }
+                        .onScrollGeometryChange(for: CGFloat.self) { geometry in
+                            geometry.contentOffset.y
+                        } action: { _, newOffset in
+                            showOnTopButton = newOffset > threshold
+                        }
+                        
+                        if showOnTopButton {
+                            Button {
+                                withAnimation {
+                                    proxy.scrollTo(0, anchor: .top)
+                                }
+                            } label: {
+                                Image(systemName: "control")
+                                    .font(.title)
+                                    .foregroundStyle(Color.mycolor.myBlue)
+                                    .frame(width: 55, height: 55)
+                                    .background(.ultraThinMaterial, in: Circle())
+                            }
+                            .transition(.opacity.combined(with: .scale(scale: 0.5)))
+                            .padding(.bottom, 16)
+                        }
+                    }
+                }
+            }
+        }
+
+        #Preview {
+            A009_OnToButtonDemo()
+        }
+        """
+    )
+
 
     
 }

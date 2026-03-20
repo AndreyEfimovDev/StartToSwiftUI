@@ -83,6 +83,7 @@
 		4751DAFE2F16410000EC9C53 /* CumulativeLegendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DAFD2F16410000EC9C53 /* CumulativeLegendView.swift */; };
 		4751DB052F16670E00EC9C53 /* LineMarkLegendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751DB042F16670E00EC9C53 /* LineMarkLegendView.swift */; };
 		47542EB42EF2C8E400B0AB79 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47542EB32EF2C8E400B0AB79 /* StartView.swift */; };
+		47586ED62F6D6A4C00C1E942 /* OnTopButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47586ED52F6D6A4C00C1E942 /* OnTopButton.swift */; };
 		4759974D2E5C690B008E20F0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 475997492E5C690B008E20F0 /* Assets.xcassets */; };
 		4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */; };
 		475997512E5C6C9D008E20F0 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997502E5C6C9D008E20F0 /* Post.swift */; };
@@ -304,6 +305,7 @@
 		4751DB042F16670E00EC9C53 /* LineMarkLegendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineMarkLegendView.swift; sourceTree = "<group>"; };
 		47542EB32EF2C8E400B0AB79 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 		47542EB52EF3171200B0AB79 /* StartToSwiftUIRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StartToSwiftUIRelease.entitlements; sourceTree = "<group>"; };
+		47586ED52F6D6A4C00C1E942 /* OnTopButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTopButton.swift; sourceTree = "<group>"; };
 		4759973B2E5C6901008E20F0 /* StartToSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StartToSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		475997492E5C690B008E20F0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartToSwiftUIApp.swift; sourceTree = "<group>"; };
@@ -942,6 +944,7 @@
 			isa = PBXGroup;
 			children = (
 				47BAF0A12E60485D00287F10 /* FavoriteButton.swift */,
+				47586ED52F6D6A4C00C1E942 /* OnTopButton.swift */,
 				472A9B5A2EDC3B6F00ED3344 /* BackButtonView.swift */,
 				47BAF09F2E5F9E9800287F10 /* MoreLessTextButton.swift */,
 				4791CDF92E744AD400687126 /* CapsuleButtonView.swift */,
@@ -1278,6 +1281,7 @@
 				4765A9BE2F4DAD1D00A0FB37 /* StudyProgressRow.swift in Sources */,
 				47BAF0FA2E64CC8700287F10 /* UnderlineSermentedPicker.swift in Sources */,
 				4764A1F82EAD1DAA00D76C3A /* ClearCupsuleButton.swift in Sources */,
+				47586ED62F6D6A4C00C1E942 /* OnTopButton.swift in Sources */,
 				470DB65D2F62E23C0034464D /* SharedToolbarLeadingItems.swift in Sources */,
 				47BAF09B2E5F9BE500287F10 /* RedCupsuleButton.swift in Sources */,
 				4751DB052F16670E00EC9C53 /* LineMarkLegendView.swift in Sources */,

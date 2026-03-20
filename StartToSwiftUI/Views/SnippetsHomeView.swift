@@ -16,9 +16,9 @@ struct SnippetsHomeView: View {
     @EnvironmentObject private var coordinator: AppCoordinator
 
     private let hapticManager = HapticManager.shared
-    
-//    @Environment(\.colorScheme) private var colorScheme
-//
+
+    // MARK: - Splash vars
+
     private var splashTheme: Splash.Theme {
         .midnight(withFont: .init(size: 13))
     }
@@ -30,26 +30,26 @@ struct SnippetsHomeView: View {
 
     // MARK: - Body
     var body: some View {
-        GeometryReader { _ in
-            ScrollViewReader { scrollProxy in
-                ZStack(alignment: .bottom) {
-                    if snippetvm.allSnippets.isEmpty {
-                        allSnippetsIsEmpty
-                    } else if snippetvm.filteredSnippets.isEmpty {
-                        filteredSnippetsIsEmpty
-                    } else {
-                        listContent
-                        onTopButton(proxy: scrollProxy)
+        ScrollViewReader { scrollProxy in
+            ZStack(alignment: .bottom) {
+                if snippetvm.allSnippets.isEmpty {
+                    allSnippetsIsEmpty
+                } else if snippetvm.filteredSnippets.isEmpty {
+                    filteredSnippetsIsEmpty
+                } else {
+                    listContent
+                    OnTopButton(isVisible: showOnTopButton) {
+                        scrollProxy.scrollTo(snippetvm.filteredSnippets.first?.id, anchor: .top)
                     }
                 }
             }
-            .navigationTitle("Code Snippets")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
-            .toolbar { SharedToolbarLeadingItems() }
-            .safeAreaInset(edge: .top) { searchBarStack }
-            .sheet(isPresented: $isFilterButtonPressed) { filtersSheet }
         }
+        .navigationTitle("Code Snippets")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar { SharedToolbarLeadingItems() }
+        .safeAreaInset(edge: .top) { searchBarStack }
+        .sheet(isPresented: $isFilterButtonPressed) { filtersSheet }
         .task {
             FBAnalyticsManager.shared.logScreen(name: "SnippetsHomeView")
         }
@@ -77,7 +77,9 @@ struct SnippetsHomeView: View {
         .onScrollGeometryChange(for: CGFloat.self) { geo in
             geo.contentOffset.y
         } action: { _, newOffset in
-            showOnTopButton = newOffset > 100
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                showOnTopButton = newOffset > 100
+            }
         }
     }
 
@@ -122,9 +124,7 @@ struct SnippetsHomeView: View {
                 .clipShape(.circle)
                 .background(
                     Circle()
-                        .stroke(
-                            Color.mycolor.mySecondary,
-                            lineWidth: 1)
+                        .stroke(Color.mycolor.mySecondary,lineWidth: 1)
                 )
             }
         }
@@ -152,23 +152,6 @@ struct SnippetsHomeView: View {
     }
 
     // MARK: - Supporting Views
-
-    @ViewBuilder
-    private func onTopButton(proxy: ScrollViewProxy) -> some View {
-        if showOnTopButton {
-            CircleStrokeButtonView(
-                iconName: "control",
-                iconFont: .title,
-                imageColorPrimary: Color.mycolor.myBlue,
-                widthIn: 55,
-                heightIn: 55
-            ) {
-                withAnimation {
-                    proxy.scrollTo(snippetvm.filteredSnippets.first?.id, anchor: .top)
-                }
-            }
-        }
-    }
 
     private var allSnippetsIsEmpty: some View {
         ContentUnavailableView(
