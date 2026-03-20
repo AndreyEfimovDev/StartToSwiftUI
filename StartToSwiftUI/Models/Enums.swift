@@ -143,7 +143,7 @@ enum StatusOptions: String, CaseIterable, Codable {
         switch self {
         case .active: return Color.mycolor.myBackground
         case .hidden: return Color.mycolor.myPurple
-        case .deleted: return Color.mycolor.myOrange
+        case .deleted: return Color.mycolor.myRed.opacity(0.5)
         }
     }
 }

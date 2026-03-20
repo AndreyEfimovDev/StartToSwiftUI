@@ -23,8 +23,9 @@ struct WhatsNews {
                 News(
                     title: "New Code Snippets:",
                     newsText: """
-                    - Shimmer Wave — highlights a row with a subtle wave to draw attention to it
-                    - Expandable Section — a section is expandable from a fixed height to its full content height
+                    - A007 Shimmer Wave — highlights a row with a subtle wave to draw attention to it
+                    - A008 Expandable Section — a section is expandable from a fixed height to its full content height
+                    - A009 OnToButton - 
                     """
                 ),
                 News(
