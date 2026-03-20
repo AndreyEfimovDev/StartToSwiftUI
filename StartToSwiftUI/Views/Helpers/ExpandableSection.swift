@@ -42,7 +42,7 @@ struct ExpandableSection: View {
                         .lineLimit(nil)
                         .fixedSize(horizontal: false, vertical: true)
                         .hidden()
-                        .readSize { fullHeight = $0.height }
+                        .getSize { fullHeight = $0.height }
                     
                     // Measure limited height
                     Text(text)
@@ -51,7 +51,7 @@ struct ExpandableSection: View {
                         .lineLimit(linesLimit)
                         .fixedSize(horizontal: false, vertical: true)
                         .hidden()
-                        .readSize { limitedHeight = $0.height }
+                        .getSize { limitedHeight = $0.height }
                 }
                 .onChange(of: fullHeight)    { isTruncated = fullHeight > limitedHeight }
                 .onChange(of: limitedHeight) { isTruncated = fullHeight > limitedHeight }
@@ -67,7 +67,7 @@ struct ExpandableSection: View {
 }
 
 extension View {
-    func readSize(onChange: @escaping (CGSize) -> Void) -> some View {
+    func getSize(onChange: @escaping (CGSize) -> Void) -> some View {
         background(
             GeometryReader { geo in
                 Color.clear
