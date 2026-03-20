@@ -622,7 +622,7 @@ struct SnippetsRepository {
         title: "Progress Circle with animated Checkmark",
         intro: "An interactive circular progress indicator that transforms into a spring-animated checkmark upon completion. Features multiple size/color variants, a progress slider, and auto-increment timer with pause/resume controls. Demonstrates advanced state management and coordinated animations.",
         thanks: nil,
-        date: Date.from(year: 2026, month: 3, day: 9) ?? Date(),
+        date: Date.from(year: 2026, month: 3, day: 9, hour: 2, minute: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
 
@@ -884,7 +884,7 @@ struct SnippetsRepository {
             * .variableColor.hideInactiveLayers — hides inactive segments
         """,
         thanks: nil,
-        date: Date.from(year: 2026, month: 3, day: 15) ?? Date(),
+        date: Date.from(year: 2026, month: 3, day: 15, hour: 2, minute: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
 
@@ -1414,7 +1414,7 @@ struct SnippetsRepository {
         When you have a long text that you initially want to limit to a certain height so that it doesn't take up much space on the screen. This code allows you to expand the text if the entire text does not fit within the specified height. 
         """,
         thanks: nil,
-        date: Date.from(year: 2026, month: 3, day: 19) ?? Date(),
+        date: Date.from(year: 2026, month: 3, day: 19, hour: 2, minute: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
 
@@ -1559,7 +1559,7 @@ struct SnippetsRepository {
         thanks: nil,
         date: Date.from(year: 2026, month: 3, day: 20) ?? Date(),
         codeSnippet: """
-        import SwiftUI
+        Import SwiftUI
 
         struct A009_OnToButtonDemo: View {
             
@@ -1572,7 +1572,7 @@ struct SnippetsRepository {
                 ScrollViewReader { proxy in
                     ZStack(alignment: .bottom) {
                         ScrollView {
-                            ForEach(1..<30) { index in
+                            ForEach(0..<30) { index in
                                 Text("Row \\(index)")
                                     .font(.headline)
                                     .foregroundStyle(Color.mycolor.myAccent)
