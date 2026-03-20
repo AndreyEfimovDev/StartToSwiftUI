@@ -23,10 +23,11 @@ struct WhatsNews {
                 News(
                     title: "New Code Snippets:",
                     newsText: """
-                    - A007 Shimmer Wave — highlights a row with a subtle wave to draw attention to it
-                    - A008 Expandable Section — a section is expandable from a fixed height to its full content height
-                    - A009 OnToButton - it lets users jump back to the top of a long list with a single tap
-                    - A010 Mask - a beautiful sample of Rating using .mask
+                    - A007: Shimmer Wave — highlights a row with a subtle wave to draw attention to it
+                    - A008: Expandable Section — a section is expandable from a fixed height to its full content height
+                    - A009: OnToButton - it lets users jump back to the top of a long list with a single tap
+                    - A010: Mask - a beautiful sample of Rating View using .mask
+                    - A011: 
                     """
                 ),
                 News(
@@ -62,6 +63,17 @@ struct WhatsNews {
                     """
                 ),
                 News(
+                    title: "New Code Snippets:",
+                    newsText: """
+                    - A001: Progress indicators collection
+                    - A002: Progress Trim indicator
+                    - A003: Progress circle with animated checkmark
+                    - A004: Shrinking Button
+                    - A005: SF Symbol Animation Effects
+                    - A006: Frame Transition
+                    """
+                ),
+                News(
                     title: "Improved",
                     newsText: """
                     - Removed the Hide action when deleting a material, now the deletion process is shorter: move materials to Deleted, then erase them permanently or restore back anytime
@@ -74,7 +86,7 @@ struct WhatsNews {
                     newsText: """
                     - An issue where changes made on one device were not syncing to other devices via iCloud
                     """
-                )
+                ),
             ]
         ),
         Release(
