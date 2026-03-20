@@ -33,7 +33,7 @@ struct A010_MaskDemoView: View {
             .fixedSize(horizontal: false, vertical: true)
             
             A010_MaskDemo()
-                .frame(maxHeight: .infinity)            
+                .frame(maxHeight: .infinity)
         }
         .foregroundStyle(Color.mycolor.myAccent)
     }

@@ -29,9 +29,9 @@ struct A006_FrameTransitionDemo: View {
                     titleForCase: { tab in
                         switch tab {
                         case .bottomBottom: return "↑↓"
-                        case .bottomRight:  return "↑→"
-                        case .rightRight:   return "←→"
-                        case .sliderStyle:       return "←←"
+                        case .bottomRight: return "↑→"
+                        case .rightRight: return "←→"
+                        case .sliderStyle: return "←←"
                         }
                     }
                 )
@@ -204,7 +204,7 @@ struct A006_FrameSliderTransition: View {
     init(height: CGFloat, width: CGFloat) {
             self.height = height
             self.width = width
-            _offset = State(initialValue: CGSize(width: 0, height: height))
+            _offset = State(initialValue: CGSize(width: width, height: 0))
         }
     
     var body: some View {
