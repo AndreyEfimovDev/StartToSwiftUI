@@ -1411,7 +1411,7 @@ struct SnippetsRepository {
         category: Constants.mainCategory,
         title: "Expandable Section",
         intro: """
-        When you have a long text that you initially want to limit to a certain height so that it doesn't take up much space on the screen. This code allows you to expand the text if the entire text does not fit within the specified height. 
+        Restricts text to a specified height to save screen space. If the text does not fit, it allows it to be expanded. 
         """,
         thanks: nil,
         date: Date.from(year: 2026, month: 3, day: 19, hour: 2, minute: 8) ?? Date(),
