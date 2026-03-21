@@ -56,6 +56,10 @@ struct AddEditPostView: View {
             set: { editedPost.postDate = $0 }
         )
     }
+    private var isExtended: Bool {
+        !editedPost.intro.isEmpty || !editedPost.notes.isEmpty
+    }
+
     private var isEditable: Bool = true
 
     // MARK: - Alert Type
@@ -87,21 +91,20 @@ struct AddEditPostView: View {
     
     var body: some View {
         Group {
-            VStack {
-                ScrollView {
-                    titleSection
-                    introSection
-                    authorSection
-                    typeSection
-                    studyLevelSection
-                    platformSection
-                    postDateSection
-                    urlSection
-                    notesSection
-                }
-                .foregroundStyle(Color.mycolor.myAccent)
-                .padding(.horizontal, 8)
+            ScrollView {
+                titleSection
+                introSection
+                authorSection
+                typeSection
+                studyLevelSection
+                platformSection
+                postDateSection
+                urlSection
+                notesSection
             }
+            .foregroundStyle(Color.mycolor.myAccent)
+            .padding(.horizontal, 8)
+            .animation(.smooth(duration: 0.3), value: isExtended)
             .navigationTitle(viewTitle)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -413,7 +416,6 @@ struct AddEditPostView: View {
             }
             .disabled(!isEditable)
         }
-        .animation(.smooth(duration: 0.3), value: editedPost.intro.isEmpty)
     }
     
     private var authorSection: some View {
