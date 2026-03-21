@@ -163,7 +163,7 @@ struct PostDetailsView: View {
     
     private func goToTheSourceButton(urlString: String) -> some View {
         LinkButtonURL(
-            buttonTitle: "Go to the Source",
+            buttonTitle: "View Source",
             urlString: urlString
         )
     }
