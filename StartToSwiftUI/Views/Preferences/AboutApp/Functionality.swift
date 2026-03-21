@@ -34,7 +34,7 @@ struct Functionality: View {
                **Home View Navigation**
                - Tap on a item to see its Details
                - Swipe right on an item to Add or Remove from Favourites
-               - Swipe left on an item to Edit, Hide, or move to Deleted (restorable)
+               - Swipe left on an item to Edit and move to Deleted (restorable)
                - Press and hold on an item to Update your Study Progress
                - Double-tap on an item to Rate the material
                - Pull down to Refresh the list of materials
@@ -43,7 +43,7 @@ struct Functionality: View {
                - Title
                - Intro description
                - Author's name
-               - Type (Lesson, Course, Article)
+               - Type (Lesson, Course, Article, etc.)
                - Study level (Beginner, Middle, Advanced)
                - Platform (Website, YouTube)
                - Date of publication (if known)
@@ -58,15 +58,10 @@ struct Functionality: View {
                - Tap Add Widget, then tap Done
 
                **Icons**
-               *Drafts*
-                \(Image(systemName: "square.stack.3d.up")) - draft
-               *Favourite choice*
-                \(FavoriteChoice.yes.icon) - yes
-                \(FavoriteChoice.no.icon) - no
                *Original source*
                 \(OriginOptions.local.icon) - created locally
                 \(OriginOptions.cloud.icon) - loaded from cloud (curated collection)
-                \(OriginOptions.cloudNew.icon) - recently loaded from cloud
+                \(OriginOptions.cloudNew.icon) - recently loaded from cloud (new)
                *Study progress*
                 \(StudyProgress.added.icon) - added
                 \(StudyProgress.started.icon) - started 

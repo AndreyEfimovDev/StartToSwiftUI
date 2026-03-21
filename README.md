@@ -10,7 +10,7 @@
 
 ## Overview
 
-**StartToSwiftUI** is a specialised learning environment for iOS developers designed to help you organise and manage SwiftUI study materials and related technologies. Created from own experience, it provides a personal learning system for mastering SwiftUI at your own pace.
+**StartToSwiftUI** is a specialised learning system for iOS developers designed to help you organise and manage SwiftUI study materials and related technologies.
 
 ## Key Features
 
@@ -23,7 +23,7 @@
 - Curated code snippets demonstrating advanced SwiftUI features
   
 ### Learning Management
-- Put on the own shelve: Lesson, Course, Article, Bug, Other
+- Put materials on the own shelve: Lesson, Course, Article, Bug, Other
 - Track progress: 'Added' → 'Started' → 'Learnt' → 'Practiced'
 - Rate materials: Good / Great / Excellent
 - Organise by difficulty level: Beginner / Intermediate / Advanced

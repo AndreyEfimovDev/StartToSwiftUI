@@ -94,10 +94,20 @@ struct StartToSwiftUIApp: App {
                 .task {
                     postsViewModel.start()
                     noticesViewModel.start()
+                    clearBadge()
+                }
+                .onReceive(NotificationCenter.default.publisher(
+                    for: UIApplication.willEnterForegroundNotification)
+                ) { _ in
+                    clearBadge()
                 }
         }
     }
     
+    private func clearBadge() {
+        UNUserNotificationCenter.current().setBadgeCount(0)
+    }
+
     // MARK: - Configuration Methods
     
     private func configureNavigationBarAppearance() {

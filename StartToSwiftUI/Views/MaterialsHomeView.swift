@@ -34,12 +34,15 @@ struct MaterialsHomeView: View {
     }
     
     private var postsToDisplay: [Post] {
-        guard let category = selectedCategory else {
-            return vm.filteredPosts
+        let byCategory: [Post]
+        if let category = selectedCategory {
+            byCategory = vm.filteredPosts.filter { $0.category == category }
+        } else {
+            byCategory = vm.filteredPosts
         }
-        return vm.filteredPosts.filter { $0.category == category }
+        return byCategory.filter { $0.status == .active && !$0.draft }
     }
-    
+
     // MARK: BODY
     var body: some View {
         GeometryReader { proxy in
@@ -51,7 +54,11 @@ struct MaterialsHomeView: View {
                         filteredPostsIsEmpty
                     } else {
                         listPostRowsContent
-                        onTopButton(proxy: scrollProxy)
+                        OnTopButton(isVisible: showOnTopButton) {
+                            withAnimation(.easeInOut(duration: 0.5)) {
+                                scrollProxy.scrollTo(postsToDisplay.first?.id, anchor: .top)
+                            }
+                        }
                     }
                 }
             }
@@ -73,11 +80,11 @@ struct MaterialsHomeView: View {
     
     private var listPostRowsContent: some View {
         List {
-            ForEach(postsToDisplay.filter { $0.status == .active && !$0.draft }) { post in
+            ForEach(postsToDisplay) { post in
                 PostRowView(post: post)
                     .id(post.id)
-                    .background(trackingFirstPostInList(post: post))
                     .background(.black.opacity(0.001))
+                    .shimmerWave(enabled: vm.shimmerWaveEnabled && post.origin == .cloudNew)
                     .onLongPressGesture(
                         minimumDuration: longPressDuration,
                         maximumDistance: 50,
@@ -93,7 +100,7 @@ struct MaterialsHomeView: View {
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: false) {
                         leadingSwipeActions(for: post)
-                    }
+                    }                
             } // ForEach
             .listRowBackground(Color.clear)
             .listRowSeparatorTint(Color.mycolor.myAccent.opacity(0.35))
@@ -101,9 +108,15 @@ struct MaterialsHomeView: View {
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
         } // List
         .listStyle(.plain)
-        .refreshControl {
-            refresh()
+        .coordinateSpace(name: "postsList")
+        .onScrollGeometryChange(for: CGFloat.self) { geo in
+            geo.contentOffset.y
+        } action: { _, newOffset in
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                showOnTopButton = newOffset > 100
+            }
         }
+        .refreshControl { refresh() }
     }
     
     // MARK: - Refresh
@@ -278,37 +291,6 @@ struct MaterialsHomeView: View {
 
     // MARK: - Supporting Views
 
-    @ViewBuilder
-    private func trackingFirstPostInList(post: Post) -> some View {
-        GeometryReader { geo in
-            Color.clear
-                .onChange(of: geo.frame(in: .global).minY) { oldY, newY in
-                    // Track first element position in the List
-                    if post.id == vm.filteredPosts.first?.id {
-                        showOnTopButton = newY < 0
-                    }
-                }
-        }
-    }
-    
-    @ViewBuilder
-    private func onTopButton(proxy: ScrollViewProxy) -> some View {
-        if showOnTopButton {
-            CircleStrokeButtonView(
-                iconName: "control",
-                iconFont: .title,
-                imageColorPrimary: Color.mycolor.myBlue,
-                widthIn: 55,
-                heightIn: 55) {
-                    withAnimation {
-                        if let firstID = vm.filteredPosts.first?.id {
-                            proxy.scrollTo(firstID, anchor: .top)
-                        }
-                    }
-                }
-        }
-    }
-    
     private var allPostsIsEmpty: some View {
         ContentUnavailableView(
             "No Study Materials",

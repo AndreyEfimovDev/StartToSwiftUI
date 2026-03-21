@@ -11,19 +11,12 @@ import SwiftData
 struct PostDetailsView: View {
     
     // MARK: - Dependencies
-    
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
     private let hapticManager = HapticManager.shared
     
     // MARK: - State
-    
-    @State private var showFullIntro: Bool = false
-    @State private var showFullNotes: Bool = false
-    @State private var lineCountIntro: Int = 0
-    @State private var lineCountNotes: Int = 0
-    
     @State private var showRatingTab: Bool = false
     @State private var showProgressTab: Bool = false
     @State private var zIndexBarRating: Double = 0
@@ -33,26 +26,17 @@ struct PostDetailsView: View {
     @State private var tabWidth: CGFloat = 0
     @State private var expandedWidth: CGFloat = 0
     
-    private var isFavorite: Bool {
-            post.favoriteChoice == .yes
-    }
-    
     // MARK: - Constants
-    
     let post: Post
-    
-    private let introFont: Font = .subheadline
-    private let introLineSpacing: CGFloat = 0
-    private let introLinesLimit: Int = 10
-    
-    private let notesFont: Font = .footnote
-    private let notesLineSpacing: CGFloat = 0
-    private let notesLinesLimit: Int = 3
     
     private let widthRatio: CGFloat = 0.55
     
     // MARK: - Computed Properties
+    private var isFavorite: Bool {
+            post.favoriteChoice == .yes
+    }
     
+
     private var minHeight: CGFloat {
         UIDevice.isiPad ? 60 : 75
     }
@@ -154,72 +138,25 @@ struct PostDetailsView: View {
     // MARK: - Intro
     
     private func intro(for post: Post) -> some View {
-        VStack(spacing: 0) {
-            Text("Intro")
-                .font(.headline)
-                .frame(height: 55)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            Text(post.intro)
-                .font(introFont)
-                .lineLimit(showFullIntro ? nil : introLinesLimit)
-                .lineSpacing(introLineSpacing)
-                .frame(minHeight: 55, alignment: .topLeading)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(
-                    Text(post.intro)
-                        .font(introFont)
-                        .lineSpacing(introLineSpacing)
-                        .lineLimit(nil)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .hidden()
-                        .onLineCountChanged(font: introFont, lineSpacing: introLineSpacing) { count in
-                            lineCountIntro = count - 1
-                        }
-                )
-            if lineCountIntro > introLinesLimit {
-                HStack(alignment: .top) {
-                    Spacer()
-                    MoreLessTextButton(showText: $showFullIntro)
-                }
-            }
-        }
+        ExpandableSection(
+            title: nil,
+            text: post.intro,
+            font: .subheadline,
+            lineSpacing: 0,
+            linesLimit: 5
+        )
     }
     
     // MARK: - Notes
     
     private func notes(for post: Post) -> some View {
-        VStack(spacing: 0) {
-            Text("Notes")
-                .font(.headline)
-                .frame(height: 55)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            VStack(spacing: 0) {
-                Text(post.notes)
-                    .font(notesFont)
-                    .lineLimit(showFullNotes ? nil : notesLinesLimit)
-                    .lineSpacing(notesLineSpacing)
-                    .frame(minHeight: 55, alignment: .topLeading)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(
-                        Text(post.intro)
-                            .font(notesFont)
-                            .lineSpacing(notesLineSpacing)
-                            .lineLimit(nil)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .hidden()
-                            .onLineCountChanged(font: notesFont, lineSpacing: notesLineSpacing) { count in
-                                lineCountNotes = count - 1
-                            }
-                    )
-                
-                if lineCountNotes > notesLinesLimit {
-                    HStack(alignment: .top) {
-                        Spacer()
-                        MoreLessTextButton(showText: $showFullNotes)
-                    }
-                }
-            }
-        }
+        ExpandableSection(
+            title: "Notes",
+            text: post.notes,
+            font: .footnote,
+            lineSpacing: 0,
+            linesLimit: 3
+        )
     }
     
     // MARK: - Source Button

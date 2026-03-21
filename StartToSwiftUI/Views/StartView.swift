@@ -24,10 +24,20 @@ struct StartView: View {
     @State private var visibility: NavigationSplitViewVisibility = .doubleColumn
     
     // MARK: - Section Transition State
-      /// A local copy of the section that we are changing through withAnimation
-      @State private var displayedSection: AppSection = .materials
-      /// true = forward (materials → snippets), false = backward
-      @State private var isGoingForward: Bool = true
+    /// A local copy of the section that we are changing through withAnimation
+    @State private var displayedSection: AppSection = .materials
+    /// true = forward (materials → snippets), false = backward
+    @State private var isGoingForward: Bool = true
+    
+    // MARK: - Section Transition Helper (is not used)
+    private var sectionTransition: AnyTransition {
+        .asymmetric(
+            insertion: .opacity.combined(with: .scale(scale: 0.97)),
+            removal:   .opacity.combined(with: .scale(scale: 0.97))
+//            insertion: .move(edge: isGoingForward ? .trailing : .leading).combined(with: .opacity),
+//            removal:   .move(edge: isGoingForward ? .leading  : .trailing).combined(with: .opacity)
+        )
+    }
     
     // MARK: - Body
     var body: some View {
@@ -43,6 +53,7 @@ struct StartView: View {
                         Text(errorManager.errorMessage ?? "")
                     }
                     .task {
+                        displayedSection = coordinator.activeSection
                         vm.selectedCategory = vm.mainCategory
                         vm.loadPostsFromSwiftData()
                         noticevm.loadNoticesFromSwiftData()
@@ -56,7 +67,7 @@ struct StartView: View {
                     }
                     .onChange(of: coordinator.activeSection) { oldSection, newSection in
                         isGoingForward = newSection.transitionIndex > oldSection.transitionIndex
-                        withAnimation(.easeInOut(duration: 0.35)) {
+                        withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
                             displayedSection = newSection
                         }
                     }
@@ -69,16 +80,6 @@ struct StartView: View {
         .environmentObject(snippetsvm)
     }
     
-    
-    // MARK: - Section Transition Helper          ← NEW
-    
-    private var sectionTransition: AnyTransition {
-        .asymmetric(
-            insertion: .move(edge: isGoingForward ? .trailing : .leading).combined(with: .opacity),
-            removal:   .move(edge: isGoingForward ? .leading  : .trailing).combined(with: .opacity)
-        )
-    }
-
     // MARK: Main Content
     
     @ViewBuilder
@@ -93,19 +94,21 @@ struct StartView: View {
     // iPhone: single NavigationStack, root switches with activeSection
     @ViewBuilder
     private var iPhoneContent: some View {
-        switch displayedSection {
-        case .materials:
-            NavigationStack(path: $coordinator.path) {
-                MaterialsHomeView(selectedCategory: vm.selectedCategory)
-                    .navigationDestination(for: AppRoute.self) { destinationView(for: $0) }
+        Group {
+            switch displayedSection {
+            case .materials:
+                NavigationStack(path: $coordinator.path) {
+                    MaterialsHomeView(selectedCategory: vm.selectedCategory)
+                        .navigationDestination(for: AppRoute.self) { destinationView(for: $0) }
+                }
+                .transition(sectionTransition)
+            case .snippets:
+                NavigationStack(path: $coordinator.path) {
+                    SnippetsHomeView()
+                        .navigationDestination(for: AppRoute.self) { destinationView(for: $0) }
+                }
+                .transition(sectionTransition)
             }
-            .transition(sectionTransition)
-        case .snippets:
-            NavigationStack(path: $coordinator.path) {
-                SnippetsHomeView()
-                    .navigationDestination(for: AppRoute.self) { destinationView(for: $0) }
-            }
-            .transition(sectionTransition)
         }
     }
 
