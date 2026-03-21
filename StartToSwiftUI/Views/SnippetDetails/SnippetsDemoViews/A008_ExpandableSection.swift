@@ -88,7 +88,6 @@ struct A008_ExpandableSection: View {
                         endPoint: .bottom
                     )
                 }
-                .animation(.smooth(duration: 0.5), value: showFull) // slow height change
                 .overlay(alignment: .topLeading) {
                     // Measure full height
                     Text(text)
@@ -140,7 +139,9 @@ struct A008_MoreLessTextButton: View {
     
     var body: some View {
         Button{
-            showText.toggle()
+            withAnimation(.smooth(duration: 0.5)) {
+                showText.toggle()
+            }
         } label: {
             Text(showText ? "less..." : "...more")
                 .font(.subheadline)

@@ -1502,7 +1502,6 @@ struct SnippetsRepository {
                                 endPoint: .bottom
                             )
                         }
-                        .animation(.smooth(duration: 0.5), value: showFull) // slow height change
                         .overlay(alignment: .topLeading) {
                             // Measure full height
                             Text(text)
@@ -1554,7 +1553,9 @@ struct SnippetsRepository {
             
             var body: some View {
                 Button{
-                    showText.toggle()
+                    withAnimation(.smooth(duration: 0.5)) {
+                        showText.toggle()
+                    }
                 } label: {
                     Text(showText ? "less..." : "...more")
                         .font(.subheadline)
@@ -1637,7 +1638,7 @@ struct SnippetsRepository {
         """
     )
 
-    // MARK: - A010 OnTop Button for ScrollView
+    // MARK: - A010 Mask
     static let a010 = CodeSnippet(
         id: "A010",
         category: Constants.mainCategory,
