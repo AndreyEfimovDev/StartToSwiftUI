@@ -1579,7 +1579,7 @@ struct SnippetsRepository {
         thanks: nil,
         date: Date.from(year: 2026, month: 3, day: 20) ?? Date(),
         codeSnippet: """
-        Import SwiftUI
+        import SwiftUI
 
         struct A009_OnToButtonDemo: View {
             
@@ -1622,7 +1622,11 @@ struct SnippetsRepository {
                                     .font(.title)
                                     .foregroundStyle(Color.mycolor.myBlue)
                                     .frame(width: 55, height: 55)
-                                    .background(.ultraThinMaterial, in: Circle())
+                                    .background(.clear, in: .circle)
+                                    .overlay(
+                                        Circle()
+                                            .stroke(Color.mycolor.myBlue, lineWidth: 1)
+                                    )
                             }
                             .transition(.opacity.combined(with: .scale(scale: 0.5)))
                             .padding(.bottom, 16)
