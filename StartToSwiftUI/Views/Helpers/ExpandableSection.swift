@@ -26,14 +26,32 @@ struct ExpandableSection: View {
                     .font(.headline)
                     .frame(height: 55)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .animation(nil, value: showFull)
             }
             
             Text(text)
                 .font(font)
                 .lineSpacing(lineSpacing)
-                .lineLimit(showFull ? nil : linesLimit)
-                .frame(minHeight: 55, alignment: .topLeading)
+                .lineLimit(nil) // always render the full text
+                .frame(
+                    height: showFull
+                    ? max(fullHeight, 55)
+                    : max(limitedHeight, 55),
+                    alignment: .topLeading
+                )
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .mask { // smooth text fading from the bottom
+                    LinearGradient(
+                        stops: [
+                            .init(color: .black, location: 0.0),
+                            .init(color: .black, location: showFull ? 1.0 : 0.75), //Adjust the starting point of attenuation - here is 0.75
+                            .init(color: .clear, location: 1.0)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                }
+                .animation(.smooth(duration: 0.5), value: showFull) // slow height change
                 .overlay(alignment: .topLeading) {
                     // Measure full height
                     Text(text)
@@ -43,7 +61,6 @@ struct ExpandableSection: View {
                         .fixedSize(horizontal: false, vertical: true)
                         .hidden()
                         .getSize { fullHeight = $0.height }
-                    
                     // Measure limited height
                     Text(text)
                         .font(font)
@@ -80,11 +97,14 @@ extension View {
 
 
 #Preview {
-    ExpandableSection(
-        title: "Intro",
-        text:  PreviewData.samplePosts[0].intro,
-        font: .subheadline,
-        lineSpacing: 0,
-        linesLimit: 10
-    )
+    VStack {
+        ExpandableSection(
+            title: "Intro",
+            text:  PreviewData.samplePosts[0].intro,
+            font: .subheadline,
+            lineSpacing: 0,
+            linesLimit: 5
+        )
+        Spacer()
+    }
 }
