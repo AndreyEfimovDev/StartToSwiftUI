@@ -33,7 +33,7 @@ struct WhatsNews {
                 News(
                     title: "Improved",
                     newsText: """
-                    - Switching between Materials and Code Snippets now goes smoothly with a directional animation
+                    - Switching between Materials and Code Snippets now goes smoothly
                     - Behaviour of 'Go to the Source' button when a url link is invalid 
                     """
                 ),
