@@ -51,7 +51,7 @@ struct A009_OnToButtonDemo: View {
                             .background(.clear, in: .circle)
                             .overlay(
                                 Circle()
-                                    .stroke(Color.mycolor.myBlue, lineWidth: 2)
+                                    .stroke(Color.mycolor.myBlue, lineWidth: 1)
                             )
                     }
                     .transition(.opacity.combined(with: .scale(scale: 0.5)))
