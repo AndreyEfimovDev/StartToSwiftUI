@@ -1839,8 +1839,8 @@ struct SnippetsRepository {
                         .strokeBorder(Color.mycolor.myBlue.opacity(0.5), lineWidth: 1)
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 8))
+                .frame(maxWidth: 250)
                 .onPreferenceChange(TextEditorViewHeightKey.self) { height = $0 }
-                .padding()
             }
         }
 
@@ -1872,7 +1872,6 @@ struct SnippetsRepository {
             }
             return PreviewWrapper()
         }
-
         """
     )
 
