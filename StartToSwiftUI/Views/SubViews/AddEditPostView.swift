@@ -383,8 +383,8 @@ struct AddEditPostView: View {
                     .onSubmit {focusedField = .intro }
                     .submitLabel(.next)
                 
-                clearButton(for: editedPost.title) {
-                    editedPost.title = ""
+                if !editedPost.title.isEmpty {
+                    clearButton() { editedPost.title = "" }
                 }
             }
             .disabled(!isEditable)
@@ -402,19 +402,18 @@ struct AddEditPostView: View {
                     .focused($focusedField, equals: .intro)
                     .onSubmit {focusedField = .author }
                     .submitLabel(.return)
-                VStack {
-                    clearButton(for: editedPost.intro) {
-                        editedPost.intro = ""
-                    }
-                    
-                    nextFieldButton(visible: !editedPost.intro.isEmpty) {
-                        focusedField = .author
+                
+                if !editedPost.intro.isEmpty {
+                    VStack {
+                        clearButton() { editedPost.intro = "" }
+                        nextFieldButton() { focusedField = .author }
                     }
                     .frame(maxHeight: .infinity, alignment: .bottom)
                 }
             }
             .disabled(!isEditable)
         }
+        .animation(.smooth(duration: 0.3), value: editedPost.intro.isEmpty)
     }
     
     private var authorSection: some View {
@@ -429,8 +428,8 @@ struct AddEditPostView: View {
                     .onSubmit {focusedField = .postType }
                     .submitLabel(.next)
                 
-                clearButton(for: editedPost.author) {
-                    editedPost.author = ""
+                if !editedPost.author.isEmpty {
+                    clearButton() { editedPost.author = "" }
                 }
             }
             .disabled(!isEditable)
@@ -531,8 +530,8 @@ struct AddEditPostView: View {
                     .onSubmit {focusedField = .notes }
                     .submitLabel(.next)
                 
-                clearButton(for: editedPost.urlString) {
-                    editedPost.urlString = ""
+                if !editedPost.urlString.isEmpty {
+                    clearButton( ) { editedPost.urlString = "" }
                 }
             }
             .disabled(!isEditable)
@@ -548,12 +547,11 @@ struct AddEditPostView: View {
                     .scrollContentBackground(.hidden)
                     .focused($focusedField, equals: .notes)
                     .submitLabel(.return)
-                VStack {
-                    clearButton(for: editedPost.notes) {
-                        editedPost.notes = ""
-                    }
-                    nextFieldButton(visible: !editedPost.notes.isEmpty) {
-                        focusedField = nil
+                
+                if !editedPost.notes.isEmpty {
+                    VStack {
+                        clearButton() { editedPost.notes = "" }
+                        nextFieldButton() { focusedField = nil }
                     }
                     .frame(maxHeight: .infinity, alignment: .bottom)
                 }
@@ -563,27 +561,25 @@ struct AddEditPostView: View {
     
     // MARK: - Helper Views
     @ViewBuilder
-    private func clearButton(for text: String, action: @escaping () -> Void) -> some View {
-        if !text.isEmpty {
-            Button(action: action) {
-                Image(systemName: "xmark")
-                    .foregroundStyle(Color.mycolor.myRed)
-            }
-            .frame(width: 50, height: 50)
-            .background(.black.opacity(0.001))
+    private func clearButton(action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: "xmark")
+                .foregroundStyle(Color.mycolor.myRed)
         }
+        .frame(width: 50, height: 50)
+        .background(.black.opacity(0.001))
+        .transition(.scale(scale: 0.5).combined(with: .opacity))
     }
     
     @ViewBuilder
-    private func nextFieldButton(visible: Bool, action: @escaping () -> Void) -> some View {
-        if visible {
-            Button(action: action) {
-                Image(systemName: "arrow.turn.right.down")
-                    .foregroundStyle(Color.mycolor.myBlue)
-            }
-            .frame(width: 50, height: 50)
-            .background(.black.opacity(0.001))
+    private func nextFieldButton(action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: "arrow.turn.right.down")
+                .foregroundStyle(Color.mycolor.myBlue)
         }
+        .frame(width: 50, height: 50)
+        .background(.black.opacity(0.001))
+        .transition(.scale(scale: 0.5).combined(with: .opacity))
     }
 
 }
