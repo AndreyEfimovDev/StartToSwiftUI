@@ -42,7 +42,7 @@ struct ExpandableSection: View {
                     LinearGradient(
                         stops: [
                             .init(color: .black, location: 0.0),
-                            .init(color: .black, location: showFull ? 1.0 : 0.75), //Adjust the starting point of attenuation - here is 0.75
+                            .init(color: .black, location: (showFull || !isTruncated) ? 1.0 : 0.75), //Adjust the starting point of attenuation - here is 0.75
                             .init(color: .clear, location: 1.0)
                         ],
                         startPoint: .top,
