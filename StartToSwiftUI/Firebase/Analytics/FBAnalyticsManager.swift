@@ -9,7 +9,6 @@ import SwiftUI
 import FirebaseAnalytics
 
 final class FBAnalyticsManager {
-#warning("Before deployment: ensure -FIRDebugEnabled is OFF in scheme arguments")
     static let shared = FBAnalyticsManager()
 
     private init() { }

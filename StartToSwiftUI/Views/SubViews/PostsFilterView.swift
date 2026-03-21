@@ -34,8 +34,6 @@ struct PostsFilterView: View {
 
             // Filters section
                 VStack(spacing: 0) {
-#warning("Remove before deployment to App Store")
-                    //                categoryFilter
                     studyLevelFilter
                     favouriteFilter
                     typeFilter
