@@ -34,9 +34,7 @@ struct ExpandableSection: View {
                 .lineSpacing(lineSpacing)
                 .lineLimit(nil) // always render the full text
                 .frame(
-                    height: showFull
-                    ? max(fullHeight, 55)
-                    : max(limitedHeight, 55),
+                    height: showFull ? max(fullHeight, 55) : max(limitedHeight, 55),
                     alignment: .topLeading
                 )
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -51,7 +49,6 @@ struct ExpandableSection: View {
                         endPoint: .bottom
                     )
                 }
-                .animation(.smooth(duration: 0.5), value: showFull) // slow height change
                 .overlay(alignment: .topLeading) {
                     // Measure full height
                     Text(text)
