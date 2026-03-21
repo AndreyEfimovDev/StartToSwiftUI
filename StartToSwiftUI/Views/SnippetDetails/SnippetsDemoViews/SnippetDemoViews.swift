@@ -12,6 +12,43 @@
 
 import SwiftUI
 
+
+struct PreviewWrapper: View {
+    @State private var text = ""
+    var body: some View {
+        A011_ExpandbleTextEditorDemo(text: $text)
+            .padding()
+    }
+}
+
+
+// MARK: - A009 OnTo Button DemoView
+struct A011_ExpandbleTextEditorDemoView: View {
+    
+    @State private var text = ""
+    let snippet: CodeSnippet
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                    
+                    if let thanks = snippet.thanks, !thanks.isEmpty {
+                        SnippetThanksView(thanks: thanks)
+                            .padding(.horizontal)
+                    }
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            
+            A011_ExpandbleTextEditorDemo(text: $text)
+                .frame(maxHeight: .infinity)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
 // MARK: - A009 OnTo Button DemoView
 struct A010_MaskDemoView: View {
     

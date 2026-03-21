@@ -14,7 +14,10 @@ import Foundation
 
 struct SnippetsRepository {
     
-    static let allDemoCodeSnippet: [CodeSnippet] = [a001, a002, a003, a004, a005, a006, a007, a008, a009, a010]
+    static let allDemoCodeSnippet: [CodeSnippet] = [
+        a001, a002, a003, a004, a005, a006, a007, a008, a009, a010,
+        a011
+    ]
     
     // MARK: - A001 Progress indicators collection
     static let a001 = CodeSnippet(
@@ -1779,6 +1782,95 @@ struct SnippetsRepository {
         }
         """
     )
+
+    // MARK: - A011 Expandble TextEditor
+    static let a011 = CodeSnippet(
+        id: "A011",
+        category: Constants.mainCategory,
+        title: "Expandble TextEditor",
+        intro: """
+        A convenient expandable version of a native TextEditor —
+        automatically grows in height as the user types, matching
+        the content size with no manual frame management.
+        Accepts a Font parameter with .body as default,
+        keeping the call site clean: ExpandableTextEditor(text: $text)
+        """,
+        thanks: nil,
+        date: Date.from(year: 2026, month: 3, day: 21) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        struct A011_ExpandbleTextEditorDemo: View {
+            
+            @Binding var text: String
+            var textFont: Font = .body //  default value → the parameter is optional
+            @State private var height: CGFloat = 38
+            
+            var body: some View {
+                ZStack(alignment: .leading) {
+                    Text(text.isEmpty ? " " : text)
+                        .font(textFont)
+                        .padding(8)
+                        .background(
+                            GeometryReader {
+                                Color.clear.preference(
+                                    key: TextEditorViewHeightKey.self,
+                                    value: $0.frame(in: .local).size.height
+                                )
+                            }
+                        )
+                        .hidden()
+                    
+                    TextEditor(text: $text)
+                        .font(textFont)
+                        .foregroundStyle(Color.mycolor.myAccent)
+                        .scrollContentBackground(.hidden)
+                        .frame(height: max(38, height))
+                        .padding(.horizontal, 3)
+                }
+                .background(.ultraThinMaterial.opacity(0.5))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 8)
+                        .strokeBorder(Color.mycolor.myBlue.opacity(0.5), lineWidth: 1)
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .onPreferenceChange(TextEditorViewHeightKey.self) { height = $0 }
+                .padding()
+            }
+        }
+
+        struct TextEditorViewHeightKey: PreferenceKey {
+            static var defaultValue: CGFloat { 0 }
+            static func reduce(value: inout Value, nextValue: () -> Value) {
+                value = max(value, nextValue())
+            }
+        }
+
+        /*
+         Application
+         *** without explicit font — .body by default
+         ExpandableTextEditor(text: $text)
+
+         *** with an explicit font
+         ExpandableTextEditor(text: $text, font: .callout)
+         ExpandableTextEditor(text: $text, font: .system(.body, design: .monospaced))
+         
+         */
+
+        #Preview {
+            struct PreviewWrapper: View {
+                @State private var text = ""
+                var body: some View {
+                    A011_ExpandbleTextEditorDemo(text: $text, textFont: .body)
+                        .padding()
+                }
+            }
+            return PreviewWrapper()
+        }
+
+        """
+    )
+
 
     
 }

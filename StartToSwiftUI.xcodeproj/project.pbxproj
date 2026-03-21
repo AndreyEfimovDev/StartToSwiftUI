@@ -85,6 +85,8 @@
 		47542EB42EF2C8E400B0AB79 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47542EB32EF2C8E400B0AB79 /* StartView.swift */; };
 		47586ED62F6D6A4C00C1E942 /* OnTopButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47586ED52F6D6A4C00C1E942 /* OnTopButton.swift */; };
 		47586ED82F6D7C7F00C1E942 /* A010_Mask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47586ED72F6D7C7F00C1E942 /* A010_Mask.swift */; };
+		47586EDA2F6E9B8A00C1E942 /* A011_ExpandbleTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47586ED92F6E9B8A00C1E942 /* A011_ExpandbleTextEditor.swift */; };
+		47586EDC2F6EA9F100C1E942 /* ExpandbleTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47586EDB2F6EA9F100C1E942 /* ExpandbleTextEditor.swift */; };
 		4759974D2E5C690B008E20F0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 475997492E5C690B008E20F0 /* Assets.xcassets */; };
 		4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */; };
 		475997512E5C6C9D008E20F0 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997502E5C6C9D008E20F0 /* Post.swift */; };
@@ -308,6 +310,8 @@
 		47542EB52EF3171200B0AB79 /* StartToSwiftUIRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StartToSwiftUIRelease.entitlements; sourceTree = "<group>"; };
 		47586ED52F6D6A4C00C1E942 /* OnTopButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTopButton.swift; sourceTree = "<group>"; };
 		47586ED72F6D7C7F00C1E942 /* A010_Mask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A010_Mask.swift; sourceTree = "<group>"; };
+		47586ED92F6E9B8A00C1E942 /* A011_ExpandbleTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A011_ExpandbleTextEditor.swift; sourceTree = "<group>"; };
+		47586EDB2F6EA9F100C1E942 /* ExpandbleTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandbleTextEditor.swift; sourceTree = "<group>"; };
 		4759973B2E5C6901008E20F0 /* StartToSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StartToSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		475997492E5C690B008E20F0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartToSwiftUIApp.swift; sourceTree = "<group>"; };
@@ -552,6 +556,7 @@
 			children = (
 				47FF42582EE556DA0069D232 /* TapHandler.swift */,
 				474245E42F6B39450053853A /* ExpandableSection.swift */,
+				47586EDB2F6EA9F100C1E942 /* ExpandbleTextEditor.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -920,6 +925,7 @@
 				474245E82F6BDDDC0053853A /* A008_ExpandableSection.swift */,
 				474245EA2F6C158A0053853A /* A009_OnToButton.swift */,
 				47586ED72F6D7C7F00C1E942 /* A010_Mask.swift */,
+				47586ED92F6E9B8A00C1E942 /* A011_ExpandbleTextEditor.swift */,
 				474638002F66F27600DF011B /* AnimationTiming.swift */,
 				474638062F672F7800DF011B /* Actionsheet.swift */,
 				474638082F6732EA00DF011B /* ContextMenu.swift */,
@@ -1212,6 +1218,7 @@
 				47B6E7F72F5D991200EF7441 /* PostsViewModel+FBImport.swift in Sources */,
 				471DCBD92EBBBF2200AFA5F4 /* JSON.swift in Sources */,
 				4765A76D2EAE5F7B00EACDF4 /* PostRowView.swift in Sources */,
+				47586EDC2F6EA9F100C1E942 /* ExpandbleTextEditor.swift in Sources */,
 				4751DAFA2F1640C300EC9C53 /* StatCard.swift in Sources */,
 				4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */,
 				4751DAF82F16409B00EC9C53 /* StatsCardsView.swift in Sources */,
@@ -1238,6 +1245,7 @@
 				4773545D2E65D03A001DEDEE /* PostsFilterView.swift in Sources */,
 				47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */,
 				47B6E8122F5DFB3200EF7441 /* SnippetDetailsView.swift in Sources */,
+				47586EDA2F6E9B8A00C1E942 /* A011_ExpandbleTextEditor.swift in Sources */,
 				4746380F2F6735CB00DF011B /* Mask.swift in Sources */,
 				47FF42592EE556DB0069D232 /* TapHandler.swift in Sources */,
 				475CC64D2F216B870099CAA6 /* DataSourcesProtocols.swift in Sources */,

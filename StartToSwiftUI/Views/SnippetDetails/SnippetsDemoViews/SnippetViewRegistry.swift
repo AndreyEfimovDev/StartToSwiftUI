@@ -28,6 +28,9 @@ struct SnippetViewRegistry {
         case "A008": A008_ExpandableSectionDemoView(snippet: snippet)
         case "A009": A009_OnToButtonDemoView(snippet: snippet)
         case "A010": A010_MaskDemoView(snippet: snippet)
+        case "A011": A011_ExpandbleTextEditorDemoView(snippet: snippet)
+
+            
 
         default: SnippetNoPreviewView(snippet: snippet)
         }
