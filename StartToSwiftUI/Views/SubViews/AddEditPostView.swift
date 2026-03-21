@@ -32,6 +32,7 @@ struct AddEditPostView: View {
     // MARK: - Properties
     private let originalPost: Post?
     private let copyOfThePost: Post
+    private let minHeight: CGFloat = 50
 
     // MARK: - Constants
     private let sectionBackground = Color.mycolor.mySectionBackground
@@ -125,7 +126,7 @@ struct AddEditPostView: View {
     @ViewBuilder
     private var editHintBubble: some View {
         if showEditHint {
-            Text("Only Notes are available for editing in curated materials")
+            Text("Only Notes section is available for editing in curated materials")
                 .font(.callout)
                 .foregroundStyle(Color.mycolor.myAccent)
                 .multilineTextAlignment(.center)
@@ -377,7 +378,7 @@ struct AddEditPostView: View {
                 TextField("", text: $editedPost.title)
                     .font(fontTextInput)
                     .padding(.leading, 5)
-                    .frame(height: 50)
+                    .frame(height: minHeight)
                     .focused($focusedField, equals: .postTitle)
                     .onSubmit {focusedField = .intro }
                     .submitLabel(.next)
@@ -393,9 +394,9 @@ struct AddEditPostView: View {
     private var introSection: some View {
         FormSectionViewWraper(title: "Intro") {
             HStack(spacing: 0) {
-                TextEditor(text: $editedPost.intro)
-                    .font(fontTextInput)
-                    .frame(height: 100)
+                ExpandbleTextEditor(text: $editedPost.intro, textFont: fontTextInput)
+                    .frame(minHeight: minHeight)
+                    .frame(maxHeight: .infinity, alignment: .top)
                     .autocorrectionDisabled(true) // fixing leaking memory
                     .scrollContentBackground(.hidden)
                     .focused($focusedField, equals: .intro)
@@ -422,7 +423,7 @@ struct AddEditPostView: View {
                 TextField("", text: $editedPost.author)
                     .font(fontTextInput)
                     .padding(.leading, 5)
-                    .frame(height: 50)
+                    .frame(height: minHeight)
                     .autocorrectionDisabled(true) // fixing leaking memory
                     .focused($focusedField, equals: .author)
                     .onSubmit {focusedField = .postType }
@@ -446,7 +447,7 @@ struct AddEditPostView: View {
                 unselectedTextColor: Color.mycolor.mySecondary
             )
             .padding(.horizontal, 8)
-            .frame(height: 50)
+            .frame(height: minHeight)
             .disabled(!isEditable)
         }
     }
@@ -461,7 +462,7 @@ struct AddEditPostView: View {
                 unselectedTextColor: Color.mycolor.mySecondary
             )
             .padding(.horizontal, 8)
-            .frame(height: 50)
+            .frame(height: minHeight)
             .disabled(!isEditable)
         }
     }
@@ -476,7 +477,7 @@ struct AddEditPostView: View {
                 unselectedTextColor: Color.mycolor.mySecondary
             )
             .padding(.horizontal, 8)
-            .frame(height: 50)
+            .frame(height: minHeight)
             .disabled(!isEditable)
         }
     }
@@ -521,7 +522,7 @@ struct AddEditPostView: View {
                 TextField("", text: $editedPost.urlString)
                     .font(fontTextInput)
                     .padding(.leading, 5)
-                    .frame(height: 50)
+                    .frame(height: minHeight)
                     .padding(.horizontal, 3)
                     .textInputAutocapitalization(.none)
                     .autocorrectionDisabled(true) // fixing leaking memory
@@ -541,9 +542,9 @@ struct AddEditPostView: View {
     private var notesSection: some View {
         FormSectionViewWraper(title: "Notes") {
             HStack(spacing: 0) {
-                TextEditor(text: $editedPost.notes)
-                    .font(fontTextInput)
-                    .frame(minHeight: 200)
+                ExpandbleTextEditor(text: $editedPost.notes, textFont: fontTextInput)
+                    .frame(minHeight: minHeight)
+                    .frame(maxHeight: .infinity, alignment: .top)
                     .scrollContentBackground(.hidden)
                     .focused($focusedField, equals: .notes)
                     .submitLabel(.return)

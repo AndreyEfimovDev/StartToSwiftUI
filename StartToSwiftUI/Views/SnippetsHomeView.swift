@@ -16,8 +16,8 @@ struct SnippetsHomeView: View {
     @EnvironmentObject private var coordinator: AppCoordinator
 
     private let hapticManager = HapticManager.shared
-    
-    @Environment(\.colorScheme) private var colorScheme
+
+    // MARK: - Splash vars
 
     private var splashTheme: Splash.Theme {
         .midnight(withFont: .init(size: 13))
@@ -30,26 +30,28 @@ struct SnippetsHomeView: View {
 
     // MARK: - Body
     var body: some View {
-        GeometryReader { _ in
-            ScrollViewReader { scrollProxy in
-                ZStack(alignment: .bottom) {
-                    if snippetvm.allSnippets.isEmpty {
-                        allSnippetsIsEmpty
-                    } else if snippetvm.filteredSnippets.isEmpty {
-                        filteredSnippetsIsEmpty
-                    } else {
-                        listContent
-                        onTopButton(proxy: scrollProxy)
+        ScrollViewReader { scrollProxy in
+            ZStack(alignment: .bottom) {
+                if snippetvm.allSnippets.isEmpty {
+                    allSnippetsIsEmpty
+                } else if snippetvm.filteredSnippets.isEmpty {
+                    filteredSnippetsIsEmpty
+                } else {
+                    listContent
+                    OnTopButton(isVisible: showOnTopButton) {
+                        withAnimation(.easeInOut(duration: 0.5)) {
+                            scrollProxy.scrollTo(snippetvm.filteredSnippets.first?.id, anchor: .top)
+                        }
                     }
                 }
             }
-            .navigationTitle("Code Snippets")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
-            .toolbar { SharedToolbarLeadingItems() }
-            .safeAreaInset(edge: .top) { searchBarStack }
-            .sheet(isPresented: $isFilterButtonPressed) { filtersSheet }
         }
+        .navigationTitle("Code Snippets")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar { SharedToolbarLeadingItems() }
+        .safeAreaInset(edge: .top) { searchBarStack }
+        .sheet(isPresented: $isFilterButtonPressed) { filtersSheet }
         .task {
             FBAnalyticsManager.shared.logScreen(name: "SnippetsHomeView")
         }
@@ -62,7 +64,6 @@ struct SnippetsHomeView: View {
             ForEach(snippetvm.filteredSnippets) { snippet in
                 SnippetRowView(snippet: snippet, isFavorite: snippetvm.isFavorite(snippet))
                     .id(snippet.id)
-                    .background(trackingFirstSnippet(snippet: snippet))
                     .background(.black.opacity(0.001))
                     .onTapGesture { handleTap(on: snippet) }
                     .swipeActions(edge: .leading, allowsFullSwipe: true) {
@@ -75,6 +76,13 @@ struct SnippetsHomeView: View {
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
         }
         .listStyle(.plain)
+        .onScrollGeometryChange(for: CGFloat.self) { geo in
+            geo.contentOffset.y
+        } action: { _, newOffset in
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                showOnTopButton = newOffset > 100
+            }
+        }
     }
 
     // MARK: - Tap
@@ -118,9 +126,7 @@ struct SnippetsHomeView: View {
                 .clipShape(.circle)
                 .background(
                     Circle()
-                        .stroke(
-                            Color.mycolor.mySecondary,
-                            lineWidth: 1)
+                        .stroke(Color.mycolor.mySecondary,lineWidth: 1)
                 )
             }
         }
@@ -148,37 +154,6 @@ struct SnippetsHomeView: View {
     }
 
     // MARK: - Supporting Views
-
-    @ViewBuilder
-    private func trackingFirstSnippet(snippet: CodeSnippet) -> some View {
-        GeometryReader { geo in
-            Color.clear
-                .onChange(of: geo.frame(in: .global).minY) { _, newY in
-                    if snippet.id == snippetvm.filteredSnippets.first?.id {
-                        showOnTopButton = newY < 0
-                    }
-                }
-        }
-    }
-
-    @ViewBuilder
-    private func onTopButton(proxy: ScrollViewProxy) -> some View {
-        if showOnTopButton {
-            CircleStrokeButtonView(
-                iconName: "control",
-                iconFont: .title,
-                imageColorPrimary: Color.mycolor.myBlue,
-                widthIn: 55,
-                heightIn: 55
-            ) {
-                withAnimation {
-                    if let firstID = snippetvm.filteredSnippets.first?.id {
-                        proxy.scrollTo(firstID, anchor: .top)
-                    }
-                }
-            }
-        }
-    }
 
     private var allSnippetsIsEmpty: some View {
         ContentUnavailableView(

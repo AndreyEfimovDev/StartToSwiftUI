@@ -8,22 +8,14 @@
 import Foundation
 
 extension Date {
-    static func from(year: Int, month: Int, day: Int) -> Date? {
-        
-        // "yyyy-MM-dd'T'HH:mm:ss'Z'"
-        
-        var utcCalendar = Calendar.current
-        if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
-            utcCalendar.timeZone = utcTimeZone
-            
-        }
-        
+    
+    static func from(year: Int, month: Int, day: Int, hour: Int = 1, minute: Int = 8) -> Date? {
         var components = DateComponents()
         components.year = year
         components.month = month
         components.day = day
-        components.timeZone = utcCalendar.timeZone
-        
-        return utcCalendar.date(from: components)
+        components.hour = hour
+        components.minute = minute
+        return Calendar.current.date(from: components) ?? Date()
     }
 }

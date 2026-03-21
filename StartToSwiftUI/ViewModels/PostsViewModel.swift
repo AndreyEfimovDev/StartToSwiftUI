@@ -53,6 +53,7 @@ final class PostsViewModel: ObservableObject {
     }
     
     // MARK: - AppStorage
+    @AppStorage("shimmerWaveEnabled") var shimmerWaveEnabled = true
     @AppStorage("selectedTheme") var selectedTheme: Theme = .system
     
     // Filters

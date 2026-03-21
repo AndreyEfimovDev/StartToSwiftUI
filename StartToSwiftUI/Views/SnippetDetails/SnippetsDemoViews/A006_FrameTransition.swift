@@ -23,15 +23,15 @@ struct A006_FrameTransitionDemo: View {
             
             VStack(spacing: 0) {
                 
-                SegmentedOneLinePickerNotOptional(
+                A006_SegmentedOneLinePickerNotOptional(
                     selection: $selectedTab,
                     allItems: FrameTab.allCases,
                     titleForCase: { tab in
                         switch tab {
                         case .bottomBottom: return "↑↓"
-                        case .bottomRight:  return "↑→"
-                        case .rightRight:   return "←→"
-                        case .sliderStyle:       return "←←"
+                        case .bottomRight: return "↑→"
+                        case .rightRight: return "←→"
+                        case .sliderStyle: return "←←"
                         }
                     }
                 )
@@ -80,7 +80,7 @@ struct A006_FrameBottomTransition: View {
                 Spacer()
             }
             RoundedRectangle(cornerRadius: 30)
-                .fill(Color.mycolor.myRed.verticalGradient())
+                .fill(Color.mycolor.myRed.A006_verticalGradient())
                 .frame(height: height)
                 .offset(y: showView ? 0 : height)
                 .animation(.easeInOut(duration: 0.5), value: showView)
@@ -149,7 +149,7 @@ struct A006_FrameBottomRightTransition: View {
                     topLeading: 30,
                     topTrailing: 30
                 ))
-                .fill(Color.mycolor.myGreen.verticalGradient())
+                .fill(Color.mycolor.myGreen.A006_verticalGradient())
                 .frame(height: height)
                 .offset(offset)
             }
@@ -181,7 +181,7 @@ struct A006_FrameRightRightTransition: View {
                 Spacer()
             }
             RoundedRectangle(cornerRadius: 30)
-                .fill(Color.mycolor.myOrange.verticalGradient())
+                .fill(Color.mycolor.myOrange.A006_verticalGradient())
                 .frame(height: height)
                 .offset(x: showView ? 0 : UIScreen.main.bounds.width) // from right to left
                 .animation(.easeInOut(duration: 0.5), value: showView)
@@ -204,7 +204,7 @@ struct A006_FrameSliderTransition: View {
     init(height: CGFloat, width: CGFloat) {
             self.height = height
             self.width = width
-            _offset = State(initialValue: CGSize(width: 0, height: height))
+            _offset = State(initialValue: CGSize(width: width, height: 0))
         }
     
     var body: some View {
@@ -241,7 +241,7 @@ struct A006_FrameSliderTransition: View {
             
             if showView {
                 RoundedRectangle(cornerRadius: 30)
-                    .fill(Color.mycolor.myPurple.verticalGradient())
+                    .fill(Color.mycolor.myPurple.A006_verticalGradient())
                     .frame(height: height)
                     .offset(offset)
             }
@@ -251,56 +251,56 @@ struct A006_FrameSliderTransition: View {
     }
 }
 
-//extension Color {
-//    func verticalGradient() -> LinearGradient {
-//        LinearGradient(
-//            gradient: Gradient(stops: [
-//                .init(color: self.opacity(0.1), location: 0.0),
-//                .init(color: self.opacity(0.3), location: 0.3),
-//                .init(color: self.opacity(0.7), location: 0.7),
-//                .init(color: self.opacity(1.0), location: 1.0)
-//            ]),
-//            startPoint: .bottom,
-//            endPoint: .top
-//        )
-//    }
-//}
+extension Color {
+    func A006_verticalGradient() -> LinearGradient {
+        LinearGradient(
+            gradient: Gradient(stops: [
+                .init(color: self.opacity(0.1), location: 0.0),
+                .init(color: self.opacity(0.3), location: 0.3),
+                .init(color: self.opacity(0.7), location: 0.7),
+                .init(color: self.opacity(1.0), location: 1.0)
+            ]),
+            startPoint: .bottom,
+            endPoint: .top
+        )
+    }
+}
 
-//struct SegmentedOneLinePickerNotOptional<T: Hashable>: View {
-//    @Binding var selection: T
-//    let allItems: [T]
-//    let titleForCase: (T) -> String
-//    
-//    // Colors
-//    var selectedFont: Font = .footnote
-//    var selectedTextColor: Color = Color.mycolor.myBackground
-//    var unselectedTextColor: Color = Color.mycolor.myAccent
-//    var selectedBackground: Color = Color.mycolor.myButtonBGBlue
-//    var unselectedBackground: Color = .clear
-//    
-//    var body: some View {
-//        HStack(spacing: 0) {
-//            // Regular buttons for enum's values
-//            ForEach(allItems, id: \.self) { item in
-//                Button {
-//                    withAnimation(.easeInOut) {
-//                        selection = item
-//                    }
-//                } label: {
-//                    Text(titleForCase(item))
-//                        .font(selectedFont)
-//                        .foregroundColor(selection == item ? selectedTextColor : unselectedTextColor)
-//                        .frame(width: 60, height: 30)
-//                        .frame(maxWidth: .infinity)
-//                        .background(selection == item ? selectedBackground : unselectedBackground)
-//                }
-//            } //ForEach
-//        } // HStack
-//        .clipShape(RoundedRectangle(cornerRadius: 15))
-//        .overlay(
-//            RoundedRectangle(cornerRadius: 15)
-//                .stroke(selectedBackground, lineWidth: 1)
-//        )
-//    }
-//}
+struct A006_SegmentedOneLinePickerNotOptional<T: Hashable>: View {
+    @Binding var selection: T
+    let allItems: [T]
+    let titleForCase: (T) -> String
+    
+    // Colors
+    var selectedFont: Font = .footnote
+    var selectedTextColor: Color = Color.mycolor.myBackground
+    var unselectedTextColor: Color = Color.mycolor.myAccent
+    var selectedBackground: Color = Color.mycolor.myButtonBGBlue
+    var unselectedBackground: Color = .clear
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            // Regular buttons for enum's values
+            ForEach(allItems, id: \.self) { item in
+                Button {
+                    withAnimation(.easeInOut) {
+                        selection = item
+                    }
+                } label: {
+                    Text(titleForCase(item))
+                        .font(selectedFont)
+                        .foregroundColor(selection == item ? selectedTextColor : unselectedTextColor)
+                        .frame(width: 60, height: 30)
+                        .frame(maxWidth: .infinity)
+                        .background(selection == item ? selectedBackground : unselectedBackground)
+                }
+            } //ForEach
+        } // HStack
+        .clipShape(RoundedRectangle(cornerRadius: 15))
+        .overlay(
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(selectedBackground, lineWidth: 1)
+        )
+    }
+}
 

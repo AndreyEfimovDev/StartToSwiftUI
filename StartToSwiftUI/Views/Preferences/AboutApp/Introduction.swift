@@ -36,7 +36,7 @@ struct Introduction: View {
             Text("""
                First of all, thank you for choosing this app.
                
-               **StartToSwiftUI** is a personal learning management app for self-directed SwiftUI learners.
+               **StartToSwiftUI** is a personal learning system for self-directed SwiftUI learners.
                
                The app offers the following features:
                         

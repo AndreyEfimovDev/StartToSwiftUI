@@ -14,7 +14,10 @@ import Foundation
 
 struct SnippetsRepository {
     
-    static let allDemoCodeSnippet: [CodeSnippet] = [a001, a002, a003, a004, a005, a006]
+    static let allDemoCodeSnippet: [CodeSnippet] = [
+        a001, a002, a003, a004, a005, a006, a007, a008, a009, a010,
+        a011
+    ]
     
     // MARK: - A001 Progress indicators collection
     static let a001 = CodeSnippet(
@@ -622,7 +625,7 @@ struct SnippetsRepository {
         title: "Progress Circle with animated Checkmark",
         intro: "An interactive circular progress indicator that transforms into a spring-animated checkmark upon completion. Features multiple size/color variants, a progress slider, and auto-increment timer with pause/resume controls. Demonstrates advanced state management and coordinated animations.",
         thanks: nil,
-        date: Date.from(year: 2026, month: 3, day: 9) ?? Date(),
+        date: Date.from(year: 2026, month: 3, day: 9, hour: 2, minute: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
 
@@ -884,7 +887,7 @@ struct SnippetsRepository {
             * .variableColor.hideInactiveLayers — hides inactive segments
         """,
         thanks: nil,
-        date: Date.from(year: 2026, month: 3, day: 15) ?? Date(),
+        date: Date.from(year: 2026, month: 3, day: 15, hour: 2, minute: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
 
@@ -981,7 +984,7 @@ struct SnippetsRepository {
                     
                     VStack(spacing: 0) {
                         
-                        SegmentedOneLinePickerNotOptional(
+                        A006_SegmentedOneLinePickerNotOptional(
                             selection: $selectedTab,
                             allItems: FrameTab.allCases,
                             titleForCase: { tab in
@@ -1038,7 +1041,7 @@ struct SnippetsRepository {
                         Spacer()
                     }
                     RoundedRectangle(cornerRadius: 30)
-                        .fill(Color.mycolor.myRed.verticalGradient())
+                        .fill(Color.mycolor.myRed.A006_verticalGradient())
                         .frame(height: height)
                         .offset(y: showView ? 0 : height)
                         .animation(.easeInOut(duration: 0.5), value: showView)
@@ -1107,7 +1110,7 @@ struct SnippetsRepository {
                             topLeading: 30,
                             topTrailing: 30
                         ))
-                        .fill(Color.mycolor.myGreen.verticalGradient())
+                        .fill(Color.mycolor.myGreen.A006_verticalGradient())
                         .frame(height: height)
                         .offset(offset)
                     }
@@ -1139,7 +1142,7 @@ struct SnippetsRepository {
                         Spacer()
                     }
                     RoundedRectangle(cornerRadius: 30)
-                        .fill(Color.mycolor.myOrange.verticalGradient())
+                        .fill(Color.mycolor.myOrange.A006_verticalGradient())
                         .frame(height: height)
                         .offset(x: showView ? 0 : UIScreen.main.bounds.width) // from right to left
                         .animation(.easeInOut(duration: 0.5), value: showView)
@@ -1199,7 +1202,7 @@ struct SnippetsRepository {
                     
                     if showView {
                         RoundedRectangle(cornerRadius: 30)
-                            .fill(Color.mycolor.myPurple.verticalGradient())
+                            .fill(Color.mycolor.myPurple.A006_verticalGradient())
                             .frame(height: height)
                             .offset(offset)
                     }
@@ -1209,59 +1212,665 @@ struct SnippetsRepository {
             }
         }
 
-        //extension Color {
-        //    func verticalGradient() -> LinearGradient {
-        //        LinearGradient(
-        //            gradient: Gradient(stops: [
-        //                .init(color: self.opacity(0.1), location: 0.0),
-        //                .init(color: self.opacity(0.3), location: 0.3),
-        //                .init(color: self.opacity(0.7), location: 0.7),
-        //                .init(color: self.opacity(1.0), location: 1.0)
-        //            ]),
-        //            startPoint: .bottom,
-        //            endPoint: .top
-        //        )
-        //    }
-        //}
+        extension Color {
+            func A006_verticalGradient() -> LinearGradient {
+                LinearGradient(
+                    gradient: Gradient(stops: [
+                        .init(color: self.opacity(0.1), location: 0.0),
+                        .init(color: self.opacity(0.3), location: 0.3),
+                        .init(color: self.opacity(0.7), location: 0.7),
+                        .init(color: self.opacity(1.0), location: 1.0)
+                    ]),
+                    startPoint: .bottom,
+                    endPoint: .top
+                )
+            }
+        }
 
-        //struct SegmentedOneLinePickerNotOptional<T: Hashable>: View {
-        //    @Binding var selection: T
-        //    let allItems: [T]
-        //    let titleForCase: (T) -> String
-        //    
-        //    // Colors
-        //    var selectedFont: Font = .footnote
-        //    var selectedTextColor: Color = Color.mycolor.myBackground
-        //    var unselectedTextColor: Color = Color.mycolor.myAccent
-        //    var selectedBackground: Color = Color.mycolor.myButtonBGBlue
-        //    var unselectedBackground: Color = .clear
-        //    
-        //    var body: some View {
-        //        HStack(spacing: 0) {
-        //            // Regular buttons for enum's values
-        //            ForEach(allItems, id: \\.self) { item in
-        //                Button {
-        //                    withAnimation(.easeInOut) {
-        //                        selection = item
-        //                    }
-        //                } label: {
-        //                    Text(titleForCase(item))
-        //                        .font(selectedFont)
-        //                        .foregroundColor(selection == item ? selectedTextColor : unselectedTextColor)
-        //                        .frame(width: 60, height: 30)
-        //                        .frame(maxWidth: .infinity)
-        //                        .background(selection == item ? selectedBackground : unselectedBackground)
-        //                }
-        //            } //ForEach
-        //        } // HStack
-        //        .clipShape(RoundedRectangle(cornerRadius: 15))
-        //        .overlay(
-        //            RoundedRectangle(cornerRadius: 15)
-        //                .stroke(selectedBackground, lineWidth: 1)
-        //        )
-        //    }
-        //}
+        struct A006_SegmentedOneLinePickerNotOptional<T: Hashable>: View {
+            @Binding var selection: T
+            let allItems: [T]
+            let titleForCase: (T) -> String
+            
+            // Colors
+            var selectedFont: Font = .footnote
+            var selectedTextColor: Color = Color.mycolor.myBackground
+            var unselectedTextColor: Color = Color.mycolor.myAccent
+            var selectedBackground: Color = Color.mycolor.myButtonBGBlue
+            var unselectedBackground: Color = .clear
+            
+            var body: some View {
+                HStack(spacing: 0) {
+                    // Regular buttons for enum's values
+                    ForEach(allItems, id: \\.self) { item in
+                        Button {
+                            withAnimation(.easeInOut) {
+                                selection = item
+                            }
+                        } label: {
+                            Text(titleForCase(item))
+                                .font(selectedFont)
+                                .foregroundColor(selection == item ? selectedTextColor : unselectedTextColor)
+                                .frame(width: 60, height: 30)
+                                .frame(maxWidth: .infinity)
+                                .background(selection == item ? selectedBackground : unselectedBackground)
+                        }
+                    } //ForEach
+                } // HStack
+                .clipShape(RoundedRectangle(cornerRadius: 15))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(selectedBackground, lineWidth: 1)
+                )
+            }
+        }
         """
     )
 
+    // MARK: - A007 Shimmer Wave
+    static let a007 = CodeSnippet(
+        id: "A007",
+        category: Constants.mainCategory,
+        title: "Shimmer Wave",
+        intro: """
+        You can apply this code to highlight a row with a subtle wave to draw attention to it.
+        """,
+        thanks: nil,
+        date: Date.from(year: 2026, month: 3, day: 19) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        struct A007_ShimmerWaveDemo: View {
+            
+            let rowSamples: [A007_RowModel] = [
+                A007_RowModel(title: "Row Sample 1 (shimmered)", isShimmered: true),
+                A007_RowModel(title: "Row Sample 2 (not shimmered)", isShimmered: false),
+                A007_RowModel(title: "Row Sample 3 (shimmered)", isShimmered: true)
+            ]
+            
+            var body: some View {
+                List {
+                    ForEach(rowSamples) { row in
+                        A007_RowView(row: row)
+                            .a007_shimmerWave(enabled: row.isShimmered)
+                    }
+                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                }
+                .listStyle(.plain)
+            }
+        }
+
+        struct A007_RowModel: Identifiable {
+            let id: String = UUID().uuidString
+            let title: String
+            let isShimmered: Bool
+            
+            init(title: String, isShimmered: Bool) {
+                self.title = title
+                self.isShimmered = isShimmered
+            }
+        }
+
+        struct A007_RowView: View {
+            
+            let row: A007_RowModel
+
+            var body: some View {
+                HStack {
+                    Text(row.title)
+                        .padding(8)
+                        .padding(.horizontal, 8)
+                        .frame(height: 100)
+                    Spacer()
+                }
+            }
+        }
+
+
+        #Preview {
+            A007_ShimmerWaveDemo()
+        }
+
+        struct A007_ShimmerWave: ViewModifier {
+            
+            let enabled: Bool
+            
+            @State private var phase: CGFloat = 0
+            @State private var task: Task<Void, Never>?
+
+            func body(content: Content) -> some View {
+                if enabled {
+                    content
+                        .overlay(shimmerOverlay)
+                        .clipped()
+                        .task { await runLoop() }
+                } else {
+                    content
+                }
+            }
+
+            private var shimmerOverlay: some View {
+                GeometryReader { geo in
+                    let w = geo.size.width
+                    let bandWidth = w * 0.4
+
+                    LinearGradient(
+                        stops: [
+                            .init(color: .clear, location: 0),
+                            .init(color: Color.mycolor.myAccent.opacity(0.06), location: 0.25),
+                            .init(color: Color.mycolor.myAccent.opacity(0.22), location: 0.5),
+                            .init(color: Color.mycolor.myAccent.opacity(0.06), location: 0.75),
+                            .init(color: .clear, location: 1),
+                        ],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                    .frame(width: bandWidth)
+                    .offset(x: phase * (w + bandWidth) - bandWidth)
+                    .allowsHitTesting(false)
+                }
+            }
+
+            private func runLoop() async {
+                /*
+                 How the cycle works:
+                 ```
+                 phase = 0 (the band goes beyond the left edge)
+                     │
+                     ▼ withAnimation(.linear(duration: 1.2))
+                 phase = 1 (the band goes beyond the right edge)  ← 1.2 sec
+                     │
+                     ▼ Task.sleep(1.2) — waiting for the end of the animation
+                 phase = 0 (instant reset, the strip behind the screen)
+                     │
+                     ▼ Task.sleep(3.0) — silent pause
+                     └── repeat
+                 */
+                while !Task.isCancelled {
+                    withAnimation(.linear(duration: 1.2)) { phase = 1 }
+                    do {
+                        try await Task.sleep(for: .seconds(1.2)) // wait for the end of sweep
+                        phase = 0
+                        try await Task.sleep(for: .seconds(3.0)) // pause between animations
+                    } catch {
+                        break  // CancellationError → exit imideatelly
+                    }
+                }
+            }
+        }
+
+        extension View {
+            func a007_shimmerWave(enabled: Bool = true) -> some View {
+                modifier(A007_ShimmerWave(enabled: enabled))
+            }
+        }
+
+        """
+    )
+
+    // MARK: - A008 Expandable Section
+    static let a008 = CodeSnippet(
+        id: "A008",
+        category: Constants.mainCategory,
+        title: "Expandable Section",
+        intro: """
+        Restricts text to a specified height to save screen space. If the text does not fit, it allows it to be expanded. 
+        """,
+        thanks: nil,
+        date: Date.from(year: 2026, month: 3, day: 19, hour: 2, minute: 8) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        struct A008_ExpandableSectionDemo: View {
+            
+            private let demoText: String = \"""
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                
+                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                
+                Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida.
+                \"""
+            
+            var body: some View {
+                VStack {
+                    A008_ExpandableSection(
+                        title: "De Finibus Bonorum et Malorum",
+                        text: demoText,
+                        font: .body,
+                        lineSpacing: 0,
+                        linesLimit: 3
+                    )
+                    .foregroundStyle(Color.mycolor.myAccent)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(
+                        .thinMaterial,
+                        in: RoundedRectangle(cornerRadius: 15)
+                    )
+                    .padding()
+                    
+                    Spacer()
+                }
+            }
+        }
+
+        #Preview {
+            A008_ExpandableSectionDemo()
+        }
+
+        struct A008_ExpandableSection: View {
+            let title: String?
+            let text: String
+            let font: Font
+            let lineSpacing: CGFloat
+            let linesLimit: Int
+            
+            @State private var showFull = false
+            @State private var isTruncated = false
+            @State private var fullHeight: CGFloat = 0
+            @State private var limitedHeight: CGFloat = 0
+            
+            var body: some View {
+                VStack(spacing: 0) {
+                    if let title {
+                        Text(title)
+                            .font(.headline)
+                            .frame(height: 55)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .animation(nil, value: showFull)
+                    }
+                    
+                    Text(text)
+                        .font(font)
+                        .lineSpacing(lineSpacing)
+                        .lineLimit(nil) // always render the full text
+                        .frame(
+                            height: showFull
+                            ? max(fullHeight, 55)
+                            : max(limitedHeight, 55),
+                            alignment: .topLeading
+                        )
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .mask { // smooth text fading from the bottom
+                            LinearGradient(
+                                stops: [
+                                    .init(color: .black, location: 0.0),
+                                    .init(color: .black, location: showFull ? 1.0 : 0.75), //Adjust the starting point of attenuation - here is 0.75
+                                    .init(color: .clear, location: 1.0)
+                                ],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        }
+                        .animation(.smooth(duration: 0.5), value: showFull) // slow height change
+                        .overlay(alignment: .topLeading) {
+                            // Measure full height
+                            Text(text)
+                                .font(font)
+                                .lineSpacing(lineSpacing)
+                                .lineLimit(nil)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .hidden()
+                                .a008_getSize { fullHeight = $0.height }
+                            // Measure limited height
+                            Text(text)
+                                .font(font)
+                                .lineSpacing(lineSpacing)
+                                .lineLimit(linesLimit)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .hidden()
+                                .a008_getSize { limitedHeight = $0.height }
+                        }
+                        .onChange(of: fullHeight)    { isTruncated = fullHeight > limitedHeight }
+                        .onChange(of: limitedHeight) { isTruncated = fullHeight > limitedHeight }
+                    
+                    if isTruncated {
+                        HStack {
+                            Spacer()
+                            A008_MoreLessTextButton(showText: $showFull)
+                        }
+                    }
+                }
+            }
+        }
+
+        // MARK: - getSize
+
+        extension View {
+            func a008_getSize(onChange: @escaping (CGSize) -> Void) -> some View {
+                background(
+                    GeometryReader { geo in
+                        Color.clear
+                            .onAppear { onChange(geo.size) }
+                            .onChange(of: geo.size) { _, newSize in onChange(newSize) }
+                    }
+                )
+            }
+        }
+
+        struct A008_MoreLessTextButton: View {
+            
+            @Binding var showText: Bool
+            
+            var body: some View {
+                Button{
+                    showText.toggle()
+                } label: {
+                    Text(showText ? "less..." : "...more")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color.mycolor.myBlue)
+                        .frame(minWidth: 60, alignment: .leading)
+                }
+            }
+        }
+        """
+    )
+
+    // MARK: - A009 OnTop Button for ScrollView
+    static let a009 = CodeSnippet(
+        id: "A009",
+        category: Constants.mainCategory,
+        title: "OnTop Button for ScrollView",
+        intro: """
+        When there is a long list of items in a ScrollView, the OnTop Button helps the user jump back to the top with a single tap. The button appears automatically when the user scrolls down, and disappears when they are already at the top.
+        """,
+        thanks: nil,
+        date: Date.from(year: 2026, month: 3, day: 20) ?? Date(),
+        codeSnippet: """
+        Import SwiftUI
+
+        struct A009_OnToButtonDemo: View {
+            
+            @State private var showOnTopButton = false
+            
+            // the threshold is 100pt, you can adjust it to your row height
+            private let threshold: CGFloat = 100
+            
+            var body: some View {
+                ScrollViewReader { proxy in
+                    ZStack(alignment: .bottom) {
+                        ScrollView {
+                            ForEach(0..<30) { index in
+                                Text("Row \\(index)")
+                                    .font(.headline)
+                                    .foregroundStyle(Color.mycolor.myAccent)
+                                    .frame(height: 55)
+                                    .frame(maxWidth: .infinity)
+                                    .background(
+                                        .ultraThinMaterial,
+                                        in: RoundedRectangle(cornerRadius: 8)
+                                    )
+                                    .padding(.horizontal)
+                                    .id(index)
+                            }
+                        }
+                        .onScrollGeometryChange(for: CGFloat.self) { geometry in
+                            geometry.contentOffset.y
+                        } action: { _, newOffset in
+                            showOnTopButton = newOffset > threshold
+                        }
+                        
+                        if showOnTopButton {
+                            Button {
+                                withAnimation {
+                                    proxy.scrollTo(0, anchor: .top)
+                                }
+                            } label: {
+                                Image(systemName: "control")
+                                    .font(.title)
+                                    .foregroundStyle(Color.mycolor.myBlue)
+                                    .frame(width: 55, height: 55)
+                                    .background(.ultraThinMaterial, in: Circle())
+                            }
+                            .transition(.opacity.combined(with: .scale(scale: 0.5)))
+                            .padding(.bottom, 16)
+                        }
+                    }
+                }
+            }
+        }
+
+        #Preview {
+            A009_OnToButtonDemo()
+        }
+        """
+    )
+
+    // MARK: - A010 OnTop Button for ScrollView
+    static let a010 = CodeSnippet(
+        id: "A010",
+        category: Constants.mainCategory,
+        title: "Mask",
+        intro: """
+        .mask clips its content to the alpha channel of the mask view — transparent areas hide, opaque areas reveal. Here the same iconsView is used twice: as a base layer and as a mask, so the gradient overlay is visible only through the icon shapes.
+        """,
+        thanks: nil,
+        date: Date.from(year: 2026, month: 3, day: 20, hour: 2, minute: 8) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        // MARK: Mask Rating Example
+        /*
+         How .mask works here — dual use of a single view:
+
+         iconsView              ← base layer: gray stars
+             .overlay(
+                 fillOverlay    ← yellow rectangle, width grows with selectedRating
+                     .mask(
+                         iconsView  ← same stars used as alpha mask
+                     )
+             )
+
+         The yellow rectangle is visible only through the star shapes,
+         creating a "fill" effect as the rating increases.
+         Base stars remain visible underneath as a fallback (unselected state).
+         */
+
+        struct A010_MaskDemo: View {
+            
+            @State private var selectedRating: StarRating? = nil
+         
+            var body: some View {
+                ZStack {
+                    VStack(spacing: 24) {
+                        label
+                        iconsView
+                            .overlay(
+                                fillOverlay
+                                    .mask(iconsView)   // ← the key line
+                            )
+                            .animation(.easeInOut(duration: 0.25), value: selectedRating)
+                    }
+                    resetButton
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .padding()
+            }
+         
+            // MARK: - Subviews
+            
+            private var iconsView: some View {
+                HStack(spacing: 12) {
+                    ForEach(StarRating.allCases, id: \\.self) { rating in
+                        rating.icon
+                            .font(.system(size: 36))
+                            .foregroundStyle(Color.mycolor.myButtonBGGray)
+                            .onTapGesture {
+                                withAnimation(.easeInOut(duration: 0.25)) {
+                                    selectedRating = rating
+                                }
+                            }
+                    }
+                }
+            }
+
+            private var fillOverlay: some View {
+                GeometryReader { geo in
+                    let total    = CGFloat(StarRating.allCases.count)
+                    let selected = CGFloat(selectedRating.flatMap {
+                        StarRating.allCases.firstIndex(of: $0)
+                    }.map { $0 + 1 } ?? 0)
+
+                    ZStack(alignment: .leading) {
+                        LinearGradient(
+                            colors: [Color.mycolor.myYellow, Color.mycolor.myOrange],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                        .frame(width: selected / total * geo.size.width)
+                    }
+                }
+                .allowsHitTesting(false) // .overlay will not intercept taps instead of icons below it
+            }
+
+            @ViewBuilder
+            private var label: some View {
+                Group {
+                    if let rating = selectedRating {
+                        Text(rating.label)
+                            .transition(.scale.combined(with: .opacity))
+                    } else {
+                        Text("Tap a star")
+                    }
+                }
+                .font(.title)
+                .foregroundStyle(Color.mycolor.myAccent)
+            }
+            
+            private var resetButton: some View {
+                Group {
+                    if selectedRating != nil {
+                        Button {
+                            withAnimation(.easeInOut(duration: 0.25)) {
+                                selectedRating = nil
+                            }
+                        } label: {
+                            Text("Reset")
+                                .font(.title)
+                                .foregroundStyle(Color.mycolor.myRed)
+                                .padding(.horizontal)
+                                .frame(height: 55)
+                                .background(.ultraThinMaterial, in: .capsule)
+                        }
+                    }
+                }
+                .offset(y: 108)
+            }
+
+        }
+
+        private enum StarRating: Int, CaseIterable {
+            case good, great, excellent
+         
+            var icon: Image {
+                Image(systemName: "star.fill")
+            }
+
+            var label: String {
+                switch self {
+                case .good: "Good"
+                case .great: "Great"
+                case .excellent: "Excellent"
+                }
+            }
+        }
+
+
+        #Preview {
+            A010_MaskDemo()
+        }
+        """
+    )
+
+    // MARK: - A011 Expandble TextEditor
+    static let a011 = CodeSnippet(
+        id: "A011",
+        category: Constants.mainCategory,
+        title: "Expandble TextEditor",
+        intro: """
+        A convenient expandable version of a native TextEditor —
+        automatically grows in height as the user types, matching
+        the content size with no manual frame management.
+        Accepts a Font parameter with .body as default,
+        keeping the call site clean: ExpandableTextEditor(text: $text)
+        """,
+        thanks: nil,
+        date: Date.from(year: 2026, month: 3, day: 21) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        struct A011_ExpandbleTextEditorDemo: View {
+            
+            @Binding var text: String
+            var textFont: Font = .body //  default value → the parameter is optional
+            @State private var height: CGFloat = 38
+            
+            var body: some View {
+                ZStack(alignment: .leading) {
+                    Text(text.isEmpty ? " " : text)
+                        .font(textFont)
+                        .padding(8)
+                        .background(
+                            GeometryReader {
+                                Color.clear.preference(
+                                    key: TextEditorViewHeightKey.self,
+                                    value: $0.frame(in: .local).size.height
+                                )
+                            }
+                        )
+                        .hidden()
+                    
+                    TextEditor(text: $text)
+                        .font(textFont)
+                        .foregroundStyle(Color.mycolor.myAccent)
+                        .scrollContentBackground(.hidden)
+                        .frame(height: max(38, height))
+                        .padding(.horizontal, 3)
+                }
+                .background(.ultraThinMaterial.opacity(0.5))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 8)
+                        .strokeBorder(Color.mycolor.myBlue.opacity(0.5), lineWidth: 1)
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .onPreferenceChange(TextEditorViewHeightKey.self) { height = $0 }
+                .padding()
+            }
+        }
+
+        struct TextEditorViewHeightKey: PreferenceKey {
+            static var defaultValue: CGFloat { 0 }
+            static func reduce(value: inout Value, nextValue: () -> Value) {
+                value = max(value, nextValue())
+            }
+        }
+
+        /*
+         Application
+         *** without explicit font — .body by default
+         ExpandableTextEditor(text: $text)
+
+         *** with an explicit font
+         ExpandableTextEditor(text: $text, font: .callout)
+         ExpandableTextEditor(text: $text, font: .system(.body, design: .monospaced))
+         
+         */
+
+        #Preview {
+            struct PreviewWrapper: View {
+                @State private var text = ""
+                var body: some View {
+                    A011_ExpandbleTextEditorDemo(text: $text, textFont: .body)
+                        .padding()
+                }
+            }
+            return PreviewWrapper()
+        }
+
+        """
+    )
+
+
+    
 }

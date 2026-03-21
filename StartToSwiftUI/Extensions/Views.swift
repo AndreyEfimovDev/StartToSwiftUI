@@ -202,7 +202,7 @@ extension View {
         self
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()
-            .background(.thinMaterial,
+            .background(.ultraThinMaterial,
                 in: RoundedRectangle(cornerRadius: 15)
         )
     }

@@ -12,7 +12,7 @@ struct RatingSelectionView: View {
     
     @EnvironmentObject private var vm: PostsViewModel
     @State private var isShowingView: Bool = false
-
+    
     let completion: () -> Void
         
     init(completion: @escaping () -> Void) {
@@ -114,15 +114,22 @@ struct RatingSelectionView: View {
     
     private var raringOverlayView: some View {
         GeometryReader { geometry in
+
+            let total = CGFloat(PostRating.allCases.count)
+            let selected = CGFloat(vm.selectedRating?.value ?? 0)
+
             ZStack(alignment: .leading) {
                 Rectangle()
-//                    .foregroundColor(vm.selectedRating?.color ?? Color.mycolor.mySecondary)
-//                    .fill(LinearGradient(gradient: Gradient(colors: [Color.mycolor.myBlue.opacity(0.3), Color.mycolor.myBlue]), startPoint: .leading, endPoint: .trailing))
+                    .fill(LinearGradient(
+                        colors: [Color.mycolor.myBlue.opacity(0.4), Color.mycolor.myBlue],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    ))
                     .foregroundStyle(Color.mycolor.myBlue)
-                    .frame(width: CGFloat(vm.selectedRating?.value ?? 0) / 3 * geometry.size.width)
+                    .frame(width: selected / total * geometry.size.width)
             }
         }
-        .allowsHitTesting(false)
+        .allowsHitTesting(false) // .overlay will not intercept taps instead of icons below it
     }
     
     @ViewBuilder
