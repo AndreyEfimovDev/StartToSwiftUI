@@ -85,6 +85,7 @@ struct A006_FrameBottomTransition: View {
                 .offset(y: showView ? 0 : height)
                 .animation(.easeInOut(duration: 0.5), value: showView)
         }
+        .clipped()
         .padding(.top)
         .edgesIgnoringSafeArea(.bottom)
     }
@@ -154,6 +155,7 @@ struct A006_FrameBottomRightTransition: View {
                 .offset(offset)
             }
         }
+        .clipped()
         .padding(.top)
         .edgesIgnoringSafeArea(.bottom)
     }
@@ -186,6 +188,7 @@ struct A006_FrameRightRightTransition: View {
                 .offset(x: showView ? 0 : UIScreen.main.bounds.width) // from right to left
                 .animation(.easeInOut(duration: 0.5), value: showView)
         }
+        .clipped()
         .padding(.top)
         .edgesIgnoringSafeArea(.bottom)
     }
@@ -246,6 +249,7 @@ struct A006_FrameSliderTransition: View {
                     .offset(offset)
             }
         }
+        .clipped()
         .padding(.top)
         .edgesIgnoringSafeArea(.bottom)
     }

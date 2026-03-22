@@ -15,6 +15,18 @@ struct CodeSnippet: Identifiable, Hashable {
     let thanks: String?
     let date: Date
     let codeSnippet: String
+    var minOS: MinOS = .ios18
+    
+    enum MinOS: String {
+        case ios18 = "iOS 18+"
+        case ios26 = "iOS 26+"
+
+        var isAvailable: Bool {
+            if #available(iOS 26, *) { return true }
+            return self == .ios18
+        }
+    }
+    
 }
 
 

@@ -14,25 +14,37 @@
 import SwiftUI
 
 struct SnippetViewRegistry {
-
+    
     @ViewBuilder
     static func view(for snippet: CodeSnippet) -> some View {
         switch snippet.id {
+            // iOS 18 snippets
         case "A001": A001_ProgressViewIndicatorsDemoView(snippet: snippet)
         case "A002": A002_TrimIndicatorDemoView(snippet: snippet)
         case "A003": A003_ProgressCircleWithCheckmarkDemoView(snippet: snippet)
         case "A004": A004_ShrinkingButtonDemoView(snippet: snippet)
         case "A005": A005_SFSymbolEffectsDemoView(snippet: snippet)
         case "A006": A006_FrameTransitionDemoView(snippet: snippet)
+            
         case "A007": A007_ShimmerWaveDemoView(snippet: snippet)
         case "A008": A008_ExpandableSectionDemoView(snippet: snippet)
         case "A009": A009_OnToButtonDemoView(snippet: snippet)
         case "A010": A010_MaskDemoView(snippet: snippet)
         case "A011": A011_ExpandbleTextEditorDemoView(snippet: snippet)
-
             
-
+        case "A012": A012_BottomTabsContainerDemoView(snippet: snippet)
+            
+            // iOS 26 snippets
+        case "B001":
+            if #available(iOS 26, *) {
+                B001_GlassEffectDemoView(snippet: snippet)
+            } else {
+                SnippetUnavailableView(snippet: snippet)
+            }
+            
+            
         default: SnippetNoPreviewView(snippet: snippet)
         }
     }
 }
+

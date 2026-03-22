@@ -18,7 +18,7 @@ struct StartView: View {
     @EnvironmentObject private var coordinator: AppCoordinator
     
     @StateObject private var errorManager = ErrorManager.shared
-
+    
     // MARK: - States
     @State private var showLaunchView: Bool = true
     @State private var visibility: NavigationSplitViewVisibility = .doubleColumn
@@ -34,8 +34,6 @@ struct StartView: View {
         .asymmetric(
             insertion: .opacity.combined(with: .scale(scale: 0.97)),
             removal:   .opacity.combined(with: .scale(scale: 0.97))
-//            insertion: .move(edge: isGoingForward ? .trailing : .leading).combined(with: .opacity),
-//            removal:   .move(edge: isGoingForward ? .leading  : .trailing).combined(with: .opacity)
         )
     }
     
@@ -44,7 +42,7 @@ struct StartView: View {
         ZStack {
             if showLaunchView {
                 LaunchView() { showLaunchView = false }
-                .transition(.move(edge: .leading))
+                    .transition(.move(edge: .leading))
             } else {
                 mainContent
                     .alert("Error", isPresented: $errorManager.showAlert) {
@@ -59,7 +57,6 @@ struct StartView: View {
                         noticevm.loadNoticesFromSwiftData()
                         vm.updateWidgetData()
                         vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
-                        snippetsvm.isFiltersEmpty = snippetsvm.checkIfAllFiltersAreEmpty()
                         /* Clean dublicates if any. iCloud sync may create multiple appSyncStates on different devices. This function finds duplicates, merges their data into one (the oldest), and deletes the rest.
                          */
                         vm.appStateManager?.cleanupDuplicateAppStates()
@@ -111,7 +108,7 @@ struct StartView: View {
             }
         }
     }
-
+    
     // iPad: NavigationSplitView — same section switch in the primary column
     @ViewBuilder
     private var iPadContent: some View {
@@ -144,7 +141,7 @@ struct StartView: View {
             }
         }
     }
-
+    
     // Switches root view based on active section
     @ViewBuilder
     private var sectionRootView: some View {
@@ -155,20 +152,20 @@ struct StartView: View {
             SnippetsHomeView()
         }
     }
-
+    
     // MARK: - Destination View for routing
     @ViewBuilder
     private func destinationView(for route: AppRoute) -> some View {
         switch route {
-        // Posts
+            // Posts
         case .postDetails(let post):
             PostDetailsView(post: post)
-
-        // Snippets — push on main stack
+            
+            // Snippets — push on main stack
         case .snippetDetails(let snippet):
             SnippetDetailsView(snippet: snippet)
                 .environmentObject(snippetsvm)
-
+            
         default:
             EmptyView()
         }

@@ -11,30 +11,59 @@ struct WhatsNews {
 #warning("Add upated info before deployment to App Store")
     static let releases: [Release] = [
         Release(
+            release: "Release 1.7.0(10)",
+            news: [
+                News(
+                    title: "Added",
+                    newsText: """
+                    - Code snipets for iOS 26+ is available now
+                    """
+                ),
+                News(
+                    title: "New Code Snippets",
+                    newsText: """
+                    - A012: Bottom Tabs Container - expandable bottom tabs for additional actions, sliding up from the screen bottom
+                    """
+                ),
+                News(
+                    title: "Improved",
+                    newsText: """
+                    - 
+                    """
+                ),
+                News(
+                    title: "Fixed",
+                    newsText: """
+                    - 
+                    """
+                )
+            ]
+        ),
+        Release(
             release: "Release 1.6.0(9)",
             news: [
                 News(
                     title: "Added",
                     newsText: """
-                    - New materials now shimmer — freshly imported content is highlighted with a subtle wave so you never miss new study material
+                    - Shimmer effect: freshly imported content is highlighted with a subtle wave so you never miss new study material
                     - Shimmer wave can be toggled in Preferences
                     """
                 ),
                 News(
-                    title: "New Code Snippets:",
+                    title: "New Code Snippets",
                     newsText: """
                     - A007: Shimmer Wave — highlights a row with a subtle wave to draw attention to it
                     - A008: Expandable Section — a section is expandable from a fixed height to its full content height
                     - A009: OnToButton - it lets users jump back to the top of a long list with a single tap
                     - A010: Mask - a beautiful sample of Rating View using .mask
-                    - A011: Expandble TextEditor - auto-expanding TextEditor that grows with your content
+                    - A011: Expandable TextEditor - auto-expanding TextEditor that grows with your content
                     """
                 ),
                 News(
                     title: "Improved",
                     newsText: """
                     - Switching between Materials and Code Snippets now goes smoothly
-                    - Behaviour of 'Go to the Source' button when a url link is invalid 
+                    - Behaviour of 'View Source' button when a url link is invalid 
                     """
                 ),
                 News(
@@ -46,7 +75,6 @@ struct WhatsNews {
                 )
             ]
         ),
-
         Release(
             release: "Release 1.5.0(8)",
             news: [

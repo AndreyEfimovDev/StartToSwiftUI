@@ -12,6 +12,7 @@ struct SnippetRowView: View {
     let snippet: CodeSnippet
     let isFavorite: Bool
 
+    
     // MARK: - Computed Properties
 
     private var snippetDate: String {
@@ -21,6 +22,9 @@ struct SnippetRowView: View {
             parts.append("@\(thanks)")
         }
         return parts.joined(separator: "  ·  ")
+    }
+    private var iOSColor: Color {
+        snippet.minOS == .ios26 ? Color.mycolor.myPurple : Color.mycolor.myOrange
     }
         
     // MARK: - Body
@@ -64,11 +68,21 @@ struct SnippetRowView: View {
         }
     }
     private var statusRow: some View {
+        
         HStack(spacing: 3) {
             Text(snippet.id)
             Text("-")
-            Text(snippet.category)
+            Text(snippet.category + ", ")
             
+            Text(snippet.minOS.rawValue)
+                .font(.caption2)
+                .foregroundStyle(iOSColor)
+                .padding(.horizontal, 5)
+                .padding(.vertical, 2)
+                .overlay{
+                    Capsule()
+                        .stroke(iOSColor, lineWidth: 1)
+                }
             Spacer()
             if isFavorite {
                 Image(systemName: "star.fill")

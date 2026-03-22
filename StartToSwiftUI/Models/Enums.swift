@@ -202,9 +202,9 @@ enum PostRating: String, CaseIterable, Codable {
     
     var icon: Image {
         switch self {
-        case .good: return Image(systemName: "hand.thumbsup")
-        case .great: return Image(systemName: "star")
-        case .excellent: return Image(systemName: "crown")
+        case .good: return Image(systemName: "hand.thumbsup.fill")
+        case .great: return Image(systemName: "sparkles") // medal.fill medal.star.fill bolt.fill
+        case .excellent: return Image(systemName: "crown.fill")
         }
     }
     
