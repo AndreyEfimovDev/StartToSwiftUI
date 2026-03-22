@@ -29,7 +29,7 @@ struct SnippetsRepository {
         - Wave patterns — symmetrical & asymmetrical (sine-based)
         - Pulsing circle — scale & opacity
         - Jumping dots & letters — sequential bounce
-        - Rotating ring with trace and dinamyc gap - gradient & rotation
+        - Rotating ring with trace - gradient & rotation
         - Dynamic gap arc — winding effect with TimelineView & Canvas
         - Gauge progress — native gauges with percentage updates
         

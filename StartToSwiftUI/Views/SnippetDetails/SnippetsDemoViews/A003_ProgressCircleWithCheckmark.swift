@@ -97,7 +97,7 @@ struct A003_ProgressCircleWithCheckmarkView: View {
     
     // MARK: - Public API
     var progress: Double
-    var lineWidth: CGFloat = 5
+    var lineWidth: CGFloat = 90
     var size: CGFloat = 52
     var color: Color = Color.mycolor.myGreen
     
@@ -106,7 +106,7 @@ struct A003_ProgressCircleWithCheckmarkView: View {
     @State private var showCheckmark: Bool = false
     
     // MARK: - Private vars
-    private let gapStartDegrees: Double = 135 // initial gap
+    private let gapStartDegrees: Double = 5 // initial gap
     private var gapDegrees: Double {
         gapStartDegrees * (1.0 - min(progress, 1.0))
     }
@@ -150,7 +150,7 @@ struct A003_ProgressCircleWithCheckmarkView: View {
             .rotationEffect(.degrees(isSpinning ? 360 : 0))
             .animation(
                 isSpinning
-                ? .linear(duration: 1.0).repeatForever(autoreverses: false)
+                ? .linear(duration: 2.0).repeatForever(autoreverses: false)
                 : .easeOut(duration: 0.3),
                 value: isSpinning
             )
