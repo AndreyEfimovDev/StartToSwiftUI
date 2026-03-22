@@ -16,7 +16,7 @@ struct WhatsNews {
                 News(
                     title: "Added",
                     newsText: """
-                    - 
+                    - Code snipets for iOS 26+ is available now
                     """
                 ),
                 News(
