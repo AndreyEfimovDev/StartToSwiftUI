@@ -69,6 +69,16 @@ struct SnippetRowView: View {
             Text("-")
             Text(snippet.category)
             
+            if snippet.minOS == .ios26 {
+                Text(snippet.minOS.rawValue)
+                    .font(.caption2)
+                    .padding(.horizontal, 5)
+                    .padding(.vertical, 2)
+                    .background(Color.purple.opacity(0.2))
+                    .foregroundStyle(.purple)
+                    .clipShape(Capsule())
+            }
+
             Spacer()
             if isFavorite {
                 Image(systemName: "star.fill")

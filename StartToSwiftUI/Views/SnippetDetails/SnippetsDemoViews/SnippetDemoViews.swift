@@ -12,6 +12,27 @@
 
 import SwiftUI
 
+@available(iOS 26, *)
+struct B001_GlassEffectDemoView: View {
+    let snippet: CodeSnippet
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            
+            B001_LiquidGlassEffectDemo()
+                .frame(maxHeight: .infinity)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
+
 // MARK: - A012 Bottom Tabs Container
 struct A012_BottomTabsContainerDemoView: View {
     
@@ -345,83 +366,4 @@ struct A001_ProgressViewIndicatorsDemoView: View {
 }
 
 
-// MARK: - Shared helper views
-private struct SnippetDemoHeader: View {
-    let snippet: CodeSnippet
-    
-    @State private var showFullIntro: Bool = false
-    @State private var isTruncated = false
-    
-    private let introFont: Font = .subheadline
-    private let introLineSpacing: CGFloat = 0
-    private let introLinesLimit: Int = 3
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(snippet.title)
-                .font(.title2)
-                .fontWeight(.semibold)
-                .minimumScaleFactor(0.75)
-                .lineLimit(showFullIntro ? nil : 1)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
-            ExpandableSection(
-                title: nil,
-                text: snippet.intro,
-                font: .subheadline,
-                lineSpacing: 0,
-                linesLimit: 3
-            )
-        }
-        .cardBackground()
-    }
-}
 
-
-private struct SnippetThanksView: View {
-    let thanks: String
-    
-    var body: some View {
-        Text("Source: @\(thanks)")
-            .font(.caption)
-            .foregroundStyle(Color.mycolor.myAccent.opacity(0.5))
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            .padding(.horizontal, 4)
-    }
-}
-
-
-
-// MARK: - Previews
-//
-//#Preview("A001 Progress Indicators") {
-//    NavigationStack {
-//        A001_ProgressViewIndicatorsDemoView(snippet: SnippetsRepository.a001)
-//            .environmentObject(AppCoordinator())
-//    }
-//}
-//
-//#Preview("A002 Trim Indicator") {
-//    NavigationStack {
-//        A002_TrimIndicatorDemoView(snippet: SnippetsRepository.a002)
-//            .environmentObject(AppCoordinator())
-//    }
-//}
-//#Preview("A003 Progress Circle With Checkmark") {
-//    NavigationStack {
-//        A003_ProgressCircleWithCheckmarkDemoView(snippet: SnippetsRepository.a003)
-//            .environmentObject(AppCoordinator())
-//    }
-//}
-//#Preview("A004_Shrinking Button") {
-//    NavigationStack {
-//        A004_ShrinkingButtonDemoView(snippet: SnippetsRepository.a004)
-//            .environmentObject(AppCoordinator())
-//    }
-//}
-//#Preview("A005_Sheet Transition") {
-//    NavigationStack {
-//        A006_FrameTransitionDemoView(snippet: SnippetsRepository.a006)
-//            .environmentObject(AppCoordinator())
-//    }
-//}

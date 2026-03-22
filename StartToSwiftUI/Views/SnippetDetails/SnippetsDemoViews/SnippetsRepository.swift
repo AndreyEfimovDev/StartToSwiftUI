@@ -16,8 +16,28 @@ struct SnippetsRepository {
     
     static let allDemoCodeSnippet: [CodeSnippet] = [
         a001, a002, a003, a004, a005, a006, a007, a008, a009, a010,
-        a011, a012
+        a011, a012,b001
     ]
+    
+    static let b001 = CodeSnippet(
+        id: "B001",
+        category: "Glass UI",
+        title: "Liquid Glass Card",
+        intro: "Native glass material introduced in iOS 26...",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 6, day: 9) ?? Date(),
+        codeSnippet: """
+        VStack(spacing: 12) {
+            Image(systemName: "star.fill")
+                .font(.largeTitle)
+            Text("Glass Card")
+        }
+        .padding(24)
+        .glassEffect()
+        """,
+        minOS: .ios26               // ← единственное отличие от A-серии
+    )
+
     
     // MARK: - A012 Bottom Tabs Container
     static let a012 = CodeSnippet(
