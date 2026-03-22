@@ -11,7 +11,6 @@ import SwiftData
 struct RatingSelectionView: View {
     
     @EnvironmentObject private var vm: PostsViewModel
-    @State private var isShowingView: Bool = false
     
     let completion: () -> Void
         
@@ -52,12 +51,6 @@ struct RatingSelectionView: View {
         .background(
             .bar,
             in: RoundedRectangle(cornerRadius: 30))
-        .scaleEffect(isShowingView ? 1.0 : 0.5)
-        .opacity(isShowingView ? 1.0 : 0)
-        .animation(.bouncy(duration: 0.3), value: isShowingView)
-        .onAppear {
-            isShowingView = true
-        }
     }
     
     @ViewBuilder
@@ -87,9 +80,7 @@ struct RatingSelectionView: View {
             iconName: "xmark",
             isShownCircle: false
         ){
-            withAnimation {
                 completion()
-            }
         }
     }
     
@@ -121,7 +112,7 @@ struct RatingSelectionView: View {
             ZStack(alignment: .leading) {
                 Rectangle()
                     .fill(LinearGradient(
-                        colors: [Color.mycolor.myBlue.opacity(0.4), Color.mycolor.myBlue],
+                        colors: [Color.mycolor.myYellow, Color.mycolor.myRed],
                         startPoint: .leading,
                         endPoint: .trailing
                     ))

@@ -64,7 +64,6 @@
 		474638072F672F7800DF011B /* Actionsheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474638062F672F7800DF011B /* Actionsheet.swift */; };
 		474638092F6732EA00DF011B /* ContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474638082F6732EA00DF011B /* ContextMenu.swift */; };
 		4746380B2F67348E00DF011B /* AlignmentGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4746380A2F67348E00DF011B /* AlignmentGallery.swift */; };
-		4746380F2F6735CB00DF011B /* Mask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4746380E2F6735CB00DF011B /* Mask.swift */; };
 		474638112F67363300DF011B /* TimerPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474638102F67363300DF011B /* TimerPublisher.swift */; };
 		474638132F67382E00DF011B /* VisualEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474638122F67382E00DF011B /* VisualEffect.swift */; };
 		474BFB8D2F3C8DF2006E639B /* PostsViewModel+Filtering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474BFB8C2F3C8DF2006E639B /* PostsViewModel+Filtering.swift */; };
@@ -87,6 +86,7 @@
 		47586ED82F6D7C7F00C1E942 /* A010_Mask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47586ED72F6D7C7F00C1E942 /* A010_Mask.swift */; };
 		47586EDA2F6E9B8A00C1E942 /* A011_ExpandbleTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47586ED92F6E9B8A00C1E942 /* A011_ExpandbleTextEditor.swift */; };
 		47586EDC2F6EA9F100C1E942 /* ExpandbleTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47586EDB2F6EA9F100C1E942 /* ExpandbleTextEditor.swift */; };
+		47586EDE2F6F03B400C1E942 /* A012_BottomTabsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47586EDD2F6F03B400C1E942 /* A012_BottomTabsContainer.swift */; };
 		4759974D2E5C690B008E20F0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 475997492E5C690B008E20F0 /* Assets.xcassets */; };
 		4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */; };
 		475997512E5C6C9D008E20F0 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475997502E5C6C9D008E20F0 /* Post.swift */; };
@@ -119,6 +119,10 @@
 		4781D72E2ED716AE00B74F85 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4781D72D2ED716AE00B74F85 /* Bundle.swift */; };
 		47870FBA2ECC8628004175E4 /* Acknowledgements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47870FB92ECC8628004175E4 /* Acknowledgements.swift */; };
 		47870FBF2ECCD743004175E4 /* LinkButtonURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47870FBE2ECCD743004175E4 /* LinkButtonURL.swift */; };
+		478DBECB2F7000670097FC8A /* B001_LiquidGlassEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DBECA2F7000670097FC8A /* B001_LiquidGlassEffect.swift */; };
+		478DBECD2F70025A0097FC8A /* SnippetUnavailableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DBECC2F70025A0097FC8A /* SnippetUnavailableView.swift */; };
+		478DBED22F7002C30097FC8A /* SnippetDemoHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DBED12F7002C30097FC8A /* SnippetDemoHeader.swift */; };
+		478DBED42F7002F40097FC8A /* SnippetThanksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DBED32F7002F40097FC8A /* SnippetThanksView.swift */; };
 		4791CD862E6ED58B00687126 /* ShrinkIconButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CD852E6ED58B00687126 /* ShrinkIconButtonStyle.swift */; };
 		4791CDAF2E70187E00687126 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDAE2E70187E00687126 /* PreferencesView.swift */; };
 		4791CDBB2E702E9700687126 /* EraseAllPostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */; };
@@ -288,7 +292,6 @@
 		474638062F672F7800DF011B /* Actionsheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Actionsheet.swift; sourceTree = "<group>"; };
 		474638082F6732EA00DF011B /* ContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenu.swift; sourceTree = "<group>"; };
 		4746380A2F67348E00DF011B /* AlignmentGallery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignmentGallery.swift; sourceTree = "<group>"; };
-		4746380E2F6735CB00DF011B /* Mask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mask.swift; sourceTree = "<group>"; };
 		474638102F67363300DF011B /* TimerPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerPublisher.swift; sourceTree = "<group>"; };
 		474638122F67382E00DF011B /* VisualEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffect.swift; sourceTree = "<group>"; };
 		474BFB8C2F3C8DF2006E639B /* PostsViewModel+Filtering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+Filtering.swift"; sourceTree = "<group>"; };
@@ -312,6 +315,7 @@
 		47586ED72F6D7C7F00C1E942 /* A010_Mask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A010_Mask.swift; sourceTree = "<group>"; };
 		47586ED92F6E9B8A00C1E942 /* A011_ExpandbleTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A011_ExpandbleTextEditor.swift; sourceTree = "<group>"; };
 		47586EDB2F6EA9F100C1E942 /* ExpandbleTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandbleTextEditor.swift; sourceTree = "<group>"; };
+		47586EDD2F6F03B400C1E942 /* A012_BottomTabsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A012_BottomTabsContainer.swift; sourceTree = "<group>"; };
 		4759973B2E5C6901008E20F0 /* StartToSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StartToSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		475997492E5C690B008E20F0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartToSwiftUIApp.swift; sourceTree = "<group>"; };
@@ -346,6 +350,10 @@
 		4781D72D2ED716AE00B74F85 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
 		47870FB92ECC8628004175E4 /* Acknowledgements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Acknowledgements.swift; sourceTree = "<group>"; };
 		47870FBE2ECCD743004175E4 /* LinkButtonURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkButtonURL.swift; sourceTree = "<group>"; };
+		478DBECA2F7000670097FC8A /* B001_LiquidGlassEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = B001_LiquidGlassEffect.swift; sourceTree = "<group>"; };
+		478DBECC2F70025A0097FC8A /* SnippetUnavailableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetUnavailableView.swift; sourceTree = "<group>"; };
+		478DBED12F7002C30097FC8A /* SnippetDemoHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetDemoHeader.swift; sourceTree = "<group>"; };
+		478DBED32F7002F40097FC8A /* SnippetThanksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetThanksView.swift; sourceTree = "<group>"; };
 		4791CD852E6ED58B00687126 /* ShrinkIconButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShrinkIconButtonStyle.swift; sourceTree = "<group>"; };
 		4791CDAE2E70187E00687126 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		4791CDBA2E702E9700687126 /* EraseAllPostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EraseAllPostsView.swift; sourceTree = "<group>"; };
@@ -826,6 +834,16 @@
 			path = PostDrafts;
 			sourceTree = "<group>";
 		};
+		478DBECE2F70027C0097FC8A /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				478DBECC2F70025A0097FC8A /* SnippetUnavailableView.swift */,
+				478DBED12F7002C30097FC8A /* SnippetDemoHeader.swift */,
+				478DBED32F7002F40097FC8A /* SnippetThanksView.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		47A331792F27672D002883DD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -926,11 +944,12 @@
 				474245EA2F6C158A0053853A /* A009_OnToButton.swift */,
 				47586ED72F6D7C7F00C1E942 /* A010_Mask.swift */,
 				47586ED92F6E9B8A00C1E942 /* A011_ExpandbleTextEditor.swift */,
+				47586EDD2F6F03B400C1E942 /* A012_BottomTabsContainer.swift */,
+				478DBECA2F7000670097FC8A /* B001_LiquidGlassEffect.swift */,
 				474638002F66F27600DF011B /* AnimationTiming.swift */,
 				474638062F672F7800DF011B /* Actionsheet.swift */,
 				474638082F6732EA00DF011B /* ContextMenu.swift */,
 				4746380A2F67348E00DF011B /* AlignmentGallery.swift */,
-				4746380E2F6735CB00DF011B /* Mask.swift */,
 				474638102F67363300DF011B /* TimerPublisher.swift */,
 				474638122F67382E00DF011B /* VisualEffect.swift */,
 				470823E12F60545E00D8C073 /* A004_CardSwipTinder.swift */,
@@ -945,6 +964,7 @@
 				47B6E8112F5DFB3200EF7441 /* SnippetDetailsView.swift */,
 				47B6E8212F5EF33B00EF7441 /* SnippetFavouritesService.swift */,
 				47B6E81C2F5EB4BF00EF7441 /* SnippetsDemoViews */,
+				478DBECE2F70027C0097FC8A /* Helpers */,
 			);
 			path = SnippetDetails;
 			sourceTree = "<group>";
@@ -1018,7 +1038,6 @@
 				475997382E5C6901008E20F0 /* Frameworks */,
 				475997392E5C6901008E20F0 /* Resources */,
 				47A3318D2F276734002883DD /* Embed Foundation Extensions */,
-				4734368E2F4B3F8900CF00FA /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -1187,28 +1206,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		4734368E2F4B3F8900CF00FA /* Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "
-";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		475997372E5C6901008E20F0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -1220,6 +1217,7 @@
 				4765A76D2EAE5F7B00EACDF4 /* PostRowView.swift in Sources */,
 				47586EDC2F6EA9F100C1E942 /* ExpandbleTextEditor.swift in Sources */,
 				4751DAFA2F1640C300EC9C53 /* StatCard.swift in Sources */,
+				47586EDE2F6F03B400C1E942 /* A012_BottomTabsContainer.swift in Sources */,
 				4791CDFA2E744AD500687126 /* CapsuleButtonView.swift in Sources */,
 				4751DAF82F16409B00EC9C53 /* StatsCardsView.swift in Sources */,
 				47B465802E6867930059CCB7 /* MaterialsHomeView.swift in Sources */,
@@ -1246,11 +1244,11 @@
 				47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */,
 				47B6E8122F5DFB3200EF7441 /* SnippetDetailsView.swift in Sources */,
 				47586EDA2F6E9B8A00C1E942 /* A011_ExpandbleTextEditor.swift in Sources */,
-				4746380F2F6735CB00DF011B /* Mask.swift in Sources */,
 				47FF42592EE556DB0069D232 /* TapHandler.swift in Sources */,
 				475CC64D2F216B870099CAA6 /* DataSourcesProtocols.swift in Sources */,
 				4734367F2F4A345500CF00FA /* AppSyncStateModel.swift in Sources */,
 				474637FD2F6699F800DF011B /* A004_ShrinkingButton.swift in Sources */,
+				478DBECD2F70025A0097FC8A /* SnippetUnavailableView.swift in Sources */,
 				47AC34412F28D9F40023C7AF /* Functionality.swift in Sources */,
 				472E05CC2EDDC9BA005D774E /* KeyboardManager.swift in Sources */,
 				471DCBD02EBB88A400AFA5F4 /* CopyrightPolicy.swift in Sources */,
@@ -1259,6 +1257,7 @@
 				475997552E5C7F81008E20F0 /* PreviewData.swift in Sources */,
 				4773545B2E65C470001DEDEE /* CapsulesSegmentedPicker.swift in Sources */,
 				474638052F6726CC00DF011B /* A006_FrameTransition.swift in Sources */,
+				478DBED42F7002F40097FC8A /* SnippetThanksView.swift in Sources */,
 				471DCBDC2EBBC67500AFA5F4 /* Introduction.swift in Sources */,
 				4791CE002E747B2E00687126 /* HapticManager.swift in Sources */,
 				475CC6A02F22B0790099CAA6 /* CodablePost.swift in Sources */,
@@ -1323,6 +1322,7 @@
 				471BBFA12EC7251D0004AC45 /* NoticesViewModel.swift in Sources */,
 				4751DAF22F16402E00EC9C53 /* ProgressStats.swift in Sources */,
 				4791CE082E75AAB000687126 /* UnderlineSermentedPickerNotOptional.swift in Sources */,
+				478DBECB2F7000670097FC8A /* B001_LiquidGlassEffect.swift in Sources */,
 				47FF425B2EE578DD0069D232 /* ProgressSelectionView.swift in Sources */,
 				471DCBD22EBB89E000AFA5F4 /* FairUseNotice.swift in Sources */,
 				470823E22F60545E00D8C073 /* A004_CardSwipTinder.swift in Sources */,
@@ -1343,6 +1343,7 @@
 				471BBF9A2EC5F6170004AC45 /* PostDraftsView.swift in Sources */,
 				4791CDAF2E70187E00687126 /* PreferencesView.swift in Sources */,
 				47453E042EAB73A9000D2C16 /* Date.swift in Sources */,
+				478DBED22F7002C30097FC8A /* SnippetDemoHeader.swift in Sources */,
 				474638092F6732EA00DF011B /* ContextMenu.swift in Sources */,
 				47069F002EAFF6210082AE12 /* LaunchView.swift in Sources */,
 				471DCBD62EBBAD9700AFA5F4 /* AboutApp.swift in Sources */,
@@ -1565,7 +1566,7 @@
 				CODE_SIGN_ENTITLEMENTS = StartToSwiftUI/StartToSwiftUIDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -1588,7 +1589,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.0;
+				MARKETING_VERSION = 1.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = PELSH.StartToSwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1612,7 +1613,7 @@
 				CODE_SIGN_ENTITLEMENTS = StartToSwiftUI/StartToSwiftUIRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readwrite;
 				ENABLE_FILE_ACCESS_PICTURE_FOLDER = readwrite;
@@ -1647,7 +1648,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.0;
+				MARKETING_VERSION = 1.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = PELSH.StartToSwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1775,7 +1776,7 @@
 				CODE_SIGN_ENTITLEMENTS = StudyProgressWidgetExtensionDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StudyProgressWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StudyProgressWidget;
@@ -1786,7 +1787,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.5.0;
+				MARKETING_VERSION = 1.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = PELSH.StartToSwiftUI.StudyProgressWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1811,7 +1812,7 @@
 				CODE_SIGN_ENTITLEMENTS = StudyProgressWidgetExtensionRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StudyProgressWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StudyProgressWidget;
@@ -1822,7 +1823,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.5.0;
+				MARKETING_VERSION = 1.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = PELSH.StartToSwiftUI.StudyProgressWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

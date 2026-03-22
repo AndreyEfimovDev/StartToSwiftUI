@@ -13,7 +13,9 @@ struct MoreLessTextButton: View {
     
     var body: some View {
         Button{
-            showText.toggle()
+            withAnimation(.smooth(duration: 0.5)) {
+                showText.toggle()
+            }
         } label: {
             Text(showText ? "less... \(Image(systemName: "arrow.up.to.line.compact"))" : "...more \(Image(systemName: "arrow.down.to.line.compact"))")
                 .font(.subheadline)

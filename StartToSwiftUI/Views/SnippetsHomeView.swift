@@ -15,8 +15,6 @@ struct SnippetsHomeView: View {
     @EnvironmentObject private var noticevm: NoticesViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
 
-    private let hapticManager = HapticManager.shared
-
     // MARK: - Splash vars
 
     private var splashTheme: Splash.Theme {
@@ -25,8 +23,6 @@ struct SnippetsHomeView: View {
 
     // MARK: - States
     @State private var showOnTopButton = false
-    @State private var isFilterButtonPressed = false
-    @State private var hasSnippetsUpdate = false
 
     // MARK: - Body
     var body: some View {
@@ -50,10 +46,13 @@ struct SnippetsHomeView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar { SharedToolbarLeadingItems() }
-        .safeAreaInset(edge: .top) { searchBarStack }
-        .sheet(isPresented: $isFilterButtonPressed) { filtersSheet }
+        .safeAreaInset(edge: .top) {
+            SearchBarView(searchText: $snippetvm.searchText)
+                .padding(.horizontal)
+        }
         .task {
             FBAnalyticsManager.shared.logScreen(name: "SnippetsHomeView")
+            
         }
     }
 
@@ -61,7 +60,7 @@ struct SnippetsHomeView: View {
 
     private var listContent: some View {
         List {
-            ForEach(snippetvm.filteredSnippets) { snippet in
+            ForEach(snippetvm.filteredSnippets.sorted { $0.date > $1.date }) { snippet in
                 SnippetRowView(snippet: snippet, isFavorite: snippetvm.isFavorite(snippet))
                     .id(snippet.id)
                     .background(.black.opacity(0.001))
@@ -105,52 +104,6 @@ struct SnippetsHomeView: View {
             snippetvm.favoriteToggle(snippet)
         }
         .tint(snippetvm.isFavorite(snippet) ? FavoriteChoice.yes.color : FavoriteChoice.no.color)
-    }
-
-    // MARK: - Search Bar Stack
-    private var searchBarStack: some View {
-        HStack {
-            SearchBarView(searchText: $snippetvm.searchText)
-
-            // Fliters for posts
-            if !snippetvm.allSnippets.isEmpty {
-                CircleStrokeButtonView(
-                    iconName: "line.3.horizontal.decrease",
-                    isIconColorToChange: !snippetvm.isFiltersEmpty,
-                    isShownCircle: false
-                ) {
-                    isFilterButtonPressed.toggle()
-                    hapticManager.impact(style: .light)
-                }
-                .background(.ultraThinMaterial)
-                .clipShape(.circle)
-                .background(
-                    Circle()
-                        .stroke(Color.mycolor.mySecondary,lineWidth: 1)
-                )
-            }
-        }
-        .padding(.horizontal)
-    }
-
-    // MARK: - Filters Sheet
-
-    private var filtersSheet: some View {
-        SnippetsFilterView(isPresented: $isFilterButtonPressed)
-            .overlay(alignment: .top) {
-                if UIDevice.isiPhone {
-                    LinearGradient(
-                        colors: [Color.mycolor.mySecondary.opacity(0.1), Color.clear],
-                        startPoint: .top, endPoint: .bottom
-                    )
-                    .frame(height: 30)
-                    .clipShape(RoundedRectangle(cornerRadius: 30))
-                }
-            }
-            .presentationBackground(.ultraThinMaterial)
-            .presentationDetents([.height(400)])
-            .presentationDragIndicator(.visible)
-            .presentationCornerRadius(30)
     }
 
     // MARK: - Supporting Views

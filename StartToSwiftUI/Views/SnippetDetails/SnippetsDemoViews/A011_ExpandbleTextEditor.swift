@@ -41,8 +41,8 @@ struct A011_ExpandbleTextEditorDemo: View {
                 .strokeBorder(Color.mycolor.myBlue.opacity(0.5), lineWidth: 1)
         }
         .clipShape(RoundedRectangle(cornerRadius: 8))
+        .frame(maxWidth: 250)
         .onPreferenceChange(A011_TextEditorViewHeightKey.self) { height = $0 }
-        .padding()
     }
 }
 

@@ -50,9 +50,9 @@ struct Introduction: View {
                
                **LEARNING MANAGEMENT**:
                - Classify by type: Lesson, Course, Article, Bug, Other
+               - Organise by difficulty level: Beginner / Intermediate / Advanced
                - Track progress: 'Added' → 'Started' → 'Learnt' → 'Practiced'
                - Rate materials: Good / Great / Excellent
-               - Organise by difficulty level: Beginner / Intermediate / Advanced
                - Mark favourites for quick access
                
                **ANALYTICS & PROGRESS**:
@@ -73,9 +73,9 @@ struct Introduction: View {
 
                **YOUR DATA, YOUR CONTROL**:
                - Move materials to Deleted, then erase them permanently or restore back to Active anytime
-               - Share, backup, restore and delete materials as needed
+               - Share, backup, restore and erase materials as needed
 
-               For detailed functionality information, please visit the 'Functionality' section. 
+               For more details please visit the 'Functionality' section. 
                """)
             
             .multilineTextAlignment(.leading)

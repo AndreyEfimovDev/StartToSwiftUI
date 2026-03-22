@@ -34,9 +34,7 @@ struct ExpandableSection: View {
                 .lineSpacing(lineSpacing)
                 .lineLimit(nil) // always render the full text
                 .frame(
-                    height: showFull
-                    ? max(fullHeight, 55)
-                    : max(limitedHeight, 55),
+                    height: showFull ? max(fullHeight, 55) : max(limitedHeight, 55),
                     alignment: .topLeading
                 )
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -44,14 +42,13 @@ struct ExpandableSection: View {
                     LinearGradient(
                         stops: [
                             .init(color: .black, location: 0.0),
-                            .init(color: .black, location: showFull ? 1.0 : 0.75), //Adjust the starting point of attenuation - here is 0.75
+                            .init(color: .black, location: (showFull || !isTruncated) ? 1.0 : 0.75), //Adjust the starting point of attenuation - here is 0.75
                             .init(color: .clear, location: 1.0)
                         ],
                         startPoint: .top,
                         endPoint: .bottom
                     )
                 }
-                .animation(.smooth(duration: 0.5), value: showFull) // slow height change
                 .overlay(alignment: .topLeading) {
                     // Measure full height
                     Text(text)
