@@ -44,24 +44,19 @@ struct PostDetailsView: View {
     
     var body: some View {
         GeometryReader { proxy in
-            VStack {
-                postContent(for: post)
-                    .navigationBarBackButtonHidden(true)
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar { toolbar(for: post) }
-            }
-            .safeAreaInset(edge: .bottom) {
-                    bottomTabsContainer
-            }
-            .ignoresSafeArea(edges: .bottom)
-            .onAppear {
-                FBAnalyticsManager.shared.logScreen(name: "PostDetailsView")
-                updateWidths(for: proxy.size.width)
-            }
-            .onChange(of: proxy.size.width) { _, newValue in
-                updateWidths(for: newValue)
-            }
-
+            postContent(for: post)
+                .navigationBarBackButtonHidden(true)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar { toolbar(for: post) }
+                .safeAreaInset(edge: .bottom) { bottomTabsContainer }
+                .ignoresSafeArea(edges: .bottom)
+                .onAppear {
+                    FBAnalyticsManager.shared.logScreen(name: "PostDetailsView")
+                    updateWidths(for: proxy.size.width)
+                }
+                .onChange(of: proxy.size.width) { _, newValue in
+                    updateWidths(for: newValue)
+                }
         }
     }
     

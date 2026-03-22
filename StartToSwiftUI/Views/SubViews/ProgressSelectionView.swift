@@ -11,7 +11,6 @@ import SwiftData
 struct ProgressSelectionView: View {
     
     @EnvironmentObject private var vm: PostsViewModel
-    @State private var isShowingView: Bool = false
     
     let completion: () -> Void
     
@@ -52,12 +51,6 @@ struct ProgressSelectionView: View {
         .background(
             .bar,
             in: RoundedRectangle(cornerRadius: 30))
-        .scaleEffect(isShowingView ? 1.0 : 0.5)
-        .opacity(isShowingView ? 1.0 : 0)
-        .animation(.bouncy(duration: 0.3), value: isShowingView)
-        .onAppear {
-            isShowingView = true
-        }
     }
     
     @ViewBuilder
@@ -76,7 +69,7 @@ struct ProgressSelectionView: View {
                 .lineLimit(1)
         }
         .foregroundStyle(Color.mycolor.myAccent)
-        .frame(maxWidth: .infinity/*, alignment: .center*/)
+        .frame(maxWidth: .infinity)
         .padding(.top)
 
     }
@@ -124,9 +117,7 @@ struct ProgressSelectionView: View {
             iconName: "xmark",
             isShownCircle: false
         ){
-            withAnimation {
                 completion()
-            }
         }
     }
 
