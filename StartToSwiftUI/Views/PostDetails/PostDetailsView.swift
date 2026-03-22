@@ -23,8 +23,8 @@ struct PostDetailsView: View {
     @State private var zIndexBarProgress: Double = 0
     
     @State private var maxHeight: CGFloat = 350
-    @State private var tabWidth: CGFloat = 0
-    @State private var expandedWidth: CGFloat = 0
+    @State private var tabWidth: CGFloat = UIScreen.main.bounds.width * 0.55
+    @State private var expandedWidth: CGFloat = UIScreen.main.bounds.width
     
     // MARK: - Constants
     let post: Post
@@ -36,7 +36,6 @@ struct PostDetailsView: View {
             post.favoriteChoice == .yes
     }
     
-
     private var minHeight: CGFloat {
         UIDevice.isiPad ? 60 : 75
     }
@@ -51,6 +50,10 @@ struct PostDetailsView: View {
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar { toolbar(for: post) }
             }
+            .safeAreaInset(edge: .bottom) {
+                    bottomTabsContainer
+            }
+            .ignoresSafeArea(edges: .bottom)
             .onAppear {
                 FBAnalyticsManager.shared.logScreen(name: "PostDetailsView")
                 updateWidths(for: proxy.size.width)
@@ -58,10 +61,7 @@ struct PostDetailsView: View {
             .onChange(of: proxy.size.width) { _, newValue in
                 updateWidths(for: newValue)
             }
-            .safeAreaInset(edge: .bottom) {
-                    bottomTabsContainer
-            }
-            .ignoresSafeArea(edges: .bottom)
+
         }
     }
     
@@ -188,8 +188,7 @@ struct PostDetailsView: View {
         }
         
         ToolbarItemGroup(placement: .topBarTrailing) {
-            
-            // ⭐ Favourite
+            // Favourite
             CircleStrokeButtonView(
                 iconName: isFavorite ? "star.fill" : "star",
                 iconFont: .headline,
@@ -201,7 +200,7 @@ struct PostDetailsView: View {
                 vm.favoriteToggle(post)
                 hapticManager.impact(style: .light)
             }
-            
+            // Edit
             CircleStrokeButtonView(
                 iconName: "pencil",
                 isShownCircle: false
@@ -215,15 +214,14 @@ struct PostDetailsView: View {
     
     private var bottomTabsContainer: some View {
         ZStack {
-            // Study Progress Selection Bar
-            selectionTabView (
+            selectionTabView(
                 icon: "hare",
                 color: Color.mycolor.myGreen,
                 alignment: .leading,
                 isExpanded: showProgressTab,
                 otherIsExpanded: showRatingTab,
                 zIndexTab: zIndexBarProgress
-            ){
+            ) {
                 ProgressSelectionView { showProgressTab = false }
             } onTap: {
                 maxHeight = 310
@@ -231,16 +229,16 @@ struct PostDetailsView: View {
                 zIndexBarRating = 0
                 showProgressTab.toggle()
             }
-            // Rating Selection Bar
-            selectionTabView (
+
+            selectionTabView(
                 icon: "star",
                 color: Color.mycolor.myYellow,
                 alignment: .trailing,
                 isExpanded: showRatingTab,
                 otherIsExpanded: showProgressTab,
                 zIndexTab: zIndexBarRating
-            ){
-                RatingSelectionView { showRatingTab = false}
+            ) {
+                RatingSelectionView { showRatingTab = false }
             } onTap: {
                 maxHeight = 350
                 zIndexBarRating = 1
@@ -249,7 +247,7 @@ struct PostDetailsView: View {
             }
         }
     }
-    
+
     @ViewBuilder
     private func selectionTabView<Content: View>(
         icon: String,
@@ -261,12 +259,12 @@ struct PostDetailsView: View {
         @ViewBuilder content: () -> Content,
         onTap: @escaping () -> Void
     ) -> some View {
-        ZStack (alignment: .top) {
+        ZStack(alignment: .top) {
             if UIDevice.isiPad {
                 RoundedRectangle(cornerRadius: 30)
                     .fill(.bar)
                     .strokeBorder(
-                        (isExpanded ? .clear : Color.mycolor.mySecondary.opacity(0.5)),
+                        Color.mycolor.mySecondary.opacity(0.5),
                         lineWidth: 1,
                         antialiased: true
                     )
@@ -280,25 +278,34 @@ struct PostDetailsView: View {
                 )
                 .fill(.bar)
                 .strokeBorder(
-                    (isExpanded ? .clear : Color.mycolor.mySecondary.opacity(0.5)),
+                    Color.mycolor.mySecondary.opacity(0.5),
                     lineWidth: 1,
                     antialiased: true
                 )
             }
-            
+
+            // asymmetric transition — instant removal, delayed insertion
             if isExpanded {
                 content()
+                    .transition(.asymmetric(
+                        insertion: .opacity.animation(.smooth(duration: 0.2).delay(0.15)),
+                        removal:   .opacity.animation(.smooth(duration: 0.05))
+                    ))
             } else {
                 tabButton(icon: icon, onTap: onTap)
+                    .transition(.asymmetric(
+                        insertion: .opacity.animation(.smooth(duration: 0.15).delay(0.2)),
+                        removal:   .opacity.animation(.smooth(duration: 0.05))
+                    ))
             }
         }
         .frame(height: isExpanded ? maxHeight : minHeight)
-        .frame(maxWidth: isExpanded ? expandedWidth : tabWidth)
+        .frame(minWidth: 80, maxWidth: isExpanded ? expandedWidth : tabWidth)
         .frame(maxWidth: .infinity, alignment: alignment)
         .padding(UIDevice.isiPad ? 8 : 0)
         .zIndex(zIndexTab)
         .offset(y: otherIsExpanded && !isExpanded ? maxHeight : 0)
-        .animation(.easeInOut(duration: 0), value: isExpanded)
+        .animation(.smooth(duration: 0.25), value: isExpanded)
     }
     
     private func tabButton(icon: String, onTap: @escaping () -> Void) -> some View {

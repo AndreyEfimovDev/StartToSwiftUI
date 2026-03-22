@@ -148,17 +148,18 @@ struct A012_BottomTabsContainer: View {
                     antialiased: true
                 )
             }
+            // asymmetric transition — instant removal, delayed insertion
             if isExpanded {
                 content()
                     .transition(.asymmetric(
                         insertion: .opacity.animation(.smooth(duration: 0.2).delay(0.15)),
-                        removal:   .opacity.animation(.smooth(duration: 0.05)) // ✅ исчезает мгновенно
+                        removal:   .opacity.animation(.smooth(duration: 0.05))
                     ))
             } else {
                 tabButton(icon: icon, onTap: onTap)
                     .transition(.asymmetric(
                         insertion: .opacity.animation(.smooth(duration: 0.15).delay(0.2)),
-                        removal:   .opacity.animation(.smooth(duration: 0.05)) // ✅ исчезает мгновенно
+                        removal:   .opacity.animation(.smooth(duration: 0.05))
                     ))
             }
 
