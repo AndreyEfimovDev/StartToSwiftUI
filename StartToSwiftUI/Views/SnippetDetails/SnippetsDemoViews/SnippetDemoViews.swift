@@ -12,17 +12,35 @@
 
 import SwiftUI
 
-
-struct PreviewWrapper: View {
-    @State private var text = ""
+// MARK: - A012 Bottom Tabs Container
+struct A012_BottomTabsContainerDemoView: View {
+    
+    let snippet: CodeSnippet
+    
     var body: some View {
-        A011_ExpandbleTextEditorDemo(text: $text)
-            .padding()
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                    
+                    if let thanks = snippet.thanks, !thanks.isEmpty {
+                        SnippetThanksView(thanks: thanks)
+                            .padding(.horizontal)
+                    }
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            
+            A012_BottomTabsContainerDemo()
+                .frame(maxHeight: .infinity)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
     }
 }
 
 
-// MARK: - A009 OnTo Button DemoView
+// MARK: - A011 Expandble Text Editor
 struct A011_ExpandbleTextEditorDemoView: View {
     
     @State private var text = ""
@@ -49,7 +67,8 @@ struct A011_ExpandbleTextEditorDemoView: View {
         .foregroundStyle(Color.mycolor.myAccent)
     }
 }
-// MARK: - A009 OnTo Button DemoView
+
+// MARK: - A010 Mask DemoView
 struct A010_MaskDemoView: View {
     
     let snippet: CodeSnippet

@@ -287,6 +287,7 @@ struct PostDetailsView: View {
             // asymmetric transition — instant removal, delayed insertion
             if isExpanded {
                 content()
+                    .padding(1) // make a space for stroke when expanded
                     .transition(.asymmetric(
                         insertion: .opacity.animation(.smooth(duration: 0.2).delay(0.15)),
                         removal:   .opacity.animation(.smooth(duration: 0.05))

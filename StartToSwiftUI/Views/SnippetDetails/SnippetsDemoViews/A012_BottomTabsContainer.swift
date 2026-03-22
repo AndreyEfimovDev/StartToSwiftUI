@@ -6,24 +6,10 @@
 //
 
 import SwiftUI
-/*
- Layout:
 
- .safeAreaInset вместо ZStack — правильный hit-testing
- .ignoresSafeArea(.container, edges: .bottom) на контенте — не двигается при открытии таба
- UIScreen.main.bounds.width * 0.55 — кнопки тапабельны сразу, не ждут onAppear
-
- Анимация:
-
- Одна .animation(.smooth(duration: 0.25), value: isExpanded) на selectionTabView управляет frame
- .transition(.asymmetric(...)) с анимацией прямо внутри — переопределяет родительский тайминг для opacity отдельно для insertion и removal
- removal: .opacity.animation(.smooth(duration: 0.05)) — мгновенное исчезновение контента при закрытии
-
- Ключевой инсайт: .asymmetric с анимацией внутри transition имеет приоритет над родительским .animation — это позволяет задать разный тайминг для разных направлений независимо от контекста.
- */
-struct A012_BottomTabsContainer: View {
+struct A012_BottomTabsContainerDemo: View {
     
-    // MARK: - State
+    // MARK: - States
     @State private var showRatingTab: Bool = false
     @State private var showProgressTab: Bool = false
     @State private var zIndexBarRating: Double = 0
@@ -50,8 +36,8 @@ struct A012_BottomTabsContainer: View {
         GeometryReader { proxy in
             Text("Main View")
                 .font(.largeTitle)
+                .foregroundColor(Color.mycolor.myBlue)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                // ✅ контент игнорирует сжатие от safeAreaInset — не двигается при открытии таба
                 .ignoresSafeArea(.container, edges: .bottom)
                 .safeAreaInset(edge: .bottom) {
                     bottomTabsContainer
@@ -77,12 +63,7 @@ struct A012_BottomTabsContainer: View {
                 otherIsExpanded: showRatingTab,
                 zIndexTab: zIndexBarProgress
             ) {
-                VStack {
-                    Text("Tab 1")
-                        .font(.headline)
-                    Button("Close") { showProgressTab = false }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                tabView(name: "Tab 1") { showProgressTab = false }
             } onTap: {
                 maxHeight = 300
                 zIndexBarProgress = 1
@@ -98,12 +79,7 @@ struct A012_BottomTabsContainer: View {
                 otherIsExpanded: showProgressTab,
                 zIndexTab: zIndexBarRating
             ) {
-                VStack {
-                    Text("Tab 2")
-                        .font(.headline)
-                    Button("Close") { showRatingTab = false }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                tabView(name: "Tab 2") { showRatingTab = false }
             } onTap: {
                 maxHeight = 300
                 zIndexBarRating = 1
@@ -116,7 +92,7 @@ struct A012_BottomTabsContainer: View {
     @ViewBuilder
     private func selectionTabView<Content: View>(
         icon: String,
-        color: Color,
+        color: Color, // for use in a certain tab if needed
         alignment: Alignment,
         isExpanded: Bool,
         otherIsExpanded: Bool,
@@ -151,6 +127,7 @@ struct A012_BottomTabsContainer: View {
             // asymmetric transition — instant removal, delayed insertion
             if isExpanded {
                 content()
+                    .padding(1) // make a space for stroke when expanded
                     .transition(.asymmetric(
                         insertion: .opacity.animation(.smooth(duration: 0.2).delay(0.15)),
                         removal:   .opacity.animation(.smooth(duration: 0.05))
@@ -162,7 +139,6 @@ struct A012_BottomTabsContainer: View {
                         removal:   .opacity.animation(.smooth(duration: 0.05))
                     ))
             }
-
         }
         .frame(height: isExpanded ? maxHeight : minHeight)
         .frame(minWidth: 80, maxWidth: isExpanded ? expandedWidth : tabWidth)
@@ -177,12 +153,11 @@ struct A012_BottomTabsContainer: View {
         Button(action: onTap) {
             VStack(spacing: 0) {
                 Image(systemName: "control")
-                    .font(.headline)
                 Image(systemName: icon)
-                    .imageScale(.small)
                     .padding(8)
             }
-            .foregroundColor(Color.mycolor.mySecondary)
+            .font(.headline)
+            .foregroundColor(Color.mycolor.myBlue)
             .padding(.top, 4)
             .padding(.horizontal, 30)
             .background(.black.opacity(0.001))
@@ -191,6 +166,21 @@ struct A012_BottomTabsContainer: View {
     }
     
     // MARK: - Helpers
+    private func tabView(
+        name: String,
+        completion: @escaping () -> ()
+    ) -> some View {
+        VStack {
+            Text(name)
+                .font(.headline)
+            Button("Close") { completion() }
+                .foregroundStyle(Color.mycolor.myBlue)
+                .padding()
+                .background(.black.opacity(0.001))
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
     private func updateWidths(for width: CGFloat) {
         tabWidth = width * widthRatio
         expandedWidth = width
@@ -198,5 +188,5 @@ struct A012_BottomTabsContainer: View {
 }
 
 #Preview {
-    A012_BottomTabsContainer()
+    A012_BottomTabsContainerDemo()
 }
