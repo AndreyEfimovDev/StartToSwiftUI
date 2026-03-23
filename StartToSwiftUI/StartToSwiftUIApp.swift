@@ -164,10 +164,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         didFailToRegisterForRemoteNotificationsWithError error: Error) {
         log("🔔 APNs registration failed: \(error)", level: .error)
     }
-    
-//    func applicationDidBecomeActive(_ application: UIApplication) {}
-//    
-//    func applicationWillResignActive(_ application: UIApplication) {}
 }
 
 // MARK: - UNUserNotificationCenterDelegate
