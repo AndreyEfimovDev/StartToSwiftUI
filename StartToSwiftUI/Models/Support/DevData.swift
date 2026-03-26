@@ -13,20 +13,35 @@ struct DevData {
 
         
 // MARK: NEW
-        
         Post(
-            title: "Swift for Complete Beginners",
+            title: "",
             intro: """
-                 All the core concepts required to get started building apps with Swift and SwiftUI.
-                 """,
-            author: "Paul Hudson",
+                """,
+            author: "",
             postType: .course,
-            urlString: "https://www.youtube.com/playlist?list=PLuoeXyslFTuaYpVr3S9wG6PkIvYn_yHbg",
+            urlString: "",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 10, day: 14),
-            origin: .cloudNew,
-            date: Date.from(year: 2026, month: 02, day: 06) ?? Date()
+            postDate: Date.from(year: 2021, month: 6, day: 21),
+            studyLevel: .advanced,
+            origin: .cloudNew
         ),
+
+        // MARK: 2026-03-26
+//
+//        Post(
+//            title: "SwiftUI Advanced Learning",
+//            intro: """
+//                Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
+//                """,
+//            author: "Nick Sarno",
+//            postType: .course,
+//            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
+//            postPlatform: .youtube,
+//            postDate: Date.from(year: 2021, month: 6, day: 21),
+//            studyLevel: .advanced,
+//            origin: .cloudNew
+//        ),
+
         
         // MARK: 2026-03-08
 //        Post(
