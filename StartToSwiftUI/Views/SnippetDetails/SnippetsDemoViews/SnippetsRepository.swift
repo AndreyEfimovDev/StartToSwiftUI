@@ -245,7 +245,8 @@ struct SnippetsRepository {
         title: "Expandble TextEditor",
         intro: """
         A convenient expandable version of a native TextEditor — automatically grows in height as the user types, matching the content size with no manual frame management.
-        Accepts a Font parameter with .body as default, keeping the call site clean: ExpandableTextEditor(text: $text)
+        Accepts a Font parameter with .body as default, keeping the call site clean: ExpandableTextEditor(text: $text).
+        Please note that in iOS 16, the new axis: .vertical property is built into TextField. It does the same as ExpandableTextEditor — the field's height increases as you type. It is a native feature short and clear, without GeometryReader or PreferenceKey.
         """,
         thanks: nil,
         date: Date.from(year: 2026, month: 3, day: 21) ?? Date(),
