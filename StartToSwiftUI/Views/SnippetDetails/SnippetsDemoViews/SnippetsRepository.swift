@@ -16,16 +16,166 @@ struct SnippetsRepository {
     
     static let allDemoCodeSnippet: [CodeSnippet] = [
         a001, a002, a003, a004, a005, a006, a007, a008, a009, a010,
-        a011, a012,b001
+        a011, a012, b001, a013, a014
     ]
+    
+    static let a014 = CodeSnippet(
+        id: "A014",
+        title: "Animation Types",
+        intro: "Demonstrates the vary of transition in accordace to the animation type.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 3, day: 31, hour: 2, minute: 8) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+        
+        struct A014_AnimationTypeDemo: View {
+            @State var isAnimating: Bool = false
+            
+            private let timing: Double = 3
+            private let circleSize: CGFloat = 11
+            private let fillColour: Color = Color.mycolor.myBlue.opacity(0.9)
+            private let tracesCount = 21
+            private let delayStep = 0.1
+            
+            var body: some View {
+                VStack {
+                    circleViewWithTrace("spring:", animation: .spring(duration: timing))
+                    circleViewWithTrace("linear:", animation: .linear(duration: timing))
+                    circleViewWithTrace("easeInOut:", animation: .easeInOut(duration: timing))
+                    circleViewWithTrace("easeIn:", animation: .easeIn(duration: timing))
+                    circleViewWithTrace("easeOut:", animation: .easeOut(duration: timing))
+                    circleViewWithTrace("bouncy:", animation: .bouncy(duration: timing))
+                    circleViewWithTrace("snappy:", animation: .snappy(duration: timing))
+                }
+                .foregroundStyle(Color.mycolor.myAccent)
+                .padding()
+                
+                Button("Animate") {
+                    isAnimating.toggle()
+                }
+                .font(.headline)
+                .foregroundStyle(Color.mycolor.myBlue)
+                .padding(8)
+                .background(.ultraThinMaterial, in: .capsule)
+                .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
+                .padding()
+            }
+            
+            private func circleViewWithTrace(_ title: String, animation: Animation) -> some View {
+                HStack {
+                    Text(title)
+                        .font(.caption)
+                        .frame(width: 80, alignment: .leading)
+                    
+                    GeometryReader { geometry in
+                        let maxOffset = geometry.size.width - circleSize
+                        
+                        ZStack(alignment: .leading) {
+                            ForEach(0..<tracesCount, id: \\.self) { index in
+                                Circle()
+                                    .fill(fillColour.opacity(opacityForTrace(index: index)))
+                                    .frame(width: circleSize, height: circleSize)
+                                    .offset(x: isAnimating ? maxOffset : 0)
+                                    .animation(
+                                        animation.delay(Double(index) * delayStep),
+                                        value: isAnimating
+                                    )
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .frame(height: circleSize)
+                }
+            }
+            
+            private func opacityForTrace(index: Int) -> Double {
+                return Double(tracesCount - index) / Double(tracesCount) * 0.8
+            }
+
+        }
+
+        #Preview {
+            A014_AnimationTypeDemo()
+        }
+        """,
+        minOS: .ios18
+    )
+
+
+    
+    static let a013 = CodeSnippet(
+        id: "A013",
+        title: "Rotating Carousel",
+        intro: "Automatically rotating carousel using Combine Timer Publisher.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 3, day: 31, hour: 1, minute: 8) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        struct A013_RotatingCarouselDemo: View {
+
+            @State private var count: Int = 1
+            @State private var swipeDirection: SwipeDirection = .right
+
+            let colours: [Color] = [
+                Color.mycolor.myRed,
+                Color.mycolor.myBlue,
+                Color.mycolor.myPurple,
+                Color.mycolor.myGreen,
+                Color.mycolor.myOrange,
+                Color.mycolor.myYellow
+            ]
+            
+            var body: some View {
+                TabView(selection: $count) {
+                    ForEach(colours.indices, id: \\.self) { index in
+                        Rectangle()
+                            .foregroundStyle(colours[index])
+                            .tag(index + 1)
+                    }
+                }
+                .frame(height: 250)
+                .tabViewStyle(.page)
+                .task {
+                    await runCarousel()
+                }
+            }
+
+            private func runCarousel() async {
+                while true {
+                    try? await Task.sleep(for: .seconds(1.2))
+
+                    withAnimation {
+                        switch swipeDirection {
+                        case .right:
+                            count += 1
+                            if count == colours.count { swipeDirection = .left }
+                        case .left:
+                            count -= 1
+                            if count == 1 { swipeDirection = .right }
+                        }
+                    }
+                }
+            }
+
+            enum SwipeDirection { case left, right }
+        }
+
+        #Preview {
+            A013_RotatingCarouselDemo()
+        }
+        """,
+        minOS: .ios18
+    )
+
+
     
     static let b001 = CodeSnippet(
         id: "B001",
-        category: "Glass UI",
         title: "Liquid Glass Card",
-        intro: "Native glass material introduced in iOS 26...",
+        intro: "Native glass material introduced in iOS 26.",
         thanks: nil,
-        date: Date.from(year: 2026, month: 6, day: 9) ?? Date(),
+        date: Date.from(year: 2026, month: 3, day: 22, hour: 2, minute: 8) ?? Date(),
         codeSnippet: """
         VStack(spacing: 12) {
             Image(systemName: "star.fill")
@@ -35,7 +185,7 @@ struct SnippetsRepository {
         .padding(24)
         .glassEffect()
         """,
-        minOS: .ios26               // ← единственное отличие от A-серии
+        minOS: .ios26
     )
 
     
@@ -48,7 +198,7 @@ struct SnippetsRepository {
         Expandable bottom tabs for additional actions, sliding up from the screen bottom. Adapted for iPad NavigationSplitView.
         """,
         thanks: nil,
-        date: Date.from(year: 2026, month: 3, day: 22) ?? Date(),
+        date: Date.from(year: 2026, month: 3, day: 22, hour: 1, minute: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
 
@@ -245,10 +395,11 @@ struct SnippetsRepository {
         title: "Expandble TextEditor",
         intro: """
         A convenient expandable version of a native TextEditor — automatically grows in height as the user types, matching the content size with no manual frame management.
-        Accepts a Font parameter with .body as default, keeping the call site clean: ExpandableTextEditor(text: $text)
+        Accepts a Font parameter with .body as default, keeping the call site clean: ExpandableTextEditor(text: $text).
+        Please note that in iOS 16, the new axis: .vertical property is built into TextField. It does the same as ExpandableTextEditor — the field's height increases as you type. It is a native feature short and clear, without GeometryReader or PreferenceKey.
         """,
         thanks: nil,
-        date: Date.from(year: 2026, month: 3, day: 21) ?? Date(),
+        date: Date.from(year: 2026, month: 3, day: 21, hour: 1, minute: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
 
@@ -477,7 +628,7 @@ struct SnippetsRepository {
         When there is a long list of items in a ScrollView, the OnTop Button helps the user jump back to the top with a single tap. The button appears automatically when the user scrolls down, and disappears when they are already at the top.
         """,
         thanks: nil,
-        date: Date.from(year: 2026, month: 3, day: 20) ?? Date(),
+        date: Date.from(year: 2026, month: 3, day: 20, hour: 1, minute: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
 
@@ -711,7 +862,7 @@ struct SnippetsRepository {
         You can apply this code to highlight a row with a subtle wave to draw attention to it.
         """,
         thanks: nil,
-        date: Date.from(year: 2026, month: 3, day: 19) ?? Date(),
+        date: Date.from(year: 2026, month: 3, day: 19, hour: 1, minute: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
 
@@ -858,7 +1009,7 @@ struct SnippetsRepository {
         Each transition is implemented using .offset modifier with different combinations of enter/exit directions.
         """,
         thanks: nil,
-        date: Date.from(year: 2026, month: 3, day: 16) ?? Date(),
+        date: Date.from(year: 2026, month: 3, day: 16, hour: 1, minute: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
 
@@ -1246,7 +1397,7 @@ struct SnippetsRepository {
         title: "Shrinking button",
         intro: "Button with a custom shrinking effect. Two versions: regular and ScrollView-compatible. Because ScrollView absorbs touches, the regular shrinking button does not work — so we use DragGesture for the ScrollView version to avoid this effect.",
         thanks: nil,
-        date: Date.from(year: 2026, month: 3, day: 15) ?? Date(),
+        date: Date.from(year: 2026, month: 3, day: 15, hour: 1, minute: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
 
@@ -1499,7 +1650,7 @@ struct SnippetsRepository {
         title: "Progress Trim indicator",
         intro: "An enhanced circular progress indicator with manual +/− controls, an animated auto-increment timer, and a reset button. Demonstrates Timer integration within SwiftUI state.",
         thanks: nil,
-        date: Date.from(year: 2026, month: 3, day: 9) ?? Date(),
+        date: Date.from(year: 2026, month: 3, day: 9, hour: 1, minute: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
 
@@ -1686,7 +1837,7 @@ struct SnippetsRepository {
         Techniques: Timer publishers, phase animations, staggered delays, TimelineView, Canvas drawing, state-driven animations, and native gauges.
         """,
         thanks: nil,
-        date: Date.from(year: 2026, month: 3, day: 8) ?? Date(),
+        date: Date.from(year: 2026, month: 3, day: 8, hour: 1, minute: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
         import Combine

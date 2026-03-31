@@ -15,7 +15,27 @@ struct CodeSnippet: Identifiable, Hashable {
     let thanks: String?
     let date: Date
     let codeSnippet: String
-    var minOS: MinOS = .ios18
+    let minOS: MinOS
+    
+    init(
+        id: String,
+        category: String = Constants.mainCategory,
+        title: String,
+        intro: String,
+        thanks: String?,
+        date: Date,
+        codeSnippet: String ,
+        minOS: MinOS = .ios18
+    ) {
+        self.id = id
+        self.category = category
+        self.title = title
+        self.intro = intro
+        self.thanks = thanks
+        self.date = date
+        self.codeSnippet = codeSnippet
+        self.minOS = minOS
+    }
     
     enum MinOS: String {
         case ios18 = "iOS 18+"

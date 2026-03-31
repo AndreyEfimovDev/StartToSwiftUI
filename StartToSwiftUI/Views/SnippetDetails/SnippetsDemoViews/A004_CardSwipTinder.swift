@@ -8,25 +8,16 @@
 import SwiftUI
 
 struct A004_CardSwipTinder: View {
-    @State var cards: [ExampleCardView]
+    @State var cards: [SampleCardView]
     
     var body: some View {
         VStack {
             Text("Swipe Cards")
                 .font(.title)
                 .foregroundColor(.gray)
-            Button {
-                print("Resetting...")
-                loadCards()
-            } label: {
-                HStack {
-                    Image(systemName: "arrow.clockwise.circle.fill")
-                    Text("Reset Cards")
-                }
-            }
             
             // Cards
-            CardSwiperView(cards: self.$cards , onCardSwiped: { swipeDirection, index in
+            CardSwiperView(cards: $cards , onCardSwiped: { swipeDirection, index in
                 
                 switch swipeDirection {
                 case .left:
@@ -42,6 +33,21 @@ struct A004_CardSwipTinder: View {
                 print("Card dragged \(swipeDirection) direction at index \(index) with offset \(offset)")
             })
             .padding(.vertical, 20)
+            
+            Button {
+                print("Resetting...")
+                loadCards()
+            } label: {
+                HStack {
+                    Text("Reset Cards")
+                        .font(.headline)
+                        .foregroundStyle(Color.mycolor.myBlue)
+                        .padding()
+                        .background(.ultraThinMaterial, in: .capsule)
+                        .overlay(Capsule().stroke(Color.mycolor.myBlue, lineWidth: 1))
+                }
+            }
+
         }
         .onAppear {
             loadCards()
@@ -50,14 +56,14 @@ struct A004_CardSwipTinder: View {
     
     private func loadCards() {
         let newCards = [
-            ExampleCardView(index: 0),
-            ExampleCardView(index: 1),
-            ExampleCardView(index: 2),
-            ExampleCardView(index: 3),
-            ExampleCardView(index: 5),
-            ExampleCardView(index: 6),
-            ExampleCardView(index: 7),
-            ExampleCardView(index: 8)
+            SampleCardView(index: 0),
+            SampleCardView(index: 1),
+            SampleCardView(index: 2),
+            SampleCardView(index: 3),
+            SampleCardView(index: 5),
+            SampleCardView(index: 6),
+            SampleCardView(index: 7),
+            SampleCardView(index: 8)
         ]
         // Assigning a new array instance to the @State variable
         cards = newCards
@@ -74,7 +80,7 @@ enum SwipeDirection {
     case left, right, top, bottom
 }
 
-struct ExampleCardView: View {
+struct SampleCardView: View {
     var index: Int
     var tagId: UUID = UUID()
 
@@ -83,21 +89,11 @@ struct ExampleCardView: View {
         RoundedRectangle(cornerRadius: 20)
             .fill(Color.mycolor.myButtonTextPrimary)
             .overlay(
-                VStack(spacing: 10) {
-                    Image(systemName: "heart.fill")
-                        .font(.system(size: 50))
-                        .foregroundColor(Color.mycolor.myPurple)
-                    Text("Example Card \(index)")
-                        .font(.title)
-                        .bold()
-                    Text("This is an example card with some beautiful UI.")
-                        .multilineTextAlignment(.center)
-                        .font(.body)
-                        .foregroundColor(Color.mycolor.mySecondary)
-                }
-                .padding()
+                Text("Card \(index)")
+                    .font(.title)
+                    .bold()
             )
-            .shadow(color: Color.mycolor.mySecondary, radius: 5)
+            .shadow(color: Color.mycolor.mySecondary.opacity(0.3), radius: 5)
     }
 }
 
