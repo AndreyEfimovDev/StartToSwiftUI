@@ -27,9 +27,9 @@ struct SnippetsRepository {
         date: Date.from(year: 2026, month: 3, day: 31, hour: 2, minute: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
-        
+
         struct A014_AnimationTypeDemo: View {
-            @State var isAnimating: Bool = false
+            @State private var isAnimating: Bool = false
             
             private let timing: Double = 3
             private let circleSize: CGFloat = 11
@@ -37,15 +37,22 @@ struct SnippetsRepository {
             private let tracesCount = 21
             private let delayStep = 0.1
             
+            // var, because it refers to the instance property timing
+            private var animationStyles: [(label: String, animation: Animation)] {[
+                ("spring:",    .spring(duration: timing)),
+                ("linear:",    .linear(duration: timing)),
+                ("easeInOut:", .easeInOut(duration: timing)),
+                ("easeIn:",    .easeIn(duration: timing)),
+                ("easeOut:",   .easeOut(duration: timing)),
+                ("bouncy:",    .bouncy(duration: timing)),
+                ("snappy:",    .snappy(duration: timing))
+            ]}
+            
             var body: some View {
                 VStack {
-                    circleViewWithTrace("spring:", animation: .spring(duration: timing))
-                    circleViewWithTrace("linear:", animation: .linear(duration: timing))
-                    circleViewWithTrace("easeInOut:", animation: .easeInOut(duration: timing))
-                    circleViewWithTrace("easeIn:", animation: .easeIn(duration: timing))
-                    circleViewWithTrace("easeOut:", animation: .easeOut(duration: timing))
-                    circleViewWithTrace("bouncy:", animation: .bouncy(duration: timing))
-                    circleViewWithTrace("snappy:", animation: .snappy(duration: timing))
+                    ForEach(animationStyles, id: \\.label) { style in
+                        circleViewWithTrace(style.label, animation: style.animation)
+                    }
                 }
                 .foregroundStyle(Color.mycolor.myAccent)
                 .padding()
@@ -91,7 +98,7 @@ struct SnippetsRepository {
             private func opacityForTrace(index: Int) -> Double {
                 return Double(tracesCount - index) / Double(tracesCount) * 0.8
             }
-
+            
         }
 
         #Preview {
