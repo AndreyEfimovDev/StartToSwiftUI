@@ -22,7 +22,7 @@ struct SnippetsRepository {
     static let a014 = CodeSnippet(
         id: "A014",
         title: "Animation Types",
-        intro: "Demonstrates the vary of transition in accordace to the animation type.",
+        intro: "Shows different transition styles driven by the selected animation type.",
         thanks: nil,
         date: Date.from(year: 2026, month: 3, day: 31, hour: 2, minute: 8) ?? Date(),
         codeSnippet: """
@@ -113,7 +113,7 @@ struct SnippetsRepository {
     static let a013 = CodeSnippet(
         id: "A013",
         title: "Rotating Carousel",
-        intro: "Automatically rotating carousel using Combine Timer Publisher.",
+        intro: "Auto-rotating carousel with timed transitions.",
         thanks: nil,
         date: Date.from(year: 2026, month: 3, day: 31, hour: 1, minute: 8) ?? Date(),
         codeSnippet: """

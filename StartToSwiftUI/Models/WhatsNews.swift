@@ -24,8 +24,8 @@ struct WhatsNews {
                     newsText: """
                     - A012: Bottom Tabs Container - expandable bottom tabs for additional actions, sliding up from the screen bottom
                     - B001: Liquid Glass Card - native glass material introduced in iOS 26
-                    - A013: Rotating Carousel - sutomatically rotating carousel using Combine Timer Publisher
-                    - A014: Animation Types - the vary of transition in accordace to the animation type
+                    - A013: Rotating Carousel - auto-rotating carousel with timed transitions
+                    - A014: Animation Types - different transition styles driven by the selected animation type
 
                     """
                 ),
