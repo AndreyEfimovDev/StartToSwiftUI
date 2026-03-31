@@ -23,12 +23,16 @@ struct WhatsNews {
                     title: "New Code Snippets",
                     newsText: """
                     - A012: Bottom Tabs Container - expandable bottom tabs for additional actions, sliding up from the screen bottom
+                    - B001: Liquid Glass Card - native glass material introduced in iOS 26
+                    - A013: Rotating Carousel - sutomatically rotating carousel using Combine Timer Publisher
+                    - A014: Animation Types - the vary of transition in accordace to the animation type
+
                     """
                 ),
                 News(
                     title: "Improved",
                     newsText: """
-                    - Code snippet are nowdispayed from the newest to the oldest providing access to the newest ones first 
+                    - Code snippet are now dispayed from the newest to the oldest providing access to the newest ones first 
                     """
                 ),
                 News(
