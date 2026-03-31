@@ -111,14 +111,13 @@ struct SnippetsRepository {
         date: Date.from(year: 2026, month: 3, day: 31, hour: 1, minute: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
-        import Combine
 
         struct A013_RotatingCarouselDemo: View {
-            
-            @State private var cancellable: AnyCancellable? = nil
-            @State var count: Int = 1
-            
-            let coloursArray: [Color] = [
+
+            @State private var count: Int = 1
+            @State private var swipeDirection: SwipeDirection = .right
+
+            let colours: [Color] = [
                 Color.mycolor.myRed,
                 Color.mycolor.myBlue,
                 Color.mycolor.myPurple,
@@ -128,46 +127,38 @@ struct SnippetsRepository {
             ]
             
             var body: some View {
-                ZStack {
-                    Color.clear
-                        .ignoresSafeArea()
-                    
-                    TabView(selection: $count) {
+                TabView(selection: $count) {
+                    ForEach(colours.indices, id: \\.self) { index in
                         Rectangle()
-                            .foregroundColor(coloursArray[0])
-                            .tag(1)
-                        Rectangle()
-                            .foregroundColor(coloursArray[1])
-                            .tag(2)
-                        Rectangle()
-                            .foregroundColor(coloursArray[2])
-                            .tag(3)
-                        Rectangle()
-                            .foregroundColor(coloursArray[3])
-                            .tag(4)
-                        Rectangle()
-                            .foregroundColor(coloursArray[4])
-                            .tag(5)
-                        Rectangle()
-                            .foregroundColor(coloursArray[5])
-                            .tag(6)
+                            .foregroundStyle(colours[index])
+                            .tag(index + 1)
                     }
-                    .frame(height: 250)
-                    .tabViewStyle(.page)
                 }
-                .onAppear {
-                    cancellable = Timer
-                        .publish(every: 1.2, on: .main, in: .common).autoconnect()
-                        .sink { _ in
-                            count = count == coloursArray.count ? 1 : count + 1
-                        }
+                .frame(height: 250)
+                .tabViewStyle(.page)
+                .task {
+                    await runCarousel()
                 }
-                .onDisappear {
-                    cancellable?.cancel()
-                    cancellable = nil
-                }
-                
             }
+
+            private func runCarousel() async {
+                while true {
+                    try? await Task.sleep(for: .seconds(1.2))
+
+                    withAnimation {
+                        switch swipeDirection {
+                        case .right:
+                            count += 1
+                            if count == colours.count { swipeDirection = .left }
+                        case .left:
+                            count -= 1
+                            if count == 1 { swipeDirection = .right }
+                        }
+                    }
+                }
+            }
+
+            enum SwipeDirection { case left, right }
         }
 
         #Preview {
