@@ -15,12 +15,17 @@ struct SnippetsHomeView: View {
     @EnvironmentObject private var noticevm: NoticesViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
 
-    // MARK: - Splash vars
+    // MARK: - Sorted Snippets
+    private var sortedSnippets: [CodeSnippet] {
+        snippetvm.filteredSnippets.sorted { $0.date > $1.date }
+    }
 
+    // MARK: - Splash vars
     private var splashTheme: Splash.Theme {
         .midnight(withFont: .init(size: 13))
     }
 
+    
     // MARK: - States
     @State private var showOnTopButton = false
 
@@ -36,7 +41,7 @@ struct SnippetsHomeView: View {
                     listContent
                     OnTopButton(isVisible: showOnTopButton) {
                         withAnimation(.easeInOut(duration: 0.5)) {
-                            scrollProxy.scrollTo(snippetvm.filteredSnippets.first?.id, anchor: .top)
+                            scrollProxy.scrollTo(sortedSnippets.first?.id, anchor: .top)
                         }
                     }
                 }
@@ -60,7 +65,7 @@ struct SnippetsHomeView: View {
 
     private var listContent: some View {
         List {
-            ForEach(snippetvm.filteredSnippets.sorted { $0.date > $1.date }) { snippet in
+            ForEach(sortedSnippets) { snippet in
                 SnippetRowView(snippet: snippet, isFavorite: snippetvm.isFavorite(snippet))
                     .id(snippet.id)
                     .background(.black.opacity(0.001))
