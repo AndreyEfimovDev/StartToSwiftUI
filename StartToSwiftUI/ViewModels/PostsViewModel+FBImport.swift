@@ -20,8 +20,9 @@ extension PostsViewModel {
         
         let sourceName = isSwiftData ? "SwiftData" : "(Mock)"
         
-        let result = await fbPostsManager.fetchFBPosts(after: lastDatePostsLoaded)
-        
+        guard let appStateManager else { return false }
+        let importAfterDate = appStateManager.getLastDateOfPostsLoaded()
+        let result = await fbPostsManager.fetchFBPosts(after: importAfterDate)
         log("🔥 lastDatePostsLoaded \(String(describing: lastDatePostsLoaded))", level: .info)
         
         switch result {
@@ -44,14 +45,12 @@ extension PostsViewModel {
                 
                 // Migration: If the date has not yet been set, we take it from local posts
                 // One-time fix for users who had lastPostsFBUpdateDate = nil before saveContext() was added
-                if let appStateManager {
-                    let lastDate = appStateManager.getLastDateOfPostsLoaded()
-                    if lastDate == nil || (lastDate ?? Date()) <= Date(timeIntervalSince1970: 1) {
-                        let cloudPosts = allPosts.filter { $0.origin == .cloud || $0.origin == .cloudNew }
-                        if let latestDate = cloudPosts.max(by: { $0.date < $1.date })?.date {
-                            appStateManager.setLastDateOfPostsLoaded(latestDate.addingTimeInterval(1))
-                            log("🔥 lastPostsFBUpdateDate restored from local posts: \(latestDate)", level: .info)
-                        }
+                let lastDate = appStateManager.getLastDateOfPostsLoaded()
+                if lastDate == nil || (lastDate ?? Date()) <= Date(timeIntervalSince1970: 1) {
+                    let cloudPosts = allPosts.filter { $0.origin == .cloud || $0.origin == .cloudNew }
+                    if let latestDate = cloudPosts.max(by: { $0.date < $1.date })?.date {
+                        appStateManager.setLastDateOfPostsLoaded(latestDate.addingTimeInterval(1))
+                        log("🔥 lastPostsFBUpdateDate restored from local posts: \(latestDate)", level: .info)
                     }
                 }
                 return true
@@ -66,8 +65,7 @@ extension PostsViewModel {
             saveContextAndReload()
             
             // Update last date of posts loaded from Firebase
-            if let appStateManager,
-               let latestDate = fbResponseChecked.max(by: { $0.date < $1.date })?.date {
+            if let latestDate = fbResponseChecked.max(by: { $0.date < $1.date })?.date {
                 appStateManager.setLastDateOfPostsLoaded(latestDate.addingTimeInterval(1))
                 log("🔥 lastPostsFBUpdateDate updated in appStateManager \(latestDate)", level: .info)
             }
@@ -86,7 +84,7 @@ extension PostsViewModel {
             return true
         }
     }
-
+    
     /// Check for updates to available posts in the cloud
     func checkFBPostsForUpdates() async -> Bool {
         clearError()
@@ -94,7 +92,8 @@ extension PostsViewModel {
         guard let lastLoadedDate = appStateManager.getLastDateOfPostsLoaded() else {
             return true // дата не установлена — считаем что обновления есть
         }
-
+        log("🔍 checkFBPostsForUpdates date: \(String(describing: lastLoadedDate))", level: .info)
+        
         let result = await fbPostsManager.fetchFBPosts(after: lastLoadedDate)
         
         switch result {
@@ -118,5 +117,5 @@ extension PostsViewModel {
         
         log("🔄 Migrated \(hiddenPosts.count) posts: hidden → deleted", level: .info)
     }
-
+    
 }

@@ -116,19 +116,6 @@ struct PostsFilterView: View {
         }
     }
 
-    private var categoryFilter: some View {
-        Group {
-            if let list = vm.allCategories {
-                filterSection(
-                    title: "Category:",
-                    selection: $vm.selectedCategory,
-                    allItems: list,
-                    titleForCase: { $0 }
-                )
-            }
-        }
-    }
-
     private var sortOptions: some View {
         filterSection(
             title: "Sort:",
@@ -231,7 +218,7 @@ struct PostsFilterView: View {
                 "platform": vm.selectedPlatform?.rawValue ?? "",
                 "year": vm.selectedYear ?? "",
                 "sort": vm.selectedSortOption.rawValue,
-                "category": vm.selectedCategory ?? ""
+                "category": Constants.mainCategory
             ])
             isFilterButtonPressed.toggle()
         }

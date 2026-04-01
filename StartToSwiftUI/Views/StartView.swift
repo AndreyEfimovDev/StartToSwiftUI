@@ -52,7 +52,6 @@ struct StartView: View {
                     }
                     .task {
                         displayedSection = coordinator.activeSection
-                        vm.selectedCategory = vm.mainCategory
                         vm.loadPostsFromSwiftData()
                         noticevm.loadNoticesFromSwiftData()
                         vm.updateWidgetData()
@@ -95,7 +94,7 @@ struct StartView: View {
             switch displayedSection {
             case .materials:
                 NavigationStack(path: $coordinator.path) {
-                    MaterialsHomeView(selectedCategory: vm.selectedCategory)
+                    MaterialsHomeView(selectedCategory: Constants.mainCategory)
                         .navigationDestination(for: AppRoute.self) { destinationView(for: $0) }
                 }
                 .transition(sectionTransition)
@@ -116,7 +115,7 @@ struct StartView: View {
             Group {
                 switch displayedSection {
                 case .materials:
-                    MaterialsHomeView(selectedCategory: vm.selectedCategory)
+                    MaterialsHomeView(selectedCategory: Constants.mainCategory)
                         .transition(sectionTransition)
                 case .snippets:
                     SnippetsHomeView()
@@ -147,7 +146,7 @@ struct StartView: View {
     private var sectionRootView: some View {
         switch coordinator.activeSection {
         case .materials:
-            MaterialsHomeView(selectedCategory: vm.selectedCategory)
+            MaterialsHomeView(selectedCategory: Constants.mainCategory)
         case .snippets:
             SnippetsHomeView()
         }

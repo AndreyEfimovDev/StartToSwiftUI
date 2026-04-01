@@ -16,7 +16,7 @@ extension PostsViewModel {
             .combineLatest($selectedFavorite, $selectedType, $selectedYear)
         
         let filtersWithPlatformAndSortOption = filters
-            .combineLatest($selectedPlatform, $selectedSortOption, $selectedCategory)
+            .combineLatest($selectedPlatform, $selectedSortOption)
         
         let debouncedSearchText = $searchText
             .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
@@ -26,16 +26,15 @@ extension PostsViewModel {
             .map { [weak self] posts, searchText, data, _ -> [Post] in
                 guard let self else { return posts }
                 
-                let ((level, favorite, type, year), platform, sortOption, category) = data
-                
+                let ((level, favorite, type, year), platform, sortOption) = data
+
                 let filtered = self.filterPosts(
                     allPosts: posts,
                     platform: platform,
                     level: level,
                     favorite: favorite,
                     type: type,
-                    year: year,
-                    category: category
+                    year: year
                 )
                 
                 let searchedPosts = self.searchPosts(posts: filtered)
@@ -57,32 +56,29 @@ extension PostsViewModel {
         level: StudyLevel?,
         favorite: FavoriteChoice?,
         type: PostType?,
-        year: String?,
-        category: String? = nil
+        year: String?
     ) -> [Post] {
-        
+        let categoryFiltered = allPosts.filter { $0.category == Constants.mainCategory }
+
         guard platform != nil ||
                 level != nil ||
                 favorite != nil ||
                 type != nil ||
-                year != nil ||
-                category != nil
+                year != nil
         else {
-            return allPosts
+            return categoryFiltered
         }
-        
-        return allPosts.filter { post in
+
+        return categoryFiltered.filter { post in
             let matchesLevel = level == nil || post.studyLevel == level
             let matchesFavorite = favorite == nil || post.favoriteChoice == favorite
             let matchesType = type == nil || post.postType == type
             let matchesPlatform = platform == nil || post.postPlatform == platform
-            
+
             let postYear = String(utcCalendar.component(.year, from: post.postDate ?? Date(timeIntervalSince1970: 0)))
             let matchesYear = year == nil || postYear == year
-            
-            let matchesCategory = category == nil || post.category == category
-            
-            return matchesLevel && matchesFavorite && matchesType && matchesPlatform && matchesYear && matchesCategory
+
+            return matchesLevel && matchesFavorite && matchesType && matchesPlatform && matchesYear
         }
     }
     
