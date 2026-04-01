@@ -42,7 +42,14 @@ extension PostsViewModel {
                 hapticManager.impact(style: .light)
                 FBPerformanceManager.shared.stopTrace(name: "import_posts_firebase")
                 log("ℹ️ No new posts from \(sourceName)", level: .info)
-                
+
+                // All received posts already exist locally — advance date past them
+                // to prevent the same posts from being found on the next check
+                if let latestDate = fbResponse.max(by: { $0.date < $1.date })?.date {
+                    appStateManager.setLastDateOfPostsLoaded(latestDate.addingTimeInterval(1))
+                    log("🔥 lastDateOfPostsLoaded advanced past known duplicates: \(latestDate)", level: .info)
+                }
+
                 // Migration: If the date has not yet been set, we take it from local posts
                 // One-time fix for users who had lastPostsFBUpdateDate = nil before saveContext() was added
                 let lastDate = appStateManager.getLastDateOfPostsLoaded()
