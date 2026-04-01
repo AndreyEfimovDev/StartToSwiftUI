@@ -17,5 +17,9 @@
 	</dict>
     <key>FirebaseAutomaticScreenReportingEnabled</key>
     <false/>
+    <key>FirebaseSessionsEnabled</key>
+    <false/>
+    <key>FirebaseAppDelegateProxyEnabled</key>
+    <false/>
 </dict>
 </plist>

@@ -151,11 +151,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 #if DEBUG
         Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(false)
-#endif
-
+#else
         // FCM delegate
         Messaging.messaging().delegate = self
-        
+
         // Request push notification permission
         UNUserNotificationCenter.current().delegate = self
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
@@ -163,6 +162,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             log("🔔 Push notification permission: \(granted)", level: .info)
         }
         application.registerForRemoteNotifications()
+#endif
         
         return true
     }
