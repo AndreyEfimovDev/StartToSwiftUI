@@ -15,10 +15,12 @@ import SwiftUI
 
 struct SnippetViewRegistry {
     
+    // AXXX - iOS 18 snippets
+    // BXXX - iOS 26 snippets
+    
     @ViewBuilder
     static func view(for snippet: CodeSnippet) -> some View {
         switch snippet.id {
-            // iOS 18 snippets
         case "A001": A001_ProgressViewIndicatorsDemoView(snippet: snippet)
         case "A002": A002_TrimIndicatorDemoView(snippet: snippet)
         case "A003": A003_ProgressCircleWithCheckmarkDemoView(snippet: snippet)
@@ -33,8 +35,9 @@ struct SnippetViewRegistry {
         case "A011": A011_ExpandbleTextEditorDemoView(snippet: snippet)
             
         case "A012": A012_BottomTabsContainerDemoView(snippet: snippet)
+        case "A013": A013_RotatingCarouselDemoView(snippet: snippet)
+        case "A014": A014_AnimationTypeDemoView(snippet: snippet)
             
-            // iOS 26 snippets
         case "B001":
             if #available(iOS 26, *) {
                 B001_GlassEffectDemoView(snippet: snippet)

@@ -27,7 +27,6 @@ struct ContextMenu: View {
                     }
                 }
         }
-        
     }
 }
 

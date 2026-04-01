@@ -12,6 +12,64 @@
 
 import SwiftUI
 
+
+// MARK: - A013 Rotating Carousel
+struct A014_AnimationTypeDemoView: View {
+    
+    let snippet: CodeSnippet
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                    
+                    if let thanks = snippet.thanks, !thanks.isEmpty {
+                        SnippetThanksView(thanks: thanks)
+                            .padding(.horizontal)
+                    }
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            
+            A014_AnimationTypeDemo()
+                .frame(maxHeight: .infinity)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
+
+
+// MARK: - A013 Rotating Carousel
+struct A013_RotatingCarouselDemoView: View {
+    
+    let snippet: CodeSnippet
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                    
+                    if let thanks = snippet.thanks, !thanks.isEmpty {
+                        SnippetThanksView(thanks: thanks)
+                            .padding(.horizontal)
+                    }
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            
+            A013_RotatingCarouselDemo()
+                .frame(maxHeight: .infinity)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
+
+
+// MARK: - B001 Liquid Glass Card
 @available(iOS 26, *)
 struct B001_GlassEffectDemoView: View {
     let snippet: CodeSnippet
