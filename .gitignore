@@ -8,3 +8,6 @@ xcuserdata/
 
 GoogleService-Info.plist
 GoogleService-Info.plist
+
+# Claude Code worktrees
+.claude/worktrees/
