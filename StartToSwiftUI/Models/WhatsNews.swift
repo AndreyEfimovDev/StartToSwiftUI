@@ -32,7 +32,8 @@ struct WhatsNews {
                 News(
                     title: "Improved",
                     newsText: """
-                    - Code snippet are now dispayed from the newest to the oldest providing access to the newest ones first 
+                    - Code snippet are now dispayed from the newest to the oldest providing access to the newest ones first
+                    - the App's stability and performance 
                     """
                 ),
                 News(

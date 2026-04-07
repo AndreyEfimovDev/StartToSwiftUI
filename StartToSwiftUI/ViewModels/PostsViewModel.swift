@@ -34,8 +34,6 @@ final class PostsViewModel: ObservableObject {
     var utcCalendar = Calendar.current
     
     var allYears: [String]? = nil
-    var allCategories: [String]? = nil
-    let mainCategory: String = Constants.mainCategory
     var randomSortOrder: [String] = []
     var dispatchTime: DispatchTime { .now() + 1.5 }
     
@@ -57,10 +55,6 @@ final class PostsViewModel: ObservableObject {
     @AppStorage("selectedTheme") var selectedTheme: Theme = .system
     
     // Filters
-    @AppStorage("storedCategory") var storedCategory: String?
-    @Published var selectedCategory: String? = nil {
-        didSet { storedCategory = selectedCategory }}
-    
     @AppStorage("storedLevel") var storedLevel: StudyLevel?
     @Published var selectedLevel: StudyLevel? = nil {
         didSet { storedLevel = selectedLevel }}
@@ -206,7 +200,6 @@ final class PostsViewModel: ObservableObject {
     }
 
     func restorePostFilters() {
-        selectedCategory = storedCategory
         selectedLevel = storedLevel
         selectedFavorite = storedFavorite
         selectedType = storedType
@@ -236,7 +229,6 @@ final class PostsViewModel: ObservableObject {
             
             FBCrashManager.shared.addLog("loadPostsFromSwiftData: posts count after check for duplicates: \(allPosts.count)")
             allYears = getAllYears()
-            allCategories = getAllCategories()
             FBCrashManager.shared.setUserContext(allPosts.count, hasCloudPosts)
             log("📊 Loaded \(allPosts.count) posts from SwiftData:", level: .debug)
         } catch {
@@ -461,11 +453,6 @@ final class PostsViewModel: ObservableObject {
         return unique.isEmpty ? nil : unique
     }
     
-    private func getAllCategories() -> [String]? {
-        let categories = Array(Set(allPosts.map { $0.category })).sorted()
-        return categories.isEmpty ? nil : categories
-    }
-
     // MARK: - Handle Errors
     func clearError() {
         ErrorManager.shared.clear()

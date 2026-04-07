@@ -109,7 +109,7 @@ struct ImportPostsFromCloudView: View {
         hapticManager.notification(type: .success)
         
         DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-            coordinator.closeModal()
+            if coordinator.modalPath.isEmpty { coordinator.closeModal() } else { coordinator.popModal() }
         }
     }
     
@@ -127,7 +127,7 @@ struct ImportPostsFromCloudView: View {
             Task {
                 try? await Task.sleep(nanoseconds: 1_500_000_000)
                 await MainActor.run {
-                    coordinator.closeModal()
+                    if coordinator.modalPath.isEmpty { coordinator.closeModal() } else { coordinator.popModal() }
                 }
             }
         } else {

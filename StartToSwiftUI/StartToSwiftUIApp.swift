@@ -10,6 +10,7 @@ import SwiftData
 import CloudKit
 import Firebase
 import FirebaseAnalytics
+import FirebaseCrashlytics
 import FirebaseMessaging
 
 @main
@@ -34,12 +35,20 @@ struct StartToSwiftUIApp: App {
             AppSyncState.self
         ])
         
+#if DEBUG
+        let config = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: false,
+            cloudKitDatabase: .none  // ← without CloudKit in debug
+        )
+#else
         let config = ModelConfiguration(
             schema: schema,
             isStoredInMemoryOnly: false,
             cloudKitDatabase: .automatic
         )
-        
+#endif
+
         do {
             let container = try ModelContainer(for: schema, configurations: [config])
             log("✅ SwiftData container created successfully", level: .info)
@@ -139,10 +148,13 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         FirebaseApp.configure()
-        
+
+#if DEBUG
+        Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(false)
+#else
         // FCM delegate
         Messaging.messaging().delegate = self
-        
+
         // Request push notification permission
         UNUserNotificationCenter.current().delegate = self
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
@@ -150,6 +162,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             log("🔔 Push notification permission: \(granted)", level: .info)
         }
         application.registerForRemoteNotifications()
+#endif
         
         return true
     }
