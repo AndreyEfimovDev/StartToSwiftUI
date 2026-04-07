@@ -292,11 +292,18 @@ struct MaterialsHomeView: View {
     // MARK: - Supporting Views
 
     private var allPostsIsEmpty: some View {
-        ContentUnavailableView(
-            "No Study Materials",
-            systemImage: "tray",
-            description: Text("Materials will appear here once you create them yourself or download curated content.")
-        )
+        ZStack {
+            ContentUnavailableView(
+                "No Study Materials",
+                systemImage: "tray",
+                description: Text("Materials will appear here once you create them yourself or download curated content.")
+            )
+            Button("Download curated collection") {
+                coordinator.push(.importFromCloud)
+            }
+            .customListRowStyle(iconName: "icloud.and.arrow.down", iconWidth: 18)
+            .offset(y: 100)
+        }
     }
     
     private var filteredPostsIsEmpty: some View {
