@@ -14,32 +14,21 @@ struct WhatsNews {
             release: "Release 1.7.0(10)",
             news: [
                 News(
-                    title: "Added",
-                    newsText: """
-                    - Code snipets for iOS 26+ is available now
-                    """
-                ),
-                News(
                     title: "New Code Snippets",
                     newsText: """
                     - A012: Bottom Tabs Container - expandable bottom tabs for additional actions, sliding up from the screen bottom
                     - B001: Liquid Glass Card - native glass material introduced in iOS 26
                     - A013: Rotating Carousel - auto-rotating carousel with timed transitions
                     - A014: Animation Types - different transition styles driven by the selected animation type
-
+                    - A015: Card Swipe Animation - a Tinder-style swipeable card deck
+                    - A016: Indeterminate Progress Bar - a loading indicator without fixed progress
                     """
                 ),
                 News(
                     title: "Improved",
                     newsText: """
                     - Code snippet are now dispayed from the newest to the oldest providing access to the newest ones first
-                    - the App's stability and performance 
-                    """
-                ),
-                News(
-                    title: "Fixed",
-                    newsText: """
-                    - 
+                    - The application's stability and performance 
                     """
                 )
             ]

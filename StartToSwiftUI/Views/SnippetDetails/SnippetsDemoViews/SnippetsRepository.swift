@@ -16,13 +16,94 @@ struct SnippetsRepository {
     
     static let allDemoCodeSnippet: [CodeSnippet] = [
         a001, a002, a003, a004, a005, a006, a007, a008, a009, a010,
-        a011, a012, /*b001, */a013, a014, a015
+        a011, a012, a013, a014, a015, a016
     ]
+    
+    static let a016 = CodeSnippet(
+        id: "A016",
+        title: "Indeterminate Progress Bar",
+        intro: "A loading indicator without fixed progress — signals something is happening without any specific numbers, like Xcode's package installation. Built entirely with native SwiftUI: GeometryReader for dimensions, LinearGradient for the trailing fade, .scaleEffect for mirroring, and async/await for the animation loop.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 4, day: 07, hour: 2, minute: 8) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        struct A016_IndeterminateProgressBarDemo: View {
+            
+            @State private var offset: CGFloat = 0
+            @State private var flipped = false
+
+            private let ratio:    CGFloat = 0.65
+            private let duration: Double  = 1.3
+
+            var body: some View {
+                GeometryReader { geo in
+                    let block = geo.size.width * ratio
+
+                    ZStack(alignment: .leading) {
+                        // Track
+                        RoundedRectangle(cornerRadius: 3)
+                            .fill(Color(.systemGray5))
+                            .frame(height: 6)
+
+                        // Thumb + trace (single block with gradient)
+                        LinearGradient(
+                            stops: [
+                                .init(color: .clear, location: 0.00),
+                                .init(color: Color.mycolor.myBlue.opacity(0.25), location: 0.38),
+                                .init(color: Color.mycolor.myBlue, location: 1.00),
+                            ],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                        .frame(width: block, height: 6)
+                        .clipShape(RoundedRectangle(cornerRadius: 3))
+                        // Flip mirrors the gradient: trace is always behind
+                        .scaleEffect(x: flipped ? -1 : 1, anchor: .center)
+                        .offset(x: offset)
+                    }
+                    .clipped()
+                    .task {
+                        offset = -block // start behind the left edge
+
+                        while !Task.isCancelled {
+                            // ── right: trace on the left, thumb on the right ──
+                            flipped = false
+                            withAnimation(.easeInOut(duration: duration)) {
+                                offset = geo.size.width // уезжает за правый край
+                            }
+                            try? await Task.sleep(
+                                nanoseconds: UInt64(duration * 1_000_000_000)
+                            )
+
+                            // the block is completely behind the screen → the flip is not visible
+                            flipped = true
+
+                            // ── left: thumb left, trace right ───
+                            withAnimation(.easeInOut(duration: duration)) {
+                                offset = -block // goes beyond the left edge
+                            }
+                            try? await Task.sleep(
+                                nanoseconds: UInt64(duration * 1_000_000_000)
+                            )
+                        }
+                    }
+                }
+                .frame(height: 6)
+            }
+        }
+
+        #Preview {
+            A016_IndeterminateProgressBarDemo()
+        }       
+        """,
+        minOS: .ios18
+    )
     
     static let a015 = CodeSnippet(
         id: "A015",
         title: "Card Swipe Animation",
-        intro: "Card swipe animation by native SwiftUI tools.",
+        intro: "A self-contained SwiftUI demo of a Tinder-style swipeable card deck: directional swipe recognition, 3D flip via rotation3DEffect, animated ghost cards, and color overlays — inspired by Tinder.",
         thanks: nil,
         date: Date.from(year: 2026, month: 4, day: 07, hour: 1, minute: 8) ?? Date(),
         codeSnippet: """
@@ -131,7 +212,6 @@ struct SnippetsRepository {
                     headerRow
                         .padding(16)
                         .padding(.bottom, 8)
-
                     
                     // Card area
                     ZStack {
@@ -186,7 +266,7 @@ struct SnippetsRepository {
                             .font(.caption.weight(.semibold))
                     }
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(Color.mycolor.mySecondary)
+                    .foregroundStyle(Color.mycolor.myAccent)
 
                     GeometryReader { geo in
                         ZStack(alignment: .leading) {
@@ -272,7 +352,7 @@ struct SnippetsRepository {
                     .offset(x: vm.dragOffset.width, y: yOffset)
                     .rotationEffect(.degrees(Double(vm.dragOffset.width) / 18))
                     .scaleEffect(scale)
-                    .shadow(color: .black.opacity(0.10), radius: 16, x: 0, y: 6)
+                    .shadow(color: Color.mycolor.myButtonTextSecondary.opacity(0.25), radius: 8, x: 0, y: -6)
                     .simultaneousGesture(dragGesture)
                     .onTapGesture {
                         guard !dragIsActive, !vm.isDragging else { return }
@@ -292,7 +372,7 @@ struct SnippetsRepository {
 
             private func cardContainer(_ card: DemoCard) -> some View {
                 ZStack {
-                    RoundedRectangle(cornerRadius: 24).fill(Color(.systemBackground))
+                    RoundedRectangle(cornerRadius: 24).fill(Color.mycolor.myBackground)
                     flipContent(card)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)

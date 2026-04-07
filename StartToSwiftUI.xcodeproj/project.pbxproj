@@ -187,6 +187,7 @@
 		47BAF0F82E64A77A00287F10 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF0F72E64A77A00287F10 /* Enums.swift */; };
 		47BAF0FA2E64CC8700287F10 /* UnderlineSermentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF0F92E64CC8700287F10 /* UnderlineSermentedPicker.swift */; };
 		47C09A9A2F8576ED0049858B /* A015_CardSwipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C09A992F8576ED0049858B /* A015_CardSwipe.swift */; };
+		47C09A9C2F858F930049858B /* A016_IndeterminateProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C09A9B2F858F930049858B /* A016_IndeterminateProgressBar.swift */; };
 		47C56FEC2EC9C66700F0796C /* NoticeDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C56FEB2EC9C66700F0796C /* NoticeDetailsView.swift */; };
 		47C56FEE2EC9C94100F0796C /* NoticeRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C56FED2EC9C94100F0796C /* NoticeRowView.swift */; };
 		47C57E7F2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */; };
@@ -416,6 +417,7 @@
 		47BAF0F72E64A77A00287F10 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		47BAF0F92E64CC8700287F10 /* UnderlineSermentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineSermentedPicker.swift; sourceTree = "<group>"; };
 		47C09A992F8576ED0049858B /* A015_CardSwipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A015_CardSwipe.swift; sourceTree = "<group>"; };
+		47C09A9B2F858F930049858B /* A016_IndeterminateProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A016_IndeterminateProgressBar.swift; sourceTree = "<group>"; };
 		47C56FEB2EC9C66700F0796C /* NoticeDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeDetailsView.swift; sourceTree = "<group>"; };
 		47C56FED2EC9C94100F0796C /* NoticeRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeRowView.swift; sourceTree = "<group>"; };
 		47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForPostsUpdateView.swift; sourceTree = "<group>"; };
@@ -657,6 +659,7 @@
 				474638102F67363300DF011B /* A013_RotatingCarousel.swift */,
 				474638002F66F27600DF011B /* A014_AnimationType.swift */,
 				47C09A992F8576ED0049858B /* A015_CardSwipe.swift */,
+				47C09A9B2F858F930049858B /* A016_IndeterminateProgressBar.swift */,
 			);
 			path = "A011-A020";
 			sourceTree = "<group>";
@@ -1335,6 +1338,7 @@
 				47939D812F50592100CBE432 /* MockFBNoticesManager.swift in Sources */,
 				4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */,
 				4791CDFE2E747AC100687126 /* JSONFileManager.swift in Sources */,
+				47C09A9C2F858F930049858B /* A016_IndeterminateProgressBar.swift in Sources */,
 				470E63702EFB241D007B75B5 /* FormCoordinatorToolbar.swift in Sources */,
 				47B6E7E82F5BF85B00EF7441 /* CodeSnippet.swift in Sources */,
 				474637FF2F66D58F00DF011B /* A005_SFSymbolEffects.swift in Sources */,

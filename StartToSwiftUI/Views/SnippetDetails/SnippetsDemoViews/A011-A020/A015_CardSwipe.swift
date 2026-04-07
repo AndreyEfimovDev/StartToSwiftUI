@@ -110,7 +110,6 @@ struct A015_CardSwipeDemo: View {
             headerRow
                 .padding(16)
                 .padding(.bottom, 8)
-
             
             // Card area
             ZStack {
@@ -165,7 +164,7 @@ struct A015_CardSwipeDemo: View {
                     .font(.caption.weight(.semibold))
             }
             .font(.caption.weight(.semibold))
-            .foregroundStyle(Color.mycolor.mySecondary)
+            .foregroundStyle(Color.mycolor.myAccent)
 
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
@@ -251,7 +250,7 @@ struct A015_CardSwipeDemo: View {
             .offset(x: vm.dragOffset.width, y: yOffset)
             .rotationEffect(.degrees(Double(vm.dragOffset.width) / 18))
             .scaleEffect(scale)
-            .shadow(color: .black.opacity(0.10), radius: 16, x: 0, y: 6)
+            .shadow(color: Color.mycolor.myButtonTextSecondary.opacity(0.25), radius: 12, x: 0, y: -6)
             .simultaneousGesture(dragGesture)
             .onTapGesture {
                 guard !dragIsActive, !vm.isDragging else { return }
@@ -271,7 +270,7 @@ struct A015_CardSwipeDemo: View {
 
     private func cardContainer(_ card: DemoCard) -> some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 24).fill(Color(.systemBackground))
+            RoundedRectangle(cornerRadius: 24).fill(Color.mycolor.myBackground)
             flipContent(card)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
