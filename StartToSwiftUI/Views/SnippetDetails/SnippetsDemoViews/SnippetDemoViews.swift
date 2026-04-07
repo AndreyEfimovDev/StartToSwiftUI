@@ -12,8 +12,34 @@
 
 import SwiftUI
 
+// MARK: - A015 Card Swipe
+struct A015_CardSwipeDemoView: View {
+    
+    let snippet: CodeSnippet
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                    
+                    if let thanks = snippet.thanks, !thanks.isEmpty {
+                        SnippetThanksView(thanks: thanks)
+                            .padding(.horizontal)
+                    }
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            
+            A015_CardSwipeDemo()
+                .frame(maxHeight: .infinity)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
 
-// MARK: - A013 Rotating Carousel
+// MARK: - A014 Animation Type
 struct A014_AnimationTypeDemoView: View {
     
     let snippet: CodeSnippet
@@ -39,7 +65,6 @@ struct A014_AnimationTypeDemoView: View {
         .foregroundStyle(Color.mycolor.myAccent)
     }
 }
-
 
 // MARK: - A013 Rotating Carousel
 struct A013_RotatingCarouselDemoView: View {
