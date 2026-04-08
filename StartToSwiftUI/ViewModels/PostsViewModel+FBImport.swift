@@ -109,9 +109,7 @@ extension PostsViewModel {
         }
     }
     
-#warning("Delete a body of this func before deployment to App Store")
     func uploadDevDataPostsToFirebase() async {
-        await fbPostsManager.uploadDevDataPostsToFirebase()
     }
     
     // MARK: - Migration
