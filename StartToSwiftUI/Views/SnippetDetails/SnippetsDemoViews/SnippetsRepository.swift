@@ -623,11 +623,14 @@ struct SnippetsRepository {
                 .font(.headline)
                 .foregroundStyle(isFinished ? Color.mycolor.myRed : Color.mycolor.myBlue)
                 .padding(8)
+                .frame(width: 150)
                 .background(.ultraThinMaterial, in: .capsule)
                 .overlay(
                     Capsule()
                         .stroke(isFinished ? Color.mycolor.myRed : Color.mycolor.myBlue, lineWidth: 1)
                 )
+                .opacity(!isAnimating || isFinished ? 1 : 0)
+                .animation(.easeInOut(duration: 0.25), value: isFinished)
                 .padding()
             }
 
@@ -798,7 +801,7 @@ struct SnippetsRepository {
             // MARK: - Body
             var body: some View {
                 GeometryReader { proxy in
-                    Text("Main View")
+                    Text("View")
                         .font(.largeTitle)
                         .foregroundColor(Color.mycolor.myBlue)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)

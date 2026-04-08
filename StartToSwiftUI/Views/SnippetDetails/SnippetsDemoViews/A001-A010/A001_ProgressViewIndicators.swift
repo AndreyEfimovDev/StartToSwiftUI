@@ -14,14 +14,18 @@ struct A001_ProgressViewIndicatorsDemo: View {
     @State private var isLoading = false
     
     var body: some View {
-        VStack(spacing: 16) {
-            A001_WaveSymmetrical()
-            A001_WaveAsymmetrical()
+        VStack(spacing: 32) {
+            HStack(spacing: 32) {
+                A001_WaveSymmetrical()
+                A001_WaveAsymmetrical()
+            }
             A001_PulsingCircle()
             A001_JumpingDots()
             A001_JumpingLetters()
-            A001_RotatingRingWithTrace()
-            A001_ArcProgressDinamycGapView(lineWidth: 3, diameter: 30)
+            HStack(spacing: 32) {
+                A001_RotatingRingWithTrace()
+                A001_ArcProgressDinamycGapView(lineWidth: 3, diameter: 30)
+            }
             A001_GaugeProgress()
         }
     }
