@@ -38,7 +38,7 @@ struct SnippetViewRegistry {
         case "A013": A013_RotatingCarouselDemoView(snippet: snippet)
         case "A014": A014_AnimationTypeDemoView(snippet: snippet)
         case "A015": A015_CardSwipeDemoView(snippet: snippet)
-
+        case "A016": A016_IndeterminateProgressBarDemoView(snippet: snippet)
             
         case "B001":
             if #available(iOS 26, *) {

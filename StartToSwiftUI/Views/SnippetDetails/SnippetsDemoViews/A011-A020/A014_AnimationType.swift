@@ -57,12 +57,15 @@ struct A014_AnimationTypeDemo: View {
         .font(.headline)
         .foregroundStyle(isFinished ? Color.mycolor.myRed : Color.mycolor.myBlue)
         .padding(8)
+        .frame(width: 150)
         .background(.ultraThinMaterial, in: .capsule)
         .overlay(
             Capsule()
                 .stroke(isFinished ? Color.mycolor.myRed : Color.mycolor.myBlue, lineWidth: 1)
         )
         .padding()
+        .opacity(!isAnimating || isFinished ? 1 : 0)
+        .animation(.easeInOut(duration: 0.25), value: isFinished)
     }
 
     private func circleViewWithTrace(_ title: String, animation: Animation) -> some View {

@@ -34,7 +34,7 @@ struct A012_BottomTabsContainerDemo: View {
     // MARK: - Body
     var body: some View {
         GeometryReader { proxy in
-            Text("Main View")
+            Text("View")
                 .font(.largeTitle)
                 .foregroundColor(Color.mycolor.myBlue)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
