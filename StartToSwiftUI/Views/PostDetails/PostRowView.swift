@@ -28,7 +28,7 @@ struct PostRowView: View {
             parts.append(post.postType.displayName)
         }
         
-        parts.append(post.postPlatform.displayName)
+//        parts.append(post.postPlatform.displayName)
         
         return parts.joined(separator: ", ")
     }

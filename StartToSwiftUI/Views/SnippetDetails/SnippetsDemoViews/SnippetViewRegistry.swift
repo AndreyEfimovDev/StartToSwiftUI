@@ -41,8 +41,8 @@ struct SnippetViewRegistry {
         case "A016": A016_IndeterminateProgressBarDemoView(snippet: snippet)
             
         case "B001":
-            if #available(iOS 26, *) {
-                B001_GlassEffectDemoView(snippet: snippet)
+            if #available(iOS 26.1, *) {
+                B001_AlbumPlayerDemoView(snippet: snippet)
             } else {
                 SnippetUnavailableView(snippet: snippet)
             }

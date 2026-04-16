@@ -14,17 +14,90 @@ struct DevData {
         
 // MARK: NEW
         Post(
-            title: "",
+            title: "Lazy Properties in Swift - Why They Don’t Always Work in SwiftUI",
             intro: """
+                Swift provides a powerful set of tools to manage initialization, performance, and memory. Among them, lazy properties stand out as a simple yet highly effective way to defer work until it is actually needed.
+
+                At first glance, lazy may look like a small keyword. In practice, it enables better performance, cleaner initialization patterns, and more predictable ownership-when used correctly.
+
+                This article explores lazy properties in depth: what they are, how they work, when to use them, and how they behave in real-world SwiftUI applications.
                 """,
-            author: "",
-            postType: .course,
-            urlString: "",
-            postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 6, day: 21),
+            author: "Sagar Unagar",
+            postType: .article,
+            urlString: "https://www.sagarunagar.com/blog/lazy-properties-swiftui-pitfalls/",
+            postPlatform: .website,
+            postDate: Date.from(year: 2026, month: 4, day: 11),
+            studyLevel: .middle,
+            origin: .cloudNew
+        ),
+        Post(
+            title: "Mutex in Swift - Protecting Shared Mutable State with Locks",
+            intro: """
+                In modern Swift development, managing shared mutable state is a fundamental challenge. As applications become increasingly concurrent, ensuring that multiple threads do not access or modify the same data simultaneously—leading to data races—is paramount.
+
+                While Actors are the primary tool for isolation in Swift Concurrency, there are performance-critical scenarios where a lower-level synchronization primitive is required. The Mutex type, part of the Synchronization library, provides a high-performance, synchronous solution for protecting shared state.
+
+                In this article, we will explore the core mechanics of the Mutex primitive in Swift. You will learn how to use this synchronization tool to safeguard shared mutable state, understand the technical reasoning for choosing it over high-level Actors, and see practical implementations that integrate seamlessly with Swift Concurrency.
+                """,
+            author: "Sagar Unagar",
+            postType: .article,
+            urlString: "https://www.sagarunagar.com/blog/swift-mutex-shared-mutable-state/",
+            postPlatform: .website,
+            postDate: Date.from(year: 2026, month: 4, day: 4),
             studyLevel: .advanced,
             origin: .cloudNew
         ),
+        Post(
+            title: "Animatable in SwiftUI Explained - Complete Guide with Examples & Deep Dive",
+            intro: """
+                SwiftUI provides a powerful, declarative animation system that enables smooth, expressive user interfaces. In most cases, animations can be achieved using built in APIs like withAnimation or .animation(_:).
+
+                However, when you need precise control over how values change over time, SwiftUI exposes a deeper mechanism: the Animatable protocol.
+
+                This article explores how Animatable works, why it matters, and how to use it to build custom, data-driven animations.
+                """,
+            author: "Sagar Unagar",
+            postType: .article,
+            urlString: "https://www.sagarunagar.com/blog/swiftui-animatable-protocol-guide/",
+            postPlatform: .website,
+            postDate: Date.from(year: 2026, month: 3, day: 28),
+            studyLevel: .middle,
+            origin: .cloudNew
+        ),
+        Post(
+            title: "Swift Algorithms - Apple’s Hidden Collection and Sequence APIs You Should Be Using",
+            intro: """
+                Swift’s standard library already gives us strong collection primitives. Yet many developers still write nested loops, temporary buffers, and index math that is harder to read and easier to break.
+
+                Apple’s open-source swift-algorithms package fills that gap with focused sequence and collection APIs designed for correctness, clarity, and predictable performance.
+
+                Many Swift developers still do not know this package exists, even though it is maintained by Apple and widely used in production Swift code.
+
+                In this article, we will learn Swift Algorithms in a practical way and cover its operations.
+                """,
+            author: "Sagar Unagar",
+            postType: .article,
+            urlString: "https://www.sagarunagar.com/blog/swift-algorithms-complete-guide/",
+            postPlatform: .website,
+            postDate: Date.from(year: 2026, month: 3, day: 21),
+            studyLevel: .middle,
+            origin: .cloudNew
+        ),
+        Post(
+            title: "Swift some vs any - Understanding Opaque Types and Existential Types",
+            intro: """
+                Swift’s type system is designed to provide both strong compile-time guarantees and high runtime performance. One of the key features enabling this balance is Swift’s approach to protocol-based abstraction.
+                """,
+            author: "Sagar Unagar",
+            postType: .article,
+            urlString: "https://www.sagarunagar.com/blog/swift-some-vs-any-opaque-existential-types/",
+            postPlatform: .website,
+            postDate: Date.from(year: 2026, month: 3, day: 14),
+            studyLevel: .middle,
+            origin: .cloudNew
+        ),
+
+
 
         // MARK: 2026-03-26
 //

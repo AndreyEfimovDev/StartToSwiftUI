@@ -12,6 +12,30 @@
 
 import SwiftUI
 
+
+// MARK: - B001 Liquid Glass Card
+@available(iOS 26.1, *)
+struct B001_AlbumPlayerDemoView: View {
+    let snippet: CodeSnippet
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            
+            B001_AlbumPlayerDemo()
+                .frame(maxHeight: .infinity)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
+
+
 // MARK: - A016 Indeterminate Progress Bar
 struct A016_IndeterminateProgressBarDemoView: View {
     
@@ -115,29 +139,6 @@ struct A013_RotatingCarouselDemoView: View {
             .fixedSize(horizontal: false, vertical: true)
             
             A013_RotatingCarouselDemo()
-                .frame(maxHeight: .infinity)
-        }
-        .foregroundStyle(Color.mycolor.myAccent)
-    }
-}
-
-
-// MARK: - B001 Liquid Glass Card
-@available(iOS 26, *)
-struct B001_GlassEffectDemoView: View {
-    let snippet: CodeSnippet
-    
-    var body: some View {
-        VStack(spacing: 0) {
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 20) {
-                    SnippetDemoHeader(snippet: snippet)
-                        .padding()
-                }
-            }
-            .fixedSize(horizontal: false, vertical: true)
-            
-            B001_LiquidGlassEffectDemo()
                 .frame(maxHeight: .infinity)
         }
         .foregroundStyle(Color.mycolor.myAccent)
