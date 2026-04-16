@@ -16,9 +16,29 @@ struct SnippetsRepository {
     
     static let allDemoCodeSnippet: [CodeSnippet] = [
         a001, a002, a003, a004, a005, a006, a007, a008, a009, a010,
-        a011, a012, a013, a014, a015, a016
+        a011, a012, a013, a014, a015, a016, b001
     ]
     
+    
+    static let b001 = CodeSnippet(
+        id: "B001",
+        title: "Album Player",
+        intro: "Native glass material introduced in iOS 26.1.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 4, day: 9, hour: 1, minute: 8) ?? Date(),
+        codeSnippet: """
+        VStack(spacing: 12) {
+            Image(systemName: "star.fill")
+                .font(.largeTitle)
+            Text("Glass Card")
+        }
+        .padding(24)
+        .glassEffect()
+        """,
+        minOS: .ios26
+    )
+
+
     static let a016 = CodeSnippet(
         id: "A016",
         title: "Indeterminate Progress Bar",
@@ -739,27 +759,6 @@ struct SnippetsRepository {
         """,
         minOS: .ios18
     )
-
-
-    
-    static let b001 = CodeSnippet(
-        id: "B001",
-        title: "Liquid Glass Card",
-        intro: "Native glass material introduced in iOS 26.",
-        thanks: nil,
-        date: Date.from(year: 2026, month: 3, day: 22, hour: 2, minute: 8) ?? Date(),
-        codeSnippet: """
-        VStack(spacing: 12) {
-            Image(systemName: "star.fill")
-                .font(.largeTitle)
-            Text("Glass Card")
-        }
-        .padding(24)
-        .glassEffect()
-        """,
-        minOS: .ios26
-    )
-
     
     // MARK: - A012 Bottom Tabs Container
     static let a012 = CodeSnippet(

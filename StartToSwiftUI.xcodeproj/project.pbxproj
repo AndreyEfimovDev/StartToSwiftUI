@@ -118,7 +118,7 @@
 		4781D72E2ED716AE00B74F85 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4781D72D2ED716AE00B74F85 /* Bundle.swift */; };
 		47870FBA2ECC8628004175E4 /* Acknowledgements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47870FB92ECC8628004175E4 /* Acknowledgements.swift */; };
 		47870FBF2ECCD743004175E4 /* LinkButtonURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47870FBE2ECCD743004175E4 /* LinkButtonURL.swift */; };
-		478DBECB2F7000670097FC8A /* B001_LiquidGlassEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DBECA2F7000670097FC8A /* B001_LiquidGlassEffect.swift */; };
+		478DBECB2F7000670097FC8A /* B001_AlbumPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DBECA2F7000670097FC8A /* B001_AlbumPlayer.swift */; };
 		478DBECD2F70025A0097FC8A /* SnippetUnavailableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DBECC2F70025A0097FC8A /* SnippetUnavailableView.swift */; };
 		478DBED22F7002C30097FC8A /* SnippetDemoHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DBED12F7002C30097FC8A /* SnippetDemoHeader.swift */; };
 		478DBED42F7002F40097FC8A /* SnippetThanksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DBED32F7002F40097FC8A /* SnippetThanksView.swift */; };
@@ -350,7 +350,7 @@
 		4781D72D2ED716AE00B74F85 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
 		47870FB92ECC8628004175E4 /* Acknowledgements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Acknowledgements.swift; sourceTree = "<group>"; };
 		47870FBE2ECCD743004175E4 /* LinkButtonURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkButtonURL.swift; sourceTree = "<group>"; };
-		478DBECA2F7000670097FC8A /* B001_LiquidGlassEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = B001_LiquidGlassEffect.swift; sourceTree = "<group>"; };
+		478DBECA2F7000670097FC8A /* B001_AlbumPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = B001_AlbumPlayer.swift; sourceTree = "<group>"; };
 		478DBECC2F70025A0097FC8A /* SnippetUnavailableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetUnavailableView.swift; sourceTree = "<group>"; };
 		478DBED12F7002C30097FC8A /* SnippetDemoHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetDemoHeader.swift; sourceTree = "<group>"; };
 		478DBED32F7002F40097FC8A /* SnippetThanksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetThanksView.swift; sourceTree = "<group>"; };
@@ -667,7 +667,7 @@
 		474F1FE42F7BBC5700128E83 /* B001-B010 */ = {
 			isa = PBXGroup;
 			children = (
-				478DBECA2F7000670097FC8A /* B001_LiquidGlassEffect.swift */,
+				478DBECA2F7000670097FC8A /* B001_AlbumPlayer.swift */,
 			);
 			path = "B001-B010";
 			sourceTree = "<group>";
@@ -1351,7 +1351,7 @@
 				471BBFA12EC7251D0004AC45 /* NoticesViewModel.swift in Sources */,
 				4751DAF22F16402E00EC9C53 /* ProgressStats.swift in Sources */,
 				4791CE082E75AAB000687126 /* UnderlineSermentedPickerNotOptional.swift in Sources */,
-				478DBECB2F7000670097FC8A /* B001_LiquidGlassEffect.swift in Sources */,
+				478DBECB2F7000670097FC8A /* B001_AlbumPlayer.swift in Sources */,
 				47FF425B2EE578DD0069D232 /* ProgressSelectionView.swift in Sources */,
 				471DCBD22EBB89E000AFA5F4 /* FairUseNotice.swift in Sources */,
 				472A9B5B2EDC3B6F00ED3344 /* BackButtonView.swift in Sources */,
@@ -1594,7 +1594,7 @@
 				CODE_SIGN_ENTITLEMENTS = StartToSwiftUI/StartToSwiftUIDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -1617,7 +1617,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7.0;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = PELSH.StartToSwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1641,7 +1641,7 @@
 				CODE_SIGN_ENTITLEMENTS = StartToSwiftUI/StartToSwiftUIRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readwrite;
 				ENABLE_FILE_ACCESS_PICTURE_FOLDER = readwrite;
@@ -1676,7 +1676,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7.0;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = PELSH.StartToSwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1815,7 +1815,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.7.0;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = PELSH.StartToSwiftUI.StudyProgressWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1851,7 +1851,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.7.0;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = PELSH.StartToSwiftUI.StudyProgressWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

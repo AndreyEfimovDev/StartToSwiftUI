@@ -96,7 +96,7 @@ enum Platform: String, CaseIterable, Codable {
     var displayName: String {
         switch self {
         case .youtube: return "Video"
-        case .website: return "Article"
+        case .website: return "Website"
         }
     }
 }
