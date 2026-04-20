@@ -94,44 +94,43 @@ struct A006_FrameBottomTransition: View {
 struct A006_FrameBottomRightTransition: View {
     /*
      Logic:
-     - Initial offset = width — hidden behind the right edge
-     - Appearance → offset = 0 (moves from right to left)
-     - Disappearance → offset = -width (moves left)
-     - asyncAfter resets the offset back to width while the view is hidden
+     - Appearance: snap offset to (0, height) off-screen below, then animate to (0, 0)
+     - Disappearance: animate to (width, 0) — no asyncAfter reset needed
+     - Offset reset happens lazily on the next appearance tap, before the animation starts
+     - This eliminates the asyncAfter race that caused flickering
      */
     @State private var showView: Bool = false
     @State private var offset: CGSize
-    
+
     let height: CGFloat
     let width: CGFloat
-    
+
     private let duration: Double = 0.5
-    
+
     init(height: CGFloat, width: CGFloat) {
-            self.height = height
-            self.width = width
-            _offset = State(initialValue: CGSize(width: 0, height: height))
-        }
+        self.height = height
+        self.width = width
+        _offset = State(initialValue: CGSize(width: 0, height: height))
+    }
 
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack {
                 Button {
                     if !showView {
-                        // appearance from the bottom
+                        // snap to start position (below screen, invisible), then animate up
                         showView = true
-                        withAnimation(.easeInOut(duration: duration)) {
-                            offset = .zero
+                        offset = CGSize(width: 0, height: height)
+                        DispatchQueue.main.async {
+                            withAnimation(.easeInOut(duration: duration)) {
+                                offset = .zero
+                            }
                         }
                     } else {
-                        // disappearance to the right
+                        // animate exit to the right — offset stays there, reset on next show
+                        showView = false
                         withAnimation(.easeInOut(duration: duration)) {
                             offset = CGSize(width: width, height: 0)
-                        }
-                        // resetting the position back down after disappearing
-                        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                            showView = false
-                            offset = CGSize(width: 0, height: height)
                         }
                     }
                 } label: {
@@ -144,7 +143,7 @@ struct A006_FrameBottomRightTransition: View {
                 }
                 Spacer()
             }
-            
+
             UnevenRoundedRectangle(cornerRadii: .init(
                 topLeading: 30,
                 topTrailing: 30
