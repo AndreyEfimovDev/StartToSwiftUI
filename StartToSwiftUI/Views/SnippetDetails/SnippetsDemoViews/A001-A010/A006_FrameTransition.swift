@@ -92,15 +92,8 @@ struct A006_FrameBottomTransition: View {
 }
 
 struct A006_FrameBottomRightTransition: View {
-    /*
-     Logic:
-     - Appearance: snap offset to (0, height) off-screen below, then animate to (0, 0)
-     - Disappearance: animate to (width, 0) — no asyncAfter reset needed
-     - Offset reset happens lazily on the next appearance tap, before the animation starts
-     - This eliminates the asyncAfter race that caused flickering
-     */
+
     @State private var showView: Bool = false
-    @State private var offset: CGSize
 
     let height: CGFloat
     let width: CGFloat
@@ -110,28 +103,14 @@ struct A006_FrameBottomRightTransition: View {
     init(height: CGFloat, width: CGFloat) {
         self.height = height
         self.width = width
-        _offset = State(initialValue: CGSize(width: 0, height: height))
     }
 
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack {
                 Button {
-                    if !showView {
-                        // snap to start position (below screen, invisible), then animate up
-                        showView = true
-                        offset = CGSize(width: 0, height: height)
-                        DispatchQueue.main.async {
-                            withAnimation(.easeInOut(duration: duration)) {
-                                offset = .zero
-                            }
-                        }
-                    } else {
-                        // animate exit to the right — offset stays there, reset on next show
-                        showView = false
-                        withAnimation(.easeInOut(duration: duration)) {
-                            offset = CGSize(width: width, height: 0)
-                        }
+                    withAnimation(.easeInOut(duration: duration)) {
+                        showView.toggle()
                     }
                 } label: {
                     Text("Animate Bottom-Right")
@@ -144,13 +123,18 @@ struct A006_FrameBottomRightTransition: View {
                 Spacer()
             }
 
-            UnevenRoundedRectangle(cornerRadii: .init(
-                topLeading: 30,
-                topTrailing: 30
-            ))
-            .fill(Color.mycolor.myGreen.A006_verticalGradient())
-            .frame(height: height)
-            .offset(offset)
+            if showView {
+                UnevenRoundedRectangle(cornerRadii: .init(
+                    topLeading: 30,
+                    topTrailing: 30
+                ))
+                .fill(Color.mycolor.myGreen.A006_verticalGradient())
+                .frame(height: height)
+                .transition(.asymmetric(
+                    insertion: .move(edge: .bottom),
+                    removal: .move(edge: .trailing)
+                ))
+            }
         }
         .clipped()
         .padding(.top)
