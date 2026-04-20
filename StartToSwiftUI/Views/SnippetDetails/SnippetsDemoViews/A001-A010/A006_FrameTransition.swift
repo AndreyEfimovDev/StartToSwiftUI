@@ -145,15 +145,13 @@ struct A006_FrameBottomRightTransition: View {
                 Spacer()
             }
             
-            if showView {
-                UnevenRoundedRectangle(cornerRadii: .init(
-                    topLeading: 30,
-                    topTrailing: 30
-                ))
-                .fill(Color.mycolor.myGreen.A006_verticalGradient())
-                .frame(height: height)
-                .offset(offset)
-            }
+            UnevenRoundedRectangle(cornerRadii: .init(
+                topLeading: 30,
+                topTrailing: 30
+            ))
+            .fill(Color.mycolor.myGreen.A006_verticalGradient())
+            .frame(height: height)
+            .offset(offset)
         }
         .clipped()
         .padding(.top)
