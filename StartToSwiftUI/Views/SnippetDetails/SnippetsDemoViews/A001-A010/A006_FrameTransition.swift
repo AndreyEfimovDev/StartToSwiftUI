@@ -92,12 +92,20 @@ struct A006_FrameBottomTransition: View {
 }
 
 struct A006_FrameBottomRightTransition: View {
+    /*
+     Three-phase approach — view always stays in the hierarchy (like rightRight).
+     - .hidden:    offset (0, height)  — below screen, clipped, invisible
+     - .visible:   offset (0, 0)       — shown
+     - .exitRight: offset (width, 0)   — right of screen, clipped, invisible
+     Reset (.exitRight → .hidden) is instant via disablesAnimations, both
+     positions are off-screen so the snap is invisible. No asyncAfter needed.
+     */
+    private enum Phase { case hidden, visible, exitRight }
 
-    @State private var showView: Bool = false
+    @State private var phase: Phase = .hidden
 
     let height: CGFloat
     let width: CGFloat
-
     private let duration: Double = 0.5
 
     init(height: CGFloat, width: CGFloat) {
@@ -105,12 +113,22 @@ struct A006_FrameBottomRightTransition: View {
         self.width = width
     }
 
+    private var xOffset: CGFloat { phase == .exitRight ? width : 0 }
+    private var yOffset: CGFloat { phase == .hidden    ? height : 0 }
+
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack {
                 Button {
-                    withAnimation(.easeInOut(duration: duration)) {
-                        showView.toggle()
+                    if phase != .visible {
+                        // instant snap to below-screen start position, then animate in
+                        var t = Transaction()
+                        t.disablesAnimations = true
+                        withTransaction(t) { phase = .hidden }
+                        DispatchQueue.main.async { phase = .visible }
+                    } else {
+                        // animate exit to the right; reset happens lazily on next show
+                        phase = .exitRight
                     }
                 } label: {
                     Text("Animate Bottom-Right")
@@ -123,18 +141,14 @@ struct A006_FrameBottomRightTransition: View {
                 Spacer()
             }
 
-            if showView {
-                UnevenRoundedRectangle(cornerRadii: .init(
-                    topLeading: 30,
-                    topTrailing: 30
-                ))
-                .fill(Color.mycolor.myGreen.A006_verticalGradient())
-                .frame(height: height)
-                .transition(.asymmetric(
-                    insertion: .move(edge: .bottom),
-                    removal: .move(edge: .trailing)
-                ))
-            }
+            UnevenRoundedRectangle(cornerRadii: .init(
+                topLeading: 30,
+                topTrailing: 30
+            ))
+            .fill(Color.mycolor.myGreen.A006_verticalGradient())
+            .frame(height: height)
+            .offset(x: xOffset, y: yOffset)
+            .animation(.easeInOut(duration: duration), value: phase)
         }
         .clipped()
         .padding(.top)
