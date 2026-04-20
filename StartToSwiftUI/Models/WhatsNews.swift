@@ -31,6 +31,12 @@ struct WhatsNews {
                     newsText: """
                     - The application's stability and performance 
                     """
+                ),
+                News(
+                    title: "Fixed",
+                    newsText: """
+                    - flickering in A006 BottomRight
+                    """
                 )
             ]
         ),
