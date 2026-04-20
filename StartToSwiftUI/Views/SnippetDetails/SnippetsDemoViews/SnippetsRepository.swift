@@ -1722,13 +1722,10 @@ struct SnippetsRepository {
                     }
                     
                     if showView {
-                        UnevenRoundedRectangle(cornerRadii: .init(
-                            topLeading: 30,
-                            topTrailing: 30
-                        ))
-                        .fill(Color.mycolor.myGreen.A006_verticalGradient())
-                        .frame(height: height)
-                        .offset(offset)
+                        RoundedRectangle(cornerRadius: 30)
+                            .fill(Color.mycolor.myGreen.A006_verticalGradient())
+                            .frame(height: height)
+                            .offset(offset)
                     }
                 }
                 .padding(.top)
