@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @MainActor
-class AppSyncStateManager {
+class AppSyncStateManager: AppSyncStateManagerProtocol {
     
     private let modelContext: ModelContext
     
@@ -93,7 +93,7 @@ class AppSyncStateManager {
             return newState
             
         } catch {
-            log("❌ Error getting AppState: \(error)", level: .error)
+            log("Error getting AppState: \(error)", level: .error)
             let newState = AppSyncState()
             modelContext.insert(newState)
             return newState
@@ -154,7 +154,7 @@ class AppSyncStateManager {
         let uniqueFavorites = Array(Set(mergedFavorites)) // remove duplicates
         primaryState.snippetFavoriteIDs = uniqueFavorites // collect all id from unique favorites
         
-        log("  ✅ Combined data:", level: .info)
+        log("  Combined data:", level: .info)
         
         // Remove duplicates
         for duplicateState in sortedStates.dropFirst() {
@@ -173,7 +173,7 @@ class AppSyncStateManager {
         do {
             try modelContext.save()
         } catch {
-            log("❌ Error saving AppState: \(error)", level: .error)
+            log("Error saving AppState: \(error)", level: .error)
         }
     }
 }
@@ -249,6 +249,3 @@ extension AppSyncStateManager {
         return appState.snippetFavoriteIDs.contains(id)
     }
 }
-
-@MainActor
-extension AppSyncStateManager: AppSyncStateManagerProtocol {}
