@@ -71,7 +71,7 @@ struct MaterialsHomeView: View {
             .sheet(isPresented: $isFilterButtonPressed) {filtersSheet }
             .overlay { gestureOverlays(proxy: proxy) }
             .task {
-                FBAnalyticsManager.shared.logScreen(name: "MaterialsHomeView")
+                vm.analyticsManager.logScreen(name: "MaterialsHomeView")
             }
         }
     }

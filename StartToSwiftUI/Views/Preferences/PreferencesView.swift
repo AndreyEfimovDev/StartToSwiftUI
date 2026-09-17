@@ -80,7 +80,7 @@ struct PreferencesView: View {
         .toolbar { toolbar }
         .preferredColorScheme(vm.selectedTheme.colorScheme)
         .onAppear {
-            FBAnalyticsManager.shared.logScreen(name: "PreferencesView")
+            vm.analyticsManager.logScreen(name: "PreferencesView")
         }
         .task {
             hasPostsUpdate = await vm.checkFBPostsForUpdates()

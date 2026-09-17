@@ -31,7 +31,7 @@ struct SnippetDetailsView: View {
             .toolbar { toolbar }
             .sheet(isPresented: $showCodeSheet) { codeSheet }
             .onAppear {
-                FBAnalyticsManager.shared.logScreen(name: "SnippetDetailsView_\(snippet.id)")
+                snippetvm.analyticsManager.logScreen(name: "SnippetDetailsView_\(snippet.id)")
                 isFavorite = snippetvm.isFavorite(snippet)
             }
             .navigationTitle(snippet.id)

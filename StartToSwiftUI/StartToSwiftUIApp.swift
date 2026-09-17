@@ -69,6 +69,7 @@ struct StartToSwiftUIApp: App {
         let jsonFileManager = JSONFileManager()
         let crashManager = FBCrashManager()
         let performanceManager = FBPerformanceManager()
+        let analyticsManager = FBAnalyticsManager()
 
         self.appStateManager = stateManager
         _errorManager = StateObject(wrappedValue: errorManager)
@@ -88,7 +89,8 @@ struct StartToSwiftUIApp: App {
             errorManager: errorManager,
             fileManager: jsonFileManager,
             crashManager: crashManager,
-            performanceManager: performanceManager
+            performanceManager: performanceManager,
+            analyticsManager: analyticsManager
         ))
         _noticesViewModel = StateObject(wrappedValue: NoticesViewModel(
             modelContext: context,
@@ -98,7 +100,8 @@ struct StartToSwiftUIApp: App {
             performanceManager: performanceManager
         ))
         _snippetsViewModel = StateObject(wrappedValue: SnippetsViewModel(
-            appStateManager: stateManager
+            appStateManager: stateManager,
+            analyticsManager: analyticsManager
         ))
 
 #if DEBUG

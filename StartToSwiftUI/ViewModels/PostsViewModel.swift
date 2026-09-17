@@ -23,6 +23,7 @@ final class PostsViewModel: ObservableObject {
     let errorManager: ErrorManager
     let crashManager: FBCrashManager
     let performanceManager: FBPerformanceManager
+    let analyticsManager: FBAnalyticsManager
 
     @Published var allPosts: [Post] = []
     @Published var filteredPosts: [Post] = []
@@ -144,7 +145,8 @@ final class PostsViewModel: ObservableObject {
         errorManager: ErrorManager? = nil,
         fileManager: JSONFileManager = JSONFileManager(),
         crashManager: FBCrashManager = FBCrashManager(),
-        performanceManager: FBPerformanceManager = FBPerformanceManager()
+        performanceManager: FBPerformanceManager = FBPerformanceManager(),
+        analyticsManager: FBAnalyticsManager = FBAnalyticsManager()
     ) {
         self.dataSource = dataSource
         self.appStateManager = appStateManager
@@ -157,6 +159,7 @@ final class PostsViewModel: ObservableObject {
         self.fileManager = fileManager
         self.crashManager = crashManager
         self.performanceManager = performanceManager
+        self.analyticsManager = analyticsManager
 
         setupTimezone()
         restorePostFilters()
@@ -169,7 +172,8 @@ final class PostsViewModel: ObservableObject {
         errorManager: ErrorManager? = nil,
         fileManager: JSONFileManager = JSONFileManager(),
         crashManager: FBCrashManager = FBCrashManager(),
-        performanceManager: FBPerformanceManager = FBPerformanceManager()
+        performanceManager: FBPerformanceManager = FBPerformanceManager(),
+        analyticsManager: FBAnalyticsManager = FBAnalyticsManager()
     ) {
         self.init(
             dataSource: SwiftDataPostsDataSource(modelContext: modelContext),
@@ -178,7 +182,8 @@ final class PostsViewModel: ObservableObject {
             errorManager: errorManager,
             fileManager: fileManager,
             crashManager: crashManager,
-            performanceManager: performanceManager
+            performanceManager: performanceManager,
+            analyticsManager: analyticsManager
         )
     }
     
@@ -392,7 +397,7 @@ final class PostsViewModel: ObservableObject {
     func favoriteToggle(_ post: Post) {
         post.favoriteChoice = post.favoriteChoice == .yes ? .no : .yes
         if post.favoriteChoice == .yes {
-            FBAnalyticsManager.shared.logEvent(name: "post_favorited")
+            analyticsManager.logEvent(name: "post_favorited")
         }
         saveContextAndReload()
     }
@@ -422,7 +427,7 @@ final class PostsViewModel: ObservableObject {
         case .practiced:
             post.practicedDateStamp = .now
         }
-        FBAnalyticsManager.shared.logEvent(name: "study_progress_changed", params: ["progress": selectedStudyProgress.rawValue])
+        analyticsManager.logEvent(name: "study_progress_changed", params: ["progress": selectedStudyProgress.rawValue])
         saveContextAndReload()
     }
     

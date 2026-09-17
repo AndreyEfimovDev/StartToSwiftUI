@@ -51,7 +51,7 @@ struct PostDetailsView: View {
                 .safeAreaInset(edge: .bottom) { bottomTabsContainer }
                 .ignoresSafeArea(edges: .bottom)
                 .onAppear {
-                    FBAnalyticsManager.shared.logScreen(name: "PostDetailsView")
+                    vm.analyticsManager.logScreen(name: "PostDetailsView")
                     updateWidths(for: proxy.size.width)
                 }
                 .onChange(of: proxy.size.width) { _, newValue in

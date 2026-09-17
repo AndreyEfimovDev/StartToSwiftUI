@@ -70,7 +70,7 @@ extension PostsViewModel {
                 return true
             }
             
-            FBAnalyticsManager.shared.logEvent(name: "import_posts", params: ["count": fbResponseChecked.count])
+            analyticsManager.logEvent(name: "import_posts", params: ["count": fbResponseChecked.count])
             
             // Adding new posts
             for firebasePost in fbResponseChecked {

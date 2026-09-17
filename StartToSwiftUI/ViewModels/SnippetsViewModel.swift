@@ -15,6 +15,7 @@ final class SnippetsViewModel: ObservableObject {
     private let appStateManager: AppSyncStateManager?
     private let favoritesService = SnippetFavouritesService.shared
     private let hapticManager = HapticManager.shared
+    let analyticsManager: FBAnalyticsManager
 
     // MARK: - Data
     @Published var allSnippets: [CodeSnippet] = SnippetsRepository.allDemoCodeSnippet
@@ -23,8 +24,12 @@ final class SnippetsViewModel: ObservableObject {
     @Published var searchText: String = ""
 
     // MARK: - Init
-    init(appStateManager: AppSyncStateManager? = nil) {
+    init(
+        appStateManager: AppSyncStateManager? = nil,
+        analyticsManager: FBAnalyticsManager = FBAnalyticsManager()
+    ) {
         self.appStateManager = appStateManager
+        self.analyticsManager = analyticsManager
         setupSubscriptions()
         if let appStateManager {
             SnippetFavouritesService.shared.configure(with: appStateManager)

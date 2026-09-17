@@ -56,7 +56,7 @@ struct SnippetsHomeView: View {
                 .padding(.horizontal)
         }
         .task {
-            FBAnalyticsManager.shared.logScreen(name: "SnippetsHomeView")
+            snippetvm.analyticsManager.logScreen(name: "SnippetsHomeView")
             
         }
     }
