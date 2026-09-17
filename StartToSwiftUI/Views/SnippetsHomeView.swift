@@ -56,7 +56,7 @@ struct SnippetsHomeView: View {
                 .padding(.horizontal)
         }
         .task {
-            FBAnalyticsManager.shared.logScreen(name: "SnippetsHomeView")
+            snippetvm.analyticsManager.logScreen(name: "SnippetsHomeView")
             
         }
     }
@@ -133,10 +133,11 @@ struct SnippetsHomeView: View {
 #Preview("With Mock Snippets") {
     NavigationStack {
         SnippetsHomeView()
-            .environmentObject(SnippetsViewModel())
+            .environmentObject(SnippetsViewModel(services: .make()))
             .environmentObject(NoticesViewModel(
                 dataSource: MockNoticesDataSource(),
-                fbNoticesManager: MockFBNoticesManager()
+                fbNoticesManager: MockFBNoticesManager(),
+                services: .make()
             ))
             .environmentObject(AppCoordinator())
     }

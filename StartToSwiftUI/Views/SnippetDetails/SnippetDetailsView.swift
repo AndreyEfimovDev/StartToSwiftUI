@@ -31,7 +31,7 @@ struct SnippetDetailsView: View {
             .toolbar { toolbar }
             .sheet(isPresented: $showCodeSheet) { codeSheet }
             .onAppear {
-                FBAnalyticsManager.shared.logScreen(name: "SnippetDetailsView_\(snippet.id)")
+                snippetvm.analyticsManager.logScreen(name: "SnippetDetailsView_\(snippet.id)")
                 isFavorite = snippetvm.isFavorite(snippet)
             }
             .navigationTitle(snippet.id)
@@ -133,7 +133,7 @@ struct SnippetDetailsView: View {
 
 // MARK: - Preview
 #Preview("Code Snippet Details") {
-    let vm = SnippetsViewModel()
+    let vm = SnippetsViewModel(services: .make())
     NavigationStack {
         SnippetDetailsView(snippet: SnippetsRepository.a001)
             .environmentObject(vm)

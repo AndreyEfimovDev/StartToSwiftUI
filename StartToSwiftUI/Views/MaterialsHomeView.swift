@@ -71,7 +71,7 @@ struct MaterialsHomeView: View {
             .sheet(isPresented: $isFilterButtonPressed) {filtersSheet }
             .overlay { gestureOverlays(proxy: proxy) }
             .task {
-                FBAnalyticsManager.shared.logScreen(name: "MaterialsHomeView")
+                vm.analyticsManager.logScreen(name: "MaterialsHomeView")
             }
         }
     }
@@ -319,7 +319,8 @@ private struct HomeViewPreview: View {
     @StateObject var vm: PostsViewModel = {
         let vm = PostsViewModel(
             dataSource: MockPostsDataSource(),
-            fbPostsManager: MockFBPostsManager()
+            fbPostsManager: MockFBPostsManager(),
+            services: .make()
         )
         vm.start()
         return vm
@@ -327,7 +328,8 @@ private struct HomeViewPreview: View {
     
     @StateObject var noticesVM = NoticesViewModel(
         dataSource: MockNoticesDataSource(),
-        fbNoticesManager: MockFBNoticesManager()
+        fbNoticesManager: MockFBNoticesManager(),
+        services: .make()
     )
     
     var body: some View {

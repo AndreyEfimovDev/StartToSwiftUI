@@ -10,9 +10,8 @@ import FirebaseAnalytics
 
 final class FBAnalyticsManager {
 #warning("Before deployment: ensure -FIRDebugEnabled is OFF in scheme arguments")
-    static let shared = FBAnalyticsManager()
 
-    private init() { }
+    init() { }
     
     func logEvent(name: String, params: [String:Any]? = nil) {
         Analytics.logEvent(name, parameters: params)

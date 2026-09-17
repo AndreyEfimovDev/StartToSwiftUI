@@ -89,7 +89,7 @@ struct NoticeDetailsView: View {
 }
 
 #Preview {
-    let noticeVM = NoticesViewModel(dataSource: MockNoticesDataSource())
+    let noticeVM = NoticesViewModel(dataSource: MockNoticesDataSource(), fbNoticesManager: MockFBNoticesManager(), services: .make())
     
     noticeVM.notices = PreviewData.sampleNotices
     

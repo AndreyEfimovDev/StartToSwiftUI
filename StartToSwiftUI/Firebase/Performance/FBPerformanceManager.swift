@@ -23,8 +23,7 @@ struct PerformanceTrace {
 
 final class FBPerformanceManager {
 
-    static let shared = FBPerformanceManager()
-    private init() { }
+    init() { }
 
     func startTrace(name: String) -> PerformanceTrace {
         PerformanceTrace(trace: Performance.startTrace(name: name))

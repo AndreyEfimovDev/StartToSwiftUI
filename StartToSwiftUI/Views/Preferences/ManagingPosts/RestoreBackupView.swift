@@ -91,7 +91,7 @@ struct RestoreBackupView: View {
             isRestored = true
             isInProgress = false
             
-            if !ErrorManager.shared.showAlert {
+            if !vm.errorManager.showAlert {
                 DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
                     coordinator.closeModal()
                 }
@@ -108,7 +108,7 @@ struct RestoreBackupView: View {
     )
     let context = ModelContext(container)
     
-    let vm = PostsViewModel(modelContext: context)
+    let vm = PostsViewModel(modelContext: context, fbPostsManager: FBPostsManager(), services: .make())
     
     NavigationStack{
         RestoreBackupView()

@@ -211,7 +211,7 @@ struct PostsFilterView: View {
     // MARK: Buttons
     private var applyFiltersButton: some View {
         ClearCupsuleButton(primaryTitle: "Apply", primaryTitleColor: Color.mycolor.myBlue) {
-            FBAnalyticsManager.shared.logEvent(name: "filter_applied", params: [
+            vm.analyticsManager.logEvent(name: "filter_applied", params: [
                 "level": vm.selectedLevel?.rawValue ?? "",
                 "favorite": vm.selectedFavorite?.rawValue ?? "",
                 "type": vm.selectedType?.rawValue ?? "",
@@ -253,7 +253,9 @@ struct PostsFilterView: View {
 
 #Preview {
     let vm = PostsViewModel(
-        dataSource: MockPostsDataSource(posts: PreviewData.samplePosts)
+        dataSource: MockPostsDataSource(posts: PreviewData.samplePosts),
+        fbPostsManager: MockFBPostsManager(),
+        services: .make()
     )
     ZStack {
         PostsFilterView(

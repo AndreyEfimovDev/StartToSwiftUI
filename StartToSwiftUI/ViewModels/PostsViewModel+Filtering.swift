@@ -95,7 +95,7 @@ extension PostsViewModel {
         guard !searchText.isEmpty else { return posts }
         
         if searchText.count == 1 {
-            FBAnalyticsManager.shared.logEvent(name: "search_used")
+            analyticsManager.logEvent(name: "search_used")
         }
         
         let query = searchText.lowercased()

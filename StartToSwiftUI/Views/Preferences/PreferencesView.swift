@@ -80,7 +80,7 @@ struct PreferencesView: View {
         .toolbar { toolbar }
         .preferredColorScheme(vm.selectedTheme.colorScheme)
         .onAppear {
-            FBAnalyticsManager.shared.logScreen(name: "PreferencesView")
+            vm.analyticsManager.logScreen(name: "PreferencesView")
         }
         .task {
             hasPostsUpdate = await vm.checkFBPostsForUpdates()
@@ -325,8 +325,8 @@ struct PreferencesView: View {
     )
     let context = ModelContext(container)
     
-    let vm = PostsViewModel(modelContext: context)
-    let noticevm = NoticesViewModel(modelContext: context)
+    let vm = PostsViewModel(modelContext: context, fbPostsManager: FBPostsManager(), services: .make())
+    let noticevm = NoticesViewModel(modelContext: context, fbNoticesManager: FBNoticesManager(), services: .make())
     
     NavigationStack {
         PreferencesView ()

@@ -20,8 +20,8 @@ extension PostsViewModel {
         isImportingPosts = true
         defer { isImportingPosts = false }
 
-        FBCrashManager.shared.addLog("importPostsFromFirebase: started, posts count: \(allPosts.count)")
-        let trace = FBPerformanceManager.shared.startTrace(name: "import_posts_firebase")
+        crashManager.addLog("importPostsFromFirebase: started, posts count: \(allPosts.count)")
+        let trace = performanceManager.startTrace(name: "import_posts_firebase")
         
         clearError()
         
@@ -35,19 +35,19 @@ extension PostsViewModel {
         switch result {
         case .failure(.networkUnavailable):
             handleError(nil, message: "No internet connection. Please check your network and try again.")
-            FBPerformanceManager.shared.stopTrace(trace)
+            performanceManager.stopTrace(trace)
             return false
 
         case .failure(.unknown(let error)):
             handleError(error, message: "Failed to load posts from Firebase")
-            FBPerformanceManager.shared.stopTrace(trace)
+            performanceManager.stopTrace(trace)
             return false
 
         case .success(let fbResponse):
             let fbResponseChecked = filterUniquePosts(from: fbResponse)
             guard !fbResponseChecked.isEmpty else {
                 hapticManager.impact(style: .light)
-                FBPerformanceManager.shared.stopTrace(trace)
+                performanceManager.stopTrace(trace)
                 log("ℹ️ No new posts from \(sourceName)", level: .info)
 
                 // All received posts already exist locally — advance date past them
@@ -70,7 +70,7 @@ extension PostsViewModel {
                 return true
             }
             
-            FBAnalyticsManager.shared.logEvent(name: "import_posts", params: ["count": fbResponseChecked.count])
+            analyticsManager.logEvent(name: "import_posts", params: ["count": fbResponseChecked.count])
             
             // Adding new posts
             for firebasePost in fbResponseChecked {
@@ -86,15 +86,15 @@ extension PostsViewModel {
             
             hapticManager.notification(type: .success)
             
-            FBCrashManager.shared.addLog("importPostsFromFirebase: finished, import count: \(fbResponseChecked.count)")
-            FBCrashManager.shared.addLog("importPostsFromFirebase: finished, updated posts count: \(allPosts.count)")
+            crashManager.addLog("importPostsFromFirebase: finished, import count: \(fbResponseChecked.count)")
+            crashManager.addLog("importPostsFromFirebase: finished, updated posts count: \(allPosts.count)")
             log("✅ Added \(fbResponseChecked.count) new posts from \(sourceName)", level: .info)
-            FBPerformanceManager.shared.setValue(
+            performanceManager.setValue(
                 trace,
                 value: "\(fbResponseChecked.count)/\(fbResponse.count)",
                 forAttribute: "posts_new_of_received"
             )
-            FBPerformanceManager.shared.stopTrace(trace)
+            performanceManager.stopTrace(trace)
             return true
         }
     }

@@ -595,7 +595,7 @@ struct AddEditPostView: View {
     )
     let context = ModelContext(container)
     
-    let vm = PostsViewModel(modelContext: context)
+    let vm = PostsViewModel(modelContext: context, fbPostsManager: FBPostsManager(), services: .make())
     
     NavigationStack {
         AddEditPostView(post: PreviewData.samplePost1)
@@ -612,7 +612,7 @@ struct AddEditPostView: View {
     )
     let context = ModelContext(container)
     
-    let vm = PostsViewModel(modelContext: context)
+    let vm = PostsViewModel(modelContext: context, fbPostsManager: FBPostsManager(), services: .make())
     
     NavigationStack {
         AddEditPostView(post: nil)

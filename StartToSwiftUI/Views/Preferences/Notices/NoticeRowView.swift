@@ -64,7 +64,7 @@ fileprivate struct NoticeRowPreView: View {
     )
     let context = ModelContext(container)
     
-    let noticevm = NoticesViewModel(modelContext: context)
+    let noticevm = NoticesViewModel(modelContext: context, fbNoticesManager: FBNoticesManager(), services: .make())
     
     NavigationStack {
         NoticeRowPreView()

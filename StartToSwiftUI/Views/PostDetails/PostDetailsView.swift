@@ -51,7 +51,7 @@ struct PostDetailsView: View {
                 .safeAreaInset(edge: .bottom) { bottomTabsContainer }
                 .ignoresSafeArea(edges: .bottom)
                 .onAppear {
-                    FBAnalyticsManager.shared.logScreen(name: "PostDetailsView")
+                    vm.analyticsManager.logScreen(name: "PostDetailsView")
                     updateWidths(for: proxy.size.width)
                 }
                 .onChange(of: proxy.size.width) { _, newValue in
@@ -331,7 +331,7 @@ struct PostDetailsView: View {
 
 #Preview("Post Details with Mock Data") {
     let vm: PostsViewModel = {
-        let vm = PostsViewModel(dataSource: MockPostsDataSource(posts: PreviewData.samplePosts))
+        let vm = PostsViewModel(dataSource: MockPostsDataSource(posts: PreviewData.samplePosts), fbPostsManager: MockFBPostsManager(), services: .make())
         vm.loadPostsFromSwiftData()
         return vm
     }()

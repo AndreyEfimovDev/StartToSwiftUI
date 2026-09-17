@@ -18,6 +18,9 @@ final class NoticesViewModel: ObservableObject {
     private let hapticManager = HapticManager.shared
     private let fbNoticesManager: FBNoticesManagerProtocol
     private let appStateManager: AppSyncStateManagerProtocol?
+    private let errorManager: ErrorManager
+    private let crashManager: FBCrashManager
+    private let performanceManager: FBPerformanceManager
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -65,23 +68,29 @@ final class NoticesViewModel: ObservableObject {
     init(
         dataSource: NoticesDataSourceProtocol,
         appStateManager: AppSyncStateManagerProtocol? = nil,
-        fbNoticesManager: FBNoticesManagerProtocol = FBNoticesManager(),
+        fbNoticesManager: FBNoticesManagerProtocol,
+        services: AppServiceDependencies
     ) {
         self.dataSource = dataSource
         self.appStateManager = appStateManager
         self.fbNoticesManager = fbNoticesManager
+        self.errorManager = services.errorManager
+        self.crashManager = services.crashManager
+        self.performanceManager = services.performanceManager
     }
 
     /// Convenience initializer for backward compatibility
     convenience init(
         modelContext: ModelContext,
         appStateManager: AppSyncStateManager? = nil,
-        fbNoticesManager: FBNoticesManagerProtocol = FBNoticesManager()
+        fbNoticesManager: FBNoticesManagerProtocol,
+        services: AppServiceDependencies
     ) {
         self.init(
             dataSource: SwiftDataNoticesDataSource(modelContext: modelContext),
             appStateManager: appStateManager,
-            fbNoticesManager: fbNoticesManager
+            fbNoticesManager: fbNoticesManager,
+            services: services
         )
     }
 
@@ -125,25 +134,25 @@ final class NoticesViewModel: ObservableObject {
 
     // MARK: - Load Notices from SwiftData
     func loadNoticesFromSwiftData(removeDuplicates: Bool = true) {
-        let trace = FBPerformanceManager.shared.startTrace(name: "load_notices_swiftdata")
+        let trace = performanceManager.startTrace(name: "load_notices_swiftdata")
         lastLoadTime = Date()
-        FBCrashManager.shared.addLog("loadNoticesFromSwiftData: notices count: \(notices.count)")
+        crashManager.addLog("loadNoticesFromSwiftData: notices count: \(notices.count)")
 
         // Removing duplicate notices in SwiftUI, leaving only one instance for each ID - for SwiftData only
         if removeDuplicates, let swiftDataSource {
             removeDuplicateNotices(from: swiftDataSource)
         }
-        FBCrashManager.shared.addLog("loadNoticesFromSwiftData: notices count after check for duplicates: \(notices.count)")
+        crashManager.addLog("loadNoticesFromSwiftData: notices count after check for duplicates: \(notices.count)")
 
         do {
             self.notices = try dataSource.fetchNotices()
-            FBCrashManager.shared.addLog("loadNoticesFromSwiftData: notices count after fetch from SwiftData: \(notices.count)")
+            crashManager.addLog("loadNoticesFromSwiftData: notices count after fetch from SwiftData: \(notices.count)")
             updateUnreadStatus()  // ← always update status when fetch notices
         } catch {
-            FBCrashManager.shared.sendNonFatal(error)
+            crashManager.sendNonFatal(error)
             handleError(error, message: "Error loading notices")
         }
-        FBPerformanceManager.shared.stopTrace(trace)
+        performanceManager.stopTrace(trace)
     }
 
     // MARK: - Import Notices from Firebase
@@ -156,8 +165,8 @@ final class NoticesViewModel: ObservableObject {
         isImportingNotices = true
         defer { isImportingNotices = false }
 
-        let trace = FBPerformanceManager.shared.startTrace(name: "import_notices_firebase")
-        FBCrashManager.shared.addLog("loadNoticesFromFirebase: started, notices count: \(notices.count)")
+        let trace = performanceManager.startTrace(name: "import_notices_firebase")
+        crashManager.addLog("loadNoticesFromFirebase: started, notices count: \(notices.count)")
         
         clearError()
         
@@ -188,32 +197,32 @@ final class NoticesViewModel: ObservableObject {
             relevantNotices = notices
         case .failure(.networkUnavailable):
             handleError(nil, message: "No internet connection. Please check your network and try again.")
-            FBPerformanceManager.shared.stopTrace(trace)
+            performanceManager.stopTrace(trace)
             return
         case .failure(.unknown(let error)):
             handleError(error, message: "Failed to load notices from Firebase")
-            FBPerformanceManager.shared.stopTrace(trace)
+            performanceManager.stopTrace(trace)
             return
         }
 
-        FBCrashManager.shared.addLog("loadNoticesFromFirebase: in progress, notices imported: \(relevantNotices.count)")
+        crashManager.addLog("loadNoticesFromFirebase: in progress, notices imported: \(relevantNotices.count)")
 
         // Sync & filter duplicates
         loadNoticesFromSwiftData()
         let existingIDs = Set(notices.map { $0.id })
         let newNotices = relevantNotices.filter { !existingIDs.contains($0.noticeId) }
-        FBCrashManager.shared.addLog("loadNoticesFromFirebase: in progress, new notices found count: \(newNotices.count)")
+        crashManager.addLog("loadNoticesFromFirebase: in progress, new notices found count: \(newNotices.count)")
 
         // Update latest date
         if let appStateManager,
            let latestDate = relevantNotices.map({ $0.noticeDate }).max() {
             appStateManager.updateLatestNoticeDate(latestDate)
-            FBCrashManager.shared.addLog("loadNoticesFromFirebase: latest notices date updated: \(latestDate)")
+            crashManager.addLog("loadNoticesFromFirebase: latest notices date updated: \(latestDate)")
             log("🔥 LastNoticeDate updated in appStateManager \(latestDate)", level: .info)
         }
 
         guard !newNotices.isEmpty else {
-            FBPerformanceManager.shared.stopTrace(trace)
+            performanceManager.stopTrace(trace)
             return
         }
 
@@ -229,12 +238,12 @@ final class NoticesViewModel: ObservableObject {
         saveContext()
         loadNoticesFromSwiftData(removeDuplicates: false)
         log("🍉 ✅ Import complete: \(newNotices.count) notices added", level: .info)
-        FBPerformanceManager.shared.setValue(
+        performanceManager.setValue(
             trace,
             value: "\(newNotices.count)/\(relevantNotices.count)",
             forAttribute: "notices_new_of_received"
         )
-        FBPerformanceManager.shared.stopTrace(trace)
+        performanceManager.stopTrace(trace)
     }
 
     // MARK: - Remove Duplicates
@@ -249,7 +258,7 @@ final class NoticesViewModel: ObservableObject {
                 .filter { $0.value.count > 1 }
             
             guard !duplicateGroups.isEmpty else { return }
-            FBCrashManager.shared.addLog("removeDuplicateNotices: found \(duplicateGroups.count) duplicates")
+            crashManager.addLog("removeDuplicateNotices: found \(duplicateGroups.count) duplicates")
             log("🍉 🗑️ Found \(duplicateGroups.count) IDs with duplicates", level: .info)
             
             for (id, noticesList) in duplicateGroups {
@@ -267,7 +276,7 @@ final class NoticesViewModel: ObservableObject {
             }
             saveContext()
         } catch {
-            FBCrashManager.shared.sendNonFatal(error)
+            crashManager.sendNonFatal(error)
             handleError(error, message: "Error removing duplicates")
         }
     }
@@ -341,7 +350,7 @@ final class NoticesViewModel: ObservableObject {
             loadNoticesFromSwiftData()
             log("🍉 ➕ Notice added, total: \(notices.count)", level: .info)
         } catch {
-            FBCrashManager.shared.sendNonFatal(error)
+            crashManager.sendNonFatal(error)
             handleError(error, message: "Error adding notice")
         }
     }
@@ -351,19 +360,19 @@ final class NoticesViewModel: ObservableObject {
         do {
             try dataSource.save()
         } catch {
-            FBCrashManager.shared.sendNonFatal(error)
+            crashManager.sendNonFatal(error)
             handleError(error, message: "Error saving notices")
         }
     }
 
     // MARK: - Handle Errors
     func clearError() {
-        ErrorManager.shared.clear()
+        errorManager.clear()
     }
 
     private func handleError(_ error: Error?, message: String) {
         hapticManager.notification(type: .error)
-        ErrorManager.shared.handle(error, message: message)
+        errorManager.handle(error, message: message)
     }
 
     // MARK: - Notifications

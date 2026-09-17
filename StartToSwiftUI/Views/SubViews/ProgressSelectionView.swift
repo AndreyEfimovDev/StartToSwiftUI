@@ -125,7 +125,7 @@ struct ProgressSelectionView: View {
 
 #Preview("Valid post") {
     let vm: PostsViewModel = {
-        let vm = PostsViewModel(dataSource: MockPostsDataSource(posts: PreviewData.samplePosts))
+        let vm = PostsViewModel(dataSource: MockPostsDataSource(posts: PreviewData.samplePosts), fbPostsManager: MockFBPostsManager(), services: .make())
         vm.start()
         vm.selectedPost = PreviewData.samplePost1
         return vm

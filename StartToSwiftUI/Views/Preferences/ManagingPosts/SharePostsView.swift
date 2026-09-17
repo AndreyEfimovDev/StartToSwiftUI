@@ -85,10 +85,10 @@ struct SharePostsView: View {
         case .failure(let error):
             isInProgress = false
             hapticManager.notification(type: .error)
-            ErrorManager.shared.handle(error, message: "Failed to export posts")
+            vm.errorManager.handle(error, message: "Failed to export posts")
         }
     }
-    
+
     @ViewBuilder
     private func sharingActivityView(for fileURL: URL) -> some View {
         ActivityView(activityItems: [fileURL], applicationActivities: nil) { result in
@@ -110,10 +110,10 @@ struct SharePostsView: View {
         case .failure(let error):
             isInProgress = false
             hapticManager.notification(type: .error)
-            ErrorManager.shared.handle(error, message: "Failed to export posts")
+            vm.errorManager.handle(error, message: "Failed to export posts")
         }
     }
-    
+
     private func handleSharingResult(_ result: ActivityResult, fileURL: URL) {
         cleanupTempFile(fileURL)
         
@@ -156,7 +156,7 @@ struct SharePostsView: View {
     )
     let context = ModelContext(container)
     
-    let vm = PostsViewModel(modelContext: context)
+    let vm = PostsViewModel(modelContext: context, fbPostsManager: FBPostsManager(), services: .make())
     
     NavigationStack{
         SharePostsView()

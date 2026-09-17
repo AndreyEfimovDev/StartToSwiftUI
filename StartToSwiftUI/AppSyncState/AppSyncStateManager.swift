@@ -8,8 +8,8 @@
 import Foundation
 import SwiftData
 
-//@MainActor
-class AppSyncStateManager {
+@MainActor
+class AppSyncStateManager: AppSyncStateManagerProtocol {
     
     private let modelContext: ModelContext
     
@@ -20,7 +20,7 @@ class AppSyncStateManager {
     // MARK: - Maintenance Methods
     /// Force clearing all duplicate AppState (for maintenance)
     func cleanupDuplicateAppStates() {
-        log("✅ 🧹 Starting duplicate cleaning AppState...", level: .debug)
+        log("🧹 Starting duplicate cleaning AppState...", level: .debug)
 
         let descriptor = FetchDescriptor<AppSyncState>(
             predicate: #Predicate { $0.id == "app_state_singleton" }
@@ -30,15 +30,15 @@ class AppSyncStateManager {
             let results = try modelContext.fetch(descriptor)
             
             if results.count > 1 {
-                log("⚠️ Found \(results.count) duplicates, clearing...", level: .info)
+                log("Found \(results.count) duplicates, clearing...", level: .info)
 
                 _ = mergeDuplicateAppStates(results)
-                log("✅ Cleaning completed", level: .info)
+                log("Cleaning completed", level: .info)
             } else {
-                log("✅ No duplicates found (\(results.count) AppState)", level: .info)
+                log("No duplicates found (\(results.count) AppState)", level: .info)
             }
         } catch {
-            log("❌ Error clearing duplicates: \(error)", level: .error)
+            log("Error clearing duplicates: \(error)", level: .error)
         }
     }
 
@@ -54,7 +54,7 @@ class AppSyncStateManager {
             
             // 2. If several are found, merge them into one
             if results.count > 1 {
-                log("⚠️ Detected \(results.count) AppState, merging duplicates...", level: .info)
+                log("Detected \(results.count) AppState, merging duplicates...", level: .warning)
                 return mergeDuplicateAppStates(results)
             }
             
@@ -77,7 +77,7 @@ class AppSyncStateManager {
             // (in case another device created AppState at that time)
             let finalCheck = try modelContext.fetch(descriptor)
             if let existingState = finalCheck.first {
-                log("✅ AppState was created by another device, use it", level: .info)
+                log("AppState was created by another device, use it", level: .info)
                 return existingState
             }
             
@@ -93,7 +93,7 @@ class AppSyncStateManager {
             return newState
             
         } catch {
-            log("❌ Error getting AppState: \(error)", level: .error)
+            log("Error getting AppState: \(error)", level: .error)
             let newState = AppSyncState()
             modelContext.insert(newState)
             return newState
@@ -154,7 +154,7 @@ class AppSyncStateManager {
         let uniqueFavorites = Array(Set(mergedFavorites)) // remove duplicates
         primaryState.snippetFavoriteIDs = uniqueFavorites // collect all id from unique favorites
         
-        log("  ✅ Combined data:", level: .info)
+        log("  Combined data:", level: .info)
         
         // Remove duplicates
         for duplicateState in sortedStates.dropFirst() {
@@ -173,7 +173,7 @@ class AppSyncStateManager {
         do {
             try modelContext.save()
         } catch {
-            log("❌ Error saving AppState: \(error)", level: .error)
+            log("Error saving AppState: \(error)", level: .error)
         }
     }
 }
@@ -249,6 +249,3 @@ extension AppSyncStateManager {
         return appState.snippetFavoriteIDs.contains(id)
     }
 }
-
-@MainActor
-extension AppSyncStateManager: AppSyncStateManagerProtocol {}
