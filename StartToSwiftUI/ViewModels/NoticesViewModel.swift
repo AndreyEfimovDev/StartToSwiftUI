@@ -18,6 +18,7 @@ final class NoticesViewModel: ObservableObject {
     private let hapticManager = HapticManager.shared
     private let fbNoticesManager: FBNoticesManagerProtocol
     private let appStateManager: AppSyncStateManagerProtocol?
+    private let errorManager: ErrorManager
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -66,22 +67,30 @@ final class NoticesViewModel: ObservableObject {
         dataSource: NoticesDataSourceProtocol,
         appStateManager: AppSyncStateManagerProtocol? = nil,
         fbNoticesManager: FBNoticesManagerProtocol = FBNoticesManager(),
+        errorManager: ErrorManager? = nil
     ) {
         self.dataSource = dataSource
         self.appStateManager = appStateManager
         self.fbNoticesManager = fbNoticesManager
+        // `ErrorManager()` нельзя было поставить дефолтом прямо в сигнатуре —
+        // ErrorManager @MainActor, а дефолтные значения параметров
+        // вычисляются в неизолированном контексте. Строим здесь, в теле
+        // init, который сам уже на @MainActor.
+        self.errorManager = errorManager ?? ErrorManager()
     }
 
     /// Convenience initializer for backward compatibility
     convenience init(
         modelContext: ModelContext,
         appStateManager: AppSyncStateManager? = nil,
-        fbNoticesManager: FBNoticesManagerProtocol = FBNoticesManager()
+        fbNoticesManager: FBNoticesManagerProtocol = FBNoticesManager(),
+        errorManager: ErrorManager? = nil
     ) {
         self.init(
             dataSource: SwiftDataNoticesDataSource(modelContext: modelContext),
             appStateManager: appStateManager,
-            fbNoticesManager: fbNoticesManager
+            fbNoticesManager: fbNoticesManager,
+            errorManager: errorManager
         )
     }
 
@@ -358,12 +367,12 @@ final class NoticesViewModel: ObservableObject {
 
     // MARK: - Handle Errors
     func clearError() {
-        ErrorManager.shared.clear()
+        errorManager.clear()
     }
 
     private func handleError(_ error: Error?, message: String) {
         hapticManager.notification(type: .error)
-        ErrorManager.shared.handle(error, message: message)
+        errorManager.handle(error, message: message)
     }
 
     // MARK: - Notifications

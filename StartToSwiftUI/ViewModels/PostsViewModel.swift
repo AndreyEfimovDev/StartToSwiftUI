@@ -20,6 +20,7 @@ final class PostsViewModel: ObservableObject {
     let hapticManager = HapticManager.shared
     let appStateManager: AppSyncStateManager?
     let fbPostsManager: FBPostsManagerProtocol
+    let errorManager: ErrorManager
 
     @Published var allPosts: [Post] = []
     @Published var filteredPosts: [Post] = []
@@ -137,12 +138,18 @@ final class PostsViewModel: ObservableObject {
     init(
         dataSource: PostsDataSourceProtocol,
         appStateManager: AppSyncStateManager? = nil,
-        fbPostsManager: FBPostsManagerProtocol = FBPostsManager()
+        fbPostsManager: FBPostsManagerProtocol = FBPostsManager(),
+        errorManager: ErrorManager? = nil
     ) {
         self.dataSource = dataSource
         self.appStateManager = appStateManager
         self.fbPostsManager = fbPostsManager
-        
+        // `ErrorManager()` нельзя было поставить дефолтом прямо в сигнатуре —
+        // ErrorManager @MainActor, а дефолтные значения параметров
+        // вычисляются в неизолированном контексте. Строим здесь, в теле
+        // init, который сам уже на @MainActor.
+        self.errorManager = errorManager ?? ErrorManager()
+
         setupTimezone()
         restorePostFilters()
     }
@@ -150,12 +157,14 @@ final class PostsViewModel: ObservableObject {
     convenience init(
         modelContext: ModelContext,
         appStateManager: AppSyncStateManager? = nil,
-        fbPostsManager: FBPostsManagerProtocol = FBPostsManager()
+        fbPostsManager: FBPostsManagerProtocol = FBPostsManager(),
+        errorManager: ErrorManager? = nil
     ) {
         self.init(
             dataSource: SwiftDataPostsDataSource(modelContext: modelContext),
             appStateManager: appStateManager,
-            fbPostsManager: fbPostsManager
+            fbPostsManager: fbPostsManager,
+            errorManager: errorManager
         )
     }
     
@@ -463,12 +472,12 @@ final class PostsViewModel: ObservableObject {
     
     // MARK: - Handle Errors
     func clearError() {
-        ErrorManager.shared.clear()
+        errorManager.clear()
     }
-    
+
     func handleError(_ error: Error?, message: String) {
         hapticManager.notification(type: .error)
-        ErrorManager.shared.handle(error, message: message)
+        errorManager.handle(error, message: message)
     }
     
     #warning("Delete this func loadDevData() before deployment to App Store")

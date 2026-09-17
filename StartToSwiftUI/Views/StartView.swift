@@ -16,8 +16,7 @@ struct StartView: View {
     @EnvironmentObject private var noticevm: NoticesViewModel
     @EnvironmentObject private var snippetsvm: SnippetsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
-    
-    @StateObject private var errorManager = ErrorManager.shared
+    @EnvironmentObject private var errorManager: ErrorManager
     
     // MARK: - States
     @State private var showLaunchView: Bool = true
@@ -191,6 +190,7 @@ private struct StartViewPreview: View {
             .environmentObject(AppCoordinator())
             .environmentObject(vm)
             .environmentObject(noticesVM)
+            .environmentObject(ErrorManager())
     }
 }
 

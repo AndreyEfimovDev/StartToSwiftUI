@@ -9,8 +9,7 @@ import Foundation
 
 @MainActor
 final class ErrorManager: ObservableObject {
-    static let shared = ErrorManager()
-    
+
     @Published var errorMessage: String?
     @Published var showAlert: Bool = false
     

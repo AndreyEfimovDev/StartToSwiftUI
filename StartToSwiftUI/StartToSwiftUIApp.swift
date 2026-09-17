@@ -23,6 +23,7 @@ struct StartToSwiftUIApp: App {
     @StateObject private var noticesViewModel: NoticesViewModel
     @StateObject private var snippetsViewModel: SnippetsViewModel
     @StateObject private var coordinator = AppCoordinator()
+    @StateObject private var errorManager = ErrorManager()
 
     private let appStateManager: AppSyncStateManager
     private let hapticManager = HapticManager.shared
@@ -62,11 +63,15 @@ struct StartToSwiftUIApp: App {
         
         let context = modelContainer.mainContext
         let stateManager = AppSyncStateManager(modelContext: context)
-        
+        // Один инстанс ErrorManager на всё приложение — общая очередь ошибок
+        // для оверлея, а не по одному на каждого потребителя.
+        let errorManager = ErrorManager()
+
         self.appStateManager = stateManager
-        
+        _errorManager = StateObject(wrappedValue: errorManager)
+
         // Initialisation of AppState — once at startup
-        /* 
+        /*
         Ensure AppState exists (creates with appFirstLaunchDate if first launch).
         Search for AppSyncState in SwiftData - it guarantees the existence of the AppState:
         - The first launch will not find it, it will create a new one with appFirstLaunchDate = Date() and save it to the database.
@@ -76,11 +81,13 @@ struct StartToSwiftUIApp: App {
 
         _postsViewModel = StateObject(wrappedValue: PostsViewModel(
             modelContext: context,
-            appStateManager: stateManager
+            appStateManager: stateManager,
+            errorManager: errorManager
         ))
         _noticesViewModel = StateObject(wrappedValue: NoticesViewModel(
             modelContext: context,
-            appStateManager: stateManager
+            appStateManager: stateManager,
+            errorManager: errorManager
         ))
         _snippetsViewModel = StateObject(wrappedValue: SnippetsViewModel(
             appStateManager: stateManager
@@ -100,6 +107,7 @@ struct StartToSwiftUIApp: App {
                 .environmentObject(postsViewModel)
                 .environmentObject(noticesViewModel)
                 .environmentObject(snippetsViewModel)
+                .environmentObject(errorManager)
                 .task {
                     postsViewModel.start()
                     noticesViewModel.start()
