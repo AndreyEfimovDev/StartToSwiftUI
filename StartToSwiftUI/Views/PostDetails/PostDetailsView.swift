@@ -331,7 +331,7 @@ struct PostDetailsView: View {
 
 #Preview("Post Details with Mock Data") {
     let vm: PostsViewModel = {
-        let vm = PostsViewModel(dataSource: MockPostsDataSource(posts: PreviewData.samplePosts))
+        let vm = PostsViewModel(dataSource: MockPostsDataSource(posts: PreviewData.samplePosts), fbPostsManager: MockFBPostsManager(), services: .make())
         vm.loadPostsFromSwiftData()
         return vm
     }()

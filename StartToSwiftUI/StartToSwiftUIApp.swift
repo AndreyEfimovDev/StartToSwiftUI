@@ -62,17 +62,14 @@ struct StartToSwiftUIApp: App {
     init() {
         
         let context = modelContainer.mainContext
-        let stateManager = AppSyncStateManager(modelContext: context)
-        // Один инстанс ErrorManager на всё приложение — общая очередь ошибок
-        // для оверлея, а не по одному на каждого потребителя.
-        let errorManager = ErrorManager()
-        let jsonFileManager = JSONFileManager()
-        let crashManager = FBCrashManager()
-        let performanceManager = FBPerformanceManager()
-        let analyticsManager = FBAnalyticsManager()
+        // Полный манифест того, что собирает composition root — см.
+        // AppDependencies.
+        let dependencies = AppDependencies.make(modelContext: context)
+        let stateManager = dependencies.appStateManager
+        let services = dependencies.services
 
         self.appStateManager = stateManager
-        _errorManager = StateObject(wrappedValue: errorManager)
+        _errorManager = StateObject(wrappedValue: services.errorManager)
 
         // Initialisation of AppState — once at startup
         /*
@@ -86,22 +83,18 @@ struct StartToSwiftUIApp: App {
         _postsViewModel = StateObject(wrappedValue: PostsViewModel(
             modelContext: context,
             appStateManager: stateManager,
-            errorManager: errorManager,
-            fileManager: jsonFileManager,
-            crashManager: crashManager,
-            performanceManager: performanceManager,
-            analyticsManager: analyticsManager
+            fbPostsManager: FBPostsManager(),
+            services: services
         ))
         _noticesViewModel = StateObject(wrappedValue: NoticesViewModel(
             modelContext: context,
             appStateManager: stateManager,
-            errorManager: errorManager,
-            crashManager: crashManager,
-            performanceManager: performanceManager
+            fbNoticesManager: FBNoticesManager(),
+            services: services
         ))
         _snippetsViewModel = StateObject(wrappedValue: SnippetsViewModel(
             appStateManager: stateManager,
-            analyticsManager: analyticsManager
+            services: services
         ))
 
 #if DEBUG

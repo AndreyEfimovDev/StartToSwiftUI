@@ -68,39 +68,29 @@ final class NoticesViewModel: ObservableObject {
     init(
         dataSource: NoticesDataSourceProtocol,
         appStateManager: AppSyncStateManagerProtocol? = nil,
-        fbNoticesManager: FBNoticesManagerProtocol = FBNoticesManager(),
-        errorManager: ErrorManager? = nil,
-        crashManager: FBCrashManager = FBCrashManager(),
-        performanceManager: FBPerformanceManager = FBPerformanceManager()
+        fbNoticesManager: FBNoticesManagerProtocol,
+        services: AppServiceDependencies
     ) {
         self.dataSource = dataSource
         self.appStateManager = appStateManager
         self.fbNoticesManager = fbNoticesManager
-        // `ErrorManager()` нельзя было поставить дефолтом прямо в сигнатуре —
-        // ErrorManager @MainActor, а дефолтные значения параметров
-        // вычисляются в неизолированном контексте. Строим здесь, в теле
-        // init, который сам уже на @MainActor.
-        self.errorManager = errorManager ?? ErrorManager()
-        self.crashManager = crashManager
-        self.performanceManager = performanceManager
+        self.errorManager = services.errorManager
+        self.crashManager = services.crashManager
+        self.performanceManager = services.performanceManager
     }
 
     /// Convenience initializer for backward compatibility
     convenience init(
         modelContext: ModelContext,
         appStateManager: AppSyncStateManager? = nil,
-        fbNoticesManager: FBNoticesManagerProtocol = FBNoticesManager(),
-        errorManager: ErrorManager? = nil,
-        crashManager: FBCrashManager = FBCrashManager(),
-        performanceManager: FBPerformanceManager = FBPerformanceManager()
+        fbNoticesManager: FBNoticesManagerProtocol,
+        services: AppServiceDependencies
     ) {
         self.init(
             dataSource: SwiftDataNoticesDataSource(modelContext: modelContext),
             appStateManager: appStateManager,
             fbNoticesManager: fbNoticesManager,
-            errorManager: errorManager,
-            crashManager: crashManager,
-            performanceManager: performanceManager
+            services: services
         )
     }
 

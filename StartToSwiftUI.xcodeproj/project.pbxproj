@@ -199,6 +199,7 @@
 		47FF424B2EE4B5960069D232 /* RatingSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */; };
 		47FF42592EE556DB0069D232 /* TapHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF42582EE556DA0069D232 /* TapHandler.swift */; };
 		47FF425B2EE578DD0069D232 /* ProgressSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */; };
+		716EDDBC58398F3B76CC3DC0 /* AppDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC01FB66400E445C49C9D22 /* AppDependencies.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -430,6 +431,7 @@
 		47FF424A2EE4B5950069D232 /* RatingSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingSelectionView.swift; sourceTree = "<group>"; };
 		47FF42582EE556DA0069D232 /* TapHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapHandler.swift; sourceTree = "<group>"; };
 		47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressSelectionView.swift; sourceTree = "<group>"; };
+		5DC01FB66400E445C49C9D22 /* AppDependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDependencies.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -739,6 +741,7 @@
 			isa = PBXGroup;
 			children = (
 				4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */,
+				5DC01FB66400E445C49C9D22 /* AppDependencies.swift */,
 				475997722E5DA436008E20F0 /* Extensions */,
 				473436702F48A11300CF00FA /* Firebase */,
 				4759976C2E5D931F008E20F0 /* Services */,
@@ -1337,6 +1340,7 @@
 				478116462EBFF9DD00EF25F8 /* CustomProgressView.swift in Sources */,
 				47939D812F50592100CBE432 /* MockFBNoticesManager.swift in Sources */,
 				4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */,
+				716EDDBC58398F3B76CC3DC0 /* AppDependencies.swift in Sources */,
 				4791CDFE2E747AC100687126 /* JSONFileManager.swift in Sources */,
 				47C09A9C2F858F930049858B /* A016_IndeterminateProgressBar.swift in Sources */,
 				470E63702EFB241D007B75B5 /* FormCoordinatorToolbar.swift in Sources */,
@@ -1594,7 +1598,7 @@
 				CODE_SIGN_ENTITLEMENTS = StartToSwiftUI/StartToSwiftUIDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 10;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -1643,7 +1647,7 @@
 				CODE_SIGN_ENTITLEMENTS = StartToSwiftUI/StartToSwiftUIRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 10;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readwrite;
 				ENABLE_FILE_ACCESS_PICTURE_FOLDER = readwrite;

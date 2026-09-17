@@ -167,7 +167,7 @@ struct NoticesView: View {
     
     try? context.save()
     
-    let noticevm = NoticesViewModel(modelContext: context)
+    let noticevm = NoticesViewModel(modelContext: context, fbNoticesManager: FBNoticesManager(), services: .make())
     let coordinator = AppCoordinator()
     
     return Group {
@@ -222,7 +222,7 @@ struct NoticesView: View {
     
     try? context.save()
     
-    let noticevm = NoticesViewModel(modelContext: context)
+    let noticevm = NoticesViewModel(modelContext: context, fbNoticesManager: FBNoticesManager(), services: .make())
     let coordinator = AppCoordinator()
     
     return Group {
@@ -248,7 +248,7 @@ struct NoticesView: View {
                 configurations: ModelConfiguration(isStoredInMemoryOnly: true)
             )
             let emptyContext = ModelContext(emptyContainer)
-            let emptyNoticeVM = NoticesViewModel(modelContext: emptyContext)
+            let emptyNoticeVM = NoticesViewModel(modelContext: emptyContext, fbNoticesManager: FBNoticesManager(), services: .make())
             
             NoticesView(isRootModal: true)
                 .environmentObject(emptyNoticeVM)

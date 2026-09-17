@@ -57,7 +57,7 @@ struct PostDraftsView: View {
 }
 
 #Preview("With Drafts") {
-    let vm = PostsViewModel(dataSource: MockPostsDataSource())
+    let vm = PostsViewModel(dataSource: MockPostsDataSource(), fbPostsManager: MockFBPostsManager(), services: .make())
     vm.allPosts = PreviewData.samplePostsWithDrafts
     
     return PostDraftsView()
@@ -66,7 +66,7 @@ struct PostDraftsView: View {
 }
 
 #Preview("Empty Drafts") {
-    let vm = PostsViewModel(dataSource: MockPostsDataSource())
+    let vm = PostsViewModel(dataSource: MockPostsDataSource(), fbPostsManager: MockFBPostsManager(), services: .make())
     vm.allPosts = PreviewData.samplePosts  // Without draft: true
     
     return PostDraftsView()

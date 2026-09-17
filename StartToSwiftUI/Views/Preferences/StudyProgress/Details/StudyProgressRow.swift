@@ -77,7 +77,9 @@ struct StudyProgressRow: View {
     ]
     
     let postsVM = PostsViewModel(
-        dataSource: MockPostsDataSource(posts: extendedPosts)
+        dataSource: MockPostsDataSource(posts: extendedPosts),
+        fbPostsManager: MockFBPostsManager(),
+        services: .make()
     )
         
     NavigationStack {

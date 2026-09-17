@@ -180,11 +180,11 @@ struct StartView: View {
 
 private struct StartViewPreview: View {
     @StateObject var vm: PostsViewModel = {
-        let vm = PostsViewModel(dataSource: MockPostsDataSource(), fbPostsManager: MockFBPostsManager())
+        let vm = PostsViewModel(dataSource: MockPostsDataSource(), fbPostsManager: MockFBPostsManager(), services: .make())
         vm.start()
         return vm
     }()
-    @StateObject var noticesVM = NoticesViewModel(dataSource: MockNoticesDataSource(), fbNoticesManager: MockFBNoticesManager())
+    @StateObject var noticesVM = NoticesViewModel(dataSource: MockNoticesDataSource(), fbNoticesManager: MockFBNoticesManager(), services: .make())
     var body: some View {
         StartView()
             .environmentObject(AppCoordinator())

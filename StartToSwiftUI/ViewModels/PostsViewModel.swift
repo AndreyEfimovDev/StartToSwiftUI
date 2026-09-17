@@ -141,25 +141,17 @@ final class PostsViewModel: ObservableObject {
     init(
         dataSource: PostsDataSourceProtocol,
         appStateManager: AppSyncStateManagerProtocol? = nil,
-        fbPostsManager: FBPostsManagerProtocol = FBPostsManager(),
-        errorManager: ErrorManager? = nil,
-        fileManager: JSONFileManager = JSONFileManager(),
-        crashManager: FBCrashManager = FBCrashManager(),
-        performanceManager: FBPerformanceManager = FBPerformanceManager(),
-        analyticsManager: FBAnalyticsManager = FBAnalyticsManager()
+        fbPostsManager: FBPostsManagerProtocol,
+        services: AppServiceDependencies
     ) {
         self.dataSource = dataSource
         self.appStateManager = appStateManager
         self.fbPostsManager = fbPostsManager
-        // `ErrorManager()` нельзя было поставить дефолтом прямо в сигнатуре —
-        // ErrorManager @MainActor, а дефолтные значения параметров
-        // вычисляются в неизолированном контексте. Строим здесь, в теле
-        // init, который сам уже на @MainActor.
-        self.errorManager = errorManager ?? ErrorManager()
-        self.fileManager = fileManager
-        self.crashManager = crashManager
-        self.performanceManager = performanceManager
-        self.analyticsManager = analyticsManager
+        self.errorManager = services.errorManager
+        self.fileManager = services.fileManager
+        self.crashManager = services.crashManager
+        self.performanceManager = services.performanceManager
+        self.analyticsManager = services.analyticsManager
 
         setupTimezone()
         restorePostFilters()
@@ -168,22 +160,14 @@ final class PostsViewModel: ObservableObject {
     convenience init(
         modelContext: ModelContext,
         appStateManager: AppSyncStateManagerProtocol? = nil,
-        fbPostsManager: FBPostsManagerProtocol = FBPostsManager(),
-        errorManager: ErrorManager? = nil,
-        fileManager: JSONFileManager = JSONFileManager(),
-        crashManager: FBCrashManager = FBCrashManager(),
-        performanceManager: FBPerformanceManager = FBPerformanceManager(),
-        analyticsManager: FBAnalyticsManager = FBAnalyticsManager()
+        fbPostsManager: FBPostsManagerProtocol,
+        services: AppServiceDependencies
     ) {
         self.init(
             dataSource: SwiftDataPostsDataSource(modelContext: modelContext),
             appStateManager: appStateManager,
             fbPostsManager: fbPostsManager,
-            errorManager: errorManager,
-            fileManager: fileManager,
-            crashManager: crashManager,
-            performanceManager: performanceManager,
-            analyticsManager: analyticsManager
+            services: services
         )
     }
     

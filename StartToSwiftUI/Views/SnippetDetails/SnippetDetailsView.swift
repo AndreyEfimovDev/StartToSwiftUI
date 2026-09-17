@@ -133,7 +133,7 @@ struct SnippetDetailsView: View {
 
 // MARK: - Preview
 #Preview("Code Snippet Details") {
-    let vm = SnippetsViewModel()
+    let vm = SnippetsViewModel(services: .make())
     NavigationStack {
         SnippetDetailsView(snippet: SnippetsRepository.a001)
             .environmentObject(vm)

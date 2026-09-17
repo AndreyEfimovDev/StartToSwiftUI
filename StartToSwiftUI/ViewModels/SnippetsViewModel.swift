@@ -26,10 +26,10 @@ final class SnippetsViewModel: ObservableObject {
     // MARK: - Init
     init(
         appStateManager: AppSyncStateManager? = nil,
-        analyticsManager: FBAnalyticsManager = FBAnalyticsManager()
+        services: AppServiceDependencies
     ) {
         self.appStateManager = appStateManager
-        self.analyticsManager = analyticsManager
+        self.analyticsManager = services.analyticsManager
         setupSubscriptions()
         if let appStateManager {
             SnippetFavouritesService.shared.configure(with: appStateManager)

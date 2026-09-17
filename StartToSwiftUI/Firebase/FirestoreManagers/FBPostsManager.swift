@@ -41,7 +41,7 @@ final class FBPostsManager: FBPostsManagerProtocol {
                 log("📵 Firebase: network unavailable", level: .warning)
                 return .failure(.networkUnavailable)
             }
-            log("❌ Firebase: error: \(error.localizedDescription)", level: .error)
+            log("Firebase: error: \(error.localizedDescription)", level: .error)
             return .failure(.unknown(error))
         }
     }
@@ -81,9 +81,9 @@ final class FBPostsManager: FBPostsManagerProtocol {
             do {
                 try await postsCollection.document(post.id).setData(data)
                 successCount += 1
-                log("✅ Migrated: \(post.title)", level: .info)
+                log("Migrated: \(post.title)", level: .info)
             } catch {
-                log("❌ Failed: \(post.title) — \(error.localizedDescription)", level: .error)
+                log("Failed: \(post.title) — \(error.localizedDescription)", level: .error)
             }
         }
         log("🏁 uploadDevDataPostsToFirebase complete: \(successCount)/\(DevData.postsForCloud.count) posts", level: .info)

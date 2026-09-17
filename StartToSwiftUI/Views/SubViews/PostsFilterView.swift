@@ -253,7 +253,9 @@ struct PostsFilterView: View {
 
 #Preview {
     let vm = PostsViewModel(
-        dataSource: MockPostsDataSource(posts: PreviewData.samplePosts)
+        dataSource: MockPostsDataSource(posts: PreviewData.samplePosts),
+        fbPostsManager: MockFBPostsManager(),
+        services: .make()
     )
     ZStack {
         PostsFilterView(
