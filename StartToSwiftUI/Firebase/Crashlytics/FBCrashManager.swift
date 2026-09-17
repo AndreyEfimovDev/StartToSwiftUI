@@ -9,10 +9,9 @@ import Foundation
 import FirebaseCrashlytics
 
 final class FBCrashManager {
-    
-    static let shared = FBCrashManager()
-    private init() { }
-        
+
+    init() { }
+
     func addLog(_ message: String) {
         Crashlytics.crashlytics().log(message)
     }

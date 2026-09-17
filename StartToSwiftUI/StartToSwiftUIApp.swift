@@ -67,6 +67,8 @@ struct StartToSwiftUIApp: App {
         // для оверлея, а не по одному на каждого потребителя.
         let errorManager = ErrorManager()
         let jsonFileManager = JSONFileManager()
+        let crashManager = FBCrashManager()
+        let performanceManager = FBPerformanceManager()
 
         self.appStateManager = stateManager
         _errorManager = StateObject(wrappedValue: errorManager)
@@ -84,12 +86,16 @@ struct StartToSwiftUIApp: App {
             modelContext: context,
             appStateManager: stateManager,
             errorManager: errorManager,
-            fileManager: jsonFileManager
+            fileManager: jsonFileManager,
+            crashManager: crashManager,
+            performanceManager: performanceManager
         ))
         _noticesViewModel = StateObject(wrappedValue: NoticesViewModel(
             modelContext: context,
             appStateManager: stateManager,
-            errorManager: errorManager
+            errorManager: errorManager,
+            crashManager: crashManager,
+            performanceManager: performanceManager
         ))
         _snippetsViewModel = StateObject(wrappedValue: SnippetsViewModel(
             appStateManager: stateManager

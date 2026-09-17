@@ -21,6 +21,8 @@ final class PostsViewModel: ObservableObject {
     let appStateManager: AppSyncStateManagerProtocol?
     let fbPostsManager: FBPostsManagerProtocol
     let errorManager: ErrorManager
+    let crashManager: FBCrashManager
+    let performanceManager: FBPerformanceManager
 
     @Published var allPosts: [Post] = []
     @Published var filteredPosts: [Post] = []
@@ -140,7 +142,9 @@ final class PostsViewModel: ObservableObject {
         appStateManager: AppSyncStateManagerProtocol? = nil,
         fbPostsManager: FBPostsManagerProtocol = FBPostsManager(),
         errorManager: ErrorManager? = nil,
-        fileManager: JSONFileManager = JSONFileManager()
+        fileManager: JSONFileManager = JSONFileManager(),
+        crashManager: FBCrashManager = FBCrashManager(),
+        performanceManager: FBPerformanceManager = FBPerformanceManager()
     ) {
         self.dataSource = dataSource
         self.appStateManager = appStateManager
@@ -151,6 +155,8 @@ final class PostsViewModel: ObservableObject {
         // init, который сам уже на @MainActor.
         self.errorManager = errorManager ?? ErrorManager()
         self.fileManager = fileManager
+        self.crashManager = crashManager
+        self.performanceManager = performanceManager
 
         setupTimezone()
         restorePostFilters()
@@ -161,14 +167,18 @@ final class PostsViewModel: ObservableObject {
         appStateManager: AppSyncStateManagerProtocol? = nil,
         fbPostsManager: FBPostsManagerProtocol = FBPostsManager(),
         errorManager: ErrorManager? = nil,
-        fileManager: JSONFileManager = JSONFileManager()
+        fileManager: JSONFileManager = JSONFileManager(),
+        crashManager: FBCrashManager = FBCrashManager(),
+        performanceManager: FBPerformanceManager = FBPerformanceManager()
     ) {
         self.init(
             dataSource: SwiftDataPostsDataSource(modelContext: modelContext),
             appStateManager: appStateManager,
             fbPostsManager: fbPostsManager,
             errorManager: errorManager,
-            fileManager: fileManager
+            fileManager: fileManager,
+            crashManager: crashManager,
+            performanceManager: performanceManager
         )
     }
     
@@ -234,12 +244,12 @@ final class PostsViewModel: ObservableObject {
     
     /// Load posts from SwiftData
     func loadPostsFromSwiftData(removeDuplicates: Bool = true) {
-        let trace = FBPerformanceManager.shared.startTrace(name: "load_posts_swiftdata")
+        let trace = performanceManager.startTrace(name: "load_posts_swiftdata")
         lastLoadTime = Date()
         
         do {
             allPosts = try dataSource.fetchPosts()
-            FBCrashManager.shared.addLog("loadPostsFromSwiftData: loaded local posts: \(allPosts.count)")
+            crashManager.addLog("loadPostsFromSwiftData: loaded local posts: \(allPosts.count)")
             
             if removeDuplicates {
                 removeDuplicatePosts()
@@ -248,15 +258,15 @@ final class PostsViewModel: ObservableObject {
             // migrating post status scheem from active → hidden → deleted → erase to active → deleted → erase.
             migrateHiddenToDeleted()
             
-            FBCrashManager.shared.addLog("loadPostsFromSwiftData: posts count after check for duplicates: \(allPosts.count)")
+            crashManager.addLog("loadPostsFromSwiftData: posts count after check for duplicates: \(allPosts.count)")
             allYears = getAllYears()
-            FBCrashManager.shared.setUserContext(allPosts.count, hasCloudPosts)
+            crashManager.setUserContext(allPosts.count, hasCloudPosts)
             log("📊 Loaded \(allPosts.count) posts from SwiftData:", level: .debug)
         } catch {
-            FBCrashManager.shared.sendNonFatal(error)
+            crashManager.sendNonFatal(error)
             handleError(error, message: "Error loading data")
         }
-        FBPerformanceManager.shared.stopTrace(trace)
+        performanceManager.stopTrace(trace)
     }
 
     /// Remove Duplicate Posts
@@ -297,7 +307,7 @@ final class PostsViewModel: ObservableObject {
 
         guard !postsToDelete.isEmpty else { return }
         
-        FBCrashManager.shared.addLog("removeDuplicatePosts: found \(postsToDelete.count) duplicates")
+        crashManager.addLog("removeDuplicatePosts: found \(postsToDelete.count) duplicates")
 
         for post in postsToDelete {
             dataSource.delete(post)
@@ -308,7 +318,7 @@ final class PostsViewModel: ObservableObject {
             allPosts = try dataSource.fetchPosts()
             log("✅ Removed \(postsToDelete.count) duplicate posts", level: .info)
         } catch {
-            FBCrashManager.shared.sendNonFatal(error)
+            crashManager.sendNonFatal(error)
             handleError(error, message: "Error removing duplicate posts")
         }
     }
@@ -369,7 +379,7 @@ final class PostsViewModel: ObservableObject {
                 try swiftDataSource.modelContext.delete(model: Post.self)
                 saveContextAndReload()
             } catch {
-                FBCrashManager.shared.sendNonFatal(error)
+                crashManager.sendNonFatal(error)
                 handleError(error, message: "Error deleting data")
             }
         } else {
@@ -429,7 +439,7 @@ final class PostsViewModel: ObservableObject {
             loadPostsFromSwiftData()
             updateWidgetData()
         } catch {
-            FBCrashManager.shared.sendNonFatal(error)
+            crashManager.sendNonFatal(error)
             handleError(error, message: "Error saving data")
         }
     }
