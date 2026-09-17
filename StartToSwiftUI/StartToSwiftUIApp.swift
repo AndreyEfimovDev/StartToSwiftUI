@@ -15,28 +15,36 @@ import FirebaseMessaging
 
 @main
 struct StartToSwiftUIApp: App {
-    
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
-    // MARK: - Dependencies
-    @StateObject private var postsViewModel: PostsViewModel
-    @StateObject private var noticesViewModel: NoticesViewModel
-    @StateObject private var snippetsViewModel: SnippetsViewModel
-    @StateObject private var coordinator = AppCoordinator()
-    @StateObject private var errorManager = ErrorManager()
 
-    private let appStateManager: AppSyncStateManager
-    private let hapticManager = HapticManager.shared
-    
-    // MARK: - SwiftData Container with sync via iCloud
-    let modelContainer: ModelContainer = {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+
+    /// Результат сборки composition root: либо готовые зависимости и
+    /// контейнер, либо неудача создания `ModelContainer` — раньше в этом
+    /// случае был `fatalError`, теперь показываем `DatabaseErrorView`.
+    private enum Startup {
+        case ready(container: ModelContainer, dependencies: AppDependencies)
+        case failed
+    }
+    private let startup: Startup
+
+    init() {
+        // Должен отработать раньше первого обращения к любому Firebase SDK —
+        // AppDependencies.make() ниже строит FBPostsManager/FBNoticesManager,
+        // которые обращаются к Firestore.firestore() уже в своём init().
+        // AppDelegate.application(didFinishLaunchingWithOptions:) выполняется
+        // позже (после App.init()), так что полагаться на конфигурацию там
+        // нельзя.
+        FirebaseApp.configure()
+
         let schema = Schema([
             Post.self,
             Notice.self,
             AppSyncState.self
         ])
-        
+
 #if DEBUG
+        Analytics.setAnalyticsCollectionEnabled(false)
+        
         let config = ModelConfiguration(
             schema: schema,
             isStoredInMemoryOnly: false,
@@ -50,81 +58,40 @@ struct StartToSwiftUIApp: App {
         )
 #endif
 
-        do {
-            let container = try ModelContainer(for: schema, configurations: [config])
-            log("✅ SwiftData container created successfully", level: .info)
-            return container
-        } catch {
-            fatalError("❌ Failed to create ModelContainer: \(error)")
+        if let container = try? ModelContainer(for: schema, configurations: [config]) {
+            log("SwiftData container created successfully", level: .info)
+            let dependencies = AppDependencies.make(modelContext: container.mainContext)
+            startup = .ready(container: container, dependencies: dependencies)
+        } else {
+            log("Failed to create ModelContainer", level: .error)
+            startup = .failed
         }
-    }()
-    
-    init() {
         
-        let context = modelContainer.mainContext
-        // Полный манифест того, что собирает composition root — см.
-        // AppDependencies.
-        let dependencies = AppDependencies.make(modelContext: context)
-        let stateManager = dependencies.appStateManager
-        let services = dependencies.services
-
-        self.appStateManager = stateManager
-        _errorManager = StateObject(wrappedValue: services.errorManager)
-
-        // Initialisation of AppState — once at startup
-        /*
-        Ensure AppState exists (creates with appFirstLaunchDate if first launch).
-        Search for AppSyncState in SwiftData - it guarantees the existence of the AppState:
-        - The first launch will not find it, it will create a new one with appFirstLaunchDate = Date() and save it to the database.
-        - Restart — it will find an existing one and return it.
-        */
-        _ = appStateManager.getOrCreateAppState()
-
-        _postsViewModel = StateObject(wrappedValue: PostsViewModel(
-            modelContext: context,
-            appStateManager: stateManager,
-            fbPostsManager: FBPostsManager(),
-            services: services
-        ))
-        _noticesViewModel = StateObject(wrappedValue: NoticesViewModel(
-            modelContext: context,
-            appStateManager: stateManager,
-            fbNoticesManager: FBNoticesManager(),
-            services: services
-        ))
-        _snippetsViewModel = StateObject(wrappedValue: SnippetsViewModel(
-            appStateManager: stateManager,
-            services: services
-        ))
-
-#if DEBUG
-        Analytics.setAnalyticsCollectionEnabled(false)
-#endif
         configureNavigationBarAppearance()
     }
-    
+
     var body: some Scene {
         WindowGroup {
-            StartView()
-                .modelContainer(modelContainer)
-                .environmentObject(coordinator)
-                .environmentObject(postsViewModel)
-                .environmentObject(noticesViewModel)
-                .environmentObject(snippetsViewModel)
-                .environmentObject(errorManager)
-                .task {
-                    postsViewModel.start()
-                    noticesViewModel.start()
-                    clearBadge()
-                }
-                .onReceive(NotificationCenter.default.publisher(
-                    for: UIApplication.willEnterForegroundNotification)
-                ) { _ in
-                    clearBadge()
-                }
+            switch startup {
+            case .ready(let container, let dependencies):
+                StartView(dependencies: dependencies)
+                    .modelContainer(container)
+                    .task {
+                        dependencies.postsViewModel.start()
+                        dependencies.noticesViewModel.start()
+                        clearBadge()
+                    }
+                    .onReceive(NotificationCenter.default.publisher(
+                        for: UIApplication.willEnterForegroundNotification)
+                    ) { _ in
+                        clearBadge()
+                    }
+            case .failed:
+                DatabaseErrorView()
+            }
         }
     }
-    
+
     private func clearBadge() {
         UNUserNotificationCenter.current().setBadgeCount(0)
     }
@@ -159,7 +126,10 @@ struct StartToSwiftUIApp: App {
 class AppDelegate: NSObject, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        FirebaseApp.configure()
+        // FirebaseApp.configure() вызывается в StartToSwiftUIApp.init() —
+        // раньше, чем сюда доходит управление (App.init() выполняется до
+        // didFinishLaunchingWithOptions), иначе AppDependencies.make() внутри
+        // App.init() падает при первом же обращении к Firestore.
 
 #if DEBUG
         Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(false)

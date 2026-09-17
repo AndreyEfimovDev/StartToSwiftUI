@@ -10,14 +10,27 @@ import SwiftData
 import Combine
 
 struct StartView: View {
-    
+
     // MARK: - Dependencies
-    @EnvironmentObject private var vm: PostsViewModel
-    @EnvironmentObject private var noticevm: NoticesViewModel
-    @EnvironmentObject private var snippetsvm: SnippetsViewModel
-    @EnvironmentObject private var coordinator: AppCoordinator
-    @EnvironmentObject private var errorManager: ErrorManager
-    
+    // `@ObservedObject`, а не `@EnvironmentObject` — StartView сам получает
+    // готовые, уже построенные один раз в AppDependencies инстансы через
+    // init, а не полагается на то, что их кто-то положит в SwiftUI Environment
+    // выше по дереву. Ниже по дереву (глубже StartView) всё по-прежнему идёт
+    // через .environmentObject()/@EnvironmentObject — см. body.
+    @ObservedObject private var vm: PostsViewModel
+    @ObservedObject private var noticevm: NoticesViewModel
+    @ObservedObject private var snippetsvm: SnippetsViewModel
+    @ObservedObject private var coordinator: AppCoordinator
+    @ObservedObject private var errorManager: ErrorManager
+
+    init(dependencies: AppDependencies) {
+        _vm = ObservedObject(wrappedValue: dependencies.postsViewModel)
+        _noticevm = ObservedObject(wrappedValue: dependencies.noticesViewModel)
+        _snippetsvm = ObservedObject(wrappedValue: dependencies.snippetsViewModel)
+        _coordinator = ObservedObject(wrappedValue: dependencies.coordinator)
+        _errorManager = ObservedObject(wrappedValue: dependencies.services.errorManager)
+    }
+
     // MARK: - States
     @State private var showLaunchView: Bool = true
     @State private var visibility: NavigationSplitViewVisibility = .doubleColumn
@@ -73,6 +86,8 @@ struct StartView: View {
         .environmentObject(vm)
         .environmentObject(noticevm)
         .environmentObject(snippetsvm)
+        .environmentObject(coordinator)
+        .environmentObject(errorManager)
     }
     
     // MARK: Main Content
@@ -178,26 +193,24 @@ struct StartView: View {
 
 // MARK: - Preview
 
-private struct StartViewPreview: View {
-    @StateObject var vm: PostsViewModel = {
-        let vm = PostsViewModel(dataSource: MockPostsDataSource(), fbPostsManager: MockFBPostsManager(), services: .make())
-        vm.start()
-        return vm
-    }()
-    @StateObject var noticesVM = NoticesViewModel(dataSource: MockNoticesDataSource(), fbNoticesManager: MockFBNoticesManager(), services: .make())
-    var body: some View {
-        StartView()
-            .environmentObject(AppCoordinator())
-            .environmentObject(vm)
-            .environmentObject(noticesVM)
-            .environmentObject(ErrorManager())
-    }
-}
-
 #Preview("With Mock Data") {
     let container = try! ModelContainer(
         for: Post.self, Notice.self, AppSyncState.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
-    StartViewPreview().modelContainer(container)
+    let services = AppServiceDependencies.make()
+    let stateManager = AppSyncStateManager(modelContext: container.mainContext)
+    let postsVM = PostsViewModel(dataSource: MockPostsDataSource(), fbPostsManager: MockFBPostsManager(), services: services)
+    let dependencies = AppDependencies(
+        appStateManager: stateManager,
+        services: services,
+        postsViewModel: postsVM,
+        noticesViewModel: NoticesViewModel(dataSource: MockNoticesDataSource(), fbNoticesManager: MockFBNoticesManager(), services: services),
+        snippetsViewModel: SnippetsViewModel(services: services),
+        coordinator: AppCoordinator()
+    )
+
+    return StartView(dependencies: dependencies)
+        .modelContainer(container)
+        .task { postsVM.start() }
 }

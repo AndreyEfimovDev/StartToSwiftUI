@@ -6,7 +6,10 @@ import Foundation
 import SwiftData
 
 /// Полный манифест того, что собирает composition root
-/// (`StartToSwiftUIApp.init()`) — один раз, за один вызов.
+/// (`StartToSwiftUIApp.init()`) — один раз, за один вызов. ViewModel'и
+/// хранятся здесь же (не как `@StateObject` во `View`), чтобы гарантия
+/// "один инстанс на весь процесс" не зависела от того, сколько раз/сцен
+/// SwiftUI пересоздаст `StartView` — а строилась ровно один раз, здесь.
 ///
 /// `services` вынесен в отдельный `AppServiceDependencies`, а не расплющен
 /// сюда же плоским списком — по той же причине, что `MainViewDependencies`
@@ -15,11 +18,42 @@ import SwiftData
 struct AppDependencies {
     let appStateManager: AppSyncStateManager
     let services: AppServiceDependencies
+    let postsViewModel: PostsViewModel
+    let noticesViewModel: NoticesViewModel
+    let snippetsViewModel: SnippetsViewModel
+    let coordinator: AppCoordinator
 
     static func make(modelContext: ModelContext) -> AppDependencies {
-        AppDependencies(
-            appStateManager: AppSyncStateManager(modelContext: modelContext),
-            services: .make()
+        let stateManager = AppSyncStateManager(modelContext: modelContext)
+        let services = AppServiceDependencies.make()
+
+        // Initialisation of AppState — once at startup.
+        // Ensure AppState exists (creates with appFirstLaunchDate if first launch).
+        // Search for AppSyncState in SwiftData - it guarantees the existence of the AppState:
+        // - The first launch will not find it, it will create a new one with appFirstLaunchDate = Date() and save it to the database.
+        // - Restart — it will find an existing one and return it.
+        _ = stateManager.getOrCreateAppState()
+
+        return AppDependencies(
+            appStateManager: stateManager,
+            services: services,
+            postsViewModel: PostsViewModel(
+                modelContext: modelContext,
+                appStateManager: stateManager,
+                fbPostsManager: FBPostsManager(),
+                services: services
+            ),
+            noticesViewModel: NoticesViewModel(
+                modelContext: modelContext,
+                appStateManager: stateManager,
+                fbNoticesManager: FBNoticesManager(),
+                services: services
+            ),
+            snippetsViewModel: SnippetsViewModel(
+                appStateManager: stateManager,
+                services: services
+            ),
+            coordinator: AppCoordinator()
         )
     }
 }
