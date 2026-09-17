@@ -12,9 +12,16 @@ extension PostsViewModel {
     
     /// Firebase import of study materials
     func importPostsFromFirebase() async -> Bool {
-        
+        // Параллельный вызов пойдёт в Firebase с той же датой "after", что и
+        // уже выполняющийся (она ещё не сдвинулась) — он гарантированно не
+        // найдёт ничего сверх того, что найдёт уже идущий запрос, поэтому
+        // просто пропускаем его.
+        guard !isImportingPosts else { return false }
+        isImportingPosts = true
+        defer { isImportingPosts = false }
+
         FBCrashManager.shared.addLog("importPostsFromFirebase: started, posts count: \(allPosts.count)")
-        FBPerformanceManager.shared.startTrace(name: "import_posts_firebase")
+        let trace = FBPerformanceManager.shared.startTrace(name: "import_posts_firebase")
         
         clearError()
         
@@ -28,19 +35,19 @@ extension PostsViewModel {
         switch result {
         case .failure(.networkUnavailable):
             handleError(nil, message: "No internet connection. Please check your network and try again.")
-            FBPerformanceManager.shared.stopTrace(name: "import_posts_firebase")
+            FBPerformanceManager.shared.stopTrace(trace)
             return false
-            
+
         case .failure(.unknown(let error)):
             handleError(error, message: "Failed to load posts from Firebase")
-            FBPerformanceManager.shared.stopTrace(name: "import_posts_firebase")
+            FBPerformanceManager.shared.stopTrace(trace)
             return false
-            
+
         case .success(let fbResponse):
             let fbResponseChecked = filterUniquePosts(from: fbResponse)
             guard !fbResponseChecked.isEmpty else {
                 hapticManager.impact(style: .light)
-                FBPerformanceManager.shared.stopTrace(name: "import_posts_firebase")
+                FBPerformanceManager.shared.stopTrace(trace)
                 log("ℹ️ No new posts from \(sourceName)", level: .info)
 
                 // All received posts already exist locally — advance date past them
@@ -83,17 +90,21 @@ extension PostsViewModel {
             FBCrashManager.shared.addLog("importPostsFromFirebase: finished, updated posts count: \(allPosts.count)")
             log("✅ Added \(fbResponseChecked.count) new posts from \(sourceName)", level: .info)
             FBPerformanceManager.shared.setValue(
-                name: "import_posts_firebase",
+                trace,
                 value: "\(fbResponseChecked.count)/\(fbResponse.count)",
                 forAttribute: "posts_new_of_received"
             )
-            FBPerformanceManager.shared.stopTrace(name: "import_posts_firebase")
+            FBPerformanceManager.shared.stopTrace(trace)
             return true
         }
     }
     
     /// Check for updates to available posts in the cloud
     func checkFBPostsForUpdates() async -> Bool {
+        guard !isCheckingPostsForUpdates else { return false }
+        isCheckingPostsForUpdates = true
+        defer { isCheckingPostsForUpdates = false }
+
         clearError()
         guard let appStateManager else { return false }
         guard let lastLoadedDate = appStateManager.getLastDateOfPostsLoaded() else {

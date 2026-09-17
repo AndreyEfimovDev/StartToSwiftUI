@@ -33,6 +33,11 @@ final class NoticesViewModel: ObservableObject {
     private let minLoadInterval: TimeInterval = 3
     private var pendingCloudUpdate = false
     private var isStarted = false
+
+    // Защита от повторного входа: если импорт уже выполняется, пропускаем
+    // новый — он всё равно спросит Firebase о том же диапазоне дат и не
+    // найдёт ничего нового сверх уже идущего запроса.
+    private var isImportingNotices = false
     
     // MARK: - Computed Properties
     private var swiftDataSource: SwiftDataNoticesDataSource? {
@@ -120,7 +125,7 @@ final class NoticesViewModel: ObservableObject {
 
     // MARK: - Load Notices from SwiftData
     func loadNoticesFromSwiftData(removeDuplicates: Bool = true) {
-        FBPerformanceManager.shared.startTrace(name: "load_notices_swiftdata")
+        let trace = FBPerformanceManager.shared.startTrace(name: "load_notices_swiftdata")
         lastLoadTime = Date()
         FBCrashManager.shared.addLog("loadNoticesFromSwiftData: notices count: \(notices.count)")
 
@@ -138,13 +143,20 @@ final class NoticesViewModel: ObservableObject {
             FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error loading notices")
         }
-        FBPerformanceManager.shared.stopTrace(name: "load_notices_swiftdata")
+        FBPerformanceManager.shared.stopTrace(trace)
     }
-    
+
     // MARK: - Import Notices from Firebase
     func importNoticesFromFirebase() async {
-        
-        FBPerformanceManager.shared.startTrace(name: "import_notices_firebase")
+        // Параллельный вызов пойдёт в Firebase с той же датой "after", что и
+        // уже выполняющийся (она ещё не сдвинулась) — он гарантированно не
+        // найдёт ничего сверх того, что найдёт уже идущий запрос, поэтому
+        // просто пропускаем его.
+        guard !isImportingNotices else { return }
+        isImportingNotices = true
+        defer { isImportingNotices = false }
+
+        let trace = FBPerformanceManager.shared.startTrace(name: "import_notices_firebase")
         FBCrashManager.shared.addLog("loadNoticesFromFirebase: started, notices count: \(notices.count)")
         
         clearError()
@@ -176,11 +188,11 @@ final class NoticesViewModel: ObservableObject {
             relevantNotices = notices
         case .failure(.networkUnavailable):
             handleError(nil, message: "No internet connection. Please check your network and try again.")
-            FBPerformanceManager.shared.stopTrace(name: "import_notices_firebase")
+            FBPerformanceManager.shared.stopTrace(trace)
             return
         case .failure(.unknown(let error)):
             handleError(error, message: "Failed to load notices from Firebase")
-            FBPerformanceManager.shared.stopTrace(name: "import_notices_firebase")
+            FBPerformanceManager.shared.stopTrace(trace)
             return
         }
 
@@ -201,7 +213,7 @@ final class NoticesViewModel: ObservableObject {
         }
 
         guard !newNotices.isEmpty else {
-            FBPerformanceManager.shared.stopTrace(name: "import_notices_firebase")
+            FBPerformanceManager.shared.stopTrace(trace)
             return
         }
 
@@ -218,11 +230,11 @@ final class NoticesViewModel: ObservableObject {
         loadNoticesFromSwiftData(removeDuplicates: false)
         log("🍉 ✅ Import complete: \(newNotices.count) notices added", level: .info)
         FBPerformanceManager.shared.setValue(
-            name: "import_notices_firebase",
+            trace,
             value: "\(newNotices.count)/\(relevantNotices.count)",
             forAttribute: "notices_new_of_received"
         )
-        FBPerformanceManager.shared.stopTrace(name: "import_notices_firebase")
+        FBPerformanceManager.shared.stopTrace(trace)
     }
 
     // MARK: - Remove Duplicates

@@ -116,17 +116,15 @@ struct MaterialsHomeView: View {
                 showOnTopButton = newOffset > 100
             }
         }
-        .refreshControl { refresh() }
+        .refreshControl { await refresh() }
     }
-    
+
     // MARK: - Refresh
 
-    private func refresh() {
+    private func refresh() async {
         vm.loadPostsFromSwiftData()
         vm.updateWidgetData()
-        Task {
-            await noticevm.importNoticesFromFirebase()
-        }
+        await noticevm.importNoticesFromFirebase()
     }
     
     // MARK: - Gesture Handlers

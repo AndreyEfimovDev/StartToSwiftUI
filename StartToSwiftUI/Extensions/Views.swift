@@ -11,9 +11,9 @@ import SwiftUI
 // MARK: - Helper Extension для Pull to Refresh
 
 extension View {
-    func refreshControl(action: @escaping () -> Void) -> some View {
+    func refreshControl(action: @escaping () async -> Void) -> some View {
         self.refreshable {
-            action()
+            await action()
         }
     }
 }
