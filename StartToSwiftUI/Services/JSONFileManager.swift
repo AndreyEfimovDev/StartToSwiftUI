@@ -8,10 +8,8 @@
 import Foundation
 
 final class JSONFileManager: ObservableObject {
-    
-    static let shared = JSONFileManager()
-    
-    private init() {}
+
+    init() {}
 
     // MARK: Export JSON file on local device
     func exportToTemporary<T: Codable>(

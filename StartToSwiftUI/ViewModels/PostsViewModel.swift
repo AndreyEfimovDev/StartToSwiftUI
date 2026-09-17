@@ -16,7 +16,7 @@ final class PostsViewModel: ObservableObject {
     
     // MARK: - Properties
     let dataSource: PostsDataSourceProtocol
-    let fileManager = JSONFileManager.shared
+    let fileManager: JSONFileManager
     let hapticManager = HapticManager.shared
     let appStateManager: AppSyncStateManager?
     let fbPostsManager: FBPostsManagerProtocol
@@ -139,7 +139,8 @@ final class PostsViewModel: ObservableObject {
         dataSource: PostsDataSourceProtocol,
         appStateManager: AppSyncStateManager? = nil,
         fbPostsManager: FBPostsManagerProtocol = FBPostsManager(),
-        errorManager: ErrorManager? = nil
+        errorManager: ErrorManager? = nil,
+        fileManager: JSONFileManager = JSONFileManager()
     ) {
         self.dataSource = dataSource
         self.appStateManager = appStateManager
@@ -149,6 +150,7 @@ final class PostsViewModel: ObservableObject {
         // вычисляются в неизолированном контексте. Строим здесь, в теле
         // init, который сам уже на @MainActor.
         self.errorManager = errorManager ?? ErrorManager()
+        self.fileManager = fileManager
 
         setupTimezone()
         restorePostFilters()
@@ -158,13 +160,15 @@ final class PostsViewModel: ObservableObject {
         modelContext: ModelContext,
         appStateManager: AppSyncStateManager? = nil,
         fbPostsManager: FBPostsManagerProtocol = FBPostsManager(),
-        errorManager: ErrorManager? = nil
+        errorManager: ErrorManager? = nil,
+        fileManager: JSONFileManager = JSONFileManager()
     ) {
         self.init(
             dataSource: SwiftDataPostsDataSource(modelContext: modelContext),
             appStateManager: appStateManager,
             fbPostsManager: fbPostsManager,
-            errorManager: errorManager
+            errorManager: errorManager,
+            fileManager: fileManager
         )
     }
     

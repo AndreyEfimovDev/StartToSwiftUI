@@ -66,6 +66,7 @@ struct StartToSwiftUIApp: App {
         // Один инстанс ErrorManager на всё приложение — общая очередь ошибок
         // для оверлея, а не по одному на каждого потребителя.
         let errorManager = ErrorManager()
+        let jsonFileManager = JSONFileManager()
 
         self.appStateManager = stateManager
         _errorManager = StateObject(wrappedValue: errorManager)
@@ -82,7 +83,8 @@ struct StartToSwiftUIApp: App {
         _postsViewModel = StateObject(wrappedValue: PostsViewModel(
             modelContext: context,
             appStateManager: stateManager,
-            errorManager: errorManager
+            errorManager: errorManager,
+            fileManager: jsonFileManager
         ))
         _noticesViewModel = StateObject(wrappedValue: NoticesViewModel(
             modelContext: context,
