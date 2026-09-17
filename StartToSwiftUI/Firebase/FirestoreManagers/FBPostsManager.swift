@@ -50,7 +50,21 @@ final class FBPostsManager: FBPostsManagerProtocol {
     func uploadDevDataPostsToFirebase() async {
         var successCount = 0
         
+        /*
+         for post in newPosts {
+             let datePrefix = DateFormatter.yyyyMMdd.string(from: post.date)
+             let trimmedUUID = String(post.id.suffix(from: post.id.index(post.id.startIndex, offsetBy: 11)))
+             post.id = "\(datePrefix)_\(trimmedUUID)"
+             dataSource.insert(post)
+         }
+
+         */
+        
         for post in DevData.postsForCloud {
+            let datePrefix = DateFormatter.yyyyMMdd.string(from: post.date)
+            let trimmedUUID = String(post.id.suffix(from: post.id.index(post.id.startIndex, offsetBy: 11)))
+            post.id = "\(datePrefix)_\(trimmedUUID)"
+
             let data: [String: Any] = [
                 "category": post.category,
                 "title": post.title,

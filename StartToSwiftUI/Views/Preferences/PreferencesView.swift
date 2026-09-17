@@ -43,16 +43,6 @@ struct PreferencesView: View {
 //            }
 
 #endif
-            
-#warning("Delete this code before deployment to App Store")
-//            Section(header: sectionHeader("Categories")) {
-                //                if UIDevice.isiPhone {
-                //                    Section(header: sectionHeader("Selected category")) {
-                //                        selectedCategory
-                //                    }
-                //                }
-                
-//            }
             Section(header: sectionHeader("Appearance")) {
                 themeAppearance
             }

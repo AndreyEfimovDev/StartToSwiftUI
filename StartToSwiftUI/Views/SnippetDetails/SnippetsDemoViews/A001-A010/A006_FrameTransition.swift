@@ -92,43 +92,34 @@ struct A006_FrameBottomTransition: View {
 }
 
 struct A006_FrameBottomRightTransition: View {
-    /*
-     Logic:
-     - Initial offset = width — hidden behind the right edge
-     - Appearance → offset = 0 (moves from right to left)
-     - Disappearance → offset = -width (moves left)
-     - asyncAfter resets the offset back to width while the view is hidden
-     */
+
     @State private var showView: Bool = false
     @State private var offset: CGSize
-    
+
     let height: CGFloat
     let width: CGFloat
-    
+
     private let duration: Double = 0.5
-    
+
     init(height: CGFloat, width: CGFloat) {
-            self.height = height
-            self.width = width
-            _offset = State(initialValue: CGSize(width: 0, height: height))
-        }
+        self.height = height
+        self.width = width
+        _offset = State(initialValue: CGSize(width: 0, height: height))
+    }
 
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack {
                 Button {
                     if !showView {
-                        // appearance from the bottom
                         showView = true
                         withAnimation(.easeInOut(duration: duration)) {
                             offset = .zero
                         }
                     } else {
-                        // disappearance to the right
                         withAnimation(.easeInOut(duration: duration)) {
                             offset = CGSize(width: width, height: 0)
                         }
-                        // resetting the position back down after disappearing
                         DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                             showView = false
                             offset = CGSize(width: 0, height: height)
@@ -144,15 +135,12 @@ struct A006_FrameBottomRightTransition: View {
                 }
                 Spacer()
             }
-            
+
             if showView {
-                UnevenRoundedRectangle(cornerRadii: .init(
-                    topLeading: 30,
-                    topTrailing: 30
-                ))
-                .fill(Color.mycolor.myGreen.A006_verticalGradient())
-                .frame(height: height)
-                .offset(offset)
+                RoundedRectangle(cornerRadius: 30)
+                    .fill(Color.mycolor.myGreen.A006_verticalGradient())
+                    .frame(height: height)
+                    .offset(offset)
             }
         }
         .clipped()

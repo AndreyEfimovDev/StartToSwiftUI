@@ -19,7 +19,7 @@ struct SnippetUnavailableView: View {
             .fixedSize(horizontal: false, vertical: true)
             
             ContentUnavailableView(
-                "Requires iOS 26",
+                "Requires iOS 26+",
                 systemImage: "iphone.slash",
                 description: Text("Live preview is available on iOS 26 and later.")
             )
