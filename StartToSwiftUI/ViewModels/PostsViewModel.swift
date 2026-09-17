@@ -221,7 +221,7 @@ final class PostsViewModel: ObservableObject {
     
     /// Load posts from SwiftData
     func loadPostsFromSwiftData(removeDuplicates: Bool = true) {
-        FBPerformanceManager.shared.startTrace(name: "load_posts_swiftdata")
+        let trace = FBPerformanceManager.shared.startTrace(name: "load_posts_swiftdata")
         lastLoadTime = Date()
         
         do {
@@ -243,9 +243,9 @@ final class PostsViewModel: ObservableObject {
             FBCrashManager.shared.sendNonFatal(error)
             handleError(error, message: "Error loading data")
         }
-        FBPerformanceManager.shared.stopTrace(name: "load_posts_swiftdata")
+        FBPerformanceManager.shared.stopTrace(trace)
     }
-    
+
     /// Remove Duplicate Posts
     private func removeDuplicatePosts() {
         var postsToDelete: [Post] = []
