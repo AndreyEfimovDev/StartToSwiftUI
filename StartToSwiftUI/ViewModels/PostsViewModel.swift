@@ -18,7 +18,7 @@ final class PostsViewModel: ObservableObject {
     let dataSource: PostsDataSourceProtocol
     let fileManager: JSONFileManager
     let hapticManager = HapticManager.shared
-    let appStateManager: AppSyncStateManager?
+    let appStateManager: AppSyncStateManagerProtocol?
     let fbPostsManager: FBPostsManagerProtocol
     let errorManager: ErrorManager
 
@@ -137,7 +137,7 @@ final class PostsViewModel: ObservableObject {
     // MARK: - Init
     init(
         dataSource: PostsDataSourceProtocol,
-        appStateManager: AppSyncStateManager? = nil,
+        appStateManager: AppSyncStateManagerProtocol? = nil,
         fbPostsManager: FBPostsManagerProtocol = FBPostsManager(),
         errorManager: ErrorManager? = nil,
         fileManager: JSONFileManager = JSONFileManager()
@@ -158,7 +158,7 @@ final class PostsViewModel: ObservableObject {
     /// Convenience initialiser for backward compatibility
     convenience init(
         modelContext: ModelContext,
-        appStateManager: AppSyncStateManager? = nil,
+        appStateManager: AppSyncStateManagerProtocol? = nil,
         fbPostsManager: FBPostsManagerProtocol = FBPostsManager(),
         errorManager: ErrorManager? = nil,
         fileManager: JSONFileManager = JSONFileManager()
