@@ -41,6 +41,14 @@ final class PostsViewModel: ObservableObject {
     private let minLoadInterval: TimeInterval = 3
     private var pendingCloudUpdate = false
     private var isStarted = false
+
+    // Защита от повторного входа: если запрос уже выполняется, пропускаем
+    // новый — он всё равно спросит Firebase о том же диапазоне дат и не
+    // найдёт ничего нового сверх уже идущего запроса.
+    // Не `private`, т.к. методы, которые их используют, объявлены в
+    // extension-файле PostsViewModel+FBImport.swift.
+    var isImportingPosts = false
+    var isCheckingPostsForUpdates = false
     
     // MARK: - Computed Properties
     var swiftDataSource: SwiftDataPostsDataSource? {

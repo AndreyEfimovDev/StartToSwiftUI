@@ -33,6 +33,11 @@ final class NoticesViewModel: ObservableObject {
     private let minLoadInterval: TimeInterval = 3
     private var pendingCloudUpdate = false
     private var isStarted = false
+
+    // Защита от повторного входа: если импорт уже выполняется, пропускаем
+    // новый — он всё равно спросит Firebase о том же диапазоне дат и не
+    // найдёт ничего нового сверх уже идущего запроса.
+    private var isImportingNotices = false
     
     // MARK: - Computed Properties
     private var swiftDataSource: SwiftDataNoticesDataSource? {
@@ -143,7 +148,14 @@ final class NoticesViewModel: ObservableObject {
     
     // MARK: - Import Notices from Firebase
     func importNoticesFromFirebase() async {
-        
+        // Параллельный вызов пойдёт в Firebase с той же датой "after", что и
+        // уже выполняющийся (она ещё не сдвинулась) — он гарантированно не
+        // найдёт ничего сверх того, что найдёт уже идущий запрос, поэтому
+        // просто пропускаем его.
+        guard !isImportingNotices else { return }
+        isImportingNotices = true
+        defer { isImportingNotices = false }
+
         FBPerformanceManager.shared.startTrace(name: "import_notices_firebase")
         FBCrashManager.shared.addLog("loadNoticesFromFirebase: started, notices count: \(notices.count)")
         

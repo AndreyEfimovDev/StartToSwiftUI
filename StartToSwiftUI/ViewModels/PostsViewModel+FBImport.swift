@@ -12,7 +12,14 @@ extension PostsViewModel {
     
     /// Firebase import of study materials
     func importPostsFromFirebase() async -> Bool {
-        
+        // Параллельный вызов пойдёт в Firebase с той же датой "after", что и
+        // уже выполняющийся (она ещё не сдвинулась) — он гарантированно не
+        // найдёт ничего сверх того, что найдёт уже идущий запрос, поэтому
+        // просто пропускаем его.
+        guard !isImportingPosts else { return false }
+        isImportingPosts = true
+        defer { isImportingPosts = false }
+
         FBCrashManager.shared.addLog("importPostsFromFirebase: started, posts count: \(allPosts.count)")
         FBPerformanceManager.shared.startTrace(name: "import_posts_firebase")
         
@@ -94,6 +101,10 @@ extension PostsViewModel {
     
     /// Check for updates to available posts in the cloud
     func checkFBPostsForUpdates() async -> Bool {
+        guard !isCheckingPostsForUpdates else { return false }
+        isCheckingPostsForUpdates = true
+        defer { isCheckingPostsForUpdates = false }
+
         clearError()
         guard let appStateManager else { return false }
         guard let lastLoadedDate = appStateManager.getLastDateOfPostsLoaded() else {
