@@ -30,8 +30,8 @@ struct StartView: View {
 
     // MARK: - States
     @State private var showLaunchView: Bool = true
-    @State private var visibility: NavigationSplitViewVisibility = .doubleColumn
-    
+    @State private var splitViewVisibility: NavigationSplitViewVisibility = .doubleColumn
+
     // MARK: - Section Transition State
     /// A local copy of the section that we are changing through withAnimation
     @State private var displayedSection: AppSection = .materials
@@ -123,7 +123,7 @@ struct StartView: View {
     // iPad: NavigationSplitView — same section switch in the primary column
     @ViewBuilder
     private var iPadContent: some View {
-        NavigationSplitView(columnVisibility: $visibility) {
+        NavigationSplitView(columnVisibility: $splitViewVisibility) {
             Group {
                 switch displayedSection {
                 case .materials:
@@ -152,7 +152,7 @@ struct StartView: View {
             }
         }
     }
-    
+
     // Switches root view based on active section
     @ViewBuilder
     private var sectionRootView: some View {

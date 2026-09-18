@@ -13,7 +13,7 @@ struct PostDetailsView: View {
     // MARK: - Dependencies
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
-    
+
     private let hapticManager = HapticManager.shared
     
     // MARK: - State
@@ -39,13 +39,17 @@ struct PostDetailsView: View {
     private var minHeight: CGFloat {
         UIDevice.isiPad ? 60 : 75
     }
-        
+
     // MARK: - Body
-    
+
     var body: some View {
         GeometryReader { proxy in
             postContent(for: post)
-                .navigationBarBackButtonHidden(true)
+                // На iPhone скрываем системную кнопку назад — своя, кастомная,
+                // в toolbar(for:). На iPad деталь открывается через selection
+                // в List (MaterialsHomeView) — в схлопнутом NavigationSplitView
+                // кнопку "назад" даёт сама система, скрывать её не нужно.
+                .navigationBarBackButtonHidden(UIDevice.isiPhone)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar { toolbar(for: post) }
                 .safeAreaInset(edge: .bottom) { bottomTabsContainer }
@@ -53,6 +57,10 @@ struct PostDetailsView: View {
                 .onAppear {
                     vm.analyticsManager.logScreen(name: "PostDetailsView")
                     updateWidths(for: proxy.size.width)
+                    // Mark a new post from cloud as not new once its detail is shown
+                    if post.origin == .cloudNew {
+                        vm.updatePostOrigin(post)
+                    }
                 }
                 .onChange(of: proxy.size.width) { _, newValue in
                     updateWidths(for: newValue)
@@ -164,14 +172,14 @@ struct PostDetailsView: View {
     }
     
     // MARK: - Toolbar
-    
+
     @ToolbarContentBuilder
     private func toolbar(for post: Post) -> some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
             if UIDevice.isiPhone {
                 BackButtonView() { coordinator.pop() }
             }
-            
+
             ShareLink(item: post.urlString) {
                 Image(systemName: "square.and.arrow.up")
                     .font(.headline)
