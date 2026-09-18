@@ -24,6 +24,17 @@ private func makeStoredNotice(id: String) -> Notice {
     return n
 }
 
+/// firstLaunchDate управляется через @AppStorage, а не через
+/// appStateManager — эмулируем "сохранённую дату первого запуска" напрямую
+/// в UserDefaults под тем же ключом, что читает NoticesViewModel.
+/// ВАЖНО: не передавать timeIntervalSince1970 == 0 — appFirstLaunchDate
+/// считает ровно 0 признаком "не задано" и самовосстанавливается до
+/// Date() (сейчас), а не остаётся эпохой. Для "далёкого прошлого"
+/// используй любое ненулевое значение, например .init(timeIntervalSince1970: 1).
+private func setStoredFirstLaunchDate(_ date: Date) {
+    UserDefaults.standard.set(date.timeIntervalSince1970, forKey: "appFirstLaunchDate")
+}
+
 // MARK: - Tests
 @MainActor
 final class NoticesViewModelFilterDateTests: XCTestCase {
@@ -35,6 +46,13 @@ final class NoticesViewModelFilterDateTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        // NoticesViewModel.appFirstLaunchDate читается из
+        // @AppStorage("appFirstLaunchDate"), а не из appStateManager —
+        // сбрасываем реальные UserDefaults, иначе значение из предыдущих
+        // прогонов/других тестовых классов протекает сюда.
+        if let bundleID = Bundle.main.bundleIdentifier {
+            UserDefaults.standard.removePersistentDomain(forName: bundleID)
+        }
         mockFB = MockFBNoticesManager()
         mockState = MockAppSyncStateManager()
         mockDataSource = MockNoticesDataSource()
@@ -42,7 +60,8 @@ final class NoticesViewModelFilterDateTests: XCTestCase {
         sut = NoticesViewModel(
             dataSource: mockDataSource,
             appStateManager: mockState,
-            fbNoticesManager: mockFB
+            fbNoticesManager: mockFB,
+            services: .make()
         )
     }
 
@@ -54,7 +73,7 @@ final class NoticesViewModelFilterDateTests: XCTestCase {
         let firstLaunch = Date(timeIntervalSince1970: 1_700_000_000)
 
         mockState.stubbedLastNoticeDate = lastNotice
-        mockState.stubbedFirstLaunchDate = firstLaunch
+        setStoredFirstLaunchDate(firstLaunch)
 
         await sut.importNoticesFromFirebase()
 
@@ -68,7 +87,7 @@ final class NoticesViewModelFilterDateTests: XCTestCase {
         let firstLaunch = Date(timeIntervalSince1970: 1_700_000_500)
 
         mockState.stubbedLastNoticeDate = lastNotice
-        mockState.stubbedFirstLaunchDate = firstLaunch
+        setStoredFirstLaunchDate(firstLaunch)
 
         await sut.importNoticesFromFirebase()
 
@@ -76,16 +95,11 @@ final class NoticesViewModelFilterDateTests: XCTestCase {
             "filterDate должен равняться firstLaunchDate без округления")
     }
 
-    /// Both dates nil → filterDate should be Unix epoch (load everything)
-    func test_filterDate_usesEpoch_whenBothDatesNil() async {
-        mockState.stubbedLastNoticeDate = nil
-        mockState.stubbedFirstLaunchDate = nil
-
-        await sut.importNoticesFromFirebase()
-
-        XCTAssertEqual(mockFB.capturedFilterDate, Date(timeIntervalSince1970: 0),
-            "filterDate должен быть Unix Epoch если обе даты nil")
-    }
+    // "Both dates nil → epoch" больше не воспроизводимо: firstLaunchDate
+    // читается из @AppStorage и самовосстанавливается до Date() при первом
+    // обращении (timestamp == 0) — при живом appStateManager она никогда не
+    // ведёт себя как nil/epoch. Nil-случай appStateManager целиком уже
+    // покрыт test_withoutAppStateManager_filterDateIsEpoch ниже.
 
     // MARK: - Regression: no .rounded(.down) precision loss
 
@@ -94,7 +108,10 @@ final class NoticesViewModelFilterDateTests: XCTestCase {
         // Date with fractional seconds — was lost by .rounded(.down)
         let preciseDate = Date(timeIntervalSince1970: 1_700_000_100.75)
         mockState.stubbedLastNoticeDate = preciseDate
-        mockState.stubbedFirstLaunchDate = Date(timeIntervalSince1970: 0)
+        // Не 0 — appFirstLaunchDate самовосстанавливается до Date() при
+        // timestamp == 0 (см. комментарий у setStoredFirstLaunchDate), так
+        // что "0" тут означал бы "сейчас", а не далёкое прошлое.
+        setStoredFirstLaunchDate(Date(timeIntervalSince1970: 1))
 
         await sut.importNoticesFromFirebase()
 
@@ -112,7 +129,6 @@ final class NoticesViewModelFilterDateTests: XCTestCase {
         let exactDate = Date(timeIntervalSince1970: 1_700_000_100)
 
         mockState.stubbedLastNoticeDate = exactDate
-        mockState.stubbedFirstLaunchDate = Date(timeIntervalSince1970: 0)
 
         // Firebase returns a notice with date == filterDate
         // (Firestore uses isGreaterThan so it won't return it, but the +1s bug
@@ -130,7 +146,6 @@ final class NoticesViewModelFilterDateTests: XCTestCase {
     func test_noticeWithHalfSecondAfterLastDate_isNotSkipped() async {
         let lastDate = Date(timeIntervalSince1970: 1_700_000_100)
         mockState.stubbedLastNoticeDate = lastDate
-        mockState.stubbedFirstLaunchDate = Date(timeIntervalSince1970: 0)
 
         let slippedNotice = makeNotice(id: "slip-001", date: lastDate.addingTimeInterval(0.5))
         mockFB.noticesToReturn = [slippedNotice]
@@ -146,7 +161,6 @@ final class NoticesViewModelFilterDateTests: XCTestCase {
     func test_latestNoticeDateSavedWithoutOffset() async throws {
         let noticeDate = Date(timeIntervalSince1970: 1_700_001_000)
         mockState.stubbedLastNoticeDate = Date(timeIntervalSince1970: 0)
-        mockState.stubbedFirstLaunchDate = Date(timeIntervalSince1970: 0)
         mockFB.noticesToReturn = [makeNotice(id: "n1", date: noticeDate)]
 
         await sut.importNoticesFromFirebase()
@@ -169,7 +183,6 @@ final class NoticesViewModelFilterDateTests: XCTestCase {
         mockFB.noticesToReturn = [duplicate]
 
         mockState.stubbedLastNoticeDate = Date(timeIntervalSince1970: 0)
-        mockState.stubbedFirstLaunchDate = Date(timeIntervalSince1970: 0)
 
         await sut.importNoticesFromFirebase()
 
@@ -189,7 +202,6 @@ final class NoticesViewModelFilterDateTests: XCTestCase {
         ]
 
         mockState.stubbedLastNoticeDate = Date(timeIntervalSince1970: 0)
-        mockState.stubbedFirstLaunchDate = Date(timeIntervalSince1970: 0)
 
         await sut.importNoticesFromFirebase()
 
@@ -204,7 +216,6 @@ final class NoticesViewModelFilterDateTests: XCTestCase {
     func test_emptyFirebaseResult_noInsert_noSave() async {
         mockFB.noticesToReturn = []
         mockState.stubbedLastNoticeDate = Date()
-        mockState.stubbedFirstLaunchDate = Date()
 
         await sut.importNoticesFromFirebase()
 
@@ -219,7 +230,8 @@ final class NoticesViewModelFilterDateTests: XCTestCase {
         sut = NoticesViewModel(
             dataSource: mockDataSource,
             appStateManager: nil,
-            fbNoticesManager: mockFB
+            fbNoticesManager: mockFB,
+            services: .make()
         )
 
         await sut.importNoticesFromFirebase()

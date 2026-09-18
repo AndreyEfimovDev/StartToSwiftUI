@@ -8,7 +8,11 @@
 import Foundation
 
 // MARK: - Codable version of Post for JSON
-struct CodablePost: Codable {
+// nonisolated: чистый DTO для JSON (де)сериализации, используется и вне
+// MainActor — не должен наследовать MainActor-изоляцию по умолчанию
+// (SWIFT_DEFAULT_ACTOR_ISOLATION), иначе synthesized Decodable-conformance
+// становится main actor-isolated и недоступна из nonisolated контекста
+nonisolated struct CodablePost: Codable {
     let id: String
     var category: String
     var title: String

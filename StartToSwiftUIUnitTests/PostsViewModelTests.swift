@@ -31,7 +31,9 @@ final class PostsViewModelTests: XCTestCase {
         
         // Инициализируем ViewModel с моками
         vm = PostsViewModel(
-            dataSource: dataSource
+            dataSource: dataSource,
+            fbPostsManager: networkService,
+            services: .make()
         )
         
         // Небольшая задержка для async операций
@@ -55,12 +57,14 @@ final class PostsViewModelTests: XCTestCase {
         let mockFB = MockFBPostsManager.mockPosts(mockPosts)
         let testVM = PostsViewModel(
             dataSource: MockPostsDataSource(posts: []),
-            fbPostsManager: mockFB
+            appStateManager: MockAppSyncStateManager(),
+            fbPostsManager: mockFB,
+            services: .make()
         )
-        
+
         // When
         let success = await testVM.importPostsFromFirebase()
-        
+
         // Then
         XCTAssertTrue(success)
         XCTAssertEqual(testVM.allPosts.count, 2)
@@ -79,9 +83,11 @@ final class PostsViewModelTests: XCTestCase {
         let mockFB = MockFBPostsManager.mockPosts(mockPosts)
         let testVM = PostsViewModel(
             dataSource: dataSource,
-            fbPostsManager: mockFB
+            appStateManager: MockAppSyncStateManager(),
+            fbPostsManager: mockFB,
+            services: .make()
         )
-        
+
         // Загружаем существующие посты в allPosts
         testVM.loadPostsFromSwiftData()
         XCTAssertEqual(testVM.allPosts.count, 1) // убеждаемся что existing загрузился
@@ -99,12 +105,14 @@ final class PostsViewModelTests: XCTestCase {
         let mockFB = MockFBPostsManager.mockEmpty()
         let testVM = PostsViewModel(
             dataSource: MockPostsDataSource(posts: []),
-            fbPostsManager: mockFB
+            appStateManager: MockAppSyncStateManager(),
+            fbPostsManager: mockFB,
+            services: .make()
         )
-        
+
         // When
         let success = await testVM.importPostsFromFirebase()
-        
+
         // Then
         XCTAssertTrue(success)
         XCTAssertEqual(testVM.allPosts.count, 0)
@@ -120,12 +128,14 @@ final class PostsViewModelTests: XCTestCase {
         let mockFB = MockFBPostsManager.mockPosts(mockPosts)
         let testVM = PostsViewModel(
             dataSource: MockPostsDataSource(posts: []),
-            fbPostsManager: mockFB
+            appStateManager: MockAppSyncStateManager(),
+            fbPostsManager: mockFB,
+            services: .make()
         )
-        
+
         // When
         let success = await testVM.importPostsFromFirebase()
-        
+
         // Then
         XCTAssertTrue(success)
         XCTAssertEqual(testVM.allPosts.count, 3)
@@ -139,7 +149,8 @@ final class PostsViewModelTests: XCTestCase {
         let mockFB = MockFBPostsManager.mockPosts([FBPostModel.mockBeginner])
         let testVM = PostsViewModel(
             dataSource: MockPostsDataSource(posts: []),
-            fbPostsManager: mockFB
+            fbPostsManager: mockFB,
+            services: .make()
         )
         
         // When
@@ -156,11 +167,13 @@ final class PostsViewModelTests: XCTestCase {
             configurations: ModelConfiguration(isStoredInMemoryOnly: true)
         )
         let context = container.mainContext
-        
+
         let mockFB = MockFBPostsManager.mockPosts([FBPostModel.mockBeginner])
         let testVM = PostsViewModel(
             modelContext: context,
-            fbPostsManager: mockFB
+            appStateManager: AppSyncStateManager(modelContext: context),
+            fbPostsManager: mockFB,
+            services: .make()
         )
         try await Task.sleep(nanoseconds: 100_000_000)
         

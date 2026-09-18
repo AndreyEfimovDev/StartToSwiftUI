@@ -22,13 +22,16 @@ class AppSyncStateManager: AppSyncStateManagerProtocol {
     func cleanupDuplicateAppStates() {
         log("🧹 Starting duplicate cleaning AppState...", level: .debug)
 
-        let descriptor = FetchDescriptor<AppSyncState>(
-            predicate: #Predicate { $0.id == "app_state_singleton" }
-        )
-        
         do {
-            let results = try modelContext.fetch(descriptor)
-            
+            // Забираем все AppSyncState и фильтруем по id уже в Swift, а не
+            // через #Predicate — фетч с предикатом падает с EXC_BAD_INSTRUCTION
+            // внутри самого SwiftData на этой связке SDK/Simulator, независимо
+            // от того, сравниваем со строковым литералом или с переменной
+            // (проверено эмпирически). Строк здесь всегда единицы, лишней
+            // нагрузки от фетча без предиката нет.
+            let allStates = try modelContext.fetch(FetchDescriptor<AppSyncState>())
+            let results = allStates.filter { $0.id == "app_state_singleton" }
+
             if results.count > 1 {
                 log("Found \(results.count) duplicates, clearing...", level: .info)
 
@@ -44,14 +47,12 @@ class AppSyncStateManager: AppSyncStateManagerProtocol {
 
     /// Get or create AppState with atomic validation and deduplication
     func getOrCreateAppState() -> AppSyncState {
-        // 1. Search for all AppStates with our singleton ID
-        let descriptor = FetchDescriptor<AppSyncState>(
-            predicate: #Predicate { $0.id == "app_state_singleton" }
-        )
-        
         do {
-            let results = try modelContext.fetch(descriptor)
-            
+            // 1. Search for all AppStates with our singleton ID — без #Predicate,
+            // см. комментарий в cleanupDuplicateAppStates().
+            let results = try modelContext.fetch(FetchDescriptor<AppSyncState>())
+                .filter { $0.id == "app_state_singleton" }
+
             // 2. If several are found, merge them into one
             if results.count > 1 {
                 log("Detected \(results.count) AppState, merging duplicates...", level: .warning)
@@ -75,7 +76,8 @@ class AppSyncStateManager: AppSyncStateManagerProtocol {
             // 4. Create a new one ONLY if the database is COMPLETELY EMPTY
             // 🔥 Final check before creation
             // (in case another device created AppState at that time)
-            let finalCheck = try modelContext.fetch(descriptor)
+            let finalCheck = try modelContext.fetch(FetchDescriptor<AppSyncState>())
+                .filter { $0.id == "app_state_singleton" }
             if let existingState = finalCheck.first {
                 log("AppState was created by another device, use it", level: .info)
                 return existingState

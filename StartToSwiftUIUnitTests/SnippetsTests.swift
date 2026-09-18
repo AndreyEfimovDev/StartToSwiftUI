@@ -11,11 +11,15 @@ import Combine
 @testable import StartToSwiftUI
 
 /*
- 27 tests in four groups:
+ 15 tests in four groups:
   Repository — the data is correct, the ID is unique, and A001/A002 exists
-  ViewModel initial state — filters are empty, filteredSnippets is the same as allSnippets
-  Filtering & Search & Sorting — all combinations
+  ViewModel initial state — filteredSnippets is the same as allSnippets, no selection
+  Search — match, no match, empty restores all
   FavoritesService + ViewModel integration — toggle, idempotency, ID independence
+
+ Category/platform filtering and sorting are intentionally not covered here —
+ SnippetsViewModel no longer has selectedCategory/selectedSortOption/
+ isFiltersEmpty/resetAllFilters (simplified to search + favorites only).
 */
 
 @MainActor
@@ -29,7 +33,7 @@ final class SnippetsTests: XCTestCase {
         if let bundleID = Bundle.main.bundleIdentifier {
             UserDefaults.standard.removePersistentDomain(forName: bundleID)
         }
-        vm = SnippetsViewModel()
+        vm = SnippetsViewModel(services: .make())
         try await Task.sleep(nanoseconds: 100_000_000) // 0.1s for Combine pipeline
     }
 
@@ -68,36 +72,8 @@ final class SnippetsTests: XCTestCase {
         XCTAssertEqual(vm.filteredSnippets.count, vm.allSnippets.count)
     }
     
-    func test_viewModel_initialState_filtersAreEmpty() {
-        XCTAssertTrue(vm.isFiltersEmpty)
-    }
-
     func test_viewModel_initialState_noSelectedSnippet() {
         XCTAssertNil(vm.selectedSnippet)
-    }
-
-    // MARK: - SnippetsViewModel — Filtering
-
-    func test_filterByCategory_returnsCorrectSnippets() async throws {
-        let category = "Indicators"
-        vm.selectedCategory = category
-        try await Task.sleep(nanoseconds: 400_000_000) // wait for debounce
-        XCTAssertTrue(vm.filteredSnippets.allSatisfy { $0.category == category })
-    }
-
-    func test_filterByCategory_nonExistent_returnsEmpty() async throws {
-        vm.selectedCategory = "NonExistentCategory"
-        try await Task.sleep(nanoseconds: 400_000_000)
-        XCTAssertTrue(vm.filteredSnippets.isEmpty)
-    }
-
-    func test_resetAllFilters_clearsCategory() async throws {
-        vm.selectedCategory = "Indicators"
-        try await Task.sleep(nanoseconds: 400_000_000)
-        vm.resetAllFilters()
-        try await Task.sleep(nanoseconds: 400_000_000)
-        XCTAssertNil(vm.selectedCategory)
-        XCTAssertTrue(vm.isFiltersEmpty)
     }
 
     // MARK: - SnippetsViewModel — Search
@@ -124,74 +100,76 @@ final class SnippetsTests: XCTestCase {
         XCTAssertEqual(vm.filteredSnippets.count, vm.allSnippets.count)
     }
 
-    // MARK: - SnippetsViewModel — Sorting
-
-    func test_sort_newestFirst_isDescending() async throws {
-        vm.selectedSortOption = .newestFirst
-        try await Task.sleep(nanoseconds: 400_000_000)
-        let dates = vm.filteredSnippets.map { $0.date }
-        XCTAssertEqual(dates, dates.sorted(by: >))
-    }
-
-    func test_sort_oldestFirst_isAscending() async throws {
-        vm.selectedSortOption = .oldestFirst
-        try await Task.sleep(nanoseconds: 400_000_000)
-        let dates = vm.filteredSnippets.map { $0.date }
-        XCTAssertEqual(dates, dates.sorted(by: <))
-    }
-
-    func test_sort_notSorted_matchesOriginalOrder() async throws {
-        vm.selectedSortOption = .notSorted
-        try await Task.sleep(nanoseconds: 400_000_000)
-        XCTAssertEqual(vm.filteredSnippets.map { $0.id }, vm.allSnippets.map { $0.id })
-    }
-
-    func test_sort_random_sameCount() async throws {
-        vm.selectedSortOption = .random
-        try await Task.sleep(nanoseconds: 400_000_000)
-        XCTAssertEqual(vm.filteredSnippets.count, vm.allSnippets.count)
-    }
-
     // MARK: - SnippetFavoritesService
 
-    func test_favorites_toggle_addsFavorite() {
-        let service = SnippetFavouritesService.shared
-        service.toggle("A001")
-        XCTAssertTrue(service.isFavorite("A001"))
-        service.toggle("A001") // cleanup
+    /// Гонка инициализации свежесозданного in-memory ModelContainer (первый
+    /// fetch падал с SIGILL внутри самого SwiftData) воспроизводится на
+    /// связке Intel Mac + iOS 26.5 Simulator даже с паузой-прогревом —
+    /// одна попытка на тест давала 4-5 шансов словить гонку на класс.
+    /// Вместо этого контейнер создаётся и прогревается ОДИН раз на весь
+    /// test case (`static let` с `Task`, вычисляется лениво и потокобезопасно
+    /// при первом обращении, дальше отдаёт закешированный результат) —
+    /// гонка теперь возможна только один раз вместо пяти.
+    /// Изоляция между тестами обеспечивается вручную — сбросом
+    /// snippetFavoriteIDs перед каждым использованием, раз контейнер общий.
+    private static let sharedFavouritesContainer: Task<ModelContainer, Error> = Task { @MainActor in
+        let container = try ModelContainer(
+            for: Post.self, Notice.self, AppSyncState.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        )
+        try await Task.sleep(nanoseconds: 100_000_000)
+        return container
     }
 
-    func test_favorites_toggle_removesFavorite() {
-        let service = SnippetFavouritesService.shared
+    private func makeFavouritesService() async throws -> SnippetFavouritesService {
+        let container = try await Self.sharedFavouritesContainer.value
+        let stateManager = AppSyncStateManager(modelContext: container.mainContext)
+        stateManager.getOrCreateAppState().snippetFavoriteIDs = []
+        return SnippetFavouritesService(appSyncStateManager: stateManager)
+    }
+
+    func test_favorites_toggle_addsFavorite() async throws {
+        let service = try await makeFavouritesService()
+        service.toggle("A001")
+        XCTAssertTrue(service.isFavorite("A001"))
+    }
+
+    func test_favorites_toggle_removesFavorite() async throws {
+        let service = try await makeFavouritesService()
         service.toggle("A001")
         service.toggle("A001")
         XCTAssertFalse(service.isFavorite("A001"))
     }
 
-    func test_favorites_toggle_idempotentMultipleTimes() {
-        let service = SnippetFavouritesService.shared
+    func test_favorites_toggle_idempotentMultipleTimes() async throws {
+        let service = try await makeFavouritesService()
         service.toggle("A002")
         service.toggle("A002")
         service.toggle("A002")
         XCTAssertTrue(service.isFavorite("A002"))
-        service.toggle("A002") // cleanup
     }
 
-    func test_favorites_differentIDs_independant() {
-        let service = SnippetFavouritesService.shared
+    func test_favorites_differentIDs_independant() async throws {
+        let service = try await makeFavouritesService()
         service.toggle("A001")
         XCTAssertTrue(service.isFavorite("A001"))
         XCTAssertFalse(service.isFavorite("A002"))
-        service.toggle("A001") // cleanup
     }
 
     // MARK: - SnippetsViewModel — Favorites Integration
 
-    func test_viewModel_favoriteToggle_updatesState() {
+    /// vm из setUp() строится без appStateManager (nil по умолчанию) —
+    /// favoritesService там тоже nil, favoriteToggle/isFavorite становятся
+    /// no-op. Для этого теста нужен свой vm с реальным appStateManager.
+    func test_viewModel_favoriteToggle_updatesState() async throws {
+        let container = try await Self.sharedFavouritesContainer.value
+        let stateManager = AppSyncStateManager(modelContext: container.mainContext)
+        stateManager.getOrCreateAppState().snippetFavoriteIDs = []
+        let testVM = SnippetsViewModel(appStateManager: stateManager, services: .make())
+
         let snippet = SnippetsRepository.a001
-        let before = vm.isFavorite(snippet)
-        vm.favoriteToggle(snippet)
-        XCTAssertNotEqual(vm.isFavorite(snippet), before)
-        vm.favoriteToggle(snippet) // cleanup
+        let before = testVM.isFavorite(snippet)
+        testVM.favoriteToggle(snippet)
+        XCTAssertNotEqual(testVM.isFavorite(snippet), before)
     }
 }

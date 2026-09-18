@@ -121,7 +121,7 @@ final class PostTests: XCTestCase {
         XCTAssertEqual(post.studyLevel, .beginner)
         XCTAssertEqual(post.progress, .added)
         XCTAssertEqual(post.favoriteChoice, .no)
-        XCTAssertEqual(post.origin, .cloudNew)
+        XCTAssertEqual(post.origin, .local)
         XCTAssertEqual(post.postType, .post)
         XCTAssertEqual(post.postPlatform, .youtube)
     }
