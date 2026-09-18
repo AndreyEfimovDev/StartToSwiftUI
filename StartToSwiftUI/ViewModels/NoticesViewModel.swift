@@ -60,9 +60,12 @@ final class NoticesViewModel: ObservableObject {
         notices.filter { !$0.isRead }.count
     }
 
-    var sortedNotices: [Notice] {
-        notices.sorted { $0.noticeDate > $1.noticeDate }
-    }
+    /// Уведомления, отсортированные по дате (новые сверху) — кэшируется в
+    /// loadNoticesFromSwiftData() при каждом реальном изменении notices,
+    /// а не пересчитывается на каждое обращение (единственный потребитель,
+    /// NoticesView, читает его при каждом ре-рендере широковещательного
+    /// @EnvironmentObject, включая ре-рендеры, не связанные со списком).
+    @Published private(set) var sortedNotices: [Notice] = []
 
     // MARK: - Init
     init(
@@ -146,6 +149,7 @@ final class NoticesViewModel: ObservableObject {
 
         do {
             self.notices = try dataSource.fetchNotices()
+            self.sortedNotices = self.notices.sorted { $0.noticeDate > $1.noticeDate }
             crashManager.addLog("loadNoticesFromSwiftData: notices count after fetch from SwiftData: \(notices.count)")
             updateUnreadStatus()  // ← always update status when fetch notices
         } catch {
