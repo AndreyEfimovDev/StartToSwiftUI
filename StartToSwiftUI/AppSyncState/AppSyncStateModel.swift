@@ -22,7 +22,15 @@ final class AppSyncState {
     var appFirstLaunchDate: Date?
     
     // CloudKit does not support [String] directly in SwiftData
-    // It is stored as a String separated by commas
+    // It is stored as a String separated by commas.
+    //
+    // ВАЖНО: разбор строится на предположении, что ни один ID сниппета
+    // (CodeSnippet.id, см. Models/Snippets/CodeSnippet.swift) никогда не
+    // содержит запятую — иначе round-trip тихо расколет один ID на
+    // несколько при следующем чтении. Сейчас ID — захардкоженные слаги
+    // вида "A006"/"B001" (см. SnippetsRepository.swift), так что это
+    // безопасно, но при добавлении новых ID это ограничение нужно
+    // соблюдать явно, компилятор/рантайм его не проверяют.
     var snippetFavoriteIDsRaw: String = ""
     var snippetFavoriteIDs: [String] {
         get { snippetFavoriteIDsRaw.isEmpty ? [] : snippetFavoriteIDsRaw.components(separatedBy: ",") }

@@ -7,7 +7,13 @@
 
 import SwiftUI
 
-func log(_ message: String, level: LogLevel = .debug, file: String = #file, function: String = #function, line: Int = #line) {
+nonisolated func log(
+    _ message: String,
+    level: LogLevel = .debug,
+    file: String = #file,
+    function: String = #function,
+    line: Int = #line
+) {
     #if DEBUG
     let fileName = (file as NSString).lastPathComponent
     print("\(level.icon) [\(fileName):\(line)] \(function) - \(message)")
@@ -15,7 +21,7 @@ func log(_ message: String, level: LogLevel = .debug, file: String = #file, func
 }
 
 // MARK: - Debug print states + func
-enum LogLevel {
+nonisolated enum LogLevel {
     case debug, info, warning, error
     
     var icon: String {

@@ -93,41 +93,40 @@ struct PlayerHomeView: View {
     @Binding var currentTrack: Track
     
     var body: some View {
-        NavigationStack {
-            List(Track.tracks) { track in
-                Button {
-                    currentTrack = track
-                    isPlaying = true
-                    isPlayerVisible = true // show mini-player
-                } label: {
-                    HStack {
-                        Image(systemName: "music.note")
-                            .foregroundStyle(.blue)
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text(track.title)
-                                .font(.headline)
-                                .foregroundStyle(.primary)
-                            Text(track.singer)
-                                .font(.caption2)
-                                .italic()
-                                .foregroundStyle(.secondary)
-                        }
-                        Spacer()
-                        B001_WaveAsymmetrical()
-                            .clipShape(.capsule)
-                            .opacity(currentTrack.title == track.title && isPlaying ? 0.8 : 0)
+        List(Track.tracks) { track in
+            Button {
+                currentTrack = track
+                isPlaying = true
+                isPlayerVisible = true // show mini-player
+            } label: {
+                HStack {
+                    Image(systemName: "music.note")
+                        .foregroundStyle(.blue)
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text(track.title)
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+                        Text(track.singer)
+                            .font(.caption2)
+                            .italic()
+                            .foregroundStyle(.secondary)
                     }
+                    Spacer()
+                    B001_WaveAsymmetrical()
+                        .clipShape(.capsule)
+                        .opacity(currentTrack.title == track.title && isPlaying ? 0.8 : 0)
                 }
             }
-            .navigationTitle("Player")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    if isPlayerVisible {
-                        Button(isPlaying ? "Stop" : "Play") {
-                            isPlaying.toggle()
-                            if !isPlaying {
-                                isPlayerVisible.toggle()// hide the mini-player
-                            }
+        }
+        .navigationTitle("Player")
+        .listStyle(.plain)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                if isPlayerVisible {
+                    Button(isPlaying ? "Stop" : "Play") {
+                        isPlaying.toggle()
+                        if !isPlaying {
+                            isPlayerVisible.toggle()// hide the mini-player
                         }
                     }
                 }

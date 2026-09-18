@@ -12,16 +12,12 @@ import Combine
 struct StartView: View {
 
     // MARK: - Dependencies
-    // `@ObservedObject`, а не `@EnvironmentObject` — StartView сам получает
-    // готовые, уже построенные один раз в AppDependencies инстансы через
-    // init, а не полагается на то, что их кто-то положит в SwiftUI Environment
-    // выше по дереву. Ниже по дереву (глубже StartView) всё по-прежнему идёт
-    // через .environmentObject()/@EnvironmentObject — см. body.
     @ObservedObject private var vm: PostsViewModel
     @ObservedObject private var noticevm: NoticesViewModel
     @ObservedObject private var snippetsvm: SnippetsViewModel
     @ObservedObject private var coordinator: AppCoordinator
     @ObservedObject private var errorManager: ErrorManager
+    private let appStoreService: AppStoreService
 
     init(dependencies: AppDependencies) {
         _vm = ObservedObject(wrappedValue: dependencies.postsViewModel)
@@ -29,6 +25,7 @@ struct StartView: View {
         _snippetsvm = ObservedObject(wrappedValue: dependencies.snippetsViewModel)
         _coordinator = ObservedObject(wrappedValue: dependencies.coordinator)
         _errorManager = ObservedObject(wrappedValue: dependencies.services.errorManager)
+        appStoreService = dependencies.appStoreService
     }
 
     // MARK: - States
@@ -88,6 +85,7 @@ struct StartView: View {
         .environmentObject(snippetsvm)
         .environmentObject(coordinator)
         .environmentObject(errorManager)
+        .environment(\.appStoreService, appStoreService)
     }
     
     // MARK: Main Content
@@ -204,6 +202,7 @@ struct StartView: View {
     let dependencies = AppDependencies(
         appStateManager: stateManager,
         services: services,
+        appStoreService: AppStoreService(),
         postsViewModel: postsVM,
         noticesViewModel: NoticesViewModel(dataSource: MockNoticesDataSource(), fbNoticesManager: MockFBNoticesManager(), services: services),
         snippetsViewModel: SnippetsViewModel(services: services),

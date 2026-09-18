@@ -22,7 +22,7 @@ struct SnippetDetailsView: View {
     @State private var showCodeSheet = false
     @State private var codeCopied = false
     @State private var isFavorite: Bool = false
-    
+
     // MARK: - Body
     var body: some View {
         SnippetViewRegistry.view(for: snippet)
@@ -72,7 +72,7 @@ struct SnippetDetailsView: View {
             }
         }
     }
-    
+
     // MARK: - Code Sheet
     private var codeSheet: some View {
         NavigationStack {
@@ -86,7 +86,7 @@ struct SnippetDetailsView: View {
                         .background(Color.mycolor.mySecondary.opacity(0.05))
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                         .padding(.horizontal)
-                    
+
                     if let thanks = snippet.thanks, !thanks.isEmpty {
                         Text("Source: @\(thanks)")
                             .font(.caption)

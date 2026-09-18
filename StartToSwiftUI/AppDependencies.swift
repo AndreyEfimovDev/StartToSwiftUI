@@ -18,6 +18,7 @@ import SwiftData
 struct AppDependencies {
     let appStateManager: AppSyncStateManager
     let services: AppServiceDependencies
+    let appStoreService: AppStoreService
     let postsViewModel: PostsViewModel
     let noticesViewModel: NoticesViewModel
     let snippetsViewModel: SnippetsViewModel
@@ -37,6 +38,7 @@ struct AppDependencies {
         return AppDependencies(
             appStateManager: stateManager,
             services: services,
+            appStoreService: AppStoreService(),
             postsViewModel: PostsViewModel(
                 modelContext: modelContext,
                 appStateManager: stateManager,
@@ -69,6 +71,9 @@ struct AppDependencies {
 /// `HapticManager` сюда не входит — решили оставить его синглтоном.
 /// `AppSyncStateManager` сюда не входит — он никогда не был синглтоном и
 /// по своей природе другой (держит ModelContext, а не stateless-утилита).
+/// `AppStoreService` сюда не входит — ни одна из трёх ViewModel'ей, для
+/// которых эта структура существует, его не использует (см. комментарий
+/// у AppDependencies.appStoreService).
 struct AppServiceDependencies {
     let errorManager: ErrorManager
     let fileManager: JSONFileManager

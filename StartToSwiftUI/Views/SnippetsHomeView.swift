@@ -57,7 +57,7 @@ struct SnippetsHomeView: View {
         }
         .task {
             snippetvm.analyticsManager.logScreen(name: "SnippetsHomeView")
-            
+
         }
     }
 

@@ -13,7 +13,7 @@ final class SnippetsViewModel: ObservableObject {
 
     // MARK: - Dependencies
     private let appStateManager: AppSyncStateManager?
-    private let favoritesService = SnippetFavouritesService.shared
+    private let favoritesService: SnippetFavouritesService?
     private let hapticManager = HapticManager.shared
     let analyticsManager: FBAnalyticsManager
 
@@ -29,20 +29,31 @@ final class SnippetsViewModel: ObservableObject {
         services: AppServiceDependencies
     ) {
         self.appStateManager = appStateManager
+        self.favoritesService = appStateManager.map { SnippetFavouritesService(appSyncStateManager: $0) }
+        /*
+         if let appStateManager {
+             self.favoritesService = SnippetFavouritesService(appSyncStateManager: appStateManager)
+         } else {
+             self.favoritesService = nil
+         }
+         
+         или
+         
+         appStateManager.map { unwrapped in
+             SnippetFavouritesService(appSyncStateManager: unwrapped)
+         }
+         */
         self.analyticsManager = services.analyticsManager
         setupSubscriptions()
-        if let appStateManager {
-            SnippetFavouritesService.shared.configure(with: appStateManager)
-        }
     }
 
     // MARK: - Favorites
     func isFavorite(_ snippet: CodeSnippet) -> Bool {
-        favoritesService.isFavorite(snippet.id)
+        favoritesService?.isFavorite(snippet.id) ?? false
     }
 
     func favoriteToggle(_ snippet: CodeSnippet) {
-        favoritesService.toggle(snippet.id)
+        favoritesService?.toggle(snippet.id)
         hapticManager.impact(style: .light)
         objectWillChange.send()
     }
@@ -60,16 +71,6 @@ final class SnippetsViewModel: ObservableObject {
     }
 
     // MARK: - Private Helpers
-    private func applyFilters(
-        snippets: [CodeSnippet],
-        category: String?
-    ) -> [CodeSnippet] {
-        guard category != nil else { return snippets }
-        return snippets.filter { snippet in
-            let matchesCategory = category == nil || snippet.category == category
-            return matchesCategory
-        }
-    }
 
     private func applySearch(snippets: [CodeSnippet], query: String) -> [CodeSnippet] {
         guard !query.isEmpty else { return snippets }

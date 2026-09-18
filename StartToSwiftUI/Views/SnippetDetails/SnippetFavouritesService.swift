@@ -7,21 +7,20 @@
 
 import Foundation
 
+@MainActor
 final class SnippetFavouritesService {
-    
-    static let shared = SnippetFavouritesService()
-    
-    private var appSyncStateManager: AppSyncStateManager? = nil
-    
-    func configure(with manager: AppSyncStateManager) {
-        appSyncStateManager = manager
+
+    private let appSyncStateManager: AppSyncStateManager
+
+    init(appSyncStateManager: AppSyncStateManager) {
+        self.appSyncStateManager = appSyncStateManager
     }
-    
-    @MainActor func isFavorite(_ id: String) -> Bool {
-        appSyncStateManager?.isSnippetFavorite(id) ?? false
+
+    func isFavorite(_ id: String) -> Bool {
+        appSyncStateManager.isSnippetFavorite(id)
     }
-    
-    @MainActor func toggle(_ id: String) {
-        appSyncStateManager?.toggleSnippetFavorite(id)
+
+    func toggle(_ id: String) {
+        appSyncStateManager.toggleSnippetFavorite(id)
     }
 }

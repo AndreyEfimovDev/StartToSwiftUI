@@ -8,6 +8,10 @@
 import Foundation
 
 struct CodeSnippet: Identifiable, Hashable {
+    /// Не должен содержать запятую — избранные сниппеты (см.
+    /// AppSyncState.snippetFavoriteIDs) сериализуются через запятую как
+    /// одна строка для CloudKit-синка; ID с запятой расколется на несколько
+    /// значений при следующем чтении.
     let id: String
     let category: String
     let title: String
@@ -16,7 +20,7 @@ struct CodeSnippet: Identifiable, Hashable {
     let date: Date
     let codeSnippet: String
     let minOS: MinOS
-    
+
     init(
         id: String,
         category: String = Constants.mainCategory,

@@ -12,7 +12,6 @@ struct TermsOfUse: View {
     
     // MARK: - Dependencies
     
-    @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     private let hapticManager = HapticManager.shared
     

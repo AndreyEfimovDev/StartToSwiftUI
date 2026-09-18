@@ -17,13 +17,12 @@ struct WhatsNews {
                     title: "Added",
                     newsText: """
                     - Demo for iOS 26+
-                    - 
                     """
                 ),
                 News(
                     title: "New Code Snippets",
                     newsText: """
-                    - B001: Album Player - 
+                    - B001: Album Player built on iOS 26's new TabView APIs.
                     """
                 ),
                 News(
@@ -35,7 +34,7 @@ struct WhatsNews {
                 News(
                     title: "Fixed",
                     newsText: """
-                    - flickering in A006 BottomRight
+                    - Flickering in A006 BottomRight
                     """
                 )
             ]
