@@ -478,14 +478,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		47069EFC2EAFF2E30082AE12 /* Launch */ = {
-			isa = PBXGroup;
-			children = (
-				47069EFF2EAFF6210082AE12 /* LaunchView.swift */,
-			);
-			path = Launch;
-			sourceTree = "<group>";
-		};
 		470A21C42E6E389D006D2D66 /* Pickers */ = {
 			isa = PBXGroup;
 			children = (
@@ -755,7 +747,6 @@
 				475997592E5C86C5008E20F0 /* Components */,
 				475997562E5C8671008E20F0 /* Models */,
 				475997572E5C8688008E20F0 /* ViewModels */,
-				47069EFC2EAFF2E30082AE12 /* Launch */,
 				47BAF0EE2E645B0A00287F10 /* Views */,
 				475997492E5C690B008E20F0 /* Assets.xcassets */,
 				471BEF4F2EA793880093F962 /* Info.plist */,
@@ -1026,6 +1017,7 @@
 				47542EB32EF2C8E400B0AB79 /* StartView.swift */,
 				47B4657F2E6867930059CCB7 /* MaterialsHomeView.swift */,
 				47B6E8072F5DF5AD00EF7441 /* SnippetsHomeView.swift */,
+				47069EFF2EAFF6210082AE12 /* LaunchView.swift */,
 				473436362F449BC400CF00FA /* SubViews */,
 				473436382F449CA800CF00FA /* Helpers */,
 				4715FA2F2F263BE800ED732A /* PostDetails */,

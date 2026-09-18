@@ -12,11 +12,6 @@ import Combine
 struct StartView: View {
 
     // MARK: - Dependencies
-    // `@ObservedObject`, а не `@EnvironmentObject` — StartView сам получает
-    // готовые, уже построенные один раз в AppDependencies инстансы через
-    // init, а не полагается на то, что их кто-то положит в SwiftUI Environment
-    // выше по дереву. Ниже по дереву (глубже StartView) всё по-прежнему идёт
-    // через .environmentObject()/@EnvironmentObject — см. body.
     @ObservedObject private var vm: PostsViewModel
     @ObservedObject private var noticevm: NoticesViewModel
     @ObservedObject private var snippetsvm: SnippetsViewModel

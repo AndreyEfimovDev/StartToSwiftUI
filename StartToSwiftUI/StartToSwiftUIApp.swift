@@ -18,22 +18,15 @@ struct StartToSwiftUIApp: App {
 
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
-    /// Результат сборки composition root: либо готовые зависимости и
-    /// контейнер, либо неудача создания `ModelContainer` — раньше в этом
-    /// случае был `fatalError`, теперь показываем `DatabaseErrorView`.
     private enum Startup {
         case ready(container: ModelContainer, dependencies: AppDependencies)
-        case failed
+        case failed // если контейнер SwiftData не создался
     }
+    
     private let startup: Startup
 
     init() {
-        // Должен отработать раньше первого обращения к любому Firebase SDK —
-        // AppDependencies.make() ниже строит FBPostsManager/FBNoticesManager,
-        // которые обращаются к Firestore.firestore() уже в своём init().
-        // AppDelegate.application(didFinishLaunchingWithOptions:) выполняется
-        // позже (после App.init()), так что полагаться на конфигурацию там
-        // нельзя.
+        
         FirebaseApp.configure()
 
         let schema = Schema([
