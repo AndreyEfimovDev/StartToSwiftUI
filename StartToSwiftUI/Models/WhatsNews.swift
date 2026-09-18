@@ -28,6 +28,7 @@ struct WhatsNews {
                 News(
                     title: "Improved",
                     newsText: """
+                    - UI/UX for iPad
                     - The application's stability and performance 
                     """
                 ),

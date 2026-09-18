@@ -48,9 +48,7 @@ struct ProgressSelectionView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(
-            .bar,
-            in: RoundedRectangle(cornerRadius: 30))
+        .background(.bar, in: RoundedRectangle(cornerRadius: 30))
     }
     
     @ViewBuilder
@@ -65,7 +63,6 @@ struct ProgressSelectionView: View {
                 .lineLimit(2)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: .infinity)
                 .padding(.horizontal)
 
             Text("@" + post.author)
@@ -73,6 +70,8 @@ struct ProgressSelectionView: View {
                 .minimumScaleFactor(0.75)
                 .lineLimit(1)
                 .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal)
         }
         .foregroundStyle(Color.mycolor.myAccent)
         .frame(maxWidth: .infinity, alignment: .center)
@@ -122,9 +121,7 @@ struct ProgressSelectionView: View {
         CircleStrokeButtonView(
             iconName: "xmark",
             isShownCircle: false
-        ){
-                completion()
-        }
+        ){ completion() }
     }
 
 }
