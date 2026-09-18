@@ -17,6 +17,7 @@ struct StartView: View {
     @ObservedObject private var snippetsvm: SnippetsViewModel
     @ObservedObject private var coordinator: AppCoordinator
     @ObservedObject private var errorManager: ErrorManager
+    private let appStoreService: AppStoreService
 
     init(dependencies: AppDependencies) {
         _vm = ObservedObject(wrappedValue: dependencies.postsViewModel)
@@ -24,6 +25,7 @@ struct StartView: View {
         _snippetsvm = ObservedObject(wrappedValue: dependencies.snippetsViewModel)
         _coordinator = ObservedObject(wrappedValue: dependencies.coordinator)
         _errorManager = ObservedObject(wrappedValue: dependencies.services.errorManager)
+        appStoreService = dependencies.appStoreService
     }
 
     // MARK: - States
@@ -83,6 +85,7 @@ struct StartView: View {
         .environmentObject(snippetsvm)
         .environmentObject(coordinator)
         .environmentObject(errorManager)
+        .environment(\.appStoreService, appStoreService)
     }
     
     // MARK: Main Content
@@ -199,6 +202,7 @@ struct StartView: View {
     let dependencies = AppDependencies(
         appStateManager: stateManager,
         services: services,
+        appStoreService: AppStoreService(),
         postsViewModel: postsVM,
         noticesViewModel: NoticesViewModel(dataSource: MockNoticesDataSource(), fbNoticesManager: MockFBNoticesManager(), services: services),
         snippetsViewModel: SnippetsViewModel(services: services),

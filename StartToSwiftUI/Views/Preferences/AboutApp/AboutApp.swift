@@ -11,6 +11,7 @@ struct AboutApp: View {
     
     // MARK: - Dependencies
     @EnvironmentObject private var coordinator: AppCoordinator
+    @Environment(\.appStoreService) private var appStoreService
     
     // MARK: - States
     @State private var buttonTitleAppUpdate = "Check for App update"
@@ -68,7 +69,7 @@ struct AboutApp: View {
             // Link to the app's page in the App Store
             Button(buttonTitleAppUpdate) {
                 Task {
-                    let hasUpdate = await AppStoreService.shared.isUpdateAvailable()
+                    let hasUpdate = await appStoreService.isUpdateAvailable()
                     await MainActor.run {
                         if hasUpdate {
                             if let url = URL(string: Constants.appStoreURL) {

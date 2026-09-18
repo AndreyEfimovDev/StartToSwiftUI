@@ -6,12 +6,12 @@
 //
 
 import Foundation
+import SwiftUI
 
 final class AppStoreService {
-    
-    static let shared = AppStoreService()
-    private init() {}
-    
+
+    init() {}
+
     // MARK: - iTunes Response Models
     private struct ITunesResponse: Decodable {
         let results: [ITunesResult]
@@ -49,4 +49,16 @@ final class AppStoreService {
             return false
         }
     }
+}
+
+// MARK: - Environment
+// AppStoreService нужен только AboutApp — глубоко вложенному экрану без
+// естественного родителя рядом (в отличие от остальных сервисов из
+// AppServiceDependencies, которые есть у Posts/Notices/SnippetsViewModel,
+// у AboutApp нет доступа ни к одной ViewModel). Поэтому — Environment, а
+// не пиггибэк через уже существующую ViewModel. Дефолт ниже — только для
+// #Preview, в реальном приложении всегда явно задан через
+// .environment(\.appStoreService, ...) в StartView.
+extension EnvironmentValues {
+    @Entry var appStoreService = AppStoreService()
 }
