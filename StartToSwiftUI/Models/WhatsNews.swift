@@ -17,7 +17,6 @@ struct WhatsNews {
                     title: "Added",
                     newsText: """
                     - Demo for iOS 26+
-                    - 
                     """
                 ),
                 News(
@@ -35,7 +34,7 @@ struct WhatsNews {
                 News(
                     title: "Fixed",
                     newsText: """
-                    - flickering in A006 BottomRight
+                    - Flickering in A006 BottomRight
                     """
                 )
             ]
