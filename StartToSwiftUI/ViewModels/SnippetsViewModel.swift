@@ -71,16 +71,6 @@ final class SnippetsViewModel: ObservableObject {
     }
 
     // MARK: - Private Helpers
-    private func applyFilters(
-        snippets: [CodeSnippet],
-        category: String?
-    ) -> [CodeSnippet] {
-        guard category != nil else { return snippets }
-        return snippets.filter { snippet in
-            let matchesCategory = category == nil || snippet.category == category
-            return matchesCategory
-        }
-    }
 
     private func applySearch(snippets: [CodeSnippet], query: String) -> [CodeSnippet] {
         guard !query.isEmpty else { return snippets }
