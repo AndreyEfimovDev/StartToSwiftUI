@@ -14,9 +14,9 @@ struct MaterialsHomeView: View {
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticesViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
-    
+
     private let hapticManager = HapticManager.shared
-    
+
     // MARK: - Constants
     let selectedCategory: String?
     private let longPressDuration: Double = 0.5
@@ -27,6 +27,12 @@ struct MaterialsHomeView: View {
     @State private var isLongPressSuccess: Bool = false
     @State private var showViewOnDoubleTap: Bool = false
     @State private var isFilterButtonPressed: Bool = false
+    /// Выбор в List(selection:) на iPad (iPadListContent) — привязан к id
+    /// (String), а не к самому Post: Post — SwiftData @Model, reference type,
+    /// и привязка selection напрямую к нему на реальном устройстве не работала
+    /// (тап не долетал до vm.selectedPost вообще, даже в широком виде).
+    /// Синхронизируется в vm.selectedPost через onChange ниже.
+    @State private var selectedPostID: String?
     
     // MARK: - Computed Properties
     private var disableHomeView: Bool {
@@ -77,8 +83,24 @@ struct MaterialsHomeView: View {
     }
     
     // MARK: Subviews
-    
+
+    /// iPhone — обычный ForEach со всеми жестами (long-press, double-tap, swipe).
+    /// iPad — List(selection:), привязанный к NavigationSplitView: тап по строке
+    /// сам переключает detail-колонку и даёт системную кнопку "назад" в
+    /// схлопнутом (compact) состоянии — то, что вручную через columnVisibility
+    /// заставить работать не удалось (см. обсуждение бага с открытием деталей).
+    /// Long-press/double-tap на iPad не переносим — они конфликтовали бы с
+    /// собственным тап-жестом List(selection:).
+    @ViewBuilder
     private var listPostRowsContent: some View {
+        if UIDevice.isiPad {
+            iPadListContent
+        } else {
+            iPhoneListContent
+        }
+    }
+
+    private var iPhoneListContent: some View {
         List {
             ForEach(postsToDisplay) { post in
                 PostRowView(post: post)
@@ -100,7 +122,7 @@ struct MaterialsHomeView: View {
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: false) {
                         leadingSwipeActions(for: post)
-                    }                
+                    }
             } // ForEach
             .listRowBackground(Color.clear)
             .listRowSeparatorTint(Color.mycolor.myAccent.opacity(0.35))
@@ -117,6 +139,34 @@ struct MaterialsHomeView: View {
             }
         }
         .refreshControl { await refresh() }
+    }
+
+    private var iPadListContent: some View {
+        List(postsToDisplay, selection: $selectedPostID) { post in
+            PostRowView(post: post)
+                .id(post.id)
+                .shimmerWave(enabled: vm.shimmerWaveEnabled && post.origin == .cloudNew)
+                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                    trailingSwipeActions(for: post)
+                }
+                .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                    leadingSwipeActions(for: post)
+                }
+        } // List
+        .listStyle(.plain)
+        .tint(Color.mycolor.myAccent.opacity(0.15)) // цвет подсветки выбранной строки
+        .coordinateSpace(name: "postsList")
+        .onScrollGeometryChange(for: CGFloat.self) { geo in
+            geo.contentOffset.y
+        } action: { _, newOffset in
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                showOnTopButton = newOffset > 100
+            }
+        }
+        .refreshControl { await refresh() }
+        .onChange(of: selectedPostID) { _, newID in
+            vm.selectedPost = postsToDisplay.first { $0.id == newID }
+        }
     }
 
     // MARK: - Refresh
@@ -148,14 +198,11 @@ struct MaterialsHomeView: View {
         }
     }
     
+    /// Используется только на iPhone (ForEach + жесты, см. iPhoneListContent).
+    /// На iPad деталь открывается через List(selection:) в iPadListContent —
+    /// "отметить прочитанным" в этом случае происходит в PostDetailsView.onAppear.
     private func handleSingleTap(on post: Post) {
         vm.selectedPost = post
-        
-        // Mark a new post from cloud as not new after tapping if necessary
-        if post.origin == .cloudNew {
-            vm.updatePostOrigin(post)
-        }
-        
         if UIDevice.isiPhone {
             coordinator.push(.postDetails(post: post))
         }

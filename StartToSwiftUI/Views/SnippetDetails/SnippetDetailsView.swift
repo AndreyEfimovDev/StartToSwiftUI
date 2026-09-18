@@ -12,7 +12,7 @@ struct SnippetDetailsView: View {
     // MARK: - Dependencies
     @EnvironmentObject private var snippetvm: SnippetsViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
-    
+
     private let hapticManager = HapticManager.shared
     
     // MARK: - Constants
@@ -27,7 +27,11 @@ struct SnippetDetailsView: View {
     var body: some View {
         SnippetViewRegistry.view(for: snippet)
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
+            // На iPhone скрываем системную кнопку назад — своя, кастомная, в
+            // toolbar. На iPad деталь открывается через selection в List
+            // (SnippetsHomeView) — в схлопнутом NavigationSplitView кнопку
+            // "назад" даёт сама система, скрывать её не нужно.
+            .navigationBarBackButtonHidden(UIDevice.isiPhone)
             .toolbar { toolbar }
             .sheet(isPresented: $showCodeSheet) { codeSheet }
             .onAppear {

@@ -58,7 +58,6 @@ final class AppCoordinator: ObservableObject {
     /// For modal Views
     @Published var presentedSheet: AppRoute?
     
-    
     // MARK: - Section Switch
     /// Switches between Materials and Snippets, resetting the navigation path.
     func switchSection() {

@@ -28,6 +28,12 @@ struct SnippetsHomeView: View {
     
     // MARK: - States
     @State private var showOnTopButton = false
+    /// Выбор в List(selection:) на iPad (iPadListContent) — привязан к id
+    /// (String), а не к самому CodeSnippet, для единообразия с MaterialsHomeView
+    /// (там привязка selection напрямую к Post — SwiftData @Model — на реальном
+    /// устройстве не работала). Синхронизируется в snippetvm.selectedSnippet
+    /// через onChange ниже.
+    @State private var selectedSnippetID: String?
 
     // MARK: - Body
     var body: some View {
@@ -63,7 +69,21 @@ struct SnippetsHomeView: View {
 
     // MARK: - List
 
+    /// iPhone — обычный ForEach с onTapGesture + swipe. iPad — List(selection:),
+    /// привязанный к NavigationSplitView: тап сам переключает detail-колонку
+    /// и даёт системную кнопку "назад" в схлопнутом (compact) состоянии —
+    /// вручную через columnVisibility это заставить работать не удалось
+    /// (см. аналогичное обсуждение для MaterialsHomeView).
+    @ViewBuilder
     private var listContent: some View {
+        if UIDevice.isiPad {
+            iPadListContent
+        } else {
+            iPhoneListContent
+        }
+    }
+
+    private var iPhoneListContent: some View {
         List {
             ForEach(sortedSnippets) { snippet in
                 SnippetRowView(snippet: snippet, isFavorite: snippetvm.isFavorite(snippet))
@@ -89,8 +109,31 @@ struct SnippetsHomeView: View {
         }
     }
 
+    private var iPadListContent: some View {
+        List(sortedSnippets, selection: $selectedSnippetID) { snippet in
+            SnippetRowView(snippet: snippet, isFavorite: snippetvm.isFavorite(snippet))
+                .id(snippet.id)
+                .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                    leadingSwipeActions(for: snippet)
+                }
+        }
+        .listStyle(.plain)
+        .onScrollGeometryChange(for: CGFloat.self) { geo in
+            geo.contentOffset.y
+        } action: { _, newOffset in
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                showOnTopButton = newOffset > 100
+            }
+        }
+        .onChange(of: selectedSnippetID) { _, newID in
+            snippetvm.selectedSnippet = sortedSnippets.first { $0.id == newID }
+        }
+    }
+
     // MARK: - Tap
 
+    /// Используется только на iPhone (см. iPhoneListContent). На iPad деталь
+    /// открывается через List(selection:) в iPadListContent.
     private func handleTap(on snippet: CodeSnippet) {
         snippetvm.selectedSnippet = snippet
         if UIDevice.isiPhone {
