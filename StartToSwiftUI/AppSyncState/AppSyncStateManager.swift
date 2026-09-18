@@ -114,25 +114,18 @@ class AppSyncStateManager: AppSyncStateManagerProtocol {
         }
         log("  📌 Main AppState: \(primaryState.id)", level: .info)
         
-        // Merge the flags: if at least one is true, we take true
-        var earliestDate: Date?
-        var latestSyncDate: Date?
         
-        for state in sortedStates {
-            // Earliest launch date
-            if let date = state.appFirstLaunchDate {
-                if earliestDate == nil || date < earliestDate! {
-                    earliestDate = date
-                }
-            }
-            // Latest synchronization
-            if let date = state.lastCloudSyncDateToMergeDuplicate {
-                if latestSyncDate == nil || date > latestSyncDate! {
-                    latestSyncDate = date
-                }
-            }
-        }
+        // Merge the flags: if at least one is true, to take true
+        /// Earliest launch date
+        let earliestDate = sortedStates
+            .compactMap { $0.appFirstLaunchDate }
+            .min()
         
+        /// Latest synchronization/
+        let latestSyncDate = sortedStates
+            .compactMap { $0.lastCloudSyncDateToMergeDuplicate }
+            .max()
+
         // Updating the main object with the merged data
         primaryState.appFirstLaunchDate = earliestDate
         primaryState.lastCloudSyncDateToMergeDuplicate = latestSyncDate
