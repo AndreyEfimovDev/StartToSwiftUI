@@ -61,15 +61,21 @@ struct ProgressSelectionView: View {
         VStack (spacing: 8) {
             Text(post.title)
                 .font(.headline)
+                .minimumScaleFactor(0.75)
                 .lineLimit(2)
                 .multilineTextAlignment(.center)
-            
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal)
+
             Text("@" + post.author)
                 .font(.footnote)
+                .minimumScaleFactor(0.75)
                 .lineLimit(1)
+                .multilineTextAlignment(.center)
         }
         .foregroundStyle(Color.mycolor.myAccent)
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, alignment: .center)
         .padding(.top)
 
     }
