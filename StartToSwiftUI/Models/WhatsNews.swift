@@ -23,7 +23,7 @@ struct WhatsNews {
                 News(
                     title: "New Code Snippets",
                     newsText: """
-                    - B001: Album Player - 
+                    - B001: Album Player built on iOS 26's new TabView APIs.
                     """
                 ),
                 News(

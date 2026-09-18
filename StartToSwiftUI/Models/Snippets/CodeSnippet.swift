@@ -20,7 +20,7 @@ struct CodeSnippet: Identifiable, Hashable {
     let date: Date
     let codeSnippet: String
     let minOS: MinOS
-    
+
     init(
         id: String,
         category: String = Constants.mainCategory,

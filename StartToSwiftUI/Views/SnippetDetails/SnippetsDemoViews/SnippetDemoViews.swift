@@ -17,7 +17,7 @@ import SwiftUI
 @available(iOS 26.1, *)
 struct B001_AlbumPlayerDemoView: View {
     let snippet: CodeSnippet
-    
+
     var body: some View {
         VStack(spacing: 0) {
             ScrollView(showsIndicators: false) {
@@ -27,7 +27,7 @@ struct B001_AlbumPlayerDemoView: View {
                 }
             }
             .fixedSize(horizontal: false, vertical: true)
-            
+
             B001_AlbumPlayerDemo()
                 .frame(maxHeight: .infinity)
         }
