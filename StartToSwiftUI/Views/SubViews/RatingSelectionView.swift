@@ -48,9 +48,7 @@ struct RatingSelectionView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(
-            .bar,
-            in: RoundedRectangle(cornerRadius: 30))
+        .background(.bar, in: RoundedRectangle(cornerRadius: 30))
     }
     
     @ViewBuilder
@@ -65,7 +63,6 @@ struct RatingSelectionView: View {
                 .lineLimit(2)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: .infinity)
                 .padding(.horizontal)
             
             Text("@" + post.author)
@@ -73,6 +70,8 @@ struct RatingSelectionView: View {
                 .minimumScaleFactor(0.75)
                 .lineLimit(1)
                 .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal)
         }
         .foregroundStyle(Color.mycolor.myAccent)
         .frame(maxWidth: .infinity, alignment: .center)
@@ -83,9 +82,7 @@ struct RatingSelectionView: View {
         CircleStrokeButtonView(
             iconName: "xmark",
             isShownCircle: false
-        ){
-                completion()
-        }
+        ){ completion() }
     }
     
     private var ratingIconsView: some View {
@@ -94,8 +91,7 @@ struct RatingSelectionView: View {
                 VStack(spacing: 8) {
                     rating.icon
                         .font(.largeTitle)
-                        .onTapGesture {
-                            withAnimation(.easeInOut) {
+                        .onTapGesture { withAnimation(.easeInOut) {
                                 vm.selectedRating = rating
                             }
                         }
