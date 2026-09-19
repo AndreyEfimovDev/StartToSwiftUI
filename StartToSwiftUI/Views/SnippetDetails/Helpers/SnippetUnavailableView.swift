@@ -23,6 +23,7 @@ struct SnippetUnavailableView: View {
                 systemImage: "iphone.slash",
                 description: Text("Live preview is available on iOS 26 and later.")
             )
+            .foregroundStyle(Color.mycolor.myAccent)
             .frame(maxHeight: .infinity)
         }
     }

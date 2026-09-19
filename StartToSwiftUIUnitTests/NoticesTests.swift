@@ -32,7 +32,9 @@ final class NoticeViewModelTests: XCTestCase {
         
         // Инициализируем ViewModel с моками
         noticeVM = NoticesViewModel(
-            dataSource: dataSource
+            dataSource: dataSource,
+            fbNoticesManager: networkService,
+            services: .make()
         )
         
         // Небольшая задержка для async операций
@@ -57,7 +59,8 @@ final class NoticeViewModelTests: XCTestCase {
         let mockFB = MockFBNoticesManager.mockNotices(mockNotices)
         let testVM = NoticesViewModel(
             dataSource: MockNoticesDataSource(notices: []),
-            fbNoticesManager: mockFB
+            fbNoticesManager: mockFB,
+            services: .make()
         )
         
         // When
@@ -80,7 +83,8 @@ final class NoticeViewModelTests: XCTestCase {
         let mockFB = MockFBNoticesManager.mockNotices(mockNotices)
         let testVM = NoticesViewModel(
             dataSource: dataSource,
-            fbNoticesManager: mockFB
+            fbNoticesManager: mockFB,
+            services: .make()
         )
         
         // When
@@ -98,7 +102,8 @@ final class NoticeViewModelTests: XCTestCase {
         let mockFB = MockFBNoticesManager.mockEmpty()
         let testVM = NoticesViewModel(
             dataSource: MockNoticesDataSource(notices: []),
-            fbNoticesManager: mockFB
+            fbNoticesManager: mockFB,
+            services: .make()
         )
         
         // When
@@ -116,7 +121,8 @@ final class NoticeViewModelTests: XCTestCase {
         
         let testVM = NoticesViewModel(
             dataSource: MockNoticesDataSource(notices: []),
-            fbNoticesManager: mockFB
+            fbNoticesManager: mockFB,
+            services: .make()
         )
         
         // When

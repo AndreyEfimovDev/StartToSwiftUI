@@ -138,6 +138,7 @@ struct A015_CardSwipeDemo: View {
                         .stroke(Color.mycolor.mySecondary.opacity(0.5), lineWidth: 1))
             }
             .buttonStyle(.plain)
+            .frame(maxWidth: 250)
             .padding(.horizontal, 16)
             .padding(.bottom, 28)
             .padding(.top, 12)

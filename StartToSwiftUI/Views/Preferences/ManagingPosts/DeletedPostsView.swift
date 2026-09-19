@@ -101,6 +101,7 @@ struct DeletedPostsView: View {
             systemImage: "square.stack.3d.up",
             description: Text(subText)
         )
+        .foregroundStyle(Color.mycolor.myAccent)
     }
 
 }

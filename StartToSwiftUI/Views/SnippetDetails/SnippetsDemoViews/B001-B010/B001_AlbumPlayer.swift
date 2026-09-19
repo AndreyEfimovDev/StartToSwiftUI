@@ -46,9 +46,11 @@ struct B001_AlbumPlayerDemo: View {
                     isPlaying = playing
                 }
             )
+            .padding(.horizontal)
         }
         // 3. Configure the tab bar to collapse when scrolling
         .tabBarMinimizeBehavior(.onScrollDown)
+        .tint(Color.mycolor.myAccent)
     }
 }
 
@@ -216,7 +218,7 @@ struct MiniPlayerView: View {
                     }
                 }
             }
-            .padding(.horizontal)
+            .padding()
             
         default:
             // Collapsed view (when the tab bar is hidden when scrolling)

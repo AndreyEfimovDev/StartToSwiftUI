@@ -53,6 +53,7 @@ struct PostDraftsView: View {
             systemImage: "square.stack.3d.up",
             description: Text("Drafts will appear here when you save drafts.")
         )
+        .foregroundStyle(Color.mycolor.myAccent)
     }
 }
 

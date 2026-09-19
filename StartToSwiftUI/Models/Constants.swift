@@ -8,7 +8,9 @@
 import Foundation
 
 
-struct Constants {
+// nonisolated: чистые константы без связи с UI/main thread, не должны
+// наследовать MainActor-изоляцию по умолчанию (SWIFT_DEFAULT_ACTOR_ISOLATION)
+nonisolated struct Constants {
     static let mainCategory = "SwiftUI"
     static let urlStart = "https://"
     static let appStoreURL = "https://apps.apple.com/ru/app/starttoswiftui/id6755787606?l=en-GB"

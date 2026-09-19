@@ -123,6 +123,7 @@ struct NoticesView: View {
             systemImage: "tray.and.arrow.down",
             description: Text("Messages will appear here when are available.")
         )
+        .foregroundStyle(Color.mycolor.myAccent)
     }
     
 }

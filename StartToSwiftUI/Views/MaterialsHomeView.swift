@@ -154,7 +154,12 @@ struct MaterialsHomeView: View {
                 }
         } // List
         .listStyle(.plain)
-        .tint(Color.mycolor.myAccent.opacity(0.15)) // цвет подсветки выбранной строки
+        // Фон подсветки выделенной строки в List(selection:) внутри
+        // NavigationSplitView захардкожен под системный accent color и не
+        // подчиняется ни .tint(), ни .listRowBackground, ни AccentColor
+        // asset — проверено эмпирически (несколько подходов не сработали).
+        // Системный синий остаётся как задокументированное ограничение
+        // платформы (без инвазивного UIKit-обхода через introspection).
         .coordinateSpace(name: "postsList")
         .onScrollGeometryChange(for: CGFloat.self) { geo in
             geo.contentOffset.y
@@ -343,6 +348,7 @@ struct MaterialsHomeView: View {
                 systemImage: "tray",
                 description: Text("Materials will appear here once you create them yourself or download curated content.")
             )
+            .foregroundStyle(Color.mycolor.myAccent)
             Button("Download curated collection") {
                 coordinator.push(.importFromCloud)
             }
@@ -357,6 +363,7 @@ struct MaterialsHomeView: View {
             systemImage: "magnifyingglass",
             description: Text("Check the spelling or try a new search.")
         )
+        .foregroundStyle(Color.mycolor.myAccent)
     }
 
 }

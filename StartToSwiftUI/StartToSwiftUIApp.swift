@@ -61,6 +61,7 @@ struct StartToSwiftUIApp: App {
         }
         
         configureNavigationBarAppearance()
+        configureSegmentedControlAppearance()
     }
 
     var body: some Scene {
@@ -112,6 +113,15 @@ struct StartToSwiftUIApp: App {
         UINavigationBar.appearance().compactScrollEdgeAppearance = appearance
         UINavigationBar.appearance().tintColor = accentColor
         UITableView.appearance().backgroundColor = UIColor.clear
+    }
+
+    /// `Picker(.segmented)` под капотом — `UISegmentedControl` (UIKit), его
+    /// текст не реагирует на SwiftUI `.foregroundStyle`/`.foregroundColor`
+    /// вообще — только на `UIAppearance` API.
+    private func configureSegmentedControlAppearance() {
+        let accentColor = UIColor(Color.mycolor.myAccent)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: accentColor], for: .normal)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: accentColor], for: .selected)
     }
 }
 
