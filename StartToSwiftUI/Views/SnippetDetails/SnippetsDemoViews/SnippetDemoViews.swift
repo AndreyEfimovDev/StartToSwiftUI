@@ -13,9 +13,9 @@
 import SwiftUI
 
 
-// MARK: - B001 Liquid Glass Card
+// MARK: - B002 Album Player
 @available(iOS 26.1, *)
-struct B001_AlbumPlayerDemoView: View {
+struct B002_AlbumPlayerDemoView: View {
     let snippet: CodeSnippet
 
     var body: some View {
@@ -28,7 +28,30 @@ struct B001_AlbumPlayerDemoView: View {
             }
             .fixedSize(horizontal: false, vertical: true)
 
-            B001_AlbumPlayerDemo()
+            B002_AlbumPlayerDemo()
+                .frame(maxHeight: .infinity)
+                .padding(.horizontal)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
+
+// MARK: - B001 Liquid Glass Playground
+@available(iOS 26.0, *)
+struct B001_LiquidGlassPlaygroundDemoView: View {
+    let snippet: CodeSnippet
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+
+            B001_LiquidGlassPlaygroundDemo()
                 .frame(maxHeight: .infinity)
                 .padding(.horizontal)
         }

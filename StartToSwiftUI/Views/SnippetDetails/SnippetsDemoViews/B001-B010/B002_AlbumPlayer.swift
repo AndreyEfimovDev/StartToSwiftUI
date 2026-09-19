@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 @available(iOS 26.1, *)
-struct B001_AlbumPlayerDemo: View {
+struct B002_AlbumPlayerDemo: View {
     // State for controlling the visibility of the mini-player
     @State private var isPlaying = false
     @State private var isPlayerVisible = false   // player visibility flag
@@ -114,7 +114,7 @@ struct PlayerHomeView: View {
                             .foregroundStyle(.secondary)
                     }
                     Spacer()
-                    B001_WaveAsymmetrical()
+                    B002_WaveAsymmetrical()
                         .clipShape(.capsule)
                         .opacity(currentTrack.title == track.title && isPlaying ? 0.8 : 0)
                 }
@@ -181,7 +181,7 @@ struct MiniPlayerView: View {
         case .expanded:
             // Expanded view (when the tab bar is at normal size)
             HStack {
-                B001_PulsingCircle()
+                B002_PulsingCircle()
                 
                 VStack(alignment: .leading) {
                     Text(track.title)
@@ -246,7 +246,7 @@ struct MiniPlayerView: View {
     }
 }
 
-struct B001_WaveAsymmetrical: View {
+struct B002_WaveAsymmetrical: View {
     private let barCount = 11
     private let maxHeight: CGFloat = 30
     private let minHeight: CGFloat = 3
@@ -286,7 +286,7 @@ struct B001_WaveAsymmetrical: View {
     }
 }
 
-struct B001_PulsingCircle: View {
+struct B002_PulsingCircle: View {
     @State private var scale: CGFloat = 0.5
     
     var body: some View {
@@ -305,6 +305,6 @@ struct B001_PulsingCircle: View {
 
 #Preview {
     if #available(iOS 26.1, *) {
-        B001_AlbumPlayerDemo()
+        B002_AlbumPlayerDemo()
     }
 }
