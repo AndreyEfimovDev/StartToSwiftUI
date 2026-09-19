@@ -20,10 +20,9 @@ struct SearchBarView: View {
         HStack (spacing: 0) {
             HStack(spacing: 0) {
                 Image(systemName: "magnifyingglass")
-                    .foregroundStyle(
-                        isFocusedOnSearchBar ? Color.mycolor.myAccent : Color.mycolor.mySecondary
-                    )
-
+                    .foregroundStyle(Color.mycolor.myAccent)
+                    .opacity(isFocusedOnSearchBar ? 1 : 0.3)
+                
                 TextField("Search here ...", text: $searchText)
                     .foregroundStyle(Color.mycolor.myAccent)
                     .autocorrectionDisabled(true)
@@ -42,9 +41,8 @@ struct SearchBarView: View {
                 Capsule()
                     .stroke(
                         isFocusedOnSearchBar ? Color.mycolor.myBlue : Color.mycolor.mySecondary,
-                        lineWidth: isFocusedOnSearchBar ? 5 : 1)
+                        lineWidth: isFocusedOnSearchBar ? 3 : 1)
             )
-//            .padding(.trailing)
             .padding(.vertical, 8)
         }
         .animation(.easeInOut, value: isFocusedOnSearchBar)
@@ -53,7 +51,7 @@ struct SearchBarView: View {
     private var xmarkButton: some View {
         
         Image(systemName: "xmark")
-            .imageScale(.large)
+            .imageScale(.medium)
             .foregroundStyle(Color.mycolor.myRed)
             .padding(.horizontal, 6)
             .background(.black.opacity(0.001))

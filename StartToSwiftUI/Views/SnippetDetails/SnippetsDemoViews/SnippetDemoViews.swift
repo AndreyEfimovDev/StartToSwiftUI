@@ -30,6 +30,7 @@ struct B001_AlbumPlayerDemoView: View {
 
             B001_AlbumPlayerDemo()
                 .frame(maxHeight: .infinity)
+                .padding(.horizontal)
         }
         .foregroundStyle(Color.mycolor.myAccent)
     }

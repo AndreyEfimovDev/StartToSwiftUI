@@ -162,14 +162,16 @@ struct SnippetsHomeView: View {
             systemImage: "chevron.left.forwardslash.chevron.right",
             description: Text("Download the curated collection from the menu.")
         )
+        .foregroundStyle(Color.mycolor.myAccent)
     }
 
     private var filteredSnippetsIsEmpty: some View {
         ContentUnavailableView(
-            "No Results",
+            "No Results matching your search criteria",
             systemImage: "magnifyingglass",
             description: Text("Check the spelling or try a new search.")
         )
+        .foregroundStyle(Color.mycolor.myAccent)
     }
 }
 

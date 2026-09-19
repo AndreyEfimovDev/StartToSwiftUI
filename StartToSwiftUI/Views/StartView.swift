@@ -31,6 +31,11 @@ struct StartView: View {
     // MARK: - States
     @State private var showLaunchView: Bool = true
     @State private var splitViewVisibility: NavigationSplitViewVisibility = .doubleColumn
+    /// В compact-ширине (узкий Split View/Slide Over — влезает только одна
+    /// колонка) NavigationSplitView схлопывается в push-навигацию, и
+    /// columnVisibility не управляет тем, что видно на экране — свою
+    /// sidebar-кнопку сворачивания там показывать не нужно.
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     // MARK: - Section Transition State
     /// A local copy of the section that we are changing through withAnimation
@@ -135,20 +140,73 @@ struct StartView: View {
                 }
             }
             .navigationSplitViewColumnWidth(430)
+            .toolbar(removing: .sidebarToggle)
+            .toolbar { sidebarSplitViewToggleItem }
         } detail: {
-            switch displayedSection {
-            case .materials:
-                if let post = vm.selectedPost {
-                    PostDetailsView(post: post).id(post.id)
-                } else {
-                    placeholderView(text: "Select Topic")
+            Group {
+                switch displayedSection {
+                case .materials:
+                    if let post = vm.selectedPost {
+                        PostDetailsView(post: post).id(post.id)
+                    } else {
+                        placeholderView(text: "Select Topic")
+                    }
+                case .snippets:
+                    if let snippet = snippetsvm.selectedSnippet {
+                        SnippetDetailsView(snippet: snippet).id(snippet.id)
+                    } else {
+                        placeholderView(text: "Select Snippet")
+                    }
                 }
-            case .snippets:
-                if let snippet = snippetsvm.selectedSnippet {
-                    SnippetDetailsView(snippet: snippet).id(snippet.id)
-                } else {
-                    placeholderView(text: "Select Snippet")
-                }
+            }
+            // Системная sidebarToggle-кнопка переезжает в nav bar detail-колонки,
+            // когда sidebar скрыт (detailOnly) — прячем её и здесь тоже,
+            // иначе своя кнопка добавится, а системная белая останется рядом.
+            .toolbar(removing: .sidebarToggle)
+            .toolbar { detailSplitViewToggleItem }
+        }
+    }
+
+    private func toggleSplitViewVisibility() {
+        withAnimation {
+            splitViewVisibility = splitViewVisibility == .detailOnly ? .doubleColumn : .detailOnly
+        }
+        HapticManager.shared.impact(style: .light)
+    }
+
+    /// Замена системной sidebarToggle-кнопки `NavigationSplitView` — та в iOS 26
+    /// (Liquid Glass) не подхватывает ни `.tint()`, ни `UIWindow`/`UINavigationBar`
+    /// tintColor (подтверждённый баг Apple, не наш код), поэтому всегда рисуется
+    /// белой. Своя кнопка красится явно через CircleStrokeButtonView, как и
+    /// остальные иконки нав-бара.
+    ///
+    /// В отличие от системной, показывается только в ОДНОЙ колонке за раз —
+    /// в sidebar, когда он виден, и в detail, когда он открыт на весь экран
+    /// (sidebar скрыт) — а не в обеих одновременно.
+    /// Сворачивать sidebar в пустой placeholder ("Select Topic"/"Select
+    /// Snippet") смысла нет — тогда detail-колонка пуста, а вернуться
+    /// назад можно только тем же переключением, что мы прячем.
+    private var hasSelectionInDisplayedSection: Bool {
+        switch displayedSection {
+        case .materials: vm.selectedPost != nil
+        case .snippets: snippetsvm.selectedSnippet != nil
+        }
+    }
+
+    @ToolbarContentBuilder
+    private var sidebarSplitViewToggleItem: some ToolbarContent {
+        if splitViewVisibility != .detailOnly && horizontalSizeClass != .compact && hasSelectionInDisplayedSection {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(iconName: "sidebar.left", isShownCircle: false, completion: toggleSplitViewVisibility)
+            }
+        }
+    }
+
+    @ToolbarContentBuilder
+    private var detailSplitViewToggleItem: some ToolbarContent {
+        if splitViewVisibility == .detailOnly {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CircleStrokeButtonView(iconName: "sidebar.left", isShownCircle: false, completion: toggleSplitViewVisibility)
             }
         }
     }
@@ -185,6 +243,7 @@ struct StartView: View {
     // MARK: - Placeholder
     private func placeholderView(text: String) -> some View {
         ContentUnavailableView(text, systemImage: "arrow.left")
+            .foregroundStyle(Color.mycolor.myAccent)
     }
     
 }

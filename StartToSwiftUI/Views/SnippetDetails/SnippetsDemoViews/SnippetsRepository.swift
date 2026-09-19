@@ -23,7 +23,7 @@ struct SnippetsRepository {
     static let b001 = CodeSnippet(
         id: "B001",
         title: "Album Player",
-        intro: "A music player built on iOS 26's new TabView APIs: tap a track in the list and a mini-player slides in as a native tab bar accessory, with playback controls right there. Built with .tabViewBottomAccessory for the mini-player, .tabBarMinimizeBehavior(.onScrollDown) to collapse the tab bar while scrolling, and @Environment(\\.tabViewBottomAccessoryPlacement) to adapt the mini-player's layout to its expanded/collapsed state.",
+        intro: "A music player built on iOS 26's new TabView APIs: tap a track in the list and a mini-player slides in as a native tab bar accessory, with playback controls right there. Built with .tabViewBottomAccessory for the mini-player, .tabBarMinimizeBehavior(.onScrollDown) to collapse the tab bar while scrolling, and @Environment(\\.tabViewBottomAccessoryPlacement) to adapt the mini-player's layout to its expanded/collapsed state. The collapsing tab bar and mini-player effects are designed for iPhone only, on iPad, TabView renders as a top bar by platform design and doesn't collapse on scroll.",
         thanks: nil,
         date: Date.from(year: 2026, month: 9, day: 18, hour: 1, minute: 8) ?? Date(),
         codeSnippet: """
@@ -71,6 +71,7 @@ struct SnippetsRepository {
                 }
                 // 3. Configure the tab bar to collapse when scrolling
                 .tabBarMinimizeBehavior(.onScrollDown)
+                .tint(Color.mycolor.myAccent)
             }
         }
 
