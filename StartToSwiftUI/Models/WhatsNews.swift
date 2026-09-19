@@ -13,22 +13,17 @@ struct WhatsNews {
         Release(
             release: "Release 1.8.0(11)",
             news: [
-//                News(
-//                    title: "Added",
-//                    newsText: """
-//                    - Demo for iOS 26+
-//                    """
-//                ),
                 News(
                     title: "New Code Snippets",
                     newsText: """
-                    - B001: Album Player built on iOS 26's new TabView APIs
+                    - B001: Liquid Glass Playground — hands-on tour of iOS 26's Liquid Glass material
+                    - B002: Album Player built on iOS 26's new TabView APIs
                     """
                 ),
                 News(
                     title: "Improved",
                     newsText: """
-                    - Better UI/UX adaptation for iPad
+                    - UI/UX adaptation for iPad
                     - The application's stability and performance 
                     """
                 ),

@@ -211,17 +211,6 @@ struct StartView: View {
         }
     }
 
-    // Switches root view based on active section
-    @ViewBuilder
-    private var sectionRootView: some View {
-        switch coordinator.activeSection {
-        case .materials:
-            MaterialsHomeView(selectedCategory: Constants.mainCategory)
-        case .snippets:
-            SnippetsHomeView()
-        }
-    }
-    
     // MARK: - Destination View for routing
     @ViewBuilder
     private func destinationView(for route: AppRoute) -> some View {

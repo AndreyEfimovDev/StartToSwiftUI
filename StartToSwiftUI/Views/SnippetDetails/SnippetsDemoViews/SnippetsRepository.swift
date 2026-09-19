@@ -16,12 +16,11 @@ struct SnippetsRepository {
     
     static let allDemoCodeSnippet: [CodeSnippet] = [
         a001, a002, a003, a004, a005, a006, a007, a008, a009, a010,
-        a011, a012, a013, a014, a015, a016, b001
+        a011, a012, a013, a014, a015, a016, b001, b002
     ]
-    
-    
-    static let b001 = CodeSnippet(
-        id: "B001",
+
+    static let b002 = CodeSnippet(
+        id: "B002",
         title: "Album Player",
         intro: "A music player built on iOS 26's new TabView APIs: tap a track in the list and a mini-player slides in as a native tab bar accessory, with playback controls right there. Built with .tabViewBottomAccessory for the mini-player, .tabBarMinimizeBehavior(.onScrollDown) to collapse the tab bar while scrolling, and @Environment(\\.tabViewBottomAccessoryPlacement) to adapt the mini-player's layout to its expanded/collapsed state. The collapsing tab bar and mini-player effects are designed for iPhone only, on iPad, TabView renders as a top bar by platform design and doesn't collapse on scroll.",
         thanks: nil,
@@ -31,7 +30,7 @@ struct SnippetsRepository {
         import Combine
 
         @available(iOS 26.1, *)
-        struct B001_AlbumPlayerDemo: View {
+        struct B002_AlbumPlayerDemo: View {
             // State for controlling the visibility of the mini-player
             @State private var isPlaying = false
             @State private var isPlayerVisible = false   // player visibility flag
@@ -135,7 +134,7 @@ struct SnippetsRepository {
                                     .foregroundStyle(.secondary)
                             }
                             Spacer()
-                            B001_WaveAsymmetrical()
+                            B002_WaveAsymmetrical()
                                 .clipShape(.capsule)
                                 .opacity(currentTrack.title == track.title && isPlaying ? 0.8 : 0)
                         }
@@ -202,7 +201,7 @@ struct SnippetsRepository {
                 case .expanded:
                     // Expanded view (when the tab bar is at normal size)
                     HStack {
-                        B001_PulsingCircle()
+                        B002_PulsingCircle()
                         
                         VStack(alignment: .leading) {
                             Text(track.title)
@@ -267,7 +266,7 @@ struct SnippetsRepository {
             }
         }
 
-        struct B001_WaveAsymmetrical: View {
+        struct B002_WaveAsymmetrical: View {
             private let barCount = 11
             private let maxHeight: CGFloat = 30
             private let minHeight: CGFloat = 3
@@ -307,7 +306,7 @@ struct SnippetsRepository {
             }
         }
 
-        struct B001_PulsingCircle: View {
+        struct B002_PulsingCircle: View {
             @State private var scale: CGFloat = 0.5
             
             var body: some View {
@@ -325,13 +324,214 @@ struct SnippetsRepository {
         minOS: .ios26
     )
 
+    static let b001 = CodeSnippet(
+        id: "B001",
+        title: "Liquid Glass Playground",
+        intro: "A hands-on tour of iOS 26's Liquid Glass material: GlassEffectContainer blends nearby .glassEffect() shapes into one another in real time — tap Merge to see it — and .glassEffectID(_:in:) lets separate glass shapes merge into and split from a shared control. Glass can also be tinted with .tint(_:) — here it recolors a status pill on tap, the way you'd communicate success/error state.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 4, day: 01, hour: 3, minute: 8) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        private enum GlassStatus: CaseIterable {
+            case idle, success, error
+
+            var label: String {
+                switch self {
+                case .idle: "Idle"
+                case .success: "Success"
+                case .error: "Error"
+                }
+            }
+
+            var icon: String {
+                switch self {
+                case .idle: "circle"
+                case .success: "checkmark.circle.fill"
+                case .error: "exclamationmark.triangle.fill"
+                }
+            }
+
+            var tint: Color {
+                switch self {
+                case .idle: Color.mycolor.myBlue
+                case .success: Color.mycolor.myGreen
+                case .error: Color.mycolor.myRed
+                }
+            }
+
+            var next: GlassStatus {
+                switch self {
+                case .idle: .success
+                case .success: .error
+                case .error: .idle
+                }
+            }
+        }
+
+        @available(iOS 26.0, *)
+        struct B001_LiquidGlassPlaygroundDemo: View {
+            // MARK: - Merge state
+            @State private var isMerged = false
+
+            // MARK: - Morph disclosure state
+            @Namespace private var glassNamespace
+            @State private var isExpanded = false
+
+            // MARK: - Tinted status state
+            @State private var status: GlassStatus = .idle
+
+            var body: some View {
+                ScrollView {
+                    VStack(spacing: 50) {
+                        dragToMergeSection
+                        morphDisclosureSection
+                        tintedGlassSection
+                    }
+                    .padding()
+                }
+            }
+
+            // MARK: - 1. Tap to merge/split two bubbles
+            private var dragToMergeSection: some View {
+                VStack(spacing: 12) {
+                    Text("GlassEffectContainer")
+                        .font(.headline)
+                        .foregroundStyle(Color.mycolor.myAccent)
+
+                    Text("combines multiple glass shapes into a single")
+                        .font(.subheadline)
+                        .foregroundStyle(Color.mycolor.myAccent)
+                        .multilineTextAlignment(.center)
+
+                    Text("shape when they're close enough together")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+
+                    GlassEffectContainer(spacing: 40) {
+                        HStack(spacing: 40) {
+                            glassBubble(icon: "heart.fill", pullTogether: isMerged ? 35 : 0)
+                            glassBubble(icon: "star.fill", pullTogether: isMerged ? -35 : 0)
+                        }
+                    }
+                    .frame(height: 100)
+
+                    Text(isMerged ? "Split" : "Merge")
+                        .font(.subheadline)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 10)
+                        .glassEffect(.regular.interactive(), in: Capsule())
+                        .onTapGesture {
+                            withAnimation(
+                                .spring(
+                                    response: 1.0,
+                                    dampingFraction: 0.85
+                                )
+                            ) {
+                                isMerged.toggle()
+                            }
+                        }
+                }
+            }
+
+            private func glassBubble(icon: String, pullTogether: CGFloat) -> some View {
+                Image(systemName: icon)
+                    .font(.title2)
+                    .frame(width: 70, height: 70)
+                    .glassEffect(.regular.interactive(), in: Circle())
+                    .offset(x: pullTogether)
+            }
+
+            // MARK: - 2. Morph a small button into a wider control panel
+            private var morphDisclosureSection: some View {
+                VStack(spacing: 12) {
+                    Text(".glassEffectID")
+                        .font(.headline)
+                        .foregroundStyle(Color.mycolor.myAccent)
+
+                    Text("separate glass shapes merge into and split from a shared control")
+                        .font(.subheadline)
+                        .foregroundStyle(Color.mycolor.myAccent)
+                        .multilineTextAlignment(.center)
+
+                    Text("Tap to expand")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    GlassEffectContainer(spacing: 20) {
+                        HStack(spacing: 20) {
+                            Image(systemName: isExpanded ? "xmark" : "plus")
+                                .font(.title2)
+                                .frame(width: 56, height: 56)
+                                .glassEffect(.regular.interactive(), in: Circle())
+                                .glassEffectID("toggle", in: glassNamespace)
+                                .onTapGesture {
+                                    withAnimation(.easeInOut(duration: 0.3)) {
+                                        isExpanded.toggle()
+                                    }
+                                }
+
+                            if isExpanded {
+                                controlButton(icon: "backward.fill", id: "backward")
+                                controlButton(icon: "pause.fill", id: "pause")
+                                controlButton(icon: "forward.fill", id: "forward")
+                            }
+                        }
+                    }
+                }
+            }
+
+            private func controlButton(icon: String, id: String) -> some View {
+                Image(systemName: icon)
+                    .font(.title2)
+                    .frame(width: 56, height: 56)
+                    .glassEffect(.regular.interactive(), in: Circle())
+                    .glassEffectID(id, in: glassNamespace)
+            }
+
+            // MARK: - 3. Tinted glass communicates state at a glance
+            private var tintedGlassSection: some View {
+                VStack(spacing: 12) {
+                    Text(".tint(_:)")
+                        .font(.headline)
+                        .foregroundStyle(Color.mycolor.myAccent)
+
+                    Text("recolors the glass to communicate state at a glance")
+                        .font(.subheadline)
+                        .foregroundStyle(Color.mycolor.myAccent)
+                        .multilineTextAlignment(.center)
+
+                    Text("Tap to cycle the status")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    HStack(spacing: 10) {
+                        Image(systemName: status.icon)
+                        Text(status.label)
+                    }
+                    .font(.headline)
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 14)
+                    .glassEffect(.regular.tint(status.tint).interactive(), in: Capsule())
+                    .onTapGesture {
+                        withAnimation(.bouncy(duration: 0.3)) {
+                            status = status.next
+                        }
+                    }
+                }
+            }
+        }
+        """,
+        minOS: .ios26
+    )
 
     static let a016 = CodeSnippet(
         id: "A016",
         title: "Indeterminate Progress Bar",
         intro: "A loading indicator without fixed progress — signals something is happening without any specific numbers, like Xcode's package installation. Built entirely with native SwiftUI: GeometryReader for dimensions, LinearGradient for the trailing fade, .scaleEffect for mirroring, and async/await for the animation loop.",
         thanks: nil,
-        date: Date.from(year: 2026, month: 4, day: 07, hour: 2, minute: 8) ?? Date(),
+        date: Date.from(year: 2026, month: 4, day: 01, hour: 2, minute: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
 
@@ -412,7 +612,7 @@ struct SnippetsRepository {
         title: "Card Swipe Animation",
         intro: "A self-contained SwiftUI demo of a Tinder-style swipeable card deck: directional swipe recognition, 3D flip via rotation3DEffect, animated ghost cards, and color overlays — inspired by Tinder.",
         thanks: nil,
-        date: Date.from(year: 2026, month: 4, day: 07, hour: 1, minute: 8) ?? Date(),
+        date: Date.from(year: 2026, month: 4, day: 01, hour: 1, minute: 8) ?? Date(),
         codeSnippet: """
         import SwiftUI
 

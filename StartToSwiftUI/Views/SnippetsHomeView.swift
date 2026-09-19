@@ -50,6 +50,12 @@ struct SnippetsHomeView: View {
                             scrollProxy.scrollTo(sortedSnippets.first?.id, anchor: .top)
                         }
                     }
+                    // На iPad это view — sidebar-колонка NavigationSplitView
+                    // (без собственного нижнего toolbar) — её нижняя safe
+                    // area примыкает вплотную к краю экрана, в отличие от
+                    // полноэкранного NavigationStack на iPhone, поэтому
+                    // кнопку нужно явно приподнять.
+                    .padding(.bottom, UIDevice.isiPad ? 20 : 0)
                 }
             }
         }
