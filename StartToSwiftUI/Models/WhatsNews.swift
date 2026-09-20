@@ -17,7 +17,8 @@ struct WhatsNews {
                     title: "New Code Snippets",
                     newsText: """
                     - B001: Liquid Glass Playground — hands-on tour of iOS 26's Liquid Glass material
-                    - B002: Album Player built on iOS 26's new TabView APIs
+                    - B002: TabView APIs for Album Player — mini-player accessory, Favorites, Search, and a sidebar on iPad
+                    - B003: Rich Text Notes — TextEditor now supports AttributedString natively
                     """
                 ),
                 News(

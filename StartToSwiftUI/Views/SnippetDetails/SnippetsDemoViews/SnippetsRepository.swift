@@ -16,15 +16,93 @@ struct SnippetsRepository {
     
     static let allDemoCodeSnippet: [CodeSnippet] = [
         a001, a002, a003, a004, a005, a006, a007, a008, a009, a010,
-        a011, a012, a013, a014, a015, a016, b001, b002
+        a011, a012, a013, a014, a015, a016, b001, b002, b003
     ]
+
+    static let b003 = CodeSnippet(
+        id: "B003",
+        title: "Rich Text Notes",
+        intro: "TextEditor now takes an AttributedString binding directly — no more wrapping UITextView in a UIViewRepresentable for rich text. Select some text and tap Bold, Italic, or a size button in the keyboard toolbar: AttributedTextSelection tracks the selection, and transformAttributes(in:) applies the change to just that range.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 9, day: 20, hour: 1, minute: 08) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        @available(iOS 26.0, *)
+        struct B003_RichTextNotesDemo: View {
+            @State private var text = AttributedString(
+                "Rich Text Notes\\n\\nSelect some text and tap Bold, Italic, or the size buttons below the keyboard."
+            )
+            @State private var selection = AttributedTextSelection()
+
+            var body: some View {
+                // TextEditor now takes an AttributedString binding directly — no more
+                // wrapping UITextView in a UIViewRepresentable for rich text editing.
+                TextEditor(text: $text, selection: $selection)
+                    .padding()
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            Button {
+                                applyBold()
+                            } label: {
+                                Image(systemName: "bold")
+                            }
+
+                            Button {
+                                applyItalic()
+                            } label: {
+                                Image(systemName: "italic")
+                            }
+
+                            Spacer()
+
+                            Button {
+                                applyFont(.body)
+                            } label: {
+                                Image(systemName: "textformat.size.smaller")
+                            }
+
+                            Button {
+                                applyFont(.title2)
+                            } label: {
+                                Image(systemName: "textformat.size.larger")
+                            }
+                        }
+                    }
+            }
+
+            // MARK: - Formatting
+
+            // transformAttributes(in:) applies a change to just the selected range —
+            // the AttributedTextSelection tracks the caret/selection through edits.
+            private func applyBold() {
+                text.transformAttributes(in: &selection) { container in
+                    container.font = .body.bold()
+                }
+            }
+
+            private func applyItalic() {
+                text.transformAttributes(in: &selection) { container in
+                    container.font = .body.italic()
+                }
+            }
+
+            private func applyFont(_ font: Font) {
+                text.transformAttributes(in: &selection) { container in
+                    container.font = font
+                }
+            }
+        }
+        """,
+        minOS: .ios26
+    )
 
     static let b002 = CodeSnippet(
         id: "B002",
-        title: "Album Player",
-        intro: "A music player built on iOS 26's new TabView APIs: tap a track in the list and a mini-player slides in as a native tab bar accessory, with playback controls right there. Built with .tabViewBottomAccessory for the mini-player, .tabBarMinimizeBehavior(.onScrollDown) to collapse the tab bar while scrolling, and @Environment(\\.tabViewBottomAccessoryPlacement) to adapt the mini-player's layout to its expanded/collapsed state. The collapsing tab bar and mini-player effects are designed for iPhone only, on iPad, TabView renders as a top bar by platform design and doesn't collapse on scroll.",
+        title: "TabView APIs for Album Player",
+        intro: "A music player built on iOS 26's new TabView APIs: tap a track and a mini-player slides in as a native tab bar accessory. Favoriting a track adds it to its own Favorites tab, and the Search tab filters tracks by title or artist. On iPad, .tabViewStyle(.sidebarAdaptable) lets the top tab bar expand into a sidebar — iPhone keeps the plain bottom bar.",
         thanks: nil,
-        date: Date.from(year: 2026, month: 9, day: 18, hour: 1, minute: 8) ?? Date(),
+        date: Date.from(year: 2026, month: 9, day: 18, hour: 1, minute: 08) ?? Date(),
         codeSnippet: """
         import SwiftUI
         import Combine
@@ -35,7 +113,8 @@ struct SnippetsRepository {
             @State private var isPlaying = false
             @State private var isPlayerVisible = false   // player visibility flag
             @State private var currentTrack = Track(singer: "Billie Eilish", title: "Bad Guy")
-            
+            @State private var favoriteTrackIDs: Set<String> = []
+
             var body: some View {
                 // 1. Main TabView
                 TabView {
@@ -44,19 +123,33 @@ struct SnippetsRepository {
                         PlayerHomeView(
                             isPlaying: $isPlaying,
                             isPlayerVisible: $isPlayerVisible,
-                            currentTrack: $currentTrack)
+                            currentTrack: $currentTrack,
+                            favoriteTrackIDs: $favoriteTrackIDs)
                     }
-                    
+
+                    // Favorites tab
+                    Tab("Favorites", systemImage: "heart.fill") {
+                        PlayerFavoritesView(
+                            isPlaying: $isPlaying,
+                            isPlayerVisible: $isPlayerVisible,
+                            currentTrack: $currentTrack,
+                            favoriteTrackIDs: $favoriteTrackIDs)
+                    }
+
                     // Library tab
                     Tab("Library", systemImage: "books.vertical") {
                         PlayerLibraryView()
                     }
-                    
+
                     // Search tab
                     Tab("Search", systemImage: "magnifyingglass", role: .search) {
-                        PlayerSearchView()
+                        PlayerSearchView(
+                            isPlaying: $isPlaying,
+                            isPlayerVisible: $isPlayerVisible,
+                            currentTrack: $currentTrack,
+                            favoriteTrackIDs: $favoriteTrackIDs)
                     }
-                    
+
                 }
                 // 2. Add a mini-player as an accessory
                 .tabViewBottomAccessory(isEnabled: isPlayerVisible) {
@@ -70,7 +163,10 @@ struct SnippetsRepository {
                 }
                 // 3. Configure the tab bar to collapse when scrolling
                 .tabBarMinimizeBehavior(.onScrollDown)
-                .tint(Color.mycolor.myAccent)
+                // 4. On iPad, lets the top tab bar expand into a sidebar (iPhone is
+                // unaffected — this style only applies on iPad).
+                .tabViewStyle(.sidebarAdaptable)
+                .tint(Color.mycolor.myBlue)
             }
         }
 
@@ -79,7 +175,7 @@ struct SnippetsRepository {
             let id: String
             let singer: String
             let title: String
-            
+
             init(id: String = UUID().uuidString, singer: String, title: String) {
                 self.id = id
                 self.singer = singer
@@ -108,19 +204,17 @@ struct SnippetsRepository {
             ]
         }
 
-        // MARK: - Home tab with player controls
-        struct PlayerHomeView: View {
-            @Binding var isPlaying: Bool
-            @Binding var isPlayerVisible: Bool
-            @Binding var currentTrack: Track
-            
+        // MARK: - Shared track row (used by Home, Favorites and Search)
+        struct TrackRow: View {
+            let track: Track
+            let isCurrentAndPlaying: Bool
+            let isFavorite: Bool
+            let onSelect: () -> Void
+            let onToggleFavorite: () -> Void
+
             var body: some View {
-                List(Track.tracks) { track in
-                    Button {
-                        currentTrack = track
-                        isPlaying = true
-                        isPlayerVisible = true // show mini-player
-                    } label: {
+                HStack(spacing: 16) {
+                    Button(action: onSelect) {
                         HStack {
                             Image(systemName: "music.note")
                                 .foregroundStyle(.blue)
@@ -136,9 +230,47 @@ struct SnippetsRepository {
                             Spacer()
                             B002_WaveAsymmetrical()
                                 .clipShape(.capsule)
-                                .opacity(currentTrack.title == track.title && isPlaying ? 0.8 : 0)
+                                .opacity(isCurrentAndPlaying ? 0.8 : 0)
                         }
+                        .contentShape(Rectangle())
                     }
+                    .buttonStyle(.plain)
+
+                    Button(action: onToggleFavorite) {
+                        Image(systemName: isFavorite ? "heart.fill" : "heart")
+                            .foregroundStyle(isFavorite ? Color.mycolor.myBlue : .secondary)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+
+        // MARK: - Home tab with player controls
+        struct PlayerHomeView: View {
+            @Binding var isPlaying: Bool
+            @Binding var isPlayerVisible: Bool
+            @Binding var currentTrack: Track
+            @Binding var favoriteTrackIDs: Set<String>
+
+            var body: some View {
+                List(Track.tracks) { track in
+                    TrackRow(
+                        track: track,
+                        isCurrentAndPlaying: currentTrack.title == track.title && isPlaying,
+                        isFavorite: favoriteTrackIDs.contains(track.id),
+                        onSelect: {
+                            currentTrack = track
+                            isPlaying = true
+                            isPlayerVisible = true // show mini-player
+                        },
+                        onToggleFavorite: {
+                            if favoriteTrackIDs.contains(track.id) {
+                                favoriteTrackIDs.remove(track.id)
+                            } else {
+                                favoriteTrackIDs.insert(track.id)
+                            }
+                        }
+                    )
                 }
                 .navigationTitle("Player")
                 .listStyle(.plain)
@@ -157,12 +289,123 @@ struct SnippetsRepository {
             }
         }
 
-        // MARK: - Auxiliary tabs
-        struct PlayerSearchView: View {
+        // MARK: - Favorites tab
+        struct PlayerFavoritesView: View {
+            @Binding var isPlaying: Bool
+            @Binding var isPlayerVisible: Bool
+            @Binding var currentTrack: Track
+            @Binding var favoriteTrackIDs: Set<String>
+
+            private var favoriteTracks: [Track] {
+                Track.tracks.filter { favoriteTrackIDs.contains($0.id) }
+            }
+
             var body: some View {
-                Text("Search Content")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color(.systemBackground))
+                Group {
+                    if favoriteTracks.isEmpty {
+                        ContentUnavailableView(
+                            "No Favorites Yet",
+                            systemImage: "heart",
+                            description: Text("Tap the heart on a track in Home to add it here.")
+                        )
+                    } else {
+                        List(favoriteTracks) { track in
+                            TrackRow(
+                                track: track,
+                                isCurrentAndPlaying: currentTrack.title == track.title && isPlaying,
+                                isFavorite: true,
+                                onSelect: {
+                                    currentTrack = track
+                                    isPlaying = true
+                                    isPlayerVisible = true
+                                },
+                                onToggleFavorite: {
+                                    favoriteTrackIDs.remove(track.id)
+                                }
+                            )
+                        }
+                        .listStyle(.plain)
+                    }
+                }
+                .navigationTitle("Favorites")
+            }
+        }
+
+        // MARK: - Search tab
+        struct PlayerSearchView: View {
+            @Binding var isPlaying: Bool
+            @Binding var isPlayerVisible: Bool
+            @Binding var currentTrack: Track
+            @Binding var favoriteTrackIDs: Set<String>
+
+            @State private var searchText = ""
+
+            private var filteredTracks: [Track] {
+                guard !searchText.isEmpty else { return [] }
+                return Track.tracks.filter {
+                    $0.title.localizedCaseInsensitiveContains(searchText) ||
+                    $0.singer.localizedCaseInsensitiveContains(searchText)
+                }
+            }
+
+            var body: some View {
+                VStack(spacing: 0) {
+
+                    searchField
+
+                    List(filteredTracks) { track in
+                        TrackRow(
+                            track: track,
+                            isCurrentAndPlaying: currentTrack.title == track.title && isPlaying,
+                            isFavorite: favoriteTrackIDs.contains(track.id),
+                            onSelect: {
+                                currentTrack = track
+                                isPlaying = true
+                                isPlayerVisible = true
+                            },
+                            onToggleFavorite: {
+                                if favoriteTrackIDs.contains(track.id) {
+                                    favoriteTrackIDs.remove(track.id)
+                                } else {
+                                    favoriteTrackIDs.insert(track.id)
+                                }
+                            }
+                        )
+                    }
+                    .listStyle(.plain)
+                    .overlay {
+                        if searchText.isEmpty {
+                            ContentUnavailableView(
+                                "Search Tracks",
+                                systemImage: "magnifyingglass",
+                                description: Text("Search by title or artist.")
+                            )
+                        } else if filteredTracks.isEmpty {
+                            ContentUnavailableView.search
+                        }
+                    }
+                }
+            }
+
+            private var searchField: some View {
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundStyle(.secondary)
+                    TextField("Search tracks", text: $searchText)
+                        .textFieldStyle(.plain)
+                    if !searchText.isEmpty {
+                        Button {
+                            searchText = ""
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundStyle(.secondary)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(10)
+                .background(.thinMaterial, in: Capsule())
+                .padding()
             }
         }
 
@@ -193,7 +436,6 @@ struct SnippetsRepository {
                     self.onPlayPause = onPlayPause
                     _isLocallyPlaying = State(initialValue: initialPlayingState)
                 }
-
             
             var body: some View {
                 // Adapt the interface depending on the placement
@@ -201,8 +443,8 @@ struct SnippetsRepository {
                 case .expanded:
                     // Expanded view (when the tab bar is at normal size)
                     HStack {
-                        B002_PulsingCircle()
-                        
+                        B002_PulsingCircle(isPlaying: isLocallyPlaying)
+
                         VStack(alignment: .leading) {
                             Text(track.title)
                                 .font(.headline)
@@ -307,17 +549,29 @@ struct SnippetsRepository {
         }
 
         struct B002_PulsingCircle: View {
+            let isPlaying: Bool
             @State private var scale: CGFloat = 0.5
-            
+
             var body: some View {
                 Circle()
                     .fill(.blue)
                     .frame(width: 16, height: 16)
                     .scaleEffect(scale)
                     .opacity((1.4 - min(scale, 1)))
-                    .onAppear {
-                        withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) { scale = 1.5 }
+                    .onAppear { updatePulse() }
+                    .onChange(of: isPlaying) { _, _ in updatePulse() }
+            }
+
+            private func updatePulse() {
+                if isPlaying {
+                    withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                        scale = 1.5
                     }
+                } else {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        scale = 0.5
+                    }
+                }
             }
         }
         """,

@@ -165,7 +165,7 @@ struct PreferencesView: View {
     // MARK: - Materials Management
   
     private var shimmerToggle: some View {
-        Toggle("Shimmer", isOn: $vm.shimmerWaveEnabled)
+        Toggle("Shimmer new posts", isOn: $vm.shimmerWaveEnabled)
             .tint(Color.mycolor.myBlue)
             .customListRowStyle(
                 iconName: vm.shimmerWaveEnabled ? "waveform" : "waveform.slash", // water.waves water.waves.slash
