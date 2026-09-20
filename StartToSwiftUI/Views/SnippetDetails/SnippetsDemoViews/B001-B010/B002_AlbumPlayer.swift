@@ -14,7 +14,8 @@ struct B002_AlbumPlayerDemo: View {
     @State private var isPlaying = false
     @State private var isPlayerVisible = false   // player visibility flag
     @State private var currentTrack = Track(singer: "Billie Eilish", title: "Bad Guy")
-    
+    @State private var favoriteTrackIDs: Set<String> = []
+
     var body: some View {
         // 1. Main TabView
         TabView {
@@ -23,19 +24,33 @@ struct B002_AlbumPlayerDemo: View {
                 PlayerHomeView(
                     isPlaying: $isPlaying,
                     isPlayerVisible: $isPlayerVisible,
-                    currentTrack: $currentTrack)
+                    currentTrack: $currentTrack,
+                    favoriteTrackIDs: $favoriteTrackIDs)
             }
-            
+
+            // Favorites tab
+            Tab("Favorites", systemImage: "heart.fill") {
+                PlayerFavoritesView(
+                    isPlaying: $isPlaying,
+                    isPlayerVisible: $isPlayerVisible,
+                    currentTrack: $currentTrack,
+                    favoriteTrackIDs: $favoriteTrackIDs)
+            }
+
             // Library tab
             Tab("Library", systemImage: "books.vertical") {
                 PlayerLibraryView()
             }
-            
+
             // Search tab
             Tab("Search", systemImage: "magnifyingglass", role: .search) {
-                PlayerSearchView()
+                PlayerSearchView(
+                    isPlaying: $isPlaying,
+                    isPlayerVisible: $isPlayerVisible,
+                    currentTrack: $currentTrack,
+                    favoriteTrackIDs: $favoriteTrackIDs)
             }
-            
+
         }
         // 2. Add a mini-player as an accessory
         .tabViewBottomAccessory(isEnabled: isPlayerVisible) {
@@ -50,7 +65,7 @@ struct B002_AlbumPlayerDemo: View {
         }
         // 3. Configure the tab bar to collapse when scrolling
         .tabBarMinimizeBehavior(.onScrollDown)
-        .tint(Color.mycolor.myAccent)
+        .tint(Color.mycolor.myBlue)
     }
 }
 
@@ -88,19 +103,17 @@ extension Track {
     ]
 }
 
-// MARK: - Home tab with player controls
-struct PlayerHomeView: View {
-    @Binding var isPlaying: Bool
-    @Binding var isPlayerVisible: Bool
-    @Binding var currentTrack: Track
-    
+// MARK: - Shared track row (used by Home, Favorites and Search)
+struct TrackRow: View {
+    let track: Track
+    let isCurrentAndPlaying: Bool
+    let isFavorite: Bool
+    let onSelect: () -> Void
+    let onToggleFavorite: () -> Void
+
     var body: some View {
-        List(Track.tracks) { track in
-            Button {
-                currentTrack = track
-                isPlaying = true
-                isPlayerVisible = true // show mini-player
-            } label: {
+        HStack {
+            Button(action: onSelect) {
                 HStack {
                     Image(systemName: "music.note")
                         .foregroundStyle(.blue)
@@ -116,9 +129,46 @@ struct PlayerHomeView: View {
                     Spacer()
                     B002_WaveAsymmetrical()
                         .clipShape(.capsule)
-                        .opacity(currentTrack.title == track.title && isPlaying ? 0.8 : 0)
+                        .opacity(isCurrentAndPlaying ? 0.8 : 0)
                 }
             }
+            .buttonStyle(.plain)
+
+            Button(action: onToggleFavorite) {
+                Image(systemName: isFavorite ? "heart.fill" : "heart")
+                    .foregroundStyle(isFavorite ? Color.mycolor.myBlue : .secondary)
+            }
+            .buttonStyle(.plain)
+        }
+    }
+}
+
+// MARK: - Home tab with player controls
+struct PlayerHomeView: View {
+    @Binding var isPlaying: Bool
+    @Binding var isPlayerVisible: Bool
+    @Binding var currentTrack: Track
+    @Binding var favoriteTrackIDs: Set<String>
+
+    var body: some View {
+        List(Track.tracks) { track in
+            TrackRow(
+                track: track,
+                isCurrentAndPlaying: currentTrack.title == track.title && isPlaying,
+                isFavorite: favoriteTrackIDs.contains(track.id),
+                onSelect: {
+                    currentTrack = track
+                    isPlaying = true
+                    isPlayerVisible = true // show mini-player
+                },
+                onToggleFavorite: {
+                    if favoriteTrackIDs.contains(track.id) {
+                        favoriteTrackIDs.remove(track.id)
+                    } else {
+                        favoriteTrackIDs.insert(track.id)
+                    }
+                }
+            )
         }
         .navigationTitle("Player")
         .listStyle(.plain)
@@ -137,12 +187,123 @@ struct PlayerHomeView: View {
     }
 }
 
-// MARK: - Auxiliary tabs
-struct PlayerSearchView: View {
+// MARK: - Favorites tab
+struct PlayerFavoritesView: View {
+    @Binding var isPlaying: Bool
+    @Binding var isPlayerVisible: Bool
+    @Binding var currentTrack: Track
+    @Binding var favoriteTrackIDs: Set<String>
+
+    private var favoriteTracks: [Track] {
+        Track.tracks.filter { favoriteTrackIDs.contains($0.id) }
+    }
+
     var body: some View {
-        Text("Search Content")
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.systemBackground))
+        Group {
+            if favoriteTracks.isEmpty {
+                ContentUnavailableView(
+                    "No Favorites Yet",
+                    systemImage: "heart",
+                    description: Text("Tap the heart on a track in Home to add it here.")
+                )
+            } else {
+                List(favoriteTracks) { track in
+                    TrackRow(
+                        track: track,
+                        isCurrentAndPlaying: currentTrack.title == track.title && isPlaying,
+                        isFavorite: true,
+                        onSelect: {
+                            currentTrack = track
+                            isPlaying = true
+                            isPlayerVisible = true
+                        },
+                        onToggleFavorite: {
+                            favoriteTrackIDs.remove(track.id)
+                        }
+                    )
+                }
+                .listStyle(.plain)
+            }
+        }
+        .navigationTitle("Favorites")
+    }
+}
+
+// MARK: - Search tab
+struct PlayerSearchView: View {
+    @Binding var isPlaying: Bool
+    @Binding var isPlayerVisible: Bool
+    @Binding var currentTrack: Track
+    @Binding var favoriteTrackIDs: Set<String>
+
+    @State private var searchText = ""
+
+    private var filteredTracks: [Track] {
+        guard !searchText.isEmpty else { return [] }
+        return Track.tracks.filter {
+            $0.title.localizedCaseInsensitiveContains(searchText) ||
+            $0.singer.localizedCaseInsensitiveContains(searchText)
+        }
+    }
+
+    var body: some View {
+        VStack(spacing: 0) {
+
+            searchField
+
+            List(filteredTracks) { track in
+                TrackRow(
+                    track: track,
+                    isCurrentAndPlaying: currentTrack.title == track.title && isPlaying,
+                    isFavorite: favoriteTrackIDs.contains(track.id),
+                    onSelect: {
+                        currentTrack = track
+                        isPlaying = true
+                        isPlayerVisible = true
+                    },
+                    onToggleFavorite: {
+                        if favoriteTrackIDs.contains(track.id) {
+                            favoriteTrackIDs.remove(track.id)
+                        } else {
+                            favoriteTrackIDs.insert(track.id)
+                        }
+                    }
+                )
+            }
+            .listStyle(.plain)
+            .overlay {
+                if searchText.isEmpty {
+                    ContentUnavailableView(
+                        "Search Tracks",
+                        systemImage: "magnifyingglass",
+                        description: Text("Search by title or artist.")
+                    )
+                } else if filteredTracks.isEmpty {
+                    ContentUnavailableView.search
+                }
+            }
+        }
+    }
+
+    private var searchField: some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(.secondary)
+            TextField("Search tracks", text: $searchText)
+                .textFieldStyle(.plain)
+            if !searchText.isEmpty {
+                Button {
+                    searchText = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(10)
+        .background(.thinMaterial, in: Capsule())
+        .padding()
     }
 }
 

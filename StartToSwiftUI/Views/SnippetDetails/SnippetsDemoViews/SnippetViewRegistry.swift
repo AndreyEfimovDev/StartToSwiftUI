@@ -54,7 +54,6 @@ struct SnippetViewRegistry {
                 SnippetUnavailableView(snippet: snippet)
             }
 
-
         default: SnippetNoPreviewView(snippet: snippet)
         }
     }
