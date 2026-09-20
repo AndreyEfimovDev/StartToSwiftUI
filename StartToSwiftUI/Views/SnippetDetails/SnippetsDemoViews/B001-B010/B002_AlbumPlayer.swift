@@ -65,6 +65,9 @@ struct B002_AlbumPlayerDemo: View {
         }
         // 3. Configure the tab bar to collapse when scrolling
         .tabBarMinimizeBehavior(.onScrollDown)
+        // 4. On iPad, lets the top tab bar expand into a sidebar (iPhone is
+        // unaffected — this style only applies on iPad).
+        .tabViewStyle(.sidebarAdaptable)
         .tint(Color.mycolor.myBlue)
     }
 }
@@ -112,7 +115,7 @@ struct TrackRow: View {
     let onToggleFavorite: () -> Void
 
     var body: some View {
-        HStack {
+        HStack(spacing: 16) {
             Button(action: onSelect) {
                 HStack {
                     Image(systemName: "music.note")
@@ -131,6 +134,10 @@ struct TrackRow: View {
                         .clipShape(.capsule)
                         .opacity(isCurrentAndPlaying ? 0.8 : 0)
                 }
+                // Without this, .buttonStyle(.plain) only makes the visible
+                // content (icon/text/wave) tappable — the empty Spacer()
+                // area between them doesn't trigger the button at all.
+                .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
 
@@ -342,8 +349,8 @@ struct MiniPlayerView: View {
         case .expanded:
             // Expanded view (when the tab bar is at normal size)
             HStack {
-                B002_PulsingCircle()
-                
+                B002_PulsingCircle(isPlaying: isLocallyPlaying)
+
                 VStack(alignment: .leading) {
                     Text(track.title)
                         .font(.headline)
@@ -448,19 +455,29 @@ struct B002_WaveAsymmetrical: View {
 }
 
 struct B002_PulsingCircle: View {
+    let isPlaying: Bool
     @State private var scale: CGFloat = 0.5
-    
+
     var body: some View {
         Circle()
             .fill(.blue)
             .frame(width: 16, height: 16)
             .scaleEffect(scale)
             .opacity((1.4 - min(scale, 1)))
-            .onAppear {
-                withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
-                    scale = 1.5
-                }
+            .onAppear { updatePulse() }
+            .onChange(of: isPlaying) { _, _ in updatePulse() }
+    }
+
+    private func updatePulse() {
+        if isPlaying {
+            withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                scale = 1.5
             }
+        } else {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                scale = 0.5
+            }
+        }
     }
 }
 

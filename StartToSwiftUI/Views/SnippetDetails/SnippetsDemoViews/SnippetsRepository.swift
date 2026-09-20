@@ -24,7 +24,7 @@ struct SnippetsRepository {
         title: "Rich Text Notes",
         intro: "TextEditor now takes an AttributedString binding directly — no more wrapping UITextView in a UIViewRepresentable for rich text. Select some text and tap Bold, Italic, or a size button in the keyboard toolbar: AttributedTextSelection tracks the selection, and transformAttributes(in:) applies the change to just that range.",
         thanks: nil,
-        date: Date.from(year: 2026, month: 9, day: 20, hour: 13, minute: 0) ?? Date(),
+        date: Date.from(year: 2026, month: 9, day: 20, hour: 1, minute: 08) ?? Date(),
         codeSnippet: """
         import SwiftUI
 
@@ -99,10 +99,10 @@ struct SnippetsRepository {
 
     static let b002 = CodeSnippet(
         id: "B002",
-        title: "Album Player",
-        intro: "A music player built on iOS 26's new TabView APIs: tap a track and a mini-player slides in as a native tab bar accessory. Favoriting a track adds it to its own Favorites tab, and the Search tab filters tracks by title or artist. Designed for iPhone, on iPad - TabView renders as a top bar and doesn't collapse on scroll.",
+        title: "TabView APIs for Album Player",
+        intro: "A music player built on iOS 26's new TabView APIs: tap a track and a mini-player slides in as a native tab bar accessory. Favoriting a track adds it to its own Favorites tab, and the Search tab filters tracks by title or artist. On iPad, .tabViewStyle(.sidebarAdaptable) lets the top tab bar expand into a sidebar — iPhone keeps the plain bottom bar.",
         thanks: nil,
-        date: Date.from(year: 2026, month: 9, day: 18, hour: 1, minute: 8) ?? Date(),
+        date: Date.from(year: 2026, month: 9, day: 18, hour: 1, minute: 08) ?? Date(),
         codeSnippet: """
         import SwiftUI
         import Combine
@@ -163,6 +163,9 @@ struct SnippetsRepository {
                 }
                 // 3. Configure the tab bar to collapse when scrolling
                 .tabBarMinimizeBehavior(.onScrollDown)
+                // 4. On iPad, lets the top tab bar expand into a sidebar (iPhone is
+                // unaffected — this style only applies on iPad).
+                .tabViewStyle(.sidebarAdaptable)
                 .tint(Color.mycolor.myBlue)
             }
         }
@@ -210,7 +213,7 @@ struct SnippetsRepository {
             let onToggleFavorite: () -> Void
 
             var body: some View {
-                HStack {
+                HStack(spacing: 16) {
                     Button(action: onSelect) {
                         HStack {
                             Image(systemName: "music.note")
@@ -229,6 +232,7 @@ struct SnippetsRepository {
                                 .clipShape(.capsule)
                                 .opacity(isCurrentAndPlaying ? 0.8 : 0)
                         }
+                        .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
 
@@ -439,8 +443,8 @@ struct SnippetsRepository {
                 case .expanded:
                     // Expanded view (when the tab bar is at normal size)
                     HStack {
-                        B002_PulsingCircle()
-                        
+                        B002_PulsingCircle(isPlaying: isLocallyPlaying)
+
                         VStack(alignment: .leading) {
                             Text(track.title)
                                 .font(.headline)
@@ -545,17 +549,29 @@ struct SnippetsRepository {
         }
 
         struct B002_PulsingCircle: View {
+            let isPlaying: Bool
             @State private var scale: CGFloat = 0.5
-            
+
             var body: some View {
                 Circle()
                     .fill(.blue)
                     .frame(width: 16, height: 16)
                     .scaleEffect(scale)
                     .opacity((1.4 - min(scale, 1)))
-                    .onAppear {
-                        withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) { scale = 1.5 }
+                    .onAppear { updatePulse() }
+                    .onChange(of: isPlaying) { _, _ in updatePulse() }
+            }
+
+            private func updatePulse() {
+                if isPlaying {
+                    withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                        scale = 1.5
                     }
+                } else {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        scale = 0.5
+                    }
+                }
             }
         }
         """,
