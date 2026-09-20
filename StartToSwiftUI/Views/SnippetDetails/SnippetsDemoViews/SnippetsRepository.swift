@@ -16,8 +16,86 @@ struct SnippetsRepository {
     
     static let allDemoCodeSnippet: [CodeSnippet] = [
         a001, a002, a003, a004, a005, a006, a007, a008, a009, a010,
-        a011, a012, a013, a014, a015, a016, b001, b002
+        a011, a012, a013, a014, a015, a016, b001, b002, b003
     ]
+
+    static let b003 = CodeSnippet(
+        id: "B003",
+        title: "Rich Text Notes",
+        intro: "TextEditor now takes an AttributedString binding directly — no more wrapping UITextView in a UIViewRepresentable for rich text. Select some text and tap Bold, Italic, or a size button in the keyboard toolbar: AttributedTextSelection tracks the selection, and transformAttributes(in:) applies the change to just that range.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 9, day: 20, hour: 13, minute: 0) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        @available(iOS 26.0, *)
+        struct B003_RichTextNotesDemo: View {
+            @State private var text = AttributedString(
+                "Rich Text Notes\\n\\nSelect some text and tap Bold, Italic, or the size buttons below the keyboard."
+            )
+            @State private var selection = AttributedTextSelection()
+
+            var body: some View {
+                // TextEditor now takes an AttributedString binding directly — no more
+                // wrapping UITextView in a UIViewRepresentable for rich text editing.
+                TextEditor(text: $text, selection: $selection)
+                    .padding()
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            Button {
+                                applyBold()
+                            } label: {
+                                Image(systemName: "bold")
+                            }
+
+                            Button {
+                                applyItalic()
+                            } label: {
+                                Image(systemName: "italic")
+                            }
+
+                            Spacer()
+
+                            Button {
+                                applyFont(.body)
+                            } label: {
+                                Image(systemName: "textformat.size.smaller")
+                            }
+
+                            Button {
+                                applyFont(.title2)
+                            } label: {
+                                Image(systemName: "textformat.size.larger")
+                            }
+                        }
+                    }
+            }
+
+            // MARK: - Formatting
+
+            // transformAttributes(in:) applies a change to just the selected range —
+            // the AttributedTextSelection tracks the caret/selection through edits.
+            private func applyBold() {
+                text.transformAttributes(in: &selection) { container in
+                    container.font = .body.bold()
+                }
+            }
+
+            private func applyItalic() {
+                text.transformAttributes(in: &selection) { container in
+                    container.font = .body.italic()
+                }
+            }
+
+            private func applyFont(_ font: Font) {
+                text.transformAttributes(in: &selection) { container in
+                    container.font = font
+                }
+            }
+        }
+        """,
+        minOS: .ios26
+    )
 
     static let b002 = CodeSnippet(
         id: "B002",

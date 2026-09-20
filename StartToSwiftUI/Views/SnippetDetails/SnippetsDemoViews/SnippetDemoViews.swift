@@ -13,6 +13,29 @@
 import SwiftUI
 
 
+// MARK: - B003 Rich Text Notes
+@available(iOS 26.0, *)
+struct B003_RichTextNotesDemoView: View {
+    let snippet: CodeSnippet
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+
+            B003_RichTextNotesDemo()
+                .frame(maxHeight: .infinity)
+                .padding(.horizontal)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
+
 // MARK: - B002 Album Player
 @available(iOS 26.1, *)
 struct B002_AlbumPlayerDemoView: View {

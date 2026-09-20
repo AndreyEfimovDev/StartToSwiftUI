@@ -71,8 +71,8 @@ struct SnippetRowView: View {
         
         HStack(spacing: 3) {
             Text(snippet.id)
-            Text("-")
-            Text(snippet.category + ", ")
+//            Text("-")
+//            Text(snippet.category + ", ")
             
             Text(snippet.minOS.rawValue)
                 .font(.caption2)
