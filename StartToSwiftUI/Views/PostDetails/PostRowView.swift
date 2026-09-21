@@ -27,9 +27,7 @@ struct PostRowView: View {
         if post.postType != .other {
             parts.append(post.postType.displayName)
         }
-        
-//        parts.append(post.postPlatform.displayName)
-        
+                
         return parts.joined(separator: ", ")
     }
     

@@ -17,15 +17,18 @@ struct WhatsNews {
                     title: "New Code Snippets",
                     newsText: """
                     - B001: Liquid Glass Playground — hands-on tour of iOS 26's Liquid Glass material
-                    - B002: TabView APIs for Album Player — mini-player accessory, Favorites, Search, and a sidebar on iPad
+                    - B002: Album Player — mini-player accessory, Favorites, Search, and a sidebar on iPad, with new TabView APIs
                     - B003: Rich Text Notes — TextEditor now supports AttributedString natively
+                    - B004: Mini Browser — native in-app web view backed by WebPage, with back/forward and a loading progress bar
+                    - B005: Zoom Navigation Transition — a grid card zooms into its detail screen, with Liquid Glass materializing as part of the same transition
+                    - B006: Immersive Hero Header — a hero image blurs and mirrors into the safe area around it, continuing behind the glass toolbar and, on iPad, the floating sidebar
                     """
                 ),
                 News(
                     title: "Improved",
                     newsText: """
                     - UI/UX adaptation for iPad
-                    - The application's stability and performance 
+                    - The application's stability and performance
                     """
                 ),
                 News(
@@ -34,6 +37,7 @@ struct WhatsNews {
                     - Flickering in A006 BottomRight
                     """
                 )
+
             ]
         ),
 

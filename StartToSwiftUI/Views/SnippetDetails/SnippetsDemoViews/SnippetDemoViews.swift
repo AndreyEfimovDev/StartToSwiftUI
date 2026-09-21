@@ -13,6 +13,114 @@
 import SwiftUI
 
 
+// MARK: - B006 Immersive Hero Header
+//
+// backgroundExtensionEffect() only has something to bleed into when the hero
+// is the very first thing on screen, touching the real top safe area — the
+// usual header-card-above-the-demo layout would block that. So unlike every
+// other B0XX wrapper, this one puts the hero first and SnippetDemoHeader
+// below it, in the same scroll region, instead of stacking two separate
+// containers.
+@available(iOS 26.0, *)
+struct B006_ImmersiveHeroHeaderDemoView: View {
+    let snippet: CodeSnippet
+
+    var body: some View {
+        ScrollView {
+            hero
+            SnippetDemoHeader(snippet: snippet)
+                .padding()
+        }
+        .ignoresSafeArea(edges: .top)
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+
+    private var hero: some View {
+        ZStack(alignment: .bottomLeading) {
+            LinearGradient(
+                colors: [Color.mycolor.myBlue, Color.mycolor.myPurple],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            Image(systemName: "mountain.2.fill")
+                .font(.system(size: 160))
+                .foregroundStyle(.white.opacity(0.25))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            caption
+        }
+        .frame(height: 420)
+        .frame(maxWidth: .infinity)
+        .backgroundExtensionEffect()
+    }
+
+    private var caption: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Glacier Bay")
+                .font(.title.bold())
+            Text("Tidewater glaciers calve into the sea here — home to humpback whales, sea otters, and nesting bald eagles.")
+                .font(.subheadline)
+                .lineLimit(2)
+        }
+        .foregroundStyle(.white)
+        .padding(20)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            LinearGradient(
+                colors: [.clear, .black.opacity(0.65)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        )
+    }
+}
+
+// MARK: - B005 Zoom Navigation Transition
+@available(iOS 26.0, *)
+struct B005_ZoomNavigationTransitionDemoView: View {
+    let snippet: CodeSnippet
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+
+            B005_ZoomNavigationTransitionDemo()
+                .frame(maxHeight: .infinity)
+                .padding(.horizontal)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
+
+// MARK: - B004 Mini Browser
+@available(iOS 26.0, *)
+struct B004_MiniBrowserDemoView: View {
+    let snippet: CodeSnippet
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+
+            B004_MiniBrowserDemo()
+                .frame(maxHeight: .infinity)
+                .padding(.horizontal)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
+
 // MARK: - B003 Rich Text Notes
 @available(iOS 26.0, *)
 struct B003_RichTextNotesDemoView: View {
