@@ -151,6 +151,7 @@ struct MaterialsHomeView: View {
         List(postsToDisplay, selection: $selectedPostID) { post in
             PostRowView(post: post)
                 .id(post.id)
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 .shimmerWave(enabled: vm.shimmerWaveEnabled && post.origin == .cloudNew)
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                     trailingSwipeActions(for: post)
