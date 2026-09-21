@@ -13,6 +13,52 @@
 import SwiftUI
 
 
+// MARK: - B005 Zoom Navigation Transition
+@available(iOS 26.0, *)
+struct B005_ZoomNavigationTransitionDemoView: View {
+    let snippet: CodeSnippet
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+
+            B005_ZoomNavigationTransitionDemo()
+                .frame(maxHeight: .infinity)
+                .padding(.horizontal)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
+
+// MARK: - B004 Mini Browser
+@available(iOS 26.0, *)
+struct B004_MiniBrowserDemoView: View {
+    let snippet: CodeSnippet
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+
+            B004_MiniBrowserDemo()
+                .frame(maxHeight: .infinity)
+                .padding(.horizontal)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
+
 // MARK: - B003 Rich Text Notes
 @available(iOS 26.0, *)
 struct B003_RichTextNotesDemoView: View {

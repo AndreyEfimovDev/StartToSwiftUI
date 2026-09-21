@@ -61,6 +61,20 @@ struct SnippetViewRegistry {
                 SnippetUnavailableView(snippet: snippet)
             }
 
+        case "B004":
+            if #available(iOS 26.0, *) {
+                B004_MiniBrowserDemoView(snippet: snippet)
+            } else {
+                SnippetUnavailableView(snippet: snippet)
+            }
+
+        case "B005":
+            if #available(iOS 26.0, *) {
+                B005_ZoomNavigationTransitionDemoView(snippet: snippet)
+            } else {
+                SnippetUnavailableView(snippet: snippet)
+            }
+
         default: SnippetNoPreviewView(snippet: snippet)
         }
     }

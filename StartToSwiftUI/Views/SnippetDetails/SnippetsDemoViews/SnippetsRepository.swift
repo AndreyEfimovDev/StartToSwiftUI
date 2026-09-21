@@ -16,13 +16,262 @@ struct SnippetsRepository {
     
     static let allDemoCodeSnippet: [CodeSnippet] = [
         a001, a002, a003, a004, a005, a006, a007, a008, a009, a010,
-        a011, a012, a013, a014, a015, a016, b001, b002, b003
+        a011, a012, a013, a014, a015, a016, b001, b002, b003, b004, b005
     ]
+
+    static let b005 = CodeSnippet(
+        id: "B005",
+        title: "Zoom Navigation Transition",
+        intro: "A grid card zooms into its detail screen instead of just pushing — .matchedTransitionSource on the card and .navigationTransition(.zoom(sourceID:in:)) on the destination share a Namespace so the system morphs the card's frame into the new screen. In iOS 26 this plays nicely with Liquid Glass: a glassEffect() toolbar button on the destination materializes as part of the same zoom, the way it does in Photos.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 9, day: 21, hour: 11, minute: 0) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        struct B005_Destination: Identifiable, Hashable {
+            let id: String
+            let title: String
+            let subtitle: String
+            let icon: String
+            let colors: [Color]
+
+            static let all: [B005_Destination] = [
+                .init(id: "kyoto", title: "Kyoto", subtitle: "Temples & maple leaves",
+                      icon: "leaf.fill", colors: [Color.mycolor.myRed, Color.mycolor.myOrange]),
+                .init(id: "iceland", title: "Iceland", subtitle: "Glaciers & northern lights",
+                      icon: "snowflake", colors: [Color.mycolor.myBlue, Color.mycolor.myPurple]),
+                .init(id: "sahara", title: "Sahara", subtitle: "Dunes at sunset",
+                      icon: "sun.max.fill", colors: [Color.mycolor.myYellow, Color.mycolor.myOrange]),
+                .init(id: "amazon", title: "Amazon", subtitle: "Rainforest canopy",
+                      icon: "tree.fill", colors: [Color.mycolor.myGreen, Color.mycolor.myBlue]),
+                .init(id: "santorini", title: "Santorini", subtitle: "White cliffs, blue domes",
+                      icon: "water.waves", colors: [Color.mycolor.myBlue, Color.mycolor.mySecondary]),
+                .init(id: "patagonia", title: "Patagonia", subtitle: "Granite peaks & wind",
+                      icon: "mountain.2.fill", colors: [Color.mycolor.mySecondary, Color.mycolor.myPurple])
+            ]
+        }
+
+        @available(iOS 26.0, *)
+        struct B005_ZoomNavigationTransitionDemo: View {
+            // Shared between the grid cards and the pushed detail view — the source
+            // and destination must use the same Namespace for the zoom to connect them.
+            @Namespace private var zoomNamespace
+            @State private var favoriteIDs: Set<String> = []
+
+            var body: some View {
+                if UIDevice.isiPad {
+                    NavigationStack {
+                        content
+                    }
+                } else {
+                    content
+                }
+            }
+
+            private var content: some View {
+                ScrollView {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 16)], spacing: 16) {
+                        ForEach(B005_Destination.all) { destination in
+                            NavigationLink(value: destination) {
+                                card(for: destination)
+                            }
+                            .buttonStyle(.plain)
+                            // Marks this card as the anchor the zoom grows from and
+                            // shrinks back into on dismiss.
+                            .matchedTransitionSource(id: destination.id, in: zoomNamespace)
+                        }
+                    }
+                    .padding()
+                }
+                .navigationDestination(for: B005_Destination.self) { destination in
+                    detail(for: destination)
+                        // In iOS 26 a glass toolbar on the destination materializes as
+                        // part of this same zoom instead of just fading in afterwards.
+                        .navigationTransition(.zoom(sourceID: destination.id, in: zoomNamespace))
+                }
+            }
+
+            // MARK: - Grid card
+
+            private func card(for destination: B005_Destination) -> some View {
+                ZStack(alignment: .bottomLeading) {
+                    RoundedRectangle(cornerRadius: 24)
+                        .fill(
+                            LinearGradient(
+                                colors: destination.colors,
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+
+                    Image(systemName: destination.icon)
+                        .font(.system(size: 40))
+                        .foregroundStyle(.white.opacity(0.35))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                        .padding(12)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(destination.title)
+                            .font(.headline)
+                        Text(destination.subtitle)
+                            .font(.caption2)
+                            .lineLimit(1)
+                    }
+                    .foregroundStyle(.white)
+                    .padding(12)
+                }
+                .frame(height: 150)
+            }
+
+            // MARK: - Detail
+
+            private func detail(for destination: B005_Destination) -> some View {
+                ZStack {
+                    LinearGradient(
+                        colors: destination.colors,
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+
+                    Image(systemName: destination.icon)
+                        .font(.system(size: 140))
+                        .foregroundStyle(.white.opacity(0.25))
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        Spacer()
+                        Text(destination.title)
+                            .font(.largeTitle.bold())
+                        Text(destination.subtitle)
+                            .font(.subheadline)
+                    }
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(24)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .ignoresSafeArea(edges: .bottom)
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        let isFavorite = favoriteIDs.contains(destination.id)
+                        Image(systemName: isFavorite ? "heart.fill" : "heart")
+                            .foregroundStyle(isFavorite ? Color.mycolor.myRed : Color.mycolor.myAccent)
+                            .frame(width: 36, height: 36)
+                            .glassEffect(.regular.interactive(), in: Circle())
+                            .onTapGesture {
+                                toggleFavorite(destination.id)
+                            }
+                    }
+                }
+            }
+
+            private func toggleFavorite(_ id: String) {
+                withAnimation(.bouncy(duration: 0.3)) {
+                    if favoriteIDs.contains(id) {
+                        favoriteIDs.remove(id)
+                    } else {
+                        favoriteIDs.insert(id)
+                    }
+                }
+            }
+        }
+        """,
+        minOS: .ios26
+    )
+
+    static let b004 = CodeSnippet(
+        id: "B004",
+        title: "Mini Browser",
+        intro: "iOS 26 brings a native WebView backed by WebPage — an Observable model that owns navigation state (url, title, isLoading, backForwardList), no more wrapping WKWebView in a UIViewRepresentable. Unlike Link, which just hands the URL to Safari, this keeps the page inside your app with full programmatic control: back/forward, reload, and a loading progress bar.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 9, day: 21, hour: 10, minute: 0) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+        import WebKit
+
+        @available(iOS 26.0, *)
+        struct B004_MiniBrowserDemo: View {
+            // WebPage is the new Observable model that owns navigation state
+            // (url, title, isLoading, backForwardList) — WebView just renders it.
+            // Before iOS 26 this meant wrapping WKWebView in a UIViewRepresentable.
+            @State private var page = WebPage()
+            @State private var urlText = "https://developer.apple.com"
+
+            var body: some View {
+                VStack(spacing: 0) {
+                    addressBar
+
+                    if page.isLoading {
+                        ProgressView(value: page.estimatedProgress)
+                            .progressViewStyle(.linear)
+                    }
+
+                    WebView(page)
+                }
+                .onAppear {
+                    load(urlText)
+                }
+            }
+
+            private var addressBar: some View {
+                HStack(spacing: 12) {
+                    Button {
+                        goBack()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                    }
+                    .disabled(page.backForwardList.backList.isEmpty)
+
+                    Button {
+                        goForward()
+                    } label: {
+                        Image(systemName: "chevron.right")
+                    }
+                    .disabled(page.backForwardList.forwardList.isEmpty)
+
+                    TextField("Enter URL", text: $urlText)
+                        .textFieldStyle(.roundedBorder)
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
+                        .onSubmit {
+                            load(urlText)
+                        }
+
+                    Button {
+                        page.reload()
+                    } label: {
+                        Image(systemName: "arrow.clockwise")
+                    }
+                }
+                .padding()
+            }
+
+            private func load(_ urlString: String) {
+                guard let url = URL(string: urlString) else { return }
+                page.load(URLRequest(url: url))
+            }
+
+            // WebPage has no built-in goBack()/goForward() — navigation history is
+            // exposed as backForwardList.backList/forwardList (nearest page is the
+            // last item going back, the first item going forward), and moving
+            // through it just means loading that item's URL again.
+            private func goBack() {
+                guard let item = page.backForwardList.backList.last else { return }
+                page.load(URLRequest(url: item.url))
+            }
+
+            private func goForward() {
+                guard let item = page.backForwardList.forwardList.first else { return }
+                page.load(URLRequest(url: item.url))
+            }
+        }
+        """,
+        minOS: .ios26
+    )
 
     static let b003 = CodeSnippet(
         id: "B003",
         title: "Rich Text Notes",
-        intro: "TextEditor now takes an AttributedString binding directly — no more wrapping UITextView in a UIViewRepresentable for rich text. Select some text and tap Bold, Italic, or a size button in the keyboard toolbar: AttributedTextSelection tracks the selection, and transformAttributes(in:) applies the change to just that range.",
+        intro: "TextEditor now takes an AttributedString binding directly — no more wrapping UITextView in a UIViewRepresentable for rich text. AttributedTextSelection tracks the selection and transformAttributes(in:) applies the change to just that range.",
         thanks: nil,
         date: Date.from(year: 2026, month: 9, day: 20, hour: 1, minute: 08) ?? Date(),
         codeSnippet: """
@@ -35,11 +284,17 @@ struct SnippetsRepository {
             )
             @State private var selection = AttributedTextSelection()
 
-            var body: some View {
+        var body: some View {
+            
+            VStack(spacing: 16) {
+                Text("On the box below select some text and tap Bold, Italic, or a size button in the keyboard toolbar")
+                    .font(.subheadline)
+                    .foregroundStyle(Color.mycolor.myAccent)
+                    .multilineTextAlignment(.center)
+                
                 // TextEditor now takes an AttributedString binding directly — no more
                 // wrapping UITextView in a UIViewRepresentable for rich text editing.
                 TextEditor(text: $text, selection: $selection)
-                    .padding()
                     .toolbar {
                         ToolbarItemGroup(placement: .keyboard) {
                             Button {
@@ -47,21 +302,21 @@ struct SnippetsRepository {
                             } label: {
                                 Image(systemName: "bold")
                             }
-
+                            
                             Button {
                                 applyItalic()
                             } label: {
                                 Image(systemName: "italic")
                             }
-
+                            
                             Spacer()
-
+                            
                             Button {
                                 applyFont(.body)
                             } label: {
                                 Image(systemName: "textformat.size.smaller")
                             }
-
+                            
                             Button {
                                 applyFont(.title2)
                             } label: {
@@ -69,7 +324,16 @@ struct SnippetsRepository {
                             }
                         }
                     }
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 15)
+                            .stroke(Color.mycolor.myAccent.opacity(0.5), lineWidth: 1)
+                    )
+                Spacer()
             }
+        }
 
             // MARK: - Formatting
 

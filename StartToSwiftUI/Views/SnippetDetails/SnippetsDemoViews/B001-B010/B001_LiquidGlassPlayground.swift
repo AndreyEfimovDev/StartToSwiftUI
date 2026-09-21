@@ -62,6 +62,7 @@ struct B001_LiquidGlassPlaygroundDemo: View {
                 morphDisclosureSection
                 tintedGlassSection
             }
+            .frame(maxWidth: .infinity)
             .padding()
         }
     }
