@@ -100,7 +100,7 @@ struct SnippetDetailsView: View {
                 }
                 .padding(.bottom, 30)
             }
-            .navigationTitle("Code")
+            .navigationTitle("Code Snippet")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 // Copy button inside sheet

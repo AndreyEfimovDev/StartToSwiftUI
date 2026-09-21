@@ -75,6 +75,13 @@ struct SnippetViewRegistry {
                 SnippetUnavailableView(snippet: snippet)
             }
 
+        case "B006":
+            if #available(iOS 26.0, *) {
+                B006_ImmersiveHeroHeaderDemoView(snippet: snippet)
+            } else {
+                SnippetUnavailableView(snippet: snippet)
+            }
+
         default: SnippetNoPreviewView(snippet: snippet)
         }
     }

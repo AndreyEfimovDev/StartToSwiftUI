@@ -16,8 +16,75 @@ struct SnippetsRepository {
     
     static let allDemoCodeSnippet: [CodeSnippet] = [
         a001, a002, a003, a004, a005, a006, a007, a008, a009, a010,
-        a011, a012, a013, a014, a015, a016, b001, b002, b003, b004, b005
+        a011, a012, a013, a014, a015, a016, b001, b002, b003, b004, b005, b006
     ]
+
+    static let b006 = CodeSnippet(
+        id: "B006",
+        title: "Immersive Hero Header",
+        intro: "A hero image at the top of a ScrollView, mirrored and blurred into the safe area above it with .backgroundExtensionEffect() — instead of stopping at a hard edge, the image appears to continue behind the glass toolbar, the way Apple's own detail screens do in iOS 26.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 9, day: 21, hour: 12, minute: 0) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        @available(iOS 26.0, *)
+        struct B006_ImmersiveHeroHeaderDemo: View {
+            var body: some View {
+                ScrollView {
+                    hero
+                }
+            }
+
+            // MARK: - Hero
+
+            private var hero: some View {
+                ZStack(alignment: .bottomLeading) {
+                    LinearGradient(
+                        colors: [Color.mycolor.myBlue, Color.mycolor.myPurple],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    Image(systemName: "mountain.2.fill")
+                        .font(.system(size: 160))
+                        .foregroundStyle(.white.opacity(0.25))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+                    caption
+                }
+                .frame(height: 520)
+                .frame(maxWidth: .infinity)
+                // Mirrors and blurs this view into the safe area around it, so the
+                // hero appears to continue behind the glass toolbar/sidebar instead
+                // of stopping at a hard edge.
+                .backgroundExtensionEffect()
+            }
+
+            // MARK: - Caption
+
+            private var caption: some View {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Glacier Bay")
+                        .font(.title.bold())
+                    Text("Tidewater glaciers calve into the sea here — home to humpback whales, sea otters, and nesting bald eagles.")
+                        .font(.subheadline)
+                        .lineLimit(2)
+                }
+                .foregroundStyle(.white)
+                .padding(20)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(
+                    LinearGradient(
+                        colors: [.clear, .black.opacity(0.65)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+            }
+        }
+        """,
+        minOS: .ios26
+    )
 
     static let b005 = CodeSnippet(
         id: "B005",
@@ -373,7 +440,7 @@ struct SnippetsRepository {
 
     static let b002 = CodeSnippet(
         id: "B002",
-        title: "TabView APIs for Album Player",
+        title: "Album Player",
         intro: "A music player built on iOS 26's new TabView APIs: tap a track and a mini-player slides in as a native tab bar accessory. Favoriting a track adds it to its own Favorites tab, and the Search tab filters tracks by title or artist. On iPad, .tabViewStyle(.sidebarAdaptable) lets the top tab bar expand into a sidebar — iPhone keeps the plain bottom bar.",
         thanks: nil,
         date: Date.from(year: 2026, month: 9, day: 18, hour: 1, minute: 08) ?? Date(),
