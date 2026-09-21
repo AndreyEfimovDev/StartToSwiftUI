@@ -19,19 +19,23 @@ struct WhatsNews {
                     - B001: Liquid Glass Playground — hands-on tour of iOS 26's Liquid Glass material
                     - B002: TabView APIs for Album Player — mini-player accessory, Favorites, Search, and a sidebar on iPad
                     - B003: Rich Text Notes — TextEditor now supports AttributedString natively
+                    - B004: Mini Browser — native in-app web view backed by WebPage, with back/forward and a loading progress bar
+                    - B005: Zoom Navigation Transition — a grid card zooms into its detail screen, with Liquid Glass materializing as part of the same transition
                     """
                 ),
                 News(
                     title: "Improved",
                     newsText: """
                     - UI/UX adaptation for iPad
-                    - The application's stability and performance 
+                    - The application's stability and performance
                     """
                 ),
                 News(
                     title: "Fixed",
                     newsText: """
                     - Flickering in A006 BottomRight
+                    - Rich Text Notes editor briefly collapsing to a single line on first appearance
+                    - Extra spacing between rows on iPad that wasn't present on iPhone
                     """
                 )
             ]

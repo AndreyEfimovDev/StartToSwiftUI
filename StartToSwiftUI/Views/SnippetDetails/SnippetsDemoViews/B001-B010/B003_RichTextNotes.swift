@@ -13,6 +13,11 @@ struct B003_RichTextNotesDemo: View {
         "Rich Text Notes\n\nSelect some text and tap Bold, Italic, or the size buttons below the keyboard."
     )
     @State private var selection = AttributedTextSelection()
+    // TextEditor wraps UITextView, and on the very first layout pass UITextView
+    // hasn't computed its contentSize yet — querying fixedSize(vertical:) right
+    // away collapses the box to one line. Deferring by one run loop tick lets
+    // UITextView finish that layout first, so fixedSize then measures correctly.
+    @State private var canAutoSizeEditor = false
 
     var body: some View {
         
@@ -54,7 +59,7 @@ struct B003_RichTextNotesDemo: View {
                         }
                     }
                 }
-                .fixedSize(horizontal: false, vertical: true)
+                .fixedSize(horizontal: false, vertical: canAutoSizeEditor)
                 .frame(maxWidth: .infinity)
                 .padding()
                 .overlay(
@@ -62,6 +67,11 @@ struct B003_RichTextNotesDemo: View {
                         .stroke(Color.mycolor.myAccent.opacity(0.5), lineWidth: 1)
                 )
             Spacer()
+        }
+        .onAppear {
+            DispatchQueue.main.async {
+                canAutoSizeEditor = true
+            }
         }
     }
 
