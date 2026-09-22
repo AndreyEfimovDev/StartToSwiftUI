@@ -9,14 +9,21 @@ import SwiftUI
 
 struct SupportDeveloperView: View {
 
+    // MARK: - Dependencies
+    @Environment(\.remoteConfigService) private var remoteConfigService
+
     // MARK: - Constants
     private let iconWidth: CGFloat = 18
-    private let options = SupportOption.all
+
+    // MARK: - States
+    // Стартуем с локальных fallback-значений — они сразу рабочие — и
+    // обновляем после activate(), если Remote Config прислал другие.
+    @State private var options: [SupportOption] = SupportOption.all(remoteConfig: MockRemoteConfigService())
 
     // MARK: - Body
     var body: some View {
         FormCoordinatorToolbar(
-            title: "Buy Me a Coffee",
+            title: "Support the Developer",
             showHomeButton: true
         ) {
             Form {
@@ -28,13 +35,17 @@ struct SupportDeveloperView: View {
         }
         .foregroundStyle(Color.mycolor.myAccent)
         .background(.thickMaterial)
+        .task {
+            await remoteConfigService.activate()
+            options = SupportOption.all(remoteConfig: remoteConfigService)
+        }
     }
 
     // MARK: - Sections
 
     private var introSection: some View {
         Section {
-            Text("StartToSwiftUI is free and always will be. If it's helped you, you're welcome to buy me a coffee — completely optional, nothing extra unlocked in return.")
+            Text("StartToSwiftUI is free and always will be. If it's helped you, you're welcome to support my work — completely optional, nothing extra unlocked in return.")
                 .font(.subheadline)
         }
         .listRowBackground(Color.clear)
@@ -61,7 +72,7 @@ struct SupportDeveloperView: View {
                 .customListRowStyle(iconName: option.icon, iconWidth: iconWidth)
             }
         } footer: {
-            Text("Opens in Safari — payment is handled by the selected service, not inside the app.")
+            Text("Opens in Safari and is handled by the selected service outside of the app.")
         }
     }
 

@@ -49,6 +49,7 @@
 		4734363D2F48661100CF00FA /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 4734363C2F48661100CF00FA /* FirebaseAuth */; };
 		4734363F2F48661100CF00FA /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 4734363E2F48661100CF00FA /* FirebaseCrashlytics */; };
 		473436412F48661100CF00FA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 473436402F48661100CF00FA /* FirebaseFirestore */; };
+		9032119C47EC46C29A91A97E /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = C93B9056FA2145F489742105 /* FirebaseRemoteConfig */; };
 		473436432F48661100CF00FA /* FirebasePerformance in Frameworks */ = {isa = PBXBuildFile; productRef = 473436422F48661100CF00FA /* FirebasePerformance */; };
 		473436742F48C96300CF00FA /* FBNoticeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436732F48C96300CF00FA /* FBNoticeManager.swift */; };
 		473436762F48F18600CF00FA /* FBNoticeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473436752F48F18200CF00FA /* FBNoticeModel.swift */; };
@@ -165,6 +166,8 @@
 		47B6E7E82F5BF85B00EF7441 /* CodeSnippet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7E72F5BF85B00EF7441 /* CodeSnippet.swift */; };
 		47B6E7EC2F5C001E00EF7441 /* SnippetsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7EB2F5C001E00EF7441 /* SnippetsViewModel.swift */; };
 		47B6E7F52F5D989100EF7441 /* FBAnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7F42F5D989100EF7441 /* FBAnalyticsManager.swift */; };
+		B6266D20F6FE4D3E85E05DE6 /* RemoteConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD6201661824703971DCE54 /* RemoteConfigService.swift */; };
+		02DDE482FDB24AECB18E283D /* MockRemoteConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BBE1D52C3B4C93B1F47C2B /* MockRemoteConfigService.swift */; };
 		47B6E7F72F5D991200EF7441 /* PostsViewModel+FBImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E7F62F5D991200EF7441 /* PostsViewModel+FBImport.swift */; };
 		47B6E8082F5DF5AD00EF7441 /* SnippetsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8072F5DF5AD00EF7441 /* SnippetsHomeView.swift */; };
 		47B6E80E2F5DFAE500EF7441 /* SnippetRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E80D2F5DFAE500EF7441 /* SnippetRowView.swift */; };
@@ -389,6 +392,8 @@
 		47B6E7E72F5BF85B00EF7441 /* CodeSnippet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeSnippet.swift; sourceTree = "<group>"; };
 		47B6E7EB2F5C001E00EF7441 /* SnippetsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsViewModel.swift; sourceTree = "<group>"; };
 		47B6E7F42F5D989100EF7441 /* FBAnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBAnalyticsManager.swift; sourceTree = "<group>"; };
+		EFD6201661824703971DCE54 /* RemoteConfigService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigService.swift; sourceTree = "<group>"; };
+		F7BBE1D52C3B4C93B1F47C2B /* MockRemoteConfigService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRemoteConfigService.swift; sourceTree = "<group>"; };
 		47B6E7F62F5D991200EF7441 /* PostsViewModel+FBImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsViewModel+FBImport.swift"; sourceTree = "<group>"; };
 		47B6E8072F5DF5AD00EF7441 /* SnippetsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsHomeView.swift; sourceTree = "<group>"; };
 		47B6E80D2F5DFAE500EF7441 /* SnippetRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetRowView.swift; sourceTree = "<group>"; };
@@ -444,6 +449,7 @@
 				4734363F2F48661100CF00FA /* FirebaseCrashlytics in Frameworks */,
 				47B6E8282F5F267C00EF7441 /* Splash in Frameworks */,
 				473436412F48661100CF00FA /* FirebaseFirestore in Frameworks */,
+				9032119C47EC46C29A91A97E /* FirebaseRemoteConfig in Frameworks */,
 				47B6E7DF2F5AFDD800EF7441 /* FirebaseMessaging in Frameworks */,
 				473436432F48661100CF00FA /* FirebasePerformance in Frameworks */,
 				4734363B2F48661100CF00FA /* FirebaseAnalytics in Frameworks */,
@@ -560,6 +566,14 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		74F15FECA7E9437A8EF95C1E /* RemoteConfig */ = {
+			isa = PBXGroup;
+			children = (
+				EFD6201661824703971DCE54 /* RemoteConfigService.swift */,
+			);
+			path = RemoteConfig;
+			sourceTree = "<group>";
+		};
 		473436702F48A11300CF00FA /* Firebase */ = {
 			isa = PBXGroup;
 			children = (
@@ -568,6 +582,7 @@
 				473436802F4B059200CF00FA /* Crashlytics */,
 				473436882F4B24DA00CF00FA /* Performance */,
 				4734368B2F4B2A0C00CF00FA /* Analytics */,
+				74F15FECA7E9437A8EF95C1E /* RemoteConfig */,
 			);
 			path = Firebase;
 			sourceTree = "<group>";
@@ -935,6 +950,7 @@
 				475CC6912F2246E00099CAA6 /* MockNoticesDataSource.swift */,
 				47939D7A2F50540800CBE432 /* MockFBPostsManager.swift */,
 				47939D7C2F50542A00CBE432 /* MockFBNoticesManager.swift */,
+				F7BBE1D52C3B4C93B1F47C2B /* MockRemoteConfigService.swift */,
 			);
 			path = MockServices;
 			sourceTree = "<group>";
@@ -1071,6 +1087,7 @@
 				4734363C2F48661100CF00FA /* FirebaseAuth */,
 				4734363E2F48661100CF00FA /* FirebaseCrashlytics */,
 				473436402F48661100CF00FA /* FirebaseFirestore */,
+				C93B9056FA2145F489742105 /* FirebaseRemoteConfig */,
 				473436422F48661100CF00FA /* FirebasePerformance */,
 				47B65CDE2F4C98D4002FB480 /* FirebaseCore */,
 				47B6E7DE2F5AFDD800EF7441 /* FirebaseMessaging */,
@@ -1361,6 +1378,8 @@
 				475997612E5CC0F8008E20F0 /* PostDetailsView.swift in Sources */,
 				47870FBA2ECC8628004175E4 /* Acknowledgements.swift in Sources */,
 				47B6E7F52F5D989100EF7441 /* FBAnalyticsManager.swift in Sources */,
+				B6266D20F6FE4D3E85E05DE6 /* RemoteConfigService.swift in Sources */,
+				02DDE482FDB24AECB18E283D /* MockRemoteConfigService.swift in Sources */,
 				F4D10C61F9AD5CA38F401C96 /* B001_LiquidGlassPlayground.swift in Sources */,
 				1A4F739D0A5AB5DA92C9A2AB /* B003_RichTextNotes.swift in Sources */,
 				551F2DC647DC3E98AAC18899 /* B004_MiniBrowser.swift in Sources */,
@@ -1850,6 +1869,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 473436392F48661100CF00FA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		C93B9056FA2145F489742105 /* FirebaseRemoteConfig */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 473436392F48661100CF00FA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseRemoteConfig;
 		};
 		473436422F48661100CF00FA /* FirebasePerformance */ = {
 			isa = XCSwiftPackageProductDependency;

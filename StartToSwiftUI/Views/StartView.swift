@@ -18,6 +18,7 @@ struct StartView: View {
     @ObservedObject private var coordinator: AppCoordinator
     @ObservedObject private var errorManager: ErrorManager
     private let appStoreService: AppStoreService
+    private let remoteConfigService: RemoteConfigServiceProtocol
 
     init(dependencies: AppDependencies) {
         _vm = ObservedObject(wrappedValue: dependencies.postsViewModel)
@@ -26,6 +27,7 @@ struct StartView: View {
         _coordinator = ObservedObject(wrappedValue: dependencies.coordinator)
         _errorManager = ObservedObject(wrappedValue: dependencies.services.errorManager)
         appStoreService = dependencies.appStoreService
+        remoteConfigService = dependencies.remoteConfigService
     }
 
     // MARK: - States
@@ -91,6 +93,7 @@ struct StartView: View {
         .environmentObject(coordinator)
         .environmentObject(errorManager)
         .environment(\.appStoreService, appStoreService)
+        .environment(\.remoteConfigService, remoteConfigService)
     }
     
     // MARK: Main Content
@@ -251,6 +254,7 @@ struct StartView: View {
         appStateManager: stateManager,
         services: services,
         appStoreService: AppStoreService(),
+        remoteConfigService: MockRemoteConfigService(),
         postsViewModel: postsVM,
         noticesViewModel: NoticesViewModel(dataSource: MockNoticesDataSource(), fbNoticesManager: MockFBNoticesManager(), services: services),
         snippetsViewModel: SnippetsViewModel(services: services),
