@@ -16,7 +16,7 @@ struct SupportDeveloperView: View {
     // MARK: - Body
     var body: some View {
         FormCoordinatorToolbar(
-            title: "Buy Me a Coffee",
+            title: "Support the Developer",
             showHomeButton: true
         ) {
             Form {
@@ -34,7 +34,7 @@ struct SupportDeveloperView: View {
 
     private var introSection: some View {
         Section {
-            Text("StartToSwiftUI is free and always will be. If it's helped you, you're welcome to buy me a coffee — completely optional, nothing extra unlocked in return.")
+            Text("StartToSwiftUI is free and always will be. If it's helped you, you're welcome to support my work — completely optional, nothing extra unlocked in return.")
                 .font(.subheadline)
         }
         .listRowBackground(Color.clear)
@@ -61,7 +61,7 @@ struct SupportDeveloperView: View {
                 .customListRowStyle(iconName: option.icon, iconWidth: iconWidth)
             }
         } footer: {
-            Text("Opens in Safari — payment is handled by the selected service, not inside the app.")
+            Text("Opens in Safari and is handled by the selected service outside of the app.")
         }
     }
 
