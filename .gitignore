@@ -1,6 +1,10 @@
 # For Firebase sensitive data
 GoogleService-Info.plist
 
+# Personal/payment links, kept out of git
+Secrets.swift
+Secrets/
+
 # For Xcode
 xcuserdata/
 *.xcuserstate
