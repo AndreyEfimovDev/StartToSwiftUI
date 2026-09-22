@@ -183,6 +183,7 @@ enum AppRoute: Hashable, Identifiable {
     case introduction
     case functionality
     case whatIsNew
+    case supportDeveloper
     case legalInfo
     case termsOfUse
     case privacyPolicy
@@ -223,6 +224,7 @@ enum AppRoute: Hashable, Identifiable {
         case .introduction:             return "introduction"
         case .functionality:            return "functionality"
         case .whatIsNew:                return "whatIsNew"
+        case .supportDeveloper:         return "supportDeveloper"
         case .legalInfo:                return "legalInfo"
         case .termsOfUse:               return "termsOfUse"
         case .privacyPolicy:            return "privacyPolicy"
