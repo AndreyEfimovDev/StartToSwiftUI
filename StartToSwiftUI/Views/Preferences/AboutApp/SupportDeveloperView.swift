@@ -9,9 +9,16 @@ import SwiftUI
 
 struct SupportDeveloperView: View {
 
+    // MARK: - Dependencies
+    @Environment(\.remoteConfigService) private var remoteConfigService
+
     // MARK: - Constants
     private let iconWidth: CGFloat = 18
-    private let options = SupportOption.all
+
+    // MARK: - States
+    // Стартуем с локальных fallback-значений — они сразу рабочие — и
+    // обновляем после activate(), если Remote Config прислал другие.
+    @State private var options: [SupportOption] = SupportOption.all(remoteConfig: MockRemoteConfigService())
 
     // MARK: - Body
     var body: some View {
@@ -28,6 +35,10 @@ struct SupportDeveloperView: View {
         }
         .foregroundStyle(Color.mycolor.myAccent)
         .background(.thickMaterial)
+        .task {
+            await remoteConfigService.activate()
+            options = SupportOption.all(remoteConfig: remoteConfigService)
+        }
     }
 
     // MARK: - Sections

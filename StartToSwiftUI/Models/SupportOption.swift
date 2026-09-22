@@ -18,23 +18,33 @@ struct SupportOption: Identifiable {
 }
 
 extension SupportOption {
-    // TODO: заменить плейсхолдер-ссылку для иностранной карты на реальную
-    // после выбора сервиса (Freedom Pay/Altyn Wallet или аналог — см.
-    // обсуждение фичи "Buy Me a Coffee").
-    static let all: [SupportOption] = [
-        SupportOption(
-            id: "ru",
-            title: "RU card / SBP",
-            subtitle: "CloudTips",
-            icon: "creditcard",
-            urlString: Secrets.cloudTipsURL
-        ),
-        SupportOption(
-            id: "foreign",
-            title: "Foreign card",
-            subtitle: "Freedom Pay",
-            icon: "globe",
-            urlString: "https://example.com/support-foreign-placeholder"
-        )
-    ]
+    // Ссылки берутся из Firebase Remote Config (с локальным fallback-значением
+    // на случай оффлайна/первого запуска) — это даёт возможность сменить
+    // платёжный сервис без релиза приложения.
+    // TODO: заменить плейсхолдер-ссылку/fallback для иностранной карты на
+    // реальную после выбора сервиса (см. обсуждение фичи "Buy Me a Coffee").
+    static func all(remoteConfig: RemoteConfigServiceProtocol) -> [SupportOption] {
+        [
+            SupportOption(
+                id: "ru",
+                title: "RU card / SBP",
+                subtitle: "CloudTips",
+                icon: "creditcard",
+                urlString: remoteConfig.string(
+                    forKey: .russianURL,
+                    default: Secrets.cloudTipsURL
+                )
+            ),
+            SupportOption(
+                id: "foreign",
+                title: "Foreign card",
+                subtitle: "Coming soon",
+                icon: "globe",
+                urlString: remoteConfig.string(
+                    forKey: .foreignSupportURL,
+                    default: "https://example.com/support-foreign-placeholder"
+                )
+            )
+        ]
+    }
 }
