@@ -63,22 +63,16 @@ struct RatingSelectionView: View {
                 .lineLimit(2)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
-<<<<<<< HEAD
                 .frame(maxWidth: .infinity)
-=======
->>>>>>> development
                 .padding(.horizontal)
-            
+
             Text("@" + post.author)
                 .font(.footnote)
                 .minimumScaleFactor(0.75)
                 .lineLimit(1)
                 .multilineTextAlignment(.center)
-<<<<<<< HEAD
-=======
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.horizontal)
->>>>>>> development
         }
         .foregroundStyle(Color.mycolor.myAccent)
         .frame(maxWidth: .infinity, alignment: .center)
