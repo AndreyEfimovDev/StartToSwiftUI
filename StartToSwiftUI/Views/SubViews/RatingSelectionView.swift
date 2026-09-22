@@ -145,8 +145,6 @@ struct RatingSelectionView: View {
                 }
                 .frame(maxWidth: 200)
         }
-        .padding(.bottom)
-
     }
 }
 
