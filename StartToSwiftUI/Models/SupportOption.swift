@@ -18,16 +18,16 @@ struct SupportOption: Identifiable {
 }
 
 extension SupportOption {
-    // TODO: заменить плейсхолдер-ссылки на реальные после выбора сервисов
-    // (RU: CloudTips/ЮMoney; иностранная карта: Freedom Pay/Altyn Wallet или
-    // аналог — см. обсуждение фичи "Buy Me a Coffee").
+    // TODO: заменить плейсхолдер-ссылку для иностранной карты на реальную
+    // после выбора сервиса (Freedom Pay/Altyn Wallet или аналог — см.
+    // обсуждение фичи "Buy Me a Coffee").
     static let all: [SupportOption] = [
         SupportOption(
             id: "ru",
             title: "RU card / SBP",
             subtitle: "CloudTips",
             icon: "creditcard",
-            urlString: "https://example.com/support-ru-placeholder"
+            urlString: Secrets.cloudTipsURL
         ),
         SupportOption(
             id: "foreign",
