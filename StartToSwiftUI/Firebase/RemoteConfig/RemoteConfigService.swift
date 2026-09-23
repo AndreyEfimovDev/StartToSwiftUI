@@ -11,7 +11,7 @@ import SwiftUI
 /// Ключи значений, которые можно менять удалённо без релиза приложения
 /// (например ссылки на внешние сервисы для доната).
 enum RemoteConfigKey: String {
-    case russianURL = "support_russian_url"
+    case russianSupportURL = "support_russian_url"
     case foreignSupportURL = "support_foreign_url"
 }
 
@@ -36,7 +36,7 @@ final class RemoteConfigService: RemoteConfigServiceProtocol {
         do {
             _ = try await remoteConfig.fetchAndActivate()
         } catch {
-            log("❌ RemoteConfigService: \(error.localizedDescription)", level: .error)
+            log("RemoteConfigService: \(error.localizedDescription)", level: .error)
         }
     }
 

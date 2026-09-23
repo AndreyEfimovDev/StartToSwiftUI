@@ -39,7 +39,7 @@ extension SupportOption {
                 subtitle: "CloudTips",
                 icon: "creditcard",
                 urlString: remoteConfig.string(
-                    forKey: .russianURL,
+                    forKey: .russianSupportURL,
                     default: Secrets.cloudTipsURL
                 )
             )
