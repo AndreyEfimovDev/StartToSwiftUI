@@ -132,12 +132,12 @@ extension PostsViewModel {
     }
     
     // MARK: - Migration
-    func migrateHiddenToDeleted() {
+    func migrateHiddenToDeleted(removeDuplicates: Bool = true) {
         let hiddenPosts = allPosts.filter { $0.status == .hidden }
         guard !hiddenPosts.isEmpty else { return }
-        
+
         hiddenPosts.forEach { $0.status = .deleted }
-        saveContextAndReload()
+        saveContextAndReload(removeDuplicates: removeDuplicates)
         
         log("🔄 Migrated \(hiddenPosts.count) posts: hidden → deleted", level: .info)
     }
