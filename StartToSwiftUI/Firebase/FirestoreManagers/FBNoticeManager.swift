@@ -20,7 +20,12 @@ final class FBNoticesManager: FBNoticesManagerProtocol {
             let snapshot = try await noticesCollection
                 .whereField("notice_date", isGreaterThan: Timestamp(date: date))
                 .getDocuments()
-            let notices = snapshot.documents.compactMap { FBNoticeModel(document: $0) }
+            let decoded = snapshot.documents.map { ($0.documentID, FBNoticeModel(document: $0)) }
+            let notices = decoded.compactMap { $0.1 }
+            let droppedIDs = decoded.filter { $0.1 == nil }.map { $0.0 }
+            if !droppedIDs.isEmpty {
+                log("Firebase: \(droppedIDs.count) notice document(s) failed to decode: \(droppedIDs)", level: .error)
+            }
             log("🔥 Firebase: received \(notices.count) notices", level: .info)
             return .success(notices)
         } catch let error as NSError {
@@ -29,7 +34,7 @@ final class FBNoticesManager: FBNoticesManagerProtocol {
                 log("📵 Firebase: network unavailable (notices)", level: .warning)
                 return .failure(.networkUnavailable)
             }
-            log("❌ Firebase: fetchFBNotices error: \(error.localizedDescription)", level: .error)
+            log("Firebase: fetchFBNotices error: \(error.localizedDescription)", level: .error)
             return .failure(.unknown(error))
         }
     }
