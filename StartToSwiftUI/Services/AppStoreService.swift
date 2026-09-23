@@ -39,7 +39,10 @@ final class AppStoreService {
             }
             
             let currentVersion = Bundle.main.version
-            let hasUpdate = appStoreVersion > currentVersion
+            // Обычное сравнение String ломается на многозначных компонентах
+            // версии ("10.0" < "9.0" лексикографически) — .numeric сравнивает
+            // цифровые последовательности как числа, а не посимвольно.
+            let hasUpdate = appStoreVersion.compare(currentVersion, options: .numeric) == .orderedDescending
             
             log("🔍 AppStoreService: App Store \(appStoreVersion), Current \(currentVersion), hasUpdate: \(hasUpdate)", level: .info)
             return hasUpdate
