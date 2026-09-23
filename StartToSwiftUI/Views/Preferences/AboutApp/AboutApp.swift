@@ -87,11 +87,6 @@ struct AboutApp: View {
                 coordinator.pushModal(.whatIsNew)
             }
             .customListRowStyle(iconName: "newspaper", iconWidth: iconWidth)
-
-            Button("Support the Developer") {
-                coordinator.pushModal(.supportDeveloper)
-            }
-            .customListRowStyle(iconName: "cup.and.saucer", iconWidth: iconWidth)
         }
     }
     
