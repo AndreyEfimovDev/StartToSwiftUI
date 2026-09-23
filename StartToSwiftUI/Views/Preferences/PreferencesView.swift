@@ -69,6 +69,7 @@ struct PreferencesView: View {
                 aboutApplication
                 legalInformation
                 contactDeveloperButton
+                supportDeveloperButton
             }
         }
         .foregroundStyle(Color.mycolor.myAccent)
@@ -294,7 +295,7 @@ struct PreferencesView: View {
     }
     
     private var legalInformation: some View {
-        Button("Legal information") {
+        Button("Legal Information") {
             coordinator.pushModal(.legalInfo)
         }
         .customListRowStyle(
@@ -304,7 +305,7 @@ struct PreferencesView: View {
     }
     
     private var contactDeveloperButton: some View {
-        Button("Contact Developer") {
+        Button("Contact the Developer") {
             EmailService().sendEmail(
                 to: "andrey.efimov.dev@gmail.com",
                 subject: "Start To SwiftUI!",
@@ -313,6 +314,16 @@ struct PreferencesView: View {
         }
         .customListRowStyle(
             iconName: "envelope",
+            iconWidth: iconSize
+        )
+    }
+
+    private var supportDeveloperButton: some View {
+        Button("Support the Developer") {
+            coordinator.pushModal(.supportDeveloper)
+        }
+        .customListRowStyle(
+            iconName: "cup.and.saucer",
             iconWidth: iconSize
         )
     }
