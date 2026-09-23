@@ -569,7 +569,7 @@ struct SnippetsRepository {
                                     .foregroundStyle(.secondary)
                             }
                             Spacer()
-                            B002_WaveAsymmetrical()
+                            B002_WaveAsymmetrical(isAnimating: isCurrentAndPlaying)
                                 .clipShape(.capsule)
                                 .opacity(isCurrentAndPlaying ? 0.8 : 0)
                         }
@@ -850,13 +850,15 @@ struct SnippetsRepository {
         }
 
         struct B002_WaveAsymmetrical: View {
+            let isAnimating: Bool
+
             private let barCount = 11
             private let maxHeight: CGFloat = 30
             private let minHeight: CGFloat = 3
-            
+
             @State private var phase: CGFloat = 0
             @State private var cancellable: AnyCancellable? = nil
-            
+
             var body: some View {
                 HStack(spacing: 3) {
                     ForEach(0..<barCount, id: \\.self) { index in
@@ -868,18 +870,33 @@ struct SnippetsRepository {
                     }
                 }
                 .onAppear {
-                    cancellable = Timer
-                        .publish(every: 0.08, on: .main, in: .common)
-                        .autoconnect()
-                        .sink { _ in
-                            phase += 0.4
-                        }
+                    if isAnimating { startTimer() }
                 }
                 .onDisappear {
-                    // cancel the timer publisher to prevent memory leak
-                    cancellable?.cancel()
-                    cancellable = nil
+                    stopTimer()
                 }
+                // isAnimating меняется, когда трек ставят на паузу/переключают, не
+                // когда строка появляется/исчезает — .onAppear/.onDisappear одни
+                // не уловили бы этот случай, таймер продолжал бы крутиться.
+                .onChange(of: isAnimating) { _, newValue in
+                    newValue ? startTimer() : stopTimer()
+                }
+            }
+
+            private func startTimer() {
+                guard cancellable == nil else { return }
+                cancellable = Timer
+                    .publish(every: 0.08, on: .main, in: .common)
+                    .autoconnect()
+                    .sink { _ in
+                        phase += 0.4
+                    }
+            }
+
+            private func stopTimer() {
+                // cancel the timer publisher to prevent memory leak
+                cancellable?.cancel()
+                cancellable = nil
             }
             
             private func barHeight(for index: Int) -> CGFloat {
