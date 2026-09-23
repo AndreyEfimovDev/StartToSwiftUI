@@ -115,8 +115,14 @@ extension PostsViewModel {
         let result = await fbPostsManager.fetchFBPosts(after: lastLoadedDate)
         
         switch result {
-        case .success(let newPosts): return !newPosts.isEmpty
-        case .failure: return false
+        case .success(let newPosts):
+            return !newPosts.isEmpty
+        case .failure(.networkUnavailable):
+            handleError(nil, message: "No internet connection. Please check your network and try again.")
+            return false
+        case .failure(.unknown(let error)):
+            handleError(error, message: "Failed to check for updates")
+            return false
         }
     }
     
