@@ -104,6 +104,7 @@
 		475CC68C2F217B890099CAA6 /* NoticesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC6862F217B890099CAA6 /* NoticesTests.swift */; };
 		475CC68D2F217B890099CAA6 /* PostsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC6872F217B890099CAA6 /* PostsViewModelTests.swift */; };
 		475CC68E2F217B890099CAA6 /* PostTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC6882F217B890099CAA6 /* PostTests.swift */; };
+		68C330B30D974AFAAA4C8A71 /* AppStoreServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DDA2807C7B4195B085962B /* AppStoreServiceTests.swift */; };
 		475CC6902F217B890099CAA6 /* UtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC68A2F217B890099CAA6 /* UtilityTests.swift */; };
 		475CC6922F2246E00099CAA6 /* MockNoticesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC6912F2246E00099CAA6 /* MockNoticesDataSource.swift */; };
 		475CC6942F2246FB0099CAA6 /* MockPostsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CC6932F2246FB0099CAA6 /* MockPostsDataSource.swift */; };
@@ -332,6 +333,7 @@
 		475CC6862F217B890099CAA6 /* NoticesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticesTests.swift; sourceTree = "<group>"; };
 		475CC6872F217B890099CAA6 /* PostsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsViewModelTests.swift; sourceTree = "<group>"; };
 		475CC6882F217B890099CAA6 /* PostTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTests.swift; sourceTree = "<group>"; };
+		22DDA2807C7B4195B085962B /* AppStoreServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreServiceTests.swift; sourceTree = "<group>"; };
 		475CC68A2F217B890099CAA6 /* UtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityTests.swift; sourceTree = "<group>"; };
 		475CC6912F2246E00099CAA6 /* MockNoticesDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNoticesDataSource.swift; sourceTree = "<group>"; };
 		475CC6932F2246FB0099CAA6 /* MockPostsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPostsDataSource.swift; sourceTree = "<group>"; };
@@ -849,6 +851,7 @@
 				475CC6872F217B890099CAA6 /* PostsViewModelTests.swift */,
 				475CC68A2F217B890099CAA6 /* UtilityTests.swift */,
 				475CC6882F217B890099CAA6 /* PostTests.swift */,
+				22DDA2807C7B4195B085962B /* AppStoreServiceTests.swift */,
 				475CC6862F217B890099CAA6 /* NoticesTests.swift */,
 				470DB6502F62A61F0034464D /* SnippetsTests.swift */,
 				474F70712F63F2390010F09D /* NoticesViewModelFilterDateTests.swift */,
@@ -1396,6 +1399,7 @@
 				475CC68C2F217B890099CAA6 /* NoticesTests.swift in Sources */,
 				475CC68D2F217B890099CAA6 /* PostsViewModelTests.swift in Sources */,
 				475CC68E2F217B890099CAA6 /* PostTests.swift in Sources */,
+				68C330B30D974AFAAA4C8A71 /* AppStoreServiceTests.swift in Sources */,
 				470DB6512F62A61F0034464D /* SnippetsTests.swift in Sources */,
 				475CC6902F217B890099CAA6 /* UtilityTests.swift in Sources */,
 				474F70742F63F99C0010F09D /* TestMocks.swift in Sources */,
