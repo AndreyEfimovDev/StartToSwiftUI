@@ -329,17 +329,6 @@ final class PostsViewModel: ObservableObject {
         return saveContextAndReload()
     }
     
-    func addPostIfNotExists(_ newPost: Post) -> Bool {
-        if allPosts.contains(where: { $0.id == newPost.id || $0.title == newPost.title }) {
-            log("Post with ID \(newPost.id) or title already exists", level: .error)
-            return false
-        }
-        
-        dataSource.insert(newPost)
-        saveContextAndReload()
-        return true
-    }
-    
     /// If necessary, update post.origin .cloudNew with .cloud
     func updatePostOrigin(_ post: Post) {
         post.origin = .cloud
@@ -445,10 +434,6 @@ final class PostsViewModel: ObservableObject {
         }
     }
     
-    func getPost(id: String) -> Post? {
-        allPosts.first { $0.id == id }
-    }
-    
     /// Save context and reload UI
     /// Сохраняет контекст и перезагружает посты.
     ///
@@ -472,15 +457,6 @@ final class PostsViewModel: ObservableObject {
         allPosts.contains(where: { $0.title == postTitle && $0.id != editingPostId })
     }
     
-    func filterUniquePosts(from cloudResponse: [CodablePost]) -> [Post] {
-        let existingTitles = Set(allPosts.map { $0.title })
-        let existingIds = Set(allPosts.map { $0.id })
-        
-        return cloudResponse
-            .filter { !existingTitles.contains($0.title) && !existingIds.contains($0.id) }
-            .map { PostMigrationHelper.convertFromCodable($0) }
-    }
-    
     func filterUniquePosts(from fbResponse: [FBPostModel]) -> [FBPostModel] {
         let existingTitles = Set(allPosts.map { $0.title })
         let existingIds = Set(allPosts.map { $0.id })
@@ -494,10 +470,6 @@ final class PostsViewModel: ObservableObject {
         let existingIds = Set(allPosts.map { $0.id })
         
         return posts.filter { !existingTitles.contains($0.title) && !existingIds.contains($0.id) }
-    }
-    
-    func getLatestDateFromPosts(posts: [Post]) -> Date? {
-        posts.max { $0.date < $1.date }?.date
     }
     
     private func getAllYears() -> [String]? {
