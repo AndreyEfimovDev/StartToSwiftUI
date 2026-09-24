@@ -184,6 +184,71 @@ extension Post {
         self.notes = post.notes
         self.draft = post.draft
     }
+
+    // MARK: For removeDuplicatePosts: merge user state from a duplicate
+
+    /// Переносит в этот пост пользовательское состояние из дубля `other`
+    /// перед тем, как дубль будет удалён.
+    ///
+    /// Дубли возникают в основном при синхронизации через iCloud, когда
+    /// каждое устройство вело прогресс в своей копии поста. Без слияния
+    /// состояние удаляемой копии терялось бы на всех устройствах.
+    /// Контент, `status`, `draft` и `origin` остаются как у этого поста.
+    ///
+    /// Правила:
+    /// - прогресс — максимальный этап;
+    /// - метки этапов — самая ранняя непустая дата (когда этап реально был пройден впервые);
+    /// - избранное — если отмечено хотя бы в одной копии;
+    /// - рейтинг — максимальный;
+    /// - заметки — если различаются, объединяются, чтобы ничего не потерять.
+    func mergeUserState(from other: Post) {
+        if Self.rank(of: other.progress) > Self.rank(of: progress) {
+            progress = other.progress
+        }
+
+        addedDateStamp = Self.earliest(addedDateStamp, other.addedDateStamp)
+        startedDateStamp = Self.earliest(startedDateStamp, other.startedDateStamp)
+        studiedDateStamp = Self.earliest(studiedDateStamp, other.studiedDateStamp)
+        practicedDateStamp = Self.earliest(practicedDateStamp, other.practicedDateStamp)
+
+        if other.favoriteChoice == .yes {
+            favoriteChoice = .yes
+        }
+
+        if let otherRating = other.postRating {
+            let currentRank = postRating.map { Self.rank(of: $0) } ?? -1
+            if Self.rank(of: otherRating) > currentRank {
+                postRating = otherRating
+            }
+        }
+
+        notes = Self.mergedNotes(notes, other.notes)
+    }
+
+    /// Порядковый номер значения enum в `allCases` — для сравнения этапов
+    /// прогресса и рейтингов (порядок объявления = порядок "от меньшего к большему").
+    private static func rank<T: CaseIterable & Equatable>(of value: T) -> Int {
+        Array(T.allCases).firstIndex(of: value) ?? 0
+    }
+
+    /// Самая ранняя из двух дат; если одна отсутствует — другая.
+    private static func earliest(_ lhs: Date?, _ rhs: Date?) -> Date? {
+        guard let lhs, let rhs else { return lhs ?? rhs }
+        return min(lhs, rhs)
+    }
+
+    /// Объединяет заметки двух копий без потерь.
+    ///
+    /// Если одна версия пустая или целиком содержится в другой (например,
+    /// другая — её дополненная редакция), берётся более полная. Иначе
+    /// версии склеиваются через пустую строку.
+    private static func mergedNotes(_ lhs: String, _ rhs: String) -> String {
+        let left = lhs.trimmingCharacters(in: .whitespacesAndNewlines)
+        let right = rhs.trimmingCharacters(in: .whitespacesAndNewlines)
+        if right.isEmpty || left.contains(right) { return lhs }
+        if left.isEmpty || right.contains(left) { return rhs }
+        return lhs + "\n\n" + rhs
+    }
 }
 
 // MARK: Converts JSON codable post to a SwiftData post

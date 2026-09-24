@@ -788,4 +788,122 @@ final class PostTests: XCTestCase {
         XCTAssertEqual(post.author, specialAuthor)
         XCTAssertEqual(post.notes, specialNotes)
     }
+
+    // MARK: - mergeUserState(from:) Tests
+    // Слияние пользовательского состояния дубля перед его удалением
+    // (removeDuplicatePosts). @MainActor — Post изолирован на MainActor.
+
+    @MainActor
+    func testMergeUserState_TakesStrongestStateFromDuplicate() {
+        // Given — остающаяся копия с "меньшим" состоянием
+        let d1 = Date(timeIntervalSince1970: 1_000)
+        let d2 = Date(timeIntervalSince1970: 2_000)
+        let d3 = Date(timeIntervalSince1970: 3_000)
+        let d4 = Date(timeIntervalSince1970: 4_000)
+
+        let keep = Post(
+            title: "Keep",
+            progress: .started,
+            favoriteChoice: .no,
+            postRating: .good,
+            notes: "Notes A",
+            origin: .cloud,
+            draft: false,
+            status: .active,
+            addedDateStamp: d2,
+            startedDateStamp: d2
+        )
+        // Дубль с более продвинутым состоянием и более ранними метками
+        let duplicate = Post(
+            title: "Duplicate",
+            progress: .practiced,
+            favoriteChoice: .yes,
+            postRating: .excellent,
+            notes: "Notes B",
+            origin: .local,
+            draft: true,
+            status: .deleted,
+            addedDateStamp: d1,
+            startedDateStamp: d1,
+            studiedDateStamp: d3,
+            practicedDateStamp: d4
+        )
+
+        // When
+        keep.mergeUserState(from: duplicate)
+
+        // Then — пользовательское состояние слито
+        XCTAssertEqual(keep.progress, .practiced)
+        XCTAssertEqual(keep.addedDateStamp, d1)
+        XCTAssertEqual(keep.startedDateStamp, d1)
+        XCTAssertEqual(keep.studiedDateStamp, d3)
+        XCTAssertEqual(keep.practicedDateStamp, d4)
+        XCTAssertEqual(keep.favoriteChoice, .yes)
+        XCTAssertEqual(keep.postRating, .excellent)
+        XCTAssertEqual(keep.notes, "Notes A\n\nNotes B")
+
+        // Then — контент и служебные поля остаются как у остающейся копии
+        XCTAssertEqual(keep.title, "Keep")
+        XCTAssertEqual(keep.origin, .cloud)
+        XCTAssertFalse(keep.draft)
+        XCTAssertEqual(keep.status, .active)
+    }
+
+    @MainActor
+    func testMergeUserState_DoesNotDowngradeStrongerState() {
+        // Given — остающаяся копия "сильнее" дубля
+        let early = Date(timeIntervalSince1970: 1_000)
+        let late = Date(timeIntervalSince1970: 5_000)
+
+        let keep = Post(
+            progress: .studied,
+            favoriteChoice: .yes,
+            postRating: .great,
+            notes: "Keep notes",
+            startedDateStamp: early,
+            studiedDateStamp: early
+        )
+        let duplicate = Post(
+            progress: .started,
+            favoriteChoice: .no,
+            postRating: nil,
+            notes: "",
+            startedDateStamp: late
+        )
+
+        // When
+        keep.mergeUserState(from: duplicate)
+
+        // Then — ничего не откатилось назад
+        XCTAssertEqual(keep.progress, .studied)
+        XCTAssertEqual(keep.favoriteChoice, .yes)
+        XCTAssertEqual(keep.postRating, .great)
+        XCTAssertEqual(keep.startedDateStamp, early)
+        XCTAssertEqual(keep.studiedDateStamp, early)
+        XCTAssertNil(keep.practicedDateStamp)
+        XCTAssertEqual(keep.notes, "Keep notes")
+    }
+
+    @MainActor
+    func testMergeUserState_Notes_TakesMoreCompleteVersion() {
+        // Given — заметки дубля — дополненная редакция заметок остающейся копии
+        let keep = Post(notes: "Short")
+        let duplicate = Post(notes: "Short, then extended")
+
+        // When
+        keep.mergeUserState(from: duplicate)
+
+        // Then — берётся более полная версия, без дублирования текста
+        XCTAssertEqual(keep.notes, "Short, then extended")
+
+        // Given — у остающейся копии заметок нет
+        let emptyKeep = Post(notes: "")
+        let withNotes = Post(notes: "Only here")
+
+        // When
+        emptyKeep.mergeUserState(from: withNotes)
+
+        // Then
+        XCTAssertEqual(emptyKeep.notes, "Only here")
+    }
 }

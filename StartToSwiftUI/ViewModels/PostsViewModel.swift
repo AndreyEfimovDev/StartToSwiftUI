@@ -279,6 +279,9 @@ final class PostsViewModel: ObservableObject {
         for (id, postsList) in idGroups {
             if let postToKeep = postsList.sorted(by: { $0.date > $1.date }).first {
                 for post in postsList where post.persistentModelID != postToKeep.persistentModelID {
+                    // Прогресс, избранное, рейтинг и заметки удаляемой копии
+                    // переносятся в остающуюся — иначе они потеряются на всех устройствах.
+                    postToKeep.mergeUserState(from: post)
                     postsToDelete.append(post)
                     log("🗑️ Duplicate by ID \(id): '\(post.title)'", level: .info)
                 }
@@ -297,6 +300,7 @@ final class PostsViewModel: ObservableObject {
         for (title, postsList) in titleGroups {
             if let postToKeep = postsList.sorted(by: { $0.date < $1.date }).first {
                 for post in postsList where post.persistentModelID != postToKeep.persistentModelID {
+                    postToKeep.mergeUserState(from: post)
                     postsToDelete.append(post)
                     log("🗑️ Duplicate by title '\(title)'", level: .info)
                 }
