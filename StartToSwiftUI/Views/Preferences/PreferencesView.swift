@@ -47,8 +47,11 @@ struct PreferencesView: View {
             Section(header: sectionHeader("Achievements")) {
                 achievements
             }
-            if noticevm.notices.count > 0 {
-                Section(header: sectionHeader("Notices (\(noticevm.unreadCount)/\(noticevm.notices.count))")) {
+            // Секция видна всегда — переключатель сигналов нужен и до первых
+            // notices; список сообщений и счётчик — только когда они есть.
+            Section(header: sectionHeader(noticesSectionTitle)) {
+                noticeSignalsToggle
+                if noticevm.notices.count > 0 {
                     noticeMessages
                 }
             }
@@ -146,6 +149,21 @@ struct PreferencesView: View {
     }
     
     // MARK: - Notices
+
+    private var noticesSectionTitle: String {
+        noticevm.notices.isEmpty
+        ? "Notices"
+        : "Notices (\(noticevm.unreadCount)/\(noticevm.notices.count))"
+    }
+
+    private var noticeSignalsToggle: some View {
+        Toggle("New notices alerts", isOn: $noticevm.isNotificationOn)
+            .tint(Color.mycolor.myBlue)
+            .customListRowStyle(
+                iconName: noticevm.isNotificationOn ? "bell" : "bell.slash",
+                iconWidth: iconSize
+            )
+    }
     
     private var noticeMessages: some View {
         Button("Messages") {

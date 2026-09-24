@@ -30,7 +30,10 @@ final class NoticesViewModel: ObservableObject {
     
     // MARK: - AppStorage
     @AppStorage("appFirstLaunchDate") private var appFirstLaunchDateTimestamp: Double = 0
-    @AppStorage("isNotificationOn") var isShowBadgeForNewNotices: Bool = true
+    /// Сигналы о новых notices внутри приложения: тактильный отклик при
+    /// импорте новых notices и бейдж-кнопка с числом непрочитанных в тулбаре.
+    /// Переключается в Preferences. На FCM-пуши не влияет.
+    @AppStorage("isNotificationOn") var isNotificationOn: Bool = true
     
     private var lastLoadTime: Date = Date(timeIntervalSince1970: 0)
     private let minLoadInterval: TimeInterval = 3
@@ -235,9 +238,7 @@ final class NoticesViewModel: ObservableObject {
             dataSource.insert(NoticeMigrationHelper.convertFromFirebase(firebaseNotice))
         }
 
-        if isShowBadgeForNewNotices {
-            sendLocalNotification(count: newNotices.count)
-        }
+        signalNewNotices(count: newNotices.count)
 
         saveContext()
         loadNoticesFromSwiftData(removeDuplicates: false)
@@ -380,11 +381,15 @@ final class NoticesViewModel: ObservableObject {
     }
 
     // MARK: - Notifications
-    /// Send local notification of new notices
-    private func sendLocalNotification(count: Int) {
-        guard isShowBadgeForNewNotices else { return }
+    /// Тактильный сигнал о новых notices, если сигналы включены в Preferences.
+    ///
+    /// Системного уведомления здесь нет намеренно: импорт notices идёт, когда
+    /// пользователь уже в приложении (запуск, refresh), а снаружи о новых
+    /// notices сообщают FCM-пуши.
+    private func signalNewNotices(count: Int) {
+        guard isNotificationOn else { return }
         hapticManager.notification(type: .success)
-        log("🍉 🔔 Local notification sent: \(count) new", level: .info)
+        log("🍉 🔔 New notices signalled: \(count)", level: .info)
     }
     
     func resetLatestNoticeDate() {
