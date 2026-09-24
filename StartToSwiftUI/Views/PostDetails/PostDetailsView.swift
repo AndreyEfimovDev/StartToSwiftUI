@@ -65,6 +65,16 @@ struct PostDetailsView: View {
                 .onChange(of: proxy.size.width) { _, newValue in
                     updateWidths(for: newValue)
                 }
+                // iPhone: пост окончательно удалён (например, на другом
+                // устройстве, пришло через iCloud) — закрываем экран, иначе он
+                // держит удалённую модель SwiftData. Сверяем по persistentModelID:
+                // поля удалённой модели читать небезопасно. Перенос в корзину
+                // экран не закрывает — модель остаётся валидной. На iPad деталь
+                // показывается через vm.selectedPost, его обнуляет сама VM.
+                .onChange(of: vm.allPosts.map(\.persistentModelID)) { _, ids in
+                    guard UIDevice.isiPhone, !ids.contains(post.persistentModelID) else { return }
+                    coordinator.pop()
+                }
         }
     }
     
