@@ -44,13 +44,13 @@ struct AppDependencies {
             postsViewModel: PostsViewModel(
                 modelContext: modelContext,
                 appStateManager: stateManager,
-                fbPostsManager: FBPostsManager(),
+                fbPostsManager: makeFBPostsManager(),
                 services: services
             ),
             noticesViewModel: NoticesViewModel(
                 modelContext: modelContext,
                 appStateManager: stateManager,
-                fbNoticesManager: FBNoticesManager(),
+                fbNoticesManager: makeFBNoticesManager(),
                 services: services
             ),
             snippetsViewModel: SnippetsViewModel(
@@ -59,6 +59,22 @@ struct AppDependencies {
             ),
             coordinator: AppCoordinator()
         )
+    }
+
+    // MARK: - Firestore: реальный или мок (см. DebugConfig)
+    // Выбор реализации — только здесь, в composition root: ViewModel'и
+    // получают протокол и не знают, с чем работают.
+
+    /// Источник постов: реальный Firestore или мок на `PreviewData`.
+    private static func makeFBPostsManager() -> FBPostsManagerProtocol {
+        if DebugConfig.useRealServices { return FBPostsManager() }
+        return MockFBPostsManager.previewData()
+    }
+
+    /// Источник notices: реальный Firestore или мок на `PreviewData`.
+    private static func makeFBNoticesManager() -> FBNoticesManagerProtocol {
+        if DebugConfig.useRealServices { return FBNoticesManager() }
+        return MockFBNoticesManager.previewData()
     }
 }
 

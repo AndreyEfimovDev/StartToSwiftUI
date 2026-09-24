@@ -44,6 +44,9 @@ extension PostsViewModel {
             return false
 
         case .success(let fbResponse):
+            // Всё новое из облака забрано (или нового не оказалось) — кнопка
+            // "Check for materials update" больше не нужна.
+            hasPostsUpdate = false
             let fbResponseChecked = filterUniquePosts(from: fbResponse)
             guard !fbResponseChecked.isEmpty else {
                 hapticManager.impact(style: .light)
@@ -109,24 +112,26 @@ extension PostsViewModel {
         }
     }
     
-    /// Check for updates to available posts in the cloud
+    /// Принудительная проверка новых постов в облаке — по действию
+    /// пользователя (модалка "Check for materials update").
+    ///
+    /// Ошибки показываются глобальным алертом. Результат записывается в
+    /// `hasPostsUpdate` и возвращается вызывающей стороне.
+    ///
+    /// - Returns: `true`, если есть новые посты; `false` — если их нет, при
+    ///   ошибке или если проверка уже выполняется.
     func checkFBPostsForUpdates() async -> Bool {
         guard !isCheckingPostsForUpdates else { return false }
         isCheckingPostsForUpdates = true
         defer { isCheckingPostsForUpdates = false }
 
         clearError()
-        guard let appStateManager else { return false }
-        guard let lastLoadedDate = appStateManager.getLastDateOfPostsLoaded() else {
-            return true // дата не установлена — считаем что обновления есть
-        }
-        log("🔍 checkFBPostsForUpdates date: \(String(describing: lastLoadedDate))", level: .info)
-        
-        let result = await fbPostsManager.fetchFBPosts(after: lastLoadedDate)
-        
+        guard let result = await fetchPostsUpdateStatus() else { return false }
+
         switch result {
-        case .success(let newPosts):
-            return !newPosts.isEmpty
+        case .success(let hasNewPosts):
+            hasPostsUpdate = hasNewPosts
+            return hasNewPosts
         case .failure(.networkUnavailable):
             handleError(nil, message: "No internet connection. Please check your network and try again.")
             return false
@@ -135,10 +140,41 @@ extension PostsViewModel {
             return false
         }
     }
-    
-#warning("Delete a body of this func before deployment to App Store")
-    func uploadDevDataPostsToFirebase() async {
-        await fbPostsManager.uploadDevDataPostsToFirebase()
+
+    /// Фоновая проверка новых постов — при запуске приложения и
+    /// pull-to-refresh. Обновляет `hasPostsUpdate`.
+    ///
+    /// Намеренно тихая: не вызывает `clearError()`/`handleError()`. Рядом
+    /// выполняется импорт notices с тем же `ErrorManager` — `clearError()`
+    /// закрыл бы его алерт раньше, чем пользователь его увидит, а о проблемах
+    /// с сетью тот импорт и так сообщает. При сбое флаг не меняется.
+    func refreshPostsUpdateStatus() async {
+        guard !isCheckingPostsForUpdates else { return }
+        isCheckingPostsForUpdates = true
+        defer { isCheckingPostsForUpdates = false }
+
+        guard let result = await fetchPostsUpdateStatus() else { return }
+
+        switch result {
+        case .success(let hasNewPosts):
+            hasPostsUpdate = hasNewPosts
+        case .failure(let error):
+            log("⚠️ Background posts update check failed: \(error)", level: .warning)
+        }
+    }
+
+    /// Общая часть принудительной и фоновой проверки: запрос в Firestore
+    /// относительно даты последней загрузки постов.
+    ///
+    /// - Returns: результат запроса; `.success(true)` без запроса, если дата
+    ///   ещё не установлена; `nil`, если проверить нельзя (нет `appStateManager`).
+    private func fetchPostsUpdateStatus() async -> Result<Bool, FBFetchError>? {
+        guard let appStateManager else { return nil }
+        guard let lastLoadedDate = appStateManager.getLastDateOfPostsLoaded() else {
+            return .success(true) // дата не установлена — считаем что обновления есть
+        }
+        log("🔍 checkFBPostsForUpdates date: \(String(describing: lastLoadedDate))", level: .info)
+        return await fbPostsManager.hasFBPosts(after: lastLoadedDate)
     }
     
     // MARK: - Migration

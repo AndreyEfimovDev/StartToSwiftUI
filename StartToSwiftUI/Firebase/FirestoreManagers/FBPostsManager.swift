@@ -39,64 +39,59 @@ final class FBPostsManager: FBPostsManagerProtocol {
             }
             log("🔥 Firebase: received \(posts.count) posts", level: .info)
             return .success(posts)
-        } catch let error as NSError {
-            // Firestore offline error code = 14 (unavailable)
-            if error.domain == FirestoreErrorDomain,
-               error.code == FirestoreErrorCode.unavailable.rawValue {
-                log("📵 Firebase: network unavailable", level: .warning)
-                return .failure(.networkUnavailable)
-            }
-            log("Firebase: error: \(error.localizedDescription)", level: .error)
-            return .failure(.unknown(error))
+        } catch {
+            return .failure(Self.fetchError(from: error))
         }
     }
 
-#warning("Delete this func before deployment to App Store")
-    func uploadDevDataPostsToFirebase() async {
-        var successCount = 0
-        
-        /*
-         for post in newPosts {
-             let datePrefix = DateFormatter.yyyyMMdd.string(from: post.date)
-             let trimmedUUID = String(post.id.suffix(from: post.id.index(post.id.startIndex, offsetBy: 11)))
-             post.id = "\(datePrefix)_\(trimmedUUID)"
-             dataSource.insert(post)
-         }
-
-         */
-        
-        for post in DevData.postsForCloud {
-            let datePrefix = DateFormatter.yyyyMMdd.string(from: post.date)
-            let trimmedUUID = String(post.id.suffix(from: post.id.index(post.id.startIndex, offsetBy: 11)))
-            post.id = "\(datePrefix)_\(trimmedUUID)"
-
-            let data: [String: Any] = [
-                "category": post.category,
-                "title": post.title,
-                "intro": post.intro,
-                "author": post.author,
-                "post_type": post.postType.rawValue,
-                "url_string": post.urlString,
-                "post_platform": post.postPlatform.rawValue,
-                "post_date": Timestamp(date: post.postDate ?? Date()),
-                "study_level": post.studyLevel.rawValue,
-                "date": Timestamp(date: post.date)
-            ]
-            
-            do {
-                try await postsCollection.document(post.id).setData(data)
-                successCount += 1
-                log("Migrated: \(post.title)", level: .info)
-            } catch {
-                log("Failed: \(post.title) — \(error.localizedDescription)", level: .error)
-            }
+    func hasFBPosts(after date: Date) async -> Result<Bool, FBFetchError> {
+        do {
+            // Firestore тарифицирует чтения по числу возвращённых документов
+            // (пустой ответ — одно чтение). Для ответа "да/нет" хватает
+            // одного документа: без limit проверка скачивала бы все новые
+            // посты целиком, и импорт после неё — ещё раз.
+            //
+            // Документ не декодируется: битый (недозаполненный) документ тоже
+            // считается "обновлением". Иначе, если он оказался первым, новые
+            // валидные посты за ним остались бы незамеченными. Цена — кнопка
+            // обновления может показываться, пока битый документ не исправят
+            // (см. комментарий о дате синка в PostsViewModel+FBImport).
+            let snapshot = try await postsCollection
+                .whereField("date", isGreaterThan: Timestamp(date: date))
+                .limit(to: 1)
+                .getDocuments()
+            let hasPosts = !snapshot.documents.isEmpty
+            log("🔍 Firebase: new posts available: \(hasPosts)", level: .info)
+            return .success(hasPosts)
+        } catch {
+            return .failure(Self.fetchError(from: error))
         }
-        log("🏁 uploadDevDataPostsToFirebase complete: \(successCount)/\(DevData.postsForCloud.count) posts", level: .info)
+    }
+
+    // MARK: - Private
+
+    /// Переводит ошибку Firestore в `FBFetchError` и логирует её.
+    ///
+    /// Общая для всех запросов менеджера, чтобы отличие "нет сети" от прочих
+    /// сбоев определялось в одном месте.
+    private static func fetchError(from error: Error) -> FBFetchError {
+        let nsError = error as NSError
+        // Firestore offline error code = 14 (unavailable)
+        if nsError.domain == FirestoreErrorDomain,
+           nsError.code == FirestoreErrorCode.unavailable.rawValue {
+            log("📵 Firebase: network unavailable", level: .warning)
+            return .networkUnavailable
+        }
+        log("Firebase: error: \(nsError.localizedDescription)", level: .error)
+        return .unknown(error)
     }
 }
 
 // MARK: - Firestore Posts Manager Protocol
 protocol FBPostsManagerProtocol {
     func fetchFBPosts(after: Date?) async -> Result<[FBPostModel], FBFetchError>
-    func uploadDevDataPostsToFirebase() async
+    /// Есть ли в Firestore посты новее `date`. Дешёвая проверка для кнопки
+    /// обновления: читает не больше одного документа, в отличие от
+    /// `fetchFBPosts(after:)`, который скачивает все новые посты.
+    func hasFBPosts(after date: Date) async -> Result<Bool, FBFetchError>
 }

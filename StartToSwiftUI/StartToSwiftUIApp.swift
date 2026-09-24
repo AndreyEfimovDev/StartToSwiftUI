@@ -36,20 +36,16 @@ struct StartToSwiftUIApp: App {
         ])
 
 #if DEBUG
+        // Analytics в DEBUG выключена всегда, независимо от DebugConfig, —
+        // чтобы тестовые события не попадали в прод-статистику.
         Analytics.setAnalyticsCollectionEnabled(false)
-        
-        let config = ModelConfiguration(
-            schema: schema,
-            isStoredInMemoryOnly: false,
-            cloudKitDatabase: .none  // ← without CloudKit in debug
-        )
-#else
-        let config = ModelConfiguration(
-            schema: schema,
-            isStoredInMemoryOnly: false,
-            cloudKitDatabase: .automatic
-        )
 #endif
+
+        let config = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: false,
+            cloudKitDatabase: DebugConfig.useRealServices ? .automatic : .none
+        )
 
         if let container = try? ModelContainer(for: schema, configurations: [config]) {
             log("SwiftData container created successfully", level: .info)
@@ -135,19 +131,23 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         // App.init() падает при первом же обращении к Firestore.
 
 #if DEBUG
+        // Crashlytics в DEBUG выключен всегда, независимо от DebugConfig, —
+        // чтобы отладочные краши не смешивались с продовыми.
         Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(false)
-#else
-        // FCM delegate
-        Messaging.messaging().delegate = self
-
-        // Request push notification permission
-        UNUserNotificationCenter.current().delegate = self
-        let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-        UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { granted, error in
-            log("🔔 Push notification permission: \(granted)", level: .info)
-        }
-        application.registerForRemoteNotifications()
 #endif
+
+        if DebugConfig.useRealServices {
+            // FCM delegate
+            Messaging.messaging().delegate = self
+
+            // Request push notification permission
+            UNUserNotificationCenter.current().delegate = self
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { granted, error in
+                log("🔔 Push notification permission: \(granted)", level: .info)
+            }
+            application.registerForRemoteNotifications()
+        }
         
         return true
     }

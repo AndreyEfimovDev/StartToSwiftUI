@@ -35,5 +35,22 @@ final class MockFBNoticesManager: FBNoticesManagerProtocol {
     static func mockEmpty() -> MockFBNoticesManager {
         MockFBNoticesManager()
     }
+
+    /// Мок с notices из `PreviewData` — composition root подставляет его
+    /// вместо реального Firestore, когда `DebugConfig.useRealServices == false`.
+    ///
+    /// Мок отдаёт все notices без фильтра по дате (в отличие от Firestore) —
+    /// так они видны в debug и после первого запуска; повторно они не
+    /// добавляются, дубли отсекаются по id.
+    static func previewData() -> MockFBNoticesManager {
+        mockNotices(PreviewData.sampleNotices.map {
+            FBNoticeModel(
+                noticeId: $0.id,
+                title: $0.title,
+                message: $0.noticeMessage,
+                noticeDate: $0.noticeDate
+            )
+        })
+    }
 }
 //#endif

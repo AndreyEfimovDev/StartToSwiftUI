@@ -187,6 +187,7 @@ struct MaterialsHomeView: View {
         vm.loadPostsFromSwiftData()
         vm.updateWidgetData()
         await noticevm.importNoticesFromFirebase()
+        await vm.refreshPostsUpdateStatus()
     }
     
     // MARK: - Gesture Handlers

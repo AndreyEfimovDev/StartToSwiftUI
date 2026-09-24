@@ -15,8 +15,6 @@ struct PreferencesView: View {
     @EnvironmentObject private var noticevm: NoticesViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
     
-    @State private var hasPostsUpdate = false
-    
     // MARK: - Constants
     let iconSize: CGFloat = 18
     
@@ -27,7 +25,7 @@ struct PreferencesView: View {
 #if DEBUG
 //                Button {
 //                    Task {
-//                        await vm.uploadDevDataPostsToFirebase()
+//                        await FBAdminUploader.uploadDevDataPosts()
 //                    }
 //                } label: {
 //                    Text("Upload DevData to Firebase")
@@ -82,9 +80,6 @@ struct PreferencesView: View {
         .preferredColorScheme(vm.selectedTheme.colorScheme)
         .onAppear {
             vm.analyticsManager.logScreen(name: "PreferencesView")
-        }
-        .task {
-            hasPostsUpdate = await vm.checkFBPostsForUpdates()
         }
     }
     
@@ -212,7 +207,7 @@ struct PreferencesView: View {
                 coordinator.pushModal(.importFromCloud)
             }
             .customListRowStyle(iconName: "icloud.and.arrow.down", iconWidth: iconSize)
-        } else if hasPostsUpdate {
+        } else if vm.hasPostsUpdate {
             Button("Check for materials update") {
                 coordinator.pushModal(.checkForUpdates)
             }
@@ -263,10 +258,10 @@ struct PreferencesView: View {
         if let date = vm.appStateManager?.getLastDateOfPostsLoaded(),
            date <= Date(timeIntervalSince1970: 1),
            vm.hasCloudPosts,
-           !hasPostsUpdate {
+           !vm.hasPostsUpdate {
             Button("Make all curated collection available") {
                 vm.appStateManager?.resetLastDateOfPostsLoaded()
-                hasPostsUpdate = true
+                vm.hasPostsUpdate = true
             }
             .customListRowStyle(iconName: "arrow.down.circle", iconWidth: iconSize)
         }

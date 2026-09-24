@@ -44,8 +44,53 @@ final class MockFBPostsManager: FBPostsManagerProtocol {
         guard let after else { return .success(postsToReturn) }
         return .success(postsToReturn.filter { $0.date > after })
     }
-    
-    func uploadDevDataPostsToFirebase() async {}
+
+    func hasFBPosts(after date: Date) async -> Result<Bool, FBFetchError> {
+        if shouldSimulateDelay {
+            try? await Task.sleep(nanoseconds: 500_000_000)
+        }
+        if shouldSimulateNetworkError {
+            return .failure(.networkUnavailable)
+        }
+        return .success(postsToReturn.contains { $0.date > date })
+    }
+}
+
+// MARK: - Preview Data (DEBUG-режим приложения)
+extension MockFBPostsManager {
+    /// Мок с постами из `PreviewData` — composition root подставляет его
+    /// вместо реального Firestore, когда `DebugConfig.useRealServices == false`.
+    static func previewData() -> MockFBPostsManager {
+        let posts = [
+            PreviewData.samplePost1,
+            PreviewData.samplePost2,
+            PreviewData.samplePost3,
+            PreviewData.samplePost4
+        ]
+        return mockPosts(posts.map(FBPostModel.init(post:)))
+    }
+}
+
+extension FBPostModel {
+    /// Модель Firestore из локального `Post` — для мок-данных.
+    ///
+    /// У `FBPostModel` дата публикации обязательна, поэтому при её отсутствии
+    /// подставляется `post.date`.
+    init(post: Post) {
+        self.init(
+            postId: post.id,
+            category: post.category,
+            title: post.title,
+            intro: post.intro,
+            author: post.author,
+            postType: post.postType,
+            urlString: post.urlString,
+            postPlatform: post.postPlatform,
+            postDate: post.postDate ?? post.date,
+            studyLevel: post.studyLevel,
+            date: post.date
+        )
+    }
 }
 
 // MARK: - FBPostModel Test Helpers
