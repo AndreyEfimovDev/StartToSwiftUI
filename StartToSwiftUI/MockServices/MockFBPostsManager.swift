@@ -44,8 +44,6 @@ final class MockFBPostsManager: FBPostsManagerProtocol {
         guard let after else { return .success(postsToReturn) }
         return .success(postsToReturn.filter { $0.date > after })
     }
-    
-    func uploadDevDataPostsToFirebase() async {}
 }
 
 // MARK: - FBPostModel Test Helpers

@@ -193,6 +193,7 @@
 		47C56FEE2EC9C94100F0796C /* NoticeRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C56FED2EC9C94100F0796C /* NoticeRowView.swift */; };
 		47C57E7F2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */; };
 		47CA5628306523A00093B17D /* ChartLegendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CA56273065239F0093B17D /* ChartLegendView.swift */; };
+		47CA562A3065429B0093B17D /* FBAdminUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CA56293065429B0093B17D /* FBAdminUploader.swift */; };
 		47E2AF4F2EBCD86000B0214F /* CategoryFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */; };
 		47EA14312EF530780064583B /* AppSyncStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EA14302EF530780064583B /* AppSyncStateManager.swift */; };
 		47F38B1F2ED480B0006DEDBE /* DevData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F38B1E2ED480B0006DEDBE /* DevData.swift */; };
@@ -421,6 +422,7 @@
 		47C56FED2EC9C94100F0796C /* NoticeRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeRowView.swift; sourceTree = "<group>"; };
 		47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForPostsUpdateView.swift; sourceTree = "<group>"; };
 		47CA56273065239F0093B17D /* ChartLegendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartLegendView.swift; sourceTree = "<group>"; };
+		47CA56293065429B0093B17D /* FBAdminUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBAdminUploader.swift; sourceTree = "<group>"; };
 		47E229FE2EF42B9400341DD2 /* StartToSwiftUIDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StartToSwiftUIDebug.entitlements; sourceTree = "<group>"; };
 		47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilterView.swift; sourceTree = "<group>"; };
 		47EA14302EF530780064583B /* AppSyncStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSyncStateManager.swift; sourceTree = "<group>"; };
@@ -613,6 +615,7 @@
 			children = (
 				473436792F49C49000CF00FA /* FBPostsManager.swift */,
 				473436732F48C96300CF00FA /* FBNoticeManager.swift */,
+				47CA56293065429B0093B17D /* FBAdminUploader.swift */,
 			);
 			path = FirestoreManagers;
 			sourceTree = "<group>";
@@ -1322,6 +1325,7 @@
 				4759974F2E5C690B008E20F0 /* StartToSwiftUIApp.swift in Sources */,
 				716EDDBC58398F3B76CC3DC0 /* AppDependencies.swift in Sources */,
 				4791CDFE2E747AC100687126 /* JSONFileManager.swift in Sources */,
+				47CA562A3065429B0093B17D /* FBAdminUploader.swift in Sources */,
 				47C09A9C2F858F930049858B /* A016_IndeterminateProgressBar.swift in Sources */,
 				470E63702EFB241D007B75B5 /* FormCoordinatorToolbar.swift in Sources */,
 				47B6E7E82F5BF85B00EF7441 /* CodeSnippet.swift in Sources */,

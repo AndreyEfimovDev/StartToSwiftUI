@@ -136,11 +136,6 @@ extension PostsViewModel {
         }
     }
     
-#warning("Delete a body of this func before deployment to App Store")
-    func uploadDevDataPostsToFirebase() async {
-        await fbPostsManager.uploadDevDataPostsToFirebase()
-    }
-    
     // MARK: - Migration
     func migrateHiddenToDeleted(removeDuplicates: Bool = true) {
         let hiddenPosts = allPosts.filter { $0.status == .hidden }

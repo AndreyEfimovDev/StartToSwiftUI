@@ -50,53 +50,9 @@ final class FBPostsManager: FBPostsManagerProtocol {
             return .failure(.unknown(error))
         }
     }
-
-#warning("Delete this func before deployment to App Store")
-    func uploadDevDataPostsToFirebase() async {
-        var successCount = 0
-        
-        /*
-         for post in newPosts {
-             let datePrefix = DateFormatter.yyyyMMdd.string(from: post.date)
-             let trimmedUUID = String(post.id.suffix(from: post.id.index(post.id.startIndex, offsetBy: 11)))
-             post.id = "\(datePrefix)_\(trimmedUUID)"
-             dataSource.insert(post)
-         }
-
-         */
-        
-        for post in DevData.postsForCloud {
-            let datePrefix = DateFormatter.yyyyMMdd.string(from: post.date)
-            let trimmedUUID = String(post.id.suffix(from: post.id.index(post.id.startIndex, offsetBy: 11)))
-            post.id = "\(datePrefix)_\(trimmedUUID)"
-
-            let data: [String: Any] = [
-                "category": post.category,
-                "title": post.title,
-                "intro": post.intro,
-                "author": post.author,
-                "post_type": post.postType.rawValue,
-                "url_string": post.urlString,
-                "post_platform": post.postPlatform.rawValue,
-                "post_date": Timestamp(date: post.postDate ?? Date()),
-                "study_level": post.studyLevel.rawValue,
-                "date": Timestamp(date: post.date)
-            ]
-            
-            do {
-                try await postsCollection.document(post.id).setData(data)
-                successCount += 1
-                log("Migrated: \(post.title)", level: .info)
-            } catch {
-                log("Failed: \(post.title) — \(error.localizedDescription)", level: .error)
-            }
-        }
-        log("🏁 uploadDevDataPostsToFirebase complete: \(successCount)/\(DevData.postsForCloud.count) posts", level: .info)
-    }
 }
 
 // MARK: - Firestore Posts Manager Protocol
 protocol FBPostsManagerProtocol {
     func fetchFBPosts(after: Date?) async -> Result<[FBPostModel], FBFetchError>
-    func uploadDevDataPostsToFirebase() async
 }

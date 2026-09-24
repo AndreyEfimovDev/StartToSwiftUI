@@ -27,7 +27,7 @@ struct PreferencesView: View {
 #if DEBUG
 //                Button {
 //                    Task {
-//                        await vm.uploadDevDataPostsToFirebase()
+//                        await FBAdminUploader.uploadDevDataPosts()
 //                    }
 //                } label: {
 //                    Text("Upload DevData to Firebase")
