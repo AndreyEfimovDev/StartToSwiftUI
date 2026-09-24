@@ -33,6 +33,11 @@ final class PostsViewModel: ObservableObject {
     @Published var selectedRating: PostRating? = nil
     @Published var selectedStudyProgress: StudyProgress = .added
     @Published var reshuffleToken = UUID()
+    /// Есть ли в Firestore новые посты — единый источник правды для кнопки
+    /// "Check for materials update" в Preferences. Обновляется только при
+    /// запуске, pull-to-refresh и принудительной проверке в модалке — не при
+    /// каждом открытии Preferences (экономия запросов в Firestore).
+    @Published var hasPostsUpdate = false
       
     var cancellables = Set<AnyCancellable>()
     var utcCalendar = Calendar.current

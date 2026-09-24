@@ -76,6 +76,7 @@ struct StartView: View {
                          */
                         vm.appStateManager?.cleanupDuplicateAppStates()
                         await noticevm.importNoticesFromFirebase()
+                        await vm.refreshPostsUpdateStatus()
                     }
                     .onChange(of: coordinator.activeSection) { oldSection, newSection in
                         isGoingForward = newSection.transitionIndex > oldSection.transitionIndex
