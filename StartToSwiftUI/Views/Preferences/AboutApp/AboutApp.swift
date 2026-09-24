@@ -86,7 +86,7 @@ struct AboutApp: View {
                 switch hasUpdate {
                 case true?:
                     if let url = URL(string: Constants.appStoreURL) {
-                        UIApplication.shared.open(url)
+                        await UIApplication.shared.open(url)
                     }
                 case false?:
                     buttonTitleAppUpdate = "The App is up to date"

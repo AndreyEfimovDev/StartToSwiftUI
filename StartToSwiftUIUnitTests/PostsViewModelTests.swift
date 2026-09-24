@@ -185,14 +185,18 @@ final class PostsViewModelTests: XCTestCase {
     }
 
     /// VM с датой последней загрузки постов — проверка реально идёт в мок Firestore.
-    private func makeCheckVM(fbManager: MockFBPostsManager, services: AppServiceDependencies = .make()) -> PostsViewModel {
+    ///
+    /// `services` — опционально с `nil`, а не `= .make()`: выражение значения
+    /// по умолчанию вычисляется в неизолированном контексте, а `make()`
+    /// изолирован на MainActor. Вызов перенесён в тело метода.
+    private func makeCheckVM(fbManager: MockFBPostsManager, services: AppServiceDependencies? = nil) -> PostsViewModel {
         let stateManager = MockAppSyncStateManager()
         stateManager.stubbedLastDateOfPostsLoaded = Date(timeIntervalSince1970: 1_000)
         return PostsViewModel(
             dataSource: MockPostsDataSource(posts: []),
             appStateManager: stateManager,
             fbPostsManager: fbManager,
-            services: services
+            services: services ?? .make()
         )
     }
 
