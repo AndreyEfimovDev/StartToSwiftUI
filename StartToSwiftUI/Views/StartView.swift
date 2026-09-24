@@ -28,6 +28,10 @@ struct StartView: View {
         _errorManager = ObservedObject(wrappedValue: dependencies.services.errorManager)
         appStoreService = dependencies.appStoreService
         remoteConfigService = dependencies.remoteConfigService
+        // Сохранённая секция — сразу, а не только в .task: иначе первый кадр
+        // строит Materials, даже если последней была открыта Snippets
+        // (вспышка и ложный logScreen("MaterialsHomeView")).
+        _displayedSection = State(initialValue: dependencies.coordinator.activeSection)
     }
 
     // MARK: - States
@@ -70,7 +74,6 @@ struct StartView: View {
                         displayedSection = coordinator.activeSection
                         vm.loadPostsFromSwiftData()
                         noticevm.loadNoticesFromSwiftData()
-                        vm.updateWidgetData()
                         vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
                         /* Clean dublicates if any. iCloud sync may create multiple appSyncStates on different devices. This function finds duplicates, merges their data into one (the oldest), and deletes the rest.
                          */

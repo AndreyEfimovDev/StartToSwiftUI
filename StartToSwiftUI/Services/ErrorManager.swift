@@ -23,7 +23,7 @@ final class ErrorManager: ObservableObject {
             // showAlert может стать false двумя путями: SwiftUI сама
             // выставляет его через двусторонний биндинг isPresented в
             // StartView, когда пользователь закрывает алерт, либо это делает
-            // clear(). В обоих случаях, если в очереди есть следующая
+            // dismissCurrent(). В обоих случаях, если в очереди есть следующая
             // ошибка — показываем её.
             guard oldValue, !showAlert else { return }
             showNext()
@@ -46,7 +46,13 @@ final class ErrorManager: ObservableObject {
         enqueue(QueuedError(text: text))
     }
 
-    func clear() {
+    /// Закрывает текущий алерт — как если бы его закрыл пользователь — и
+    /// показывает следующую ошибку из очереди, если она есть.
+    ///
+    /// Не для "сброса ошибок перед операцией": так закрывался бы алерт,
+    /// который пользователь ещё не прочитал. Операции сообщают свой
+    /// результат сами, а не через состояние `showAlert`.
+    func dismissCurrent() {
         errorMessage = nil
         showAlert = false
     }

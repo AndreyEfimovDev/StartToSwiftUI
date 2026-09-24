@@ -788,4 +788,217 @@ final class PostTests: XCTestCase {
         XCTAssertEqual(post.author, specialAuthor)
         XCTAssertEqual(post.notes, specialNotes)
     }
+
+    // MARK: - mergeUserState(from:) Tests
+    // Слияние пользовательского состояния дубля перед его удалением
+    // (removeDuplicatePosts). @MainActor — Post изолирован на MainActor.
+
+    @MainActor
+    func testMergeUserState_TakesStrongestStateFromDuplicate() {
+        // Given — остающаяся копия с "меньшим" состоянием
+        let d1 = Date(timeIntervalSince1970: 1_000)
+        let d2 = Date(timeIntervalSince1970: 2_000)
+        let d3 = Date(timeIntervalSince1970: 3_000)
+        let d4 = Date(timeIntervalSince1970: 4_000)
+
+        let keep = Post(
+            title: "Keep",
+            progress: .started,
+            favoriteChoice: .no,
+            postRating: .good,
+            notes: "Notes A",
+            origin: .cloud,
+            draft: false,
+            status: .active,
+            addedDateStamp: d2,
+            startedDateStamp: d2
+        )
+        // Дубль с более продвинутым состоянием и более ранними метками
+        let duplicate = Post(
+            title: "Duplicate",
+            progress: .practiced,
+            favoriteChoice: .yes,
+            postRating: .excellent,
+            notes: "Notes B",
+            origin: .local,
+            draft: true,
+            status: .deleted,
+            addedDateStamp: d1,
+            startedDateStamp: d1,
+            studiedDateStamp: d3,
+            practicedDateStamp: d4
+        )
+
+        // When
+        keep.mergeUserState(from: duplicate)
+
+        // Then — пользовательское состояние слито
+        XCTAssertEqual(keep.progress, .practiced)
+        XCTAssertEqual(keep.addedDateStamp, d1)
+        XCTAssertEqual(keep.startedDateStamp, d1)
+        XCTAssertEqual(keep.studiedDateStamp, d3)
+        XCTAssertEqual(keep.practicedDateStamp, d4)
+        XCTAssertEqual(keep.favoriteChoice, .yes)
+        XCTAssertEqual(keep.postRating, .excellent)
+        XCTAssertEqual(keep.notes, "Notes A\n\nNotes B")
+
+        // Then — контент и служебные поля остаются как у остающейся копии
+        XCTAssertEqual(keep.title, "Keep")
+        XCTAssertEqual(keep.origin, .cloud)
+        XCTAssertFalse(keep.draft)
+        XCTAssertEqual(keep.status, .active)
+    }
+
+    @MainActor
+    func testMergeUserState_DoesNotDowngradeStrongerState() {
+        // Given — остающаяся копия "сильнее" дубля
+        let early = Date(timeIntervalSince1970: 1_000)
+        let late = Date(timeIntervalSince1970: 5_000)
+
+        let keep = Post(
+            progress: .studied,
+            favoriteChoice: .yes,
+            postRating: .great,
+            notes: "Keep notes",
+            startedDateStamp: early,
+            studiedDateStamp: early
+        )
+        let duplicate = Post(
+            progress: .started,
+            favoriteChoice: .no,
+            postRating: nil,
+            notes: "",
+            startedDateStamp: late
+        )
+
+        // When
+        keep.mergeUserState(from: duplicate)
+
+        // Then — ничего не откатилось назад
+        XCTAssertEqual(keep.progress, .studied)
+        XCTAssertEqual(keep.favoriteChoice, .yes)
+        XCTAssertEqual(keep.postRating, .great)
+        XCTAssertEqual(keep.startedDateStamp, early)
+        XCTAssertEqual(keep.studiedDateStamp, early)
+        XCTAssertNil(keep.practicedDateStamp)
+        XCTAssertEqual(keep.notes, "Keep notes")
+    }
+
+    @MainActor
+    func testMergeUserState_Notes_TakesMoreCompleteVersion() {
+        // Given — заметки дубля — дополненная редакция заметок остающейся копии
+        let keep = Post(notes: "Short")
+        let duplicate = Post(notes: "Short, then extended")
+
+        // When
+        keep.mergeUserState(from: duplicate)
+
+        // Then — берётся более полная версия, без дублирования текста
+        XCTAssertEqual(keep.notes, "Short, then extended")
+
+        // Given — у остающейся копии заметок нет
+        let emptyKeep = Post(notes: "")
+        let withNotes = Post(notes: "Only here")
+
+        // When
+        emptyKeep.mergeUserState(from: withNotes)
+
+        // Then
+        XCTAssertEqual(emptyKeep.notes, "Only here")
+    }
+
+    // MARK: - applyStudyProgress(_:at:) Tests
+    // Метки этапов накопительные: пропущенные ранние этапы получают дату
+    // следующего, существующие даты не перезаписываются, откат обнуляет поздние.
+
+    @MainActor
+    func testApplyStudyProgress_SkippedStages_GetSameDateAsTarget() {
+        // Given — пост только добавлен
+        let now = Date(timeIntervalSince1970: 3_000)
+        let post = Post(progress: .added)
+
+        // When — сразу practiced
+        post.applyStudyProgress(.practiced, at: now)
+
+        // Then — started и studied заполнены той же датой
+        XCTAssertEqual(post.progress, .practiced)
+        XCTAssertEqual(post.practicedDateStamp, now)
+        XCTAssertEqual(post.studiedDateStamp, now)
+        XCTAssertEqual(post.startedDateStamp, now)
+    }
+
+    @MainActor
+    func testApplyStudyProgress_ExistingEarlierStamp_IsKept() {
+        // Given — started отмечен раньше
+        let startedDate = Date(timeIntervalSince1970: 1_000)
+        let now = Date(timeIntervalSince1970: 3_000)
+        let post = Post(progress: .started, startedDateStamp: startedDate)
+
+        // When
+        post.applyStudyProgress(.practiced, at: now)
+
+        // Then — реальная дата started сохранена, пропущенный studied — дата practiced
+        XCTAssertEqual(post.startedDateStamp, startedDate)
+        XCTAssertEqual(post.studiedDateStamp, now)
+        XCTAssertEqual(post.practicedDateStamp, now)
+    }
+
+    @MainActor
+    func testApplyStudyProgress_SameStageAgain_DoesNotOverwriteDate() {
+        // Given — practiced уже отмечен
+        let firstDate = Date(timeIntervalSince1970: 1_000)
+        let laterDate = Date(timeIntervalSince1970: 9_000)
+        let post = Post()
+        post.applyStudyProgress(.practiced, at: firstDate)
+
+        // When — тот же этап ещё раз
+        post.applyStudyProgress(.practiced, at: laterDate)
+
+        // Then — дата не сдвинулась
+        XCTAssertEqual(post.practicedDateStamp, firstDate)
+        XCTAssertEqual(post.studiedDateStamp, firstDate)
+        XCTAssertEqual(post.startedDateStamp, firstDate)
+    }
+
+    @MainActor
+    func testApplyStudyProgress_Rollback_ClearsLaterStages() {
+        // Given
+        let date = Date(timeIntervalSince1970: 1_000)
+        let post = Post()
+        post.applyStudyProgress(.practiced, at: date)
+
+        // When — откат practiced → studied
+        post.applyStudyProgress(.studied, at: Date(timeIntervalSince1970: 9_000))
+
+        // Then — practiced обнулён, ранние этапы не тронуты
+        XCTAssertEqual(post.progress, .studied)
+        XCTAssertNil(post.practicedDateStamp)
+        XCTAssertEqual(post.studiedDateStamp, date)
+        XCTAssertEqual(post.startedDateStamp, date)
+
+        // When — откат studied → started
+        post.applyStudyProgress(.started, at: Date(timeIntervalSince1970: 9_000))
+
+        // Then
+        XCTAssertNil(post.studiedDateStamp)
+        XCTAssertEqual(post.startedDateStamp, date)
+    }
+
+    @MainActor
+    func testApplyStudyProgress_Added_ClearsStagesButKeepsAddedDate() {
+        // Given
+        let addedDate = Date(timeIntervalSince1970: 500)
+        let post = Post(addedDateStamp: addedDate)
+        post.applyStudyProgress(.practiced, at: Date(timeIntervalSince1970: 1_000))
+
+        // When
+        post.applyStudyProgress(.added, at: Date(timeIntervalSince1970: 9_000))
+
+        // Then
+        XCTAssertEqual(post.progress, .added)
+        XCTAssertNil(post.startedDateStamp)
+        XCTAssertNil(post.studiedDateStamp)
+        XCTAssertNil(post.practicedDateStamp)
+        XCTAssertEqual(post.addedDateStamp, addedDate)
+    }
 }

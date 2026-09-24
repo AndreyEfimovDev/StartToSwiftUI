@@ -38,8 +38,17 @@ struct CheckForPostsUpdateView: View {
                 }
             }
             .task {
-                try? await Task.sleep(for: .seconds(Constants.dispatchFor))
+                // Пауза, чтобы пользователь увидел "Checking for update...".
+                // Если экран закрыли раньше — выходим, не отправляя запрос.
+                do {
+                    try await Task.sleep(for: .seconds(Constants.dispatchFor))
+                } catch {
+                    return
+                }
                 await checkForUpdates()
+            }
+            .autoDismiss(when: isUpdated || isImported) {
+                coordinator.closeModal()
             }
         }
     }
@@ -113,32 +122,22 @@ struct CheckForPostsUpdateView: View {
     
     /// Check if updates for curated study materials are available
     private func checkForUpdates() async {
-        let hasUpdates = await vm.checkFBPostsForUpdates()
+        let result = await vm.checkFBPostsForUpdates()
         isInProgress = false
 
-        // Сбой сети/Firestore внутри checkFBPostsForUpdates() уже показан
-        // глобальным alert (StartView), но сама функция всё равно вернула
-        // false — не путать это с "обновлений действительно нет".
-        guard !vm.errorManager.showAlert else {
-            statusText = "Could not check for updates"
-            statusColor = Color.mycolor.myRed
-            return
-        }
-
-        if hasUpdates {
+        switch result {
+        case .available:
             statusText = "Updates available!"
             statusColor = Color.mycolor.myRed
             isUpdateAvailable = true
-        } else {
+        case .upToDate:
             statusText = "No updates available"
             statusColor = Color.mycolor.myGreen
             isUpdated = true
-            Task {
-                try? await Task.sleep(for: .seconds(Constants.dispatchFor))
-                await MainActor.run {
-                    coordinator.closeModal()
-                }
-            }
+        case .failed:
+            // Текст ошибки уже показан глобальным алертом.
+            statusText = "Could not check for updates"
+            statusColor = Color.mycolor.myRed
         }
     }
     
@@ -151,12 +150,6 @@ struct CheckForPostsUpdateView: View {
         if success {
             isImported = true
             hapticManager.notification(type: .success)
-            Task {
-                try? await Task.sleep(for: .seconds(Constants.dispatchFor))
-                await MainActor.run {
-                    coordinator.closeModal()
-                }
-            }
         }
     }
 }

@@ -31,7 +31,14 @@ struct MaterialsHomeView: View {
     /// (String), а не к самому Post: Post — SwiftData @Model, reference type,
     /// и привязка selection напрямую к нему на реальном устройстве не работала
     /// (тап не долетал до vm.selectedPost вообще, даже в широком виде).
-    /// Синхронизируется в vm.selectedPost через onChange ниже.
+    ///
+    /// Источник правды — vm.selectedPost; это локальное зеркало для List,
+    /// синхронизируется в обе стороны (см. iPadListContent). При смене секции
+    /// экран пересоздаётся и @State обнуляется — выделение восстанавливается
+    /// из VM в onAppear. Вычисляемый биндинг прямо поверх VM не подошёл:
+    /// List(selection:) в sidebar NavigationSplitView не подсвечивал строку
+    /// с заданным заранее выбором (проверено на iPad). Серый цвет подсветки
+    /// после возврата — системное "неактивное" выделение, не ошибка.
     @State private var selectedPostID: String?
     
     // MARK: - Computed Properties
@@ -42,11 +49,11 @@ struct MaterialsHomeView: View {
     private var postsToDisplay: [Post] {
         let byCategory: [Post]
         if let category = selectedCategory {
-            byCategory = vm.filteredPosts.filter { $0.category == category }
+            byCategory = vm.visiblePosts.filter { $0.category == category }
         } else {
-            byCategory = vm.filteredPosts
+            byCategory = vm.visiblePosts
         }
-        return byCategory.filter { $0.status == .active && !$0.draft }
+        return byCategory
     }
 
     // MARK: BODY
@@ -56,7 +63,10 @@ struct MaterialsHomeView: View {
                 ZStack (alignment: .bottom) {
                     if vm.allPosts.isEmpty {
                         allPostsIsEmpty
-                    } else if vm.filteredPosts.isEmpty {
+                    } else if vm.visiblePosts.isEmpty {
+                        // visiblePosts, а не filteredPosts: список показывает только
+                        // видимые посты — если фильтру соответствуют лишь посты из
+                        // корзины или черновики, нужен этот экран, а не пустой список.
                         filteredPostsIsEmpty
                     } else {
                         listPostRowsContent
@@ -176,8 +186,16 @@ struct MaterialsHomeView: View {
             }
         }
         .refreshControl { await refresh() }
+        // Восстановить выделение из VM после появления списка (экран
+        // пересоздаётся при смене секции, @State при этом обнуляется).
+        .onAppear { selectedPostID = vm.selectedPost?.id }
+        // Список → VM: тап по строке.
         .onChange(of: selectedPostID) { _, newID in
             vm.selectedPost = postsToDisplay.first { $0.id == newID }
+        }
+        // VM → список: выбор изменён/сброшен снаружи (например, пост удалён).
+        .onChange(of: vm.selectedPost?.id) { _, newID in
+            selectedPostID = newID
         }
     }
 
@@ -185,7 +203,6 @@ struct MaterialsHomeView: View {
 
     private func refresh() async {
         vm.loadPostsFromSwiftData()
-        vm.updateWidgetData()
         await noticevm.importNoticesFromFirebase()
         await vm.refreshPostsUpdateStatus()
     }

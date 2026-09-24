@@ -26,8 +26,8 @@ struct SharedToolbarLeadingItems: ToolbarContent {
             }
         }
         
-        // 🔔 Notices badge (only when unread)
-        if noticevm.unreadCount > 0 {
+        // 🔔 Notices badge (only when unread and notice signals are on in Preferences)
+        if noticevm.isNotificationOn && noticevm.unreadCount > 0 {
             ToolbarItem(placement: .navigationBarLeading) {
                 noticeButton
             }

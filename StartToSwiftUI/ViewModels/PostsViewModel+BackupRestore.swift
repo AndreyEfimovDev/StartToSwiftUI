@@ -10,9 +10,12 @@ import Foundation
 // MARK: - Backup & Restore
 extension PostsViewModel {
     
-    func getPostsFromBackup(url: URL, completion: @escaping (Int) -> Void) {
-        clearError()
-
+    /// Восстанавливает посты из файла бэкапа, пропуская уже существующие.
+    ///
+    /// - Parameter completion: `.success(count)` — сколько постов добавлено
+    ///   (0, если все уже есть); `.failure` — файл не прочитан или сохранение
+    ///   не удалось (текст ошибки показан глобальным алертом).
+    func getPostsFromBackup(url: URL, completion: @escaping (Result<Int, Error>) -> Void) {
         Task {
             do {
                 let codablePosts = try await loadBackupPosts(from: url)
@@ -20,25 +23,36 @@ extension PostsViewModel {
                 let uniquePosts = filterUniquePosts(posts)
 
                 guard !uniquePosts.isEmpty else {
-                    completion(0)
+                    completion(.success(0))
                     return
                 }
 
                 for post in uniquePosts {
                     dataSource.insert(post)
                 }
-                saveContextAndReload()
+                // Ошибку сохранения saveContextAndReload() уже показал — здесь
+                // только сообщаем экрану, что восстановление не удалось.
+                guard saveContextAndReload() else {
+                    completion(.failure(BackupRestoreError.saveFailed))
+                    return
+                }
 
                 hapticManager.notification(type: .success)
                 log("🍓 Restore: Restored \(uniquePosts.count) posts from \(url.lastPathComponent)", level: .info)
-                completion(uniquePosts.count)
+                completion(.success(uniquePosts.count))
 
             } catch {
                 crashManager.sendNonFatal(error)
                 handleError(error, message: "Failed to load posts")
-                completion(0)
+                completion(.failure(error))
             }
         }
+    }
+
+    /// Ошибки восстановления, не пришедшие от системы (чтение/декод файла).
+    enum BackupRestoreError: Error {
+        /// Посты прочитаны, но сохранить их не удалось.
+        case saveFailed
     }
 
     /// Чтение файла бэкапа с диска и JSON-декод — потенциально медленная

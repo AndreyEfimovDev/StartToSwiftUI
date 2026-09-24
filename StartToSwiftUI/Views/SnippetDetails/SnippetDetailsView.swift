@@ -115,12 +115,6 @@ struct SnippetDetailsView: View {
                         UIPasteboard.general.string = snippet.codeSnippet
                         hapticManager.notification(type: .success)
                         withAnimation { codeCopied = true }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            withAnimation {
-                                codeCopied = false
-                                showCodeSheet = false
-                            }
-                        }
                     }
                 }
                 ToolbarItem(placement: .topBarLeading) {
@@ -134,6 +128,15 @@ struct SnippetDetailsView: View {
         .preferredColorScheme(.dark)
         .presentationDragIndicator(.visible)
         .presentationDetents([.large])
+        .autoDismiss(when: codeCopied) {
+            withAnimation {
+                codeCopied = false
+                showCodeSheet = false
+            }
+        }
+        // Если sheet закрыли вручную до автозакрытия — сбрасываем галочку,
+        // иначе при следующем открытии она сразу запустит автозакрытие.
+        .onDisappear { codeCopied = false }
     }
 }
 

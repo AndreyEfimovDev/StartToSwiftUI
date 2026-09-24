@@ -48,6 +48,9 @@ struct EraseAllPostsView: View {
             .onAppear {
                 hapticManager.notification(type: .warning)
             }
+            .autoDismiss(when: isDeleted) {
+                coordinator.closeModal()
+            }
         }
     }
     
@@ -91,14 +94,16 @@ struct EraseAllPostsView: View {
     
     private func performErase() {
         isInProgress = true
-        vm.appStateManager?.resetLastDateOfPostsLoaded()
-        vm.eraseAllPosts {
+        // Дату синка сбрасывает сам eraseAllPosts() — только после успешного удаления.
+        let isErased = vm.eraseAllPosts()
+        isInProgress = false
+
+        if isErased {
             isDeleted = true
-            isInProgress = false
-            
-            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                coordinator.closeModal()
-            }
+        } else {
+            // Успех не показываем и экран не закрываем; текст ошибки — в
+            // глобальном алерте ErrorManager.
+            hapticManager.notification(type: .error)
         }
     }
 }

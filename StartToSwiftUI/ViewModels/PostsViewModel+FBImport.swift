@@ -7,6 +7,17 @@
 
 import Foundation
 
+/// Исход принудительной проверки новых постов в облаке.
+enum PostsUpdateCheckResult {
+    /// Есть новые посты.
+    case available
+    /// Новых постов нет.
+    case upToDate
+    /// Проверить не удалось (нет сети, ошибка Firestore) — текст ошибки
+    /// показан глобальным алертом.
+    case failed
+}
+
 // MARK: - Firebase Import & Update Check
 extension PostsViewModel {
     
@@ -22,8 +33,6 @@ extension PostsViewModel {
 
         crashManager.addLog("importPostsFromFirebase: started, posts count: \(allPosts.count)")
         let trace = performanceManager.startTrace(name: "import_posts_firebase")
-        
-        clearError()
         
         let sourceName = isSwiftData ? "SwiftData" : "(Mock)"
         
@@ -83,7 +92,12 @@ extension PostsViewModel {
             
             // Update last date of posts loaded from Firebase
             //
-            // Дата сознательно считается только по успешно декодированным
+            // Дата считается по ВСЕМ успешно декодированным постам ответа
+            // (fbResponse), включая уже существующие локально, — а не только
+            // по новым: иначе уже известный пост новее новых останется "за"
+            // датой и даст ложное "есть обновления" при следующей проверке.
+            //
+            // При этом дата сознательно считается только по успешно декодированным
             // постам, а не по всем документам ответа: битый документ (нет
             // обязательного поля — обычно его прочитали недозаполненным в
             // консоли Firestore) не сдвигает дату и перечитывается при каждом
@@ -92,7 +106,7 @@ extension PostsViewModel {
             // уже никогда не получит (без ручного подъёма его `date`). Цена —
             // пара лишних чтений и повтор ошибки в логе, это приемлемо.
             // То же правило действует в ветке "нет новых постов" выше.
-            if let latestDate = fbResponseChecked.max(by: { $0.date < $1.date })?.date {
+            if let latestDate = fbResponse.max(by: { $0.date < $1.date })?.date {
                 appStateManager.setLastDateOfPostsLoaded(latestDate.addingTimeInterval(1))
                 log("🔥 lastPostsFBUpdateDate updated in appStateManager \(latestDate)", level: .info)
             }
@@ -101,7 +115,7 @@ extension PostsViewModel {
             
             crashManager.addLog("importPostsFromFirebase: finished, import count: \(fbResponseChecked.count)")
             crashManager.addLog("importPostsFromFirebase: finished, updated posts count: \(allPosts.count)")
-            log("✅ Added \(fbResponseChecked.count) new posts from \(sourceName)", level: .info)
+            log("Added \(fbResponseChecked.count) new posts from \(sourceName)", level: .info)
             performanceManager.setValue(
                 trace,
                 value: "\(fbResponseChecked.count)/\(fbResponse.count)",
@@ -115,51 +129,64 @@ extension PostsViewModel {
     /// Принудительная проверка новых постов в облаке — по действию
     /// пользователя (модалка "Check for materials update").
     ///
-    /// Ошибки показываются глобальным алертом. Результат записывается в
-    /// `hasPostsUpdate` и возвращается вызывающей стороне.
+    /// Текст ошибки показывается глобальным алертом, а сам исход проверки
+    /// возвращается вызывающей стороне — экрану не нужно угадывать сбой по
+    /// глобальному `showAlert` (там может висеть чужая ошибка). Результат
+    /// также записывается в `hasPostsUpdate`.
     ///
-    /// - Returns: `true`, если есть новые посты; `false` — если их нет, при
-    ///   ошибке или если проверка уже выполняется.
-    func checkFBPostsForUpdates() async -> Bool {
-        guard !isCheckingPostsForUpdates else { return false }
+    /// - Returns: `.available` / `.upToDate`; `.failed` — если проверить не
+    ///   удалось. Если проверка уже выполняется — `.upToDate` (как и раньше).
+    func checkFBPostsForUpdates() async -> PostsUpdateCheckResult {
+        guard !isCheckingPostsForUpdates else { return .upToDate }
         isCheckingPostsForUpdates = true
         defer { isCheckingPostsForUpdates = false }
 
-        clearError()
-        guard let result = await fetchPostsUpdateStatus() else { return false }
+        guard let result = await fetchPostsUpdateStatus() else { return .failed }
 
         switch result {
         case .success(let hasNewPosts):
             hasPostsUpdate = hasNewPosts
-            return hasNewPosts
+            return hasNewPosts ? .available : .upToDate
         case .failure(.networkUnavailable):
             handleError(nil, message: "No internet connection. Please check your network and try again.")
-            return false
+            return .failed
         case .failure(.unknown(let error)):
             handleError(error, message: "Failed to check for updates")
-            return false
+            return .failed
         }
     }
 
     /// Фоновая проверка новых постов — при запуске приложения и
     /// pull-to-refresh. Обновляет `hasPostsUpdate`.
     ///
-    /// Намеренно тихая: не вызывает `clearError()`/`handleError()`. Рядом
-    /// выполняется импорт notices с тем же `ErrorManager` — `clearError()`
-    /// закрыл бы его алерт раньше, чем пользователь его увидит, а о проблемах
-    /// с сетью тот импорт и так сообщает. При сбое флаг не меняется.
+    /// Намеренно тихая: не вызывает `handleError()` — о проблемах с сетью
+    /// при запуске и refresh уже сообщает параллельный импорт notices, второй
+    /// алерт был бы дублем. При сбое флаг не меняется.
     func refreshPostsUpdateStatus() async {
         guard !isCheckingPostsForUpdates else { return }
         isCheckingPostsForUpdates = true
         defer { isCheckingPostsForUpdates = false }
 
+        // Дата до запроса — чтобы после ответа понять, не устарел ли он.
+        let dateBeforeRequest = appStateManager?.getLastDateOfPostsLoaded()
+
         guard let result = await fetchPostsUpdateStatus() else { return }
+
+        // Пока шёл запрос, мог пройти импорт: он сдвинул дату и сбросил
+        // hasPostsUpdate. Ответ, полученный для старой даты, тогда устарел —
+        // применять его нельзя, иначе "есть обновления" загорится после
+        // того, как всё уже загружено.
+        guard !isImportingPosts,
+              appStateManager?.getLastDateOfPostsLoaded() == dateBeforeRequest else {
+            log("🔍 Background posts update check: stale result ignored", level: .info)
+            return
+        }
 
         switch result {
         case .success(let hasNewPosts):
             hasPostsUpdate = hasNewPosts
         case .failure(let error):
-            log("⚠️ Background posts update check failed: \(error)", level: .warning)
+            log("Background posts update check failed: \(error)", level: .warning)
         }
     }
 

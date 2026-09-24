@@ -25,7 +25,12 @@ final class PostsViewModel: ObservableObject {
     let performanceManager: FBPerformanceManager
     let analyticsManager: FBAnalyticsManager
 
-    @Published var allPosts: [Post] = []
+    @Published var allPosts: [Post] = [] {
+        // Единая точка для всех путей удаления: свайп Delete, Erase, Erase all,
+        // удаление дублей, синк CloudKit — все они заканчиваются
+        // переприсваиванием allPosts.
+        didSet { clearSelectedPostIfRemoved() }
+    }
     @Published var filteredPosts: [Post] = []
     @Published var selectedPost: Post? = nil
     @Published var searchText: String = ""
@@ -40,11 +45,16 @@ final class PostsViewModel: ObservableObject {
     @Published var hasPostsUpdate = false
       
     var cancellables = Set<AnyCancellable>()
-    var utcCalendar = Calendar.current
     
     var allYears: [String]? = nil
-    var randomSortOrder: [String] = []
-    var dispatchTime: DispatchTime { .now() + 1.5 }
+    /// Случайный ключ сортировки для каждого поста (id → ключ) при
+    /// сортировке "Random". Ключи раздаются лениво при сортировке и
+    /// сбрасываются только явным reshufflePosts().
+    var randomSortKeys: [String: Double] = [:]
+    /// Счётчики этапов, последними записанные в виджет (added, started,
+    /// studied, practiced). Не `private` — используется в
+    /// PostsViewModel+Widget.swift, чтобы не перезаписывать виджет без изменений.
+    var lastWidgetCounts: [Int]?
     
     private var lastLoadTime: Date = Date(timeIntervalSince1970: 0)
     private let minLoadInterval: TimeInterval = 3
@@ -56,8 +66,10 @@ final class PostsViewModel: ObservableObject {
     // найдёт ничего нового сверх уже идущего запроса.
     // Не `private`, т.к. методы, которые их используют, объявлены в
     // extension-файле PostsViewModel+FBImport.swift.
-    var isImportingPosts = false
-    var isCheckingPostsForUpdates = false
+    // @Published — PreferencesView блокирует по ним кнопки импорта/проверки,
+    // пока запрос в Firestore ещё идёт.
+    @Published var isImportingPosts = false
+    @Published var isCheckingPostsForUpdates = false
     
     // MARK: - Computed Properties
     var swiftDataSource: SwiftDataPostsDataSource? {
@@ -158,7 +170,6 @@ final class PostsViewModel: ObservableObject {
         self.performanceManager = services.performanceManager
         self.analyticsManager = services.analyticsManager
 
-        setupTimezone()
         restorePostFilters()
     }
     /// Convenience initialiser for backward compatibility
@@ -187,12 +198,6 @@ final class PostsViewModel: ObservableObject {
         setupSubscriptionForChangesInCloud()
     }
 
-    private func setupTimezone() {
-        if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
-            utcCalendar.timeZone = utcTimeZone
-        }
-    }
-    
     // MARK: - CloudKit Sync
     private func setupSubscriptionForChangesInCloud() {
         NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
@@ -255,6 +260,9 @@ final class PostsViewModel: ObservableObject {
             crashManager.addLog("loadPostsFromSwiftData: posts count after check for duplicates: \(allPosts.count)")
             allYears = getAllYears()
             crashManager.setUserContext(allPosts.count, hasCloudPosts)
+            // Единая точка обновления виджета: любая перезагрузка постов —
+            // локальное сохранение, запуск, refresh, синк CloudKit.
+            updateWidgetData()
             log("📊 Loaded \(allPosts.count) posts from SwiftData:", level: .debug)
         } catch {
             crashManager.sendNonFatal(error)
@@ -275,6 +283,9 @@ final class PostsViewModel: ObservableObject {
         for (id, postsList) in idGroups {
             if let postToKeep = postsList.sorted(by: { $0.date > $1.date }).first {
                 for post in postsList where post.persistentModelID != postToKeep.persistentModelID {
+                    // Прогресс, избранное, рейтинг и заметки удаляемой копии
+                    // переносятся в остающуюся — иначе они потеряются на всех устройствах.
+                    postToKeep.mergeUserState(from: post)
                     postsToDelete.append(post)
                     log("🗑️ Duplicate by ID \(id): '\(post.title)'", level: .info)
                 }
@@ -293,6 +304,7 @@ final class PostsViewModel: ObservableObject {
         for (title, postsList) in titleGroups {
             if let postToKeep = postsList.sorted(by: { $0.date < $1.date }).first {
                 for post in postsList where post.persistentModelID != postToKeep.persistentModelID {
+                    postToKeep.mergeUserState(from: post)
                     postsToDelete.append(post)
                     log("🗑️ Duplicate by title '\(title)'", level: .info)
                 }
@@ -318,9 +330,13 @@ final class PostsViewModel: ObservableObject {
     }
 
     /// Add a new post
-    func addPost(_ newPost: Post) {
+    ///
+    /// - Returns: `true`, если пост сохранён; `false` при ошибке сохранения
+    ///   (ошибка уже отправлена в `ErrorManager`).
+    @discardableResult
+    func addPost(_ newPost: Post) -> Bool {
         dataSource.insert(newPost)
-        saveContextAndReload()
+        return saveContextAndReload()
     }
     
     func addPostIfNotExists(_ newPost: Post) -> Bool {
@@ -341,7 +357,11 @@ final class PostsViewModel: ObservableObject {
     }
     
     /// Post update
-    func updatePost() {
+    ///
+    /// - Returns: `true`, если изменения сохранены; `false` при ошибке
+    ///   сохранения (ошибка уже отправлена в `ErrorManager`).
+    @discardableResult
+    func updatePost() -> Bool {
         saveContextAndReload()
     }
     
@@ -367,19 +387,33 @@ final class PostsViewModel: ObservableObject {
     }
     
     /// Delete all posts
-    func eraseAllPosts(_ completion: @escaping () -> ()) {
+    ///
+    /// При успехе сбрасывает дату последней загрузки постов из облака — чтобы
+    /// коллекцию можно было скачать заново. При ошибке дата не трогается.
+    ///
+    /// - Returns: `true`, если посты удалены и сохранение прошло; `false` при
+    ///   ошибке (ошибка уже отправлена в `ErrorManager`).
+    @discardableResult
+    func eraseAllPosts() -> Bool {
+        let isErased: Bool
         if let swiftDataSource {
             do {
                 try swiftDataSource.modelContext.delete(model: Post.self)
-                saveContextAndReload()
+                isErased = saveContextAndReload()
             } catch {
                 crashManager.sendNonFatal(error)
                 handleError(error, message: "Error deleting data")
+                isErased = false
             }
         } else {
             allPosts = []
+            isErased = true
         }
-        completion()
+
+        if isErased {
+            appStateManager?.resetLastDateOfPostsLoaded()
+        }
+        return isErased
     }
     
     /// Toggle favorite flag
@@ -399,42 +433,53 @@ final class PostsViewModel: ObservableObject {
     
     /// Update post study progress
     func updatePostStudyProgress(_ post: Post) {
-        post.progress = selectedStudyProgress
-        
-        switch selectedStudyProgress {
-        case .added:
-            post.startedDateStamp = nil
-            post.studiedDateStamp = nil
-            post.practicedDateStamp = nil
-        case .started:
-            post.startedDateStamp = .now
-            post.studiedDateStamp = nil
-            post.practicedDateStamp = nil
-        case .studied:
-            post.studiedDateStamp = .now
-            post.practicedDateStamp = nil
-        case .practiced:
-            post.practicedDateStamp = .now
-        }
+        // Правила меток дат этапов — в модели (Post.applyStudyProgress).
+        post.applyStudyProgress(selectedStudyProgress)
         analyticsManager.logEvent(name: "study_progress_changed", params: ["progress": selectedStudyProgress.rawValue])
         saveContextAndReload()
     }
     
     // MARK: - Helper Methods
+
+    /// Сбрасывает `selectedPost`, если выбранный пост удалён из базы или
+    /// больше не показывается в списке (в корзине / стал черновиком).
+    ///
+    /// Нужно для iPad: детальная колонка берёт пост из `selectedPost` и
+    /// видна одновременно со списком, поэтому иначе продолжала бы показывать
+    /// уже удалённый пост. Условие `active && !draft` совпадает с фильтром
+    /// списка в MaterialsHomeView.
+    private func clearSelectedPostIfRemoved() {
+        guard let selected = selectedPost else { return }
+        // Сверяем по persistentModelID, а не по id: обычные поля модели,
+        // удалённой из SwiftData, читать небезопасно.
+        guard let current = allPosts.first(where: { $0.persistentModelID == selected.persistentModelID }),
+              current.status == .active,
+              !current.draft else {
+            selectedPost = nil
+            return
+        }
+    }
     
     func getPost(id: String) -> Post? {
         allPosts.first { $0.id == id }
     }
     
     /// Save context and reload UI
-    func saveContextAndReload(removeDuplicates: Bool = true) {
+    /// Сохраняет контекст и перезагружает посты.
+    ///
+    /// - Returns: `true`, если сохранение прошло; `false` при ошибке (она
+    ///   уже отправлена в `ErrorManager`). Результат нужен экранам, которые
+    ///   показывают пользователю итог операции, остальные его игнорируют.
+    @discardableResult
+    func saveContextAndReload(removeDuplicates: Bool = true) -> Bool {
         do {
             try dataSource.save()
             loadPostsFromSwiftData(removeDuplicates: removeDuplicates)
-            updateWidgetData()
+            return true
         } catch {
             crashManager.sendNonFatal(error)
             handleError(error, message: "Error saving data")
+            return false
         }
     }
     
@@ -471,18 +516,17 @@ final class PostsViewModel: ObservableObject {
     }
     
     private func getAllYears() -> [String]? {
+        // Локальный календарь — тот же, что при создании (DatePicker,
+        // Date.from) и отображении даты в строке: год в списке фильтра
+        // совпадает с тем, что пользователь видит у поста.
         let years = allPosts.compactMap { post -> String? in
-            post.postDate.map { String(utcCalendar.component(.year, from: $0)) }
+            post.postDate.map { String(Calendar.current.component(.year, from: $0)) }
         }
         let unique = Array(Set(years)).sorted()
         return unique.isEmpty ? nil : unique
     }
     
     // MARK: - Handle Errors
-    func clearError() {
-        errorManager.clear()
-    }
-
     func handleError(_ error: Error?, message: String) {
         hapticManager.notification(type: .error)
         errorManager.handle(error, message: message)

@@ -11,6 +11,8 @@ import Foundation
 final class MockPostsDataSource: PostsDataSourceProtocol {
     
     private var posts: [Post]
+    /// true — save() бросает ошибку (для тестов сценария "сохранение не удалось").
+    var shouldThrowOnSave = false
     
     init(posts: [Post] = PreviewData.samplePosts) {
         self.posts = posts
@@ -30,7 +32,13 @@ final class MockPostsDataSource: PostsDataSourceProtocol {
     }
     
     func save() throws {
-        // Mock - ничего не делаем
+        if shouldThrowOnSave {
+            throw MockSaveError.saveFailed
+        }
+    }
+
+    enum MockSaveError: Error {
+        case saveFailed
     }
 }
 //#endif

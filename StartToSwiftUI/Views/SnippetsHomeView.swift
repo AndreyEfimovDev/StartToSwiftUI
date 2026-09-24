@@ -29,10 +29,10 @@ struct SnippetsHomeView: View {
     // MARK: - States
     @State private var showOnTopButton = false
     /// Выбор в List(selection:) на iPad (iPadListContent) — привязан к id
-    /// (String), а не к самому CodeSnippet, для единообразия с MaterialsHomeView
-    /// (там привязка selection напрямую к Post — SwiftData @Model — на реальном
-    /// устройстве не работала). Синхронизируется в snippetvm.selectedSnippet
-    /// через onChange ниже.
+    /// (String), а не к самому CodeSnippet, для единообразия с MaterialsHomeView.
+    /// Источник правды — snippetvm.selectedSnippet; это локальное зеркало для
+    /// List, синхронизируется в обе стороны и восстанавливается из VM в
+    /// onAppear после смены секции — подробнее у selectedPostID в MaterialsHomeView.
     @State private var selectedSnippetID: String?
 
     // MARK: - Body
@@ -132,8 +132,15 @@ struct SnippetsHomeView: View {
                 showOnTopButton = newOffset > 100
             }
         }
+        // Восстановить выделение из VM после появления списка (см. MaterialsHomeView).
+        .onAppear { selectedSnippetID = snippetvm.selectedSnippet?.id }
+        // Список → VM: тап по строке.
         .onChange(of: selectedSnippetID) { _, newID in
             snippetvm.selectedSnippet = sortedSnippets.first { $0.id == newID }
+        }
+        // VM → список: выбор изменён снаружи.
+        .onChange(of: snippetvm.selectedSnippet?.id) { _, newID in
+            selectedSnippetID = newID
         }
     }
 

@@ -122,6 +122,9 @@ struct AddEditPostView: View {
             }
             .alert(isPresented: $showAlert) { alert }
             .onAppear { focusedField = .postTitle }
+            // Свайп вниз закрывает sheet на iPad в обход подтверждения выхода —
+            // пока есть несохранённые правки, закрытие только через ✕ (с подтверждением).
+            .interactiveDismissDisabled(!hasNoChanges)
         }
     }
    
@@ -201,26 +204,32 @@ struct AddEditPostView: View {
     }
 
     private func navigateBack() {
-        // Determine where to return
-        if coordinator.modalPath.isEmpty {
-            // In the main stack or this is the root modal view
-            coordinator.closeModal()
-        } else {
-            // In the modal stack
-            coordinator.popModal()
-        }
+        coordinator.dismissCurrentModalScreen()
     }
         
     private func checkAndSave() {
         guard validatePost() else { return }
         
+        let isSaved: Bool
         if let originalPost {
             originalPost.update(with: editedPost)
-            vm.updatePost()
+            isSaved = vm.updatePost()
         } else {
-            vm.addPost(editedPost)
+            isSaved = vm.addPost(editedPost)
         }
-        
+
+        guard isSaved else {
+            // Показываем ошибку прямо в форме: глобальный алерт висит на
+            // StartView под модалкой. Форма остаётся открытой с введёнными
+            // данными — можно повторить сохранение или выйти.
+            showAlert(
+                title: "Could not save",
+                message: "Please try again.",
+                field: nil
+            )
+            return
+        }
+
         alertType = .success
         showAlert = true
     }

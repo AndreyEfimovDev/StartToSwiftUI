@@ -1833,8 +1833,12 @@ struct SnippetsRepository {
             }
 
             private func runCarousel() async {
-                while true {
-                    try? await Task.sleep(for: .seconds(1.2))
+                while !Task.isCancelled {
+                    do {
+                        try await Task.sleep(for: .seconds(1.2))
+                    } catch {
+                        break // CancellationError — the view has left the screen, stop the loop
+                    }
 
                     withAnimation {
                         switch swipeDirection {

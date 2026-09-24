@@ -136,19 +136,62 @@ final class PostsFilteringTests: XCTestCase {
     }
 
     func test_filterByYear_returnsOnlyMatching() async throws {
-        // Дата строится через UTC-календарь — именно им filterPosts() считает
-        // год поста (vm.utcCalendar), локальный часовой пояс машины не должен
-        // влиять на результат.
-        var utc = Calendar(identifier: .gregorian)
-        utc.timeZone = TimeZone(identifier: "UTC")!
-        let year2024 = post(title: "2024", postDate: DateComponents(calendar: utc, year: 2024, month: 6, day: 15).date)
-        let year2025 = post(title: "2025", postDate: DateComponents(calendar: utc, year: 2025, month: 6, day: 15).date)
+        // Год поста filterPosts() считает по локальному календарю — тому же,
+        // которым дата создаётся и отображается.
+        let local = Calendar.current
+        let year2024 = post(title: "2024", postDate: DateComponents(calendar: local, year: 2024, month: 6, day: 15).date)
+        let year2025 = post(title: "2025", postDate: DateComponents(calendar: local, year: 2025, month: 6, day: 15).date)
         vm = try await makeVM(posts: [year2024, year2025])
 
         vm.selectedYear = "2025"
         try await Task.sleep(nanoseconds: pipelineDelay)
 
         XCTAssertEqual(vm.filteredPosts.map(\.title), ["2025"])
+    }
+
+    func test_filterByYear_localNewYearMidnight_belongsToDisplayedYear() async throws {
+        // Граничный случай: 1 января 00:30 по локальному времени. В строке
+        // пост показывается как 01.01.2025, значит и в фильтре он должен
+        // быть в 2025 (с UTC-календарём восточнее UTC он уходил в 2024).
+        let local = Calendar.current
+        let newYear = post(title: "New Year", postDate: DateComponents(calendar: local, year: 2025, month: 1, day: 1, hour: 0, minute: 30).date)
+        vm = try await makeVM(posts: [newYear])
+
+        XCTAssertEqual(vm.allYears, ["2025"])
+
+        vm.selectedYear = "2025"
+        try await Task.sleep(nanoseconds: pipelineDelay)
+
+        XCTAssertEqual(vm.filteredPosts.map(\.title), ["New Year"])
+    }
+
+    // MARK: - visiblePosts
+
+    func test_visiblePosts_excludesDeletedAndDrafts() async throws {
+        // Given — активный пост, пост в корзине и черновик
+        let active = post(title: "Active")
+        let deleted = post(title: "Deleted")
+        deleted.status = .deleted
+        let draft = post(title: "Draft")
+        draft.draft = true
+        vm = try await makeVM(posts: [active, deleted, draft])
+
+        // Then — видимы (в списке и статистике) только активные не-черновики
+        XCTAssertEqual(vm.visiblePosts.map(\.title), ["Active"])
+    }
+
+    func test_visiblePosts_followsFilters() async throws {
+        // Given
+        let advanced = post(title: "Advanced", studyLevel: .advanced)
+        let beginner = post(title: "Beginner", studyLevel: .beginner)
+        vm = try await makeVM(posts: [advanced, beginner])
+
+        // When — фильтр списка применяется и к видимым постам (статистике)
+        vm.selectedLevel = .advanced
+        try await Task.sleep(nanoseconds: pipelineDelay)
+
+        // Then
+        XCTAssertEqual(vm.visiblePosts.map(\.title), ["Advanced"])
     }
 
     // MARK: - Combined filters (AND)
@@ -198,6 +241,25 @@ final class PostsFilteringTests: XCTestCase {
         vm.searchText = "xyzzy_no_match_12345"
         try await Task.sleep(nanoseconds: pipelineDelay)
 
+        XCTAssertTrue(vm.filteredPosts.isEmpty)
+    }
+
+    func test_search_usesDebouncedText_notLiveText() async throws {
+        // Given
+        vm = try await makeVM(posts: [post(title: "A"), post(title: "B")])
+
+        // When — текст набран, и сразу, до конца debounce, пайплайн
+        // перезапускается по другой причине (перезагрузка постов)
+        vm.searchText = "zzz"
+        vm.loadPostsFromSwiftData(removeDuplicates: false)
+
+        // Then — поиск ещё не применён: фильтрация по тексту — только после debounce
+        XCTAssertEqual(vm.filteredPosts.count, 2)
+
+        // When — debounce отработал
+        try await Task.sleep(nanoseconds: pipelineDelay)
+
+        // Then
         XCTAssertTrue(vm.filteredPosts.isEmpty)
     }
 
@@ -268,6 +330,71 @@ final class PostsFilteringTests: XCTestCase {
 
         XCTAssertEqual(vm.filteredPosts.count, titles.count)
         XCTAssertEqual(Set(vm.filteredPosts.map(\.title)), Set(titles))
+    }
+
+    // Сам случайный порядок недетерминирован — проверяем свойства:
+    // у каждого поста есть ключ и список отсортирован по ключам.
+    private func assertSortedByRandomKeys(_ vm: PostsViewModel, file: StaticString = #filePath, line: UInt = #line) {
+        let keys = vm.filteredPosts.map { vm.randomSortKeys[$0.id] }
+        XCTAssertFalse(keys.contains(nil), "У каждого поста должен быть ключ", file: file, line: line)
+        let values = keys.compactMap { $0 }
+        XCTAssertEqual(values, values.sorted(), "Список должен быть отсортирован по ключам", file: file, line: line)
+    }
+
+    func test_sortRandom_selectedBeforeLoad_shufflesLoadedPosts() async throws {
+        // Given — как после перезапуска: "Random" выставлен до загрузки постов
+        // (restorePostFilters() в init), reshufflePosts() видит пустой allPosts.
+        let posts = (1...5).map { post(title: "Post \($0)") }
+        let viewModel = PostsViewModel(
+            dataSource: MockPostsDataSource(posts: posts),
+            fbPostsManager: MockFBPostsManager.mockPosts([]),
+            services: .make()
+        )
+        viewModel.selectedSortOption = .random
+
+        // When
+        viewModel.start()
+        viewModel.loadPostsFromSwiftData(removeDuplicates: false)
+        try await Task.sleep(nanoseconds: pipelineDelay)
+        vm = viewModel
+
+        // Then — все загруженные посты получили ключи и отсортированы по ним
+        XCTAssertEqual(vm.filteredPosts.count, posts.count)
+        assertSortedByRandomKeys(vm)
+    }
+
+    func test_sortRandom_postAddedAfterShuffle_getsKey() async throws {
+        // Given
+        vm = try await makeVM(posts: (1...3).map { post(title: "Post \($0)") })
+        vm.selectedSortOption = .random
+        try await Task.sleep(nanoseconds: pipelineDelay)
+
+        // When — пост добавлен после перемешивания
+        let newPost = post(title: "New")
+        vm.addPost(newPost)
+        try await Task.sleep(nanoseconds: pipelineDelay)
+
+        // Then — новый пост получил свой ключ (раньше всегда уходил в конец)
+        XCTAssertNotNil(vm.randomSortKeys[newPost.id])
+        XCTAssertEqual(vm.filteredPosts.count, 4)
+        assertSortedByRandomKeys(vm)
+    }
+
+    func test_sortRandom_pipelineRerun_keepsOrder() async throws {
+        // Given
+        vm = try await makeVM(posts: (1...5).map { post(title: "Post \($0)") })
+        vm.selectedSortOption = .random
+        try await Task.sleep(nanoseconds: pipelineDelay)
+        let orderBefore = vm.filteredPosts.map(\.title)
+
+        // When — пайплайн перезапускается без reshuffle (фильтр туда и обратно)
+        vm.selectedLevel = .advanced
+        try await Task.sleep(nanoseconds: pipelineDelay)
+        vm.selectedLevel = nil
+        try await Task.sleep(nanoseconds: pipelineDelay)
+
+        // Then — порядок не изменился
+        XCTAssertEqual(vm.filteredPosts.map(\.title), orderBefore)
     }
 
     // MARK: - checkIfAllFiltersAreEmpty

@@ -67,7 +67,10 @@ extension MockFBPostsManager {
             PreviewData.samplePost3,
             PreviewData.samplePost4
         ]
-        return mockPosts(posts.map(FBPostModel.init(post:)))
+        // Замыкание, а не ссылка FBPostModel.init(post:): init изолирован
+        // на MainActor (изоляция по умолчанию), а ссылка на него как значение
+        // функции не приводится к неизолированному замыканию map.
+        return mockPosts(posts.map { FBPostModel(post: $0) })
     }
 }
 

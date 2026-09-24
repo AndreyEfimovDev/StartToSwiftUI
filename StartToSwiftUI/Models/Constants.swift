@@ -16,4 +16,7 @@ nonisolated struct Constants {
     static let appStoreURL = "https://apps.apple.com/ru/app/starttoswiftui/id6755787606?l=en-GB"
     static let bundleID = "PELSH.StartToSwiftUI"
     static let dispatchFor: Double = 2.5 // for async methods
+    /// Пауза перед автозакрытием экрана после успешной операции — чтобы
+    /// пользователь успел увидеть результат на кнопке (см. `autoDismiss`).
+    static let autoDismissDelay: Duration = .seconds(2.5)
 }

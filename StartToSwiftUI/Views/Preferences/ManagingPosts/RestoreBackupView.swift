@@ -23,6 +23,8 @@ struct RestoreBackupView: View {
     @State private var restoredCount = 0
     @State private var isInProgress = false
     @State private var showDocumentPicker = false
+    /// Восстановление прошло без ошибки — экран закроется сам.
+    @State private var shouldAutoDismiss = false
     
     // MARK: - Body
     
@@ -57,6 +59,9 @@ struct RestoreBackupView: View {
             .sheet(isPresented: $showDocumentPicker) {
                 documentPicker
             }
+            .autoDismiss(when: shouldAutoDismiss) {
+                coordinator.closeModal()
+            }
         }
     }
     
@@ -86,15 +91,17 @@ struct RestoreBackupView: View {
     private func handleDocumentPicked(url: URL) {
         isInProgress = true
         
-        vm.getPostsFromBackup(url: url) { count in
-            restoredCount = count
-            isRestored = true
+        vm.getPostsFromBackup(url: url) { result in
             isInProgress = false
-            
-            if !vm.errorManager.showAlert {
-                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                    coordinator.closeModal()
-                }
+
+            switch result {
+            case .success(let count):
+                restoredCount = count
+                isRestored = true
+                shouldAutoDismiss = true
+            case .failure:
+                // Успех на кнопке не показываем; текст ошибки — в глобальном алерте.
+                hapticManager.notification(type: .error)
             }
         }
     }

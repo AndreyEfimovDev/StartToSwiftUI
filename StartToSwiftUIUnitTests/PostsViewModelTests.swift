@@ -144,7 +144,7 @@ final class PostsViewModelTests: XCTestCase {
         XCTAssertTrue(testVM.allPosts.contains { $0.studyLevel == .advanced })
     }
     
-    func testCheckFBPostsForUpdates_WhenNoAppStateManager_ReturnsFalse() async throws {
+    func testCheckFBPostsForUpdates_WhenNoAppStateManager_ReturnsFailed() async throws {
         // Given — MockPostsDataSource → appStateManager = nil
         let mockFB = MockFBPostsManager.mockPosts([FBPostModel.mockBeginner])
         let testVM = PostsViewModel(
@@ -154,13 +154,13 @@ final class PostsViewModelTests: XCTestCase {
         )
         
         // When
-        let hasUpdates = await testVM.checkFBPostsForUpdates()
+        let result = await testVM.checkFBPostsForUpdates()
         
-        // Then
-        XCTAssertFalse(hasUpdates)
+        // Then — проверить нечем
+        XCTAssertEqual(result, .failed)
     }
     
-    func testCheckFBPostsForUpdates_WhenNewPosts_ReturnsTrue() async throws {
+    func testCheckFBPostsForUpdates_WhenDateNotSet_ReturnsAvailable() async throws {
         // Given — реальный SwiftData контекст для appStateManager
         let container = try ModelContainer(
             for: Post.self, Notice.self, AppSyncState.self,
@@ -177,10 +177,192 @@ final class PostsViewModelTests: XCTestCase {
         )
         try await Task.sleep(nanoseconds: 100_000_000)
         
-        // When — lastLoadedDate = nil → returns true
-        let hasUpdates = await testVM.checkFBPostsForUpdates()
+        // When — lastLoadedDate = nil → считаем, что обновления есть
+        let result = await testVM.checkFBPostsForUpdates()
         
         // Then
-        XCTAssertTrue(hasUpdates)
+        XCTAssertEqual(result, .available)
+    }
+
+    /// VM с датой последней загрузки постов — проверка реально идёт в мок Firestore.
+    ///
+    /// `services` — опционально с `nil`, а не `= .make()`: выражение значения
+    /// по умолчанию вычисляется в неизолированном контексте, а `make()`
+    /// изолирован на MainActor. Вызов перенесён в тело метода.
+    private func makeCheckVM(fbManager: MockFBPostsManager, services: AppServiceDependencies? = nil) -> PostsViewModel {
+        let stateManager = MockAppSyncStateManager()
+        stateManager.stubbedLastDateOfPostsLoaded = Date(timeIntervalSince1970: 1_000)
+        return PostsViewModel(
+            dataSource: MockPostsDataSource(posts: []),
+            appStateManager: stateManager,
+            fbPostsManager: fbManager,
+            services: services ?? .make()
+        )
+    }
+
+    func testCheckFBPostsForUpdates_WhenNewerPosts_ReturnsAvailable() async {
+        // Given — пост новее даты последней загрузки
+        let newer = FBPostModel.mock(date: Date(timeIntervalSince1970: 2_000))
+        let testVM = makeCheckVM(fbManager: MockFBPostsManager.mockPosts([newer]))
+
+        // When
+        let result = await testVM.checkFBPostsForUpdates()
+
+        // Then
+        XCTAssertEqual(result, .available)
+        XCTAssertTrue(testVM.hasPostsUpdate)
+    }
+
+    func testCheckFBPostsForUpdates_WhenNoNewerPosts_ReturnsUpToDate() async {
+        // Given — пост старше даты последней загрузки
+        let older = FBPostModel.mock(date: Date(timeIntervalSince1970: 500))
+        let testVM = makeCheckVM(fbManager: MockFBPostsManager.mockPosts([older]))
+
+        // When
+        let result = await testVM.checkFBPostsForUpdates()
+
+        // Then
+        XCTAssertEqual(result, .upToDate)
+        XCTAssertFalse(testVM.hasPostsUpdate)
+    }
+
+    func testCheckFBPostsForUpdates_WhenNetworkFails_ReturnsFailed() async {
+        // Given
+        let testVM = makeCheckVM(fbManager: MockFBPostsManager.mockNetworkError())
+
+        // When
+        let result = await testVM.checkFBPostsForUpdates()
+
+        // Then
+        XCTAssertEqual(result, .failed)
+    }
+
+    func testCheckFBPostsForUpdates_DoesNotDismissAlreadyShownError() async {
+        // Given — на экране уже висит чужая ошибка (например, от импорта notices)
+        let services = AppServiceDependencies.make()
+        services.errorManager.handle(message: "Notices import failed")
+        let testVM = makeCheckVM(fbManager: MockFBPostsManager.mockPosts([]), services: services)
+
+        // When — успешная проверка без обновлений
+        let result = await testVM.checkFBPostsForUpdates()
+
+        // Then — чужой алерт не закрыт, а проверка не выглядит неудачной
+        XCTAssertEqual(result, .upToDate)
+        XCTAssertTrue(services.errorManager.showAlert)
+        XCTAssertEqual(services.errorManager.errorMessage, "Notices import failed")
+    }
+
+    // MARK: - Save Result Tests
+    // addPost/updatePost сообщают, прошло ли сохранение, — по этому
+    // результату AddEditPostView показывает успех или ошибку.
+
+    func testAddPost_WhenSaveSucceeds_ReturnsTrue() {
+        // Given
+        let post = Post(title: "New post")
+
+        // When
+        let isSaved = vm.addPost(post)
+
+        // Then
+        XCTAssertTrue(isSaved)
+    }
+
+    func testAddPost_WhenSaveFails_ReturnsFalse() {
+        // Given
+        dataSource.shouldThrowOnSave = true
+        let post = Post(title: "New post")
+
+        // When
+        let isSaved = vm.addPost(post)
+
+        // Then
+        XCTAssertFalse(isSaved)
+    }
+
+    func testUpdatePost_WhenSaveSucceeds_ReturnsTrue() {
+        // When
+        let isSaved = vm.updatePost()
+
+        // Then
+        XCTAssertTrue(isSaved)
+    }
+
+    func testUpdatePost_WhenSaveFails_ReturnsFalse() {
+        // Given
+        dataSource.shouldThrowOnSave = true
+
+        // When
+        let isSaved = vm.updatePost()
+
+        // Then
+        XCTAssertFalse(isSaved)
+    }
+
+    // MARK: - Update Status Staleness & Sync Date
+
+    func testRefreshPostsUpdateStatus_AppliesFreshResult() async {
+        // Given — пост новее даты последней загрузки, дата во время запроса не меняется
+        let stateManager = MockAppSyncStateManager()
+        stateManager.stubbedLastDateOfPostsLoaded = Date(timeIntervalSince1970: 1_000)
+        let newer = FBPostModel.mock(date: Date(timeIntervalSince1970: 2_000))
+        let testVM = PostsViewModel(
+            dataSource: MockPostsDataSource(posts: []),
+            appStateManager: stateManager,
+            fbPostsManager: MockFBPostsManager.mockPosts([newer]),
+            services: .make()
+        )
+
+        // When
+        await testVM.refreshPostsUpdateStatus()
+
+        // Then
+        XCTAssertTrue(testVM.hasPostsUpdate)
+    }
+
+    func testRefreshPostsUpdateStatus_WhenDateChangesDuringRequest_IgnoresStaleResult() async throws {
+        // Given — запрос с задержкой, в Firestore есть пост новее старой даты
+        let stateManager = MockAppSyncStateManager()
+        stateManager.stubbedLastDateOfPostsLoaded = Date(timeIntervalSince1970: 1_000)
+        let mockFB = MockFBPostsManager.mockPosts([FBPostModel.mock(date: Date(timeIntervalSince1970: 2_000))])
+        mockFB.shouldSimulateDelay = true
+        let testVM = PostsViewModel(
+            dataSource: MockPostsDataSource(posts: []),
+            appStateManager: stateManager,
+            fbPostsManager: mockFB,
+            services: .make()
+        )
+
+        // When — пока запрос идёт, дата сдвигается (как после импорта)
+        let task = Task { await testVM.refreshPostsUpdateStatus() }
+        try await Task.sleep(nanoseconds: 100_000_000)
+        XCTAssertTrue(testVM.isCheckingPostsForUpdates) // по нему PreferencesView гасит кнопки
+        stateManager.stubbedLastDateOfPostsLoaded = Date(timeIntervalSince1970: 3_000)
+        await task.value
+
+        // Then — устаревший ответ "есть обновления" не применён
+        XCTAssertFalse(testVM.hasPostsUpdate)
+        XCTAssertFalse(testVM.isCheckingPostsForUpdates)
+    }
+
+    func testImport_AdvancesSyncDatePastAllReceivedPosts() async {
+        // Given — в ответе новый пост и уже существующий локально, более поздний
+        let stateManager = MockAppSyncStateManager()
+        stateManager.stubbedLastDateOfPostsLoaded = Date(timeIntervalSince1970: 1_000)
+        let newPost = FBPostModel.mock(title: "New", date: Date(timeIntervalSince1970: 1_500))
+        let knownPost = FBPostModel.mock(title: "Known", date: Date(timeIntervalSince1970: 2_500))
+        let testVM = PostsViewModel(
+            dataSource: MockPostsDataSource(posts: [Post(title: "Known")]),
+            appStateManager: stateManager,
+            fbPostsManager: MockFBPostsManager.mockPosts([newPost, knownPost]),
+            services: .make()
+        )
+        testVM.loadPostsFromSwiftData()
+
+        // When
+        let success = await testVM.importPostsFromFirebase()
+
+        // Then — дата сдвинута за самый поздний пост ответа, а не за самый поздний новый
+        XCTAssertTrue(success)
+        XCTAssertEqual(stateManager.savedLastDateOfPostsLoaded, Date(timeIntervalSince1970: 2_501))
     }
 }

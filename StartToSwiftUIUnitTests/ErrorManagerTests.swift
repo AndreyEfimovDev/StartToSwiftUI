@@ -28,7 +28,7 @@ final class ErrorManagerTests: XCTestCase {
         super.tearDown()
     }
 
-    // MARK: - Basic show/clear
+    // MARK: - Basic show/dismiss
 
     func test_handle_firstError_showsImmediately() {
         sut.handle(message: "Something went wrong")
@@ -43,9 +43,9 @@ final class ErrorManagerTests: XCTestCase {
         XCTAssertEqual(sut.errorMessage, "Network unreachable")
     }
 
-    func test_clear_resetsMessageAndAlert() {
+    func test_dismissCurrent_resetsMessageAndAlert() {
         sut.handle(message: "Oops")
-        sut.clear()
+        sut.dismissCurrent()
 
         XCTAssertFalse(sut.showAlert)
         XCTAssertNil(sut.errorMessage)
@@ -62,22 +62,22 @@ final class ErrorManagerTests: XCTestCase {
         XCTAssertTrue(sut.showAlert)
     }
 
-    func test_clear_afterTwoQueuedErrors_showsNextFromQueue() {
+    func test_dismissCurrent_afterTwoQueuedErrors_showsNextFromQueue() {
         sut.handle(message: "First")
         sut.handle(message: "Second")
 
-        sut.clear()
+        sut.dismissCurrent()
 
         XCTAssertEqual(sut.errorMessage, "Second")
         XCTAssertTrue(sut.showAlert)
     }
 
-    func test_clear_afterAllQueuedErrorsShown_leavesNothingToShow() {
+    func test_dismissCurrent_afterAllQueuedErrorsShown_leavesNothingToShow() {
         sut.handle(message: "First")
         sut.handle(message: "Second")
 
-        sut.clear() // показывает "Second"
-        sut.clear() // очередь пуста
+        sut.dismissCurrent() // показывает "Second"
+        sut.dismissCurrent() // очередь пуста
 
         XCTAssertNil(sut.errorMessage)
         XCTAssertFalse(sut.showAlert)
@@ -88,10 +88,10 @@ final class ErrorManagerTests: XCTestCase {
         sut.handle(message: "Second")
         sut.handle(message: "Third")
 
-        sut.clear() // First → Second
+        sut.dismissCurrent() // First → Second
         XCTAssertEqual(sut.errorMessage, "Second")
 
-        sut.clear() // Second → Third
+        sut.dismissCurrent() // Second → Third
         XCTAssertEqual(sut.errorMessage, "Third")
     }
 
@@ -101,7 +101,7 @@ final class ErrorManagerTests: XCTestCase {
         sut.handle(message: "Duplicate")
         sut.handle(message: "Duplicate") // тот же текст, пока первый ещё на экране
 
-        sut.clear()
+        sut.dismissCurrent()
 
         // Если бы дедупа не было, здесь показался бы второй "Duplicate".
         XCTAssertNil(sut.errorMessage)
@@ -113,16 +113,16 @@ final class ErrorManagerTests: XCTestCase {
         sut.handle(message: "Duplicate")
         sut.handle(message: "Duplicate") // уже в очереди — не должно продублироваться
 
-        sut.clear() // First → Duplicate
+        sut.dismissCurrent() // First → Duplicate
         XCTAssertEqual(sut.errorMessage, "Duplicate")
 
-        sut.clear() // очередь должна быть пуста
+        sut.dismissCurrent() // очередь должна быть пуста
         XCTAssertNil(sut.errorMessage)
     }
 
     // Показывающийся simultaneously через isPresented-биндинг SwiftUI выставляет
-    // showAlert = false напрямую (не через clear()) — didSet должен вести себя так же.
-    func test_showAlertSetToFalseDirectly_behavesLikeClear() {
+    // showAlert = false напрямую (не через dismissCurrent()) — didSet должен вести себя так же.
+    func test_showAlertSetToFalseDirectly_behavesLikeDismissCurrent() {
         sut.handle(message: "First")
         sut.handle(message: "Second")
 

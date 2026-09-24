@@ -48,6 +48,9 @@ struct ImportPostsFromCloudView: View {
             .onAppear {
                 vm.loadPostsFromSwiftData()
             }
+            .autoDismiss(when: isLoaded) {
+                coordinator.dismissCurrentModalScreen()
+            }
         }
     }
     
@@ -107,14 +110,6 @@ struct ImportPostsFromCloudView: View {
         isInProgress = false
         isLoaded = true
         hapticManager.notification(type: .success)
-        
-        DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-            if coordinator.modalPath.isEmpty {
-                coordinator.closeModal()
-            } else {
-                coordinator.popModal()
-            }
-        }
     }
     
     /// Downloading from a cloud service
@@ -127,13 +122,6 @@ struct ImportPostsFromCloudView: View {
             isLoaded = true
             importedCount = vm.allPosts.count - initialPostCount
             hapticManager.notification(type: .success)
-            
-            Task {
-                try? await Task.sleep(nanoseconds: 1_500_000_000)
-                await MainActor.run {
-                    if coordinator.modalPath.isEmpty { coordinator.closeModal() } else { coordinator.popModal() }
-                }
-            }
         } else {
             hapticManager.notification(type: .error)
         }

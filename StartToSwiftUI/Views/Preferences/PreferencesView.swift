@@ -47,8 +47,11 @@ struct PreferencesView: View {
             Section(header: sectionHeader("Achievements")) {
                 achievements
             }
-            if noticevm.notices.count > 0 {
-                Section(header: sectionHeader("Notices (\(noticevm.unreadCount)/\(noticevm.notices.count))")) {
+            // Секция видна всегда — переключатель сигналов нужен и до первых
+            // notices; список сообщений и счётчик — только когда они есть.
+            Section(header: sectionHeader(noticesSectionTitle)) {
+                noticeSignalsToggle
+                if noticevm.notices.count > 0 {
                     noticeMessages
                 }
             }
@@ -146,6 +149,21 @@ struct PreferencesView: View {
     }
     
     // MARK: - Notices
+
+    private var noticesSectionTitle: String {
+        noticevm.notices.isEmpty
+        ? "Notices"
+        : "Notices (\(noticevm.unreadCount)/\(noticevm.notices.count))"
+    }
+
+    private var noticeSignalsToggle: some View {
+        Toggle("New notices alerts", isOn: $noticevm.isNotificationOn)
+            .tint(Color.mycolor.myBlue)
+            .customListRowStyle(
+                iconName: noticevm.isNotificationOn ? "bell" : "bell.slash",
+                iconWidth: iconSize
+            )
+    }
     
     private var noticeMessages: some View {
         Button("Messages") {
@@ -207,12 +225,25 @@ struct PreferencesView: View {
                 coordinator.pushModal(.importFromCloud)
             }
             .customListRowStyle(iconName: "icloud.and.arrow.down", iconWidth: iconSize)
+            .disabled(isFirestoreRequestInProgress)
         } else if vm.hasPostsUpdate {
             Button("Check for materials update") {
                 coordinator.pushModal(.checkForUpdates)
             }
             .customListRowStyle(iconName: "arrow.trianglehead.counterclockwise", iconWidth: iconSize)
+            .disabled(isFirestoreRequestInProgress)
         }
+    }
+
+    /// Идёт ли сейчас запрос постов в Firestore (фоновая проверка при
+    /// запуске/refresh или импорт). Пока идёт — кнопки импорта и проверки
+    /// неактивны: иначе модалка стартовала бы параллельно с фоновой
+    /// проверкой (её проверка упёрлась бы в guard и показала "No updates"),
+    /// а импорт мог бы завершиться раньше фоновой проверки со старой датой.
+    /// Кнопка не прячется, а гаснет — проверка длится доли секунды, строка
+    /// не должна мигать.
+    private var isFirestoreRequestInProgress: Bool {
+        vm.isCheckingPostsForUpdates || vm.isImportingPosts
     }
         
     private var shareBackup: some View {

@@ -40,7 +40,7 @@ final class AppCoordinator: ObservableObject {
     private let hapticManager = HapticManager.shared
 
     // MARK: - Section
-    @AppStorage("activeSection") var activeSection: AppSection = .snippets
+    @AppStorage("activeSection") var activeSection: AppSection = .materials
     
     // MARK: - Navigation
     /// For main stack navigation
@@ -143,6 +143,19 @@ final class AppCoordinator: ObservableObject {
     func closeModal() {
         presentedSheet = nil
         modalPath = NavigationPath()
+    }
+
+    /// Уходит с текущего модального экрана: если он корень модалки (или
+    /// открыт из основного стека) — закрывает модалку целиком, иначе
+    /// возвращает на шаг назад в модальном стеке.
+    ///
+    /// Решение принимается по состоянию `modalPath` в момент вызова.
+    func dismissCurrentModalScreen() {
+        if modalPath.isEmpty {
+            closeModal()
+        } else {
+            popModal()
+        }
     }
 }
 
