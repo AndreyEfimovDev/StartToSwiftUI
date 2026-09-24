@@ -17,7 +17,7 @@ struct StartView: View {
     @ObservedObject private var snippetsvm: SnippetsViewModel
     @ObservedObject private var coordinator: AppCoordinator
     @ObservedObject private var errorManager: ErrorManager
-    private let appStoreService: AppStoreService
+    private let appStoreService: AppStoreServiceProtocol
     private let remoteConfigService: RemoteConfigServiceProtocol
 
     init(dependencies: AppDependencies) {
@@ -74,7 +74,6 @@ struct StartView: View {
                         displayedSection = coordinator.activeSection
                         vm.loadPostsFromSwiftData()
                         noticevm.loadNoticesFromSwiftData()
-                        vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
                         /* Clean dublicates if any. iCloud sync may create multiple appSyncStates on different devices. This function finds duplicates, merges their data into one (the oldest), and deletes the rest.
                          */
                         vm.appStateManager?.cleanupDuplicateAppStates()
@@ -257,7 +256,7 @@ struct StartView: View {
     let dependencies = AppDependencies(
         appStateManager: stateManager,
         services: services,
-        appStoreService: AppStoreService(),
+        appStoreService: MockAppStoreService(),
         remoteConfigService: MockRemoteConfigService(),
         postsViewModel: postsVM,
         noticesViewModel: NoticesViewModel(dataSource: MockNoticesDataSource(), fbNoticesManager: MockFBNoticesManager(), services: services),

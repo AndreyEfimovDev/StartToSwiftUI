@@ -18,7 +18,7 @@ import SwiftData
 struct AppDependencies {
     let appStateManager: AppSyncStateManager
     let services: AppServiceDependencies
-    let appStoreService: AppStoreService
+    let appStoreService: AppStoreServiceProtocol
     let remoteConfigService: RemoteConfigServiceProtocol
     let postsViewModel: PostsViewModel
     let noticesViewModel: NoticesViewModel
@@ -54,7 +54,7 @@ struct AppDependencies {
                 services: services
             ),
             snippetsViewModel: SnippetsViewModel(
-                appStateManager: stateManager,
+                favoritesStore: stateManager,
                 services: services
             ),
             coordinator: AppCoordinator()

@@ -29,7 +29,6 @@ final class NoticesViewModel: ObservableObject {
     @Published var shouldAnimateNoticeButton = false
     
     // MARK: - AppStorage
-    @AppStorage("appFirstLaunchDate") private var appFirstLaunchDateTimestamp: Double = 0
     /// Сигналы о новых notices внутри приложения: тактильный отклик при
     /// импорте новых notices и бейдж-кнопка с числом непрочитанных в тулбаре.
     /// Переключается в Preferences. На FCM-пуши не влияет.
@@ -46,19 +45,6 @@ final class NoticesViewModel: ObservableObject {
     private var isImportingNotices = false
     
     // MARK: - Computed Properties
-    private var swiftDataSource: SwiftDataNoticesDataSource? {
-        dataSource as? SwiftDataNoticesDataSource
-    }
-    
-    private var appFirstLaunchDate: Date {
-        if appFirstLaunchDateTimestamp == 0 {
-            let now = Date()
-            appFirstLaunchDateTimestamp = now.timeIntervalSince1970
-            return now
-        }
-        return Date(timeIntervalSince1970: appFirstLaunchDateTimestamp)
-    }
-
     var unreadCount: Int {
         notices.filter { !$0.isRead }.count
     }
@@ -144,9 +130,9 @@ final class NoticesViewModel: ObservableObject {
         lastLoadTime = Date()
         crashManager.addLog("loadNoticesFromSwiftData: notices count: \(notices.count)")
 
-        // Removing duplicate notices in SwiftUI, leaving only one instance for each ID - for SwiftData only
-        if removeDuplicates, let swiftDataSource {
-            removeDuplicateNotices(from: swiftDataSource)
+        // Removing duplicate notices, leaving only one instance for each ID
+        if removeDuplicates {
+            removeDuplicateNotices()
         }
         crashManager.addLog("loadNoticesFromSwiftData: notices count after check for duplicates: \(notices.count)")
 
@@ -184,7 +170,10 @@ final class NoticesViewModel: ObservableObject {
             let lastNoticeDate = appStateManager.getLastNoticeDate() ?? Date(timeIntervalSince1970: 0)
             log("🔥 LastNoticeDate from appStateManager \(lastNoticeDate)", level: .info)
 
-            let firstLaunchDate = appFirstLaunchDate
+            // Дата общая для всех устройств (AppSyncState синхронизируется через
+            // CloudKit вместе с notices). nil бывает только при ошибке чтения
+            // состояния — тогда берём «сейчас», чтобы не загрузить все старые notices.
+            let firstLaunchDate = appStateManager.getAppFirstLaunchDate() ?? Date()
             log("🔥 FirstLaunchDate from appStateManager \(firstLaunchDate)", level: .info)
 
             filterDate = max(lastNoticeDate, firstLaunchDate)
@@ -218,7 +207,29 @@ final class NoticesViewModel: ObservableObject {
         let newNotices = relevantNotices.filter { !existingIDs.contains($0.noticeId) }
         crashManager.addLog("loadNoticesFromFirebase: in progress, new notices found count: \(newNotices.count)")
 
-        // Update latest date
+        // Save new notices
+        if !newNotices.isEmpty {
+            for firebaseNotice in newNotices {
+                dataSource.insert(NoticeMigrationHelper.convertFromFirebase(firebaseNotice))
+            }
+
+            // Дату синка двигаем только ПОСЛЕ успешного сохранения notices:
+            // если сдвинуть её раньше и сохранение упадёт, запрос
+            // "notice_date > даты" эти notices больше не вернёт — потеря
+            // навсегда. При ошибке дата не трогается, и notices придут при
+            // следующем импорте.
+            guard saveContext() else {
+                performanceManager.stopTrace(trace)
+                return
+            }
+
+            signalNewNotices(count: newNotices.count)
+            loadNoticesFromSwiftData(removeDuplicates: false)
+            log("🍉 ✅ Import complete: \(newNotices.count) notices added", level: .info)
+        }
+
+        // Update latest date — также и когда новых нет (все уже есть локально),
+        // чтобы те же notices не запрашивались при каждом запуске.
         if let appStateManager,
            let latestDate = relevantNotices.map({ $0.noticeDate }).max() {
             appStateManager.updateLatestNoticeDate(latestDate)
@@ -226,21 +237,6 @@ final class NoticesViewModel: ObservableObject {
             log("🔥 LastNoticeDate updated in appStateManager \(latestDate)", level: .info)
         }
 
-        guard !newNotices.isEmpty else {
-            performanceManager.stopTrace(trace)
-            return
-        }
-
-        // Save new notices
-        for firebaseNotice in newNotices {
-            dataSource.insert(NoticeMigrationHelper.convertFromFirebase(firebaseNotice))
-        }
-
-        signalNewNotices(count: newNotices.count)
-
-        saveContext()
-        loadNoticesFromSwiftData(removeDuplicates: false)
-        log("🍉 ✅ Import complete: \(newNotices.count) notices added", level: .info)
         performanceManager.setValue(
             trace,
             value: "\(newNotices.count)/\(relevantNotices.count)",
@@ -251,10 +247,9 @@ final class NoticesViewModel: ObservableObject {
 
     // MARK: - Remove Duplicates
     /// Remove duplicate notifications in SwiftUI, leaving only one instance of each ID
-    /// Passing Swift DataSource as a parameter avoids double-checking
-    private func removeDuplicateNotices(from swiftDataSource: SwiftDataNoticesDataSource) {
+    private func removeDuplicateNotices() {
         do {
-            let allNotices = try swiftDataSource.modelContext.fetch(FetchDescriptor<Notice>())
+            let allNotices = try dataSource.fetchNotices()
             
             // Find only groups with duplicates
             let duplicateGroups = Dictionary(grouping: allNotices, by: \.id)
@@ -359,12 +354,19 @@ final class NoticesViewModel: ObservableObject {
     }
     
     // MARK: - Save Context
-    private func saveContext() {
+    /// Сохраняет notices.
+    ///
+    /// - Returns: `true`, если сохранение прошло; `false` при ошибке (она
+    ///   уже показана через `ErrorManager`).
+    @discardableResult
+    private func saveContext() -> Bool {
         do {
             try dataSource.save()
+            return true
         } catch {
             crashManager.sendNonFatal(error)
             handleError(error, message: "Error saving notices")
+            return false
         }
     }
 

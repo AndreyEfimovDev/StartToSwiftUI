@@ -27,8 +27,14 @@ final class MockPostsDataSource: PostsDataSourceProtocol {
         posts.append(post)
     }
     
+    // Удаляем конкретный объект, а не все с тем же id — как SwiftData.
+    // Иначе при очистке дублей вместе с копиями пропала бы и оставляемая.
     func delete(_ post: Post) {
-        posts.removeAll { $0.id == post.id }
+        posts.removeAll { $0 === post }
+    }
+
+    func deleteAll() throws {
+        posts.removeAll()
     }
     
     func save() throws {

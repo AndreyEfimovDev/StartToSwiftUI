@@ -397,22 +397,43 @@ final class PostsFilteringTests: XCTestCase {
         XCTAssertEqual(vm.filteredPosts.map(\.title), orderBefore)
     }
 
-    // MARK: - checkIfAllFiltersAreEmpty
+    // MARK: - isFiltersEmpty / resetAllFilters
 
-    func test_checkIfAllFiltersAreEmpty_trueByDefault() async throws {
+    func test_isFiltersEmpty_trueByDefault() async throws {
         vm = try await makeVM(posts: [])
-        XCTAssertTrue(vm.checkIfAllFiltersAreEmpty())
+        XCTAssertTrue(vm.isFiltersEmpty)
     }
 
-    func test_checkIfAllFiltersAreEmpty_falseWhenAnyFilterSet() async throws {
+    func test_isFiltersEmpty_falseWhenAnyFilterSet() async throws {
         vm = try await makeVM(posts: [])
         vm.selectedLevel = .advanced
-        XCTAssertFalse(vm.checkIfAllFiltersAreEmpty())
+        XCTAssertFalse(vm.isFiltersEmpty)
     }
 
-    func test_checkIfAllFiltersAreEmpty_falseWhenSortOptionSet() async throws {
+    func test_isFiltersEmpty_falseWhenSortOptionSet() async throws {
         vm = try await makeVM(posts: [])
         vm.selectedSortOption = .newestFirst
-        XCTAssertFalse(vm.checkIfAllFiltersAreEmpty())
+        XCTAssertFalse(vm.isFiltersEmpty)
+    }
+
+    func test_resetAllFilters_clearsAllFilters() async throws {
+        vm = try await makeVM(posts: [])
+        vm.selectedLevel = .advanced
+        vm.selectedFavorite = .yes
+        vm.selectedType = .post
+        vm.selectedPlatform = .youtube
+        vm.selectedYear = "2025"
+        vm.selectedSortOption = .newestFirst
+        XCTAssertFalse(vm.isFiltersEmpty)
+
+        vm.resetAllFilters()
+
+        XCTAssertNil(vm.selectedLevel)
+        XCTAssertNil(vm.selectedFavorite)
+        XCTAssertNil(vm.selectedType)
+        XCTAssertNil(vm.selectedPlatform)
+        XCTAssertNil(vm.selectedYear)
+        XCTAssertEqual(vm.selectedSortOption, .notSorted)
+        XCTAssertTrue(vm.isFiltersEmpty)
     }
 }

@@ -41,9 +41,16 @@ struct CodeSnippet: Identifiable, Hashable {
         self.minOS = minOS
     }
     
-    enum MinOS: String {
-        case ios18 = "iOS 18+"
-        case ios26 = "iOS 26+"
+    enum MinOS {
+        case ios18
+        case ios26
+
+        var displayName: String {
+            switch self {
+            case .ios18: return "iOS 18+"
+            case .ios26: return "iOS 26+"
+            }
+        }
 
         var isAvailable: Bool {
             if #available(iOS 26, *) { return true }

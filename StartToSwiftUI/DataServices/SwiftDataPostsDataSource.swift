@@ -31,6 +31,10 @@ final class SwiftDataPostsDataSource: PostsDataSourceProtocol {
     func delete(_ post: Post) {
         modelContext.delete(post)
     }
+
+    func deleteAll() throws {
+        try modelContext.delete(model: Post.self)
+    }
     
     func save() throws {
         try modelContext.save()

@@ -34,7 +34,6 @@ final class PostsViewModel: ObservableObject {
     @Published var filteredPosts: [Post] = []
     @Published var selectedPost: Post? = nil
     @Published var searchText: String = ""
-    @Published var isFiltersEmpty: Bool = true
     @Published var selectedRating: PostRating? = nil
     @Published var selectedStudyProgress: StudyProgress = .added
     @Published var reshuffleToken = UUID()
@@ -70,14 +69,6 @@ final class PostsViewModel: ObservableObject {
     // пока запрос в Firestore ещё идёт.
     @Published var isImportingPosts = false
     @Published var isCheckingPostsForUpdates = false
-    
-    // MARK: - Computed Properties
-    var swiftDataSource: SwiftDataPostsDataSource? {
-        dataSource as? SwiftDataPostsDataSource
-    }
-    var isSwiftData: Bool {
-        swiftDataSource != nil
-    }
     
     // MARK: - AppStorage
     @AppStorage("shimmerWaveEnabled") var shimmerWaveEnabled = true
@@ -236,7 +227,6 @@ final class PostsViewModel: ObservableObject {
         selectedPlatform = storedPlatform
         selectedYear = storedYear
         selectedSortOption = storedSortOption
-        isFiltersEmpty = checkIfAllFiltersAreEmpty()
     }
                 
     // MARK: - SwiftData Operations
@@ -339,17 +329,6 @@ final class PostsViewModel: ObservableObject {
         return saveContextAndReload()
     }
     
-    func addPostIfNotExists(_ newPost: Post) -> Bool {
-        if allPosts.contains(where: { $0.id == newPost.id || $0.title == newPost.title }) {
-            log("Post with ID \(newPost.id) or title already exists", level: .error)
-            return false
-        }
-        
-        dataSource.insert(newPost)
-        saveContextAndReload()
-        return true
-    }
-    
     /// If necessary, update post.origin .cloudNew with .cloud
     func updatePostOrigin(_ post: Post) {
         post.origin = .cloud
@@ -396,18 +375,13 @@ final class PostsViewModel: ObservableObject {
     @discardableResult
     func eraseAllPosts() -> Bool {
         let isErased: Bool
-        if let swiftDataSource {
-            do {
-                try swiftDataSource.modelContext.delete(model: Post.self)
-                isErased = saveContextAndReload()
-            } catch {
-                crashManager.sendNonFatal(error)
-                handleError(error, message: "Error deleting data")
-                isErased = false
-            }
-        } else {
-            allPosts = []
-            isErased = true
+        do {
+            try dataSource.deleteAll()
+            isErased = saveContextAndReload()
+        } catch {
+            crashManager.sendNonFatal(error)
+            handleError(error, message: "Error deleting data")
+            isErased = false
         }
 
         if isErased {
@@ -460,10 +434,6 @@ final class PostsViewModel: ObservableObject {
         }
     }
     
-    func getPost(id: String) -> Post? {
-        allPosts.first { $0.id == id }
-    }
-    
     /// Save context and reload UI
     /// Сохраняет контекст и перезагружает посты.
     ///
@@ -487,15 +457,6 @@ final class PostsViewModel: ObservableObject {
         allPosts.contains(where: { $0.title == postTitle && $0.id != editingPostId })
     }
     
-    func filterUniquePosts(from cloudResponse: [CodablePost]) -> [Post] {
-        let existingTitles = Set(allPosts.map { $0.title })
-        let existingIds = Set(allPosts.map { $0.id })
-        
-        return cloudResponse
-            .filter { !existingTitles.contains($0.title) && !existingIds.contains($0.id) }
-            .map { PostMigrationHelper.convertFromCodable($0) }
-    }
-    
     func filterUniquePosts(from fbResponse: [FBPostModel]) -> [FBPostModel] {
         let existingTitles = Set(allPosts.map { $0.title })
         let existingIds = Set(allPosts.map { $0.id })
@@ -509,10 +470,6 @@ final class PostsViewModel: ObservableObject {
         let existingIds = Set(allPosts.map { $0.id })
         
         return posts.filter { !existingTitles.contains($0.title) && !existingIds.contains($0.id) }
-    }
-    
-    func getLatestDateFromPosts(posts: [Post]) -> Date? {
-        posts.max { $0.date < $1.date }?.date
     }
     
     private func getAllYears() -> [String]? {

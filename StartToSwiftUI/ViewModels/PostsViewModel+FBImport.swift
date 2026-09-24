@@ -34,7 +34,7 @@ extension PostsViewModel {
         crashManager.addLog("importPostsFromFirebase: started, posts count: \(allPosts.count)")
         let trace = performanceManager.startTrace(name: "import_posts_firebase")
         
-        let sourceName = isSwiftData ? "SwiftData" : "(Mock)"
+        let sourceName = String(describing: type(of: dataSource))
         
         guard let appStateManager else { return false }
         let importAfterDate = appStateManager.getLastDateOfPostsLoaded()
@@ -65,7 +65,7 @@ extension PostsViewModel {
                 // All received posts already exist locally — advance date past them
                 // to prevent the same posts from being found on the next check
                 if let latestDate = fbResponse.max(by: { $0.date < $1.date })?.date {
-                    appStateManager.setLastDateOfPostsLoaded(latestDate.addingTimeInterval(1))
+                    appStateManager.setLastDateOfPostsLoaded(syncCursor(after: latestDate))
                     log("🔥 lastDateOfPostsLoaded advanced past known duplicates: \(latestDate)", level: .info)
                 }
 
@@ -75,7 +75,7 @@ extension PostsViewModel {
                 if lastDate == nil || (lastDate ?? Date()) <= Date(timeIntervalSince1970: 1) {
                     let cloudPosts = allPosts.filter { $0.origin == .cloud || $0.origin == .cloudNew }
                     if let latestDate = cloudPosts.max(by: { $0.date < $1.date })?.date {
-                        appStateManager.setLastDateOfPostsLoaded(latestDate.addingTimeInterval(1))
+                        appStateManager.setLastDateOfPostsLoaded(syncCursor(after: latestDate))
                         log("🔥 lastPostsFBUpdateDate restored from local posts: \(latestDate)", level: .info)
                     }
                 }
@@ -107,7 +107,7 @@ extension PostsViewModel {
             // пара лишних чтений и повтор ошибки в логе, это приемлемо.
             // То же правило действует в ветке "нет новых постов" выше.
             if let latestDate = fbResponse.max(by: { $0.date < $1.date })?.date {
-                appStateManager.setLastDateOfPostsLoaded(latestDate.addingTimeInterval(1))
+                appStateManager.setLastDateOfPostsLoaded(syncCursor(after: latestDate))
                 log("🔥 lastPostsFBUpdateDate updated in appStateManager \(latestDate)", level: .info)
             }
             
@@ -188,6 +188,19 @@ extension PostsViewModel {
         case .failure(let error):
             log("Background posts update check failed: \(error)", level: .warning)
         }
+    }
+
+    /// Дата синка после импорта — для следующего запроса `date > курсора`.
+    ///
+    /// Самая поздняя дата полученных постов плюс 1 мс, а не ровно она:
+    /// `date` постов — время сервера Firestore с микросекундами, а на клиенте
+    /// это `Double`; при обратном преобразовании в `Timestamp` значение может
+    /// выйти на долю наносекунды меньше исходного, и строгое `>` снова
+    /// вернуло бы последний полученный пост (проверка обновлений навсегда
+    /// отвечала бы "есть новые"). Две отдельные загрузки в пределах 1 мс
+    /// невозможны, поэтому пропустить новый пост такой запас не может.
+    private func syncCursor(after latestDate: Date) -> Date {
+        latestDate.addingTimeInterval(0.001)
     }
 
     /// Общая часть принудительной и фоновой проверки: запрос в Firestore

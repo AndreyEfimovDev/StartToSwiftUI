@@ -134,4 +134,80 @@ final class NoticeViewModelTests: XCTestCase {
         XCTAssertGreaterThan(duration, 0.5)
         XCTAssertEqual(testVM.notices.count, 1)
     }
+
+    // MARK: - Sync Date vs Save
+
+    /// VM с моком состояния синка — чтобы видеть, сдвинута ли дата notices.
+    private func makeSyncVM(notices: [FBNoticeModel], dataSource: MockNoticesDataSource) -> (NoticesViewModel, MockAppSyncStateManager) {
+        let stateManager = MockAppSyncStateManager()
+        let vm = NoticesViewModel(
+            dataSource: dataSource,
+            appStateManager: stateManager,
+            fbNoticesManager: MockFBNoticesManager.mockNotices(notices),
+            services: .make()
+        )
+        return (vm, stateManager)
+    }
+
+    func testImportNotices_WhenSaveFails_DoesNotAdvanceSyncDate() async {
+        // Given — сохранение notices упадёт
+        let failingDataSource = MockNoticesDataSource(notices: [])
+        failingDataSource.shouldThrowOnSave = true
+        let (vm, stateManager) = makeSyncVM(
+            notices: [FBNoticeModel.mock(noticeId: "1", noticeDate: Date())],
+            dataSource: failingDataSource
+        )
+
+        // When
+        await vm.importNoticesFromFirebase()
+
+        // Then — дата не сдвинута, notices придут при следующем импорте
+        XCTAssertNil(stateManager.savedLatestNoticeDate)
+    }
+
+    func testImportNotices_WhenSaveSucceeds_AdvancesSyncDateToLatestNotice() async {
+        // Given
+        let earlier = Date().addingTimeInterval(60)
+        let latest = Date().addingTimeInterval(120)
+        let (vm, stateManager) = makeSyncVM(
+            notices: [
+                FBNoticeModel.mock(noticeId: "1", noticeDate: earlier),
+                FBNoticeModel.mock(noticeId: "2", noticeDate: latest)
+            ],
+            dataSource: MockNoticesDataSource(notices: [])
+        )
+
+        // When
+        await vm.importNoticesFromFirebase()
+
+        // Then
+        XCTAssertEqual(stateManager.savedLatestNoticeDate, latest)
+    }
+
+    // MARK: - Remove Duplicates
+
+    /// Дубли по id убираются через протокол источника (раньше — только для
+    /// SwiftData): остаётся одна копия, причём прочитанная.
+    func testLoadNotices_RemovesDuplicateNotices_KeepsReadCopy() {
+        // Given
+        let unreadCopy = Notice(id: "dup", title: "Unread copy", isRead: false)
+        let readCopy = Notice(id: "dup", title: "Read copy", isRead: true)
+        let other = Notice(id: "other", title: "Other", isRead: false)
+        let dataSource = MockNoticesDataSource(notices: [unreadCopy, readCopy, other])
+        let testVM = NoticesViewModel(
+            dataSource: dataSource,
+            fbNoticesManager: MockFBNoticesManager.mockEmpty(),
+            services: .make()
+        )
+
+        // When
+        testVM.loadNoticesFromSwiftData()
+
+        // Then
+        XCTAssertEqual(testVM.notices.count, 2)
+        let kept = testVM.notices.filter { $0.id == "dup" }
+        XCTAssertEqual(kept.count, 1)
+        XCTAssertTrue(kept.first?.isRead ?? false)
+        XCTAssertTrue(dataSource.deletedNotices.contains { $0 === unreadCopy })
+    }
 }

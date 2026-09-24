@@ -24,17 +24,6 @@ private func makeStoredNotice(id: String) -> Notice {
     return n
 }
 
-/// firstLaunchDate управляется через @AppStorage, а не через
-/// appStateManager — эмулируем "сохранённую дату первого запуска" напрямую
-/// в UserDefaults под тем же ключом, что читает NoticesViewModel.
-/// ВАЖНО: не передавать timeIntervalSince1970 == 0 — appFirstLaunchDate
-/// считает ровно 0 признаком "не задано" и самовосстанавливается до
-/// Date() (сейчас), а не остаётся эпохой. Для "далёкого прошлого"
-/// используй любое ненулевое значение, например .init(timeIntervalSince1970: 1).
-private func setStoredFirstLaunchDate(_ date: Date) {
-    UserDefaults.standard.set(date.timeIntervalSince1970, forKey: "appFirstLaunchDate")
-}
-
 // MARK: - Tests
 @MainActor
 final class NoticesViewModelFilterDateTests: XCTestCase {
@@ -46,13 +35,6 @@ final class NoticesViewModelFilterDateTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        // NoticesViewModel.appFirstLaunchDate читается из
-        // @AppStorage("appFirstLaunchDate"), а не из appStateManager —
-        // сбрасываем реальные UserDefaults, иначе значение из предыдущих
-        // прогонов/других тестовых классов протекает сюда.
-        if let bundleID = Bundle.main.bundleIdentifier {
-            UserDefaults.standard.removePersistentDomain(forName: bundleID)
-        }
         mockFB = MockFBNoticesManager()
         mockState = MockAppSyncStateManager()
         mockDataSource = MockNoticesDataSource()
@@ -73,7 +55,7 @@ final class NoticesViewModelFilterDateTests: XCTestCase {
         let firstLaunch = Date(timeIntervalSince1970: 1_700_000_000)
 
         mockState.stubbedLastNoticeDate = lastNotice
-        setStoredFirstLaunchDate(firstLaunch)
+        mockState.stubbedFirstLaunchDate = firstLaunch
 
         await sut.importNoticesFromFirebase()
 
@@ -87,7 +69,7 @@ final class NoticesViewModelFilterDateTests: XCTestCase {
         let firstLaunch = Date(timeIntervalSince1970: 1_700_000_500)
 
         mockState.stubbedLastNoticeDate = lastNotice
-        setStoredFirstLaunchDate(firstLaunch)
+        mockState.stubbedFirstLaunchDate = firstLaunch
 
         await sut.importNoticesFromFirebase()
 
@@ -95,11 +77,20 @@ final class NoticesViewModelFilterDateTests: XCTestCase {
             "filterDate должен равняться firstLaunchDate без округления")
     }
 
-    // "Both dates nil → epoch" больше не воспроизводимо: firstLaunchDate
-    // читается из @AppStorage и самовосстанавливается до Date() при первом
-    // обращении (timestamp == 0) — при живом appStateManager она никогда не
-    // ведёт себя как nil/epoch. Nil-случай appStateManager целиком уже
-    // покрыт test_withoutAppStateManager_filterDateIsEpoch ниже.
+    /// firstLaunchDate == nil (состояние не прочиталось из базы) → filterDate ≈ сейчас,
+    /// а не эпоха: иначе загрузились бы все старые notices
+    func test_filterDate_whenFirstLaunchDateIsNil_usesNow() async throws {
+        mockState.stubbedLastNoticeDate = nil
+        mockState.stubbedFirstLaunchDate = nil
+
+        let before = Date()
+        await sut.importNoticesFromFirebase()
+        let after = Date()
+
+        let captured = try XCTUnwrap(mockFB.capturedFilterDate)
+        XCTAssertGreaterThanOrEqual(captured, before)
+        XCTAssertLessThanOrEqual(captured, after)
+    }
 
     // MARK: - Regression: no .rounded(.down) precision loss
 
@@ -108,10 +99,7 @@ final class NoticesViewModelFilterDateTests: XCTestCase {
         // Date with fractional seconds — was lost by .rounded(.down)
         let preciseDate = Date(timeIntervalSince1970: 1_700_000_100.75)
         mockState.stubbedLastNoticeDate = preciseDate
-        // Не 0 — appFirstLaunchDate самовосстанавливается до Date() при
-        // timestamp == 0 (см. комментарий у setStoredFirstLaunchDate), так
-        // что "0" тут означал бы "сейчас", а не далёкое прошлое.
-        setStoredFirstLaunchDate(Date(timeIntervalSince1970: 1))
+        mockState.stubbedFirstLaunchDate = Date(timeIntervalSince1970: 0)
 
         await sut.importNoticesFromFirebase()
 

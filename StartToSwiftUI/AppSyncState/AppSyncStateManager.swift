@@ -96,9 +96,11 @@ class AppSyncStateManager: AppSyncStateManagerProtocol {
             
         } catch {
             log("Error getting AppState: \(error)", level: .error)
-            let newState = AppSyncState()
-            modelContext.insert(newState)
-            return newState
+            // Временный объект БЕЗ вставки в контекст: геттеры получат nil,
+            // изменения в нём просто не сохранятся. Вставка создала бы пустой
+            // дубль состояния, который записало бы следующее любое сохранение.
+            // При следующем вызове чтение из базы повторится.
+            return AppSyncState()
         }
     }
     
@@ -218,11 +220,23 @@ extension AppSyncStateManager {
         appState.lastNoticesFBUpdateDate = nil
         saveContext()
     }
+
+    /// Возвращает дату первого запуска приложения, общую для всех устройств пользователя.
+    ///
+    /// Дата хранится в `AppSyncState`, который синхронизируется через CloudKit
+    /// вместе с notices. Если второе устройство до прихода синка создало своё
+    /// состояние с датой «сейчас», слияние дублей оставит самую раннюю дату.
+    ///
+    /// - Returns: Дата первого запуска или `nil`, если состояние не удалось прочитать из базы.
+    func getAppFirstLaunchDate() -> Date? {
+        let appState = getOrCreateAppState()
+        return appState.appFirstLaunchDate
+    }
 }
 
 
 // MARK: - Methods for Snippet Favorites
-extension AppSyncStateManager {
+extension AppSyncStateManager: SnippetFavoritesStoreProtocol {
     
     func getSnippetFavoriteIDs() -> Set<String> {
         let appState = getOrCreateAppState()
@@ -237,10 +251,5 @@ extension AppSyncStateManager {
             appState.snippetFavoriteIDs.append(id)
         }
         saveContext()
-    }
-    
-    func isSnippetFavorite(_ id: String) -> Bool {
-        let appState = getOrCreateAppState()
-        return appState.snippetFavoriteIDs.contains(id)
     }
 }

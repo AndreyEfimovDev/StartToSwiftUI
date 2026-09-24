@@ -74,7 +74,7 @@ struct SnippetRowView: View {
 //            Text("-")
 //            Text(snippet.category + ", ")
             
-            Text(snippet.minOS.rawValue)
+            Text(snippet.minOS.displayName)
                 .font(.caption2)
                 .foregroundStyle(iOSColor)
                 .padding(.horizontal, 5)

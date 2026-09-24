@@ -13,6 +13,7 @@ protocol PostsDataSourceProtocol {
     func fetchPosts() throws -> [Post]
     func insert(_ post: Post)
     func delete(_ post: Post)
+    func deleteAll() throws
     func save() throws
 }
 @MainActor
@@ -28,10 +29,17 @@ protocol AppSyncStateManagerProtocol {
     func getLastNoticeDate() -> Date?
     func updateLatestNoticeDate(_ date: Date)
     func resetLatestNoticeDate()
+    func getAppFirstLaunchDate() -> Date?
 
     func getLastDateOfPostsLoaded() -> Date?
     func setLastDateOfPostsLoaded(_ date: Date)
     func resetLastDateOfPostsLoaded()
     func cleanupDuplicateAppStates()
+}
+
+/// Хранилище избранных сниппетов — только то, что нужно SnippetsViewModel.
+protocol SnippetFavoritesStoreProtocol {
+    func getSnippetFavoriteIDs() -> Set<String>
+    func toggleSnippetFavorite(_ id: String)
 }
 

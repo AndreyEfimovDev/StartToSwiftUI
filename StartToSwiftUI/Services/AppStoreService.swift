@@ -8,7 +8,15 @@
 import Foundation
 import SwiftUI
 
-final class AppStoreService {
+protocol AppStoreServiceProtocol {
+    /// Проверяет, есть ли в App Store версия новее установленной.
+    ///
+    /// - Returns: `true` / `false` — есть ли обновление; `nil` — проверить не
+    ///   удалось (нет сети, ошибка ответа, версия не найдена в ответе).
+    func isUpdateAvailable() async -> Bool?
+}
+
+final class AppStoreService: AppStoreServiceProtocol {
 
     init() {}
 
@@ -68,9 +76,9 @@ final class AppStoreService {
 // естественного родителя рядом (в отличие от остальных сервисов из
 // AppServiceDependencies, которые есть у Posts/Notices/SnippetsViewModel,
 // у AboutApp нет доступа ни к одной ViewModel). Поэтому — Environment, а
-// не пиггибэк через уже существующую ViewModel. Дефолт ниже — только для
-// #Preview, в реальном приложении всегда явно задан через
-// .environment(\.appStoreService, ...) в StartView.
+// не пиггибэк через уже существующую ViewModel. Дефолт ниже — мок для
+// #Preview (без запросов в сеть), в реальном приложении всегда явно задан
+// через .environment(\.appStoreService, ...) в StartView.
 extension EnvironmentValues {
-    @Entry var appStoreService = AppStoreService()
+    @Entry var appStoreService: AppStoreServiceProtocol = MockAppStoreService()
 }
