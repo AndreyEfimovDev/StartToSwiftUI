@@ -122,11 +122,11 @@ extension PostsViewModel {
         }
         log("🔍 checkFBPostsForUpdates date: \(String(describing: lastLoadedDate))", level: .info)
         
-        let result = await fbPostsManager.fetchFBPosts(after: lastLoadedDate)
+        let result = await fbPostsManager.hasFBPosts(after: lastLoadedDate)
         
         switch result {
-        case .success(let newPosts):
-            return !newPosts.isEmpty
+        case .success(let hasNewPosts):
+            return hasNewPosts
         case .failure(.networkUnavailable):
             handleError(nil, message: "No internet connection. Please check your network and try again.")
             return false

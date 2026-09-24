@@ -44,6 +44,16 @@ final class MockFBPostsManager: FBPostsManagerProtocol {
         guard let after else { return .success(postsToReturn) }
         return .success(postsToReturn.filter { $0.date > after })
     }
+
+    func hasFBPosts(after date: Date) async -> Result<Bool, FBFetchError> {
+        if shouldSimulateDelay {
+            try? await Task.sleep(nanoseconds: 500_000_000)
+        }
+        if shouldSimulateNetworkError {
+            return .failure(.networkUnavailable)
+        }
+        return .success(postsToReturn.contains { $0.date > date })
+    }
 }
 
 // MARK: - FBPostModel Test Helpers
