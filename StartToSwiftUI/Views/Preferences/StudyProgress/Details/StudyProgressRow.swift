@@ -30,8 +30,7 @@ struct StudyProgressRow: View {
             .padding(.leading, 15)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(.ultraThinMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: 30))
-            .overlay(RoundedRectangle(cornerRadius: 30).stroke(Color.mycolor.myBlue, lineWidth: 1))
+            .menuFormater(borderOpacity: 1)
             
             ProgressIndicatorView(
                 progress: progress,
