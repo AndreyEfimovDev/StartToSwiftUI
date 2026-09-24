@@ -106,11 +106,13 @@ struct SnippetsHomeView: View {
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
         }
         .listStyle(.plain)
-        .onScrollGeometryChange(for: CGFloat.self) { geo in
-            geo.contentOffset.y
-        } action: { _, newOffset in
+        // Отслеживаем только пересечение порога, а не каждый пиксель смещения:
+        // action (и withAnimation) срабатывает лишь при смене true/false.
+        .onScrollGeometryChange(for: Bool.self) { geo in
+            geo.contentOffset.y > 100
+        } action: { _, isPastThreshold in
             withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
-                showOnTopButton = newOffset > 100
+                showOnTopButton = isPastThreshold
             }
         }
     }
@@ -125,11 +127,13 @@ struct SnippetsHomeView: View {
                 }
         }
         .listStyle(.plain)
-        .onScrollGeometryChange(for: CGFloat.self) { geo in
-            geo.contentOffset.y
-        } action: { _, newOffset in
+        // Отслеживаем только пересечение порога, а не каждый пиксель смещения:
+        // action (и withAnimation) срабатывает лишь при смене true/false.
+        .onScrollGeometryChange(for: Bool.self) { geo in
+            geo.contentOffset.y > 100
+        } action: { _, isPastThreshold in
             withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
-                showOnTopButton = newOffset > 100
+                showOnTopButton = isPastThreshold
             }
         }
         // Восстановить выделение из VM после появления списка (см. MaterialsHomeView).
