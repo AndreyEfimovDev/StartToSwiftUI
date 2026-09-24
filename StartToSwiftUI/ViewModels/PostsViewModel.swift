@@ -25,7 +25,12 @@ final class PostsViewModel: ObservableObject {
     let performanceManager: FBPerformanceManager
     let analyticsManager: FBAnalyticsManager
 
-    @Published var allPosts: [Post] = []
+    @Published var allPosts: [Post] = [] {
+        // Единая точка для всех путей удаления: свайп Delete, Erase, Erase all,
+        // удаление дублей, синк CloudKit — все они заканчиваются
+        // переприсваиванием allPosts.
+        didSet { clearSelectedPostIfRemoved() }
+    }
     @Published var filteredPosts: [Post] = []
     @Published var selectedPost: Post? = nil
     @Published var searchText: String = ""
@@ -420,6 +425,25 @@ final class PostsViewModel: ObservableObject {
     }
     
     // MARK: - Helper Methods
+
+    /// Сбрасывает `selectedPost`, если выбранный пост удалён из базы или
+    /// больше не показывается в списке (в корзине / стал черновиком).
+    ///
+    /// Нужно для iPad: детальная колонка берёт пост из `selectedPost` и
+    /// видна одновременно со списком, поэтому иначе продолжала бы показывать
+    /// уже удалённый пост. Условие `active && !draft` совпадает с фильтром
+    /// списка в MaterialsHomeView.
+    private func clearSelectedPostIfRemoved() {
+        guard let selected = selectedPost else { return }
+        // Сверяем по persistentModelID, а не по id: обычные поля модели,
+        // удалённой из SwiftData, читать небезопасно.
+        guard let current = allPosts.first(where: { $0.persistentModelID == selected.persistentModelID }),
+              current.status == .active,
+              !current.draft else {
+            selectedPost = nil
+            return
+        }
+    }
     
     func getPost(id: String) -> Post? {
         allPosts.first { $0.id == id }
