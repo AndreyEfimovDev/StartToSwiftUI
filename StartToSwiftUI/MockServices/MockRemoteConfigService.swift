@@ -10,7 +10,7 @@ import Foundation
 /// Мок для #Preview и тестов — не обращается к Firebase, всегда
 /// возвращает переданное значение по умолчанию.
 final class MockRemoteConfigService: RemoteConfigServiceProtocol {
-    func activate() async {}
+    func activate() async -> Bool { false }
 
     func string(forKey key: RemoteConfigKey, default defaultValue: String) -> String {
         defaultValue

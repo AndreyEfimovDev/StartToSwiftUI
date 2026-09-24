@@ -16,10 +16,17 @@ enum RemoteConfigKey: String {
 }
 
 protocol RemoteConfigServiceProtocol {
-    /// Подтягивает актуальные значения с сервера. До первого успешного
-    /// вызова (и при любой ошибке сети) `string(forKey:default:)` отдаёт
-    /// значение по умолчанию, переданное вызывающей стороной.
-    func activate() async
+    /// Подтягивает актуальные значения с сервера и активирует их. До
+    /// активации (и при ошибке сети) `string(forKey:default:)` отдаёт
+    /// значения, активированные ранее — они сохраняются на диске между
+    /// запусками, — а если их нет (первый запуск), значение по умолчанию,
+    /// переданное вызывающей стороной.
+    ///
+    /// - Returns: `true`, если с сервера получены и активированы свежие
+    ///   данные — значит, стоит перечитать значения. `false`, если сработал
+    ///   троттлинг (использованы ранее скачанные данные) или произошла ошибка.
+    ///   `true` не гарантирует, что значения реально отличаются от прежних.
+    func activate() async -> Bool
     func string(forKey key: RemoteConfigKey, default defaultValue: String) -> String
 }
 
@@ -32,11 +39,15 @@ final class RemoteConfigService: RemoteConfigServiceProtocol {
         remoteConfig.configSettings = settings
     }
 
-    func activate() async {
+    func activate() async -> Bool {
         do {
-            _ = try await remoteConfig.fetchAndActivate()
+            // В пределах minimumFetchInterval SDK в сеть не ходит и отдаёт
+            // .successUsingPreFetchedData — новых данных нет, перечитывать нечего.
+            let status = try await remoteConfig.fetchAndActivate()
+            return status == .successFetchedFromRemote
         } catch {
             log("RemoteConfigService: \(error.localizedDescription)", level: .error)
+            return false
         }
     }
 
