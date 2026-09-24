@@ -45,7 +45,6 @@ final class PostsViewModel: ObservableObject {
     @Published var hasPostsUpdate = false
       
     var cancellables = Set<AnyCancellable>()
-    var utcCalendar = Calendar.current
     
     var allYears: [String]? = nil
     var randomSortOrder: [String] = []
@@ -162,7 +161,6 @@ final class PostsViewModel: ObservableObject {
         self.performanceManager = services.performanceManager
         self.analyticsManager = services.analyticsManager
 
-        setupTimezone()
         restorePostFilters()
     }
     /// Convenience initialiser for backward compatibility
@@ -191,12 +189,6 @@ final class PostsViewModel: ObservableObject {
         setupSubscriptionForChangesInCloud()
     }
 
-    private func setupTimezone() {
-        if let utcTimeZone = TimeZone(secondsFromGMT: 0) {
-            utcCalendar.timeZone = utcTimeZone
-        }
-    }
-    
     // MARK: - CloudKit Sync
     private func setupSubscriptionForChangesInCloud() {
         NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
@@ -513,8 +505,11 @@ final class PostsViewModel: ObservableObject {
     }
     
     private func getAllYears() -> [String]? {
+        // Локальный календарь — тот же, что при создании (DatePicker,
+        // Date.from) и отображении даты в строке: год в списке фильтра
+        // совпадает с тем, что пользователь видит у поста.
         let years = allPosts.compactMap { post -> String? in
-            post.postDate.map { String(utcCalendar.component(.year, from: $0)) }
+            post.postDate.map { String(Calendar.current.component(.year, from: $0)) }
         }
         let unique = Array(Set(years)).sorted()
         return unique.isEmpty ? nil : unique

@@ -136,19 +136,33 @@ final class PostsFilteringTests: XCTestCase {
     }
 
     func test_filterByYear_returnsOnlyMatching() async throws {
-        // Дата строится через UTC-календарь — именно им filterPosts() считает
-        // год поста (vm.utcCalendar), локальный часовой пояс машины не должен
-        // влиять на результат.
-        var utc = Calendar(identifier: .gregorian)
-        utc.timeZone = TimeZone(identifier: "UTC")!
-        let year2024 = post(title: "2024", postDate: DateComponents(calendar: utc, year: 2024, month: 6, day: 15).date)
-        let year2025 = post(title: "2025", postDate: DateComponents(calendar: utc, year: 2025, month: 6, day: 15).date)
+        // Год поста filterPosts() считает по локальному календарю — тому же,
+        // которым дата создаётся и отображается.
+        let local = Calendar.current
+        let year2024 = post(title: "2024", postDate: DateComponents(calendar: local, year: 2024, month: 6, day: 15).date)
+        let year2025 = post(title: "2025", postDate: DateComponents(calendar: local, year: 2025, month: 6, day: 15).date)
         vm = try await makeVM(posts: [year2024, year2025])
 
         vm.selectedYear = "2025"
         try await Task.sleep(nanoseconds: pipelineDelay)
 
         XCTAssertEqual(vm.filteredPosts.map(\.title), ["2025"])
+    }
+
+    func test_filterByYear_localNewYearMidnight_belongsToDisplayedYear() async throws {
+        // Граничный случай: 1 января 00:30 по локальному времени. В строке
+        // пост показывается как 01.01.2025, значит и в фильтре он должен
+        // быть в 2025 (с UTC-календарём восточнее UTC он уходил в 2024).
+        let local = Calendar.current
+        let newYear = post(title: "New Year", postDate: DateComponents(calendar: local, year: 2025, month: 1, day: 1, hour: 0, minute: 30).date)
+        vm = try await makeVM(posts: [newYear])
+
+        XCTAssertEqual(vm.allYears, ["2025"])
+
+        vm.selectedYear = "2025"
+        try await Task.sleep(nanoseconds: pipelineDelay)
+
+        XCTAssertEqual(vm.filteredPosts.map(\.title), ["New Year"])
     }
 
     // MARK: - Combined filters (AND)
