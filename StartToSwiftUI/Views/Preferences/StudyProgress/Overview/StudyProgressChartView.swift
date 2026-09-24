@@ -14,53 +14,16 @@ struct StudyProgressChartView: View {
     let posts: [Post]
     @State private var selectedPeriod: TimePeriod = .halfYear
     
-    private var chartData: [ChartDataPoint] {
-        generateChartData(posts: posts, period: selectedPeriod)
-    }
-    
-    private var stats: ProgressStats {
-        ProgressStats(posts: posts, period: selectedPeriod)
-    }
-    
-    // Calculate the maximum value for the Y-axis based on all data
-    private var chartYAxisMax: Int {
-        let calendar = Calendar.current
-        let now = Date()
-        let currentMonthStart = calendar.startOfMonth(for: now)
-        
-        var maxSum = 0
-        
-        // Go through each month and find the maximum amount
-        for i in 0...selectedPeriod.months {
-            guard let monthDate = calendar.date(byAdding: .month, value: -selectedPeriod.months + i, to: currentMonthStart) else { continue }
-            
-            let startedCount = posts.filter { post in
-                guard let date = post.startedDateStamp else { return false }
-                return calendar.isDate(date, equalTo: monthDate, toGranularity: .month)
-            }.count
-            
-            let studiedCount = posts.filter { post in
-                guard let date = post.studiedDateStamp else { return false }
-                return calendar.isDate(date, equalTo: monthDate, toGranularity: .month)
-            }.count
-            
-            let practicedCount = posts.filter { post in
-                guard let date = post.practicedDateStamp else { return false }
-                return calendar.isDate(date, equalTo: monthDate, toGranularity: .month)
-            }.count
-            
-            let sum = startedCount + studiedCount + practicedCount
-            maxSum = max(maxSum, sum)
-        }
-        
-        return max(maxSum, 5) // Minimum 5 for readability
-    }
-    
-    
     var body: some View {
         VStack(spacing: 10) {
+            // Данные считаются один раз за перерисовку и передаются дальше:
+            // максимум оси Y берётся из уже готовых точек, stats — общий.
+            let chartData = ChartDataPoint.monthlyPoints(posts: posts, period: selectedPeriod)
+            let chartYAxisMax = ChartDataPoint.yAxisMax(for: chartData)
+            let stats = ProgressStats(posts: posts, period: selectedPeriod)
+
             // Completion percentage
-                completion
+            completion(stats: stats)
             
             let UIDeviceLayout: AnyLayout = UIDevice.isiPad ? AnyLayout(HStackLayout(spacing: 6)) : AnyLayout(VStackLayout(spacing: 6))
 
@@ -136,45 +99,8 @@ struct StudyProgressChartView: View {
         
     }
     
-    // Generating data for the graph
-    private func generateChartData(posts: [Post], period: TimePeriod) -> [ChartDataPoint] {
-        let calendar = Calendar.current
-        let now = Date()
-        
-        // Start from the beginning of the current month
-        let currentMonthStart = calendar.startOfMonth(for: now)
-        
-        var dataPoints: [ChartDataPoint] = []
-        
-        // Create an array of months (from period.months back to and including the current month)
-        for i in 0...period.months {
-            guard let monthDate = calendar.date(byAdding: .month, value: -period.months + i, to: currentMonthStart) else { continue }
-            
-            // Calculate for each type of progress based on DateStamp (withoit Added)
-            let startedCount = posts.filter { post in
-                guard let date = post.startedDateStamp else { return false }
-                return calendar.isDate(date, equalTo: monthDate, toGranularity: .month)
-            }.count
-            
-            let studiedCount = posts.filter { post in
-                guard let date = post.studiedDateStamp else { return false }
-                return calendar.isDate(date, equalTo: monthDate, toGranularity: .month)
-            }.count
-            
-            let practicedCount = posts.filter { post in
-                guard let date = post.practicedDateStamp else { return false }
-                return calendar.isDate(date, equalTo: monthDate, toGranularity: .month)
-            }.count
-            
-            dataPoints.append(ChartDataPoint(month: monthDate, type: .started, count: startedCount))
-            dataPoints.append(ChartDataPoint(month: monthDate, type: .studied, count: studiedCount))
-            dataPoints.append(ChartDataPoint(month: monthDate, type: .practiced, count: practicedCount))
-        }
-        
-        return dataPoints
-    }
-    
-    private var completion: some View {
+    /// Строка "Completion: N% (всего постов)" над графиком.
+    private func completion(stats: ProgressStats) -> some View {
         HStack {
             Image(systemName: "hare")
             Text("Completion:")
