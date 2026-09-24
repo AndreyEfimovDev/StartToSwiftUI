@@ -28,6 +28,7 @@ protocol AppSyncStateManagerProtocol {
     func getLastNoticeDate() -> Date?
     func updateLatestNoticeDate(_ date: Date)
     func resetLatestNoticeDate()
+    func getAppFirstLaunchDate() -> Date?
 
     func getLastDateOfPostsLoaded() -> Date?
     func setLastDateOfPostsLoaded(_ date: Date)

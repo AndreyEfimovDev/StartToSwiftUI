@@ -29,7 +29,6 @@ final class NoticesViewModel: ObservableObject {
     @Published var shouldAnimateNoticeButton = false
     
     // MARK: - AppStorage
-    @AppStorage("appFirstLaunchDate") private var appFirstLaunchDateTimestamp: Double = 0
     /// Сигналы о новых notices внутри приложения: тактильный отклик при
     /// импорте новых notices и бейдж-кнопка с числом непрочитанных в тулбаре.
     /// Переключается в Preferences. На FCM-пуши не влияет.
@@ -50,15 +49,6 @@ final class NoticesViewModel: ObservableObject {
         dataSource as? SwiftDataNoticesDataSource
     }
     
-    private var appFirstLaunchDate: Date {
-        if appFirstLaunchDateTimestamp == 0 {
-            let now = Date()
-            appFirstLaunchDateTimestamp = now.timeIntervalSince1970
-            return now
-        }
-        return Date(timeIntervalSince1970: appFirstLaunchDateTimestamp)
-    }
-
     var unreadCount: Int {
         notices.filter { !$0.isRead }.count
     }
@@ -184,7 +174,10 @@ final class NoticesViewModel: ObservableObject {
             let lastNoticeDate = appStateManager.getLastNoticeDate() ?? Date(timeIntervalSince1970: 0)
             log("🔥 LastNoticeDate from appStateManager \(lastNoticeDate)", level: .info)
 
-            let firstLaunchDate = appFirstLaunchDate
+            // Дата общая для всех устройств (AppSyncState синхронизируется через
+            // CloudKit вместе с notices). nil бывает только при ошибке чтения
+            // состояния — тогда берём «сейчас», чтобы не загрузить все старые notices.
+            let firstLaunchDate = appStateManager.getAppFirstLaunchDate() ?? Date()
             log("🔥 FirstLaunchDate from appStateManager \(firstLaunchDate)", level: .info)
 
             filterDate = max(lastNoticeDate, firstLaunchDate)

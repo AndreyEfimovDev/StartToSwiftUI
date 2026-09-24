@@ -220,6 +220,18 @@ extension AppSyncStateManager {
         appState.lastNoticesFBUpdateDate = nil
         saveContext()
     }
+
+    /// Возвращает дату первого запуска приложения, общую для всех устройств пользователя.
+    ///
+    /// Дата хранится в `AppSyncState`, который синхронизируется через CloudKit
+    /// вместе с notices. Если второе устройство до прихода синка создало своё
+    /// состояние с датой «сейчас», слияние дублей оставит самую раннюю дату.
+    ///
+    /// - Returns: Дата первого запуска или `nil`, если состояние не удалось прочитать из базы.
+    func getAppFirstLaunchDate() -> Date? {
+        let appState = getOrCreateAppState()
+        return appState.appFirstLaunchDate
+    }
 }
 
 
