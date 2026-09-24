@@ -94,10 +94,16 @@ struct EraseAllPostsView: View {
     
     private func performErase() {
         isInProgress = true
-        vm.appStateManager?.resetLastDateOfPostsLoaded()
-        vm.eraseAllPosts {
+        // Дату синка сбрасывает сам eraseAllPosts() — только после успешного удаления.
+        let isErased = vm.eraseAllPosts()
+        isInProgress = false
+
+        if isErased {
             isDeleted = true
-            isInProgress = false
+        } else {
+            // Успех не показываем и экран не закрываем; текст ошибки — в
+            // глобальном алерте ErrorManager.
+            hapticManager.notification(type: .error)
         }
     }
 }

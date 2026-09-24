@@ -326,9 +326,13 @@ final class PostsViewModel: ObservableObject {
     }
 
     /// Add a new post
-    func addPost(_ newPost: Post) {
+    ///
+    /// - Returns: `true`, если пост сохранён; `false` при ошибке сохранения
+    ///   (ошибка уже отправлена в `ErrorManager`).
+    @discardableResult
+    func addPost(_ newPost: Post) -> Bool {
         dataSource.insert(newPost)
-        saveContextAndReload()
+        return saveContextAndReload()
     }
     
     func addPostIfNotExists(_ newPost: Post) -> Bool {
@@ -349,7 +353,11 @@ final class PostsViewModel: ObservableObject {
     }
     
     /// Post update
-    func updatePost() {
+    ///
+    /// - Returns: `true`, если изменения сохранены; `false` при ошибке
+    ///   сохранения (ошибка уже отправлена в `ErrorManager`).
+    @discardableResult
+    func updatePost() -> Bool {
         saveContextAndReload()
     }
     
@@ -375,19 +383,33 @@ final class PostsViewModel: ObservableObject {
     }
     
     /// Delete all posts
-    func eraseAllPosts(_ completion: @escaping () -> ()) {
+    ///
+    /// При успехе сбрасывает дату последней загрузки постов из облака — чтобы
+    /// коллекцию можно было скачать заново. При ошибке дата не трогается.
+    ///
+    /// - Returns: `true`, если посты удалены и сохранение прошло; `false` при
+    ///   ошибке (ошибка уже отправлена в `ErrorManager`).
+    @discardableResult
+    func eraseAllPosts() -> Bool {
+        let isErased: Bool
         if let swiftDataSource {
             do {
                 try swiftDataSource.modelContext.delete(model: Post.self)
-                saveContextAndReload()
+                isErased = saveContextAndReload()
             } catch {
                 crashManager.sendNonFatal(error)
                 handleError(error, message: "Error deleting data")
+                isErased = false
             }
         } else {
             allPosts = []
+            isErased = true
         }
-        completion()
+
+        if isErased {
+            appStateManager?.resetLastDateOfPostsLoaded()
+        }
+        return isErased
     }
     
     /// Toggle favorite flag
@@ -454,14 +476,22 @@ final class PostsViewModel: ObservableObject {
     }
     
     /// Save context and reload UI
-    func saveContextAndReload(removeDuplicates: Bool = true) {
+    /// Сохраняет контекст и перезагружает посты.
+    ///
+    /// - Returns: `true`, если сохранение прошло; `false` при ошибке (она
+    ///   уже отправлена в `ErrorManager`). Результат нужен экранам, которые
+    ///   показывают пользователю итог операции, остальные его игнорируют.
+    @discardableResult
+    func saveContextAndReload(removeDuplicates: Bool = true) -> Bool {
         do {
             try dataSource.save()
             loadPostsFromSwiftData(removeDuplicates: removeDuplicates)
             updateWidgetData()
+            return true
         } catch {
             crashManager.sendNonFatal(error)
             handleError(error, message: "Error saving data")
+            return false
         }
     }
     

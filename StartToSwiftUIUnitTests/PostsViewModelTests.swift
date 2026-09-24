@@ -183,4 +183,50 @@ final class PostsViewModelTests: XCTestCase {
         // Then
         XCTAssertTrue(hasUpdates)
     }
+
+    // MARK: - Save Result Tests
+    // addPost/updatePost сообщают, прошло ли сохранение, — по этому
+    // результату AddEditPostView показывает успех или ошибку.
+
+    func testAddPost_WhenSaveSucceeds_ReturnsTrue() {
+        // Given
+        let post = Post(title: "New post")
+
+        // When
+        let isSaved = vm.addPost(post)
+
+        // Then
+        XCTAssertTrue(isSaved)
+    }
+
+    func testAddPost_WhenSaveFails_ReturnsFalse() {
+        // Given
+        dataSource.shouldThrowOnSave = true
+        let post = Post(title: "New post")
+
+        // When
+        let isSaved = vm.addPost(post)
+
+        // Then
+        XCTAssertFalse(isSaved)
+    }
+
+    func testUpdatePost_WhenSaveSucceeds_ReturnsTrue() {
+        // When
+        let isSaved = vm.updatePost()
+
+        // Then
+        XCTAssertTrue(isSaved)
+    }
+
+    func testUpdatePost_WhenSaveFails_ReturnsFalse() {
+        // Given
+        dataSource.shouldThrowOnSave = true
+
+        // When
+        let isSaved = vm.updatePost()
+
+        // Then
+        XCTAssertFalse(isSaved)
+    }
 }

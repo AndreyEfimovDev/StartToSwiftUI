@@ -207,13 +207,26 @@ struct AddEditPostView: View {
     private func checkAndSave() {
         guard validatePost() else { return }
         
+        let isSaved: Bool
         if let originalPost {
             originalPost.update(with: editedPost)
-            vm.updatePost()
+            isSaved = vm.updatePost()
         } else {
-            vm.addPost(editedPost)
+            isSaved = vm.addPost(editedPost)
         }
-        
+
+        guard isSaved else {
+            // Показываем ошибку прямо в форме: глобальный алерт висит на
+            // StartView под модалкой. Форма остаётся открытой с введёнными
+            // данными — можно повторить сохранение или выйти.
+            showAlert(
+                title: "Could not save",
+                message: "Please try again.",
+                field: nil
+            )
+            return
+        }
+
         alertType = .success
         showAlert = true
     }
