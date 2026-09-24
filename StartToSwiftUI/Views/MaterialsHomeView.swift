@@ -31,7 +31,14 @@ struct MaterialsHomeView: View {
     /// (String), а не к самому Post: Post — SwiftData @Model, reference type,
     /// и привязка selection напрямую к нему на реальном устройстве не работала
     /// (тап не долетал до vm.selectedPost вообще, даже в широком виде).
-    /// Синхронизируется в vm.selectedPost через onChange ниже.
+    ///
+    /// Источник правды — vm.selectedPost; это локальное зеркало для List,
+    /// синхронизируется в обе стороны (см. iPadListContent). При смене секции
+    /// экран пересоздаётся и @State обнуляется — выделение восстанавливается
+    /// из VM в onAppear. Вычисляемый биндинг прямо поверх VM не подошёл:
+    /// List(selection:) в sidebar NavigationSplitView не подсвечивал строку
+    /// с заданным заранее выбором (проверено на iPad). Серый цвет подсветки
+    /// после возврата — системное "неактивное" выделение, не ошибка.
     @State private var selectedPostID: String?
     
     // MARK: - Computed Properties
@@ -179,8 +186,16 @@ struct MaterialsHomeView: View {
             }
         }
         .refreshControl { await refresh() }
+        // Восстановить выделение из VM после появления списка (экран
+        // пересоздаётся при смене секции, @State при этом обнуляется).
+        .onAppear { selectedPostID = vm.selectedPost?.id }
+        // Список → VM: тап по строке.
         .onChange(of: selectedPostID) { _, newID in
             vm.selectedPost = postsToDisplay.first { $0.id == newID }
+        }
+        // VM → список: выбор изменён/сброшен снаружи (например, пост удалён).
+        .onChange(of: vm.selectedPost?.id) { _, newID in
+            selectedPostID = newID
         }
     }
 
