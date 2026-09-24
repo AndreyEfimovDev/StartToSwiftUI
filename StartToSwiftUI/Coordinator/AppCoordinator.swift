@@ -40,7 +40,7 @@ final class AppCoordinator: ObservableObject {
     private let hapticManager = HapticManager.shared
 
     // MARK: - Section
-    @AppStorage("activeSection") var activeSection: AppSection = .snippets
+    @AppStorage("activeSection") var activeSection: AppSection = .materials
     
     // MARK: - Navigation
     /// For main stack navigation

@@ -28,6 +28,10 @@ struct StartView: View {
         _errorManager = ObservedObject(wrappedValue: dependencies.services.errorManager)
         appStoreService = dependencies.appStoreService
         remoteConfigService = dependencies.remoteConfigService
+        // Сохранённая секция — сразу, а не только в .task: иначе первый кадр
+        // строит Materials, даже если последней была открыта Snippets
+        // (вспышка и ложный logScreen("MaterialsHomeView")).
+        _displayedSection = State(initialValue: dependencies.coordinator.activeSection)
     }
 
     // MARK: - States
