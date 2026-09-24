@@ -173,7 +173,15 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ) {
-        completionHandler([.banner, .sound, .badge])
+        // Swizzling Firebase выключен (FirebaseAppDelegateProxyEnabled = false),
+        // поэтому о полученном пуше FCM сообщаем сами — иначе показы при
+        // открытом приложении не попадают в статистику кампаний.
+        Messaging.messaging().appDidReceiveMessage(notification.request.content.userInfo)
+
+        // Без .badge: пользователь уже в приложении и видит баннер, а бейдж
+        // на иконке остался бы после сворачивания (сбрасывается только при
+        // запуске/возврате из фона) — за уже показанное уведомление.
+        completionHandler([.banner, .sound])
     }
     
     // Notification tap processing
