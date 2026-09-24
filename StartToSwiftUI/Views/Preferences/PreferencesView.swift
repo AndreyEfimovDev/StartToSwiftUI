@@ -169,7 +169,6 @@ struct PreferencesView: View {
         Button("Messages") {
             coordinator.pushModal(.notices)
         }
-        .accessibilityIdentifier("MessagesButton") // for UI-testing
         .customListRowStyle(
             iconName: "message",
             iconWidth: iconSize
