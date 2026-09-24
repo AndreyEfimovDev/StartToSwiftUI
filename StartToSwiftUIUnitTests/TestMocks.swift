@@ -38,6 +38,22 @@ final class MockAppSyncStateManager: AppSyncStateManagerProtocol {
     }
 }
 
+// MARK: - Mock: SnippetFavoritesStore
+final class MockSnippetFavoritesStore: SnippetFavoritesStoreProtocol {
+    var favoriteIDs: Set<String> = []
+    var toggledIDs: [String] = []
+
+    func getSnippetFavoriteIDs() -> Set<String> { favoriteIDs }
+    func toggleSnippetFavorite(_ id: String) {
+        toggledIDs.append(id)
+        if favoriteIDs.contains(id) {
+            favoriteIDs.remove(id)
+        } else {
+            favoriteIDs.insert(id)
+        }
+    }
+}
+
 // MARK: - Mock: FBNoticesManager
 final class MockFBNoticesManager: FBNoticesManagerProtocol {
 

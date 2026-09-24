@@ -7,13 +7,13 @@
 
 import SwiftUI
 import Combine
+import CoreData
 
 @MainActor
 final class SnippetsViewModel: ObservableObject {
 
     // MARK: - Dependencies
-    private let appStateManager: AppSyncStateManager?
-    private let favoritesService: SnippetFavouritesService?
+    private let favoritesStore: SnippetFavoritesStoreProtocol?
     private let hapticManager = HapticManager.shared
     let analyticsManager: FBAnalyticsManager
 
@@ -23,39 +23,52 @@ final class SnippetsViewModel: ObservableObject {
     @Published var selectedSnippet: CodeSnippet? = nil
     @Published var searchText: String = ""
 
+    /// Кэш избранного: isFavorite вызывается до 5 раз на строку списка при
+    /// каждой перерисовке — читать базу на каждый вызов слишком дорого.
+    /// Обновляется после переключения и при изменениях из iCloud.
+    @Published private(set) var favoriteIDs: Set<String> = []
+
+    private var cancellables = Set<AnyCancellable>()
+
     // MARK: - Init
     init(
-        appStateManager: AppSyncStateManager? = nil,
+        favoritesStore: SnippetFavoritesStoreProtocol? = nil,
         services: AppServiceDependencies
     ) {
-        self.appStateManager = appStateManager
-        self.favoritesService = appStateManager.map { SnippetFavouritesService(appSyncStateManager: $0) }
-        /*
-         if let appStateManager {
-             self.favoritesService = SnippetFavouritesService(appSyncStateManager: appStateManager)
-         } else {
-             self.favoritesService = nil
-         }
-         
-         или
-         
-         appStateManager.map { unwrapped in
-             SnippetFavouritesService(appSyncStateManager: unwrapped)
-         }
-         */
+        self.favoritesStore = favoritesStore
         self.analyticsManager = services.analyticsManager
+        refreshFavorites()
         setupSubscriptions()
+        setupSubscriptionForChangesInCloud()
     }
 
     // MARK: - Favorites
     func isFavorite(_ snippet: CodeSnippet) -> Bool {
-        favoritesService?.isFavorite(snippet.id) ?? false
+        favoriteIDs.contains(snippet.id)
     }
 
     func favoriteToggle(_ snippet: CodeSnippet) {
-        favoritesService?.toggle(snippet.id)
+        guard let favoritesStore else { return }
+        favoritesStore.toggleSnippetFavorite(snippet.id)
+        refreshFavorites()
         hapticManager.impact(style: .light)
-        objectWillChange.send()
+    }
+
+    /// Перечитывает избранное из хранилища в кэш `favoriteIDs`.
+    func refreshFavorites() {
+        favoriteIDs = favoritesStore?.getSnippetFavoriteIDs() ?? []
+    }
+
+    // MARK: - CloudKit Sync
+    /// Отметки, поставленные на другом устройстве, приходят через iCloud —
+    /// без этой подписки кэш избранного оставался бы устаревшим до перезапуска.
+    private func setupSubscriptionForChangesInCloud() {
+        NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
+            .debounce(for: .seconds(2), scheduler: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.refreshFavorites()
+            }
+            .store(in: &cancellables)
     }
 
     // MARK: - Combine Pipeline

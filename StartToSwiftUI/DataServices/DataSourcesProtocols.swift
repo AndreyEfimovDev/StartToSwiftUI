@@ -37,3 +37,9 @@ protocol AppSyncStateManagerProtocol {
     func cleanupDuplicateAppStates()
 }
 
+/// Хранилище избранных сниппетов — только то, что нужно SnippetsViewModel.
+protocol SnippetFavoritesStoreProtocol {
+    func getSnippetFavoriteIDs() -> Set<String>
+    func toggleSnippetFavorite(_ id: String)
+}
+

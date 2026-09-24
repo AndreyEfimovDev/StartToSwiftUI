@@ -54,7 +54,7 @@ struct AppDependencies {
                 services: services
             ),
             snippetsViewModel: SnippetsViewModel(
-                appStateManager: stateManager,
+                favoritesStore: stateManager,
                 services: services
             ),
             coordinator: AppCoordinator()

@@ -236,7 +236,7 @@ extension AppSyncStateManager {
 
 
 // MARK: - Methods for Snippet Favorites
-extension AppSyncStateManager {
+extension AppSyncStateManager: SnippetFavoritesStoreProtocol {
     
     func getSnippetFavoriteIDs() -> Set<String> {
         let appState = getOrCreateAppState()
@@ -251,10 +251,5 @@ extension AppSyncStateManager {
             appState.snippetFavoriteIDs.append(id)
         }
         saveContext()
-    }
-    
-    func isSnippetFavorite(_ id: String) -> Bool {
-        let appState = getOrCreateAppState()
-        return appState.snippetFavoriteIDs.contains(id)
     }
 }

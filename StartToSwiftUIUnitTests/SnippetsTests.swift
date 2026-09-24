@@ -8,14 +8,17 @@
 import XCTest
 import SwiftData
 import Combine
+import CoreData
 @testable import StartToSwiftUI
 
 /*
- 15 tests in four groups:
+ Test groups:
   Repository — the data is correct, the ID is unique, and A001/A002 exists
   ViewModel initial state — filteredSnippets is the same as allSnippets, no selection
   Search — match, no match, empty restores all
-  FavoritesService + ViewModel integration — toggle, idempotency, ID independence
+  Favorites store (AppSyncStateManager) — toggle, idempotency, ID independence
+  ViewModel favorites (mock store) — cache load, toggle, no store, refresh, iCloud change
+  ViewModel + real store integration
 
  Category/platform filtering and sorting are intentionally not covered here —
  SnippetsViewModel no longer has selectedCategory/selectedSortOption/
@@ -100,7 +103,7 @@ final class SnippetsTests: XCTestCase {
         XCTAssertEqual(vm.filteredSnippets.count, vm.allSnippets.count)
     }
 
-    // MARK: - SnippetFavoritesService
+    // MARK: - Favorites store (AppSyncStateManager)
 
     /// Гонка инициализации свежесозданного in-memory ModelContainer (первый
     /// fetch падал с SIGILL внутри самого SwiftData) воспроизводится на
@@ -121,51 +124,117 @@ final class SnippetsTests: XCTestCase {
         return container
     }
 
-    private func makeFavouritesService() async throws -> SnippetFavouritesService {
+    /// Настоящий AppSyncStateManager на общем in-memory контейнере
+    /// с очищенным избранным.
+    private func makeFavoritesStore() async throws -> AppSyncStateManager {
         let container = try await Self.sharedFavouritesContainer.value
         let stateManager = AppSyncStateManager(modelContext: container.mainContext)
         stateManager.getOrCreateAppState().snippetFavoriteIDs = []
-        return SnippetFavouritesService(appSyncStateManager: stateManager)
+        return stateManager
     }
 
     func test_favorites_toggle_addsFavorite() async throws {
-        let service = try await makeFavouritesService()
-        service.toggle("A001")
-        XCTAssertTrue(service.isFavorite("A001"))
+        let store = try await makeFavoritesStore()
+        store.toggleSnippetFavorite("A001")
+        XCTAssertTrue(store.getSnippetFavoriteIDs().contains("A001"))
     }
 
     func test_favorites_toggle_removesFavorite() async throws {
-        let service = try await makeFavouritesService()
-        service.toggle("A001")
-        service.toggle("A001")
-        XCTAssertFalse(service.isFavorite("A001"))
+        let store = try await makeFavoritesStore()
+        store.toggleSnippetFavorite("A001")
+        store.toggleSnippetFavorite("A001")
+        XCTAssertFalse(store.getSnippetFavoriteIDs().contains("A001"))
     }
 
     func test_favorites_toggle_idempotentMultipleTimes() async throws {
-        let service = try await makeFavouritesService()
-        service.toggle("A002")
-        service.toggle("A002")
-        service.toggle("A002")
-        XCTAssertTrue(service.isFavorite("A002"))
+        let store = try await makeFavoritesStore()
+        store.toggleSnippetFavorite("A002")
+        store.toggleSnippetFavorite("A002")
+        store.toggleSnippetFavorite("A002")
+        XCTAssertTrue(store.getSnippetFavoriteIDs().contains("A002"))
     }
 
     func test_favorites_differentIDs_independant() async throws {
-        let service = try await makeFavouritesService()
-        service.toggle("A001")
-        XCTAssertTrue(service.isFavorite("A001"))
-        XCTAssertFalse(service.isFavorite("A002"))
+        let store = try await makeFavoritesStore()
+        store.toggleSnippetFavorite("A001")
+        XCTAssertEqual(store.getSnippetFavoriteIDs(), ["A001"])
+    }
+
+    // MARK: - SnippetsViewModel — Favorites (mock store)
+
+    func test_viewModel_init_loadsFavoritesFromStore() {
+        let store = MockSnippetFavoritesStore()
+        store.favoriteIDs = [SnippetsRepository.a001.id]
+
+        let testVM = SnippetsViewModel(favoritesStore: store, services: .make())
+
+        XCTAssertTrue(testVM.isFavorite(SnippetsRepository.a001))
+    }
+
+    func test_viewModel_favoriteToggle_updatesCacheAndStore() {
+        let store = MockSnippetFavoritesStore()
+        let testVM = SnippetsViewModel(favoritesStore: store, services: .make())
+        let snippet = SnippetsRepository.a001
+
+        testVM.favoriteToggle(snippet)
+
+        XCTAssertEqual(store.toggledIDs, [snippet.id])
+        XCTAssertTrue(testVM.isFavorite(snippet))
+    }
+
+    /// Без хранилища (превью) избранного нет, переключение ничего не делает.
+    func test_viewModel_withoutStore_favoritesAreNoOp() {
+        let snippet = SnippetsRepository.a001
+
+        vm.favoriteToggle(snippet)
+
+        XCTAssertFalse(vm.isFavorite(snippet))
+    }
+
+    /// Изменение в хранилище в обход VM (например, с другого устройства)
+    /// попадает в кэш после refreshFavorites().
+    func test_viewModel_refreshFavorites_picksUpStoreChanges() {
+        let store = MockSnippetFavoritesStore()
+        let testVM = SnippetsViewModel(favoritesStore: store, services: .make())
+        let snippet = SnippetsRepository.a001
+
+        store.favoriteIDs = [snippet.id]
+        XCTAssertFalse(testVM.isFavorite(snippet), "кэш ещё не обновлён")
+
+        testVM.refreshFavorites()
+
+        XCTAssertTrue(testVM.isFavorite(snippet))
+    }
+
+    /// Уведомление об изменениях из iCloud обновляет кэш избранного
+    /// (с debounce 2 с — поэтому тест ждёт до 4 с).
+    func test_viewModel_remoteChangeNotification_refreshesFavorites() async {
+        let store = MockSnippetFavoritesStore()
+        let testVM = SnippetsViewModel(favoritesStore: store, services: .make())
+        let snippet = SnippetsRepository.a001
+        store.favoriteIDs = [snippet.id]
+
+        let refreshed = expectation(description: "favoriteIDs refreshed")
+        testVM.$favoriteIDs
+            .dropFirst()
+            .sink { ids in
+                if ids.contains(snippet.id) { refreshed.fulfill() }
+            }
+            .store(in: &cancellables)
+
+        NotificationCenter.default.post(name: .NSPersistentStoreRemoteChange, object: nil)
+
+        await fulfillment(of: [refreshed], timeout: 4)
     }
 
     // MARK: - SnippetsViewModel — Favorites Integration
 
-    /// vm из setUp() строится без appStateManager (nil по умолчанию) —
-    /// favoritesService там тоже nil, favoriteToggle/isFavorite становятся
-    /// no-op. Для этого теста нужен свой vm с реальным appStateManager.
+    /// vm из setUp() строится без хранилища (nil по умолчанию) —
+    /// favoriteToggle/isFavorite там no-op. Для этого теста нужен свой vm
+    /// с настоящим AppSyncStateManager.
     func test_viewModel_favoriteToggle_updatesState() async throws {
-        let container = try await Self.sharedFavouritesContainer.value
-        let stateManager = AppSyncStateManager(modelContext: container.mainContext)
-        stateManager.getOrCreateAppState().snippetFavoriteIDs = []
-        let testVM = SnippetsViewModel(appStateManager: stateManager, services: .make())
+        let stateManager = try await makeFavoritesStore()
+        let testVM = SnippetsViewModel(favoritesStore: stateManager, services: .make())
 
         let snippet = SnippetsRepository.a001
         let before = testVM.isFavorite(snippet)

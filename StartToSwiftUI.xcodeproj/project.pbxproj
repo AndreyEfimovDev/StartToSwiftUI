@@ -175,7 +175,6 @@
 		47B6E81B2F5DFEE800EF7441 /* SnippetNoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E81A2F5DFEE800EF7441 /* SnippetNoPreviewView.swift */; };
 		47B6E81E2F5EB4DB00EF7441 /* A001_ProgressViewIndicators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E81D2F5EB4DB00EF7441 /* A001_ProgressViewIndicators.swift */; };
 		47B6E8202F5ECFC200EF7441 /* A002_TrimIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E81F2F5ECFC200EF7441 /* A002_TrimIndicator.swift */; };
-		47B6E8222F5EF33B00EF7441 /* SnippetFavouritesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8212F5EF33B00EF7441 /* SnippetFavouritesService.swift */; };
 		47B6E8242F5EF3B700EF7441 /* SnippetsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8232F5EF3B700EF7441 /* SnippetsRepository.swift */; };
 		47B6E8282F5F267C00EF7441 /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = 47B6E8272F5F267C00EF7441 /* Splash */; };
 		47B6E82A2F5F26BB00EF7441 /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B6E8292F5F26BB00EF7441 /* AttributedString.swift */; };
@@ -406,7 +405,6 @@
 		47B6E81A2F5DFEE800EF7441 /* SnippetNoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetNoPreviewView.swift; sourceTree = "<group>"; };
 		47B6E81D2F5EB4DB00EF7441 /* A001_ProgressViewIndicators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A001_ProgressViewIndicators.swift; sourceTree = "<group>"; };
 		47B6E81F2F5ECFC200EF7441 /* A002_TrimIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A002_TrimIndicator.swift; sourceTree = "<group>"; };
-		47B6E8212F5EF33B00EF7441 /* SnippetFavouritesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetFavouritesService.swift; sourceTree = "<group>"; };
 		47B6E8232F5EF3B700EF7441 /* SnippetsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsRepository.swift; sourceTree = "<group>"; };
 		47B6E8292F5F26BB00EF7441 /* AttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedString.swift; sourceTree = "<group>"; };
 		47BAF09A2E5F9BE500287F10 /* RedCupsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedCupsuleButton.swift; sourceTree = "<group>"; };
@@ -995,7 +993,6 @@
 			children = (
 				47B6E80D2F5DFAE500EF7441 /* SnippetRowView.swift */,
 				47B6E8112F5DFB3200EF7441 /* SnippetDetailsView.swift */,
-				47B6E8212F5EF33B00EF7441 /* SnippetFavouritesService.swift */,
 				47B6E81C2F5EB4BF00EF7441 /* SnippetsDemoViews */,
 				478DBECE2F70027C0097FC8A /* Helpers */,
 			);
@@ -1292,7 +1289,6 @@
 				47B6E8202F5ECFC200EF7441 /* A002_TrimIndicator.swift in Sources */,
 				4725A52B2EDD757F00235C40 /* UIDevice.swift in Sources */,
 				473436782F49BC1B00CF00FA /* FBPostModel.swift in Sources */,
-				47B6E8222F5EF33B00EF7441 /* SnippetFavouritesService.swift in Sources */,
 				475CC6942F2246FB0099CAA6 /* MockPostsDataSource.swift in Sources */,
 				47AC34432F28F2360023C7AF /* Calendar.swift in Sources */,
 				47656BFC2EE1EBF000F45AA6 /* ProgressIndicatorView.swift in Sources */,
