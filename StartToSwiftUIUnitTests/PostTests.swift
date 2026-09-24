@@ -906,4 +906,99 @@ final class PostTests: XCTestCase {
         // Then
         XCTAssertEqual(emptyKeep.notes, "Only here")
     }
+
+    // MARK: - applyStudyProgress(_:at:) Tests
+    // Метки этапов накопительные: пропущенные ранние этапы получают дату
+    // следующего, существующие даты не перезаписываются, откат обнуляет поздние.
+
+    @MainActor
+    func testApplyStudyProgress_SkippedStages_GetSameDateAsTarget() {
+        // Given — пост только добавлен
+        let now = Date(timeIntervalSince1970: 3_000)
+        let post = Post(progress: .added)
+
+        // When — сразу practiced
+        post.applyStudyProgress(.practiced, at: now)
+
+        // Then — started и studied заполнены той же датой
+        XCTAssertEqual(post.progress, .practiced)
+        XCTAssertEqual(post.practicedDateStamp, now)
+        XCTAssertEqual(post.studiedDateStamp, now)
+        XCTAssertEqual(post.startedDateStamp, now)
+    }
+
+    @MainActor
+    func testApplyStudyProgress_ExistingEarlierStamp_IsKept() {
+        // Given — started отмечен раньше
+        let startedDate = Date(timeIntervalSince1970: 1_000)
+        let now = Date(timeIntervalSince1970: 3_000)
+        let post = Post(progress: .started, startedDateStamp: startedDate)
+
+        // When
+        post.applyStudyProgress(.practiced, at: now)
+
+        // Then — реальная дата started сохранена, пропущенный studied — дата practiced
+        XCTAssertEqual(post.startedDateStamp, startedDate)
+        XCTAssertEqual(post.studiedDateStamp, now)
+        XCTAssertEqual(post.practicedDateStamp, now)
+    }
+
+    @MainActor
+    func testApplyStudyProgress_SameStageAgain_DoesNotOverwriteDate() {
+        // Given — practiced уже отмечен
+        let firstDate = Date(timeIntervalSince1970: 1_000)
+        let laterDate = Date(timeIntervalSince1970: 9_000)
+        let post = Post()
+        post.applyStudyProgress(.practiced, at: firstDate)
+
+        // When — тот же этап ещё раз
+        post.applyStudyProgress(.practiced, at: laterDate)
+
+        // Then — дата не сдвинулась
+        XCTAssertEqual(post.practicedDateStamp, firstDate)
+        XCTAssertEqual(post.studiedDateStamp, firstDate)
+        XCTAssertEqual(post.startedDateStamp, firstDate)
+    }
+
+    @MainActor
+    func testApplyStudyProgress_Rollback_ClearsLaterStages() {
+        // Given
+        let date = Date(timeIntervalSince1970: 1_000)
+        let post = Post()
+        post.applyStudyProgress(.practiced, at: date)
+
+        // When — откат practiced → studied
+        post.applyStudyProgress(.studied, at: Date(timeIntervalSince1970: 9_000))
+
+        // Then — practiced обнулён, ранние этапы не тронуты
+        XCTAssertEqual(post.progress, .studied)
+        XCTAssertNil(post.practicedDateStamp)
+        XCTAssertEqual(post.studiedDateStamp, date)
+        XCTAssertEqual(post.startedDateStamp, date)
+
+        // When — откат studied → started
+        post.applyStudyProgress(.started, at: Date(timeIntervalSince1970: 9_000))
+
+        // Then
+        XCTAssertNil(post.studiedDateStamp)
+        XCTAssertEqual(post.startedDateStamp, date)
+    }
+
+    @MainActor
+    func testApplyStudyProgress_Added_ClearsStagesButKeepsAddedDate() {
+        // Given
+        let addedDate = Date(timeIntervalSince1970: 500)
+        let post = Post(addedDateStamp: addedDate)
+        post.applyStudyProgress(.practiced, at: Date(timeIntervalSince1970: 1_000))
+
+        // When
+        post.applyStudyProgress(.added, at: Date(timeIntervalSince1970: 9_000))
+
+        // Then
+        XCTAssertEqual(post.progress, .added)
+        XCTAssertNil(post.startedDateStamp)
+        XCTAssertNil(post.studiedDateStamp)
+        XCTAssertNil(post.practicedDateStamp)
+        XCTAssertEqual(post.addedDateStamp, addedDate)
+    }
 }

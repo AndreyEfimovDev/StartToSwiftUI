@@ -429,23 +429,8 @@ final class PostsViewModel: ObservableObject {
     
     /// Update post study progress
     func updatePostStudyProgress(_ post: Post) {
-        post.progress = selectedStudyProgress
-        
-        switch selectedStudyProgress {
-        case .added:
-            post.startedDateStamp = nil
-            post.studiedDateStamp = nil
-            post.practicedDateStamp = nil
-        case .started:
-            post.startedDateStamp = .now
-            post.studiedDateStamp = nil
-            post.practicedDateStamp = nil
-        case .studied:
-            post.studiedDateStamp = .now
-            post.practicedDateStamp = nil
-        case .practiced:
-            post.practicedDateStamp = .now
-        }
+        // Правила меток дат этапов — в модели (Post.applyStudyProgress).
+        post.applyStudyProgress(selectedStudyProgress)
         analyticsManager.logEvent(name: "study_progress_changed", params: ["progress": selectedStudyProgress.rawValue])
         saveContextAndReload()
     }

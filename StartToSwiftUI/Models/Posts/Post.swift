@@ -185,6 +185,48 @@ extension Post {
         self.draft = post.draft
     }
 
+    // MARK: Study progress
+
+    /// Устанавливает этап изучения и согласует метки дат этапов.
+    ///
+    /// Метки накопительные: пройденный этап подразумевает все более ранние.
+    /// - Более ранние этапы без метки получают дату ближайшего следующего
+    ///   этапа. Компромисс для случая, когда пользователь сразу отметил,
+    ///   например, practiced: реальные даты started/studied неизвестны, но
+    ///   они точно не позже practiced.
+    /// - Метка самого этапа ставится только если её ещё нет: повторная
+    ///   установка того же этапа не сдвигает дату (иначе "уезжают" прошлые
+    ///   месяцы в статистике).
+    /// - Более поздние этапы при откате обнуляются (practiced → studied
+    ///   убирает дату practiced).
+    /// - `added` сбрасывает started/studied/practiced; `addedDateStamp` не трогается.
+    ///
+    /// - Parameters:
+    ///   - newProgress: Новый этап.
+    ///   - date: Дата отметки этапа (параметр — для тестов).
+    func applyStudyProgress(_ newProgress: StudyProgress, at date: Date = .now) {
+        progress = newProgress
+
+        switch newProgress {
+        case .added:
+            startedDateStamp = nil
+            studiedDateStamp = nil
+            practicedDateStamp = nil
+        case .started:
+            startedDateStamp = startedDateStamp ?? date
+            studiedDateStamp = nil
+            practicedDateStamp = nil
+        case .studied:
+            studiedDateStamp = studiedDateStamp ?? date
+            startedDateStamp = startedDateStamp ?? studiedDateStamp
+            practicedDateStamp = nil
+        case .practiced:
+            practicedDateStamp = practicedDateStamp ?? date
+            studiedDateStamp = studiedDateStamp ?? practicedDateStamp
+            startedDateStamp = startedDateStamp ?? studiedDateStamp
+        }
+    }
+
     // MARK: For removeDuplicatePosts: merge user state from a duplicate
 
     /// Переносит в этот пост пользовательское состояние из дубля `other`
