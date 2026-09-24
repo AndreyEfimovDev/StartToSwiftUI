@@ -23,10 +23,15 @@ final class AppStoreService {
     
     // MARK: - Public Methods
 
-    /// Returns true if a newer version is available on the App Store
-    func isUpdateAvailable() async -> Bool {
+    /// Проверяет, есть ли в App Store версия новее установленной.
+    ///
+    /// - Returns: `true` / `false` — есть ли обновление; `nil` — проверить не
+    ///   удалось (нет сети, ошибка ответа, версия не найдена в ответе).
+    ///   Отличать `nil` от `false` важно: иначе без сети пользователь увидел
+    ///   бы "The App is up to date".
+    func isUpdateAvailable() async -> Bool? {
         guard let url = URL(string: "https://itunes.apple.com/lookup?bundleId=\(Constants.bundleID)") else {
-            return false
+            return nil
         }
 
         do {
@@ -35,7 +40,7 @@ final class AppStoreService {
 
             guard let appStoreVersion = json.results.first?.version else {
                 log("⚠️ AppStoreService: No version found in response", level: .info)
-                return false
+                return nil
             }
 
             let currentVersion = Bundle.main.version
@@ -46,7 +51,7 @@ final class AppStoreService {
 
         } catch {
             log("❌ AppStoreService: \(error.localizedDescription)", level: .error)
-            return false
+            return nil
         }
     }
 

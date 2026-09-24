@@ -15,6 +15,9 @@ struct AboutApp: View {
     
     // MARK: - States
     @State private var buttonTitleAppUpdate = "Check for App update"
+    /// Идёт проверка версии в App Store — триггер `.task(id:)` и блокировка
+    /// кнопки от двойного тапа.
+    @State private var isCheckingAppUpdate = false
     
     // MARK: - Constants
     private let iconWidth: CGFloat = 18
@@ -67,21 +70,31 @@ struct AboutApp: View {
             .customListRowStyle(iconName: "f.cursive", iconWidth: iconWidth)
 
             // Link to the app's page in the App Store
-            Button(buttonTitleAppUpdate) {
-                Task {
-                    let hasUpdate = await appStoreService.isUpdateAvailable()
-                    await MainActor.run {
-                        if hasUpdate {
-                            if let url = URL(string: Constants.appStoreURL) {
-                                UIApplication.shared.open(url)
-                            }
-                        } else {
-                            buttonTitleAppUpdate = "The App is up to date"
-                        }
-                    }
-                }
+            Button(isCheckingAppUpdate ? "Checking…" : buttonTitleAppUpdate) {
+                isCheckingAppUpdate = true
             }
+            .disabled(isCheckingAppUpdate)
             .customListRowStyle(iconName: "gear.badge", iconWidth: iconWidth)
+            // Проверка привязана к жизни экрана: ушли раньше, чем пришёл
+            // ответ (запрос может идти до таймаута) — задача отменяется, и
+            // App Store не открывается сам собой на другом экране.
+            .task(id: isCheckingAppUpdate) {
+                guard isCheckingAppUpdate else { return }
+                let hasUpdate = await appStoreService.isUpdateAvailable()
+                guard !Task.isCancelled else { return }
+
+                switch hasUpdate {
+                case true?:
+                    if let url = URL(string: Constants.appStoreURL) {
+                        UIApplication.shared.open(url)
+                    }
+                case false?:
+                    buttonTitleAppUpdate = "The App is up to date"
+                case nil:
+                    buttonTitleAppUpdate = "Could not check for update"
+                }
+                isCheckingAppUpdate = false
+            }
             
             Button("What's New") {
                 coordinator.pushModal(.whatIsNew)
