@@ -59,6 +59,9 @@ struct SharePostsView: View {
                     sharingActivityView(for: url)
                 }
             }
+            .autoDismiss(when: isShareCompleted) {
+                coordinator.closeModal()
+            }
         }
     }
     
@@ -122,10 +125,6 @@ struct SharePostsView: View {
             isShareCompleted = true
             showActivityView = false
             log("✅ Successfully shared via: \(result.activityName)", level: .info)
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                coordinator.closeModal()
-            }
         } else {
             hapticManager.impact(style: .light)
             log("✅ Share cancelled.", level: .info)

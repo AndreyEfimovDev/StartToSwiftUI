@@ -144,6 +144,19 @@ final class AppCoordinator: ObservableObject {
         presentedSheet = nil
         modalPath = NavigationPath()
     }
+
+    /// Уходит с текущего модального экрана: если он корень модалки (или
+    /// открыт из основного стека) — закрывает модалку целиком, иначе
+    /// возвращает на шаг назад в модальном стеке.
+    ///
+    /// Решение принимается по состоянию `modalPath` в момент вызова.
+    func dismissCurrentModalScreen() {
+        if modalPath.isEmpty {
+            closeModal()
+        } else {
+            popModal()
+        }
+    }
 }
 
 // MARK: - Navigation Routes

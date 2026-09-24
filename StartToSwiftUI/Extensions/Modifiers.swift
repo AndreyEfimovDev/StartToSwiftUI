@@ -260,3 +260,34 @@ struct AdaptiveModalModifier: ViewModifier {
 }
 
 //            .tabViewStyle(.page(indexDisplayMode: .never))
+
+// MARK: - Auto Dismiss
+extension View {
+    /// Выполняет `perform` через `delay` после того, как `trigger` стал `true`
+    /// (обычно — закрыть экран после успешной операции).
+    ///
+    /// Задержка привязана к жизни вью через `.task(id:)`: если пользователь
+    /// ушёл с экрана раньше (Back, Home, свайп), задача отменяется и `perform`
+    /// не вызывается. В отличие от `Task {}` / `asyncAfter`, отложенное
+    /// закрытие не может сработать на уже другом экране или модалке.
+    ///
+    /// - Parameters:
+    ///   - trigger: Условие запуска отсчёта.
+    ///   - delay: Пауза перед действием.
+    ///   - perform: Действие после паузы.
+    func autoDismiss(
+        when trigger: Bool,
+        after delay: Duration = Constants.autoDismissDelay,
+        perform: @escaping () -> Void
+    ) -> some View {
+        task(id: trigger) {
+            guard trigger else { return }
+            do {
+                try await Task.sleep(for: delay)
+            } catch {
+                return // вью ушла с экрана — не закрываем
+            }
+            perform()
+        }
+    }
+}

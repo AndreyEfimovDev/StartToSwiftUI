@@ -48,6 +48,9 @@ struct EraseAllPostsView: View {
             .onAppear {
                 hapticManager.notification(type: .warning)
             }
+            .autoDismiss(when: isDeleted) {
+                coordinator.closeModal()
+            }
         }
     }
     
@@ -95,10 +98,6 @@ struct EraseAllPostsView: View {
         vm.eraseAllPosts {
             isDeleted = true
             isInProgress = false
-            
-            DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                coordinator.closeModal()
-            }
         }
     }
 }

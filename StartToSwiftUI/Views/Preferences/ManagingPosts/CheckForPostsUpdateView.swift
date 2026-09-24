@@ -38,8 +38,17 @@ struct CheckForPostsUpdateView: View {
                 }
             }
             .task {
-                try? await Task.sleep(for: .seconds(Constants.dispatchFor))
+                // Пауза, чтобы пользователь увидел "Checking for update...".
+                // Если экран закрыли раньше — выходим, не отправляя запрос.
+                do {
+                    try await Task.sleep(for: .seconds(Constants.dispatchFor))
+                } catch {
+                    return
+                }
                 await checkForUpdates()
+            }
+            .autoDismiss(when: isUpdated || isImported) {
+                coordinator.closeModal()
             }
         }
     }
@@ -133,12 +142,6 @@ struct CheckForPostsUpdateView: View {
             statusText = "No updates available"
             statusColor = Color.mycolor.myGreen
             isUpdated = true
-            Task {
-                try? await Task.sleep(for: .seconds(Constants.dispatchFor))
-                await MainActor.run {
-                    coordinator.closeModal()
-                }
-            }
         }
     }
     
@@ -151,12 +154,6 @@ struct CheckForPostsUpdateView: View {
         if success {
             isImported = true
             hapticManager.notification(type: .success)
-            Task {
-                try? await Task.sleep(for: .seconds(Constants.dispatchFor))
-                await MainActor.run {
-                    coordinator.closeModal()
-                }
-            }
         }
     }
 }

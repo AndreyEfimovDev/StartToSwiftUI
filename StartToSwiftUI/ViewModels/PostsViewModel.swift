@@ -44,7 +44,6 @@ final class PostsViewModel: ObservableObject {
     
     var allYears: [String]? = nil
     var randomSortOrder: [String] = []
-    var dispatchTime: DispatchTime { .now() + 1.5 }
     
     private var lastLoadTime: Date = Date(timeIntervalSince1970: 0)
     private let minLoadInterval: TimeInterval = 3

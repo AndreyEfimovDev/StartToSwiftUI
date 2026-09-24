@@ -201,14 +201,7 @@ struct AddEditPostView: View {
     }
 
     private func navigateBack() {
-        // Determine where to return
-        if coordinator.modalPath.isEmpty {
-            // In the main stack or this is the root modal view
-            coordinator.closeModal()
-        } else {
-            // In the modal stack
-            coordinator.popModal()
-        }
+        coordinator.dismissCurrentModalScreen()
     }
         
     private func checkAndSave() {

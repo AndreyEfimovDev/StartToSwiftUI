@@ -23,6 +23,8 @@ struct RestoreBackupView: View {
     @State private var restoredCount = 0
     @State private var isInProgress = false
     @State private var showDocumentPicker = false
+    /// Восстановление прошло без ошибки — экран закроется сам.
+    @State private var shouldAutoDismiss = false
     
     // MARK: - Body
     
@@ -56,6 +58,9 @@ struct RestoreBackupView: View {
             .padding(.top, 30)
             .sheet(isPresented: $showDocumentPicker) {
                 documentPicker
+            }
+            .autoDismiss(when: shouldAutoDismiss) {
+                coordinator.closeModal()
             }
         }
     }
@@ -91,11 +96,7 @@ struct RestoreBackupView: View {
             isRestored = true
             isInProgress = false
             
-            if !vm.errorManager.showAlert {
-                DispatchQueue.main.asyncAfter(deadline: vm.dispatchTime) {
-                    coordinator.closeModal()
-                }
-            }
+            shouldAutoDismiss = !vm.errorManager.showAlert
         }
     }
 }
