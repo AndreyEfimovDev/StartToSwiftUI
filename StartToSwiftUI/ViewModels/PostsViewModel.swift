@@ -197,7 +197,8 @@ final class PostsViewModel: ObservableObject {
     /// у друга разные копии, после синка пост пропадёт совсем.
     private func setupSubscriptionForChangesInCloud() {
         cloudChangeObserver?.changes
-            .sink { [weak self] in
+            .filter { $0.contains(.post) }
+            .sink { [weak self] _ in
                 self?.loadPostsFromSwiftData(removeDuplicates: false)
                 log("Cloud posts sync subscription run", level: .info)
             }

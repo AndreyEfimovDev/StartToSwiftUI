@@ -188,6 +188,7 @@
 		47BAF0FA2E64CC8700287F10 /* UnderlineSermentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BAF0F92E64CC8700287F10 /* UnderlineSermentedPicker.swift */; };
 		47BB9FDB3065C686005D034C /* MockAppStoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BB9FDA3065C686005D034C /* MockAppStoreService.swift */; };
 		47BB9FDD3065CB2A005D034C /* CloudChangeObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BB9FDC3065CB2A005D034C /* CloudChangeObserver.swift */; };
+		47BB9FDF3065CCA6005D034C /* StoreHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BB9FDE3065CCA6005D034C /* StoreHistory.swift */; };
 		47C09A9A2F8576ED0049858B /* A015_CardSwipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C09A992F8576ED0049858B /* A015_CardSwipe.swift */; };
 		47C09A9C2F858F930049858B /* A016_IndeterminateProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C09A9B2F858F930049858B /* A016_IndeterminateProgressBar.swift */; };
 		47C56FEC2EC9C66700F0796C /* NoticeDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C56FEB2EC9C66700F0796C /* NoticeDetailsView.swift */; };
@@ -419,6 +420,7 @@
 		47BAF0F92E64CC8700287F10 /* UnderlineSermentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineSermentedPicker.swift; sourceTree = "<group>"; };
 		47BB9FDA3065C686005D034C /* MockAppStoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAppStoreService.swift; sourceTree = "<group>"; };
 		47BB9FDC3065CB2A005D034C /* CloudChangeObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudChangeObserver.swift; sourceTree = "<group>"; };
+		47BB9FDE3065CCA6005D034C /* StoreHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreHistory.swift; sourceTree = "<group>"; };
 		47C09A992F8576ED0049858B /* A015_CardSwipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A015_CardSwipe.swift; sourceTree = "<group>"; };
 		47C09A9B2F858F930049858B /* A016_IndeterminateProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A016_IndeterminateProgressBar.swift; sourceTree = "<group>"; };
 		47C56FEB2EC9C66700F0796C /* NoticeDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeDetailsView.swift; sourceTree = "<group>"; };
@@ -853,6 +855,7 @@
 				475CC6972F22476D0099CAA6 /* SwiftDataPostsDataSource.swift */,
 				475CC6952F22472E0099CAA6 /* SwiftDataNoticesDataSource.swift */,
 				47BB9FDC3065CB2A005D034C /* CloudChangeObserver.swift */,
+				47BB9FDE3065CCA6005D034C /* StoreHistory.swift */,
 			);
 			path = DataServices;
 			sourceTree = "<group>";
@@ -1363,6 +1366,7 @@
 				47870FBF2ECCD743004175E4 /* LinkButtonURL.swift in Sources */,
 				47BAF0F62E6485B000287F10 /* SegmentedOneLinePicker.swift in Sources */,
 				471BBF9A2EC5F6170004AC45 /* PostDraftsView.swift in Sources */,
+				47BB9FDF3065CCA6005D034C /* StoreHistory.swift in Sources */,
 				4791CDAF2E70187E00687126 /* PreferencesView.swift in Sources */,
 				47453E042EAB73A9000D2C16 /* Date.swift in Sources */,
 				478DBED22F7002C30097FC8A /* SnippetDemoHeader.swift in Sources */,

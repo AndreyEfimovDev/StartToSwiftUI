@@ -204,11 +204,31 @@ final class NoticeViewModelTests: XCTestCase {
         testVM.start()
 
         // When
-        observer.sendChange()
+        observer.sendChange([.notice])
 
         // Then
         XCTAssertEqual(testVM.notices.count, 2)
         XCTAssertTrue(dataSource.deletedNotices.isEmpty)
+    }
+
+    /// Изменения других сущностей notices не перезагружают.
+    func testStoreChange_OfOtherEntity_DoesNotReloadNotices() {
+        // Given
+        let dataSource = MockNoticesDataSource(notices: [Notice(id: "n1", title: "Notice")])
+        let observer = MockCloudChangeObserver()
+        let testVM = NoticesViewModel(
+            dataSource: dataSource,
+            fbNoticesManager: MockFBNoticesManager.mockEmpty(),
+            cloudChangeObserver: observer,
+            services: .make()
+        )
+        testVM.start()
+
+        // When
+        observer.sendChange([.post, .appSyncState])
+
+        // Then
+        XCTAssertTrue(testVM.notices.isEmpty)
     }
 
     // MARK: - Remove Duplicates

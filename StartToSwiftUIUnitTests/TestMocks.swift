@@ -12,10 +12,16 @@ import Combine
 /// Событие "хранилище изменилось" отправляется вручную и приходит сразу,
 /// без debounce.
 final class MockCloudChangeObserver: CloudChangeObserving {
-    private let subject = PassthroughSubject<Void, Never>()
-    var changes: AnyPublisher<Void, Never> { subject.eraseToAnyPublisher() }
+    private let subject = PassthroughSubject<Set<StoreEntity>, Never>()
+    var changes: AnyPublisher<Set<StoreEntity>, Never> { subject.eraseToAnyPublisher() }
 
-    func sendChange() { subject.send() }
+    func sendChange(_ entities: Set<StoreEntity>) { subject.send(entities) }
+}
+
+// MARK: - Mock: StoreHistoryReader
+final class MockStoreHistoryReader: StoreHistoryReading {
+    var externalChanges: Set<StoreEntity> = []
+    func fetchExternalChanges() -> Set<StoreEntity> { externalChanges }
 }
 
 // MARK: - Mock: AppSyncStateManager

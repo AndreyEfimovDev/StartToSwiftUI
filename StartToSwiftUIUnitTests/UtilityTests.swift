@@ -10,6 +10,7 @@ import SwiftUI
 import XCTest
 import CoreData
 @testable import StartToSwiftUI
+import Combine
 
 final class UtilityTests: XCTestCase {
     
@@ -839,14 +840,24 @@ final class UtilityTests: XCTestCase {
 
     // MARK: - CloudChangeObserver
 
-    /// Серия уведомлений хранилища подряд схлопывается в одно событие.
+    /// Наблюдатель со своим NotificationCenter (чтобы не ловить реальные
+    /// уведомления) и коротким debounce.
+    @MainActor
+    private func makeChangeObserver(reader: MockStoreHistoryReader, center: NotificationCenter) -> CloudChangeObserver {
+        CloudChangeObserver(historyReader: reader, notificationCenter: center, debounceInterval: .milliseconds(100))
+    }
+
+    /// Серия уведомлений хранилища подряд схлопывается в одно событие
+    /// с сущностями, которые вернул читатель истории.
     @MainActor
     func test_cloudChangeObserver_debouncesBurstIntoOneEvent() async {
-        // Given — свой NotificationCenter, чтобы не ловить реальные уведомления
+        // Given
         let center = NotificationCenter()
-        let observer = CloudChangeObserver(notificationCenter: center, debounceInterval: .milliseconds(100))
-        var eventCount = 0
-        let cancellable = observer.changes.sink { eventCount += 1 }
+        let reader = MockStoreHistoryReader()
+        reader.externalChanges = [.post]
+        let observer = makeChangeObserver(reader: reader, center: center)
+        var events: [Set<StoreEntity>] = []
+        let cancellable = observer.changes.sink { events.append($0) }
 
         // When
         for _ in 0..<3 {
@@ -855,8 +866,70 @@ final class UtilityTests: XCTestCase {
         try? await Task.sleep(for: .milliseconds(400))
 
         // Then
-        XCTAssertEqual(eventCount, 1)
+        XCTAssertEqual(events, [[.post]])
         cancellable.cancel()
+    }
+
+    /// Только свои изменения (читатель вернул пусто) — события нет.
+    @MainActor
+    func test_cloudChangeObserver_noExternalChanges_noEvent() async {
+        // Given
+        let center = NotificationCenter()
+        let reader = MockStoreHistoryReader()
+        let observer = makeChangeObserver(reader: reader, center: center)
+        var eventCount = 0
+        let cancellable = observer.changes.sink { _ in eventCount += 1 }
+
+        // When
+        center.post(name: .NSPersistentStoreRemoteChange, object: nil)
+        try? await Task.sleep(for: .milliseconds(400))
+
+        // Then
+        XCTAssertEqual(eventCount, 0)
+        cancellable.cancel()
+    }
+
+    // MARK: - StoreTransaction.externalEntities
+
+    @MainActor
+    private var ownAuthor: String { SwiftDataHistoryReader.appAuthor }
+
+    @MainActor
+    func test_externalEntities_onlyOwnTransactions_isEmpty() {
+        let transactions = [
+            StoreTransaction(author: ownAuthor, entityNames: ["Post"]),
+            StoreTransaction(author: ownAuthor, entityNames: ["Notice", "AppSyncState"])
+        ]
+
+        XCTAssertTrue(StoreTransaction.externalEntities(in: transactions, ownAuthor: ownAuthor).isEmpty)
+    }
+
+    @MainActor
+    func test_externalEntities_mixed_returnsOnlyExternalEntities() {
+        let transactions = [
+            StoreTransaction(author: ownAuthor, entityNames: ["Post"]),
+            StoreTransaction(author: "NSCloudKitMirroringDelegate.import", entityNames: ["Notice", "AppSyncState"])
+        ]
+
+        XCTAssertEqual(
+            StoreTransaction.externalEntities(in: transactions, ownAuthor: ownAuthor),
+            [.notice, .appSyncState]
+        )
+    }
+
+    /// Транзакция без автора считается чужой.
+    @MainActor
+    func test_externalEntities_nilAuthor_isExternal() {
+        let transactions = [StoreTransaction(author: nil, entityNames: ["Post"])]
+
+        XCTAssertEqual(StoreTransaction.externalEntities(in: transactions, ownAuthor: ownAuthor), [.post])
+    }
+
+    @MainActor
+    func test_externalEntities_unknownEntityNames_areIgnored() {
+        let transactions = [StoreTransaction(author: nil, entityNames: ["SomethingElse", "Post"])]
+
+        XCTAssertEqual(StoreTransaction.externalEntities(in: transactions, ownAuthor: ownAuthor), [.post])
     }
 
     // MARK: - Performance Tests

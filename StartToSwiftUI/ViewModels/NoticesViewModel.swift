@@ -104,7 +104,8 @@ final class NoticesViewModel: ObservableObject {
     /// устройства могут удалить друг у друга разные копии, и notice пропадёт.
     private func setupSubscriptionForChangesInCloud() {
         cloudChangeObserver?.changes
-            .sink { [weak self] in
+            .filter { $0.contains(.notice) }
+            .sink { [weak self] _ in
                 self?.loadNoticesFromSwiftData(removeDuplicates: false)
                 log("Cloud notices sync subscription run", level: .info)
             }

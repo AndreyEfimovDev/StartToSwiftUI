@@ -65,8 +65,10 @@ final class SnippetsViewModel: ObservableObject {
     /// Отметки, поставленные на другом устройстве, приходят через iCloud —
     /// без этой подписки кэш избранного оставался бы устаревшим до перезапуска.
     private func setupSubscriptionForChangesInCloud() {
+        // Избранное хранится в AppSyncState.
         cloudChangeObserver?.changes
-            .sink { [weak self] in
+            .filter { $0.contains(.appSyncState) }
+            .sink { [weak self] _ in
                 self?.refreshFavorites()
             }
             .store(in: &cancellables)

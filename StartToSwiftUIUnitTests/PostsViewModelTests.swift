@@ -319,10 +319,31 @@ final class PostsViewModelTests: XCTestCase {
         source.insert(copyB)
 
         // When
-        observer.sendChange()
+        observer.sendChange([.post])
 
         // Then — обе копии загружены, ни одна не удалена
         XCTAssertEqual(testVM.allPosts.count, 2)
+    }
+
+    /// Изменения других сущностей посты не перезагружают.
+    func testStoreChange_OfOtherEntity_DoesNotReloadPosts() {
+        // Given
+        let source = MockPostsDataSource(posts: [])
+        let observer = MockCloudChangeObserver()
+        let testVM = PostsViewModel(
+            dataSource: source,
+            fbPostsManager: networkService,
+            cloudChangeObserver: observer,
+            services: .make()
+        )
+        testVM.start()
+        source.insert(Post(title: "New"))
+
+        // When
+        observer.sendChange([.notice, .appSyncState])
+
+        // Then
+        XCTAssertTrue(testVM.allPosts.isEmpty)
     }
 
     // MARK: - Erase All Posts

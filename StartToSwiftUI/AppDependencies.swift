@@ -26,6 +26,11 @@ struct AppDependencies {
     let coordinator: AppCoordinator
 
     static func make(modelContext: ModelContext) -> AppDependencies {
+        // Все сохранения приложения помечаются этим автором в истории
+        // SwiftData — так уведомление о своих сохранениях отличается от
+        // импорта из iCloud. Задаётся до первого сохранения ниже.
+        modelContext.author = SwiftDataHistoryReader.appAuthor
+
         let stateManager = AppSyncStateManager(modelContext: modelContext)
         let services = AppServiceDependencies.make()
 
@@ -37,7 +42,9 @@ struct AppDependencies {
         _ = stateManager.getOrCreateAppState()
 
         // Одна подписка на изменения хранилища на всё приложение.
-        let cloudChangeObserver = CloudChangeObserver()
+        let cloudChangeObserver = CloudChangeObserver(
+            historyReader: SwiftDataHistoryReader(modelContext: modelContext)
+        )
 
         return AppDependencies(
             appStateManager: stateManager,
