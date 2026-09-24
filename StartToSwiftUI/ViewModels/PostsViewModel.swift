@@ -47,7 +47,10 @@ final class PostsViewModel: ObservableObject {
     var cancellables = Set<AnyCancellable>()
     
     var allYears: [String]? = nil
-    var randomSortOrder: [String] = []
+    /// Случайный ключ сортировки для каждого поста (id → ключ) при
+    /// сортировке "Random". Ключи раздаются лениво при сортировке и
+    /// сбрасываются только явным reshufflePosts().
+    var randomSortKeys: [String: Double] = [:]
     /// Счётчики этапов, последними записанные в виджет (added, started,
     /// studied, practiced). Не `private` — используется в
     /// PostsViewModel+Widget.swift, чтобы не перезаписывать виджет без изменений.

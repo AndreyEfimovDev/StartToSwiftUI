@@ -284,6 +284,71 @@ final class PostsFilteringTests: XCTestCase {
         XCTAssertEqual(Set(vm.filteredPosts.map(\.title)), Set(titles))
     }
 
+    // Сам случайный порядок недетерминирован — проверяем свойства:
+    // у каждого поста есть ключ и список отсортирован по ключам.
+    private func assertSortedByRandomKeys(_ vm: PostsViewModel, file: StaticString = #filePath, line: UInt = #line) {
+        let keys = vm.filteredPosts.map { vm.randomSortKeys[$0.id] }
+        XCTAssertFalse(keys.contains(nil), "У каждого поста должен быть ключ", file: file, line: line)
+        let values = keys.compactMap { $0 }
+        XCTAssertEqual(values, values.sorted(), "Список должен быть отсортирован по ключам", file: file, line: line)
+    }
+
+    func test_sortRandom_selectedBeforeLoad_shufflesLoadedPosts() async throws {
+        // Given — как после перезапуска: "Random" выставлен до загрузки постов
+        // (restorePostFilters() в init), reshufflePosts() видит пустой allPosts.
+        let posts = (1...5).map { post(title: "Post \($0)") }
+        let viewModel = PostsViewModel(
+            dataSource: MockPostsDataSource(posts: posts),
+            fbPostsManager: MockFBPostsManager.mockPosts([]),
+            services: .make()
+        )
+        viewModel.selectedSortOption = .random
+
+        // When
+        viewModel.start()
+        viewModel.loadPostsFromSwiftData(removeDuplicates: false)
+        try await Task.sleep(nanoseconds: pipelineDelay)
+        vm = viewModel
+
+        // Then — все загруженные посты получили ключи и отсортированы по ним
+        XCTAssertEqual(vm.filteredPosts.count, posts.count)
+        assertSortedByRandomKeys(vm)
+    }
+
+    func test_sortRandom_postAddedAfterShuffle_getsKey() async throws {
+        // Given
+        vm = try await makeVM(posts: (1...3).map { post(title: "Post \($0)") })
+        vm.selectedSortOption = .random
+        try await Task.sleep(nanoseconds: pipelineDelay)
+
+        // When — пост добавлен после перемешивания
+        let newPost = post(title: "New")
+        vm.addPost(newPost)
+        try await Task.sleep(nanoseconds: pipelineDelay)
+
+        // Then — новый пост получил свой ключ (раньше всегда уходил в конец)
+        XCTAssertNotNil(vm.randomSortKeys[newPost.id])
+        XCTAssertEqual(vm.filteredPosts.count, 4)
+        assertSortedByRandomKeys(vm)
+    }
+
+    func test_sortRandom_pipelineRerun_keepsOrder() async throws {
+        // Given
+        vm = try await makeVM(posts: (1...5).map { post(title: "Post \($0)") })
+        vm.selectedSortOption = .random
+        try await Task.sleep(nanoseconds: pipelineDelay)
+        let orderBefore = vm.filteredPosts.map(\.title)
+
+        // When — пайплайн перезапускается без reshuffle (фильтр туда и обратно)
+        vm.selectedLevel = .advanced
+        try await Task.sleep(nanoseconds: pipelineDelay)
+        vm.selectedLevel = nil
+        try await Task.sleep(nanoseconds: pipelineDelay)
+
+        // Then — порядок не изменился
+        XCTAssertEqual(vm.filteredPosts.map(\.title), orderBefore)
+    }
+
     // MARK: - checkIfAllFiltersAreEmpty
 
     func test_checkIfAllFiltersAreEmpty_trueByDefault() async throws {

@@ -129,16 +129,23 @@ extension PostsViewModel {
                 }
             }
         case .random:
-            return posts.sorted { a, b in
-                let indexA = randomSortOrder.firstIndex(of: a.id) ?? Int.max
-                let indexB = randomSortOrder.firstIndex(of: b.id) ?? Int.max
-                return indexA < indexB
+            // Посты без ключа получают случайный ключ прямо здесь: и после
+            // перезапуска с сохранённым "Random" (reshufflePosts() тогда
+            // срабатывает в init, до загрузки постов), и для постов,
+            // добавленных после перемешивания, — они встают на случайное
+            // место, а не в конец. Словарь вместо поиска индекса в массиве —
+            // O(1) на сравнение вместо O(n).
+            for post in posts where randomSortKeys[post.id] == nil {
+                randomSortKeys[post.id] = Double.random(in: 0..<1)
             }
+            return posts.sorted { (randomSortKeys[$0.id] ?? 0) < (randomSortKeys[$1.id] ?? 0) }
         }
     }
     
+    /// Перемешивает список заново: старые ключи сбрасываются, новые
+    /// раздаются при следующей сортировке.
     func reshufflePosts() {
-        randomSortOrder = allPosts.map { $0.id }.shuffled()
+        randomSortKeys.removeAll()
         reshuffleToken = UUID() // on change → Combine pipeline is triggered
     }
 
