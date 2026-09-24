@@ -42,11 +42,11 @@ struct MaterialsHomeView: View {
     private var postsToDisplay: [Post] {
         let byCategory: [Post]
         if let category = selectedCategory {
-            byCategory = vm.filteredPosts.filter { $0.category == category }
+            byCategory = vm.visiblePosts.filter { $0.category == category }
         } else {
-            byCategory = vm.filteredPosts
+            byCategory = vm.visiblePosts
         }
-        return byCategory.filter { $0.status == .active && !$0.draft }
+        return byCategory
     }
 
     // MARK: BODY
@@ -56,7 +56,10 @@ struct MaterialsHomeView: View {
                 ZStack (alignment: .bottom) {
                     if vm.allPosts.isEmpty {
                         allPostsIsEmpty
-                    } else if vm.filteredPosts.isEmpty {
+                    } else if vm.visiblePosts.isEmpty {
+                        // visiblePosts, а не filteredPosts: список показывает только
+                        // видимые посты — если фильтру соответствуют лишь посты из
+                        // корзины или черновики, нужен этот экран, а не пустой список.
                         filteredPostsIsEmpty
                     } else {
                         listPostRowsContent

@@ -18,7 +18,9 @@ extension PostsViewModel {
     /// refresh, уведомление CloudKit о собственном сохранении) не должны
     /// впустую перезаписывать данные и перезапускать таймлайн виджета.
     func updateWidgetData() {
-        let posts = allPosts.filter { !$0.draft }
+        // Глобальный прогресс: фильтры списка не применяются, но посты из
+        // корзины и черновики не учитываются — как и в самом приложении.
+        let posts = allPosts.filter { $0.status == .active && !$0.draft }
         
         let added = posts.filter { $0.addedDateStamp != nil }.count
         let started = posts.filter { $0.startedDateStamp != nil }.count

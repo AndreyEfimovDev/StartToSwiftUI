@@ -165,6 +165,35 @@ final class PostsFilteringTests: XCTestCase {
         XCTAssertEqual(vm.filteredPosts.map(\.title), ["New Year"])
     }
 
+    // MARK: - visiblePosts
+
+    func test_visiblePosts_excludesDeletedAndDrafts() async throws {
+        // Given — активный пост, пост в корзине и черновик
+        let active = post(title: "Active")
+        let deleted = post(title: "Deleted")
+        deleted.status = .deleted
+        let draft = post(title: "Draft")
+        draft.draft = true
+        vm = try await makeVM(posts: [active, deleted, draft])
+
+        // Then — видимы (в списке и статистике) только активные не-черновики
+        XCTAssertEqual(vm.visiblePosts.map(\.title), ["Active"])
+    }
+
+    func test_visiblePosts_followsFilters() async throws {
+        // Given
+        let advanced = post(title: "Advanced", studyLevel: .advanced)
+        let beginner = post(title: "Beginner", studyLevel: .beginner)
+        vm = try await makeVM(posts: [advanced, beginner])
+
+        // When — фильтр списка применяется и к видимым постам (статистике)
+        vm.selectedLevel = .advanced
+        try await Task.sleep(nanoseconds: pipelineDelay)
+
+        // Then
+        XCTAssertEqual(vm.visiblePosts.map(\.title), ["Advanced"])
+    }
+
     // MARK: - Combined filters (AND)
 
     func test_combinedFilters_matchAllSimultaneously() async throws {
