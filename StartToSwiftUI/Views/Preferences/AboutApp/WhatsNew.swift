@@ -54,11 +54,7 @@ struct WhatsNewView: View {
                     }
                     .padding(.vertical)
                     .background(.ultraThinMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 15))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 15)
-                            .stroke(Color.mycolor.myAccent.opacity(0.3), lineWidth: 1)
-                    )
+                    .menuFormater(cornerRadius: 15, borderColor: Color.mycolor.myAccent)
                 }
                 .padding(.horizontal)
             }
