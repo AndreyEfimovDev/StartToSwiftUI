@@ -346,6 +346,56 @@ final class PostsViewModelTests: XCTestCase {
         XCTAssertTrue(testVM.allPosts.isEmpty)
     }
 
+    // MARK: - Remove Duplicates: same keeper on every device
+
+    /// Загружает посты с очисткой дублей и возвращает оставшиеся.
+    /// Порядок `posts` имитирует порядок выборки на конкретном устройстве.
+    private func postsAfterDeduplication(_ posts: [Post]) -> [Post] {
+        let testVM = PostsViewModel(
+            dataSource: MockPostsDataSource(posts: posts),
+            fbPostsManager: networkService,
+            services: .make()
+        )
+        testVM.loadPostsFromSwiftData()
+        return testVM.allPosts
+    }
+
+    /// Дубли по id (импорт на двух устройствах до синка): при любом порядке
+    /// выборки остаётся копия с самой ранней меткой добавления — иначе два
+    /// устройства удалили бы друг у друга разные копии и пост пропал бы.
+    func testRemoveDuplicates_ById_KeepsSameCopyRegardlessOfOrder() {
+        let date = Date(timeIntervalSince1970: 100)
+        func makeCopies() -> (early: Post, late: Post) {
+            (Post(id: "dup", title: "Early", date: date, addedDateStamp: Date(timeIntervalSince1970: 1_000)),
+             Post(id: "dup", title: "Late", date: date, addedDateStamp: Date(timeIntervalSince1970: 2_000)))
+        }
+
+        let first = makeCopies()
+        let deviceA = postsAfterDeduplication([first.early, first.late])
+        let second = makeCopies()
+        let deviceB = postsAfterDeduplication([second.late, second.early])
+
+        XCTAssertEqual(deviceA.map(\.title), ["Early"])
+        XCTAssertEqual(deviceB.map(\.title), ["Early"])
+    }
+
+    /// Дубли по названию (разные id): при любом порядке остаётся одна и та же копия.
+    func testRemoveDuplicates_ByTitle_KeepsSameCopyRegardlessOfOrder() {
+        let date = Date(timeIntervalSince1970: 100)
+        func makeCopies() -> (early: Post, late: Post) {
+            (Post(id: "id-early", title: "Same title", date: date, addedDateStamp: Date(timeIntervalSince1970: 1_000)),
+             Post(id: "id-late", title: "Same title", date: date, addedDateStamp: Date(timeIntervalSince1970: 2_000)))
+        }
+
+        let first = makeCopies()
+        let deviceA = postsAfterDeduplication([first.early, first.late])
+        let second = makeCopies()
+        let deviceB = postsAfterDeduplication([second.late, second.early])
+
+        XCTAssertEqual(deviceA.map(\.id), ["id-early"])
+        XCTAssertEqual(deviceB.map(\.id), ["id-early"])
+    }
+
     // MARK: - Erase All Posts
 
     /// Стирание очищает сам источник данных, а не только список в VM:

@@ -1001,4 +1001,46 @@ final class PostTests: XCTestCase {
         XCTAssertNil(post.practicedDateStamp)
         XCTAssertEqual(post.addedDateStamp, addedDate)
     }
+
+    // MARK: - isPreferredToKeep(_:over:) Tests
+    // Выбор остающейся копии дубля должен совпадать на всех устройствах.
+
+    @MainActor
+    func testIsPreferredToKeep_EarlierAddedDateStampWins() {
+        let early = Post(title: "A", date: Date(timeIntervalSince1970: 5_000), addedDateStamp: Date(timeIntervalSince1970: 1_000))
+        let late = Post(title: "A", date: Date(timeIntervalSince1970: 1), addedDateStamp: Date(timeIntervalSince1970: 2_000))
+
+        XCTAssertTrue(Post.isPreferredToKeep(early, over: late))
+        XCTAssertFalse(Post.isPreferredToKeep(late, over: early))
+    }
+
+    @MainActor
+    func testIsPreferredToKeep_MissingAddedDateStampLoses() {
+        let withStamp = Post(title: "A", addedDateStamp: Date(timeIntervalSince1970: 1_000))
+        let withoutStamp = Post(title: "A", addedDateStamp: nil)
+
+        XCTAssertTrue(Post.isPreferredToKeep(withStamp, over: withoutStamp))
+        XCTAssertFalse(Post.isPreferredToKeep(withoutStamp, over: withStamp))
+    }
+
+    @MainActor
+    func testIsPreferredToKeep_EqualStamps_EarlierDateWins() {
+        let stamp = Date(timeIntervalSince1970: 1_000)
+        let earlier = Post(title: "A", date: Date(timeIntervalSince1970: 100), addedDateStamp: stamp)
+        let later = Post(title: "A", date: Date(timeIntervalSince1970: 200), addedDateStamp: stamp)
+
+        XCTAssertTrue(Post.isPreferredToKeep(earlier, over: later))
+        XCTAssertFalse(Post.isPreferredToKeep(later, over: earlier))
+    }
+
+    @MainActor
+    func testIsPreferredToKeep_EqualStampsAndDates_SmallerIdWins() {
+        let stamp = Date(timeIntervalSince1970: 1_000)
+        let date = Date(timeIntervalSince1970: 100)
+        let a = Post(id: "a", title: "Same", date: date, addedDateStamp: stamp)
+        let b = Post(id: "b", title: "Same", date: date, addedDateStamp: stamp)
+
+        XCTAssertTrue(Post.isPreferredToKeep(a, over: b))
+        XCTAssertFalse(Post.isPreferredToKeep(b, over: a))
+    }
 }

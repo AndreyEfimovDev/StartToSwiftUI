@@ -254,8 +254,9 @@ final class PostsViewModel: ObservableObject {
             .filter { $0.value.count > 1 }
         
         /* persistentModelID is a unique internal identifier of SwiftData, which each @Model object receives automatically. It is unique even if your id and title are the same */
+        // Какую копию оставить — одинаково на всех устройствах (см. Post.isPreferredToKeep).
         for (id, postsList) in idGroups {
-            if let postToKeep = postsList.sorted(by: { $0.date > $1.date }).first {
+            if let postToKeep = postsList.min(by: { Post.isPreferredToKeep($0, over: $1) }) {
                 for post in postsList where post.persistentModelID != postToKeep.persistentModelID {
                     // Прогресс, избранное, рейтинг и заметки удаляемой копии
                     // переносятся в остающуюся — иначе они потеряются на всех устройствах.
@@ -274,9 +275,9 @@ final class PostsViewModel: ObservableObject {
         /* Grouping the remaining ones by title */
         let titleGroups = Dictionary(grouping: remainingPosts, by: \.title)
             .filter { $0.value.count > 1 }
-        /* Leave the oldest in each group: title is the key, postsList is an array of duplicates */
+        /* title is the key, postsList is an array of duplicates; the copy to keep is chosen the same way on every device */
         for (title, postsList) in titleGroups {
-            if let postToKeep = postsList.sorted(by: { $0.date < $1.date }).first {
+            if let postToKeep = postsList.min(by: { Post.isPreferredToKeep($0, over: $1) }) {
                 for post in postsList where post.persistentModelID != postToKeep.persistentModelID {
                     postToKeep.mergeUserState(from: post)
                     postsToDelete.append(post)
