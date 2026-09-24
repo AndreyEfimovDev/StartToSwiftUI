@@ -245,7 +245,7 @@ final class PostsViewModel: ObservableObject {
             }
             
             // migrating post status scheem from active → hidden → deleted → erase to active → deleted → erase.
-            migrateHiddenToDeleted()
+            migrateHiddenToDeleted(removeDuplicates: removeDuplicates)
             
             crashManager.addLog("loadPostsFromSwiftData: posts count after check for duplicates: \(allPosts.count)")
             allYears = getAllYears()
@@ -305,7 +305,7 @@ final class PostsViewModel: ObservableObject {
         do {
             try dataSource.save()
             allPosts = try dataSource.fetchPosts()
-            log("✅ Removed \(postsToDelete.count) duplicate posts", level: .info)
+            log("Removed \(postsToDelete.count) duplicate posts", level: .info)
         } catch {
             crashManager.sendNonFatal(error)
             handleError(error, message: "Error removing duplicate posts")
@@ -320,7 +320,7 @@ final class PostsViewModel: ObservableObject {
     
     func addPostIfNotExists(_ newPost: Post) -> Bool {
         if allPosts.contains(where: { $0.id == newPost.id || $0.title == newPost.title }) {
-            log("❌ Post with ID \(newPost.id) or title already exists", level: .info)
+            log("Post with ID \(newPost.id) or title already exists", level: .error)
             return false
         }
         
@@ -354,7 +354,7 @@ final class PostsViewModel: ObservableObject {
     /// Erase a post
     func erasePost(_ post: Post?) {
         guard let post else {
-            log("❌ Attempt to delete a nil post", level: .error)
+            log("Attempt to delete a nil post", level: .error)
             return
         }
         dataSource.delete(post)
@@ -422,10 +422,10 @@ final class PostsViewModel: ObservableObject {
     }
     
     /// Save context and reload UI
-    func saveContextAndReload() {
+    func saveContextAndReload(removeDuplicates: Bool = true) {
         do {
             try dataSource.save()
-            loadPostsFromSwiftData()
+            loadPostsFromSwiftData(removeDuplicates: removeDuplicates)
             updateWidgetData()
         } catch {
             crashManager.sendNonFatal(error)

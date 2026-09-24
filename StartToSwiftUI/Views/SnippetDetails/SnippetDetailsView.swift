@@ -21,7 +21,11 @@ struct SnippetDetailsView: View {
     // MARK: - State
     @State private var showCodeSheet = false
     @State private var codeCopied = false
-    @State private var isFavorite: Bool = false
+
+    // MARK: - Computed Properties
+    private var isFavorite: Bool {
+        snippetvm.isFavorite(snippet)
+    }
 
     // MARK: - Body
     var body: some View {
@@ -36,7 +40,6 @@ struct SnippetDetailsView: View {
             .sheet(isPresented: $showCodeSheet) { codeSheet }
             .onAppear {
                 snippetvm.analyticsManager.logScreen(name: "SnippetDetailsView_\(snippet.id)")
-                isFavorite = snippetvm.isFavorite(snippet)
             }
             .navigationTitle(snippet.id)
             .navigationBarTitleDisplayMode(.inline)
@@ -63,7 +66,6 @@ struct SnippetDetailsView: View {
                 isShownCircle: false
             ) {
                 snippetvm.favoriteToggle(snippet)
-                isFavorite.toggle()
                 hapticManager.impact(style: .light)
             }
             // {} View code

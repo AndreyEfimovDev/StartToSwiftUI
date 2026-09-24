@@ -22,32 +22,39 @@ final class AppStoreService {
     }
     
     // MARK: - Public Methods
-    
+
     /// Returns true if a newer version is available on the App Store
     func isUpdateAvailable() async -> Bool {
         guard let url = URL(string: "https://itunes.apple.com/lookup?bundleId=\(Constants.bundleID)") else {
             return false
         }
-        
+
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             let json = try JSONDecoder().decode(ITunesResponse.self, from: data)
-            
+
             guard let appStoreVersion = json.results.first?.version else {
                 log("⚠️ AppStoreService: No version found in response", level: .info)
                 return false
             }
-            
+
             let currentVersion = Bundle.main.version
-            let hasUpdate = appStoreVersion > currentVersion
-            
+            let hasUpdate = Self.isNewerVersion(appStoreVersion, than: currentVersion)
+
             log("🔍 AppStoreService: App Store \(appStoreVersion), Current \(currentVersion), hasUpdate: \(hasUpdate)", level: .info)
             return hasUpdate
-            
+
         } catch {
             log("❌ AppStoreService: \(error.localizedDescription)", level: .error)
             return false
         }
+    }
+
+    /// Сравнивает две строки версий по-семантически (компонент за компонентом
+    /// как числа), а не лексикографически — обычное сравнение String ломается
+    /// на многозначных компонентах ("10.0" < "9.0" посимвольно).
+    static func isNewerVersion(_ version: String, than otherVersion: String) -> Bool {
+        version.compare(otherVersion, options: .numeric) == .orderedDescending
     }
 }
 

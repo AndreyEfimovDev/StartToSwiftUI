@@ -31,7 +31,12 @@ final class FBPostsManager: FBPostsManagerProtocol {
             }
 
             let snapshot = try await query.getDocuments()
-            let posts = snapshot.documents.compactMap{ FBPostModel(document: $0) }
+            let decoded = snapshot.documents.map { ($0.documentID, FBPostModel(document: $0)) }
+            let posts = decoded.compactMap { $0.1 }
+            let droppedIDs = decoded.filter { $0.1 == nil }.map { $0.0 }
+            if !droppedIDs.isEmpty {
+                log("⚠️ Firebase: \(droppedIDs.count) post document(s) failed to decode: \(droppedIDs)", level: .error)
+            }
             log("🔥 Firebase: received \(posts.count) posts", level: .info)
             return .success(posts)
         } catch let error as NSError {

@@ -108,16 +108,25 @@ extension View {
 // MARK: CUSTOM BACKGROUND
 
 extension View {
+    /// Обрезает вью по скруглённому прямоугольнику и рисует поверх обводку.
+    /// Фон не задаёт — его добавляют снаружи (обычно `.ultraThinMaterial`).
+    ///
+    /// - Parameters:
+    ///   - cornerRadius: Радиус скругления.
+    ///   - borderColor: Цвет обводки.
+    ///   - borderOpacity: Прозрачность обводки; по умолчанию приглушённая 0.3.
+    ///   - lineWidth: Толщина обводки.
     func menuFormater(
         cornerRadius: CGFloat = 30,
         borderColor: Color = Color.mycolor.myBlue,
+        borderOpacity: Double = 0.3,
         lineWidth: CGFloat = 1
     ) -> some View {
         self
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
             .overlay(
                 RoundedRectangle(cornerRadius: cornerRadius)
-                    .stroke(borderColor.opacity(0.3), lineWidth: lineWidth)
+                    .stroke(borderColor.opacity(borderOpacity), lineWidth: lineWidth)
             )
     }
 }

@@ -192,6 +192,7 @@
 		47C56FEC2EC9C66700F0796C /* NoticeDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C56FEB2EC9C66700F0796C /* NoticeDetailsView.swift */; };
 		47C56FEE2EC9C94100F0796C /* NoticeRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C56FED2EC9C94100F0796C /* NoticeRowView.swift */; };
 		47C57E7F2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */; };
+		47CA5628306523A00093B17D /* ChartLegendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CA56273065239F0093B17D /* ChartLegendView.swift */; };
 		47E2AF4F2EBCD86000B0214F /* CategoryFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */; };
 		47EA14312EF530780064583B /* AppSyncStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EA14302EF530780064583B /* AppSyncStateManager.swift */; };
 		47F38B1F2ED480B0006DEDBE /* DevData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F38B1E2ED480B0006DEDBE /* DevData.swift */; };
@@ -201,6 +202,7 @@
 		47FF42592EE556DB0069D232 /* TapHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF42582EE556DA0069D232 /* TapHandler.swift */; };
 		47FF425B2EE578DD0069D232 /* ProgressSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FF425A2EE578DD0069D232 /* ProgressSelectionView.swift */; };
 		551F2DC647DC3E98AAC18899 /* B004_MiniBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583A1AF9930EF41B3ABE7C82 /* B004_MiniBrowser.swift */; };
+		68C330B30D974AFAAA4C8A71 /* AppStoreServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DDA2807C7B4195B085962B /* AppStoreServiceTests.swift */; };
 		716EDDBC58398F3B76CC3DC0 /* AppDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC01FB66400E445C49C9D22 /* AppDependencies.swift */; };
 		9032119C47EC46C29A91A97E /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = C93B9056FA2145F489742105 /* FirebaseRemoteConfig */; };
 		95BC9F4EDC214F9DAF30750F /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8FDEB3EB6F41C28872C25E /* Secrets.swift */; };
@@ -243,6 +245,7 @@
 
 /* Begin PBXFileReference section */
 		00FAB928A42C4B788480A6B7 /* SupportOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportOption.swift; sourceTree = "<group>"; };
+		22DDA2807C7B4195B085962B /* AppStoreServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreServiceTests.swift; sourceTree = "<group>"; };
 		47069EFF2EAFF6210082AE12 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		470A21C22E6E37F5006D2D66 /* CircleStrokeButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleStrokeButtonView.swift; sourceTree = "<group>"; };
 		470DB64E2F61504C0034464D /* A003_ProgressCircleWithCheckmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A003_ProgressCircleWithCheckmark.swift; sourceTree = "<group>"; };
@@ -417,6 +420,7 @@
 		47C56FEB2EC9C66700F0796C /* NoticeDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeDetailsView.swift; sourceTree = "<group>"; };
 		47C56FED2EC9C94100F0796C /* NoticeRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeRowView.swift; sourceTree = "<group>"; };
 		47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForPostsUpdateView.swift; sourceTree = "<group>"; };
+		47CA56273065239F0093B17D /* ChartLegendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartLegendView.swift; sourceTree = "<group>"; };
 		47E229FE2EF42B9400341DD2 /* StartToSwiftUIDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StartToSwiftUIDebug.entitlements; sourceTree = "<group>"; };
 		47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilterView.swift; sourceTree = "<group>"; };
 		47EA14302EF530780064583B /* AppSyncStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSyncStateManager.swift; sourceTree = "<group>"; };
@@ -693,6 +697,7 @@
 				4751DAF12F16402E00EC9C53 /* ProgressStats.swift */,
 				4751DB042F16670E00EC9C53 /* LineMarkLegendView.swift */,
 				4751DAFD2F16410000EC9C53 /* CumulativeLegendView.swift */,
+				47CA56273065239F0093B17D /* ChartLegendView.swift */,
 				4751DAF52F16407200EC9C53 /* ChartDataPoint.swift */,
 			);
 			path = Overview;
@@ -849,6 +854,7 @@
 				475CC6872F217B890099CAA6 /* PostsViewModelTests.swift */,
 				475CC68A2F217B890099CAA6 /* UtilityTests.swift */,
 				475CC6882F217B890099CAA6 /* PostTests.swift */,
+				22DDA2807C7B4195B085962B /* AppStoreServiceTests.swift */,
 				475CC6862F217B890099CAA6 /* NoticesTests.swift */,
 				470DB6502F62A61F0034464D /* SnippetsTests.swift */,
 				474F70712F63F2390010F09D /* NoticesViewModelFilterDateTests.swift */,
@@ -1368,6 +1374,7 @@
 				470E637A2EFDE1CF007B75B5 /* ModalNavigationContainer.swift in Sources */,
 				47B6E81E2F5EB4DB00EF7441 /* A001_ProgressViewIndicators.swift in Sources */,
 				471DCBE02EBBC6B900AFA5F4 /* WelcomeMessage.swift in Sources */,
+				47CA5628306523A00093B17D /* ChartLegendView.swift in Sources */,
 				47AA558A2EA9741D000AF4E9 /* RestoreBackupView.swift in Sources */,
 				4751DAF62F16407200EC9C53 /* ChartDataPoint.swift in Sources */,
 				474638012F66F27600DF011B /* A014_AnimationType.swift in Sources */,
@@ -1396,6 +1403,7 @@
 				475CC68C2F217B890099CAA6 /* NoticesTests.swift in Sources */,
 				475CC68D2F217B890099CAA6 /* PostsViewModelTests.swift in Sources */,
 				475CC68E2F217B890099CAA6 /* PostTests.swift in Sources */,
+				68C330B30D974AFAAA4C8A71 /* AppStoreServiceTests.swift in Sources */,
 				470DB6512F62A61F0034464D /* SnippetsTests.swift in Sources */,
 				475CC6902F217B890099CAA6 /* UtilityTests.swift in Sources */,
 				474F70742F63F99C0010F09D /* TestMocks.swift in Sources */,

@@ -16,9 +16,10 @@ struct SupportDeveloperView: View {
     private let iconWidth: CGFloat = 18
 
     // MARK: - States
-    // Стартуем с локальных fallback-значений — они сразу рабочие — и
-    // обновляем после activate(), если Remote Config прислал другие.
-    @State private var options: [SupportOption] = SupportOption.all(remoteConfig: MockRemoteConfigService())
+    // Стартуем с пустого списка: в момент инициализации @State окружение
+    // ещё не резолвлено, и прочитать инжектированный remoteConfigService
+    // нельзя. Реальные значения подставляются в .task.
+    @State private var options: [SupportOption] = []
 
     // MARK: - Body
     var body: some View {
@@ -36,8 +37,16 @@ struct SupportDeveloperView: View {
         .foregroundStyle(Color.mycolor.myAccent)
         .background(.thickMaterial)
         .task {
-            await remoteConfigService.activate()
+            // Сначала — без сети: Firebase отдаёт значения, активированные
+            // в прошлый раз (кэш на диске), либо локальный fallback. Без этого
+            // шага оффлайн экран был бы пустым до таймаута fetch (~60 с).
             options = SupportOption.all(remoteConfig: remoteConfigService)
+            // Затем перечитываем, только если с сервера пришли свежие данные:
+            // при троттлинге (повторный заход в течение часа) или ошибке сети
+            // активный конфиг не менялся, и повторная сборка была бы лишней.
+            if await remoteConfigService.activate() {
+                options = SupportOption.all(remoteConfig: remoteConfigService)
+            }
         }
     }
 

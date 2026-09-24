@@ -115,7 +115,16 @@ struct CheckForPostsUpdateView: View {
     private func checkForUpdates() async {
         let hasUpdates = await vm.checkFBPostsForUpdates()
         isInProgress = false
-        
+
+        // Сбой сети/Firestore внутри checkFBPostsForUpdates() уже показан
+        // глобальным alert (StartView), но сама функция всё равно вернула
+        // false — не путать это с "обновлений действительно нет".
+        guard !vm.errorManager.showAlert else {
+            statusText = "Could not check for updates"
+            statusColor = Color.mycolor.myRed
+            return
+        }
+
         if hasUpdates {
             statusText = "Updates available!"
             statusColor = Color.mycolor.myRed
