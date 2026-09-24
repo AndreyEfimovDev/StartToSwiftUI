@@ -175,8 +175,6 @@ final class NoticesViewModel: ObservableObject {
         let trace = performanceManager.startTrace(name: "import_notices_firebase")
         crashManager.addLog("loadNoticesFromFirebase: started, notices count: \(notices.count)")
         
-        clearError()
-        
         // MARK: Set filter date
         // Take a maximum of two dates — the date of the last notice and the date of the application installation
         // At the first launch, the user will not receive all the old notiсes, but only those that were created after app first launch
@@ -371,10 +369,6 @@ final class NoticesViewModel: ObservableObject {
     }
 
     // MARK: - Handle Errors
-    func clearError() {
-        errorManager.clear()
-    }
-
     private func handleError(_ error: Error?, message: String) {
         hapticManager.notification(type: .error)
         errorManager.handle(error, message: message)

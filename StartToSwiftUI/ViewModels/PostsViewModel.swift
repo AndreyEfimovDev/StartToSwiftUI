@@ -525,10 +525,6 @@ final class PostsViewModel: ObservableObject {
     }
     
     // MARK: - Handle Errors
-    func clearError() {
-        errorManager.clear()
-    }
-
     func handleError(_ error: Error?, message: String) {
         hapticManager.notification(type: .error)
         errorManager.handle(error, message: message)

@@ -91,12 +91,18 @@ struct RestoreBackupView: View {
     private func handleDocumentPicked(url: URL) {
         isInProgress = true
         
-        vm.getPostsFromBackup(url: url) { count in
-            restoredCount = count
-            isRestored = true
+        vm.getPostsFromBackup(url: url) { result in
             isInProgress = false
-            
-            shouldAutoDismiss = !vm.errorManager.showAlert
+
+            switch result {
+            case .success(let count):
+                restoredCount = count
+                isRestored = true
+                shouldAutoDismiss = true
+            case .failure:
+                // Успех на кнопке не показываем; текст ошибки — в глобальном алерте.
+                hapticManager.notification(type: .error)
+            }
         }
     }
 }
