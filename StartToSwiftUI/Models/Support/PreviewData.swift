@@ -9,20 +9,32 @@ import Foundation
 import SwiftUI
 
 struct PreviewData {
-    
+
+    /// Фиксированная дата для тестовых данных.
+    ///
+    /// id и даты в `PreviewData` намеренно стабильны между запусками: эти
+    /// данные служат ещё и "содержимым Firestore" для моков в DEBUG (см.
+    /// `DebugConfig`). С `.now` и случайным UUID мок-посты на каждом запуске
+    /// выглядели бы новыми, и проверка обновлений всегда отвечала бы "да".
+    private static func fixedDate(day: Int) -> Date {
+        // Date.from возвращает Optional, но внутри уже есть fallback — nil
+        // не бывает; ?? нужен только чтобы развернуть тип.
+        Date.from(year: 2026, month: 1, day: day) ?? .distantPast
+    }
+
     static let sampleNotices: [Notice] = [sampleNotice1, sampleNotice2, sampleNotice3]
         
     static let sampleNotice1 = Notice(
         id: "001",
         title: "Update is available",
-        noticeDate: .now,
+        noticeDate: fixedDate(day: 1),
         noticeMessage: "New Update includes the following:",
         isRead: true
     )
     static let sampleNotice2 = Notice(
         id: "002",
         title: "New App release 01.01.02 is availavle New App release 01.01.02 is available",
-        noticeDate: .now + 1,
+        noticeDate: fixedDate(day: 2),
         noticeMessage: """
             New release includes the following:
             Line 1
@@ -34,7 +46,7 @@ struct PreviewData {
     static let sampleNotice3 = Notice(
         id: "003",
         title: "New App release 01.01.03 is available",
-        noticeDate: .now + 2,
+        noticeDate: fixedDate(day: 3),
         noticeMessage: """
             New release includes the following:
             Line 1
@@ -48,6 +60,7 @@ struct PreviewData {
         
 
     static let samplePost1 = Post(
+        id: "preview-post-1",
         title: "Property Wrappers",
         intro: "В этом видео я расскажу вам обо всех оболочках, которые нам предлагает SwiftUI для хранения временных данных. Так же вы поймете, в чем отличие между такими оболочки как @State, @StateObject, @ObservedObject, @EnvironmentObject. Эти оболочки очень похожи друг на друга и знание того, когда и какую лучше использовать, имеет решающее значение.",
         author: "Evgenia Bruyko",
@@ -75,9 +88,11 @@ struct PreviewData {
         And finally, we will take a quick look at the power of Attributed strings in SwiftUI.
         """,
         origin: .cloud,
+        date: fixedDate(day: 1)
     )
     
     static let samplePost2 = Post(
+        id: "preview-post-2",
         title: "SwiftUI Advanced Learning",
         intro: """
             Learn how to build custom views, animations, and transitions. Get familiar with coding techniques such as Dependency Injection and Protocol-Oriented Programming. Write your first unit tests and connect to CloudKit.
@@ -89,10 +104,12 @@ struct PreviewData {
         studyLevel: .advanced,
         progress: .added, // added, learning, studied, practiced
         postRating: .great, // good, great, excellent
-        origin: .local
+        origin: .local,
+        date: fixedDate(day: 2)
     )
     
     static let samplePost3 = Post(
+        id: "preview-post-3",
         title: "TEST SwiftUI Advanced Learning",
         intro: """
             TEST TEST TEST
@@ -105,10 +122,12 @@ struct PreviewData {
         studyLevel: .advanced,
         progress: .studied, // added, learning, studied, practiced
         postRating: .excellent, // good, great, excellent
-        origin: .local
+        origin: .local,
+        date: fixedDate(day: 3)
     )
     
     static let samplePost4 = Post(
+        id: "preview-post-4",
         title: "How we can stylize text for our Text views in SwiftUI",
         intro: """
         In this video we are going to explore how we can stylize text for our Text views in SwiftUI.
@@ -140,7 +159,8 @@ struct PreviewData {
         We will also see how we can utilize string interpolation to combine and stylize our strings and present them in a text view.
         And finally, we will take a quick look at the power of Attributed strings in SwiftUI.
         """,
-        origin: .local
+        origin: .local,
+        date: fixedDate(day: 4)
     )
     
     static let sampleDraft1 = Post(

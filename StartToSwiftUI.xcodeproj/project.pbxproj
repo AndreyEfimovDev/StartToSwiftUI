@@ -194,6 +194,7 @@
 		47C57E7F2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */; };
 		47CA5628306523A00093B17D /* ChartLegendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CA56273065239F0093B17D /* ChartLegendView.swift */; };
 		47CA562A3065429B0093B17D /* FBAdminUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CA56293065429B0093B17D /* FBAdminUploader.swift */; };
+		47CA562C3065578A0093B17D /* DebugConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CA562B3065578A0093B17D /* DebugConfig.swift */; };
 		47E2AF4F2EBCD86000B0214F /* CategoryFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */; };
 		47EA14312EF530780064583B /* AppSyncStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EA14302EF530780064583B /* AppSyncStateManager.swift */; };
 		47F38B1F2ED480B0006DEDBE /* DevData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F38B1E2ED480B0006DEDBE /* DevData.swift */; };
@@ -423,6 +424,7 @@
 		47C57E7E2EAF7B1A00BE1F89 /* CheckForPostsUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForPostsUpdateView.swift; sourceTree = "<group>"; };
 		47CA56273065239F0093B17D /* ChartLegendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartLegendView.swift; sourceTree = "<group>"; };
 		47CA56293065429B0093B17D /* FBAdminUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBAdminUploader.swift; sourceTree = "<group>"; };
+		47CA562B3065578A0093B17D /* DebugConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugConfig.swift; sourceTree = "<group>"; };
 		47E229FE2EF42B9400341DD2 /* StartToSwiftUIDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StartToSwiftUIDebug.entitlements; sourceTree = "<group>"; };
 		47E2AF4E2EBCD86000B0214F /* CategoryFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilterView.swift; sourceTree = "<group>"; };
 		47EA14302EF530780064583B /* AppSyncStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSyncStateManager.swift; sourceTree = "<group>"; };
@@ -747,6 +749,7 @@
 				4759974B2E5C690B008E20F0 /* StartToSwiftUIApp.swift */,
 				5DC01FB66400E445C49C9D22 /* AppDependencies.swift */,
 				4ED982292A91E277F5BB9228 /* DatabaseErrorView.swift */,
+				47CA562B3065578A0093B17D /* DebugConfig.swift */,
 				475997722E5DA436008E20F0 /* Extensions */,
 				473436702F48A11300CF00FA /* Firebase */,
 				4759976C2E5D931F008E20F0 /* Services */,
@@ -1278,6 +1281,7 @@
 				473436852F4B05EB00CF00FA /* FBCrashManager.swift in Sources */,
 				473436762F48F18600CF00FA /* FBNoticeModel.swift in Sources */,
 				4759977A2E5F1A32008E20F0 /* Colors.swift in Sources */,
+				47CA562C3065578A0093B17D /* DebugConfig.swift in Sources */,
 				4751DAFE2F16410000EC9C53 /* CumulativeLegendView.swift in Sources */,
 				474638112F67363300DF011B /* A013_RotatingCarousel.swift in Sources */,
 				475CC6A22F22B0A90099CAA6 /* CodableNotice.swift in Sources */,

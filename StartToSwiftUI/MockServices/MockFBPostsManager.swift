@@ -56,6 +56,43 @@ final class MockFBPostsManager: FBPostsManagerProtocol {
     }
 }
 
+// MARK: - Preview Data (DEBUG-режим приложения)
+extension MockFBPostsManager {
+    /// Мок с постами из `PreviewData` — composition root подставляет его
+    /// вместо реального Firestore, когда `DebugConfig.useRealServices == false`.
+    static func previewData() -> MockFBPostsManager {
+        let posts = [
+            PreviewData.samplePost1,
+            PreviewData.samplePost2,
+            PreviewData.samplePost3,
+            PreviewData.samplePost4
+        ]
+        return mockPosts(posts.map(FBPostModel.init(post:)))
+    }
+}
+
+extension FBPostModel {
+    /// Модель Firestore из локального `Post` — для мок-данных.
+    ///
+    /// У `FBPostModel` дата публикации обязательна, поэтому при её отсутствии
+    /// подставляется `post.date`.
+    init(post: Post) {
+        self.init(
+            postId: post.id,
+            category: post.category,
+            title: post.title,
+            intro: post.intro,
+            author: post.author,
+            postType: post.postType,
+            urlString: post.urlString,
+            postPlatform: post.postPlatform,
+            postDate: post.postDate ?? post.date,
+            studyLevel: post.studyLevel,
+            date: post.date
+        )
+    }
+}
+
 // MARK: - FBPostModel Test Helpers
 extension FBPostModel {
     static func mock(
