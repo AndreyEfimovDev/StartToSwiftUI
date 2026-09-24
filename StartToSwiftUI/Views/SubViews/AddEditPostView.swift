@@ -122,6 +122,9 @@ struct AddEditPostView: View {
             }
             .alert(isPresented: $showAlert) { alert }
             .onAppear { focusedField = .postTitle }
+            // Свайп вниз закрывает sheet на iPad в обход подтверждения выхода —
+            // пока есть несохранённые правки, закрытие только через ✕ (с подтверждением).
+            .interactiveDismissDisabled(!hasNoChanges)
         }
     }
    
