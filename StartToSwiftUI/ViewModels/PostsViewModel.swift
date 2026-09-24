@@ -24,6 +24,7 @@ final class PostsViewModel: ObservableObject {
     let crashManager: FBCrashManager
     let performanceManager: FBPerformanceManager
     let analyticsManager: FBAnalyticsManager
+    private let cloudChangeObserver: CloudChangeObserving?
 
     @Published var allPosts: [Post] = [] {
         // Единая точка для всех путей удаления: свайп Delete, Erase, Erase all,
@@ -55,9 +56,6 @@ final class PostsViewModel: ObservableObject {
     /// PostsViewModel+Widget.swift, чтобы не перезаписывать виджет без изменений.
     var lastWidgetCounts: [Int]?
     
-    private var lastLoadTime: Date = Date(timeIntervalSince1970: 0)
-    private let minLoadInterval: TimeInterval = 3
-    private var pendingCloudUpdate = false
     private var isStarted = false
 
     // Защита от повторного входа: если запрос уже выполняется, пропускаем
@@ -150,11 +148,13 @@ final class PostsViewModel: ObservableObject {
         dataSource: PostsDataSourceProtocol,
         appStateManager: AppSyncStateManagerProtocol? = nil,
         fbPostsManager: FBPostsManagerProtocol,
+        cloudChangeObserver: CloudChangeObserving? = nil,
         services: AppServiceDependencies
     ) {
         self.dataSource = dataSource
         self.appStateManager = appStateManager
         self.fbPostsManager = fbPostsManager
+        self.cloudChangeObserver = cloudChangeObserver
         self.errorManager = services.errorManager
         self.fileManager = services.fileManager
         self.crashManager = services.crashManager
@@ -168,12 +168,14 @@ final class PostsViewModel: ObservableObject {
         modelContext: ModelContext,
         appStateManager: AppSyncStateManagerProtocol? = nil,
         fbPostsManager: FBPostsManagerProtocol,
+        cloudChangeObserver: CloudChangeObserving? = nil,
         services: AppServiceDependencies
     ) {
         self.init(
             dataSource: SwiftDataPostsDataSource(modelContext: modelContext),
             appStateManager: appStateManager,
             fbPostsManager: fbPostsManager,
+            cloudChangeObserver: cloudChangeObserver,
             services: services
         )
     }
@@ -190,31 +192,13 @@ final class PostsViewModel: ObservableObject {
     }
 
     // MARK: - CloudKit Sync
+    /// Перезагрузка постов при изменениях хранилища (в т.ч. из iCloud).
+    /// Дубли здесь не чистятся: если два устройства одновременно удалят друг
+    /// у друга разные копии, после синка пост пропадёт совсем.
     private func setupSubscriptionForChangesInCloud() {
-        NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
-            .debounce(for: .seconds(2), scheduler: DispatchQueue.global(qos: .utility))
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                guard let self else { return }
-                let now = Date()
-                
-                guard now.timeIntervalSince(self.lastLoadTime) >= self.minLoadInterval else {
-                    self.pendingCloudUpdate = true
-                    log("Cloud sync skipped (too soon) — marked as pending", level: .debug)
-                    
-                    // ✅ Современный способ — Task вместо DispatchQueue
-                    Task { [weak self] in
-                        try? await Task.sleep(for: .seconds(self?.minLoadInterval ?? 3))
-                        guard let self, self.pendingCloudUpdate else { return }
-                        self.pendingCloudUpdate = false
-                        self.loadPostsFromSwiftData(removeDuplicates: false)
-                        log("Cloud sync: pending update executed", level: .info)
-                    }
-                    return
-                }
-
-                self.pendingCloudUpdate = false
-                self.loadPostsFromSwiftData(removeDuplicates: false)
+        cloudChangeObserver?.changes
+            .sink { [weak self] in
+                self?.loadPostsFromSwiftData(removeDuplicates: false)
                 log("Cloud posts sync subscription run", level: .info)
             }
             .store(in: &cancellables)
@@ -234,7 +218,6 @@ final class PostsViewModel: ObservableObject {
     /// Load posts from SwiftData
     func loadPostsFromSwiftData(removeDuplicates: Bool = true) {
         let trace = performanceManager.startTrace(name: "load_posts_swiftdata")
-        lastLoadTime = Date()
         
         do {
             allPosts = try dataSource.fetchPosts()

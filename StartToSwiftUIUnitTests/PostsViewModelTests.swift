@@ -298,6 +298,33 @@ final class PostsViewModelTests: XCTestCase {
         XCTAssertFalse(isSaved)
     }
 
+    // MARK: - Cloud Changes
+
+    /// Изменение хранилища перезагружает посты — без очистки дублей
+    /// (иначе два устройства могут удалить друг у друга разные копии).
+    func testStoreChange_ReloadsPostsWithoutRemovingDuplicates() {
+        // Given — две копии одного поста уже в хранилище
+        let copyA = Post(id: "dup", title: "Copy A")
+        let copyB = Post(id: "dup", title: "Copy B")
+        let source = MockPostsDataSource(posts: [])
+        let observer = MockCloudChangeObserver()
+        let testVM = PostsViewModel(
+            dataSource: source,
+            fbPostsManager: networkService,
+            cloudChangeObserver: observer,
+            services: .make()
+        )
+        testVM.start()
+        source.insert(copyA)
+        source.insert(copyB)
+
+        // When
+        observer.sendChange()
+
+        // Then — обе копии загружены, ни одна не удалена
+        XCTAssertEqual(testVM.allPosts.count, 2)
+    }
+
     // MARK: - Erase All Posts
 
     /// Стирание очищает сам источник данных, а не только список в VM:

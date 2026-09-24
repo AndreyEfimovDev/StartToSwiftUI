@@ -5,7 +5,18 @@
 //  Created by Andrey Efimov on 13.03.2026.
 //
 import XCTest
+import Combine
 @testable import StartToSwiftUI
+
+// MARK: - Mock: CloudChangeObserver
+/// Событие "хранилище изменилось" отправляется вручную и приходит сразу,
+/// без debounce.
+final class MockCloudChangeObserver: CloudChangeObserving {
+    private let subject = PassthroughSubject<Void, Never>()
+    var changes: AnyPublisher<Void, Never> { subject.eraseToAnyPublisher() }
+
+    func sendChange() { subject.send() }
+}
 
 // MARK: - Mock: AppSyncStateManager
 final class MockAppSyncStateManager: AppSyncStateManagerProtocol {

@@ -21,6 +21,7 @@ final class NoticesViewModel: ObservableObject {
     private let errorManager: ErrorManager
     private let crashManager: FBCrashManager
     private let performanceManager: FBPerformanceManager
+    private let cloudChangeObserver: CloudChangeObserving?
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -34,9 +35,6 @@ final class NoticesViewModel: ObservableObject {
     /// Переключается в Preferences. На FCM-пуши не влияет.
     @AppStorage("isNotificationOn") var isNotificationOn: Bool = true
     
-    private var lastLoadTime: Date = Date(timeIntervalSince1970: 0)
-    private let minLoadInterval: TimeInterval = 3
-    private var pendingCloudUpdate = false
     private var isStarted = false
 
     // Защита от повторного входа: если импорт уже выполняется, пропускаем
@@ -61,11 +59,13 @@ final class NoticesViewModel: ObservableObject {
         dataSource: NoticesDataSourceProtocol,
         appStateManager: AppSyncStateManagerProtocol? = nil,
         fbNoticesManager: FBNoticesManagerProtocol,
+        cloudChangeObserver: CloudChangeObserving? = nil,
         services: AppServiceDependencies
     ) {
         self.dataSource = dataSource
         self.appStateManager = appStateManager
         self.fbNoticesManager = fbNoticesManager
+        self.cloudChangeObserver = cloudChangeObserver
         self.errorManager = services.errorManager
         self.crashManager = services.crashManager
         self.performanceManager = services.performanceManager
@@ -76,12 +76,14 @@ final class NoticesViewModel: ObservableObject {
         modelContext: ModelContext,
         appStateManager: AppSyncStateManager? = nil,
         fbNoticesManager: FBNoticesManagerProtocol,
+        cloudChangeObserver: CloudChangeObserving? = nil,
         services: AppServiceDependencies
     ) {
         self.init(
             dataSource: SwiftDataNoticesDataSource(modelContext: modelContext),
             appStateManager: appStateManager,
             fbNoticesManager: fbNoticesManager,
+            cloudChangeObserver: cloudChangeObserver,
             services: services
         )
     }
@@ -97,28 +99,13 @@ final class NoticesViewModel: ObservableObject {
     }
 
     // MARK: - CloudKit Sync
+    /// Перезагрузка notices при изменениях хранилища (в т.ч. из iCloud).
+    /// Дубли здесь не чистятся — по той же причине, что у постов: два
+    /// устройства могут удалить друг у друга разные копии, и notice пропадёт.
     private func setupSubscriptionForChangesInCloud() {
-        NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
-            .debounce(for: .seconds(2), scheduler: DispatchQueue.global(qos: .utility))
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                guard let self else { return }
-                let now = Date()
-                guard now.timeIntervalSince(self.lastLoadTime) >= self.minLoadInterval else {
-                    self.pendingCloudUpdate = true
-                    log("Cloud sync skipped (too soon) — marked as pending", level: .debug)
-                    
-                    Task { [weak self] in
-                        try? await Task.sleep(for: .seconds(self?.minLoadInterval ?? 3))
-                        guard let self, self.pendingCloudUpdate else { return }
-                        self.pendingCloudUpdate = false
-                        self.loadNoticesFromSwiftData(removeDuplicates: false)
-                        log("Cloud notices sync: pending update executed", level: .info)
-                    }
-                    return
-                }
-                self.pendingCloudUpdate = false
-                self.loadNoticesFromSwiftData()
+        cloudChangeObserver?.changes
+            .sink { [weak self] in
+                self?.loadNoticesFromSwiftData(removeDuplicates: false)
                 log("Cloud notices sync subscription run", level: .info)
             }
             .store(in: &cancellables)
@@ -127,7 +114,6 @@ final class NoticesViewModel: ObservableObject {
     // MARK: - Load Notices from SwiftData
     func loadNoticesFromSwiftData(removeDuplicates: Bool = true) {
         let trace = performanceManager.startTrace(name: "load_notices_swiftdata")
-        lastLoadTime = Date()
         crashManager.addLog("loadNoticesFromSwiftData: notices count: \(notices.count)")
 
         // Removing duplicate notices, leaving only one instance for each ID

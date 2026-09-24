@@ -8,6 +8,7 @@
 import SwiftUI
 
 import XCTest
+import CoreData
 @testable import StartToSwiftUI
 
 final class UtilityTests: XCTestCase {
@@ -834,6 +835,28 @@ final class UtilityTests: XCTestCase {
 
         XCTAssertEqual(ChartDataPoint.yAxisMax(for: points), 5)
         XCTAssertEqual(ChartDataPoint.yAxisMax(for: []), 5)
+    }
+
+    // MARK: - CloudChangeObserver
+
+    /// Серия уведомлений хранилища подряд схлопывается в одно событие.
+    @MainActor
+    func test_cloudChangeObserver_debouncesBurstIntoOneEvent() async {
+        // Given — свой NotificationCenter, чтобы не ловить реальные уведомления
+        let center = NotificationCenter()
+        let observer = CloudChangeObserver(notificationCenter: center, debounceInterval: .milliseconds(100))
+        var eventCount = 0
+        let cancellable = observer.changes.sink { eventCount += 1 }
+
+        // When
+        for _ in 0..<3 {
+            center.post(name: .NSPersistentStoreRemoteChange, object: nil)
+        }
+        try? await Task.sleep(for: .milliseconds(400))
+
+        // Then
+        XCTAssertEqual(eventCount, 1)
+        cancellable.cancel()
     }
 
     // MARK: - Performance Tests

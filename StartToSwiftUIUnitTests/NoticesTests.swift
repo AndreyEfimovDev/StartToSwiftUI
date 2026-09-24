@@ -184,6 +184,33 @@ final class NoticeViewModelTests: XCTestCase {
         XCTAssertEqual(stateManager.savedLatestNoticeDate, latest)
     }
 
+    // MARK: - Cloud Changes
+
+    /// Изменение хранилища перезагружает notices — без очистки дублей,
+    /// по той же причине, что у постов.
+    func testStoreChange_ReloadsNoticesWithoutRemovingDuplicates() {
+        // Given
+        let dataSource = MockNoticesDataSource(notices: [
+            Notice(id: "dup", title: "Copy A"),
+            Notice(id: "dup", title: "Copy B")
+        ])
+        let observer = MockCloudChangeObserver()
+        let testVM = NoticesViewModel(
+            dataSource: dataSource,
+            fbNoticesManager: MockFBNoticesManager.mockEmpty(),
+            cloudChangeObserver: observer,
+            services: .make()
+        )
+        testVM.start()
+
+        // When
+        observer.sendChange()
+
+        // Then
+        XCTAssertEqual(testVM.notices.count, 2)
+        XCTAssertTrue(dataSource.deletedNotices.isEmpty)
+    }
+
     // MARK: - Remove Duplicates
 
     /// Дубли по id убираются через протокол источника (раньше — только для

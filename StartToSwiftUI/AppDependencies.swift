@@ -36,6 +36,9 @@ struct AppDependencies {
         // - Restart — it will find an existing one and return it.
         _ = stateManager.getOrCreateAppState()
 
+        // Одна подписка на изменения хранилища на всё приложение.
+        let cloudChangeObserver = CloudChangeObserver()
+
         return AppDependencies(
             appStateManager: stateManager,
             services: services,
@@ -45,16 +48,19 @@ struct AppDependencies {
                 modelContext: modelContext,
                 appStateManager: stateManager,
                 fbPostsManager: makeFBPostsManager(),
+                cloudChangeObserver: cloudChangeObserver,
                 services: services
             ),
             noticesViewModel: NoticesViewModel(
                 modelContext: modelContext,
                 appStateManager: stateManager,
                 fbNoticesManager: makeFBNoticesManager(),
+                cloudChangeObserver: cloudChangeObserver,
                 services: services
             ),
             snippetsViewModel: SnippetsViewModel(
                 favoritesStore: stateManager,
+                cloudChangeObserver: cloudChangeObserver,
                 services: services
             ),
             coordinator: AppCoordinator()
