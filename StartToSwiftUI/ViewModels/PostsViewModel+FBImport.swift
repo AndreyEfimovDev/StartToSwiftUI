@@ -79,6 +79,16 @@ extension PostsViewModel {
             saveContextAndReload()
             
             // Update last date of posts loaded from Firebase
+            //
+            // Дата сознательно считается только по успешно декодированным
+            // постам, а не по всем документам ответа: битый документ (нет
+            // обязательного поля — обычно его прочитали недозаполненным в
+            // консоли Firestore) не сдвигает дату и перечитывается при каждом
+            // импорте, пока его не исправят, — после исправления он догрузится
+            // сам. Если сдвигать дату и за битые, исправленный документ клиент
+            // уже никогда не получит (без ручного подъёма его `date`). Цена —
+            // пара лишних чтений и повтор ошибки в логе, это приемлемо.
+            // То же правило действует в ветке "нет новых постов" выше.
             if let latestDate = fbResponseChecked.max(by: { $0.date < $1.date })?.date {
                 appStateManager.setLastDateOfPostsLoaded(latestDate.addingTimeInterval(1))
                 log("🔥 lastPostsFBUpdateDate updated in appStateManager \(latestDate)", level: .info)
