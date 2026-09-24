@@ -34,7 +34,6 @@ final class PostsViewModel: ObservableObject {
     @Published var filteredPosts: [Post] = []
     @Published var selectedPost: Post? = nil
     @Published var searchText: String = ""
-    @Published var isFiltersEmpty: Bool = true
     @Published var selectedRating: PostRating? = nil
     @Published var selectedStudyProgress: StudyProgress = .added
     @Published var reshuffleToken = UUID()
@@ -228,7 +227,6 @@ final class PostsViewModel: ObservableObject {
         selectedPlatform = storedPlatform
         selectedYear = storedYear
         selectedSortOption = storedSortOption
-        isFiltersEmpty = checkIfAllFiltersAreEmpty()
     }
                 
     // MARK: - SwiftData Operations

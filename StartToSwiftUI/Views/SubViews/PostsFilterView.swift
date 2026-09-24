@@ -61,7 +61,6 @@ struct PostsFilterView: View {
         .foregroundStyle(Color.mycolor.myAccent)
         .padding(.horizontal)
         .onDisappear {
-            vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
             isFilterButtonPressed = false
         }
     }
@@ -226,12 +225,7 @@ struct PostsFilterView: View {
     
     private var resetAllFiltersButton: some View {
         ClearCupsuleButton(primaryTitle: "Reset All", primaryTitleColor: Color.mycolor.myRed) {
-                vm.selectedLevel = nil
-                vm.selectedFavorite = nil
-                vm.selectedType = nil
-                vm.selectedPlatform = nil
-                vm.selectedYear = nil
-                vm.selectedSortOption = .notSorted
+                vm.resetAllFilters()
                 updateFiltersSheetView.toggle()
             }
     }
@@ -239,12 +233,7 @@ struct PostsFilterView: View {
     private var resetAllFiltersAndExitButton: some View {
         
         ClearCupsuleButton(primaryTitle: "Reset All & Exit", primaryTitleColor: Color.mycolor.myRed) {
-                vm.selectedLevel = nil
-                vm.selectedFavorite = nil
-                vm.selectedType = nil
-                vm.selectedPlatform = nil
-                vm.selectedYear = nil
-                vm.selectedSortOption = .notSorted
+                vm.resetAllFilters()
                 isFilterButtonPressed.toggle()
             }
     }

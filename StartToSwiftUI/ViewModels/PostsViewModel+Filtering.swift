@@ -110,13 +110,26 @@ extension PostsViewModel {
         }
     }
     
-    func checkIfAllFiltersAreEmpty() -> Bool {
+    /// Не задан ни один фильтр и сортировка по умолчанию.
+    /// Вычисляется, а не хранится: все фильтры `@Published`, так что вьюха
+    /// перерисуется при любом их изменении, и ручная синхронизация не нужна.
+    var isFiltersEmpty: Bool {
         selectedLevel == nil &&
         selectedFavorite == nil &&
         selectedType == nil &&
         selectedPlatform == nil &&
         selectedYear == nil &&
         selectedSortOption == .notSorted
+    }
+
+    /// Сбрасывает все фильтры и сортировку к значениям по умолчанию.
+    func resetAllFilters() {
+        selectedLevel = nil
+        selectedFavorite = nil
+        selectedType = nil
+        selectedPlatform = nil
+        selectedYear = nil
+        selectedSortOption = .notSorted
     }
     
     /// Оставляет посты, у которых заголовок, вступление, автор или заметки

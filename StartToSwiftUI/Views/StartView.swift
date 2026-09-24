@@ -74,7 +74,6 @@ struct StartView: View {
                         displayedSection = coordinator.activeSection
                         vm.loadPostsFromSwiftData()
                         noticevm.loadNoticesFromSwiftData()
-                        vm.isFiltersEmpty = vm.checkIfAllFiltersAreEmpty()
                         /* Clean dublicates if any. iCloud sync may create multiple appSyncStates on different devices. This function finds duplicates, merges their data into one (the oldest), and deletes the rest.
                          */
                         vm.appStateManager?.cleanupDuplicateAppStates()
