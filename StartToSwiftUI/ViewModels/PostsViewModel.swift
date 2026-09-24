@@ -48,6 +48,10 @@ final class PostsViewModel: ObservableObject {
     
     var allYears: [String]? = nil
     var randomSortOrder: [String] = []
+    /// Счётчики этапов, последними записанные в виджет (added, started,
+    /// studied, practiced). Не `private` — используется в
+    /// PostsViewModel+Widget.swift, чтобы не перезаписывать виджет без изменений.
+    var lastWidgetCounts: [Int]?
     
     private var lastLoadTime: Date = Date(timeIntervalSince1970: 0)
     private let minLoadInterval: TimeInterval = 3
@@ -251,6 +255,9 @@ final class PostsViewModel: ObservableObject {
             crashManager.addLog("loadPostsFromSwiftData: posts count after check for duplicates: \(allPosts.count)")
             allYears = getAllYears()
             crashManager.setUserContext(allPosts.count, hasCloudPosts)
+            // Единая точка обновления виджета: любая перезагрузка постов —
+            // локальное сохранение, запуск, refresh, синк CloudKit.
+            updateWidgetData()
             log("📊 Loaded \(allPosts.count) posts from SwiftData:", level: .debug)
         } catch {
             crashManager.sendNonFatal(error)
@@ -463,7 +470,6 @@ final class PostsViewModel: ObservableObject {
         do {
             try dataSource.save()
             loadPostsFromSwiftData(removeDuplicates: removeDuplicates)
-            updateWidgetData()
             return true
         } catch {
             crashManager.sendNonFatal(error)

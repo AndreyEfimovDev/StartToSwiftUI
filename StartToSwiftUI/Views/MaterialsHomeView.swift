@@ -185,7 +185,6 @@ struct MaterialsHomeView: View {
 
     private func refresh() async {
         vm.loadPostsFromSwiftData()
-        vm.updateWidgetData()
         await noticevm.importNoticesFromFirebase()
         await vm.refreshPostsUpdateStatus()
     }
