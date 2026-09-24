@@ -262,6 +262,9 @@ struct SnippetsRepository {
             // Before iOS 26 this meant wrapping WKWebView in a UIViewRepresentable.
             @State private var page = WebPage()
             @State private var urlText = "https://developer.apple.com"
+            @FocusState private var isAddressFocused: Bool
+            @State private var canGoBack = false
+            @State private var canGoForward = false
 
             var body: some View {
                 VStack(spacing: 0) {
@@ -277,6 +280,22 @@ struct SnippetsRepository {
                 .onAppear {
                     load(urlText)
                 }
+                .onChange(of: page.url) { _, newURL in
+                    guard let newURL, !isAddressFocused else { return }
+                    urlText = newURL.absoluteString
+                }
+                .task {
+                    while !Task.isCancelled {
+                        do {
+                            for try await _ in page.navigations {
+                                updateHistoryButtons()
+                            }
+                            break
+                        } catch {
+                            updateHistoryButtons()
+                        }
+                    }
+                }
             }
 
             private var addressBar: some View {
@@ -286,20 +305,22 @@ struct SnippetsRepository {
                     } label: {
                         Image(systemName: "chevron.left")
                     }
-                    .disabled(page.backForwardList.backList.isEmpty)
+                    .disabled(!canGoBack)
 
                     Button {
                         goForward()
                     } label: {
                         Image(systemName: "chevron.right")
                     }
-                    .disabled(page.backForwardList.forwardList.isEmpty)
+                    .disabled(!canGoForward)
 
                     TextField("Enter URL", text: $urlText)
+                        .focused($isAddressFocused)
                         .textFieldStyle(.roundedBorder)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
                         .onSubmit {
+                            isAddressFocused = false
                             load(urlText)
                         }
 
@@ -316,19 +337,27 @@ struct SnippetsRepository {
                 guard let url = URL(string: urlString) else { return }
                 page.load(URLRequest(url: url))
             }
-
-            // WebPage has no built-in goBack()/goForward() — navigation history is
-            // exposed as backForwardList.backList/forwardList (nearest page is the
-            // last item going back, the first item going forward), and moving
-            // through it just means loading that item's URL again.
+        
+            // WebPage has no goBack()/goForward() — navigation history is exposed as
+            // backForwardList.backList/forwardList (nearest page is the last item
+            // going back, the first item going forward). Load the history item
+            // itself: that moves the current position through the history. Loading
+            // its URL as a new request would push a new entry instead — clearing
+            // forward history and making "back" loop between the last two pages.
+        
             private func goBack() {
                 guard let item = page.backForwardList.backList.last else { return }
-                page.load(URLRequest(url: item.url))
+                page.load(item)
             }
 
             private func goForward() {
                 guard let item = page.backForwardList.forwardList.first else { return }
-                page.load(URLRequest(url: item.url))
+                page.load(item)
+            }
+
+            private func updateHistoryButtons() {
+                canGoBack = !page.backForwardList.backList.isEmpty
+                canGoForward = !page.backForwardList.forwardList.isEmpty
             }
         }
         """,
