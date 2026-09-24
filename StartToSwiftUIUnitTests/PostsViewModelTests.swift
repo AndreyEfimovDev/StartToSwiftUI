@@ -361,8 +361,41 @@ final class PostsViewModelTests: XCTestCase {
         // When
         let success = await testVM.importPostsFromFirebase()
 
-        // Then — дата сдвинута за самый поздний пост ответа, а не за самый поздний новый
+        // Then — дата сдвинута за самый поздний пост ответа (+1 мс), а не за самый поздний новый
         XCTAssertTrue(success)
-        XCTAssertEqual(stateManager.savedLastDateOfPostsLoaded, Date(timeIntervalSince1970: 2_501))
+        XCTAssertEqual(
+            stateManager.savedLastDateOfPostsLoaded?.timeIntervalSince1970 ?? 0,
+            2_500.001,
+            accuracy: 0.000_1
+        )
+    }
+
+    func testImport_PostInSameSecondAfterImportedOne_IsStillNew() async throws {
+        // Given — импортирован пост с датой 1500.3
+        let stateManager = MockAppSyncStateManager()
+        stateManager.stubbedLastDateOfPostsLoaded = Date(timeIntervalSince1970: 1_000)
+        let imported = FBPostModel.mock(title: "Imported", date: Date(timeIntervalSince1970: 1_500.3))
+        let importVM = PostsViewModel(
+            dataSource: MockPostsDataSource(posts: []),
+            appStateManager: stateManager,
+            fbPostsManager: MockFBPostsManager.mockPosts([imported]),
+            services: .make()
+        )
+        _ = await importVM.importPostsFromFirebase()
+        let cursor = try XCTUnwrap(stateManager.savedLastDateOfPostsLoaded)
+
+        // When — позже в облаке появился пост в ту же секунду (1500.8)
+        stateManager.stubbedLastDateOfPostsLoaded = cursor
+        let sameSecond = FBPostModel.mock(title: "Same second", date: Date(timeIntervalSince1970: 1_500.8))
+        let checkVM = PostsViewModel(
+            dataSource: MockPostsDataSource(posts: []),
+            appStateManager: stateManager,
+            fbPostsManager: MockFBPostsManager.mockPosts([imported, sameSecond]),
+            services: .make()
+        )
+        let result = await checkVM.checkFBPostsForUpdates()
+
+        // Then — он новый (со схемой "обрезка до секунд + 1 с" был бы пропущен навсегда)
+        XCTAssertEqual(result, .available)
     }
 }

@@ -78,8 +78,8 @@ extension FBPostModel {
         self.postPlatform = Platform(rawValue: postPlatform) ?? .youtube
         self.postDate = postDate.dateValue() // apply dateValue() to Timestamp to get Date
         self.studyLevel = StudyLevel(rawValue: studyLevel) ?? .beginner
-        // Truncate to seconds — remove nanoseconds from Firestore Timestamp
-        let rawDate = date.dateValue()
-        self.date = Date(timeIntervalSince1970: rawDate.timeIntervalSince1970.rounded(.down))
+        // Без обрезки до секунд: date — курсор синка, и обрезка вместе со
+        // сдвигом на +1 с пропускала посты, записанные в ту же секунду.
+        self.date = date.dateValue()
     }
 }

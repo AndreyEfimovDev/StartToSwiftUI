@@ -48,7 +48,13 @@ enum FBAdminUploader {
                 "post_platform": post.postPlatform.rawValue,
                 "post_date": Timestamp(date: post.postDate ?? Date()),
                 "study_level": post.studyLevel.rawValue,
-                "date": Timestamp(date: post.date)
+                // Момент публикации в приложении — время сервера Firestore
+                // при записи. Курсор синка клиентов (date > последней
+                // полученной) корректен, только если каждая новая загрузка
+                // получает date строго позже предыдущих; дата "по дню"
+                // давала одинаковые значения, и вторую загрузку за день
+                // клиенты не получали.
+                "date": FieldValue.serverTimestamp()
             ]
 
             do {
