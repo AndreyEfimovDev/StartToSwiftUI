@@ -27,8 +27,23 @@ extension PostsViewModel {
         let filtersWithPlatformAndSortOption = filters
             .combineLatest($selectedPlatform, $selectedSortOption)
         
+        // share() — один debounce на оба подписчика (фильтрация и аналитика).
         let debouncedSearchText = $searchText
             .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
+            .share()
+
+        // Аналитика поиска — отдельно от фильтрации: одно событие на "сеанс
+        // поиска" (текст стал непустым), независимо от скорости набора и от
+        // того, сколько раз пайплайн фильтрации перезапускается по другим
+        // причинам (звёздочка, синк, смена фильтра).
+        debouncedSearchText
+            .map { !$0.isEmpty }
+            .removeDuplicates()
+            .filter { $0 }
+            .sink { [weak self] _ in
+                self?.analyticsManager.logEvent(name: "search_used")
+            }
+            .store(in: &cancellables)
         
         $allPosts
             .combineLatest(debouncedSearchText, filtersWithPlatformAndSortOption, $reshuffleToken)
@@ -46,7 +61,10 @@ extension PostsViewModel {
                     year: year
                 )
                 
-                let searchedPosts = self.searchPosts(posts: filtered)
+                // Текст поиска — из пайплайна (после debounce), а не живое
+                // self.searchText: иначе перезапуск по другой причине
+                // фильтровал бы по тексту в обход задержки.
+                let searchedPosts = self.searchPosts(posts: filtered, query: searchText)
                 let sortedPosts = self.applySorting(posts: searchedPosts, option: sortOption)
                 
                 log("Values subscription run", level: .info)
@@ -101,14 +119,12 @@ extension PostsViewModel {
         selectedSortOption == .notSorted
     }
     
-    private func searchPosts(posts: [Post]) -> [Post] {
-        guard !searchText.isEmpty else { return posts }
-        
-        if searchText.count == 1 {
-            analyticsManager.logEvent(name: "search_used")
-        }
-        
-        let query = searchText.lowercased()
+    /// Оставляет посты, у которых заголовок, вступление, автор или заметки
+    /// содержат `query` (без учёта регистра). Пустой запрос — все посты.
+    private func searchPosts(posts: [Post], query rawQuery: String) -> [Post] {
+        guard !rawQuery.isEmpty else { return posts }
+
+        let query = rawQuery.lowercased()
         return posts.filter {
             $0.title.lowercased().contains(query) ||
             $0.intro.lowercased().contains(query) ||

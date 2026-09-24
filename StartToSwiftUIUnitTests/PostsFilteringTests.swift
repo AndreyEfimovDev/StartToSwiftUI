@@ -244,6 +244,25 @@ final class PostsFilteringTests: XCTestCase {
         XCTAssertTrue(vm.filteredPosts.isEmpty)
     }
 
+    func test_search_usesDebouncedText_notLiveText() async throws {
+        // Given
+        vm = try await makeVM(posts: [post(title: "A"), post(title: "B")])
+
+        // When — текст набран, и сразу, до конца debounce, пайплайн
+        // перезапускается по другой причине (перезагрузка постов)
+        vm.searchText = "zzz"
+        vm.loadPostsFromSwiftData(removeDuplicates: false)
+
+        // Then — поиск ещё не применён: фильтрация по тексту — только после debounce
+        XCTAssertEqual(vm.filteredPosts.count, 2)
+
+        // When — debounce отработал
+        try await Task.sleep(nanoseconds: pipelineDelay)
+
+        // Then
+        XCTAssertTrue(vm.filteredPosts.isEmpty)
+    }
+
     func test_search_emptyText_returnsAll() async throws {
         vm = try await makeVM(posts: [post(title: "A"), post(title: "B")])
 
