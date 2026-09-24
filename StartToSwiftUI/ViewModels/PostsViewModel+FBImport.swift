@@ -34,7 +34,7 @@ extension PostsViewModel {
         crashManager.addLog("importPostsFromFirebase: started, posts count: \(allPosts.count)")
         let trace = performanceManager.startTrace(name: "import_posts_firebase")
         
-        let sourceName = isSwiftData ? "SwiftData" : "(Mock)"
+        let sourceName = String(describing: type(of: dataSource))
         
         guard let appStateManager else { return false }
         let importAfterDate = appStateManager.getLastDateOfPostsLoaded()

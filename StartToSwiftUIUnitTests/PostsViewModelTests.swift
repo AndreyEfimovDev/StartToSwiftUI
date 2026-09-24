@@ -298,6 +298,33 @@ final class PostsViewModelTests: XCTestCase {
         XCTAssertFalse(isSaved)
     }
 
+    // MARK: - Erase All Posts
+
+    /// Стирание очищает сам источник данных, а не только список в VM:
+    /// после перезагрузки посты не должны вернуться. Раньше для не-SwiftData
+    /// источника обнулялся только allPosts.
+    func testEraseAllPosts_ClearsDataSource() {
+        // Given
+        let stateManager = MockAppSyncStateManager()
+        let testVM = PostsViewModel(
+            dataSource: MockPostsDataSource(posts: [Post(title: "Post 1"), Post(title: "Post 2")]),
+            appStateManager: stateManager,
+            fbPostsManager: networkService,
+            services: .make()
+        )
+        testVM.loadPostsFromSwiftData(removeDuplicates: false)
+        XCTAssertEqual(testVM.allPosts.count, 2)
+
+        // When
+        let isErased = testVM.eraseAllPosts()
+        testVM.loadPostsFromSwiftData(removeDuplicates: false)
+
+        // Then
+        XCTAssertTrue(isErased)
+        XCTAssertTrue(testVM.allPosts.isEmpty)
+        XCTAssertEqual(stateManager.resetLastDateOfPostsLoadedCallCount, 1)
+    }
+
     // MARK: - Update Status Staleness & Sync Date
 
     func testRefreshPostsUpdateStatus_AppliesFreshResult() async {

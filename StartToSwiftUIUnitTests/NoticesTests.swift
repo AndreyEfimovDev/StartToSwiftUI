@@ -183,4 +183,31 @@ final class NoticeViewModelTests: XCTestCase {
         // Then
         XCTAssertEqual(stateManager.savedLatestNoticeDate, latest)
     }
+
+    // MARK: - Remove Duplicates
+
+    /// Дубли по id убираются через протокол источника (раньше — только для
+    /// SwiftData): остаётся одна копия, причём прочитанная.
+    func testLoadNotices_RemovesDuplicateNotices_KeepsReadCopy() {
+        // Given
+        let unreadCopy = Notice(id: "dup", title: "Unread copy", isRead: false)
+        let readCopy = Notice(id: "dup", title: "Read copy", isRead: true)
+        let other = Notice(id: "other", title: "Other", isRead: false)
+        let dataSource = MockNoticesDataSource(notices: [unreadCopy, readCopy, other])
+        let testVM = NoticesViewModel(
+            dataSource: dataSource,
+            fbNoticesManager: MockFBNoticesManager.mockEmpty(),
+            services: .make()
+        )
+
+        // When
+        testVM.loadNoticesFromSwiftData()
+
+        // Then
+        XCTAssertEqual(testVM.notices.count, 2)
+        let kept = testVM.notices.filter { $0.id == "dup" }
+        XCTAssertEqual(kept.count, 1)
+        XCTAssertTrue(kept.first?.isRead ?? false)
+        XCTAssertTrue(dataSource.deletedNotices.contains { $0 === unreadCopy })
+    }
 }

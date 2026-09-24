@@ -13,6 +13,7 @@ protocol PostsDataSourceProtocol {
     func fetchPosts() throws -> [Post]
     func insert(_ post: Post)
     func delete(_ post: Post)
+    func deleteAll() throws
     func save() throws
 }
 @MainActor

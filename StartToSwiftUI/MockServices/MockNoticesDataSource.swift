@@ -27,9 +27,11 @@ final class MockNoticesDataSource: NoticesDataSourceProtocol {
         insertedNotices.append(notice)
         storedNotices.append(notice)
     }
+    // Удаляем конкретный объект, а не все с тем же id — как SwiftData.
+    // Иначе при очистке дублей вместе с копиями пропала бы и оставляемая.
     func delete(_ notice: Notice) {
         deletedNotices.append(notice)
-        storedNotices.removeAll { $0.id == notice.id }
+        storedNotices.removeAll { $0 === notice }
     }
     func save() throws {
         saveCallCount += 1

@@ -45,10 +45,6 @@ final class NoticesViewModel: ObservableObject {
     private var isImportingNotices = false
     
     // MARK: - Computed Properties
-    private var swiftDataSource: SwiftDataNoticesDataSource? {
-        dataSource as? SwiftDataNoticesDataSource
-    }
-    
     var unreadCount: Int {
         notices.filter { !$0.isRead }.count
     }
@@ -134,9 +130,9 @@ final class NoticesViewModel: ObservableObject {
         lastLoadTime = Date()
         crashManager.addLog("loadNoticesFromSwiftData: notices count: \(notices.count)")
 
-        // Removing duplicate notices in SwiftUI, leaving only one instance for each ID - for SwiftData only
-        if removeDuplicates, let swiftDataSource {
-            removeDuplicateNotices(from: swiftDataSource)
+        // Removing duplicate notices, leaving only one instance for each ID
+        if removeDuplicates {
+            removeDuplicateNotices()
         }
         crashManager.addLog("loadNoticesFromSwiftData: notices count after check for duplicates: \(notices.count)")
 
@@ -251,10 +247,9 @@ final class NoticesViewModel: ObservableObject {
 
     // MARK: - Remove Duplicates
     /// Remove duplicate notifications in SwiftUI, leaving only one instance of each ID
-    /// Passing Swift DataSource as a parameter avoids double-checking
-    private func removeDuplicateNotices(from swiftDataSource: SwiftDataNoticesDataSource) {
+    private func removeDuplicateNotices() {
         do {
-            let allNotices = try swiftDataSource.modelContext.fetch(FetchDescriptor<Notice>())
+            let allNotices = try dataSource.fetchNotices()
             
             // Find only groups with duplicates
             let duplicateGroups = Dictionary(grouping: allNotices, by: \.id)

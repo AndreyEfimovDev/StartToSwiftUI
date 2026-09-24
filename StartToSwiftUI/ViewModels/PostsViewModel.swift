@@ -71,14 +71,6 @@ final class PostsViewModel: ObservableObject {
     @Published var isImportingPosts = false
     @Published var isCheckingPostsForUpdates = false
     
-    // MARK: - Computed Properties
-    var swiftDataSource: SwiftDataPostsDataSource? {
-        dataSource as? SwiftDataPostsDataSource
-    }
-    var isSwiftData: Bool {
-        swiftDataSource != nil
-    }
-    
     // MARK: - AppStorage
     @AppStorage("shimmerWaveEnabled") var shimmerWaveEnabled = true
     @AppStorage("selectedTheme") var selectedTheme: Theme = .system
@@ -396,18 +388,13 @@ final class PostsViewModel: ObservableObject {
     @discardableResult
     func eraseAllPosts() -> Bool {
         let isErased: Bool
-        if let swiftDataSource {
-            do {
-                try swiftDataSource.modelContext.delete(model: Post.self)
-                isErased = saveContextAndReload()
-            } catch {
-                crashManager.sendNonFatal(error)
-                handleError(error, message: "Error deleting data")
-                isErased = false
-            }
-        } else {
-            allPosts = []
-            isErased = true
+        do {
+            try dataSource.deleteAll()
+            isErased = saveContextAndReload()
+        } catch {
+            crashManager.sendNonFatal(error)
+            handleError(error, message: "Error deleting data")
+            isErased = false
         }
 
         if isErased {
