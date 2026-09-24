@@ -15,6 +15,8 @@ final class MockNoticesDataSource: NoticesDataSourceProtocol {
     var insertedNotices: [Notice] = []
     var deletedNotices: [Notice] = []
     var saveCallCount = 0
+    /// true — save() бросает ошибку (для тестов сценария "сохранение не удалось").
+    var shouldThrowOnSave = false
 
     init(notices: [Notice] = []) {
         self.storedNotices = notices
@@ -29,7 +31,14 @@ final class MockNoticesDataSource: NoticesDataSourceProtocol {
         deletedNotices.append(notice)
         storedNotices.removeAll { $0.id == notice.id }
     }
-    func save() throws { saveCallCount += 1 }
+    func save() throws {
+        saveCallCount += 1
+        if shouldThrowOnSave { throw MockSaveError.saveFailed }
+    }
+
+    enum MockSaveError: Error {
+        case saveFailed
+    }
 }
 
 // MARK: - FBNoticeModel Test Helpers

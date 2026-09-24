@@ -218,7 +218,29 @@ final class NoticesViewModel: ObservableObject {
         let newNotices = relevantNotices.filter { !existingIDs.contains($0.noticeId) }
         crashManager.addLog("loadNoticesFromFirebase: in progress, new notices found count: \(newNotices.count)")
 
-        // Update latest date
+        // Save new notices
+        if !newNotices.isEmpty {
+            for firebaseNotice in newNotices {
+                dataSource.insert(NoticeMigrationHelper.convertFromFirebase(firebaseNotice))
+            }
+
+            // Дату синка двигаем только ПОСЛЕ успешного сохранения notices:
+            // если сдвинуть её раньше и сохранение упадёт, запрос
+            // "notice_date > даты" эти notices больше не вернёт — потеря
+            // навсегда. При ошибке дата не трогается, и notices придут при
+            // следующем импорте.
+            guard saveContext() else {
+                performanceManager.stopTrace(trace)
+                return
+            }
+
+            signalNewNotices(count: newNotices.count)
+            loadNoticesFromSwiftData(removeDuplicates: false)
+            log("🍉 ✅ Import complete: \(newNotices.count) notices added", level: .info)
+        }
+
+        // Update latest date — также и когда новых нет (все уже есть локально),
+        // чтобы те же notices не запрашивались при каждом запуске.
         if let appStateManager,
            let latestDate = relevantNotices.map({ $0.noticeDate }).max() {
             appStateManager.updateLatestNoticeDate(latestDate)
@@ -226,21 +248,6 @@ final class NoticesViewModel: ObservableObject {
             log("🔥 LastNoticeDate updated in appStateManager \(latestDate)", level: .info)
         }
 
-        guard !newNotices.isEmpty else {
-            performanceManager.stopTrace(trace)
-            return
-        }
-
-        // Save new notices
-        for firebaseNotice in newNotices {
-            dataSource.insert(NoticeMigrationHelper.convertFromFirebase(firebaseNotice))
-        }
-
-        signalNewNotices(count: newNotices.count)
-
-        saveContext()
-        loadNoticesFromSwiftData(removeDuplicates: false)
-        log("🍉 ✅ Import complete: \(newNotices.count) notices added", level: .info)
         performanceManager.setValue(
             trace,
             value: "\(newNotices.count)/\(relevantNotices.count)",
@@ -359,12 +366,19 @@ final class NoticesViewModel: ObservableObject {
     }
     
     // MARK: - Save Context
-    private func saveContext() {
+    /// Сохраняет notices.
+    ///
+    /// - Returns: `true`, если сохранение прошло; `false` при ошибке (она
+    ///   уже показана через `ErrorManager`).
+    @discardableResult
+    private func saveContext() -> Bool {
         do {
             try dataSource.save()
+            return true
         } catch {
             crashManager.sendNonFatal(error)
             handleError(error, message: "Error saving notices")
+            return false
         }
     }
 

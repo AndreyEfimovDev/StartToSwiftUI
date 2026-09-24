@@ -96,9 +96,11 @@ class AppSyncStateManager: AppSyncStateManagerProtocol {
             
         } catch {
             log("Error getting AppState: \(error)", level: .error)
-            let newState = AppSyncState()
-            modelContext.insert(newState)
-            return newState
+            // Временный объект БЕЗ вставки в контекст: геттеры получат nil,
+            // изменения в нём просто не сохранятся. Вставка создала бы пустой
+            // дубль состояния, который записало бы следующее любое сохранение.
+            // При следующем вызове чтение из базы повторится.
+            return AppSyncState()
         }
     }
     
