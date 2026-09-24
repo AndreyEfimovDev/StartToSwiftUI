@@ -225,12 +225,25 @@ struct PreferencesView: View {
                 coordinator.pushModal(.importFromCloud)
             }
             .customListRowStyle(iconName: "icloud.and.arrow.down", iconWidth: iconSize)
+            .disabled(isFirestoreRequestInProgress)
         } else if vm.hasPostsUpdate {
             Button("Check for materials update") {
                 coordinator.pushModal(.checkForUpdates)
             }
             .customListRowStyle(iconName: "arrow.trianglehead.counterclockwise", iconWidth: iconSize)
+            .disabled(isFirestoreRequestInProgress)
         }
+    }
+
+    /// Идёт ли сейчас запрос постов в Firestore (фоновая проверка при
+    /// запуске/refresh или импорт). Пока идёт — кнопки импорта и проверки
+    /// неактивны: иначе модалка стартовала бы параллельно с фоновой
+    /// проверкой (её проверка упёрлась бы в guard и показала "No updates"),
+    /// а импорт мог бы завершиться раньше фоновой проверки со старой датой.
+    /// Кнопка не прячется, а гаснет — проверка длится доли секунды, строка
+    /// не должна мигать.
+    private var isFirestoreRequestInProgress: Bool {
+        vm.isCheckingPostsForUpdates || vm.isImportingPosts
     }
         
     private var shareBackup: some View {

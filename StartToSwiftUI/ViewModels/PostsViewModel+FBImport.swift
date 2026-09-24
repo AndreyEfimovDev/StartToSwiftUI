@@ -92,7 +92,12 @@ extension PostsViewModel {
             
             // Update last date of posts loaded from Firebase
             //
-            // Дата сознательно считается только по успешно декодированным
+            // Дата считается по ВСЕМ успешно декодированным постам ответа
+            // (fbResponse), включая уже существующие локально, — а не только
+            // по новым: иначе уже известный пост новее новых останется "за"
+            // датой и даст ложное "есть обновления" при следующей проверке.
+            //
+            // При этом дата сознательно считается только по успешно декодированным
             // постам, а не по всем документам ответа: битый документ (нет
             // обязательного поля — обычно его прочитали недозаполненным в
             // консоли Firestore) не сдвигает дату и перечитывается при каждом
@@ -101,7 +106,7 @@ extension PostsViewModel {
             // уже никогда не получит (без ручного подъёма его `date`). Цена —
             // пара лишних чтений и повтор ошибки в логе, это приемлемо.
             // То же правило действует в ветке "нет новых постов" выше.
-            if let latestDate = fbResponseChecked.max(by: { $0.date < $1.date })?.date {
+            if let latestDate = fbResponse.max(by: { $0.date < $1.date })?.date {
                 appStateManager.setLastDateOfPostsLoaded(latestDate.addingTimeInterval(1))
                 log("🔥 lastPostsFBUpdateDate updated in appStateManager \(latestDate)", level: .info)
             }
@@ -110,7 +115,7 @@ extension PostsViewModel {
             
             crashManager.addLog("importPostsFromFirebase: finished, import count: \(fbResponseChecked.count)")
             crashManager.addLog("importPostsFromFirebase: finished, updated posts count: \(allPosts.count)")
-            log("✅ Added \(fbResponseChecked.count) new posts from \(sourceName)", level: .info)
+            log("Added \(fbResponseChecked.count) new posts from \(sourceName)", level: .info)
             performanceManager.setValue(
                 trace,
                 value: "\(fbResponseChecked.count)/\(fbResponse.count)",
@@ -162,13 +167,26 @@ extension PostsViewModel {
         isCheckingPostsForUpdates = true
         defer { isCheckingPostsForUpdates = false }
 
+        // Дата до запроса — чтобы после ответа понять, не устарел ли он.
+        let dateBeforeRequest = appStateManager?.getLastDateOfPostsLoaded()
+
         guard let result = await fetchPostsUpdateStatus() else { return }
+
+        // Пока шёл запрос, мог пройти импорт: он сдвинул дату и сбросил
+        // hasPostsUpdate. Ответ, полученный для старой даты, тогда устарел —
+        // применять его нельзя, иначе "есть обновления" загорится после
+        // того, как всё уже загружено.
+        guard !isImportingPosts,
+              appStateManager?.getLastDateOfPostsLoaded() == dateBeforeRequest else {
+            log("🔍 Background posts update check: stale result ignored", level: .info)
+            return
+        }
 
         switch result {
         case .success(let hasNewPosts):
             hasPostsUpdate = hasNewPosts
         case .failure(let error):
-            log("⚠️ Background posts update check failed: \(error)", level: .warning)
+            log("Background posts update check failed: \(error)", level: .warning)
         }
     }
 

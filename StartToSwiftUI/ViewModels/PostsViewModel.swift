@@ -66,8 +66,10 @@ final class PostsViewModel: ObservableObject {
     // найдёт ничего нового сверх уже идущего запроса.
     // Не `private`, т.к. методы, которые их используют, объявлены в
     // extension-файле PostsViewModel+FBImport.swift.
-    var isImportingPosts = false
-    var isCheckingPostsForUpdates = false
+    // @Published — PreferencesView блокирует по ним кнопки импорта/проверки,
+    // пока запрос в Firestore ещё идёт.
+    @Published var isImportingPosts = false
+    @Published var isCheckingPostsForUpdates = false
     
     // MARK: - Computed Properties
     var swiftDataSource: SwiftDataPostsDataSource? {
