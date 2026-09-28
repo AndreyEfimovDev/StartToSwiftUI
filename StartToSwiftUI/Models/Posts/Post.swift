@@ -338,7 +338,9 @@ struct PostMigrationHelper {
             notes: codablePost.notes,
             origin: codablePost.origin,
             draft: codablePost.draft,
-            status: codablePost.status,
+            // Устаревший hidden из старого бэкапа — в корзину: иначе пост
+            // не попал бы ни в список (active), ни в корзину (deleted).
+            status: codablePost.status == .hidden ? .deleted : codablePost.status,
             date: codablePost.date,
             addedDateStamp: codablePost.addedDateStamp,
             startedDateStamp: codablePost.startedDateStamp,

@@ -225,16 +225,4 @@ extension PostsViewModel {
         log("🔍 checkFBPostsForUpdates date: \(String(describing: lastLoadedDate))", level: .info)
         return await fbPostsManager.hasFBPosts(after: lastLoadedDate)
     }
-    
-    // MARK: - Migration
-    func migrateHiddenToDeleted(removeDuplicates: Bool = true) {
-        let hiddenPosts = allPosts.filter { $0.status == .hidden }
-        guard !hiddenPosts.isEmpty else { return }
-
-        hiddenPosts.forEach { $0.status = .deleted }
-        saveContextAndReload(removeDuplicates: removeDuplicates)
-        
-        log("🔄 Migrated \(hiddenPosts.count) posts: hidden → deleted", level: .info)
-    }
-    
 }

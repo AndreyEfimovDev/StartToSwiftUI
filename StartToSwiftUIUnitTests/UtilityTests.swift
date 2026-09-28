@@ -250,6 +250,22 @@ final class UtilityTests: XCTestCase {
         XCTAssertEqual(post.practicedDateStamp?.timeIntervalSince(testDate), oneDay * 4)
     }
     
+    /// Устаревший статус hidden из старого бэкапа восстанавливается в корзину.
+    @MainActor
+    func testConvertFromCodable_HiddenStatus_BecomesDeleted() {
+        let codablePost = CodablePost.mock(status: .hidden)
+
+        let post = PostMigrationHelper.convertFromCodable(codablePost)
+
+        XCTAssertEqual(post.status, .deleted)
+    }
+
+    @MainActor
+    func testConvertFromCodable_ActiveAndDeletedStatus_Unchanged() {
+        XCTAssertEqual(PostMigrationHelper.convertFromCodable(.mock(status: .active)).status, .active)
+        XCTAssertEqual(PostMigrationHelper.convertFromCodable(.mock(status: .deleted)).status, .deleted)
+    }
+
     // MARK: - JSONDecoder Tests
     
     func testJSONDecoderAppDecoderBasicDecoding() {

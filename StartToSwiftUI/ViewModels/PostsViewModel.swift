@@ -228,9 +228,6 @@ final class PostsViewModel: ObservableObject {
                 removeDuplicatePosts()
             }
             
-            // migrating post status scheem from active → hidden → deleted → erase to active → deleted → erase.
-            migrateHiddenToDeleted(removeDuplicates: removeDuplicates)
-            
             crashManager.addLog("loadPostsFromSwiftData: posts count after check for duplicates: \(allPosts.count)")
             allYears = getAllYears()
             crashManager.setUserContext(allPosts.count, hasCloudPosts)
