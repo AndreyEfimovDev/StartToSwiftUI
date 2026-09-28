@@ -25,6 +25,8 @@ struct ModalNavigationContainer: View {
         }
         .background(Color.mycolor.myBackground)
         .ignoresSafeArea()
+        // Ошибки операций внутри модалки видны сразу, поверх неё.
+        .errorAlert()
     }
     
     @ViewBuilder

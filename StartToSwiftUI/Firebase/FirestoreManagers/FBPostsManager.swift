@@ -16,12 +16,19 @@ enum FBFetchError: Error {
 
 // MARK: - Firestore Manager
 final class FBPostsManager: FBPostsManagerProtocol {
-    
-    init() {}
+
+    private let networkMonitor: NetworkMonitoring
+
+    /// - Parameter networkMonitor: Без сети запрос не отправляется — иначе
+    ///   Firestore ~10 с пытается подключиться, прежде чем вернуть ошибку.
+    init(networkMonitor: NetworkMonitoring) {
+        self.networkMonitor = networkMonitor
+    }
     
     private let postsCollection: CollectionReference = Firestore.firestore().collection("posts")
 
     func fetchFBPosts(after date: Date?) async -> Result<[FBPostModel], FBFetchError> {
+        guard networkMonitor.isConnected else { return .failure(Self.offlineError()) }
         do {
             let query: Query
             if let date {
@@ -30,7 +37,10 @@ final class FBPostsManager: FBPostsManagerProtocol {
                 query = postsCollection // return all Firebase posts if date = nil
             }
 
-            let snapshot = try await query.getDocuments()
+            // Только сервер: без сети Firestore иначе молча отдал бы посты из
+            // локального кэша — импорт "успешен", дата синка сдвигается по
+            // возможно устаревшим данным, а "нет интернета" не показывается.
+            let snapshot = try await query.getDocuments(source: .server)
             let decoded = snapshot.documents.map { ($0.documentID, FBPostModel(document: $0)) }
             let posts = decoded.compactMap { $0.1 }
             let droppedIDs = decoded.filter { $0.1 == nil }.map { $0.0 }
@@ -45,6 +55,7 @@ final class FBPostsManager: FBPostsManagerProtocol {
     }
 
     func hasFBPosts(after date: Date) async -> Result<Bool, FBFetchError> {
+        guard networkMonitor.isConnected else { return .failure(Self.offlineError()) }
         do {
             // Firestore тарифицирует чтения по числу возвращённых документов
             // (пустой ответ — одно чтение). Для ответа "да/нет" хватает
@@ -56,10 +67,13 @@ final class FBPostsManager: FBPostsManagerProtocol {
             // валидные посты за ним остались бы незамеченными. Цена — кнопка
             // обновления может показываться, пока битый документ не исправят
             // (см. комментарий о дате синка в PostsViewModel+FBImport).
+            //
+            // Только сервер, как и в fetchFBPosts: из кэша без сети проверка
+            // ответила бы "обновлений нет", хотя проверить было нельзя.
             let snapshot = try await postsCollection
                 .whereField("date", isGreaterThan: Timestamp(date: date))
                 .limit(to: 1)
-                .getDocuments()
+                .getDocuments(source: .server)
             let hasPosts = !snapshot.documents.isEmpty
             log("🔍 Firebase: new posts available: \(hasPosts)", level: .info)
             return .success(hasPosts)
@@ -69,6 +83,13 @@ final class FBPostsManager: FBPostsManagerProtocol {
     }
 
     // MARK: - Private
+
+    /// Ошибка "нет сети", когда запрос не отправлялся вовсе (монитор сети
+    /// сообщил об отсутствии подключения).
+    private static func offlineError() -> FBFetchError {
+        log("📵 Firebase: no network connection — request skipped", level: .warning)
+        return .networkUnavailable
+    }
 
     /// Переводит ошибку Firestore в `FBFetchError` и логирует её.
     ///

@@ -206,25 +206,30 @@ final class SnippetsTests: XCTestCase {
         XCTAssertTrue(testVM.isFavorite(snippet))
     }
 
-    /// Уведомление об изменениях из iCloud обновляет кэш избранного
-    /// (с debounce 2 с — поэтому тест ждёт до 4 с).
-    func test_viewModel_remoteChangeNotification_refreshesFavorites() async {
+    /// Изменение AppSyncState (в т.ч. из iCloud) обновляет кэш избранного.
+    func test_viewModel_appSyncStateChange_refreshesFavorites() {
         let store = MockSnippetFavoritesStore()
-        let testVM = SnippetsViewModel(favoritesStore: store, services: .make())
+        let observer = MockCloudChangeObserver()
+        let testVM = SnippetsViewModel(favoritesStore: store, cloudChangeObserver: observer, services: .make())
         let snippet = SnippetsRepository.a001
         store.favoriteIDs = [snippet.id]
 
-        let refreshed = expectation(description: "favoriteIDs refreshed")
-        testVM.$favoriteIDs
-            .dropFirst()
-            .sink { ids in
-                if ids.contains(snippet.id) { refreshed.fulfill() }
-            }
-            .store(in: &cancellables)
+        observer.sendChange([.appSyncState])
 
-        NotificationCenter.default.post(name: .NSPersistentStoreRemoteChange, object: nil)
+        XCTAssertTrue(testVM.isFavorite(snippet))
+    }
 
-        await fulfillment(of: [refreshed], timeout: 4)
+    /// Изменения других сущностей кэш избранного не трогают.
+    func test_viewModel_otherEntityChange_doesNotRefreshFavorites() {
+        let store = MockSnippetFavoritesStore()
+        let observer = MockCloudChangeObserver()
+        let testVM = SnippetsViewModel(favoritesStore: store, cloudChangeObserver: observer, services: .make())
+        let snippet = SnippetsRepository.a001
+        store.favoriteIDs = [snippet.id]
+
+        observer.sendChange([.post, .notice])
+
+        XCTAssertFalse(testVM.isFavorite(snippet))
     }
 
     // MARK: - SnippetsViewModel — Favorites Integration

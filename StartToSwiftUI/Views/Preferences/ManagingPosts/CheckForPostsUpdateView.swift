@@ -162,7 +162,7 @@ struct CheckForPostsUpdateView: View {
     )
     let context = ModelContext(container)
     
-    let vm = PostsViewModel(modelContext: context, fbPostsManager: FBPostsManager(), services: .make())
+    let vm = PostsViewModel(modelContext: context, fbPostsManager: MockFBPostsManager(), services: .make())
     
     NavigationStack{
         CheckForPostsUpdateView()

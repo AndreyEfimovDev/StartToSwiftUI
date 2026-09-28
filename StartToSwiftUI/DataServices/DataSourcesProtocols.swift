@@ -15,6 +15,8 @@ protocol PostsDataSourceProtocol {
     func delete(_ post: Post)
     func deleteAll() throws
     func save() throws
+    /// Отменяет все несохранённые изменения — после неудачного `save()`.
+    func rollback()
 }
 @MainActor
 protocol NoticesDataSourceProtocol {

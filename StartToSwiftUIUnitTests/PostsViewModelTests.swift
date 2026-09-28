@@ -248,8 +248,7 @@ final class PostsViewModelTests: XCTestCase {
 
         // Then — чужой алерт не закрыт, а проверка не выглядит неудачной
         XCTAssertEqual(result, .upToDate)
-        XCTAssertTrue(services.errorManager.showAlert)
-        XCTAssertEqual(services.errorManager.errorMessage, "Notices import failed")
+        XCTAssertEqual(services.errorManager.current?.message, "Notices import failed")
     }
 
     // MARK: - Save Result Tests
@@ -296,6 +295,131 @@ final class PostsViewModelTests: XCTestCase {
 
         // Then
         XCTAssertFalse(isSaved)
+    }
+
+    // MARK: - Rollback after failed save
+    // Несохранённые изменения не должны оставаться в контексте — иначе они
+    // тихо запишутся при следующем сохранении или автосохранении.
+
+    func testAddPost_WhenSaveFails_RollsBack() {
+        dataSource.shouldThrowOnSave = true
+
+        vm.addPost(Post(title: "New post"))
+
+        XCTAssertEqual(dataSource.rollbackCallCount, 1)
+    }
+
+    func testUpdatePost_WhenSaveFails_RollsBack() {
+        dataSource.shouldThrowOnSave = true
+
+        vm.updatePost()
+
+        XCTAssertEqual(dataSource.rollbackCallCount, 1)
+    }
+
+    func testSave_WhenSaveSucceeds_DoesNotRollBack() {
+        vm.addPost(Post(title: "New post"))
+        vm.updatePost()
+
+        XCTAssertEqual(dataSource.rollbackCallCount, 0)
+    }
+
+    // MARK: - Cloud Changes
+
+    /// Изменение хранилища перезагружает посты — без очистки дублей
+    /// (иначе два устройства могут удалить друг у друга разные копии).
+    func testStoreChange_ReloadsPostsWithoutRemovingDuplicates() {
+        // Given — две копии одного поста уже в хранилище
+        let copyA = Post(id: "dup", title: "Copy A")
+        let copyB = Post(id: "dup", title: "Copy B")
+        let source = MockPostsDataSource(posts: [])
+        let observer = MockCloudChangeObserver()
+        let testVM = PostsViewModel(
+            dataSource: source,
+            fbPostsManager: networkService,
+            cloudChangeObserver: observer,
+            services: .make()
+        )
+        testVM.start()
+        source.insert(copyA)
+        source.insert(copyB)
+
+        // When
+        observer.sendChange([.post])
+
+        // Then — обе копии загружены, ни одна не удалена
+        XCTAssertEqual(testVM.allPosts.count, 2)
+    }
+
+    /// Изменения других сущностей посты не перезагружают.
+    func testStoreChange_OfOtherEntity_DoesNotReloadPosts() {
+        // Given
+        let source = MockPostsDataSource(posts: [])
+        let observer = MockCloudChangeObserver()
+        let testVM = PostsViewModel(
+            dataSource: source,
+            fbPostsManager: networkService,
+            cloudChangeObserver: observer,
+            services: .make()
+        )
+        testVM.start()
+        source.insert(Post(title: "New"))
+
+        // When
+        observer.sendChange([.notice, .appSyncState])
+
+        // Then
+        XCTAssertTrue(testVM.allPosts.isEmpty)
+    }
+
+    // MARK: - Remove Duplicates: same keeper on every device
+
+    /// Загружает посты с очисткой дублей и возвращает оставшиеся.
+    /// Порядок `posts` имитирует порядок выборки на конкретном устройстве.
+    private func postsAfterDeduplication(_ posts: [Post]) -> [Post] {
+        let testVM = PostsViewModel(
+            dataSource: MockPostsDataSource(posts: posts),
+            fbPostsManager: networkService,
+            services: .make()
+        )
+        testVM.loadPostsFromSwiftData()
+        return testVM.allPosts
+    }
+
+    /// Дубли по id (импорт на двух устройствах до синка): при любом порядке
+    /// выборки остаётся копия с самой ранней меткой добавления — иначе два
+    /// устройства удалили бы друг у друга разные копии и пост пропал бы.
+    func testRemoveDuplicates_ById_KeepsSameCopyRegardlessOfOrder() {
+        let date = Date(timeIntervalSince1970: 100)
+        func makeCopies() -> (early: Post, late: Post) {
+            (Post(id: "dup", title: "Early", date: date, addedDateStamp: Date(timeIntervalSince1970: 1_000)),
+             Post(id: "dup", title: "Late", date: date, addedDateStamp: Date(timeIntervalSince1970: 2_000)))
+        }
+
+        let first = makeCopies()
+        let deviceA = postsAfterDeduplication([first.early, first.late])
+        let second = makeCopies()
+        let deviceB = postsAfterDeduplication([second.late, second.early])
+
+        XCTAssertEqual(deviceA.map(\.title), ["Early"])
+        XCTAssertEqual(deviceB.map(\.title), ["Early"])
+    }
+
+    /// Дубли по названию (разные id): при любом порядке остаётся одна и та же копия.
+    func testRemoveDuplicates_ByTitle_KeepsSameCopyRegardlessOfOrder() {
+        let date = Date(timeIntervalSince1970: 100)
+        func makeCopies() -> (early: Post, late: Post) {
+            (Post(id: "id-early", title: "Same title", date: date, addedDateStamp: Date(timeIntervalSince1970: 1_000)),
+             Post(id: "id-late", title: "Same title", date: date, addedDateStamp: Date(timeIntervalSince1970: 2_000)))
+        }
+
+        let first = makeCopies()
+        let deviceA = postsAfterDeduplication([first.early, first.late])
+        let second = makeCopies()
+        let deviceB = postsAfterDeduplication([second.late, second.early])
+
+        XCTAssertEqual(deviceA.map(\.id), ["id-early"])
+        XCTAssertEqual(deviceB.map(\.id), ["id-early"])
     }
 
     // MARK: - Erase All Posts

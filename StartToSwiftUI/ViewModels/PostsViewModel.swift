@@ -24,6 +24,7 @@ final class PostsViewModel: ObservableObject {
     let crashManager: FBCrashManager
     let performanceManager: FBPerformanceManager
     let analyticsManager: FBAnalyticsManager
+    private let cloudChangeObserver: CloudChangeObserving?
 
     @Published var allPosts: [Post] = [] {
         // Единая точка для всех путей удаления: свайп Delete, Erase, Erase all,
@@ -55,9 +56,6 @@ final class PostsViewModel: ObservableObject {
     /// PostsViewModel+Widget.swift, чтобы не перезаписывать виджет без изменений.
     var lastWidgetCounts: [Int]?
     
-    private var lastLoadTime: Date = Date(timeIntervalSince1970: 0)
-    private let minLoadInterval: TimeInterval = 3
-    private var pendingCloudUpdate = false
     private var isStarted = false
 
     // Защита от повторного входа: если запрос уже выполняется, пропускаем
@@ -150,11 +148,13 @@ final class PostsViewModel: ObservableObject {
         dataSource: PostsDataSourceProtocol,
         appStateManager: AppSyncStateManagerProtocol? = nil,
         fbPostsManager: FBPostsManagerProtocol,
+        cloudChangeObserver: CloudChangeObserving? = nil,
         services: AppServiceDependencies
     ) {
         self.dataSource = dataSource
         self.appStateManager = appStateManager
         self.fbPostsManager = fbPostsManager
+        self.cloudChangeObserver = cloudChangeObserver
         self.errorManager = services.errorManager
         self.fileManager = services.fileManager
         self.crashManager = services.crashManager
@@ -168,12 +168,14 @@ final class PostsViewModel: ObservableObject {
         modelContext: ModelContext,
         appStateManager: AppSyncStateManagerProtocol? = nil,
         fbPostsManager: FBPostsManagerProtocol,
+        cloudChangeObserver: CloudChangeObserving? = nil,
         services: AppServiceDependencies
     ) {
         self.init(
             dataSource: SwiftDataPostsDataSource(modelContext: modelContext),
             appStateManager: appStateManager,
             fbPostsManager: fbPostsManager,
+            cloudChangeObserver: cloudChangeObserver,
             services: services
         )
     }
@@ -190,31 +192,14 @@ final class PostsViewModel: ObservableObject {
     }
 
     // MARK: - CloudKit Sync
+    /// Перезагрузка постов при изменениях хранилища (в т.ч. из iCloud).
+    /// Дубли здесь не чистятся: если два устройства одновременно удалят друг
+    /// у друга разные копии, после синка пост пропадёт совсем.
     private func setupSubscriptionForChangesInCloud() {
-        NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
-            .debounce(for: .seconds(2), scheduler: DispatchQueue.global(qos: .utility))
-            .receive(on: DispatchQueue.main)
+        cloudChangeObserver?.changes
+            .filter { $0.contains(.post) }
             .sink { [weak self] _ in
-                guard let self else { return }
-                let now = Date()
-                
-                guard now.timeIntervalSince(self.lastLoadTime) >= self.minLoadInterval else {
-                    self.pendingCloudUpdate = true
-                    log("Cloud sync skipped (too soon) — marked as pending", level: .debug)
-                    
-                    // ✅ Современный способ — Task вместо DispatchQueue
-                    Task { [weak self] in
-                        try? await Task.sleep(for: .seconds(self?.minLoadInterval ?? 3))
-                        guard let self, self.pendingCloudUpdate else { return }
-                        self.pendingCloudUpdate = false
-                        self.loadPostsFromSwiftData(removeDuplicates: false)
-                        log("Cloud sync: pending update executed", level: .info)
-                    }
-                    return
-                }
-
-                self.pendingCloudUpdate = false
-                self.loadPostsFromSwiftData(removeDuplicates: false)
+                self?.loadPostsFromSwiftData(removeDuplicates: false)
                 log("Cloud posts sync subscription run", level: .info)
             }
             .store(in: &cancellables)
@@ -234,7 +219,6 @@ final class PostsViewModel: ObservableObject {
     /// Load posts from SwiftData
     func loadPostsFromSwiftData(removeDuplicates: Bool = true) {
         let trace = performanceManager.startTrace(name: "load_posts_swiftdata")
-        lastLoadTime = Date()
         
         do {
             allPosts = try dataSource.fetchPosts()
@@ -270,8 +254,9 @@ final class PostsViewModel: ObservableObject {
             .filter { $0.value.count > 1 }
         
         /* persistentModelID is a unique internal identifier of SwiftData, which each @Model object receives automatically. It is unique even if your id and title are the same */
+        // Какую копию оставить — одинаково на всех устройствах (см. Post.isPreferredToKeep).
         for (id, postsList) in idGroups {
-            if let postToKeep = postsList.sorted(by: { $0.date > $1.date }).first {
+            if let postToKeep = postsList.min(by: { Post.isPreferredToKeep($0, over: $1) }) {
                 for post in postsList where post.persistentModelID != postToKeep.persistentModelID {
                     // Прогресс, избранное, рейтинг и заметки удаляемой копии
                     // переносятся в остающуюся — иначе они потеряются на всех устройствах.
@@ -290,9 +275,9 @@ final class PostsViewModel: ObservableObject {
         /* Grouping the remaining ones by title */
         let titleGroups = Dictionary(grouping: remainingPosts, by: \.title)
             .filter { $0.value.count > 1 }
-        /* Leave the oldest in each group: title is the key, postsList is an array of duplicates */
+        /* title is the key, postsList is an array of duplicates; the copy to keep is chosen the same way on every device */
         for (title, postsList) in titleGroups {
-            if let postToKeep = postsList.sorted(by: { $0.date < $1.date }).first {
+            if let postToKeep = postsList.min(by: { Post.isPreferredToKeep($0, over: $1) }) {
                 for post in postsList where post.persistentModelID != postToKeep.persistentModelID {
                     postToKeep.mergeUserState(from: post)
                     postsToDelete.append(post)
@@ -437,6 +422,10 @@ final class PostsViewModel: ObservableObject {
     /// Save context and reload UI
     /// Сохраняет контекст и перезагружает посты.
     ///
+    /// При ошибке несохранённые изменения откатываются: иначе они остались
+    /// бы в контексте и тихо записались бы при следующем сохранении (или
+    /// автосохранении), хотя пользователю сообщили, что сохранения не было.
+    ///
     /// - Returns: `true`, если сохранение прошло; `false` при ошибке (она
     ///   уже отправлена в `ErrorManager`). Результат нужен экранам, которые
     ///   показывают пользователю итог операции, остальные его игнорируют.
@@ -447,6 +436,9 @@ final class PostsViewModel: ObservableObject {
             loadPostsFromSwiftData(removeDuplicates: removeDuplicates)
             return true
         } catch {
+            dataSource.rollback()
+            // Модели в памяти вернулись к данным с диска — обновляем список и фильтры.
+            loadPostsFromSwiftData(removeDuplicates: false)
             crashManager.sendNonFatal(error)
             handleError(error, message: "Error saving data")
             return false

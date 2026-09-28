@@ -5,7 +5,24 @@
 //  Created by Andrey Efimov on 13.03.2026.
 //
 import XCTest
+import Combine
 @testable import StartToSwiftUI
+
+// MARK: - Mock: CloudChangeObserver
+/// Событие "хранилище изменилось" отправляется вручную и приходит сразу,
+/// без debounce.
+final class MockCloudChangeObserver: CloudChangeObserving {
+    private let subject = PassthroughSubject<Set<StoreEntity>, Never>()
+    var changes: AnyPublisher<Set<StoreEntity>, Never> { subject.eraseToAnyPublisher() }
+
+    func sendChange(_ entities: Set<StoreEntity>) { subject.send(entities) }
+}
+
+// MARK: - Mock: StoreHistoryReader
+final class MockStoreHistoryReader: StoreHistoryReading {
+    var externalChanges: Set<StoreEntity> = []
+    func fetchExternalChanges() -> Set<StoreEntity> { externalChanges }
+}
 
 // MARK: - Mock: AppSyncStateManager
 final class MockAppSyncStateManager: AppSyncStateManagerProtocol {
@@ -53,77 +70,3 @@ final class MockSnippetFavoritesStore: SnippetFavoritesStoreProtocol {
         }
     }
 }
-
-// MARK: - Mock: FBNoticesManager
-final class MockFBNoticesManager: FBNoticesManagerProtocol {
-
-    var noticesToReturn: [FBNoticeModel] = []
-    var capturedFilterDate: Date?
-    var fetchCallCount = 0
-    var shouldSimulateDelay = false
-
-    func fetchFBNotices(after date: Date) async -> Result<[FBNoticeModel], FBFetchError> {
-        capturedFilterDate = date
-        fetchCallCount += 1
-        if shouldSimulateDelay {
-            try? await Task.sleep(nanoseconds: 600_000_000)
-        }
-        return .success(noticesToReturn)
-    }
-
-    static func mockNotices(_ notices: [FBNoticeModel]) -> MockFBNoticesManager {
-        let mock = MockFBNoticesManager()
-        mock.noticesToReturn = notices
-        return mock
-    }
-
-    static func mockEmpty() -> MockFBNoticesManager {
-        MockFBNoticesManager()
-    }
-}
-
-//// MARK: - Mock: NoticesDataSource
-//final class MockNoticesDataSource: NoticesDataSourceProtocol {
-//
-//    var storedNotices: [Notice] = []
-//    var insertedNotices: [Notice] = []
-//    var deletedNotices: [Notice] = []
-//    var saveCallCount = 0
-//
-//    init(notices: [Notice] = []) {
-//        self.storedNotices = notices
-//    }
-//
-//    func fetchNotices() throws -> [Notice] {
-//        storedNotices
-//    }
-//
-//    func insert(_ notice: Notice) {
-//        insertedNotices.append(notice)
-//        storedNotices.append(notice)
-//    }
-//
-//    func delete(_ notice: Notice) {
-//        deletedNotices.append(notice)
-//        storedNotices.removeAll { $0.id == notice.id }
-//    }
-//
-//    func save() throws {
-//        saveCallCount += 1
-//    }
-//}
-
-//// MARK: - FBNoticeModel Test Helpers
-//extension FBNoticeModel {
-//    static func mock(
-//        noticeId: String = UUID().uuidString,
-//        title: String = "Test",
-//        noticeDate: Date = Date()
-//    ) -> FBNoticeModel {
-//        FBNoticeModel(noticeId: noticeId, title: title, message: "Message", noticeDate: noticeDate)
-//    }
-//
-//    static var mockUnread: FBNoticeModel {
-//        mock(noticeId: "unread-001", title: "Unread Notice")
-//    }
-//}

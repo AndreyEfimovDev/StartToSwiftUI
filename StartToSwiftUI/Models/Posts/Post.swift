@@ -227,6 +227,30 @@ extension Post {
         }
     }
 
+    // MARK: For removeDuplicatePosts: which copy to keep
+
+    /// Определяет, какую из двух копий-дублей оставить: `true`, если `lhs`
+    /// предпочтительнее `rhs`.
+    ///
+    /// Правило обязано давать один и тот же результат на всех устройствах:
+    /// дубли удаляются на каждом устройстве независимо, и если устройства
+    /// выберут разные копии, после синка через iCloud будут удалены обе.
+    /// Поэтому сравниваются только синхронизируемые поля (не persistentModelID,
+    /// он у каждого устройства свой) и не зависящие от порядка выборки:
+    /// 1. `addedDateStamp` — самая ранняя (без метки — в конце). При импорте
+    ///    из Firestore метка ставится в момент импорта, поэтому копии с разных
+    ///    устройств различаются по ней; `mergeUserState` берёт минимум меток,
+    ///    так что у остающейся копии метка после слияния не меняется;
+    /// 2. `date` — самая ранняя;
+    /// 3. `id` — для дублей по названию, у которых id разные.
+    static func isPreferredToKeep(_ lhs: Post, over rhs: Post) -> Bool {
+        let lhsAdded = lhs.addedDateStamp ?? .distantFuture
+        let rhsAdded = rhs.addedDateStamp ?? .distantFuture
+        if lhsAdded != rhsAdded { return lhsAdded < rhsAdded }
+        if lhs.date != rhs.date { return lhs.date < rhs.date }
+        return lhs.id < rhs.id
+    }
+
     // MARK: For removeDuplicatePosts: merge user state from a duplicate
 
     /// Переносит в этот пост пользовательское состояние из дубля `other`

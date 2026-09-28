@@ -65,11 +65,9 @@ struct StartView: View {
                     .transition(.move(edge: .leading))
             } else {
                 mainContent
-                    .alert("Error", isPresented: $errorManager.showAlert) {
-                        Button("OK") {}
-                    } message: {
-                        Text(errorManager.errorMessage ?? "")
-                    }
+                    // Пока открыта модалка, ошибку показывает она
+                    // (ModalNavigationContainer), а не закрытый ею главный экран.
+                    .errorAlert(isEnabled: coordinator.presentedSheet == nil)
                     .task {
                         displayedSection = coordinator.activeSection
                         vm.loadPostsFromSwiftData()

@@ -28,8 +28,11 @@ struct FormCoordinatorToolbar<Content: View>: View {
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
+                    // Не popModal(): экран может быть корнем модалки (импорт
+                    // из облака открывается и с главного экрана) — тогда шаг
+                    // назад в пустом стеке ничего не делает, и модалку надо закрыть.
                     BackButtonView() {
-                        coordinator.popModal()
+                        coordinator.dismissCurrentModalScreen()
                     }
                 }
                 

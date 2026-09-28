@@ -8,7 +8,9 @@
 import SwiftUI
 
 import XCTest
+import CoreData
 @testable import StartToSwiftUI
+import Combine
 
 final class UtilityTests: XCTestCase {
     
@@ -737,6 +739,225 @@ final class UtilityTests: XCTestCase {
         XCTAssertEqual(codablePost?.origin, .cloud)
     }
     
+    // MARK: - Chart Data (ChartDataPoint)
+    // Фиксированные календарь (UTC) и "сейчас" — результат не зависит от
+    // часового пояса и даты прогона.
+
+    private var chartCalendar: Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "UTC") ?? .current
+        return calendar
+    }
+
+    /// 15 июня 2026, 12:00 UTC.
+    private var chartNow: Date {
+        Date(timeIntervalSince1970: 1_781_524_800)
+    }
+
+    /// Дата в заданном месяце 2026 года (10-е число, UTC).
+    private func chartDate(month: Int, year: Int = 2026) -> Date {
+        DateComponents(calendar: chartCalendar, year: year, month: month, day: 10).date ?? chartNow
+    }
+
+    /// Точка графика для месяца и типа.
+    @MainActor
+    private func point(_ points: [ChartDataPoint], month: Int, type: StudyProgress) -> ChartDataPoint? {
+        points.first {
+            $0.type == type && chartCalendar.component(.month, from: $0.month) == month
+        }
+    }
+
+    @MainActor
+    func test_monthlyPoints_countsStagesByMonth() {
+        // Given — период quarter: март...июнь 2026
+        let posts = [
+            Post(title: "A", startedDateStamp: chartDate(month: 4), studiedDateStamp: chartDate(month: 5)),
+            Post(title: "B", startedDateStamp: chartDate(month: 4)),
+            Post(title: "C", startedDateStamp: chartDate(month: 6), studiedDateStamp: chartDate(month: 6), practicedDateStamp: chartDate(month: 6))
+        ]
+
+        // When
+        let points = ChartDataPoint.monthlyPoints(posts: posts, period: .quarter, now: chartNow, calendar: chartCalendar)
+
+        // Then — (3 + 1) месяцев × 3 типа
+        XCTAssertEqual(points.count, 12)
+        XCTAssertEqual(point(points, month: 4, type: .started)?.count, 2)
+        XCTAssertEqual(point(points, month: 5, type: .studied)?.count, 1)
+        XCTAssertEqual(point(points, month: 6, type: .started)?.count, 1)
+        XCTAssertEqual(point(points, month: 6, type: .practiced)?.count, 1)
+        XCTAssertEqual(point(points, month: 3, type: .started)?.count, 0)
+    }
+
+    @MainActor
+    func test_monthlyPoints_ignoresDatesOutsidePeriod() {
+        // Given — январь 2026 вне периода quarter (март...июнь)
+        let posts = [Post(title: "Old", startedDateStamp: chartDate(month: 1))]
+
+        // When
+        let points = ChartDataPoint.monthlyPoints(posts: posts, period: .quarter, now: chartNow, calendar: chartCalendar)
+
+        // Then
+        XCTAssertEqual(points.reduce(0) { $0 + $1.count }, 0)
+    }
+
+    @MainActor
+    func test_monthlyPoints_idsAreStableBetweenCalls() {
+        // Given
+        let posts = [Post(title: "A", startedDateStamp: chartDate(month: 5))]
+
+        // When
+        let first = ChartDataPoint.monthlyPoints(posts: posts, period: .quarter, now: chartNow, calendar: chartCalendar)
+        let second = ChartDataPoint.monthlyPoints(posts: posts, period: .quarter, now: chartNow, calendar: chartCalendar)
+
+        // Then — одинаковые и уникальные
+        XCTAssertEqual(first.map(\.id), second.map(\.id))
+        XCTAssertEqual(Set(first.map(\.id)).count, first.count)
+    }
+
+    @MainActor
+    func test_yAxisMax_isLargestMonthlySum() {
+        // Given — в апреле 4 + 2 + 1 = 7, в мае 3
+        let april = chartDate(month: 4)
+        let may = chartDate(month: 5)
+        let points = [
+            ChartDataPoint(month: april, type: .started, count: 4),
+            ChartDataPoint(month: april, type: .studied, count: 2),
+            ChartDataPoint(month: april, type: .practiced, count: 1),
+            ChartDataPoint(month: may, type: .started, count: 3)
+        ]
+
+        // Then
+        XCTAssertEqual(ChartDataPoint.yAxisMax(for: points), 7)
+    }
+
+    @MainActor
+    func test_yAxisMax_isAtLeastFive() {
+        let points = [ChartDataPoint(month: chartDate(month: 4), type: .started, count: 2)]
+
+        XCTAssertEqual(ChartDataPoint.yAxisMax(for: points), 5)
+        XCTAssertEqual(ChartDataPoint.yAxisMax(for: []), 5)
+    }
+
+    // MARK: - CloudChangeObserver
+
+    /// Наблюдатель со своим NotificationCenter (чтобы не ловить реальные
+    /// уведомления) и коротким debounce.
+    @MainActor
+    private func makeChangeObserver(reader: MockStoreHistoryReader, center: NotificationCenter) -> CloudChangeObserver {
+        CloudChangeObserver(historyReader: reader, notificationCenter: center, debounceInterval: .milliseconds(100))
+    }
+
+    /// Серия уведомлений хранилища подряд схлопывается в одно событие
+    /// с сущностями, которые вернул читатель истории.
+    @MainActor
+    func test_cloudChangeObserver_debouncesBurstIntoOneEvent() async {
+        // Given
+        let center = NotificationCenter()
+        let reader = MockStoreHistoryReader()
+        reader.externalChanges = [.post]
+        let observer = makeChangeObserver(reader: reader, center: center)
+        var events: [Set<StoreEntity>] = []
+        let cancellable = observer.changes.sink { events.append($0) }
+
+        // When
+        for _ in 0..<3 {
+            center.post(name: .NSPersistentStoreRemoteChange, object: nil)
+        }
+        try? await Task.sleep(for: .milliseconds(400))
+
+        // Then
+        XCTAssertEqual(events, [[.post]])
+        cancellable.cancel()
+    }
+
+    /// Только свои изменения (читатель вернул пусто) — события нет.
+    @MainActor
+    func test_cloudChangeObserver_noExternalChanges_noEvent() async {
+        // Given
+        let center = NotificationCenter()
+        let reader = MockStoreHistoryReader()
+        let observer = makeChangeObserver(reader: reader, center: center)
+        var eventCount = 0
+        let cancellable = observer.changes.sink { _ in eventCount += 1 }
+
+        // When
+        center.post(name: .NSPersistentStoreRemoteChange, object: nil)
+        try? await Task.sleep(for: .milliseconds(400))
+
+        // Then
+        XCTAssertEqual(eventCount, 0)
+        cancellable.cancel()
+    }
+
+    // MARK: - StoreTransaction.externalEntities
+
+    @MainActor
+    private var ownAuthor: String { SwiftDataHistoryReader.appAuthor }
+
+    @MainActor
+    func test_externalEntities_onlyOwnTransactions_isEmpty() {
+        let transactions = [
+            StoreTransaction(author: ownAuthor, entityNames: ["Post"]),
+            StoreTransaction(author: ownAuthor, entityNames: ["Notice", "AppSyncState"])
+        ]
+
+        XCTAssertTrue(StoreTransaction.externalEntities(in: transactions, ownAuthor: ownAuthor).isEmpty)
+    }
+
+    @MainActor
+    func test_externalEntities_mixed_returnsOnlyExternalEntities() {
+        let transactions = [
+            StoreTransaction(author: ownAuthor, entityNames: ["Post"]),
+            StoreTransaction(author: "NSCloudKitMirroringDelegate.import", entityNames: ["Notice", "AppSyncState"])
+        ]
+
+        XCTAssertEqual(
+            StoreTransaction.externalEntities(in: transactions, ownAuthor: ownAuthor),
+            [.notice, .appSyncState]
+        )
+    }
+
+    /// Транзакция без автора считается чужой.
+    @MainActor
+    func test_externalEntities_nilAuthor_isExternal() {
+        let transactions = [StoreTransaction(author: nil, entityNames: ["Post"])]
+
+        XCTAssertEqual(StoreTransaction.externalEntities(in: transactions, ownAuthor: ownAuthor), [.post])
+    }
+
+    @MainActor
+    func test_externalEntities_unknownEntityNames_areIgnored() {
+        let transactions = [StoreTransaction(author: nil, entityNames: ["SomethingElse", "Post"])]
+
+        XCTAssertEqual(StoreTransaction.externalEntities(in: transactions, ownAuthor: ownAuthor), [.post])
+    }
+
+    // MARK: - AppCoordinator.dismissCurrentModalScreen
+
+    /// Экран — корень модалки (стек модалки пуст): модалка закрывается.
+    @MainActor
+    func test_dismissCurrentModalScreen_atModalRoot_closesModal() {
+        let coordinator = AppCoordinator()
+        coordinator.push(.importFromCloud)
+
+        coordinator.dismissCurrentModalScreen()
+
+        XCTAssertNil(coordinator.presentedSheet)
+    }
+
+    /// Экран вложен в модалку: шаг назад, модалка остаётся открытой.
+    @MainActor
+    func test_dismissCurrentModalScreen_nestedScreen_popsOneLevel() {
+        let coordinator = AppCoordinator()
+        coordinator.push(.preferences)
+        coordinator.pushModal(.importFromCloud)
+
+        coordinator.dismissCurrentModalScreen()
+
+        XCTAssertTrue(coordinator.modalPath.isEmpty)
+        XCTAssertEqual(coordinator.presentedSheet, .preferences)
+    }
+
     // MARK: - Performance Tests
     
     func testPostMigrationPerformance() {

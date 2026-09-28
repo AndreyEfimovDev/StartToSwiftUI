@@ -13,6 +13,8 @@ final class MockPostsDataSource: PostsDataSourceProtocol {
     private var posts: [Post]
     /// true — save() бросает ошибку (для тестов сценария "сохранение не удалось").
     var shouldThrowOnSave = false
+    /// Сколько раз вызван rollback() — тесты проверяют откат после ошибки сохранения.
+    var rollbackCallCount = 0
     
     init(posts: [Post] = PreviewData.samplePosts) {
         self.posts = posts
@@ -41,6 +43,10 @@ final class MockPostsDataSource: PostsDataSourceProtocol {
         if shouldThrowOnSave {
             throw MockSaveError.saveFailed
         }
+    }
+
+    func rollback() {
+        rollbackCallCount += 1
     }
 
     enum MockSaveError: Error {

@@ -7,13 +7,13 @@
 
 import SwiftUI
 import Combine
-import CoreData
 
 @MainActor
 final class SnippetsViewModel: ObservableObject {
 
     // MARK: - Dependencies
     private let favoritesStore: SnippetFavoritesStoreProtocol?
+    private let cloudChangeObserver: CloudChangeObserving?
     private let hapticManager = HapticManager.shared
     let analyticsManager: FBAnalyticsManager
 
@@ -33,9 +33,11 @@ final class SnippetsViewModel: ObservableObject {
     // MARK: - Init
     init(
         favoritesStore: SnippetFavoritesStoreProtocol? = nil,
+        cloudChangeObserver: CloudChangeObserving? = nil,
         services: AppServiceDependencies
     ) {
         self.favoritesStore = favoritesStore
+        self.cloudChangeObserver = cloudChangeObserver
         self.analyticsManager = services.analyticsManager
         refreshFavorites()
         setupSubscriptions()
@@ -63,8 +65,9 @@ final class SnippetsViewModel: ObservableObject {
     /// Отметки, поставленные на другом устройстве, приходят через iCloud —
     /// без этой подписки кэш избранного оставался бы устаревшим до перезапуска.
     private func setupSubscriptionForChangesInCloud() {
-        NotificationCenter.default.publisher(for: Notification.Name.NSPersistentStoreRemoteChange)
-            .debounce(for: .seconds(2), scheduler: DispatchQueue.main)
+        // Избранное хранится в AppSyncState.
+        cloudChangeObserver?.changes
+            .filter { $0.contains(.appSyncState) }
             .sink { [weak self] _ in
                 self?.refreshFavorites()
             }

@@ -32,10 +32,12 @@ struct A009_OnToButtonDemo: View {
                             .id(index)
                     }
                 }
-                .onScrollGeometryChange(for: CGFloat.self) { geometry in
-                    geometry.contentOffset.y
-                } action: { _, newOffset in
-                    showOnTopButton = newOffset > threshold
+                .onScrollGeometryChange(for: Bool.self) { geometry in
+                    geometry.contentOffset.y > threshold
+                } action: { _, isPastThreshold in
+                    withAnimation {
+                        showOnTopButton = isPastThreshold
+                    }
                 }
                 
                 if showOnTopButton {

@@ -145,7 +145,7 @@ extension DeletedPostsView {
     deletedPost.status = .deleted
     context.insert(deletedPost)
     
-    let vm = PostsViewModel(modelContext: context, fbPostsManager: FBPostsManager(), services: .make())
+    let vm = PostsViewModel(modelContext: context, fbPostsManager: MockFBPostsManager(), services: .make())
     vm.loadPostsFromSwiftData()
     
     return DeletedPostsView()

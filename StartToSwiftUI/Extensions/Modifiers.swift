@@ -291,3 +291,44 @@ extension View {
         }
     }
 }
+
+// MARK: - Error Alert
+
+/// Алерт текущей ошибки из `ErrorManager` (берётся из окружения).
+///
+/// Алерт на экране, закрытом модалкой, не показывается — поэтому он висит и
+/// на главном экране, и на корне каждой модалки. Активен ровно один:
+/// главный экран — только пока модалки нет (`isEnabled`).
+private struct ErrorAlertModifier: ViewModifier {
+    @EnvironmentObject private var errorManager: ErrorManager
+    let isEnabled: Bool
+
+    func body(content: Content) -> some View {
+        content
+            .alert(
+                errorManager.current?.title ?? "Error",
+                // Закрытие алерта (OK) = dismissCurrent(): покажется
+                // следующая ошибка из очереди, если она есть.
+                isPresented: Binding(
+                    get: { isEnabled && errorManager.current != nil },
+                    set: { isPresented in
+                        if !isPresented { errorManager.dismissCurrent() }
+                    }
+                )
+            ) {
+                Button("OK") {}
+            } message: {
+                Text(errorManager.current?.message ?? "")
+            }
+    }
+}
+
+extension View {
+    /// Показывает ошибки из `ErrorManager` поверх этого экрана.
+    ///
+    /// - Parameter isEnabled: `false` — не показывать здесь (экран закрыт
+    ///   модалкой, ошибку покажет она).
+    func errorAlert(isEnabled: Bool = true) -> some View {
+        modifier(ErrorAlertModifier(isEnabled: isEnabled))
+    }
+}

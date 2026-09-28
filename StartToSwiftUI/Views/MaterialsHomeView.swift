@@ -147,11 +147,13 @@ struct MaterialsHomeView: View {
         } // List
         .listStyle(.plain)
         .coordinateSpace(name: "postsList")
-        .onScrollGeometryChange(for: CGFloat.self) { geo in
-            geo.contentOffset.y
-        } action: { _, newOffset in
+        // Отслеживаем только пересечение порога, а не каждый пиксель смещения:
+        // action (и withAnimation) срабатывает лишь при смене true/false.
+        .onScrollGeometryChange(for: Bool.self) { geo in
+            geo.contentOffset.y > 100
+        } action: { _, isPastThreshold in
             withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
-                showOnTopButton = newOffset > 100
+                showOnTopButton = isPastThreshold
             }
         }
         .refreshControl { await refresh() }
@@ -178,11 +180,13 @@ struct MaterialsHomeView: View {
         // Системный синий остаётся как задокументированное ограничение
         // платформы (без инвазивного UIKit-обхода через introspection).
         .coordinateSpace(name: "postsList")
-        .onScrollGeometryChange(for: CGFloat.self) { geo in
-            geo.contentOffset.y
-        } action: { _, newOffset in
+        // Отслеживаем только пересечение порога, а не каждый пиксель смещения:
+        // action (и withAnimation) срабатывает лишь при смене true/false.
+        .onScrollGeometryChange(for: Bool.self) { geo in
+            geo.contentOffset.y > 100
+        } action: { _, isPastThreshold in
             withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
-                showOnTopButton = newOffset > 100
+                showOnTopButton = isPastThreshold
             }
         }
         .refreshControl { await refresh() }

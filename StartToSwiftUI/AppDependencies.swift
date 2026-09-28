@@ -26,6 +26,11 @@ struct AppDependencies {
     let coordinator: AppCoordinator
 
     static func make(modelContext: ModelContext) -> AppDependencies {
+        // Все сохранения приложения помечаются этим автором в истории
+        // SwiftData — так уведомление о своих сохранениях отличается от
+        // импорта из iCloud. Задаётся до первого сохранения ниже.
+        modelContext.author = SwiftDataHistoryReader.appAuthor
+
         let stateManager = AppSyncStateManager(modelContext: modelContext)
         let services = AppServiceDependencies.make()
 
@@ -36,6 +41,14 @@ struct AppDependencies {
         // - Restart — it will find an existing one and return it.
         _ = stateManager.getOrCreateAppState()
 
+        // Один монитор сети на всё приложение.
+        let networkMonitor = NetworkMonitor()
+
+        // Одна подписка на изменения хранилища на всё приложение.
+        let cloudChangeObserver = CloudChangeObserver(
+            historyReader: SwiftDataHistoryReader(modelContext: modelContext)
+        )
+
         return AppDependencies(
             appStateManager: stateManager,
             services: services,
@@ -44,17 +57,20 @@ struct AppDependencies {
             postsViewModel: PostsViewModel(
                 modelContext: modelContext,
                 appStateManager: stateManager,
-                fbPostsManager: makeFBPostsManager(),
+                fbPostsManager: makeFBPostsManager(networkMonitor: networkMonitor),
+                cloudChangeObserver: cloudChangeObserver,
                 services: services
             ),
             noticesViewModel: NoticesViewModel(
                 modelContext: modelContext,
                 appStateManager: stateManager,
                 fbNoticesManager: makeFBNoticesManager(),
+                cloudChangeObserver: cloudChangeObserver,
                 services: services
             ),
             snippetsViewModel: SnippetsViewModel(
                 favoritesStore: stateManager,
+                cloudChangeObserver: cloudChangeObserver,
                 services: services
             ),
             coordinator: AppCoordinator()
@@ -66,8 +82,8 @@ struct AppDependencies {
     // получают протокол и не знают, с чем работают.
 
     /// Источник постов: реальный Firestore или мок на `PreviewData`.
-    private static func makeFBPostsManager() -> FBPostsManagerProtocol {
-        if DebugConfig.useRealServices { return FBPostsManager() }
+    private static func makeFBPostsManager(networkMonitor: NetworkMonitoring) -> FBPostsManagerProtocol {
+        if DebugConfig.useRealServices { return FBPostsManager(networkMonitor: networkMonitor) }
         return MockFBPostsManager.previewData()
     }
 
