@@ -279,8 +279,10 @@ final class NoticesViewModel: ObservableObject {
     
     // MARK: - Mark as Read
     func markAsRead(_ noticeId: String) {
+        // Notice мог быть уже удалён (например, через iCloud) — исправлять
+        // пользователю нечего, поэтому только лог, без алерта.
         guard let notice = notices.first(where: { $0.id == noticeId }) else {
-            handleError(nil, message: "Notice with ID \(noticeId) not found")
+            log("Notice with ID \(noticeId) not found", level: .warning)
             return
         }
         setReadStatus(notice, isRead: true)
@@ -289,7 +291,7 @@ final class NoticesViewModel: ObservableObject {
     // MARK: - Toggle Read Status
     func toggleReadStatus(_ notice: Notice?) {
         guard let notice else {
-            handleError(nil, message: "Notice is nil")
+            log("toggleReadStatus: notice is nil", level: .warning)
             return
         }
         setReadStatus(notice, isRead: !notice.isRead)
@@ -308,8 +310,10 @@ final class NoticesViewModel: ObservableObject {
     
     // MARK: - Delete Notice
     func deleteErase(_ notice: Notice?) {
+        // nil — notice уже удалён (экран деталей открыт, а notice пропал):
+        // удалять нечего, алерт не нужен.
         guard let notice else {
-            handleError(nil, message: "Notice to erase is nil")
+            log("deleteErase: notice is nil", level: .warning)
             return
         }
         dataSource.delete(notice)
