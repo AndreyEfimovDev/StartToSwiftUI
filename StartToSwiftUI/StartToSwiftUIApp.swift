@@ -47,12 +47,18 @@ struct StartToSwiftUIApp: App {
             cloudKitDatabase: DebugConfig.useRealServices ? .automatic : .none
         )
 
-        if let container = try? ModelContainer(for: schema, configurations: [config]) {
+        do {
+            let container = try ModelContainer(for: schema, configurations: [config])
             log("SwiftData container created successfully", level: .info)
             let dependencies = AppDependencies.make(modelContext: container.mainContext)
             startup = .ready(container: container, dependencies: dependencies)
-        } else {
-            log("Failed to create ModelContainer", level: .error)
+        } catch {
+            // Причина нужна для диагностики: пользователь видит только
+            // DatabaseErrorView, без неё непонятно, что сломалось.
+            log("Failed to create ModelContainer: \(error)", level: .error)
+#if !DEBUG
+            Crashlytics.crashlytics().record(error: error)
+#endif
             startup = .failed
         }
         

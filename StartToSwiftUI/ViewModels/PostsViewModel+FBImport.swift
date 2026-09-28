@@ -31,12 +31,14 @@ extension PostsViewModel {
         isImportingPosts = true
         defer { isImportingPosts = false }
 
+        // Проверка до startTrace — иначе ранний выход оставлял бы трассировку незакрытой.
+        guard let appStateManager else { return false }
+
         crashManager.addLog("importPostsFromFirebase: started, posts count: \(allPosts.count)")
         let trace = performanceManager.startTrace(name: "import_posts_firebase")
         
         let sourceName = String(describing: type(of: dataSource))
         
-        guard let appStateManager else { return false }
         let importAfterDate = appStateManager.getLastDateOfPostsLoaded()
         let result = await fbPostsManager.fetchFBPosts(after: importAfterDate)
         log("🔥 lastDatePostsLoaded \(String(describing: lastDatePostsLoaded))", level: .info)
@@ -168,9 +170,10 @@ extension PostsViewModel {
     /// Фоновая проверка новых постов — при запуске приложения и
     /// pull-to-refresh. Обновляет `hasPostsUpdate`.
     ///
-    /// Намеренно тихая: не вызывает `handleError()` — о проблемах с сетью
-    /// при запуске и refresh уже сообщает параллельный импорт notices, второй
-    /// алерт был бы дублем. При сбое флаг не меняется.
+    /// Намеренно тихая: не вызывает `handleError()` — фоновая проверка не
+    /// должна показывать алерт при каждом запуске без сети; ошибку увидит
+    /// пользователь, когда сам запустит проверку или импорт. При сбое флаг
+    /// не меняется.
     func refreshPostsUpdateStatus() async {
         guard !isCheckingPostsForUpdates else { return }
         isCheckingPostsForUpdates = true
