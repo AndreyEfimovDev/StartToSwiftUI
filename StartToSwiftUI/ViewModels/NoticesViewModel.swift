@@ -299,7 +299,11 @@ final class NoticesViewModel: ObservableObject {
         guard notice.isRead != isRead else { return }
         notice.isRead = isRead
         saveContext()
-        loadNoticesFromSwiftData()
+        // Без очистки дублей: дубли возникают только при синке и импорте и
+        // чистятся там (запуск, импорт). Выбор оставляемой копии у notices
+        // недетерминирован — лишние запуски повышают риск, что два устройства
+        // удалят друг у друга разные копии.
+        loadNoticesFromSwiftData(removeDuplicates: false)
     }
     
     // MARK: - Delete Notice
@@ -310,7 +314,8 @@ final class NoticesViewModel: ObservableObject {
         }
         dataSource.delete(notice)
         saveContext()
-        loadNoticesFromSwiftData()  // ← synchronize the array with the datasource
+        // Синхронизируем массив с базой — без очистки дублей (см. setReadStatus).
+        loadNoticesFromSwiftData(removeDuplicates: false)
         log("🍉 🗑️ Notice removed, remains: \(notices.count)", level: .info)
     }
     
