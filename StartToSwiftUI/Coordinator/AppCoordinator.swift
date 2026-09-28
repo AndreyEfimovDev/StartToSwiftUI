@@ -141,6 +141,11 @@ final class AppCoordinator: ObservableObject {
 
     ///  Close modal View and return to MaterialsHomeView
     func closeModal() {
+        // Повторный вызов — норма: закрыв модалку, SwiftUI сообщает об этом
+        // через привязку isPresented, и AdaptiveModalModifier снова вызывает
+        // closeModal(). Уже закрытое состояние не публикуем заново — иначе
+        // лишняя перерисовка всех, кто наблюдает координатор.
+        guard presentedSheet != nil || !modalPath.isEmpty else { return }
         presentedSheet = nil
         modalPath = NavigationPath()
     }

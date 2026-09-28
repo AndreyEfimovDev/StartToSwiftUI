@@ -8,6 +8,7 @@
 import SwiftUI
 
 import XCTest
+import Combine
 import CoreData
 @testable import StartToSwiftUI
 import Combine
@@ -956,6 +957,23 @@ final class UtilityTests: XCTestCase {
 
         XCTAssertTrue(coordinator.modalPath.isEmpty)
         XCTAssertEqual(coordinator.presentedSheet, .preferences)
+    }
+
+    /// Повторный closeModal() (SwiftUI сообщает о закрытии модалки через
+    /// привязку isPresented) не публикует изменения заново.
+    @MainActor
+    func test_closeModal_whenAlreadyClosed_doesNotPublishChanges() {
+        let coordinator = AppCoordinator()
+        coordinator.push(.preferences)
+        coordinator.closeModal()
+
+        var changeCount = 0
+        let cancellable = coordinator.objectWillChange.sink { changeCount += 1 }
+        coordinator.closeModal()
+
+        XCTAssertEqual(changeCount, 0)
+        XCTAssertNil(coordinator.presentedSheet)
+        cancellable.cancel()
     }
 
     // MARK: - Performance Tests
