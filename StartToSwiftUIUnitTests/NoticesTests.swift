@@ -161,8 +161,28 @@ final class NoticeViewModelTests: XCTestCase {
         // When
         await vm.importNoticesFromFirebase()
 
-        // Then — дата не сдвинута, notices придут при следующем импорте
+        // Then — дата не сдвинута, вставка откатана — notices придут при следующем импорте
         XCTAssertNil(stateManager.savedLatestNoticeDate)
+        XCTAssertEqual(failingDataSource.rollbackCallCount, 1)
+    }
+
+    /// Ошибка сохранения отметки "прочитано" откатывает изменения.
+    func testToggleReadStatus_WhenSaveFails_RollsBack() {
+        // Given
+        let notice = Notice(id: "n1", title: "Notice", isRead: false)
+        let failingDataSource = MockNoticesDataSource(notices: [notice])
+        failingDataSource.shouldThrowOnSave = true
+        let testVM = NoticesViewModel(
+            dataSource: failingDataSource,
+            fbNoticesManager: MockFBNoticesManager.mockEmpty(),
+            services: .make()
+        )
+
+        // When
+        testVM.toggleReadStatus(notice)
+
+        // Then
+        XCTAssertEqual(failingDataSource.rollbackCallCount, 1)
     }
 
     func testImportNotices_WhenSaveSucceeds_AdvancesSyncDateToLatestNotice() async {

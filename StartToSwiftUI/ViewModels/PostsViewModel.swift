@@ -296,6 +296,9 @@ final class PostsViewModel: ObservableObject {
             allPosts = try dataSource.fetchPosts()
             log("Removed \(postsToDelete.count) duplicate posts", level: .info)
         } catch {
+            // Слияние состояния и удаление дублей откатываются: иначе они
+            // тихо записались бы позже, а allPosts расходился бы с базой.
+            dataSource.rollback()
             crashManager.sendNonFatal(error)
             handleError(error, message: "Error removing duplicate posts")
         }

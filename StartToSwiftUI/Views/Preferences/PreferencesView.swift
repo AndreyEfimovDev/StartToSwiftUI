@@ -105,25 +105,6 @@ struct PreferencesView: View {
         return Text(text)
             .foregroundStyle(Color.mycolor.myAccent)
     }
-#warning("Delete this var before deployment to App Store")
-//    private var selectedCategory: some View {
-//        Group {
-//            if let list = vm.allCategories {
-//                CustomOneCapsulesLineSegmentedPicker(
-//                    selection: $vm.selectedCategory,
-//                    allItems: list,
-//                    titleForCase: { $0 },
-//                    selectedTextColor: Color.mycolor.myBackground,
-//                    unselectedTextColor: Color.mycolor.myAccent,
-//                    selectedBackground: Color.mycolor.myButtonBGBlue,
-//                    unselectedBackground: .clear,
-//                    showNilOption: true,
-//                    nilTitle: "All"
-//                )
-//                .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
-//            }
-//        }
-//    }
     
     // MARK: - Appearance
     

@@ -449,6 +449,20 @@ final class PostsViewModelTests: XCTestCase {
         XCTAssertEqual(deviceB.map(\.id), ["id-early"])
     }
 
+    /// Ошибка сохранения при очистке дублей откатывает слияние и удаления.
+    func testRemoveDuplicates_WhenSaveFails_RollsBack() {
+        let source = MockPostsDataSource(posts: [
+            Post(id: "dup", title: "Copy A", addedDateStamp: Date(timeIntervalSince1970: 1_000)),
+            Post(id: "dup", title: "Copy B", addedDateStamp: Date(timeIntervalSince1970: 2_000))
+        ])
+        source.shouldThrowOnSave = true
+        let testVM = PostsViewModel(dataSource: source, fbPostsManager: networkService, services: .make())
+
+        testVM.loadPostsFromSwiftData()
+
+        XCTAssertEqual(source.rollbackCallCount, 1)
+    }
+
     // MARK: - Erase All Posts
 
     /// Стирание очищает сам источник данных, а не только список в VM:

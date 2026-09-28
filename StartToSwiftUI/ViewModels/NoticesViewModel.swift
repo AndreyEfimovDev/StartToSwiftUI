@@ -266,13 +266,6 @@ final class NoticesViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Mark all as read
-    func markAllAsRead() {
-        notices.filter { !$0.isRead }.forEach { $0.isRead = true }
-        saveContext()
-        updateUnreadStatus()
-    }
-    
     // MARK: - Update Unread Status
     func updateUnreadStatus() {
         guard !notices.isEmpty else {
@@ -321,27 +314,12 @@ final class NoticesViewModel: ObservableObject {
         log("🍉 🗑️ Notice removed, remains: \(notices.count)", level: .info)
     }
     
-    // MARK: - Add Notice
-    func addNotice(_ notice: Notice) {
-        // Checking for duplicates in an already loaded array
-        guard !notices.contains(where: { $0.id == notice.id }) else {
-            log("🍉 ⚠️ Notice with ID \(notice.id) already exists", level: .info)
-            return
-        }
-        
-        do {
-            dataSource.insert(notice)
-            try dataSource.save()
-            loadNoticesFromSwiftData()
-            log("🍉 ➕ Notice added, total: \(notices.count)", level: .info)
-        } catch {
-            crashManager.sendNonFatal(error)
-            handleError(error, message: "Error adding notice")
-        }
-    }
-    
     // MARK: - Save Context
     /// Сохраняет notices.
+    ///
+    /// При ошибке несохранённые изменения откатываются: иначе они остались бы
+    /// в контексте и тихо записались бы при следующем сохранении или
+    /// автосохранении (как и у постов, см. saveContextAndReload).
     ///
     /// - Returns: `true`, если сохранение прошло; `false` при ошибке (она
     ///   уже показана через `ErrorManager`).
@@ -351,6 +329,7 @@ final class NoticesViewModel: ObservableObject {
             try dataSource.save()
             return true
         } catch {
+            dataSource.rollback()
             crashManager.sendNonFatal(error)
             handleError(error, message: "Error saving notices")
             return false
