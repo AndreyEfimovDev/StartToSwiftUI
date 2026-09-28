@@ -47,8 +47,6 @@ struct PreferencesView: View {
             Section(header: sectionHeader("Achievements")) {
                 achievements
             }
-            // Секция видна всегда — переключатель сигналов нужен и до первых
-            // notices; список сообщений и счётчик — только когда они есть.
             Section(header: sectionHeader(noticesSectionTitle)) {
                 noticeSignalsToggle
                 if noticevm.notices.count > 0 {
@@ -64,7 +62,7 @@ struct PreferencesView: View {
                 restoreBackup
                 erasePosts
                 // Отключено (см. комментарий у makeAllCuratedAvailable ниже).
-//                makeAllCuratedAvailable
+                makeAllCuratedAvailable
             }
             Section(header: sectionHeader("Сommunication")){
                 acknowledgements
@@ -163,7 +161,7 @@ struct PreferencesView: View {
         Toggle("Shimmer new posts", isOn: $vm.shimmerWaveEnabled)
             .tint(Color.mycolor.myBlue)
             .customListRowStyle(
-                iconName: vm.shimmerWaveEnabled ? "waveform" : "waveform.slash", // water.waves water.waves.slash
+                iconName: vm.shimmerWaveEnabled ? "waveform" : "waveform.slash",
                 iconWidth: iconSize
             )
     }
@@ -265,24 +263,19 @@ struct PreferencesView: View {
         }
     }
     
-    // Отключено (аудит 2026-09-28, A15): кнопка показывалась, когда дата синка
-    // сброшена (1970), а посты из облака есть, и лишь включала кнопку "Check for
-    // materials update". Эту роль теперь выполняет фоновая проверка при запуске
-    // и pull-to-refresh (с датой 1970 она сама включает hasPostsUpdate), а сброс
-    // даты внутри был лишним — дата и так 1970. Оставлено закомментированным.
-//    @ViewBuilder
-//    private var makeAllCuratedAvailable: some View {
-//        if let date = vm.appStateManager?.getLastDateOfPostsLoaded(),
-//           date <= Date(timeIntervalSince1970: 1),
-//           vm.hasCloudPosts,
-//           !vm.hasPostsUpdate {
-//            Button("Make all curated collection available") {
-//                vm.appStateManager?.resetLastDateOfPostsLoaded()
-//                vm.hasPostsUpdate = true
-//            }
-//            .customListRowStyle(iconName: "arrow.down.circle", iconWidth: iconSize)
-//        }
-//    }
+    @ViewBuilder
+    private var makeAllCuratedAvailable: some View {
+        if let date = vm.appStateManager?.getLastDateOfPostsLoaded(),
+           date <= Date(timeIntervalSince1970: 1),
+           vm.hasCloudPosts,
+           !vm.hasPostsUpdate {
+            Button("Make all curated collection available") {
+                vm.appStateManager?.resetLastDateOfPostsLoaded()
+                vm.hasPostsUpdate = true
+            }
+            .customListRowStyle(iconName: "arrow.down.circle", iconWidth: iconSize)
+        }
+    }
     
     // MARK: - Communication
     

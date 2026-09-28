@@ -107,9 +107,15 @@ struct CheckForPostsUpdateView: View {
         ) {
             isInProgress = true
             Task {
-                await performImport()
-                statusText = "No updates available"
-                statusColor = Color.mycolor.myBlue
+                if await performImport() {
+                    statusText = "No updates available"
+                    statusColor = Color.mycolor.myBlue
+                } else {
+                    // Обновления есть, но не загрузились — причину показал
+                    // алерт ErrorManager; кнопка остаётся для повтора.
+                    statusText = "Could not update"
+                    statusColor = Color.mycolor.myRed
+                }
             }
         }
         .onChange(of: vm.allPosts.count) { oldValue, newValue in
@@ -141,8 +147,11 @@ struct CheckForPostsUpdateView: View {
         }
     }
     
-    /// Perform import new curated content from Firestore
-    private func performImport() async {
+    /// Импорт новых постов из Firestore.
+    ///
+    /// - Returns: `true`, если импорт прошёл; `false` при ошибке (сеть,
+    ///   сохранение) — текст ошибки уже показан через `ErrorManager`.
+    private func performImport() async -> Bool {
         let success = await vm.importPostsFromFirebase()
 
         isInProgress = false
@@ -151,6 +160,7 @@ struct CheckForPostsUpdateView: View {
             isImported = true
             hapticManager.notification(type: .success)
         }
+        return success
     }
 }
 
