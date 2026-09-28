@@ -41,6 +41,9 @@ struct AppDependencies {
         // - Restart — it will find an existing one and return it.
         _ = stateManager.getOrCreateAppState()
 
+        // Один монитор сети на всё приложение.
+        let networkMonitor = NetworkMonitor()
+
         // Одна подписка на изменения хранилища на всё приложение.
         let cloudChangeObserver = CloudChangeObserver(
             historyReader: SwiftDataHistoryReader(modelContext: modelContext)
@@ -54,7 +57,7 @@ struct AppDependencies {
             postsViewModel: PostsViewModel(
                 modelContext: modelContext,
                 appStateManager: stateManager,
-                fbPostsManager: makeFBPostsManager(),
+                fbPostsManager: makeFBPostsManager(networkMonitor: networkMonitor),
                 cloudChangeObserver: cloudChangeObserver,
                 services: services
             ),
@@ -79,8 +82,8 @@ struct AppDependencies {
     // получают протокол и не знают, с чем работают.
 
     /// Источник постов: реальный Firestore или мок на `PreviewData`.
-    private static func makeFBPostsManager() -> FBPostsManagerProtocol {
-        if DebugConfig.useRealServices { return FBPostsManager() }
+    private static func makeFBPostsManager(networkMonitor: NetworkMonitoring) -> FBPostsManagerProtocol {
+        if DebugConfig.useRealServices { return FBPostsManager(networkMonitor: networkMonitor) }
         return MockFBPostsManager.previewData()
     }
 

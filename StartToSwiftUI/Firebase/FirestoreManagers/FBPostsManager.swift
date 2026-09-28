@@ -16,12 +16,19 @@ enum FBFetchError: Error {
 
 // MARK: - Firestore Manager
 final class FBPostsManager: FBPostsManagerProtocol {
-    
-    init() {}
+
+    private let networkMonitor: NetworkMonitoring
+
+    /// - Parameter networkMonitor: Без сети запрос не отправляется — иначе
+    ///   Firestore ~10 с пытается подключиться, прежде чем вернуть ошибку.
+    init(networkMonitor: NetworkMonitoring) {
+        self.networkMonitor = networkMonitor
+    }
     
     private let postsCollection: CollectionReference = Firestore.firestore().collection("posts")
 
     func fetchFBPosts(after date: Date?) async -> Result<[FBPostModel], FBFetchError> {
+        guard networkMonitor.isConnected else { return .failure(Self.offlineError()) }
         do {
             let query: Query
             if let date {
@@ -48,6 +55,7 @@ final class FBPostsManager: FBPostsManagerProtocol {
     }
 
     func hasFBPosts(after date: Date) async -> Result<Bool, FBFetchError> {
+        guard networkMonitor.isConnected else { return .failure(Self.offlineError()) }
         do {
             // Firestore тарифицирует чтения по числу возвращённых документов
             // (пустой ответ — одно чтение). Для ответа "да/нет" хватает
@@ -75,6 +83,13 @@ final class FBPostsManager: FBPostsManagerProtocol {
     }
 
     // MARK: - Private
+
+    /// Ошибка "нет сети", когда запрос не отправлялся вовсе (монитор сети
+    /// сообщил об отсутствии подключения).
+    private static func offlineError() -> FBFetchError {
+        log("📵 Firebase: no network connection — request skipped", level: .warning)
+        return .networkUnavailable
+    }
 
     /// Переводит ошибку Firestore в `FBFetchError` и логирует её.
     ///
