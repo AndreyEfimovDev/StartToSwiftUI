@@ -176,6 +176,18 @@ final class PostsFilteringTests: XCTestCase {
         XCTAssertEqual(vm.visiblePosts.map(\.title), ["Active"])
     }
 
+    /// Перенос поста в корзину убирает его из видимых после перезагрузки.
+    func test_visiblePosts_updatesWhenPostMovedToTrash() async throws {
+        let first = post(title: "First")
+        let second = post(title: "Second")
+        vm = try await makeVM(posts: [first, second])
+
+        vm.setPostDeleted(first)
+        try await Task.sleep(nanoseconds: pipelineDelay)
+
+        XCTAssertEqual(vm.visiblePosts.map(\.title), ["Second"])
+    }
+
     func test_visiblePosts_followsFilters() async throws {
         // Given
         let advanced = post(title: "Advanced", studyLevel: .advanced)

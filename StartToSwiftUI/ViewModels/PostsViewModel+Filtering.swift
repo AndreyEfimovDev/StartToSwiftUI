@@ -10,15 +10,6 @@ import Combine
 
 // MARK: - Filtering, Searching & Sorting
 extension PostsViewModel {
-
-    /// Посты, которые пользователь видит после фильтров и поиска: активные
-    /// (не в корзине) и не черновики.
-    ///
-    /// Единое правило видимости для главного списка и статистики Study
-    /// Progress — статистика считается ровно по тем постам, что видны в списке.
-    var visiblePosts: [Post] {
-        filteredPosts.filter { $0.status == .active && !$0.draft }
-    }
     
     func setupSubscriptions() {
         let filters = $selectedLevel
@@ -72,7 +63,7 @@ extension PostsViewModel {
                 return sortedPosts
             }
             .sink { [weak self] selectedPosts in
-                self?.filteredPosts = selectedPosts
+                self?.applyFilteredPosts(selectedPosts)
             }
             .store(in: &cancellables)
     }
