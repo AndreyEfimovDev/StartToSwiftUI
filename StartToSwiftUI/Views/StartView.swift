@@ -65,10 +65,20 @@ struct StartView: View {
                     .transition(.move(edge: .leading))
             } else {
                 mainContent
-                    .alert("Error", isPresented: $errorManager.showAlert) {
+                    .alert(
+                        errorManager.current?.title ?? "Error",
+                        // Закрытие алерта (OK) = dismissCurrent(): покажется
+                        // следующая ошибка из очереди, если она есть.
+                        isPresented: Binding(
+                            get: { errorManager.current != nil },
+                            set: { isPresented in
+                                if !isPresented { errorManager.dismissCurrent() }
+                            }
+                        )
+                    ) {
                         Button("OK") {}
                     } message: {
-                        Text(errorManager.errorMessage ?? "")
+                        Text(errorManager.current?.message ?? "")
                     }
                     .task {
                         displayedSection = coordinator.activeSection

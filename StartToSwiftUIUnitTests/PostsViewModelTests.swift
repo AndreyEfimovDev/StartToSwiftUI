@@ -248,8 +248,7 @@ final class PostsViewModelTests: XCTestCase {
 
         // Then — чужой алерт не закрыт, а проверка не выглядит неудачной
         XCTAssertEqual(result, .upToDate)
-        XCTAssertTrue(services.errorManager.showAlert)
-        XCTAssertEqual(services.errorManager.errorMessage, "Notices import failed")
+        XCTAssertEqual(services.errorManager.current?.message, "Notices import failed")
     }
 
     // MARK: - Save Result Tests
