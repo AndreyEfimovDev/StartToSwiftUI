@@ -39,7 +39,8 @@ struct NoticesView: View {
             navigationToolbar()
         }
         .onAppear {
-            noticevm.loadNoticesFromSwiftData()
+            // Без очистки дублей: она нужна только при запуске и импорте.
+            noticevm.loadNoticesFromSwiftData(removeDuplicates: false)
         }
     }
     
@@ -168,7 +169,7 @@ struct NoticesView: View {
     
     try? context.save()
     
-    let noticevm = NoticesViewModel(modelContext: context, fbNoticesManager: FBNoticesManager(), services: .make())
+    let noticevm = NoticesViewModel(modelContext: context, fbNoticesManager: MockFBNoticesManager(), services: .make())
     let coordinator = AppCoordinator()
     
     return Group {
@@ -223,7 +224,7 @@ struct NoticesView: View {
     
     try? context.save()
     
-    let noticevm = NoticesViewModel(modelContext: context, fbNoticesManager: FBNoticesManager(), services: .make())
+    let noticevm = NoticesViewModel(modelContext: context, fbNoticesManager: MockFBNoticesManager(), services: .make())
     let coordinator = AppCoordinator()
     
     return Group {
@@ -249,7 +250,7 @@ struct NoticesView: View {
                 configurations: ModelConfiguration(isStoredInMemoryOnly: true)
             )
             let emptyContext = ModelContext(emptyContainer)
-            let emptyNoticeVM = NoticesViewModel(modelContext: emptyContext, fbNoticesManager: FBNoticesManager(), services: .make())
+            let emptyNoticeVM = NoticesViewModel(modelContext: emptyContext, fbNoticesManager: MockFBNoticesManager(), services: .make())
             
             NoticesView(isRootModal: true)
                 .environmentObject(emptyNoticeVM)

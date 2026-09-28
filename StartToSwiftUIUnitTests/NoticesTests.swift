@@ -166,6 +166,34 @@ final class NoticeViewModelTests: XCTestCase {
         XCTAssertEqual(failingDataSource.rollbackCallCount, 1)
     }
 
+    /// Notice уже удалён — отметка "прочитано" не показывает пользователю алерт.
+    func testMarkAsRead_MissingNotice_DoesNotShowAlert() {
+        let services = AppServiceDependencies.make()
+        let testVM = NoticesViewModel(
+            dataSource: MockNoticesDataSource(notices: []),
+            fbNoticesManager: MockFBNoticesManager.mockEmpty(),
+            services: services
+        )
+
+        testVM.markAsRead("missing-id")
+
+        XCTAssertNil(services.errorManager.current)
+    }
+
+    /// Удаление уже пропавшего notice (nil) не показывает алерт.
+    func testDeleteErase_NilNotice_DoesNotShowAlert() {
+        let services = AppServiceDependencies.make()
+        let testVM = NoticesViewModel(
+            dataSource: MockNoticesDataSource(notices: []),
+            fbNoticesManager: MockFBNoticesManager.mockEmpty(),
+            services: services
+        )
+
+        testVM.deleteErase(nil)
+
+        XCTAssertNil(services.errorManager.current)
+    }
+
     /// Отметка "прочитано" не запускает очистку дублей (она — только при
     /// запуске и импорте).
     func testToggleReadStatus_DoesNotRemoveDuplicates() {
