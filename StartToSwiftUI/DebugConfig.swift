@@ -24,7 +24,7 @@ import Foundation
 /// `true` на него не влияет.
 enum DebugConfig {
     #if DEBUG
-    static let useRealServices = false
+    static let useRealServices = true
     #else
     static let useRealServices = true
     #endif

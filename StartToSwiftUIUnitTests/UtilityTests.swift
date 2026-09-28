@@ -932,6 +932,32 @@ final class UtilityTests: XCTestCase {
         XCTAssertEqual(StoreTransaction.externalEntities(in: transactions, ownAuthor: ownAuthor), [.post])
     }
 
+    // MARK: - AppCoordinator.dismissCurrentModalScreen
+
+    /// Экран — корень модалки (стек модалки пуст): модалка закрывается.
+    @MainActor
+    func test_dismissCurrentModalScreen_atModalRoot_closesModal() {
+        let coordinator = AppCoordinator()
+        coordinator.push(.importFromCloud)
+
+        coordinator.dismissCurrentModalScreen()
+
+        XCTAssertNil(coordinator.presentedSheet)
+    }
+
+    /// Экран вложен в модалку: шаг назад, модалка остаётся открытой.
+    @MainActor
+    func test_dismissCurrentModalScreen_nestedScreen_popsOneLevel() {
+        let coordinator = AppCoordinator()
+        coordinator.push(.preferences)
+        coordinator.pushModal(.importFromCloud)
+
+        coordinator.dismissCurrentModalScreen()
+
+        XCTAssertTrue(coordinator.modalPath.isEmpty)
+        XCTAssertEqual(coordinator.presentedSheet, .preferences)
+    }
+
     // MARK: - Performance Tests
     
     func testPostMigrationPerformance() {
