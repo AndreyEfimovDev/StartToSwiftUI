@@ -422,6 +422,10 @@ final class PostsViewModel: ObservableObject {
     /// Save context and reload UI
     /// Сохраняет контекст и перезагружает посты.
     ///
+    /// При ошибке несохранённые изменения откатываются: иначе они остались
+    /// бы в контексте и тихо записались бы при следующем сохранении (или
+    /// автосохранении), хотя пользователю сообщили, что сохранения не было.
+    ///
     /// - Returns: `true`, если сохранение прошло; `false` при ошибке (она
     ///   уже отправлена в `ErrorManager`). Результат нужен экранам, которые
     ///   показывают пользователю итог операции, остальные его игнорируют.
@@ -432,6 +436,9 @@ final class PostsViewModel: ObservableObject {
             loadPostsFromSwiftData(removeDuplicates: removeDuplicates)
             return true
         } catch {
+            dataSource.rollback()
+            // Модели в памяти вернулись к данным с диска — обновляем список и фильтры.
+            loadPostsFromSwiftData(removeDuplicates: false)
             crashManager.sendNonFatal(error)
             handleError(error, message: "Error saving data")
             return false

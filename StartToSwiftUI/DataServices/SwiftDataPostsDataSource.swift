@@ -39,4 +39,8 @@ final class SwiftDataPostsDataSource: PostsDataSourceProtocol {
     func save() throws {
         try modelContext.save()
     }
+
+    func rollback() {
+        modelContext.rollback()
+    }
 }

@@ -298,6 +298,33 @@ final class PostsViewModelTests: XCTestCase {
         XCTAssertFalse(isSaved)
     }
 
+    // MARK: - Rollback after failed save
+    // Несохранённые изменения не должны оставаться в контексте — иначе они
+    // тихо запишутся при следующем сохранении или автосохранении.
+
+    func testAddPost_WhenSaveFails_RollsBack() {
+        dataSource.shouldThrowOnSave = true
+
+        vm.addPost(Post(title: "New post"))
+
+        XCTAssertEqual(dataSource.rollbackCallCount, 1)
+    }
+
+    func testUpdatePost_WhenSaveFails_RollsBack() {
+        dataSource.shouldThrowOnSave = true
+
+        vm.updatePost()
+
+        XCTAssertEqual(dataSource.rollbackCallCount, 1)
+    }
+
+    func testSave_WhenSaveSucceeds_DoesNotRollBack() {
+        vm.addPost(Post(title: "New post"))
+        vm.updatePost()
+
+        XCTAssertEqual(dataSource.rollbackCallCount, 0)
+    }
+
     // MARK: - Cloud Changes
 
     /// Изменение хранилища перезагружает посты — без очистки дублей
