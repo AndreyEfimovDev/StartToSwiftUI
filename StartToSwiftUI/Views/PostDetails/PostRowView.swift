@@ -19,7 +19,7 @@ struct PostRowView: View {
         var parts = [post.category]
         
         if let postDate = post.postDate {
-            parts.append(postDate.formatted(date: .numeric, time: .omitted))
+            parts.append(postDate.calendarDateText)
         }
         
         parts.append("@\(post.author)")

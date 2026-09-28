@@ -14,15 +14,9 @@ struct ModalNavigationContainerWrapper: View {
     @EnvironmentObject private var coordinator: AppCoordinator
     
     var body: some View {
+        // Стек модалки здесь не сбрасывается: это уже делает coordinator.push()
+        // перед показом модалки.
         ModalNavigationContainer(initialRoute: initialRoute)
             .environmentObject(coordinator)
-            .onAppear {
-                // Reset the stack if not empty
-                if !coordinator.modalPath.isEmpty && coordinator.modalPath.count == 1 {
-                    // Leave it as is
-                } else {
-                    coordinator.modalPath = NavigationPath()
-                }
-            }
     }
 }

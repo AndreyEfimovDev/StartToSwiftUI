@@ -419,6 +419,17 @@ final class PostsViewModel: ObservableObject {
         }
     }
     
+    /// Хранится ли ещё пост в базе — например, перед сохранением правок
+    /// в форме, пока пост могли окончательно удалить на другом устройстве.
+    ///
+    /// Сверка по `persistentModelID`: поля удалённой модели читать небезопасно.
+    ///
+    /// - Parameter post: Пост, который проверяем.
+    /// - Returns: `true`, если пост есть среди загруженных постов.
+    func isPostStored(_ post: Post) -> Bool {
+        allPosts.contains { $0.persistentModelID == post.persistentModelID }
+    }
+
     /// Save context and reload UI
     /// Сохраняет контекст и перезагружает посты.
     ///
@@ -465,11 +476,10 @@ final class PostsViewModel: ObservableObject {
     }
     
     private func getAllYears() -> [String]? {
-        // Локальный календарь — тот же, что при создании (DatePicker,
-        // Date.from) и отображении даты в строке: год в списке фильтра
-        // совпадает с тем, что пользователь видит у поста.
+        // postDate — календарная дата в UTC (см. Date.calendarDate): год в UTC
+        // совпадает с тем, что пользователь видит у поста, в любом часовом поясе.
         let years = allPosts.compactMap { post -> String? in
-            post.postDate.map { String(Calendar.current.component(.year, from: $0)) }
+            post.postDate.map { String(Calendar.calendarDate.component(.year, from: $0)) }
         }
         let unique = Array(Set(years)).sorted()
         return unique.isEmpty ? nil : unique

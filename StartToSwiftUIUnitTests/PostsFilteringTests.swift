@@ -136,11 +136,9 @@ final class PostsFilteringTests: XCTestCase {
     }
 
     func test_filterByYear_returnsOnlyMatching() async throws {
-        // Год поста filterPosts() считает по локальному календарю — тому же,
-        // которым дата создаётся и отображается.
-        let local = Calendar.current
-        let year2024 = post(title: "2024", postDate: DateComponents(calendar: local, year: 2024, month: 6, day: 15).date)
-        let year2025 = post(title: "2025", postDate: DateComponents(calendar: local, year: 2025, month: 6, day: 15).date)
+        // postDate — календарная дата (12:00 UTC), год считается в UTC.
+        let year2024 = post(title: "2024", postDate: Date.calendarDate(year: 2024, month: 6, day: 15))
+        let year2025 = post(title: "2025", postDate: Date.calendarDate(year: 2025, month: 6, day: 15))
         vm = try await makeVM(posts: [year2024, year2025])
 
         vm.selectedYear = "2025"
@@ -149,12 +147,10 @@ final class PostsFilteringTests: XCTestCase {
         XCTAssertEqual(vm.filteredPosts.map(\.title), ["2025"])
     }
 
-    func test_filterByYear_localNewYearMidnight_belongsToDisplayedYear() async throws {
-        // Граничный случай: 1 января 00:30 по локальному времени. В строке
-        // пост показывается как 01.01.2025, значит и в фильтре он должен
-        // быть в 2025 (с UTC-календарём восточнее UTC он уходил в 2024).
-        let local = Calendar.current
-        let newYear = post(title: "New Year", postDate: DateComponents(calendar: local, year: 2025, month: 1, day: 1, hour: 0, minute: 30).date)
+    func test_filterByYear_newYearCalendarDate_belongsToItsYear() async throws {
+        // Граничный случай: пост от 1 января. Показывается как 01.01.2025
+        // в любом часовом поясе, значит и в фильтре он в 2025.
+        let newYear = post(title: "New Year", postDate: Date.calendarDate(year: 2025, month: 1, day: 1))
         vm = try await makeVM(posts: [newYear])
 
         XCTAssertEqual(vm.allYears, ["2025"])
