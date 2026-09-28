@@ -218,17 +218,9 @@ struct AddEditPostView: View {
             isSaved = vm.addPost(editedPost)
         }
 
-        guard isSaved else {
-            // Показываем ошибку прямо в форме: глобальный алерт висит на
-            // StartView под модалкой. Форма остаётся открытой с введёнными
-            // данными — можно повторить сохранение или выйти.
-            showAlert(
-                title: "Could not save",
-                message: "Please try again.",
-                field: nil
-            )
-            return
-        }
+        // Ошибку показывает алерт ErrorManager поверх модалки. Форма остаётся
+        // открытой с введёнными данными — можно повторить сохранение или выйти.
+        guard isSaved else { return }
 
         alertType = .success
         showAlert = true

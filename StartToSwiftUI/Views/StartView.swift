@@ -65,21 +65,9 @@ struct StartView: View {
                     .transition(.move(edge: .leading))
             } else {
                 mainContent
-                    .alert(
-                        errorManager.current?.title ?? "Error",
-                        // Закрытие алерта (OK) = dismissCurrent(): покажется
-                        // следующая ошибка из очереди, если она есть.
-                        isPresented: Binding(
-                            get: { errorManager.current != nil },
-                            set: { isPresented in
-                                if !isPresented { errorManager.dismissCurrent() }
-                            }
-                        )
-                    ) {
-                        Button("OK") {}
-                    } message: {
-                        Text(errorManager.current?.message ?? "")
-                    }
+                    // Пока открыта модалка, ошибку показывает она
+                    // (ModalNavigationContainer), а не закрытый ею главный экран.
+                    .errorAlert(isEnabled: coordinator.presentedSheet == nil)
                     .task {
                         displayedSection = coordinator.activeSection
                         vm.loadPostsFromSwiftData()
