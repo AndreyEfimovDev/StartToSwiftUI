@@ -102,8 +102,9 @@ extension PostsViewModel {
             let matchesType = type == nil || post.postType == type
             let matchesPlatform = platform == nil || post.postPlatform == platform
 
-            // Локальный календарь, как в getAllYears() и при отображении даты.
-            let postYear = String(Calendar.current.component(.year, from: post.postDate ?? Date(timeIntervalSince1970: 0)))
+            // postDate — календарная дата в UTC: год берём в UTC, как в
+            // getAllYears() и при отображении даты (см. Date.calendarDateText).
+            let postYear = String(Calendar.calendarDate.component(.year, from: post.postDate ?? Date(timeIntervalSince1970: 0)))
             let matchesYear = year == nil || postYear == year
 
             return matchesLevel && matchesFavorite && matchesType && matchesPlatform && matchesYear

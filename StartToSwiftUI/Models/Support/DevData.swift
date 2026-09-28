@@ -26,7 +26,7 @@ struct DevData {
             postType: .article,
             urlString: "https://www.sagarunagar.com/blog/lazy-properties-swiftui-pitfalls/",
             postPlatform: .website,
-            postDate: Date.from(year: 2026, month: 4, day: 11),
+            postDate: Date.calendarDate(year: 2026, month: 4, day: 11),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -43,7 +43,7 @@ struct DevData {
             postType: .article,
             urlString: "https://www.sagarunagar.com/blog/swift-mutex-shared-mutable-state/",
             postPlatform: .website,
-            postDate: Date.from(year: 2026, month: 4, day: 4),
+            postDate: Date.calendarDate(year: 2026, month: 4, day: 4),
             studyLevel: .advanced,
             origin: .cloudNew
         ),
@@ -60,7 +60,7 @@ struct DevData {
             postType: .article,
             urlString: "https://www.sagarunagar.com/blog/swiftui-animatable-protocol-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2026, month: 3, day: 28),
+            postDate: Date.calendarDate(year: 2026, month: 3, day: 28),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -79,7 +79,7 @@ struct DevData {
             postType: .article,
             urlString: "https://www.sagarunagar.com/blog/swift-algorithms-complete-guide/",
             postPlatform: .website,
-            postDate: Date.from(year: 2026, month: 3, day: 21),
+            postDate: Date.calendarDate(year: 2026, month: 3, day: 21),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -92,7 +92,7 @@ struct DevData {
             postType: .article,
             urlString: "https://www.sagarunagar.com/blog/swift-some-vs-any-opaque-existential-types/",
             postPlatform: .website,
-            postDate: Date.from(year: 2026, month: 3, day: 14),
+            postDate: Date.calendarDate(year: 2026, month: 3, day: 14),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -110,7 +110,7 @@ struct DevData {
 //            postType: .course,
 //            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphc1LLLjCaEd87BEg07M97y",
 //            postPlatform: .youtube,
-//            postDate: Date.from(year: 2021, month: 6, day: 21),
+//            postDate: Date.calendarDate(year: 2021, month: 6, day: 21),
 //            studyLevel: .advanced,
 //            origin: .cloudNew
 //        ),
@@ -126,7 +126,7 @@ struct DevData {
 //            postType: .course,
 //            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphbc3bgy_LpLRQ9DDfFGcFu",
 //            postPlatform: .youtube,
-//            postDate: Date.from(year: 2021, month: 6, day: 21),
+//            postDate: Date.calendarDate(year: 2021, month: 6, day: 21),
 //            studyLevel: .middle,
 //            origin: .cloudNew
 //        ),
@@ -141,7 +141,7 @@ struct DevData {
 //            postType: .course,
 //            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphl8ly0oi0aHx0v2B7UvDK0",
 //            postPlatform: .youtube,
-//            postDate: Date.from(year: 2023, month: 4, day: 28),
+//            postDate: Date.calendarDate(year: 2023, month: 4, day: 28),
 //            studyLevel: .middle,
 //            origin: .cloudNew,
 //        ),
@@ -162,7 +162,7 @@ struct DevData {
 //            postType: .post,
 //            urlString: "https://youtu.be/-JLenSTKEcA?si=T10f05je27bNKRPD",
 //            postPlatform: .youtube,
-//            postDate: Date.from(year: 2022, month: 5, day: 18),
+//            postDate: Date.calendarDate(year: 2022, month: 5, day: 18),
 //            studyLevel: .middle,
 //            origin: .cloudNew,
 //            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
@@ -179,7 +179,7 @@ struct DevData {
 //            postType: .post,
 //            urlString: "https://youtu.be/9fXI6o39jLQ?si=SlBHPxUZWyIl_pgf",
 //            postPlatform: .youtube,
-//            postDate: Date.from(year: 2022, month: 4, day: 27),
+//            postDate: Date.calendarDate(year: 2022, month: 4, day: 27),
 //            studyLevel: .middle,
 //            origin: .cloudNew,
 //            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
@@ -195,7 +195,7 @@ struct DevData {
 //            postType: .post,
 //            urlString: "https://youtu.be/E3x07blYvdE?si=PdJgvPFksjMLZNHk",
 //            postPlatform: .youtube,
-//            postDate: Date.from(year: 2021, month: 10, day: 22),
+//            postDate: Date.calendarDate(year: 2021, month: 10, day: 22),
 //            studyLevel: .advanced,
 //            origin: .cloudNew,
 //            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
@@ -213,7 +213,7 @@ struct DevData {
 //            postType: .post,
 //            urlString: "https://youtu.be/0gM1wmW1Xvc?si=27QofcQFa8SyOZAT",
 //            postPlatform: .youtube,
-//            postDate: Date.from(year: 2021, month: 10, day: 20),
+//            postDate: Date.calendarDate(year: 2021, month: 10, day: 20),
 //            studyLevel: .advanced,
 //            origin: .cloudNew,
 //            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
@@ -227,7 +227,7 @@ struct DevData {
 //            postType: .post,
 //            urlString: "https://youtu.be/7gg8iBH2fg4?si=SLRsHGWRVsAbzJd5",
 //            postPlatform: .youtube,
-//            postDate: Date.from(year: 2021, month: 04, day: 20),
+//            postDate: Date.calendarDate(year: 2021, month: 04, day: 20),
 //            studyLevel: .middle,
 //            origin: .cloudNew,
 //            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
@@ -241,7 +241,7 @@ struct DevData {
 //            postType: .post,
 //            urlString: "https://youtu.be/TPHp9kR0Go8?si=McEbTyD9-OrebNO_",
 //            postPlatform: .youtube,
-//            postDate: Date.from(year: 2021, month: 04, day: 18),
+//            postDate: Date.calendarDate(year: 2021, month: 04, day: 18),
 //            studyLevel: .middle,
 //            origin: .cloudNew,
 //            date: Date.from(year: 2026, month: 02, day: 23) ?? Date()
@@ -256,7 +256,7 @@ struct DevData {
 //            postType: .course,
 //            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar",
 //            postPlatform: .youtube,
-//            postDate: Date.from(year: 2021, month: 3, day: 29),
+//            postDate: Date.calendarDate(year: 2021, month: 3, day: 29),
 //            studyLevel: .middle,
 //            origin: .cloudNew,
 //            date: Date.from(year: 2026, month: 02, day: 13) ?? Date()
@@ -269,7 +269,7 @@ struct DevData {
 //            author: "Nick Sarno",
 //            postType: .course,
 //            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdphr2Dl4sY4rS9PLzPdyi8PM",
-//            postDate: Date.from(year: 2022, month: 5, day: 18),
+//            postDate: Date.calendarDate(year: 2022, month: 5, day: 18),
 //            studyLevel: .middle,
 //            origin: .cloudNew,
 //            date: Date.from(year: 2026, month: 02, day: 13) ?? Date()
@@ -284,7 +284,7 @@ struct DevData {
 //            postType: .course,
 //            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiLvzZFJI6rVIBtdolrJBVB",
 //            postPlatform: .youtube,
-//            postDate: Date.from(year: 2023, month: 7, day: 14),
+//            postDate: Date.calendarDate(year: 2023, month: 7, day: 14),
 //            origin: .cloudNew,
 //            date: Date.from(year: 2026, month: 02, day: 06) ?? Date()
 //        ),
@@ -297,7 +297,7 @@ struct DevData {
 //            postType: .course,
 //            urlString: "https://www.youtube.com/playlist?list=PLuoeXyslFTuaYpVr3S9wG6PkIvYn_yHbg",
 //            postPlatform: .youtube,
-//            postDate: Date.from(year: 2021, month: 10, day: 14),
+//            postDate: Date.calendarDate(year: 2021, month: 10, day: 14),
 //            origin: .cloudNew,
 //            date: Date.from(year: 2026, month: 02, day: 06) ?? Date()
 //        ),
@@ -311,7 +311,7 @@ struct DevData {
 //            postType: .course,
 //            urlString: "https://www.youtube.com/playlist?list=PLBn01m5Vbs4CUCcA3fqvsRtx153akAJU1",
 //            postPlatform: .youtube,
-//            postDate: Date.from(year: 2023, month: 8, day: 13),
+//            postDate: Date.calendarDate(year: 2023, month: 8, day: 13),
 //            studyLevel: .beginner,
 //            origin: .cloudNew,
 //            date: Date.from(year: 2026, month: 02, day: 06) ?? Date()
@@ -325,7 +325,7 @@ struct DevData {
 //            postType: .course,
 //            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO",
 //            postPlatform: .youtube,
-//            postDate: Date.from(year: 2021, month: 2, day: 3),
+//            postDate: Date.calendarDate(year: 2021, month: 2, day: 3),
 //            studyLevel: .beginner,
 //            origin: .cloudNew,
 //            date: Date.from(year: 2026, month: 02, day: 06) ?? Date()
@@ -339,7 +339,7 @@ struct DevData {
 //            postType: .course,
 //            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpheGqemblOIA7v3oq0MS30i",
 //            postPlatform: .youtube,
-//            postDate: Date.from(year: 2021, month: 3, day: 20),
+//            postDate: Date.calendarDate(year: 2021, month: 3, day: 20),
 //            studyLevel: .beginner,
 //            origin: .cloudNew,
 //            date: Date.from(year: 2026, month: 02, day: 06) ?? Date()
@@ -353,7 +353,7 @@ struct DevData {
 //            postType: .course,
 //            urlString: "https://www.youtube.com/playlist?list=PLwvDm4VfkdpiALKk34l9mUS2f4mdJPvXq",
 //            postPlatform: .youtube,
-//            postDate: Date.from(year: 2024, month: 5, day: 20),
+//            postDate: Date.calendarDate(year: 2024, month: 5, day: 20),
 //            studyLevel: .beginner,
 //            origin: .cloudNew,
 //            date: Date.from(year: 2026, month: 02, day: 06) ?? Date()
@@ -367,7 +367,7 @@ struct DevData {
 //            postType: .course,
 //            urlString: "https://www.youtube.com/playlist?list=PLwvDm4Vfkdpha5eVTjLM0eRlJ7-yDDwBk",
 //            postPlatform: .youtube,
-//            postDate: Date.from(year: 2021, month: 12, day: 29),
+//            postDate: Date.calendarDate(year: 2021, month: 12, day: 29),
 //            studyLevel: .beginner,
 //            origin: .cloudNew,
 //            date: Date.from(year: 2026, month: 02, day: 06) ?? Date()
@@ -384,7 +384,7 @@ struct DevData {
                     postType: .course,
                     urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgHtditjG_y2DuYuj9FJommY",
                     postPlatform: .youtube,
-                    postDate: Date.from(year: 2020, month: 4, day: 20),
+                    postDate: Date.calendarDate(year: 2020, month: 4, day: 20),
                     origin: .cloudNew
                 ),
 
@@ -397,7 +397,7 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/playlist?list=PL8seg1JPkqgHx8DgGsHB4Dh_H_78x8oQE",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2019, month: 10, day: 30),
+            postDate: Date.calendarDate(year: 2019, month: 10, day: 30),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -410,7 +410,7 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/watch?v=CwA1VWP0Ldw",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2022, month: 10, day: 8),
+            postDate: Date.calendarDate(year: 2022, month: 10, day: 8),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -423,7 +423,7 @@ struct DevData {
             postType: .course,
             urlString: "https://www.youtube.com/watch?v=b1oC7sLIgpI",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2023, month: 9, day: 6),
+            postDate: Date.calendarDate(year: 2023, month: 9, day: 6),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -551,7 +551,7 @@ struct DevData {
             author: "Evgenia Bruyko",
             urlString: "https://youtu.be/ExwwrvOT8mI?si=SU__YwU8UlR461Zb",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2021, month: 3, day: 26),
+            postDate: Date.calendarDate(year: 2021, month: 3, day: 26),
             origin: .cloudNew
         ),
         Post(
@@ -563,7 +563,7 @@ struct DevData {
             postType: .post,
             urlString: "https://habr.com/ru/companies/banki/articles/958650/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 10, day: 22),
+            postDate: Date.calendarDate(year: 2025, month: 10, day: 22),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -576,7 +576,7 @@ struct DevData {
             postType: .post,
             urlString: "https://habr.com/ru/companies/sovcombank_technologies/articles/956112/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 10, day: 14),
+            postDate: Date.calendarDate(year: 2025, month: 10, day: 14),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -605,7 +605,7 @@ struct DevData {
             postType: .post,
             urlString: "https://habr.com/ru/articles/957390/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 10, day: 17),
+            postDate: Date.calendarDate(year: 2025, month: 10, day: 17),
             studyLevel: .advanced,
             origin: .cloudNew
         ),
@@ -634,7 +634,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/propertywrapper-reference-encoding-strings-to-valid-urls/",
             postPlatform: .website,
-            postDate: Date.from(year: 2021, month: 6, day: 24),
+            postDate: Date.calendarDate(year: 2021, month: 6, day: 24),
             studyLevel: .middle,
             notes: """
                 The Swift Programming Language (6.2)
@@ -656,7 +656,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/reference-combine-combining-operators/",
             postPlatform: .website,
-            postDate: Date.from(year: 2021, month: 9, day: 1),
+            postDate: Date.calendarDate(year: 2021, month: 9, day: 1),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -673,7 +673,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/reference-combine-switchtolatest/",
             postPlatform: .website,
-            postDate: Date.from(year: 2022, month: 1, day: 27),
+            postDate: Date.calendarDate(year: 2022, month: 1, day: 27),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -690,7 +690,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/publishing-docc-documention-as-a-static-website-on-github-pages/",
             postPlatform: .website,
-            postDate: Date.from(year: 2022, month: 2, day: 22),
+            postDate: Date.calendarDate(year: 2022, month: 2, day: 22),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -703,7 +703,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/using-sf-symbols-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2022, month: 4, day: 5),
+            postDate: Date.calendarDate(year: 2022, month: 4, day: 5),
             studyLevel: .beginner,
             notes: """
                 SF Symbols is a library of icons designed to be used with the San Francisco font, the system font for Apple platforms. You can have access to the library of over 3,000 symbols by downloading the mac app available on the official Apple Website.
@@ -725,7 +725,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/using-viewthatfits-to-replace-geometryreader-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2022, month: 6, day: 16),
+            postDate: Date.calendarDate(year: 2022, month: 6, day: 16),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -740,7 +740,7 @@ struct DevData {
             postType: .post,
             urlString: "https://nilcoalescing.com/blog/AdaptiveLayoutsWithViewThatFits/?ref=createwithswift.com",
             postPlatform: .website,
-            postDate: Date.from(year: 2022, month: 7, day: 11),
+            postDate: Date.calendarDate(year: 2022, month: 7, day: 11),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -757,7 +757,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.fivestars.blog/articles/trucated-text/",
             postPlatform: .website,
-            postDate: Date.from(year: 2021, month: 1, day: 12),
+            postDate: Date.calendarDate(year: 2021, month: 1, day: 12),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -772,7 +772,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/building-a-swiftui-app-to-interact-with-the-openai-chatgpt-api/",
             postPlatform: .website,
-            postDate: Date.from(year: 2022, month: 12, day: 3),
+            postDate: Date.calendarDate(year: 2022, month: 12, day: 3),
             studyLevel: .advanced,
             origin: .cloudNew
         ),
@@ -787,7 +787,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/building-a-swiftui-app-to-interact-with-the-openai-chatgpt-api/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 2, day: 14),
+            postDate: Date.calendarDate(year: 2023, month: 2, day: 14),
             studyLevel: .advanced,
             origin: .cloudNew
         ),
@@ -806,7 +806,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/creating-a-swiftui-app-to-generate-text-completions-with-gpt-3-5-through-the-openai-api/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 5, day: 23),
+            postDate: Date.calendarDate(year: 2023, month: 5, day: 23),
             studyLevel: .advanced,
             origin: .cloudNew
         ),
@@ -823,7 +823,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/updating-the-users-location-with-core-location-and-swift-concurrency-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 10, day: 10),
+            postDate: Date.calendarDate(year: 2023, month: 10, day: 10),
             studyLevel: .advanced,
             origin: .cloudNew
         ),
@@ -838,7 +838,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/animating-numeric-text-in-swiftui-with-the-content-transition-modifier/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 11, day: 17),
+            postDate: Date.calendarDate(year: 2023, month: 11, day: 17),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -857,7 +857,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/accessing-the-app-life-cycle-within-a-swiftui-app/",
             postPlatform: .website,
-            postDate: Date.from(year: 2023, month: 11, day: 28),
+            postDate: Date.calendarDate(year: 2023, month: 11, day: 28),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -872,7 +872,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/picking-an-image-from-the-photos-library-in-a-swiftui-app/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 1, day: 16),
+            postDate: Date.calendarDate(year: 2024, month: 1, day: 16),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -887,7 +887,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/create-an-animated-transition-with-matched-geometry-effect-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 2, day: 9),
+            postDate: Date.calendarDate(year: 2024, month: 2, day: 9),
             studyLevel: .advanced,
             origin: .cloudNew
         ),
@@ -903,7 +903,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/using-swift-charts-on-a-swiftui-app/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 3, day: 1),
+            postDate: Date.calendarDate(year: 2024, month: 3, day: 1),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -920,7 +920,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/sign-in-with-apple-on-a-swiftui-application/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 3, day: 5),
+            postDate: Date.calendarDate(year: 2024, month: 3, day: 5),
             studyLevel: .advanced,
             origin: .cloudNew
         ),
@@ -939,7 +939,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/creating-a-custom-view-modifier-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 3, day: 21),
+            postDate: Date.calendarDate(year: 2024, month: 3, day: 21),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -955,7 +955,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/camera-capture-setup-in-a-swiftui-app/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 4, day: 4),
+            postDate: Date.calendarDate(year: 2024, month: 4, day: 4),
             studyLevel: .middle,
             notes: """
                 AVFoundation
@@ -983,7 +983,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/display-empty-states-with-contentunavailableview-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 4, day: 9),
+            postDate: Date.calendarDate(year: 2024, month: 4, day: 9),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -1002,7 +1002,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/making-your-lists-searchable-in-a-swiftui-app/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 4, day: 16),
+            postDate: Date.calendarDate(year: 2024, month: 4, day: 16),
             studyLevel: .beginner,
             notes: """
                 The searchable modifier has many variations and you can find them all on the official page for search in the Apple documentation:
@@ -1029,7 +1029,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/using-gradients-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 5, day: 7),
+            postDate: Date.calendarDate(year: 2024, month: 5, day: 7),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -1048,7 +1048,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/using-materials-with-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 5, day: 14),
+            postDate: Date.calendarDate(year: 2024, month: 5, day: 14),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -1067,7 +1067,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/providing-feedback-sensory-feedback-modifier/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 5, day: 21),
+            postDate: Date.calendarDate(year: 2024, month: 5, day: 21),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -1086,7 +1086,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/using-app-intents-swiftui-app/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 6, day: 4),
+            postDate: Date.calendarDate(year: 2024, month: 6, day: 4),
             studyLevel: .advanced,
             origin: .cloudNew
         ),
@@ -1103,7 +1103,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/using-multi-step-animations-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 6, day: 25),
+            postDate: Date.calendarDate(year: 2024, month: 6, day: 25),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -1123,7 +1123,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/formatting-time-in-a-text-view-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 6, day: 23),
+            postDate: Date.calendarDate(year: 2024, month: 6, day: 23),
             studyLevel: .beginner,
             notes: """
                 TimelineView()
@@ -1147,7 +1147,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/formatting-data-as-text-in-a-text-view-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 6, day: 7),
+            postDate: Date.calendarDate(year: 2024, month: 6, day: 7),
             studyLevel: .beginner,
             notes: """
                 Measurement()
@@ -1173,7 +1173,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/converting-between-image-formats/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 6, day: 17),
+            postDate: Date.calendarDate(year: 2024, month: 6, day: 17),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -1188,7 +1188,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/preparing-your-app-icon-for-dark-and-tinted-appearance/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 6, day: 20),
+            postDate: Date.calendarDate(year: 2024, month: 6, day: 20),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -1204,7 +1204,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/animating-sf-symbols-with-the-symbol-effect-modifier/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 6, day: 26),
+            postDate: Date.calendarDate(year: 2024, month: 6, day: 26),
             studyLevel: .beginner,
             notes: """
                 symbolEffect(_:options:value:)
@@ -1241,7 +1241,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/translating-text-in-your-swiftui-app-with-the-translation-framework/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 8, day: 1),
+            postDate: Date.calendarDate(year: 2024, month: 8, day: 1),
             studyLevel: .middle,
             notes: """
                 translationPresentation
@@ -1261,7 +1261,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/using-the-translation-framework-for-language-to-language-translation/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 8, day: 2),
+            postDate: Date.calendarDate(year: 2024, month: 8, day: 2),
             studyLevel: .middle,
             notes: """
                 TranslationSession.Configuration
@@ -1284,7 +1284,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/text-effects-using-textrenderer-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 10, day: 28),
+            postDate: Date.calendarDate(year: 2025, month: 10, day: 28),
             studyLevel: .middle,
             notes: """
                 The key is combining:
@@ -1314,7 +1314,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/using-the-zoom-navigation-transition-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 9, day: 26),
+            postDate: Date.calendarDate(year: 2024, month: 9, day: 26),
             studyLevel: .middle,
             notes: """
                 @Namespace
@@ -1334,7 +1334,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/giving-depth-to-your-app-icons/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 10, day: 3),
+            postDate: Date.calendarDate(year: 2024, month: 10, day: 3),
             studyLevel: .middle,
             notes: """
                 @Namespace
@@ -1364,7 +1364,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/applying-visual-effects-combined-with-scrolling-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 10, day: 10),
+            postDate: Date.calendarDate(year: 2024, month: 10, day: 10),
             studyLevel: .middle,
             notes: """
                 visualEffect
@@ -1383,7 +1383,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/plotting-math-equation-using-swift-charts/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 10, day: 11),
+            postDate: Date.calendarDate(year: 2024, month: 10, day: 11),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -1407,7 +1407,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/creating-view-transitions-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 10, day: 24),
+            postDate: Date.calendarDate(year: 2024, month: 10, day: 24),
             studyLevel: .middle,
             notes: """
                 Transition
@@ -1430,7 +1430,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/implement-blurring-when-multitasking-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 10, day: 29),
+            postDate: Date.calendarDate(year: 2024, month: 10, day: 29),
             studyLevel: .middle,
             notes: """
                 blur
@@ -1448,7 +1448,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/prevent-screenshot-capture-of-sensitive-swiftui-views/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 11, day: 5),
+            postDate: Date.calendarDate(year: 2024, month: 11, day: 5),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -1463,7 +1463,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/exploring-interactive-bottom-sheets-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 11, day: 19),
+            postDate: Date.calendarDate(year: 2024, month: 11, day: 19),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -1486,7 +1486,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/implementing-search-suggestions-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 11, day: 26),
+            postDate: Date.calendarDate(year: 2024, month: 11, day: 26),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -1507,7 +1507,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/mastering-forms-in-swiftui-creating-and-styling/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 12, day: 8),
+            postDate: Date.calendarDate(year: 2024, month: 12, day: 8),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -1524,7 +1524,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/mastering-forms-in-swiftui-selecting-information//",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 12, day: 11),
+            postDate: Date.calendarDate(year: 2024, month: 12, day: 11),
             studyLevel: .beginner,
             notes: """
                 TextField
@@ -1544,7 +1544,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/mastering-forms-in-swiftui-text-fields/",
             postPlatform: .website,
-            postDate: Date.from(year: 2024, month: 12, day: 17),
+            postDate: Date.calendarDate(year: 2024, month: 12, day: 17),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -1564,7 +1564,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/enhance-ui-ux-with-the-confirmation-dialog-component/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 1, day: 7),
+            postDate: Date.calendarDate(year: 2025, month: 1, day: 7),
             studyLevel: .beginner,
             notes: """
                     .confirmationDialog(
@@ -1615,7 +1615,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/keyboard-driven-actions-in-swiftui-with-onkeypress/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 1, day: 9),
+            postDate: Date.calendarDate(year: 2025, month: 1, day: 9),
             studyLevel: .beginner,
             notes: """
                 @FocusState
@@ -1642,7 +1642,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/controlling-keyboard-events-with-keys-and-phases/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 1, day: 10),
+            postDate: Date.calendarDate(year: 2025, month: 1, day: 10),
             studyLevel: .beginner,
             notes: """
                 @FocusState
@@ -1670,7 +1670,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/implementing-tab-bar-in-a-swiftui-app/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 1, day: 30),
+            postDate: Date.calendarDate(year: 2025, month: 1, day: 30),
             studyLevel: .beginner,
             notes: """
                 When you use custom symbol in tab bar remember to have a look at the Human Interface Guidelines to export them in the correct size.
@@ -1697,7 +1697,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/grouping-controls-with-controlgroup/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 2, day: 6),
+            postDate: Date.calendarDate(year: 2025, month: 2, day: 6),
             studyLevel: .beginner,
         notes: """
             ImageResource
@@ -1716,7 +1716,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/enabling-interaction-with-table-view-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 2, day: 18),
+            postDate: Date.calendarDate(year: 2025, month: 2, day: 18),
             studyLevel: .middle,
             notes: """
                 Table
@@ -1750,7 +1750,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/creating-custom-sf-symbols/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 2, day: 20),
+            postDate: Date.calendarDate(year: 2025, month: 2, day: 20),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -1770,7 +1770,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/grouping-controls-with-controlgroup/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 2, day: 6),
+            postDate: Date.calendarDate(year: 2025, month: 2, day: 6),
             studyLevel: .beginner,
             notes: """
                 ImageResource
@@ -1789,7 +1789,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/enabling-interaction-with-table-view-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 2, day: 18),
+            postDate: Date.calendarDate(year: 2025, month: 2, day: 18),
             studyLevel: .middle,
             notes: """
                 Table
@@ -1820,7 +1820,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/generating-images-programmatically-with-image-playground/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 2, day: 26),
+            postDate: Date.calendarDate(year: 2025, month: 2, day: 26),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -1844,7 +1844,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/generating-images-programmatically-with-image-playground/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 2, day: 26),
+            postDate: Date.calendarDate(year: 2025, month: 2, day: 26),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -1857,7 +1857,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/symmetrical-and-asymmetrical-transitions-in-swiftui-with-the-scroll-transition-modifier/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 2, day: 27),
+            postDate: Date.calendarDate(year: 2025, month: 2, day: 27),
             studyLevel: .middle,
         notes: """
             scrollTransition
@@ -1875,7 +1875,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/placing-ui-components-within-the-safe-area-inset/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 3, day: 13),
+            postDate: Date.calendarDate(year: 2025, month: 3, day: 13),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -1894,7 +1894,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/dynamically-adapting-to-available-space-with-viewthatfits/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 3, day: 20),
+            postDate: Date.calendarDate(year: 2025, month: 3, day: 20),
             studyLevel: .advanced,
             notes: """
                 ViewThatFits
@@ -1913,7 +1913,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/presenting-an-inspector-with-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 4, day: 1),
+            postDate: Date.calendarDate(year: 2025, month: 4, day: 1),
             studyLevel: .advanced,
             notes: """
                 iPad
@@ -1936,7 +1936,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/mastering-forms-in-swiftui-toggles/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 4, day: 4),
+            postDate: Date.calendarDate(year: 2025, month: 4, day: 4),
             studyLevel: .advanced,
             notes: """
                 Toggling multiple options at once
@@ -1959,7 +1959,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/create-flexible-interfaces-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 4, day: 1),
+            postDate: Date.calendarDate(year: 2025, month: 4, day: 1),
             studyLevel: .advanced,
             notes: """
                 containerRelativeFrame
@@ -1977,7 +1977,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/integrating-timelineview-in-a-swiftui-app/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 4, day: 10),
+            postDate: Date.calendarDate(year: 2025, month: 4, day: 10),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -1992,7 +1992,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/donate-content-to-spotlight-and-open-it-using-nsuseractivity/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 6, day: 10),
+            postDate: Date.calendarDate(year: 2025, month: 6, day: 10),
             studyLevel: .advanced,
             notes: """
                 CoreSpotlight
@@ -2025,7 +2025,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/creating-valid-dates-using-the-swift-language/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 6, day: 19),
+            postDate: Date.calendarDate(year: 2025, month: 6, day: 19),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -2040,7 +2040,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/triggering-actions-after-a-time-interval-with-timers/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 6, day: 17),
+            postDate: Date.calendarDate(year: 2025, month: 6, day: 17),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -2057,7 +2057,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/implementing-advanced-speech-to-text-in-your-swiftui-app/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 8, day: 5),
+            postDate: Date.calendarDate(year: 2025, month: 8, day: 5),
             studyLevel: .advanced,
             notes: """
                 Speech
@@ -2085,7 +2085,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/making-the-tab-bar-collapse-while-scrolling/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 8, day: 28),
+            postDate: Date.calendarDate(year: 2025, month: 8, day: 28),
             studyLevel: .middle,
             origin: .cloudNew
         ),
@@ -2100,7 +2100,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/exploring-concentricity-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 9, day: 5),
+            postDate: Date.calendarDate(year: 2025, month: 9, day: 5),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -2117,7 +2117,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/displaying-web-content-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 9, day: 11),
+            postDate: Date.calendarDate(year: 2025, month: 9, day: 11),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -2136,7 +2136,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/creating-custom-layouts-with-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 9, day: 16),
+            postDate: Date.calendarDate(year: 2025, month: 9, day: 16),
             studyLevel: .middle,
             notes: """
                 CNContactStore
@@ -2161,7 +2161,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/presenting-critical-information-in-swiftui-with-alerts/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 9, day: 30),
+            postDate: Date.calendarDate(year: 2025, month: 9, day: 30),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -2176,7 +2176,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/getting-started-with-the-contacts-framework/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 10, day: 18),
+            postDate: Date.calendarDate(year: 2025, month: 10, day: 18),
             studyLevel: .middle,
             notes: """
                 CNContactStore
@@ -2197,7 +2197,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/listing-contacts-with-the-contacts-framework/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 10, day: 19),
+            postDate: Date.calendarDate(year: 2025, month: 10, day: 19),
             studyLevel: .middle,
             notes: """
                 CNContactStore
@@ -2218,7 +2218,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/implementing-draw-animations-for-sf-symbols-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 10, day: 30),
+            postDate: Date.calendarDate(year: 2025, month: 10, day: 30),
             studyLevel: .beginner,
             origin: .cloudNew
         ),
@@ -2233,7 +2233,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/programmatic-navigation-with-navigation-destination-in-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 10, day: 3),
+            postDate: Date.calendarDate(year: 2025, month: 10, day: 3),
             studyLevel: .beginner,
             notes: """
                 navigationDestination
@@ -2254,7 +2254,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/taking-control-of-your-navigation-in-swiftui-with-navigationpath/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 10, day: 9),
+            postDate: Date.calendarDate(year: 2025, month: 10, day: 9),
             studyLevel: .beginner,
             notes: """
                 navigationDestination
@@ -2275,7 +2275,7 @@ struct DevData {
             postType: .post,
             urlString: "https://www.createwithswift.com/using-rich-text-in-the-texteditor-with-swiftui/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 10, day: 17),
+            postDate: Date.calendarDate(year: 2025, month: 10, day: 17),
             studyLevel: .beginner,
             notes: """
                 AttributedString
@@ -2296,7 +2296,7 @@ struct DevData {
             postType: .post,
             urlString: "https://habr.com/ru/articles/953560/",
             postPlatform: .website,
-            postDate: Date.from(year: 2025, month: 10, day: 5),
+            postDate: Date.calendarDate(year: 2025, month: 10, day: 5),
             studyLevel: .beginner),
         Post(
             title: "Swift: Dead Simple Formatting (Dates, Numbers, Currency, Measurement, Time)",
@@ -2307,7 +2307,7 @@ struct DevData {
             postType: .post,
             urlString: "https://habr.com/ru/articles/953560/",
             postPlatform: .youtube,
-            postDate: Date.from(year: 2025, month: 1, day: 2),
+            postDate: Date.calendarDate(year: 2025, month: 1, day: 2),
             studyLevel: .beginner,
             notes: """
                 https://fuckingformatstyle.com/

@@ -476,11 +476,10 @@ final class PostsViewModel: ObservableObject {
     }
     
     private func getAllYears() -> [String]? {
-        // Локальный календарь — тот же, что при создании (DatePicker,
-        // Date.from) и отображении даты в строке: год в списке фильтра
-        // совпадает с тем, что пользователь видит у поста.
+        // postDate — календарная дата в UTC (см. Date.calendarDate): год в UTC
+        // совпадает с тем, что пользователь видит у поста, в любом часовом поясе.
         let years = allPosts.compactMap { post -> String? in
-            post.postDate.map { String(Calendar.current.component(.year, from: $0)) }
+            post.postDate.map { String(Calendar.calendarDate.component(.year, from: $0)) }
         }
         let unique = Array(Set(years)).sorted()
         return unique.isEmpty ? nil : unique

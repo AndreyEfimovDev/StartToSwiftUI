@@ -976,6 +976,43 @@ final class UtilityTests: XCTestCase {
         cancellable.cancel()
     }
 
+    // MARK: - Calendar date (postDate)
+
+    @MainActor
+    func test_calendarDate_isNoonUTC() throws {
+        let date = try XCTUnwrap(Date.calendarDate(year: 2026, month: 4, day: 11))
+        let parts = Calendar.calendarDate.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+
+        XCTAssertEqual(parts, DateComponents(year: 2026, month: 4, day: 11, hour: 12, minute: 0))
+    }
+
+    /// Старый формат: 01:08 по Москве = 22:08 UTC накануне. День берётся в
+    /// поясе, где дату задавали, и становится 12:00 UTC того же дня.
+    @MainActor
+    func test_calendarDateNoonUTC_keepsDayOfSourceTimeZone() throws {
+        var moscow = Calendar(identifier: .gregorian)
+        moscow.timeZone = try XCTUnwrap(TimeZone(identifier: "Europe/Moscow"))
+        let oldFormat = try XCTUnwrap(DateComponents(calendar: moscow, year: 2026, month: 4, day: 11, hour: 1, minute: 8).date)
+
+        XCTAssertEqual(oldFormat.calendarDateNoonUTC(in: moscow), Date.calendarDate(year: 2026, month: 4, day: 11))
+    }
+
+    /// Значение из DatePicker в UTC (любое время дня) — тот же день, 12:00 UTC.
+    @MainActor
+    func test_calendarDateNoonUTC_fromUTCPickerValue() throws {
+        let pickerValue = try XCTUnwrap(DateComponents(calendar: .calendarDate, year: 2025, month: 1, day: 1, hour: 23, minute: 59).date)
+
+        XCTAssertEqual(pickerValue.calendarDateNoonUTC(in: .calendarDate), Date.calendarDate(year: 2025, month: 1, day: 1))
+    }
+
+    /// Повторная нормализация ничего не меняет.
+    @MainActor
+    func test_calendarDateNoonUTC_isIdempotent() throws {
+        let date = try XCTUnwrap(Date.calendarDate(year: 2024, month: 2, day: 29))
+
+        XCTAssertEqual(date.calendarDateNoonUTC(in: .calendarDate), date)
+    }
+
     // MARK: - Performance Tests
     
     func testPostMigrationPerformance() {

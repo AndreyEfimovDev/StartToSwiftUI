@@ -66,7 +66,7 @@ struct PreviewData {
         author: "Evgenia Bruyko",
         urlString: "https://youtu.be/ExwwrvOT8mI?si=SU__YwU8UlR461Zb",
         postPlatform: .youtube,
-        postDate: Date.from(year: 2021, month: 3, day: 26),
+        postDate: Date.calendarDate(year: 2021, month: 3, day: 26),
         studyLevel: .beginner,
         progress: .added , // added, learning, studied, practiced
         favoriteChoice: .yes,
@@ -139,7 +139,7 @@ struct PreviewData {
         postType: .other,
         urlString: "https://www.youtube.com/watch?v=rbtIcKKxQ38/",
         postPlatform: .website,
-        postDate: Date.from(year: 2022, month: 8, day: 11),
+        postDate: Date.calendarDate(year: 2022, month: 8, day: 11),
         studyLevel: .middle,
         progress: .practiced, // added, learning, studied, practiced
         favoriteChoice: .no,

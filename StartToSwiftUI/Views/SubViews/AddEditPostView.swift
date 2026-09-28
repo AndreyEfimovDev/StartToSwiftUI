@@ -41,7 +41,10 @@ struct AddEditPostView: View {
     private let fontTextInput: Font = .callout
     private let colorSubheader = Color.mycolor.myAccent.opacity(0.5)
     private let startingDate: Date = Calendar.current.date(from: DateComponents(year: 2016)) ?? Date(timeIntervalSince1970: 0)
-    private let endingDate: Date = .now
+    // Сегодняшний день пользователя как календарная дата (12:00 UTC): DatePicker
+    // работает в UTC, и с .now в поясах восточнее UTC сегодняшний день мог
+    // оказаться вне диапазона.
+    private let endingDate: Date = Date.now.calendarDateNoonUTC(in: .current)
     
     // MARK: - Computed Properties
     private var viewTitle: String {
@@ -52,8 +55,9 @@ struct AddEditPostView: View {
     }
     private var bindingPostDate: Binding<Date> {
         Binding(
-            get: { editedPost.postDate ?? Date() },
-            set: { editedPost.postDate = $0 }
+            get: { editedPost.postDate ?? endingDate },
+            // DatePicker работает в UTC — выбранный день сохраняем как 12:00 UTC.
+            set: { editedPost.postDate = $0.calendarDateNoonUTC(in: .calendarDate) }
         )
     }
     private var isExtended: Bool {
@@ -508,7 +512,7 @@ struct AddEditPostView: View {
             ZStack {
                 HStack {
                     Button(editedPost.postDate == nil ? "Set date" : "Reset date") {
-                        editedPost.postDate = editedPost.postDate == nil ? Date() : nil
+                        editedPost.postDate = editedPost.postDate == nil ? endingDate : nil
                     }
                     .foregroundColor(editedPost.postDate == nil ? Color.mycolor.myBlue : Color.mycolor.myRed)
                     .padding(8)
@@ -528,6 +532,9 @@ struct AddEditPostView: View {
                         in: startingDate...endingDate,
                         displayedComponents: .date
                     )
+                    // postDate — календарная дата в UTC: пикер показывает и
+                    // выбирает день в UTC, одинаковый в любом часовом поясе.
+                    .environment(\.timeZone, .gmt)
                     .tint(Color.mycolor.myBlue)
                     .padding(.trailing, 8)
                     .datePickerStyle(.compact)

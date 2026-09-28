@@ -133,7 +133,7 @@ struct PostDetailsView: View {
                 .itemBackground()
 
             if let date = post.postDate {
-                Text("\(date.formatted(date: .numeric, time: .omitted))")
+                Text(date.calendarDateText)
                     .itemBackground()
             }
             Text(post.postType.displayName)
