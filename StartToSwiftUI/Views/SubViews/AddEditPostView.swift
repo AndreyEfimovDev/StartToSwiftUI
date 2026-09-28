@@ -66,6 +66,8 @@ struct AddEditPostView: View {
     enum AlertType {
         case success
         case error(title: String, message: String, field: PostFields?)
+        /// Редактируемый пост окончательно удалён (на другом устройстве).
+        case postDeleted
     }
     
     init(post: Post?) {
@@ -208,6 +210,15 @@ struct AddEditPostView: View {
     }
         
     private func checkAndSave() {
+        // Пост могли окончательно удалить на другом устройстве, пока форма
+        // открыта: писать в удалённую модель SwiftData нельзя. Проверка — до
+        // валидации, которая тоже читает поля originalPost (id).
+        if let originalPost, !vm.isPostStored(originalPost) {
+            alertType = .postDeleted
+            showAlert = true
+            return
+        }
+
         guard validatePost() else { return }
         
         let isSaved: Bool
@@ -283,6 +294,14 @@ struct AddEditPostView: View {
                 message: Text("Tap OK to continue"),
                 dismissButton: .default(Text("OK")) {
                     if editedPost.draft { isPostDraftSaved = true }
+                    navigateBack()
+                }
+            )
+        case .postDeleted:
+            return Alert(
+                title: Text("This material was deleted on another device"),
+                message: Text("Your changes can't be saved."),
+                dismissButton: .default(Text("OK")) {
                     navigateBack()
                 }
             )

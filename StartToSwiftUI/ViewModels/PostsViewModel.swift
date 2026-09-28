@@ -419,6 +419,17 @@ final class PostsViewModel: ObservableObject {
         }
     }
     
+    /// Хранится ли ещё пост в базе — например, перед сохранением правок
+    /// в форме, пока пост могли окончательно удалить на другом устройстве.
+    ///
+    /// Сверка по `persistentModelID`: поля удалённой модели читать небезопасно.
+    ///
+    /// - Parameter post: Пост, который проверяем.
+    /// - Returns: `true`, если пост есть среди загруженных постов.
+    func isPostStored(_ post: Post) -> Bool {
+        allPosts.contains { $0.persistentModelID == post.persistentModelID }
+    }
+
     /// Save context and reload UI
     /// Сохраняет контекст и перезагружает посты.
     ///

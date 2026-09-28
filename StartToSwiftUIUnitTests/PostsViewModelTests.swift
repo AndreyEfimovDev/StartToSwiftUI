@@ -297,6 +297,33 @@ final class PostsViewModelTests: XCTestCase {
         XCTAssertFalse(isSaved)
     }
 
+    // MARK: - isPostStored
+
+    func testIsPostStored_LoadedPost_ReturnsTrue() {
+        let post = Post(title: "Stored")
+        let testVM = PostsViewModel(
+            dataSource: MockPostsDataSource(posts: [post]),
+            fbPostsManager: networkService,
+            services: .make()
+        )
+        testVM.loadPostsFromSwiftData(removeDuplicates: false)
+
+        XCTAssertTrue(testVM.isPostStored(post))
+    }
+
+    /// Пост удалён (например, на другом устройстве) и пропал после перезагрузки.
+    func testIsPostStored_AfterRemovalAndReload_ReturnsFalse() {
+        let post = Post(title: "Removed")
+        let source = MockPostsDataSource(posts: [post])
+        let testVM = PostsViewModel(dataSource: source, fbPostsManager: networkService, services: .make())
+        testVM.loadPostsFromSwiftData(removeDuplicates: false)
+
+        source.delete(post)
+        testVM.loadPostsFromSwiftData(removeDuplicates: false)
+
+        XCTAssertFalse(testVM.isPostStored(post))
+    }
+
     // MARK: - Rollback after failed save
     // Несохранённые изменения не должны оставаться в контексте — иначе они
     // тихо запишутся при следующем сохранении или автосохранении.
