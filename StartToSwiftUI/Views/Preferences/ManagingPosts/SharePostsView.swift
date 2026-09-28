@@ -76,22 +76,6 @@ struct SharePostsView: View {
         .multilineTextAlignment(.center)
     }
 
-    private func prepareDocumentSharing() {
-        // Export data from SwiftData
-        let exportResult = vm.exportPostsToJSON()
-
-        switch exportResult {
-        case .success(let url):
-            isInProgress = false
-            shareURL = url
-            showActivityView = true
-        case .failure(let error):
-            isInProgress = false
-            hapticManager.notification(type: .error)
-            vm.errorManager.handle(error, message: "Failed to export posts")
-        }
-    }
-
     @ViewBuilder
     private func sharingActivityView(for fileURL: URL) -> some View {
         ActivityView(activityItems: [fileURL], applicationActivities: nil) { result in
@@ -110,10 +94,9 @@ struct SharePostsView: View {
             showActivityView = true
             isInProgress = false
             
-        case .failure(let error):
+        case .failure:
+            // Об ошибке (алерт и вибрация) уже сообщил exportPostsToJSON().
             isInProgress = false
-            hapticManager.notification(type: .error)
-            vm.errorManager.handle(error, message: "Failed to export posts")
         }
     }
 

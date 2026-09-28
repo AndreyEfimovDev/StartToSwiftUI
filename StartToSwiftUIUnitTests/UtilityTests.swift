@@ -266,6 +266,30 @@ final class UtilityTests: XCTestCase {
         XCTAssertEqual(PostMigrationHelper.convertFromCodable(.mock(status: .deleted)).status, .deleted)
     }
 
+    // MARK: - JSONFileManager / FileStorageError
+
+    /// Нехватка места при записи бэкапа распознаётся под FileStorageError.
+    @MainActor
+    func test_userMessage_fileSystemErrorWrappingOutOfSpace_suggestsFreeingSpace() {
+        let outOfSpace = NSError(domain: NSCocoaErrorDomain, code: NSFileWriteOutOfSpaceError)
+
+        XCTAssertEqual(
+            ErrorManager.userMessage(for: FileStorageError.fileSystemError(outOfSpace)),
+            "Not enough storage on the device. Free up some space and try again."
+        )
+    }
+
+    /// Ошибка кодирования возвращается как encodingFailed, а не как ошибка записи.
+    @MainActor
+    func test_exportToTemporary_unencodableData_returnsEncodingFailed() {
+        // Стандартный JSONEncoder не умеет кодировать NaN.
+        let result = JSONFileManager().exportToTemporary([Double.nan], fileName: "test.json", encoder: JSONEncoder())
+
+        guard case .failure(.encodingFailed) = result else {
+            return XCTFail("Ожидалась ошибка encodingFailed, получено: \(result)")
+        }
+    }
+
     // MARK: - JSONDecoder Tests
     
     func testJSONDecoderAppDecoderBasicDecoding() {
