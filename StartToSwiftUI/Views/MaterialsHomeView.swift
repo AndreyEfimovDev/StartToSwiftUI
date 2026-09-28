@@ -47,13 +47,8 @@ struct MaterialsHomeView: View {
     }
     
     private var postsToDisplay: [Post] {
-        let byCategory: [Post]
-        if let category = selectedCategory {
-            byCategory = vm.visiblePosts.filter { $0.category == category }
-        } else {
-            byCategory = vm.visiblePosts
-        }
-        return byCategory
+        guard let category = selectedCategory else { return vm.visiblePosts }
+        return vm.visiblePosts.filter { $0.category == category }
     }
 
     // MARK: BODY

@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class JSONFileManager: ObservableObject {
+final class JSONFileManager {
 
     init() {}
 
@@ -17,45 +17,57 @@ final class JSONFileManager: ObservableObject {
         fileName: String,
         encoder: JSONEncoder = .appEncoder
     ) -> Result<URL, FileStorageError> {
+        // Кодирование и запись — разные ошибки: запись может упасть из-за
+        // нехватки места, и об этом пользователю нужно сказать отдельно.
+        let jsonData: Data
         do {
-            let jsonData = try encoder.encode(data)
-            let tempFileURL = FileManager.default.temporaryDirectory
-                .appendingPathComponent(fileName)
-            try jsonData.write(to: tempFileURL)
-            log("🍎 FM(exportToTemporary): Exported to: \(tempFileURL.lastPathComponent)", level: .info)
-            return .success(tempFileURL)
+            jsonData = try encoder.encode(data)
         } catch {
-            log("🍎❌ FM(exportToTemporary): Export error: \(error)", level: .error)
+            log("🍎❌ FM(exportToTemporary): Encoding error: \(error)", level: .error)
             return .failure(.encodingFailed(error))
         }
+
+        let tempFileURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent(fileName)
+        do {
+            try jsonData.write(to: tempFileURL)
+        } catch {
+            log("🍎❌ FM(exportToTemporary): Write error: \(error)", level: .error)
+            return .failure(.fileSystemError(error))
+        }
+
+        log("🍎 FM(exportToTemporary): Exported to: \(tempFileURL.lastPathComponent)", level: .info)
+        return .success(tempFileURL)
     }
 }
 
 // MARK: - File Storage Errors
-enum FileStorageError: LocalizedError {
-    case fileNotFound
-    case invalidURL
+enum FileStorageError: LocalizedError, CustomNSError {
     case encodingFailed(Error)
-    case decodingFailed(Error)
     case fileSystemError(Error)
-    case exportError(String)
-    
+
     var errorDescription: String? {
         switch self {
-        case .fileNotFound:
-            return "File not found"
-        case .invalidURL:
-            return "Invalid file URL"
         case .encodingFailed(let error):
             return "Encoding failed: \(error.localizedDescription)"
-        case .decodingFailed(let error):
-            return "Decoding failed: \(error.localizedDescription)"
         case .fileSystemError(let error):
             return "File system error: \(error.localizedDescription)"
-        case .exportError(let message):
-            return message
         }
     }
+
+    /// Исходная ошибка — в `NSUnderlyingErrorKey`: без этого при переводе в
+    /// `NSError` она теряется, и `ErrorManager` не распознаёт, например,
+    /// нехватку места (Cocoa `NSFileWriteOutOfSpaceError`) под этой ошибкой.
+    var errorUserInfo: [String: Any] {
+        let underlying: Error
+        switch self {
+        case .encodingFailed(let error), .fileSystemError(let error):
+            underlying = error
+        }
+        var userInfo: [String: Any] = [NSUnderlyingErrorKey: underlying]
+        if let errorDescription {
+            userInfo[NSLocalizedDescriptionKey] = errorDescription
+        }
+        return userInfo
+    }
 }
-
-

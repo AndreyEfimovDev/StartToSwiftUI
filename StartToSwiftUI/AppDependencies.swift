@@ -12,9 +12,8 @@ import SwiftData
 /// SwiftUI пересоздаст `StartView` — а строилась ровно один раз, здесь.
 ///
 /// `services` вынесен в отдельный `AppServiceDependencies`, а не расплющен
-/// сюда же плоским списком — по той же причине, что `MainViewDependencies`
-/// у `AppDependencies` не расплющен: это связанная группа, используемая
-/// сразу тремя ViewModel'ями (Posts/Notices/Snippets), а не всем подряд.
+/// сюда же плоским списком: это связанная группа, используемая сразу тремя
+/// ViewModel'ями (Posts/Notices/Snippets), а не всем подряд.
 struct AppDependencies {
     let appStateManager: AppSyncStateManager
     let services: AppServiceDependencies

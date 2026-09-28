@@ -33,6 +33,14 @@ final class PostsViewModel: ObservableObject {
         didSet { clearSelectedPostIfRemoved() }
     }
     @Published var filteredPosts: [Post] = []
+    /// Посты, которые пользователь видит после фильтров и поиска: активные
+    /// (не в корзине) и не черновики.
+    ///
+    /// Единое правило видимости для главного списка и статистики Study
+    /// Progress. Хранится, а не вычисляется: считается один раз за прогон
+    /// пайплайна фильтров (см. applyFilteredPosts), а читается экранами
+    /// многократно за перерисовку.
+    @Published private(set) var visiblePosts: [Post] = []
     @Published var selectedPost: Post? = nil
     @Published var searchText: String = ""
     @Published var selectedRating: PostRating? = nil
@@ -228,9 +236,6 @@ final class PostsViewModel: ObservableObject {
                 removeDuplicatePosts()
             }
             
-            // migrating post status scheem from active → hidden → deleted → erase to active → deleted → erase.
-            migrateHiddenToDeleted(removeDuplicates: removeDuplicates)
-            
             crashManager.addLog("loadPostsFromSwiftData: posts count after check for duplicates: \(allPosts.count)")
             allYears = getAllYears()
             crashManager.setUserContext(allPosts.count, hasCloudPosts)
@@ -299,6 +304,9 @@ final class PostsViewModel: ObservableObject {
             allPosts = try dataSource.fetchPosts()
             log("Removed \(postsToDelete.count) duplicate posts", level: .info)
         } catch {
+            // Слияние состояния и удаление дублей откатываются: иначе они
+            // тихо записались бы позже, а allPosts расходился бы с базой.
+            dataSource.rollback()
             crashManager.sendNonFatal(error)
             handleError(error, message: "Error removing duplicate posts")
         }
@@ -419,6 +427,18 @@ final class PostsViewModel: ObservableObject {
         }
     }
     
+    /// Применяет результат пайплайна фильтров: список после фильтров и поиска
+    /// и видимые из них посты — за один проход.
+    ///
+    /// Здесь, а не в PostsViewModel+Filtering.swift: `visiblePosts` —
+    /// `private(set)`, его сеттер доступен только в этом файле.
+    ///
+    /// - Parameter posts: Посты после фильтров, поиска и сортировки.
+    func applyFilteredPosts(_ posts: [Post]) {
+        filteredPosts = posts
+        visiblePosts = posts.filter { $0.status == .active && !$0.draft }
+    }
+
     /// Хранится ли ещё пост в базе — например, перед сохранением правок
     /// в форме, пока пост могли окончательно удалить на другом устройстве.
     ///

@@ -24,6 +24,8 @@ protocol NoticesDataSourceProtocol {
     func insert(_ notice: Notice)
     func delete(_ notice: Notice)
     func save() throws
+    /// Отменяет все несохранённые изменения — после неудачного `save()`.
+    func rollback()
 }
 
 

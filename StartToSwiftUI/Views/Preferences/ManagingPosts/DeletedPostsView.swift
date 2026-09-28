@@ -138,7 +138,7 @@ extension DeletedPostsView {
     let context = ModelContext(container)
     
     let hiddenPost = Post(title: "Hidden Post", intro: "Some intro", author: "Author")
-    hiddenPost.status = .hidden
+    hiddenPost.status = .deleted
     context.insert(hiddenPost)
     
     let deletedPost = Post(title: "Deleted Post", intro: "Some intro", author: "Author")

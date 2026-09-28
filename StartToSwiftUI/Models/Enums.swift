@@ -129,6 +129,10 @@ enum PostType: String, CaseIterable, Codable {
 
 enum StatusOptions: String, CaseIterable, Codable {
     case active
+    /// Устаревший статус (старая схема active → hidden → deleted). В базе его
+    /// больше нет; вариант оставлен только ради чтения старых JSON-бэкапов —
+    /// без него их декодирование упало бы. При восстановлении переводится в
+    /// `.deleted` (см. `PostMigrationHelper.convertFromCodable`).
     case hidden
     case deleted
     

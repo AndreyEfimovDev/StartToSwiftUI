@@ -63,7 +63,8 @@ struct PreferencesView: View {
                 shareBackup
                 restoreBackup
                 erasePosts
-                makeAllCuratedAvailable
+                // Отключено (см. комментарий у makeAllCuratedAvailable ниже).
+//                makeAllCuratedAvailable
             }
             Section(header: sectionHeader("Сommunication")){
                 acknowledgements
@@ -104,25 +105,6 @@ struct PreferencesView: View {
         return Text(text)
             .foregroundStyle(Color.mycolor.myAccent)
     }
-#warning("Delete this var before deployment to App Store")
-//    private var selectedCategory: some View {
-//        Group {
-//            if let list = vm.allCategories {
-//                CustomOneCapsulesLineSegmentedPicker(
-//                    selection: $vm.selectedCategory,
-//                    allItems: list,
-//                    titleForCase: { $0 },
-//                    selectedTextColor: Color.mycolor.myBackground,
-//                    unselectedTextColor: Color.mycolor.myAccent,
-//                    selectedBackground: Color.mycolor.myButtonBGBlue,
-//                    unselectedBackground: .clear,
-//                    showNilOption: true,
-//                    nilTitle: "All"
-//                )
-//                .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
-//            }
-//        }
-//    }
     
     // MARK: - Appearance
     
@@ -283,19 +265,24 @@ struct PreferencesView: View {
         }
     }
     
-    @ViewBuilder
-    private var makeAllCuratedAvailable: some View {
-        if let date = vm.appStateManager?.getLastDateOfPostsLoaded(),
-           date <= Date(timeIntervalSince1970: 1),
-           vm.hasCloudPosts,
-           !vm.hasPostsUpdate {
-            Button("Make all curated collection available") {
-                vm.appStateManager?.resetLastDateOfPostsLoaded()
-                vm.hasPostsUpdate = true
-            }
-            .customListRowStyle(iconName: "arrow.down.circle", iconWidth: iconSize)
-        }
-    }
+    // Отключено (аудит 2026-09-28, A15): кнопка показывалась, когда дата синка
+    // сброшена (1970), а посты из облака есть, и лишь включала кнопку "Check for
+    // materials update". Эту роль теперь выполняет фоновая проверка при запуске
+    // и pull-to-refresh (с датой 1970 она сама включает hasPostsUpdate), а сброс
+    // даты внутри был лишним — дата и так 1970. Оставлено закомментированным.
+//    @ViewBuilder
+//    private var makeAllCuratedAvailable: some View {
+//        if let date = vm.appStateManager?.getLastDateOfPostsLoaded(),
+//           date <= Date(timeIntervalSince1970: 1),
+//           vm.hasCloudPosts,
+//           !vm.hasPostsUpdate {
+//            Button("Make all curated collection available") {
+//                vm.appStateManager?.resetLastDateOfPostsLoaded()
+//                vm.hasPostsUpdate = true
+//            }
+//            .customListRowStyle(iconName: "arrow.down.circle", iconWidth: iconSize)
+//        }
+//    }
     
     // MARK: - Communication
     

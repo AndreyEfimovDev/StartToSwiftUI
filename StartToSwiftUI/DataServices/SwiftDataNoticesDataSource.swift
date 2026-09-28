@@ -35,4 +35,8 @@ final class SwiftDataNoticesDataSource: NoticesDataSourceProtocol {
     func save() throws {
         try modelContext.save()
     }
+
+    func rollback() {
+        modelContext.rollback()
+    }
 }

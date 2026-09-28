@@ -449,6 +449,20 @@ final class PostsViewModelTests: XCTestCase {
         XCTAssertEqual(deviceB.map(\.id), ["id-early"])
     }
 
+    /// Ошибка сохранения при очистке дублей откатывает слияние и удаления.
+    func testRemoveDuplicates_WhenSaveFails_RollsBack() {
+        let source = MockPostsDataSource(posts: [
+            Post(id: "dup", title: "Copy A", addedDateStamp: Date(timeIntervalSince1970: 1_000)),
+            Post(id: "dup", title: "Copy B", addedDateStamp: Date(timeIntervalSince1970: 2_000))
+        ])
+        source.shouldThrowOnSave = true
+        let testVM = PostsViewModel(dataSource: source, fbPostsManager: networkService, services: .make())
+
+        testVM.loadPostsFromSwiftData()
+
+        XCTAssertEqual(source.rollbackCallCount, 1)
+    }
+
     // MARK: - Erase All Posts
 
     /// Стирание очищает сам источник данных, а не только список в VM:
@@ -546,6 +560,33 @@ final class PostsViewModelTests: XCTestCase {
             2_500.001,
             accuracy: 0.000_1
         )
+    }
+
+    /// Сохранение новых постов не удалось: дата синка не сдвигается (иначе
+    /// следующий импорт эти посты больше не вернёт), кнопка обновления остаётся.
+    func testImport_WhenSaveFails_DoesNotAdvanceSyncDate() async {
+        // Given
+        let stateManager = MockAppSyncStateManager()
+        stateManager.stubbedLastDateOfPostsLoaded = Date(timeIntervalSince1970: 1_000)
+        let source = MockPostsDataSource(posts: [])
+        source.shouldThrowOnSave = true
+        let testVM = PostsViewModel(
+            dataSource: source,
+            appStateManager: stateManager,
+            fbPostsManager: MockFBPostsManager.mockPosts([
+                FBPostModel.mock(title: "New", date: Date(timeIntervalSince1970: 2_000))
+            ]),
+            services: .make()
+        )
+        testVM.hasPostsUpdate = true
+
+        // When
+        let success = await testVM.importPostsFromFirebase()
+
+        // Then
+        XCTAssertFalse(success)
+        XCTAssertNil(stateManager.savedLastDateOfPostsLoaded)
+        XCTAssertTrue(testVM.hasPostsUpdate)
     }
 
     func testImport_PostInSameSecondAfterImportedOne_IsStillNew() async throws {

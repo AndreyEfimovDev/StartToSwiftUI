@@ -17,6 +17,8 @@ final class MockNoticesDataSource: NoticesDataSourceProtocol {
     var saveCallCount = 0
     /// true — save() бросает ошибку (для тестов сценария "сохранение не удалось").
     var shouldThrowOnSave = false
+    /// Сколько раз вызван rollback() — тесты проверяют откат после ошибки сохранения.
+    var rollbackCallCount = 0
 
     init(notices: [Notice] = []) {
         self.storedNotices = notices
@@ -36,6 +38,9 @@ final class MockNoticesDataSource: NoticesDataSourceProtocol {
     func save() throws {
         saveCallCount += 1
         if shouldThrowOnSave { throw MockSaveError.saveFailed }
+    }
+    func rollback() {
+        rollbackCallCount += 1
     }
 
     enum MockSaveError: Error {

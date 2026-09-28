@@ -161,8 +161,71 @@ final class NoticeViewModelTests: XCTestCase {
         // When
         await vm.importNoticesFromFirebase()
 
-        // Then — дата не сдвинута, notices придут при следующем импорте
+        // Then — дата не сдвинута, вставка откатана — notices придут при следующем импорте
         XCTAssertNil(stateManager.savedLatestNoticeDate)
+        XCTAssertEqual(failingDataSource.rollbackCallCount, 1)
+    }
+
+    /// Отметка "прочитано" не запускает очистку дублей (она — только при
+    /// запуске и импорте).
+    func testToggleReadStatus_DoesNotRemoveDuplicates() {
+        // Given
+        let copyA = Notice(id: "dup", title: "Copy A", isRead: false)
+        let copyB = Notice(id: "dup", title: "Copy B", isRead: false)
+        let dataSource = MockNoticesDataSource(notices: [copyA, copyB])
+        let testVM = NoticesViewModel(
+            dataSource: dataSource,
+            fbNoticesManager: MockFBNoticesManager.mockEmpty(),
+            services: .make()
+        )
+
+        // When
+        testVM.toggleReadStatus(copyA)
+
+        // Then
+        XCTAssertTrue(dataSource.deletedNotices.isEmpty)
+        XCTAssertEqual(testVM.notices.count, 2)
+    }
+
+    /// Удаление notice удаляет только его, не трогая копии другого дубля.
+    func testDeleteErase_DoesNotRemoveOtherDuplicates() {
+        // Given
+        let copyA = Notice(id: "dup", title: "Copy A")
+        let copyB = Notice(id: "dup", title: "Copy B")
+        let other = Notice(id: "other", title: "Other")
+        let dataSource = MockNoticesDataSource(notices: [copyA, copyB, other])
+        let testVM = NoticesViewModel(
+            dataSource: dataSource,
+            fbNoticesManager: MockFBNoticesManager.mockEmpty(),
+            services: .make()
+        )
+
+        // When
+        testVM.deleteErase(other)
+
+        // Then
+        XCTAssertEqual(dataSource.deletedNotices.count, 1)
+        XCTAssertTrue(dataSource.deletedNotices.first === other)
+        XCTAssertEqual(testVM.notices.count, 2)
+    }
+
+    /// Ошибка сохранения отметки "прочитано" откатывает изменения.
+    func testToggleReadStatus_WhenSaveFails_RollsBack() {
+        // Given
+        let notice = Notice(id: "n1", title: "Notice", isRead: false)
+        let failingDataSource = MockNoticesDataSource(notices: [notice])
+        failingDataSource.shouldThrowOnSave = true
+        let testVM = NoticesViewModel(
+            dataSource: failingDataSource,
+            fbNoticesManager: MockFBNoticesManager.mockEmpty(),
+            services: .make()
+        )
+
+        // When
+        testVM.toggleReadStatus(notice)
+
+        // Then
+        XCTAssertEqual(failingDataSource.rollbackCallCount, 1)
     }
 
     func testImportNotices_WhenSaveSucceeds_AdvancesSyncDateToLatestNotice() async {
