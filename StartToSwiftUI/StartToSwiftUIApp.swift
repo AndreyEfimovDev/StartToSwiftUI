@@ -21,6 +21,13 @@ struct StartToSwiftUIApp: App {
     private enum Startup {
         case ready(container: ModelContainer, dependencies: AppDependencies)
         case failed // если контейнер SwiftData не создался
+        case unitTesting // приложение запущено как хост юнит-тестов
+    }
+
+    /// Приложение запущено как хост юнит-тестов (TEST_HOST): Xcode выставляет
+    /// эту переменную окружения при прогоне тестов.
+    static var isRunningUnitTests: Bool {
+        ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
     }
     
     private let startup: Startup
@@ -40,6 +47,16 @@ struct StartToSwiftUIApp: App {
         // чтобы тестовые события не попадали в прод-статистику.
         Analytics.setAnalyticsCollectionEnabled(false)
 #endif
+
+        // Под тестами приложение — только хост: тесты сами создают ViewModel с
+        // моками и контейнеры в памяти. Без этой ветки каждый прогон тестов
+        // поднимал бы настоящий контейнер (с CloudKit), StartView и его запросы
+        // в Firestore. FirebaseApp.configure() выше остаётся: тестам нужны
+        // менеджеры Crashlytics/Performance/Analytics из AppServiceDependencies.
+        if Self.isRunningUnitTests {
+            startup = .unitTesting
+            return
+        }
 
         let config = ModelConfiguration(
             schema: schema,
@@ -84,6 +101,8 @@ struct StartToSwiftUIApp: App {
                     }
             case .failed:
                 DatabaseErrorView()
+            case .unitTesting:
+                Color.clear
             }
         }
     }
@@ -142,7 +161,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(false)
 #endif
 
-        if DebugConfig.useRealServices {
+        // Под тестами пуши не регистрируем (см. StartToSwiftUIApp.isRunningUnitTests).
+        if DebugConfig.useRealServices && !StartToSwiftUIApp.isRunningUnitTests {
             // FCM delegate
             Messaging.messaging().delegate = self
 
