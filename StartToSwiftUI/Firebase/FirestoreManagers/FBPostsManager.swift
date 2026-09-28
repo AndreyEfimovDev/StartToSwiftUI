@@ -30,7 +30,10 @@ final class FBPostsManager: FBPostsManagerProtocol {
                 query = postsCollection // return all Firebase posts if date = nil
             }
 
-            let snapshot = try await query.getDocuments()
+            // Только сервер: без сети Firestore иначе молча отдал бы посты из
+            // локального кэша — импорт "успешен", дата синка сдвигается по
+            // возможно устаревшим данным, а "нет интернета" не показывается.
+            let snapshot = try await query.getDocuments(source: .server)
             let decoded = snapshot.documents.map { ($0.documentID, FBPostModel(document: $0)) }
             let posts = decoded.compactMap { $0.1 }
             let droppedIDs = decoded.filter { $0.1 == nil }.map { $0.0 }
@@ -56,10 +59,13 @@ final class FBPostsManager: FBPostsManagerProtocol {
             // валидные посты за ним остались бы незамеченными. Цена — кнопка
             // обновления может показываться, пока битый документ не исправят
             // (см. комментарий о дате синка в PostsViewModel+FBImport).
+            //
+            // Только сервер, как и в fetchFBPosts: из кэша без сети проверка
+            // ответила бы "обновлений нет", хотя проверить было нельзя.
             let snapshot = try await postsCollection
                 .whereField("date", isGreaterThan: Timestamp(date: date))
                 .limit(to: 1)
-                .getDocuments()
+                .getDocuments(source: .server)
             let hasPosts = !snapshot.documents.isEmpty
             log("🔍 Firebase: new posts available: \(hasPosts)", level: .info)
             return .success(hasPosts)
