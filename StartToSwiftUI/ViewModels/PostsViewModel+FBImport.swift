@@ -53,11 +53,11 @@ extension PostsViewModel {
             return false
 
         case .success(let fbResponse):
-            // Всё новое из облака забрано (или нового не оказалось) — кнопка
-            // "Check for materials update" больше не нужна.
-            hasPostsUpdate = false
             let fbResponseChecked = filterUniquePosts(from: fbResponse)
             guard !fbResponseChecked.isEmpty else {
+                // Нового не оказалось — кнопка "Check for materials update"
+                // больше не нужна.
+                hasPostsUpdate = false
                 hapticManager.impact(style: .light)
                 performanceManager.stopTrace(trace)
                 log("ℹ️ No new posts from \(sourceName)", level: .info)
@@ -88,8 +88,17 @@ extension PostsViewModel {
             for firebasePost in fbResponseChecked {
                 dataSource.insert(PostMigrationHelper.convertFromFirebase(firebasePost))
             }
-            saveContextAndReload()
-            
+            // Сохранение не прошло (вставленные посты уже откатаны, ошибку
+            // показал ErrorManager) — дату синка НЕ сдвигаем: иначе следующий
+            // запрос "date > курсора" эти посты больше не вернёт, и они
+            // потеряются. Кнопка обновления остаётся — новые посты всё ещё есть.
+            guard saveContextAndReload() else {
+                performanceManager.stopTrace(trace)
+                return false
+            }
+            // Всё новое из облака забрано — кнопка обновления больше не нужна.
+            hasPostsUpdate = false
+
             // Update last date of posts loaded from Firebase
             //
             // Дата считается по ВСЕМ успешно декодированным постам ответа

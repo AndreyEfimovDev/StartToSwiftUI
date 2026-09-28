@@ -548,6 +548,33 @@ final class PostsViewModelTests: XCTestCase {
         )
     }
 
+    /// Сохранение новых постов не удалось: дата синка не сдвигается (иначе
+    /// следующий импорт эти посты больше не вернёт), кнопка обновления остаётся.
+    func testImport_WhenSaveFails_DoesNotAdvanceSyncDate() async {
+        // Given
+        let stateManager = MockAppSyncStateManager()
+        stateManager.stubbedLastDateOfPostsLoaded = Date(timeIntervalSince1970: 1_000)
+        let source = MockPostsDataSource(posts: [])
+        source.shouldThrowOnSave = true
+        let testVM = PostsViewModel(
+            dataSource: source,
+            appStateManager: stateManager,
+            fbPostsManager: MockFBPostsManager.mockPosts([
+                FBPostModel.mock(title: "New", date: Date(timeIntervalSince1970: 2_000))
+            ]),
+            services: .make()
+        )
+        testVM.hasPostsUpdate = true
+
+        // When
+        let success = await testVM.importPostsFromFirebase()
+
+        // Then
+        XCTAssertFalse(success)
+        XCTAssertNil(stateManager.savedLastDateOfPostsLoaded)
+        XCTAssertTrue(testVM.hasPostsUpdate)
+    }
+
     func testImport_PostInSameSecondAfterImportedOne_IsStillNew() async throws {
         // Given — импортирован пост с датой 1500.3
         let stateManager = MockAppSyncStateManager()
