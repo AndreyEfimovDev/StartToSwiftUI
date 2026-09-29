@@ -116,10 +116,12 @@ final class UtilityTests: XCTestCase {
         XCTAssertNil(post.practicedDateStamp)
     }
     
+    @MainActor
     func testPostMigrationHelperWithPostDate() {
         // Given - Тест с установленной postDate
         let testDate = Date()
-        let postDate = testDate.addingTimeInterval(-86400) // Вчера
+        // Календарная дата (12:00 UTC) — при восстановлении не переводится.
+        let postDate = Date.calendarDate(year: 2026, month: 9, day: 27)
         
         let codablePost = CodablePost(
             id: "test-with-postdate",
@@ -195,6 +197,7 @@ final class UtilityTests: XCTestCase {
         XCTAssertEqual(post.postPlatform, .youtube)
     }
     
+    @MainActor
     func testPostMigrationHelperDateHandling() {
         // Given
         let testDate = Date(timeIntervalSince1970: 1642675200) // 2022-01-20
@@ -226,16 +229,16 @@ final class UtilityTests: XCTestCase {
         // When
         let post = PostMigrationHelper.convertFromCodable(codablePost)
         
-        // Then
+        // Then — postDate в старом формате переведён в календарную дату (своя
+        // запись — по календарю устройства), остальные даты скопированы как есть.
         XCTAssertNotNil(post.postDate)
-        XCTAssertEqual(post.postDate, testDate)
+        XCTAssertEqual(post.postDate, testDate.calendarDateNoonUTC(in: .current))
         XCTAssertNotNil(post.addedDateStamp)
         XCTAssertNotNil(post.startedDateStamp)
         XCTAssertNotNil(post.studiedDateStamp)
         XCTAssertNotNil(post.practicedDateStamp)
         
-        // Verify all dates are correctly copied
-        XCTAssertEqual(post.postDate, codablePost.postDate)
+        // Verify other dates are copied as is
         XCTAssertEqual(post.date, codablePost.date)
         XCTAssertEqual(post.addedDateStamp, codablePost.addedDateStamp)
         XCTAssertEqual(post.startedDateStamp, codablePost.startedDateStamp)
@@ -1051,6 +1054,72 @@ final class UtilityTests: XCTestCase {
         let date = try XCTUnwrap(Date.calendarDate(year: 2024, month: 2, day: 29))
 
         XCTAssertEqual(date.calendarDateNoonUTC(in: .calendarDate), date)
+    }
+
+    // MARK: - PostDateMigration
+
+    /// Календарь с заданным часовым поясом.
+    private func calendar(_ identifier: String) throws -> Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = try XCTUnwrap(TimeZone(identifier: identifier))
+        return calendar
+    }
+
+    /// Пост из облака: 01:08 по Москве (= 22:08 UTC накануне) → тот же день.
+    @MainActor
+    func test_normalizedPostDate_cloudPost_usesMoscowDay() throws {
+        let old = try XCTUnwrap(DateComponents(calendar: calendar("Europe/Moscow"), year: 2026, month: 4, day: 11, hour: 1, minute: 8).date)
+
+        XCTAssertEqual(PostDateMigration.normalizedPostDate(old, origin: .cloud), Date.calendarDate(year: 2026, month: 4, day: 11))
+        XCTAssertEqual(PostDateMigration.normalizedPostDate(old, origin: .cloudNew), Date.calendarDate(year: 2026, month: 4, day: 11))
+    }
+
+    /// Граница года: облачный пост от 1 января остаётся в своём году.
+    @MainActor
+    func test_normalizedPostDate_cloudPostOnNewYear_keepsYear() throws {
+        let old = try XCTUnwrap(DateComponents(calendar: calendar("Europe/Moscow"), year: 2025, month: 1, day: 1, hour: 1, minute: 8).date)
+
+        XCTAssertEqual(PostDateMigration.normalizedPostDate(old, origin: .cloud), Date.calendarDate(year: 2025, month: 1, day: 1))
+    }
+
+    /// Свой пост — день по календарю устройства.
+    @MainActor
+    func test_normalizedPostDate_localPost_usesDeviceDay() throws {
+        let newYork = try calendar("America/New_York")
+        // 10 марта 23:30 в Нью-Йорке = 11 марта по UTC.
+        let old = try XCTUnwrap(DateComponents(calendar: newYork, year: 2025, month: 3, day: 10, hour: 23, minute: 30).date)
+
+        XCTAssertEqual(
+            PostDateMigration.normalizedPostDate(old, origin: .local, localCalendar: newYork),
+            Date.calendarDate(year: 2025, month: 3, day: 10)
+        )
+    }
+
+    /// Уже календарная дата или даты нет — переводить нечего.
+    @MainActor
+    func test_normalizedPostDate_alreadyNewFormatOrNil_returnsNil() {
+        XCTAssertNil(PostDateMigration.normalizedPostDate(Date.calendarDate(year: 2026, month: 4, day: 11), origin: .cloud))
+        XCTAssertNil(PostDateMigration.normalizedPostDate(nil, origin: .local))
+    }
+
+    /// Восстановление старого бэкапа переводит дату поста из облака.
+    @MainActor
+    func test_convertFromCodable_oldFormatDate_isNormalized() throws {
+        let old = try XCTUnwrap(DateComponents(calendar: calendar("Europe/Moscow"), year: 2022, month: 5, day: 18, hour: 1, minute: 8).date)
+
+        let post = PostMigrationHelper.convertFromCodable(.mock(postDate: old, origin: .cloud))
+
+        XCTAssertEqual(post.postDate, Date.calendarDate(year: 2022, month: 5, day: 18))
+    }
+
+    /// Импорт из Firestore переводит дату в старом формате.
+    @MainActor
+    func test_convertFromFirebase_oldFormatDate_isNormalized() throws {
+        let old = try XCTUnwrap(DateComponents(calendar: calendar("Europe/Moscow"), year: 2022, month: 5, day: 18, hour: 1, minute: 8).date)
+
+        let post = PostMigrationHelper.convertFromFirebase(.mock(postDate: old))
+
+        XCTAssertEqual(post.postDate, Date.calendarDate(year: 2022, month: 5, day: 18))
     }
 
     // MARK: - Performance Tests

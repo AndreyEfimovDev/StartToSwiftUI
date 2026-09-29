@@ -15,6 +15,8 @@ final class MockPostsDataSource: PostsDataSourceProtocol {
     var shouldThrowOnSave = false
     /// Сколько раз вызван rollback() — тесты проверяют откат после ошибки сохранения.
     var rollbackCallCount = 0
+    /// Сколько раз вызван save() — тесты проверяют, что миграция не пишет лишнего.
+    var saveCallCount = 0
     
     init(posts: [Post] = PreviewData.samplePosts) {
         self.posts = posts
@@ -40,6 +42,7 @@ final class MockPostsDataSource: PostsDataSourceProtocol {
     }
     
     func save() throws {
+        saveCallCount += 1
         if shouldThrowOnSave {
             throw MockSaveError.saveFailed
         }
