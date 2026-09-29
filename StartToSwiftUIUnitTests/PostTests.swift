@@ -1043,4 +1043,70 @@ final class PostTests: XCTestCase {
         XCTAssertTrue(Post.isPreferredToKeep(a, over: b))
         XCTAssertFalse(Post.isPreferredToKeep(b, over: a))
     }
+
+    // MARK: - PostRowData Tests
+    // Строка списка получает снимок значений: изменения поста (в т. ч. пришедшие
+    // из iCloud) должны давать другой снимок, иначе строка не перерисуется.
+
+    @MainActor
+    func testPostRowData_CopiesDisplayedValues() {
+        let post = Post(
+            title: "Title",
+            studyLevel: .advanced,
+            progress: .studied,
+            favoriteChoice: .yes,
+            postRating: .great,
+            origin: .cloud,
+            draft: true
+        )
+
+        let data = PostRowData(post: post)
+
+        XCTAssertEqual(data.title, "Title")
+        XCTAssertEqual(data.studyLevel, .advanced)
+        XCTAssertEqual(data.progress, .studied)
+        XCTAssertEqual(data.favoriteChoice, .yes)
+        XCTAssertEqual(data.postRating, .great)
+        XCTAssertEqual(data.origin, .cloud)
+        XCTAssertTrue(data.isDraft)
+    }
+
+    @MainActor
+    func testPostRowData_Subtitle_JoinsCategoryDateAuthorAndType() {
+        let date = Date(timeIntervalSince1970: 1_700_000_000)
+        let post = Post(category: "Combine", author: "Author", postType: .course, postDate: date)
+
+        let data = PostRowData(post: post)
+
+        XCTAssertEqual(data.subtitle, "Combine, \(date.calendarDateText), @Author, \(PostType.course.displayName)")
+    }
+
+    @MainActor
+    func testPostRowData_Subtitle_OmitsMissingDateAndOtherType() {
+        let post = Post(category: "Combine", author: "Author", postType: .other, postDate: nil)
+
+        let data = PostRowData(post: post)
+
+        XCTAssertEqual(data.subtitle, "Combine, @Author")
+    }
+
+    @MainActor
+    func testPostRowData_ChangesWhenUserStateChanges() {
+        let post = Post(title: "Title")
+        let before = PostRowData(post: post)
+
+        post.favoriteChoice = .yes
+        XCTAssertNotEqual(PostRowData(post: post), before)
+
+        post.favoriteChoice = .no
+        post.postRating = .excellent
+        XCTAssertNotEqual(PostRowData(post: post), before)
+
+        post.postRating = nil
+        post.progress = .practiced
+        XCTAssertNotEqual(PostRowData(post: post), before)
+
+        post.progress = .added
+        XCTAssertEqual(PostRowData(post: post), before)
+    }
 }
