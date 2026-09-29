@@ -907,6 +907,45 @@ final class PostTests: XCTestCase {
         XCTAssertEqual(emptyKeep.notes, "Only here")
     }
 
+    @MainActor
+    func testMergeUserState_Origin_ViewedDuplicateMarksNewPostAsViewed() {
+        // Given — остаётся копия "новый", а в удаляемой пост уже открыли
+        let keep = Post(origin: .cloudNew)
+        let duplicate = Post(origin: .cloud)
+
+        // When
+        keep.mergeUserState(from: duplicate)
+
+        // Then — отметка о просмотре не теряется
+        XCTAssertEqual(keep.origin, .cloud)
+    }
+
+    @MainActor
+    func testMergeUserState_Origin_ViewedKeepStaysViewed() {
+        // Given — остающаяся копия уже просмотрена
+        let keep = Post(origin: .cloud)
+        let duplicate = Post(origin: .cloudNew)
+
+        // When
+        keep.mergeUserState(from: duplicate)
+
+        // Then
+        XCTAssertEqual(keep.origin, .cloud)
+    }
+
+    @MainActor
+    func testMergeUserState_Origin_BothNewStaysNew() {
+        // Given — пост не открывали ни в одной копии
+        let keep = Post(origin: .cloudNew)
+        let duplicate = Post(origin: .cloudNew)
+
+        // When
+        keep.mergeUserState(from: duplicate)
+
+        // Then
+        XCTAssertEqual(keep.origin, .cloudNew)
+    }
+
     // MARK: - applyStudyProgress(_:at:) Tests
     // Метки этапов накопительные: пропущенные ранние этапы получают дату
     // следующего, существующие даты не перезаписываются, откат обнуляет поздние.

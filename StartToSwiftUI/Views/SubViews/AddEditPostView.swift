@@ -159,13 +159,6 @@ struct AddEditPostView: View {
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
-            CircleStrokeButtonView(iconName: "checkmark", isShownCircle: false) {
-                handleSave()
-            }
-            .disabled(isShowingExitConfirmation)
-        }
-        
-        ToolbarItem(placement: .topBarTrailing) {
             CircleStrokeButtonView(
                 iconName: "xmark",
                 imageColorPrimary: Color.mycolor.myRed,
@@ -175,6 +168,14 @@ struct AddEditPostView: View {
             }
             .disabled(isShowingExitConfirmation)
         }
+
+        ToolbarItem(placement: .topBarTrailing) {
+            CircleStrokeButtonView(iconName: "checkmark", imageColorPrimary: Color.mycolor.myBlue, isShownCircle: false) {
+                handleSave()
+            }
+            .disabled(isShowingExitConfirmation)
+        }
+        
     }
 
     // MARK: - Actions
