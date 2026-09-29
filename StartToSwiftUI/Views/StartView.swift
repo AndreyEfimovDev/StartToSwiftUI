@@ -18,6 +18,7 @@ struct StartView: View {
     @ObservedObject private var coordinator: AppCoordinator
     @ObservedObject private var errorManager: ErrorManager
     private let appStoreService: AppStoreServiceProtocol
+    private let storefrontService: StorefrontProviding
     private let remoteConfigService: RemoteConfigServiceProtocol
 
     init(dependencies: AppDependencies) {
@@ -27,6 +28,7 @@ struct StartView: View {
         _coordinator = ObservedObject(wrappedValue: dependencies.coordinator)
         _errorManager = ObservedObject(wrappedValue: dependencies.services.errorManager)
         appStoreService = dependencies.appStoreService
+        storefrontService = dependencies.storefrontService
         remoteConfigService = dependencies.remoteConfigService
         // Сохранённая секция — сразу, а не только в .task: иначе первый кадр
         // строит Materials, даже если последней была открыта Snippets
@@ -94,6 +96,7 @@ struct StartView: View {
         .environmentObject(coordinator)
         .environmentObject(errorManager)
         .environment(\.appStoreService, appStoreService)
+        .environment(\.storefrontService, storefrontService)
         .environment(\.remoteConfigService, remoteConfigService)
     }
     
@@ -255,6 +258,7 @@ struct StartView: View {
         appStateManager: stateManager,
         services: services,
         appStoreService: MockAppStoreService(),
+        storefrontService: MockStorefrontService(),
         remoteConfigService: MockRemoteConfigService(),
         postsViewModel: postsVM,
         noticesViewModel: NoticesViewModel(dataSource: MockNoticesDataSource(), fbNoticesManager: MockFBNoticesManager(), services: services),

@@ -111,7 +111,7 @@ extension DeletedPostsView {
     @ViewBuilder
     private var deletedPostsSection: some View {
         ForEach(deletedPosts) { post in
-            PostRowView(post: post)
+            PostRowView(data: PostRowData(post: post))
                 .swipeActions(edge: .trailing) {
                     Button("Erase", systemImage: "trash") { // xmark.bin
                         selectedPostToDelete = post
