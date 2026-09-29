@@ -1122,6 +1122,32 @@ final class UtilityTests: XCTestCase {
         XCTAssertEqual(post.postDate, Date.calendarDate(year: 2022, month: 5, day: 18))
     }
 
+    // MARK: - SupportAvailability
+
+    /// Внешние ссылки на оплату разрешены только в витрине США.
+    @MainActor
+    func test_supportAvailability_onlyUSStorefront() {
+        XCTAssertTrue(SupportAvailability.isAllowed(countryCode: "USA"))
+        XCTAssertFalse(SupportAvailability.isAllowed(countryCode: "RUS"))
+        XCTAssertFalse(SupportAvailability.isAllowed(countryCode: "DEU"))
+        XCTAssertFalse(SupportAvailability.isAllowed(countryCode: "KAZ"))
+    }
+
+    /// Витрину узнать не удалось — экран не показываем.
+    @MainActor
+    func test_supportAvailability_unknownStorefront_isNotAllowed() {
+        XCTAssertFalse(SupportAvailability.isAllowed(countryCode: nil))
+    }
+
+    /// В витрине США показывается один способ — карта через Buy Me a Coffee.
+    @MainActor
+    func test_supportOptions_onlyBuyMeACoffee() {
+        let options = SupportOption.all(remoteConfig: MockRemoteConfigService())
+
+        XCTAssertEqual(options.map(\.id), ["foreign"])
+        XCTAssertEqual(options.first?.urlString, Secrets.buyMeACoffeeURL)
+    }
+
     // MARK: - Performance Tests
     
     func testPostMigrationPerformance() {

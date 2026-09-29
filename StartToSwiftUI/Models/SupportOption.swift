@@ -25,24 +25,27 @@ extension SupportOption {
         [
             SupportOption(
                 id: "foreign",
-                title: "Foreign card",
-                subtitle: "Buy Me a Coffee",
-                icon: "globe",
+                title: "Buy Me a Coffee",
+                subtitle: "Card payment",
+                icon: "creditcard",
                 urlString: remoteConfig.string(
                     forKey: .foreignSupportURL,
                     default: Secrets.buyMeACoffeeURL
                 )
-            ),
-            SupportOption(
-                id: "ru",
-                title: "RU card / SBP",
-                subtitle: "CloudTips",
-                icon: "creditcard",
-                urlString: remoteConfig.string(
-                    forKey: .russianSupportURL,
-                    default: Secrets.cloudTipsURL
-                )
             )
+            // Скрыто, пока экран показывается только в витрине App Store США
+            // (см. SupportAvailability): российская карта там не нужна. Ключ
+            // Remote Config и Secrets.cloudTipsURL оставлены, чтобы вернуть.
+//            SupportOption(
+//                id: "ru",
+//                title: "RU card / SBP",
+//                subtitle: "CloudTips",
+//                icon: "creditcard",
+//                urlString: remoteConfig.string(
+//                    forKey: .russianSupportURL,
+//                    default: Secrets.cloudTipsURL
+//                )
+//            )
         ]
     }
 }

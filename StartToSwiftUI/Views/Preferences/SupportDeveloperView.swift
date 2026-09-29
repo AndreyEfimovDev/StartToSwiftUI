@@ -81,7 +81,8 @@ struct SupportDeveloperView: View {
                 .customListRowStyle(iconName: option.icon, iconWidth: iconWidth)
             }
         } footer: {
-            Text("Opens in Safari and is handled by the selected service outside of the app.")
+            // Сейчас способ один (см. SupportOption.all) — называем сервис явно.
+            Text("Opens in Safari. The payment is handled by Buy Me a Coffee outside of the app.")
         }
     }
 
