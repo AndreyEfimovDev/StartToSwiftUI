@@ -463,6 +463,43 @@ final class PostsViewModelTests: XCTestCase {
         XCTAssertEqual(source.rollbackCallCount, 1)
     }
 
+    // MARK: - postDate migration
+
+    /// Дата облачного поста в старом формате: 01:08 по Москве.
+    private func oldFormatCloudDate() throws -> Date {
+        var moscow = Calendar(identifier: .gregorian)
+        moscow.timeZone = try XCTUnwrap(TimeZone(identifier: "Europe/Moscow"))
+        return try XCTUnwrap(DateComponents(calendar: moscow, year: 2026, month: 4, day: 11, hour: 1, minute: 8).date)
+    }
+
+    /// Загрузка переводит даты старого формата и сохраняет; повторная — ничего не пишет.
+    func testLoadPosts_MigratesOldPostDates_OnlyOnce() throws {
+        let post = Post(title: "Old", postDate: try oldFormatCloudDate(), origin: .cloud)
+        let source = MockPostsDataSource(posts: [post])
+        let testVM = PostsViewModel(dataSource: source, fbPostsManager: networkService, services: .make())
+
+        testVM.loadPostsFromSwiftData(removeDuplicates: false)
+
+        XCTAssertEqual(post.postDate, Date.calendarDate(year: 2026, month: 4, day: 11))
+        XCTAssertEqual(source.saveCallCount, 1)
+
+        testVM.loadPostsFromSwiftData(removeDuplicates: false)
+
+        XCTAssertEqual(source.saveCallCount, 1, "Повторная загрузка не должна ничего сохранять")
+    }
+
+    /// Ошибка сохранения миграции — откат, без рекурсии (тест просто завершается).
+    func testLoadPosts_DateMigrationSaveFails_RollsBackWithoutRecursion() throws {
+        let post = Post(title: "Old", postDate: try oldFormatCloudDate(), origin: .cloud)
+        let source = MockPostsDataSource(posts: [post])
+        source.shouldThrowOnSave = true
+        let testVM = PostsViewModel(dataSource: source, fbPostsManager: networkService, services: .make())
+
+        testVM.loadPostsFromSwiftData(removeDuplicates: false)
+
+        XCTAssertEqual(source.rollbackCallCount, 1)
+    }
+
     // MARK: - Erase All Posts
 
     /// Стирание очищает сам источник данных, а не только список в VM:

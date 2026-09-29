@@ -317,6 +317,49 @@ extension Post {
     }
 }
 
+// MARK: - postDate migration (moment → calendar date)
+
+/// Перевод `postDate` из старого формата (момент времени) в календарную дату
+/// (12:00 UTC дня) — договорённость, введённая в версии 1.8.0 (см. Date.calendarDate).
+enum PostDateMigration {
+
+    /// Календарь, в котором задавались даты постов из облака: DevData
+    /// создавались через `Date.from` (01:08 по времени устройства) в Москве.
+    static let curatedAuthoringCalendar: Calendar = {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "Europe/Moscow") ?? .gmt
+        return calendar
+    }()
+
+    /// Дата в новом формате, если `date` ещё в старом.
+    ///
+    /// - Parameters:
+    ///   - date: Текущее значение `postDate`.
+    ///   - origin: Откуда пост: у постов из облака день берётся по Москве (где
+    ///     их задавали), у своих — по календарю устройства (этот день
+    ///     пользователь и видел раньше).
+    ///   - localCalendar: Календарь устройства — параметр для тестов.
+    /// - Returns: 12:00 UTC того же календарного дня; `nil`, если даты нет или
+    ///   она уже в новом формате — переводить нечего (поэтому перевод можно
+    ///   безопасно повторять).
+    static func normalizedPostDate(
+        _ date: Date?,
+        origin: OriginOptions,
+        localCalendar: Calendar = .current
+    ) -> Date? {
+        guard let date else { return nil }
+        // Уже календарная дата (ровно 12:00 UTC) — не трогаем.
+        guard date != date.calendarDateNoonUTC(in: .calendarDate) else { return nil }
+
+        let sourceCalendar: Calendar
+        switch origin {
+        case .cloud, .cloudNew: sourceCalendar = curatedAuthoringCalendar
+        case .local: sourceCalendar = localCalendar
+        }
+        return date.calendarDateNoonUTC(in: sourceCalendar)
+    }
+}
+
 // MARK: Converts JSON codable post to a SwiftData post
 
 struct PostMigrationHelper {
@@ -330,7 +373,9 @@ struct PostMigrationHelper {
             postType: codablePost.postType,
             urlString: codablePost.urlString,
             postPlatform: codablePost.postPlatform,
-            postDate: codablePost.postDate,
+            // Старые бэкапы хранят postDate в прежнем формате — переводим.
+            postDate: PostDateMigration.normalizedPostDate(codablePost.postDate, origin: codablePost.origin)
+                ?? codablePost.postDate,
             studyLevel: codablePost.studyLevel,
             progress: codablePost.progress,
             favoriteChoice: codablePost.favoriteChoice,
@@ -359,7 +404,9 @@ struct PostMigrationHelper {
             postType: fbPost.postType,
             urlString: fbPost.urlString,
             postPlatform: fbPost.postPlatform,
-            postDate: fbPost.postDate,
+            // Страховка на случай документа Firestore со старым форматом даты.
+            postDate: PostDateMigration.normalizedPostDate(fbPost.postDate, origin: .cloud)
+                ?? fbPost.postDate,
             studyLevel: fbPost.studyLevel,
             progress: .added, // default value
             favoriteChoice: .no, // default value

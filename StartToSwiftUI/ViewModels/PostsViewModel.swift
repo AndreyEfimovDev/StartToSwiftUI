@@ -235,6 +235,7 @@ final class PostsViewModel: ObservableObject {
             if removeDuplicates {
                 removeDuplicatePosts()
             }
+            migratePostDatesIfNeeded()
             
             crashManager.addLog("loadPostsFromSwiftData: posts count after check for duplicates: \(allPosts.count)")
             allYears = getAllYears()
@@ -248,6 +249,38 @@ final class PostsViewModel: ObservableObject {
             handleError(error, message: "Error loading data")
         }
         performanceManager.stopTrace(trace)
+    }
+
+    /// Переводит `postDate` сохранённых постов из старого формата (момент) в
+    /// календарную дату — для тех, кто обновился с версии до 1.8.0, и для
+    /// постов, пришедших через iCloud с устройства со старой версией.
+    ///
+    /// Сохраняет напрямую, а не через saveContextAndReload: после ошибки тот
+    /// перезагружает посты, а загрузка снова вызывала бы миграцию — рекурсия
+    /// (как было с миграцией hidden, A3). При ошибке изменения откатываются,
+    /// миграция повторится при следующей загрузке. Когда все даты уже в новом
+    /// формате, ничего не пишет.
+    private func migratePostDatesIfNeeded() {
+        var migratedCount = 0
+        for post in allPosts {
+            if let newDate = PostDateMigration.normalizedPostDate(post.postDate, origin: post.origin) {
+                post.postDate = newDate
+                migratedCount += 1
+            }
+        }
+        guard migratedCount > 0 else { return }
+
+        do {
+            try dataSource.save()
+            // Перечитываем, чтобы пайплайн фильтров пересчитал годы и сортировку.
+            allPosts = try dataSource.fetchPosts()
+            log("📅 Migrated postDate of \(migratedCount) posts to calendar date", level: .info)
+        } catch {
+            // Миграция невидима пользователю — без алерта: только откат и отчёт.
+            dataSource.rollback()
+            crashManager.sendNonFatal(error)
+            log("📅 postDate migration failed: \(error)", level: .error)
+        }
     }
 
     /// Remove Duplicate Posts
