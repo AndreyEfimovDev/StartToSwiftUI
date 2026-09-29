@@ -90,28 +90,12 @@ struct ImportPostsFromCloudView: View {
     }
     
     private func importFromCloud() async {
-#warning("Clean this func from loadDevData() before deployment to App Store")
-
-        // Download local DevData (for internal use)
-        // Uncomment this part when you need to load DevData
-//        loadDevData()
-       
         // Download from the cloud (main stream)
         // Comment out this part when using DevData
         await loadFromCloudService()
         
     }
 
-#warning("Delete this func loadDevData() before deployment to App Store")
-
-    /// Loading DevData (for internal use, to generate JSON file for cloud)
-    private func loadDevData() {
-        importedCount = vm.loadDevData()
-        isInProgress = false
-        isLoaded = true
-        hapticManager.notification(type: .success)
-    }
-    
     /// Downloading from a cloud service
     private func loadFromCloudService() async {
         let success = await vm.importPostsFromFirebase()

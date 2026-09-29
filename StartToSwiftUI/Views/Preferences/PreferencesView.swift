@@ -21,26 +21,6 @@ struct PreferencesView: View {
     // MARK: - Body
     var body: some View {
         Form {
-#warning("Delete this button before deployment to App Store")
-#if DEBUG
-//                Button {
-//                    Task {
-//                        await FBAdminUploader.uploadDevDataPosts()
-//                    }
-//                } label: {
-//                    Text("Upload DevData to Firebase")
-//                        .font(.headline)
-//                        .foregroundStyle(Color.mycolor.myAccent)
-//                        .frame(maxWidth: .infinity)
-//                        .frame(height: 55)
-//                        .background(Color.mycolor.myRed.opacity(0.3))
-//                        .cornerRadius(30)
-//                }
-//            Button("Reset lastNoticesFBUpdateDate", systemImage: "arrow.counterclockwise") {
-//                noticevm.resetLatestNoticeDate()
-//            }
-
-#endif
             Section(header: sectionHeader("Appearance")) {
                 themeAppearance
             }
