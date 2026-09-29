@@ -14,6 +14,11 @@ struct PreferencesView: View {
     @EnvironmentObject private var vm: PostsViewModel
     @EnvironmentObject private var noticevm: NoticesViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
+    @Environment(\.storefrontService) private var storefrontService
+
+    /// Показывать ли "Support the Developer" — только в витрине США
+    /// (см. SupportAvailability). До ответа StoreKit строка скрыта.
+    @State private var isSupportAvailable = false
     
     // MARK: - Constants
     let iconSize: CGFloat = 18
@@ -61,7 +66,6 @@ struct PreferencesView: View {
                 shareBackup
                 restoreBackup
                 erasePosts
-                // Отключено (см. комментарий у makeAllCuratedAvailable ниже).
                 makeAllCuratedAvailable
             }
             Section(header: sectionHeader("Сommunication")){
@@ -69,7 +73,9 @@ struct PreferencesView: View {
                 aboutApplication
                 legalInformation
                 contactDeveloperButton
-                supportDeveloperButton
+                if isSupportAvailable {
+                    supportDeveloperButton
+                }
             }
         }
         .foregroundStyle(Color.mycolor.myAccent)
@@ -82,6 +88,10 @@ struct PreferencesView: View {
         .preferredColorScheme(vm.selectedTheme.colorScheme)
         .onAppear {
             vm.analyticsManager.logScreen(name: "PreferencesView")
+        }
+        .task {
+            let countryCode = await storefrontService.currentCountryCode()
+            isSupportAvailable = SupportAvailability.isAllowed(countryCode: countryCode)
         }
     }
     

@@ -16,7 +16,7 @@ struct WhatsNews {
                 News(
                     title: "New",
                     newsText: """
-                    - Support the Developer: an optional way to support the app's development. StartToSwiftUI stays free — nothing is locked or unlocked. Links open in Safari.
+                    - Support the Developer (on the U.S. App Store): an optional way to support the app's development. StartToSwiftUI stays free — nothing is locked or unlocked. Links open in Safari.
                     """
                 ),
                 News(

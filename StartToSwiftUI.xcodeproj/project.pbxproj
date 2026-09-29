@@ -144,6 +144,7 @@
 		47939D792F4F2CDE00CBE432 /* DateFormater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47939D782F4F2CDE00CBE432 /* DateFormater.swift */; };
 		47939D802F50591B00CBE432 /* MockFBPostsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47939D7A2F50540800CBE432 /* MockFBPostsManager.swift */; };
 		47939D812F50592100CBE432 /* MockFBNoticesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47939D7C2F50542A00CBE432 /* MockFBNoticesManager.swift */; };
+		479D8208306BBFB500C85D45 /* StorefrontService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479D8207306BBFB500C85D45 /* StorefrontService.swift */; };
 		47A331732F2761F9002883DD /* WidgetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A331722F2761F9002883DD /* WidgetData.swift */; };
 		47A3317B2F27672F002883DD /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47A3317A2F27672D002883DD /* WidgetKit.framework */; };
 		47A3317D2F27672F002883DD /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47A3317C2F27672F002883DD /* SwiftUI.framework */; };
@@ -380,6 +381,7 @@
 		47939D782F4F2CDE00CBE432 /* DateFormater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormater.swift; sourceTree = "<group>"; };
 		47939D7A2F50540800CBE432 /* MockFBPostsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFBPostsManager.swift; sourceTree = "<group>"; };
 		47939D7C2F50542A00CBE432 /* MockFBNoticesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFBNoticesManager.swift; sourceTree = "<group>"; };
+		479D8207306BBFB500C85D45 /* StorefrontService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorefrontService.swift; sourceTree = "<group>"; };
 		47A3316C2F276123002883DD /* StudyProgressWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyProgressWidget.swift; sourceTree = "<group>"; };
 		47A331722F2761F9002883DD /* WidgetData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetData.swift; sourceTree = "<group>"; };
 		47A331782F27672D002883DD /* StudyProgressWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = StudyProgressWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -830,6 +832,7 @@
 				47B6E7E22F5B0B2D00EF7441 /* AppStoreService.swift */,
 				47BB9FE1306A8E21005D034C /* NetworkMonitor.swift */,
 				474F70752F6484E40010F09D /* ErrorManager.swift */,
+				479D8207306BBFB500C85D45 /* StorefrontService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1376,6 +1379,7 @@
 				478DBED22F7002C30097FC8A /* SnippetDemoHeader.swift in Sources */,
 				474638092F6732EA00DF011B /* ContextMenu.swift in Sources */,
 				47069F002EAFF6210082AE12 /* LaunchView.swift in Sources */,
+				479D8208306BBFB500C85D45 /* StorefrontService.swift in Sources */,
 				B88B983320EC397FDF2A7D00 /* DatabaseErrorView.swift in Sources */,
 				47BB9FDB3065C686005D034C /* MockAppStoreService.swift in Sources */,
 				471DCBD62EBBAD9700AFA5F4 /* AboutApp.swift in Sources */,
