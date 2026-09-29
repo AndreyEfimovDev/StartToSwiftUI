@@ -114,7 +114,7 @@ struct MaterialsHomeView: View {
     private var iPhoneListContent: some View {
         List {
             ForEach(postsToDisplay) { post in
-                PostRowView(post: post)
+                PostRowView(data: PostRowData(post: post))
                     .id(post.id)
                     .background(.black.opacity(0.001))
                     .shimmerWave(enabled: vm.shimmerWaveEnabled && post.origin == .cloudNew)
@@ -156,7 +156,7 @@ struct MaterialsHomeView: View {
 
     private var iPadListContent: some View {
         List(postsToDisplay, selection: $selectedPostID) { post in
-            PostRowView(post: post)
+            PostRowView(data: PostRowData(post: post))
                 .id(post.id)
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 .shimmerWave(enabled: vm.shimmerWaveEnabled && post.origin == .cloudNew)
