@@ -14,6 +14,12 @@ struct WhatsNews {
             release: "Release 1.8.0(11)",
             news: [
                 News(
+                    title: "New",
+                    newsText: """
+                    - Support the Developer: an optional way to support the app's development. StartToSwiftUI stays free — nothing is locked or unlocked. Links open in Safari.
+                    """
+                ),
+                News(
                     title: "New Code Snippets",
                     newsText: """
                     - B001: Liquid Glass Playground — hands-on tour of iOS 26's Liquid Glass material
@@ -29,12 +35,14 @@ struct WhatsNews {
                     newsText: """
                     - UI/UX adaptation for iPad
                     - The application's stability and performance
+                    - More reliable sync of materials, progress and favorites between devices
                     """
                 ),
                 News(
                     title: "Fixed",
                     newsText: """
                     - Flickering in A006 BottomRight
+                    - Material publication dates now show the same day in any time zone
                     """
                 )
 
