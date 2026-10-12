@@ -29,6 +29,7 @@ struct WhatsNews {
                     - UI/UX adaptation for iPad
                     - The application's stability and performance
                     - More reliable sync of materials, progress and favorites between devices
+                    - Favorites are now marked with a heart icon instead of a star
                     """
                 ),
                 News(
