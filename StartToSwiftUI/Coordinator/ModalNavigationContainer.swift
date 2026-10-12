@@ -82,8 +82,6 @@ struct ModalNavigationContainer: View {
             Functionality()
         case .whatIsNew:
             WhatsNewView()
-        case .supportDeveloper:
-            SupportDeveloperView()
 
         case .legalInfo:
             LegalInformationView()
