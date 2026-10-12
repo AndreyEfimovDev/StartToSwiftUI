@@ -14,12 +14,6 @@ struct WhatsNews {
             release: "Release 1.8.0(11)",
             news: [
                 News(
-                    title: "New",
-                    newsText: """
-                    - Support the Developer (on the U.S. App Store): a voluntary way to support the app's development. StartToSwiftUI stays free — nothing is locked or unlocked. Links open in Safari.
-                    """
-                ),
-                News(
                     title: "New Code Snippets",
                     newsText: """
                     - B001: Liquid Glass Playground — hands-on tour of iOS 26's Liquid Glass material
