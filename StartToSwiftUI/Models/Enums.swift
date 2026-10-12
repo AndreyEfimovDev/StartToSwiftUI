@@ -178,9 +178,9 @@ enum FavoriteChoice: String, CaseIterable, Codable {
     }
 
     var icon: Image {
-        switch self {
-        case .yes: return Image(systemName: "star")
-        case .no: return Image(systemName: "star.slash")
+        switch self { // "star.slash" : "star"
+        case .yes: return Image(systemName: "heart")
+        case .no: return Image(systemName: "heart.fill")
         }
     }
     

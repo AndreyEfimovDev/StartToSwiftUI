@@ -85,7 +85,7 @@ struct SnippetRowView: View {
                 }
             Spacer()
             if isFavorite {
-                Image(systemName: "star.fill")
+                Image(systemName: "heart.fill")
                     .foregroundStyle(Color.mycolor.myYellow)
             }
         }
