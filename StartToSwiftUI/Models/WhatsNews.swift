@@ -10,7 +10,7 @@ import SwiftUI
 struct WhatsNews {
     static let releases: [Release] = [
         Release(
-            release: "Release 1.8.0(11)",
+            release: "Release 1.8.0(13)",
             news: [
                 News(
                     title: "New Code Snippets",
