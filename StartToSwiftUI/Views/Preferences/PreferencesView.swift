@@ -53,9 +53,6 @@ struct PreferencesView: View {
                 aboutApplication
                 legalInformation
                 contactDeveloperButton
-                if isSupportAvailable {
-                    supportDeveloperButton
-                }
             }
         }
         .foregroundStyle(Color.mycolor.myAccent)
@@ -309,16 +306,6 @@ struct PreferencesView: View {
         }
         .customListRowStyle(
             iconName: "envelope",
-            iconWidth: iconSize
-        )
-    }
-
-    private var supportDeveloperButton: some View {
-        Button("Support the Developer") {
-            coordinator.pushModal(.supportDeveloper)
-        }
-        .customListRowStyle(
-            iconName: "cup.and.saucer",
             iconWidth: iconSize
         )
     }

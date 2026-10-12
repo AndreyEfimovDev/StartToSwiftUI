@@ -18,8 +18,6 @@ struct AppDependencies {
     let appStateManager: AppSyncStateManager
     let services: AppServiceDependencies
     let appStoreService: AppStoreServiceProtocol
-    let storefrontService: StorefrontProviding
-    let remoteConfigService: RemoteConfigServiceProtocol
     let postsViewModel: PostsViewModel
     let noticesViewModel: NoticesViewModel
     let snippetsViewModel: SnippetsViewModel
@@ -53,8 +51,6 @@ struct AppDependencies {
             appStateManager: stateManager,
             services: services,
             appStoreService: AppStoreService(),
-            storefrontService: StorefrontService(),
-            remoteConfigService: RemoteConfigService(),
             postsViewModel: PostsViewModel(
                 modelContext: modelContext,
                 appStateManager: stateManager,
