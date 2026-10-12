@@ -165,7 +165,7 @@ struct SnippetsHomeView: View {
     private func leadingSwipeActions(for snippet: CodeSnippet) -> some View {
         Button(
             snippetvm.isFavorite(snippet) ? "Unmark" : "Mark",
-            systemImage: snippetvm.isFavorite(snippet) ? "star.slash" : "star"
+            systemImage: snippetvm.isFavorite(snippet) ? "heart.fill" : "heart"
         ) {
             snippetvm.favoriteToggle(snippet)
         }
