@@ -15,3 +15,6 @@ GoogleService-Info.plist
 
 # Claude Code worktrees
 .claude/worktrees/
+
+# Сгенерированные App Store ассеты (пересоздаются скриптом AppStoreAssets/make_creative_asset.py)
+AppStoreAssets/out/
