@@ -11,7 +11,7 @@ struct WhatsNews {
 #warning("Add upated info before deployment to App Store")
     static let releases: [Release] = [
         Release(
-            release: "Release 1.8.0(11)",
+            release: "Release 1.8.0(13)",
             news: [
                 News(
                     title: "New Code Snippets",
@@ -30,6 +30,7 @@ struct WhatsNews {
                     - UI/UX adaptation for iPad
                     - The application's stability and performance
                     - More reliable sync of materials, progress and favorites between devices
+                    - Favorites are now marked with a heart icon instead of a star
                     """
                 ),
                 News(
