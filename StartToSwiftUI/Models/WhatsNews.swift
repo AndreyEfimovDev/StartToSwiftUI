@@ -11,6 +11,29 @@ struct WhatsNews {
 #warning("Add upated info before deployment to App Store")
     static let releases: [Release] = [
         Release(
+            release: "Release 1.9.0(14)",
+            news: [
+                News(
+                    title: "New Code Snippets",
+                    newsText: """
+                    - B007: 3D Charts Explorer — Swift Charts in 3D: a surface plot and a point cloud you can rotate with a drag, with preset angles and perspective/orthographic projection
+                    """
+                ),
+                News(
+                    title: "Improved",
+                    newsText: """
+                    """
+                ),
+                News(
+                    title: "Fixed",
+                    newsText: """
+                    """
+                )
+
+            ]
+        ),
+        
+        Release(
             release: "Release 1.8.0(13)",
             news: [
                 News(

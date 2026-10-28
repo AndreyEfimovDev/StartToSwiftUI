@@ -82,6 +82,13 @@ struct SnippetViewRegistry {
                 SnippetUnavailableView(snippet: snippet)
             }
 
+        case "B007":
+            if #available(iOS 26.0, *) {
+                B007_Charts3DExplorerDemoView(snippet: snippet)
+            } else {
+                SnippetUnavailableView(snippet: snippet)
+            }
+
         default: SnippetNoPreviewView(snippet: snippet)
         }
     }

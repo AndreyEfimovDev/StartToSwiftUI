@@ -13,6 +13,29 @@
 import SwiftUI
 
 
+// MARK: - B007 3D Charts Explorer
+@available(iOS 26.0, *)
+struct B007_Charts3DExplorerDemoView: View {
+    let snippet: CodeSnippet
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+
+            B007_Charts3DExplorerDemo()
+                .frame(maxHeight: .infinity)
+                .padding(.horizontal)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
+
 // MARK: - B006 Immersive Hero Header
 //
 // backgroundExtensionEffect() only has something to bleed into when the hero
