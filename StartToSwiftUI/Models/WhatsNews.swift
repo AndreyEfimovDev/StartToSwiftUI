@@ -30,13 +30,7 @@ struct WhatsNews {
                     title: "Improved",
                     newsText: """
                     """
-                ),
-                News(
-                    title: "Fixed",
-                    newsText: """
-                    """
                 )
-
             ]
         ),
         

@@ -18,7 +18,6 @@ struct PostsFilterView: View {
     
     // MARK: Constants
 
-    let selectedFont: Font = .caption.bold()
     let opacityBackground: Double = 0.10
     
     // MARK: Variables
@@ -27,39 +26,26 @@ struct PostsFilterView: View {
     // MARK: Body
     
     var body: some View {
-        VStack (spacing: 0) {
-            Text("Filters")
-                .font(.largeTitle)
-                .padding(.top, 35)
-
-            // Filters section
-                VStack(spacing: 0) {
+        FiltersSheetLayout(
+            onApply: applyFilters,
+            onReset: {
+                vm.resetAllFilters()
+                updateFiltersSheetView.toggle()
+            },
+            onResetAndExit: {
+                vm.resetAllFilters()
+                isFilterButtonPressed.toggle()
+            }
+        ) {
 #warning("Remove before deployment to App Store")
-                    //                categoryFilter
-                    studyLevelFilter
-                    favouriteFilter
-                    typeFilter
-                    typeMedia
-                    yearFilter
-                    sortOptions
-                }
-                .padding(.horizontal, UIDevice.isiPad ? 15 : 0)
-
-                Spacer()
-                
-                // Buttons section
-                VStack {
-                    applyFiltersButton
-                    HStack {
-                        resetAllFiltersButton
-                        resetAllFiltersAndExitButton
-                    }
-                }
-                .padding(.horizontal, UIDevice.isiPad ? 90 : 30)
-                .padding(.bottom, UIDevice.isiPad ? 15 : 30)
+            //                categoryFilter
+            studyLevelFilter
+            favouriteFilter
+            typeFilter
+            typeMedia
+            yearFilter
+            sortOptions
         }
-        .foregroundStyle(Color.mycolor.myAccent)
-        .padding(.horizontal)
         .onDisappear {
             isFilterButtonPressed = false
         }
@@ -67,7 +53,7 @@ struct PostsFilterView: View {
     
     // MARK: Subviews
     private var studyLevelFilter: some View {
-        filterSection(
+        FilterSection.make(
             title: "Study level:",
             selection: $vm.selectedLevel,
             allItems: StudyLevel.allCases,
@@ -76,7 +62,7 @@ struct PostsFilterView: View {
     }
     
     private var favouriteFilter: some View {
-        filterSection(
+        FilterSection.make(
             title: "Favourite:",
             selection: $vm.selectedFavorite,
             allItems: FavoriteChoice.allCases,
@@ -85,7 +71,7 @@ struct PostsFilterView: View {
     }
 
     private var typeFilter: some View {
-        filterSection(
+        FilterSection.make(
             title: "Post type:",
             selection: $vm.selectedType,
             allItems: PostType.selectablePostTypeCases,
@@ -94,7 +80,7 @@ struct PostsFilterView: View {
     }
 
     private var typeMedia: some View {
-        filterSection(
+        FilterSection.make(
             title: "Media:",
             selection: $vm.selectedPlatform,
             allItems: Platform.allCases,
@@ -105,7 +91,7 @@ struct PostsFilterView: View {
     private var yearFilter: some View {
         Group {
             if let list = vm.allYears {
-                filterSection(
+                FilterSection.make(
                     title: "Year:",
                     selection: $vm.selectedYear,
                     allItems: list,
@@ -116,7 +102,7 @@ struct PostsFilterView: View {
     }
 
     private var sortOptions: some View {
-        filterSection(
+        FilterSection.make(
             title: "Sort:",
             selection: $vm.selectedSortOption,
             allItems: SortOption.allCases,
@@ -124,118 +110,19 @@ struct PostsFilterView: View {
         )
     }
         
-    // MARK: Helpers
-    /// For Non-Optional filters (SortOption)
-    private func filterSection<T: Hashable & CaseIterable>(
-        title: String,
-        selection: Binding<T>,
-        allItems: [T],
-        titleForCase: @escaping (T) -> String
-    ) -> some View {
-        VStack(spacing: 3) {
-            Text(title)
-                .font(.footnote)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.top, 8)
-            SegmentedOneLinePickerNotOptional(
-                selection: selection,
-                allItems: allItems,
-                titleForCase: titleForCase,
-                selectedFont: selectedFont,
-                selectedTextColor: Color.mycolor.myBackground,
-                unselectedTextColor: Color.mycolor.myAccent,
-                selectedBackground: Color.mycolor.myBlue,
-                unselectedBackground: .clear
-            )
-        }
-    }
-    
-    /// For Optional filters CaseIterable (StudyLevel?, FavoriteChoice?, etc.)
-    private func filterSection<T: Hashable & CaseIterable>(
-        title: String,
-        selection: Binding<T?>,
-        allItems: [T],
-        titleForCase: @escaping (T) -> String
-    ) -> some View {
-        VStack(spacing: 3) {
-            Text(title)
-                .font(.footnote)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.top, 8)
-            SegmentedOneLinePicker(
-                selection: selection,
-                allItems: allItems,
-                titleForCase: titleForCase,
-                selectedFont: selectedFont,
-                selectedTextColor: Color.mycolor.myBackground,
-                unselectedTextColor: Color.mycolor.myAccent,
-                selectedBackground: Color.mycolor.myBlue,
-                unselectedBackground: .clear,
-                showNilOption: true,
-                nilTitle: "All"
-            )
-        }
-    }
-    
-    /// For Optional filters not CaseIterable (year, category)
-    private func filterSection<T: Hashable>(
-        title: String,
-        selection: Binding<T?>,
-        allItems: [T],
-        titleForCase: @escaping (T) -> String
-    ) -> some View {
-        VStack(spacing: 3) {
-            Text(title)
-                .font(.footnote)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.top, 8)
-            CustomOneCapsulesLineSegmentedPicker(
-                selection: selection,
-                allItems: allItems,
-                titleForCase: titleForCase,
-                selectedFont: selectedFont,
-                selectedTextColor: Color.mycolor.myBackground,
-                unselectedTextColor: Color.mycolor.myAccent,
-                selectedBackground: Color.mycolor.myBlue,
-                unselectedBackground: .clear,
-                showNilOption: true,
-                nilTitle: "All"
-            )
-        }
-    }
-
-    // MARK: Buttons
-    private var applyFiltersButton: some View {
-        ClearCupsuleButton(primaryTitle: "Apply", primaryTitleColor: Color.mycolor.myBlue) {
-            vm.analyticsManager.logEvent(name: "filter_applied", params: [
-                "level": vm.selectedLevel?.rawValue ?? "",
-                "favorite": vm.selectedFavorite?.rawValue ?? "",
-                "type": vm.selectedType?.rawValue ?? "",
-                "platform": vm.selectedPlatform?.rawValue ?? "",
-                "year": vm.selectedYear ?? "",
-                "sort": vm.selectedSortOption.rawValue,
-                "category": Constants.mainCategory
-            ])
-            isFilterButtonPressed.toggle()
-        }
-    }
-    
-    private var resetAllFiltersButton: some View {
-        ClearCupsuleButton(primaryTitle: "Reset All", primaryTitleColor: Color.mycolor.myRed) {
-                vm.resetAllFilters()
-                updateFiltersSheetView.toggle()
-            }
-    }
-    
-    private var resetAllFiltersAndExitButton: some View {
-        
-        ClearCupsuleButton(primaryTitle: "Reset All & Exit", primaryTitleColor: Color.mycolor.myRed) {
-                vm.resetAllFilters()
-                isFilterButtonPressed.toggle()
-            }
+    // MARK: Actions
+    /// Логирует выбранные фильтры и закрывает лист.
+    private func applyFilters() {
+        vm.analyticsManager.logEvent(name: "filter_applied", params: [
+            "level": vm.selectedLevel?.rawValue ?? "",
+            "favorite": vm.selectedFavorite?.rawValue ?? "",
+            "type": vm.selectedType?.rawValue ?? "",
+            "platform": vm.selectedPlatform?.rawValue ?? "",
+            "year": vm.selectedYear ?? "",
+            "sort": vm.selectedSortOption.rawValue,
+            "category": Constants.mainCategory
+        ])
+        isFilterButtonPressed.toggle()
     }
     
 }
