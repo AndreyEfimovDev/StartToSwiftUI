@@ -29,6 +29,7 @@ struct WhatsNews {
                 News(
                     title: "Improved",
                     newsText: """
+                    - Code Snippets - filters by iOS version and favourites, plus sort order (Newest, Oldest, Original, Random)
                     """
                 )
             ]

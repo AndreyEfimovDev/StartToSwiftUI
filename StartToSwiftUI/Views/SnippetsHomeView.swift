@@ -15,10 +15,7 @@ struct SnippetsHomeView: View {
     @EnvironmentObject private var noticevm: NoticesViewModel
     @EnvironmentObject private var coordinator: AppCoordinator
 
-    // MARK: - Sorted Snippets
-    private var sortedSnippets: [CodeSnippet] {
-        snippetvm.filteredSnippets.sorted { $0.date > $1.date }
-    }
+    private let hapticManager = HapticManager.shared
 
     // MARK: - Splash vars
     private var splashTheme: Splash.Theme {
@@ -28,6 +25,7 @@ struct SnippetsHomeView: View {
     
     // MARK: - States
     @State private var showOnTopButton = false
+    @State private var isFilterButtonPressed: Bool = false
     /// Выбор в List(selection:) на iPad (iPadListContent) — привязан к id
     /// (String), а не к самому CodeSnippet, для единообразия с MaterialsHomeView.
     /// Источник правды — snippetvm.selectedSnippet; это локальное зеркало для
@@ -47,7 +45,7 @@ struct SnippetsHomeView: View {
                     listContent
                     OnTopButton(isVisible: showOnTopButton) {
                         withAnimation(.easeInOut(duration: 0.5)) {
-                            scrollProxy.scrollTo(sortedSnippets.first?.id, anchor: .top)
+                            scrollProxy.scrollTo(snippetvm.filteredSnippets.first?.id, anchor: .top)
                         }
                     }
                     // На iPad это view — sidebar-колонка NavigationSplitView
@@ -63,10 +61,8 @@ struct SnippetsHomeView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar { SharedToolbarLeadingItems() }
-        .safeAreaInset(edge: .top) {
-            SearchBarView(searchText: $snippetvm.searchText)
-                .padding(.horizontal)
-        }
+        .safeAreaInset(edge: .top) { searchBarStack }
+        .sheet(isPresented: $isFilterButtonPressed) { filtersSheet }
         .task {
             snippetvm.analyticsManager.logScreen(name: "SnippetsHomeView")
 
@@ -91,7 +87,7 @@ struct SnippetsHomeView: View {
 
     private var iPhoneListContent: some View {
         List {
-            ForEach(sortedSnippets) { snippet in
+            ForEach(snippetvm.filteredSnippets) { snippet in
                 SnippetRowView(snippet: snippet, isFavorite: snippetvm.isFavorite(snippet))
                     .id(snippet.id)
                     .background(.black.opacity(0.001))
@@ -118,7 +114,7 @@ struct SnippetsHomeView: View {
     }
 
     private var iPadListContent: some View {
-        List(sortedSnippets, selection: $selectedSnippetID) { snippet in
+        List(snippetvm.filteredSnippets, selection: $selectedSnippetID) { snippet in
             SnippetRowView(snippet: snippet, isFavorite: snippetvm.isFavorite(snippet))
                 .id(snippet.id)
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
@@ -140,7 +136,7 @@ struct SnippetsHomeView: View {
         .onAppear { selectedSnippetID = snippetvm.selectedSnippet?.id }
         // Список → VM: тап по строке.
         .onChange(of: selectedSnippetID) { _, newID in
-            snippetvm.selectedSnippet = sortedSnippets.first { $0.id == newID }
+            snippetvm.selectedSnippet = snippetvm.filteredSnippets.first { $0.id == newID }
         }
         // VM → список: выбор изменён снаружи.
         .onChange(of: snippetvm.selectedSnippet?.id) { _, newID in
@@ -170,6 +166,58 @@ struct SnippetsHomeView: View {
             snippetvm.favoriteToggle(snippet)
         }
         .tint(snippetvm.isFavorite(snippet) ? FavoriteChoice.yes.color : FavoriteChoice.no.color)
+    }
+
+    // MARK: - Search Bar Stack
+    private var searchBarStack: some View {
+        HStack {
+            SearchBarView(searchText: $snippetvm.searchText)
+            // Filters for snippets
+            CircleStrokeButtonView(
+                iconName: "line.3.horizontal.decrease",
+                isIconColorToChange: !snippetvm.isFiltersEmpty,
+                isShownCircle: false
+            ) {
+                isFilterButtonPressed.toggle()
+                hapticManager.impact(style: .light)
+            }
+            .background(.ultraThinMaterial)
+            .clipShape(.circle)
+            .background(
+                Circle()
+                    .stroke(
+                        Color.mycolor.mySecondary,
+                        lineWidth: 1)
+            )
+        }
+        .padding(.horizontal)
+    }
+
+    // MARK: - Filters View
+
+    private var filtersSheet: some View {
+        SnippetsFilterView(isFilterButtonPressed: $isFilterButtonPressed)
+            .overlay(alignment: .top) {
+                if UIDevice.isiPhone {
+                    LinearGradient(
+                        colors: [
+                            Color.mycolor.mySecondary.opacity(0.1),
+                            Color.clear
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .frame(height: 30)
+                    .clipShape(
+                        RoundedRectangle(cornerRadius: 30)
+                    )
+                }
+            }
+            .presentationBackground(.ultraThinMaterial)
+            // Три секции вместо шести у постов — лист ниже, чем в Materials (600).
+            .presentationDetents([.height(420)])
+            .presentationDragIndicator(.visible)
+            .presentationCornerRadius(30)
     }
 
     // MARK: - Supporting Views
