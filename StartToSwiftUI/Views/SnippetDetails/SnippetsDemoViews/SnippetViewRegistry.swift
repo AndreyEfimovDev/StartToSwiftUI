@@ -113,6 +113,13 @@ struct SnippetViewRegistry {
                 SnippetUnavailableView(snippet: snippet)
             }
 
+        case "B011":
+            if #available(iOS 26.0, *) {
+                B011_SliderTicksDemoView(snippet: snippet)
+            } else {
+                SnippetUnavailableView(snippet: snippet)
+            }
+
         default: SnippetNoPreviewView(snippet: snippet)
         }
     }
