@@ -1148,4 +1148,13 @@ final class PostTests: XCTestCase {
         post.progress = .added
         XCTAssertEqual(PostRowData(post: post), before)
     }
+
+    // MARK: - FavoriteChoice Icon Tests
+
+    // Избранное — закрашенное сердце; иконки уже однажды были перепутаны.
+    @MainActor
+    func testFavoriteChoice_IconName_FilledHeartOnlyForFavorite() {
+        XCTAssertEqual(FavoriteChoice.yes.iconName, "heart.fill")
+        XCTAssertEqual(FavoriteChoice.no.iconName, "heart")
+    }
 }

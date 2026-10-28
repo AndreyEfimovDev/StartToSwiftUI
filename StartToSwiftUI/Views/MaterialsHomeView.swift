@@ -260,7 +260,7 @@ struct MaterialsHomeView: View {
     @ViewBuilder
     private func leadingSwipeActions(for post: Post) -> some View {
         Button(post.favoriteChoice == .yes ? "Unmark" : "Mark",
-               systemImage: post.favoriteChoice == .yes ? "heart.fill" : "heart"
+               systemImage: post.favoriteChoice.iconName
         ) {
             vm.favoriteToggle(post)
         }

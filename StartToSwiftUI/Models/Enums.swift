@@ -177,14 +177,18 @@ enum FavoriteChoice: String, CaseIterable, Codable {
         }
     }
 
-    // Не используется: FavoriteButton и свайп в MaterialsHomeView задают иконку сами.
-    // Оставлено для архива.
-//    var icon: Image {
-//        switch self {
-//        case .yes: return Image(systemName: "heart.fill")
-//        case .no: return Image(systemName: "heart")
-//        }
-//    }
+    /// Имя SF Symbol для текущего состояния избранного — единый источник для всех экранов постов.
+    var iconName: String {
+        switch self {
+        case .yes: return "heart.fill"
+        case .no: return "heart"
+        }
+    }
+
+    /// Иконка текущего состояния избранного, построенная из `iconName`.
+    var icon: Image {
+        Image(systemName: iconName)
+    }
 
     var color: Color {
         switch self {

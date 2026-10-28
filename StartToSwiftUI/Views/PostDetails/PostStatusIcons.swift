@@ -46,7 +46,7 @@ struct PostStatusIcons: View {
                 Image(systemName: "square.stack.3d.up")
             }
             if isFavoriteShown {
-                Image(systemName: "heart.fill")
+                FavoriteChoice.yes.icon
                     .foregroundStyle(Color.mycolor.myYellow)
             }
             if let rating = postRating {
