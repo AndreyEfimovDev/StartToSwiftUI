@@ -16,7 +16,7 @@ struct SnippetsRepository {
     
     static let allDemoCodeSnippet: [CodeSnippet] = [
         a001, a002, a003, a004, a005, a006, a007, a008, a009, a010,
-        a011, a012, a013, a014, a015, a016, b001, b002, b003, b004, b005, b006, b007, b008, b009
+        a011, a012, a013, a014, a015, a016, a017, a018, b001, b002, b003, b004, b005, b006, b007, b008, b009
     ]
 
     static let b009 = CodeSnippet(
@@ -1790,6 +1790,331 @@ struct SnippetsRepository {
         }
         """,
         minOS: .ios26
+    )
+
+    static let a018 = CodeSnippet(
+        id: "A018",
+        title: "Mesh Gradient",
+        intro: "MeshGradient blends colors across a grid of control points instead of along a single line, giving the soft, organic backgrounds seen across iOS. Here a 3×3 mesh is driven by a TimelineView: the corners stay pinned, edge points slide along their edges and the center point drifts, so the colors flow endlessly. Switch palettes, compare smoothsColors on and off, and reveal the control points to see exactly what is moving.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 10, day: 28, hour: 16, minute: 0) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        struct A018_MeshGradientDemo: View {
+
+            private enum Palette: CaseIterable, Identifiable {
+                case sunset
+                case ocean
+                case aurora
+
+                var id: Self { self }
+
+                var title: String {
+                    switch self {
+                    case .sunset: "Sunset"
+                    case .ocean: "Ocean"
+                    case .aurora: "Aurora"
+                    }
+                }
+
+                /// Nine colors for the 3×3 grid, row by row from the top-left corner.
+                var colors: [Color] {
+                    switch self {
+                    case .sunset:
+                        [.purple, .pink, .orange,
+                         .indigo, .red, .orange,
+                         .purple, .pink, .yellow]
+                    case .ocean:
+                        [.indigo, .blue, .cyan,
+                         .blue, .teal, .mint,
+                         .indigo, .cyan, .teal]
+                    case .aurora:
+                        [.black, .indigo, .black,
+                         .green, .mint, .purple,
+                         .indigo, .teal, .black]
+                    }
+                }
+            }
+
+            @State private var palette: Palette = .sunset
+            @State private var smoothsColors = true
+            @State private var showsPoints = false
+
+            var body: some View {
+                ScrollView {
+                    VStack(spacing: 20) {
+                        // TimelineView redraws every frame, so the mesh points follow the clock.
+                        TimelineView(.animation) { context in
+                            let points = Self.points(at: context.date.timeIntervalSinceReferenceDate)
+
+                            MeshGradient(
+                                width: 3,
+                                height: 3,
+                                points: points,
+                                colors: palette.colors,
+                                smoothsColors: smoothsColors
+                            )
+                            .overlay {
+                                if showsPoints {
+                                    controlPoints(points)
+                                }
+                            }
+                        }
+                        .frame(height: 360)
+                        .clipShape(RoundedRectangle(cornerRadius: 28))
+                        .overlay {
+                            Text("Mesh Gradient")
+                                .font(.largeTitle.bold())
+                                .foregroundStyle(.white)
+                                .shadow(radius: 8)
+                        }
+
+                        Picker("Palette", selection: $palette.animation(.easeInOut(duration: 0.6))) {
+                            ForEach(Palette.allCases) { Text($0.title).tag($0) }
+                        }
+                        .pickerStyle(.segmented)
+
+                        Toggle("Smooth colors", isOn: $smoothsColors)
+                        Toggle("Show control points", isOn: $showsPoints)
+                    }
+                    .font(.subheadline)
+                    .padding()
+                }
+            }
+
+            // MARK: - Points
+
+            /// Positions of the 3×3 mesh points at the given moment.
+            ///
+            /// Corners stay pinned and edge points only slide along their edge,
+            /// so the gradient always covers the whole rectangle.
+            /// - Parameter time: Seconds, usually the timeline's current date.
+            /// - Returns: Nine points in unit coordinates, row by row from the top-left corner.
+            private static func points(at time: Double) -> [SIMD2<Float>] {
+                // Math stays in Double: the reference-date timestamp is too large for Float precision.
+                let t = time
+                func point(_ x: Double, _ y: Double) -> SIMD2<Float> { [Float(x), Float(y)] }
+                return [
+                    point(0, 0), point(0.5 + 0.3 * sin(t * 0.8), 0), point(1, 0),
+                    point(0, 0.5 + 0.3 * sin(t * 0.9)), point(0.5 + 0.25 * sin(t * 1.3), 0.5 + 0.25 * cos(t)), point(1, 0.5 + 0.3 * cos(t * 1.1)),
+                    point(0, 1), point(0.5 + 0.3 * cos(t * 0.7), 1), point(1, 1)
+                ]
+            }
+
+            /// Dots marking where each mesh point currently is.
+            private func controlPoints(_ points: [SIMD2<Float>]) -> some View {
+                GeometryReader { proxy in
+                    ForEach(points.indices, id: \\.self) { index in
+                        Circle()
+                            .fill(.white)
+                            .stroke(.black.opacity(0.4), lineWidth: 1)
+                            .frame(width: 12, height: 12)
+                            .position(
+                                x: CGFloat(points[index].x) * proxy.size.width,
+                                y: CGFloat(points[index].y) * proxy.size.height
+                            )
+                    }
+                }
+            }
+        }
+        """,
+        minOS: .ios18
+    )
+
+    static let a017 = CodeSnippet(
+        id: "A017",
+        title: "@Animatable Macro",
+        intro: "Custom shapes animate only through animatableData — and with several properties that meant hand-nesting AnimatablePair<AnimatablePair<…>, …> and its getter and setter. The @Animatable macro synthesizes all of it from the stored properties; @AnimatableIgnored opts out the ones that can't be interpolated. Here a star morphs its point count, depth and rotation with a single spring, and a wave springs its amplitude and frequency while a TimelineView keeps it flowing. The macro expands at compile time, so it needs Xcode 26 but runs on earlier iOS versions too.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 10, day: 28, hour: 15, minute: 0) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        // MARK: - Shapes
+
+        /// A star (or polygon, when innerRatio is 1) with a fractional number of points,
+        /// so it can morph smoothly between, say, a triangle and an eight-point burst.
+        ///
+        /// Without the macro you'd hand-write the nested pair:
+        /// var animatableData: AnimatablePair<AnimatablePair<Double, Double>, Double>
+        @Animatable
+        struct A017_Star: Shape {
+            var points: Double
+            var innerRatio: Double
+            var rotation: Double
+
+            func path(in rect: CGRect) -> Path {
+                let center = CGPoint(x: rect.midX, y: rect.midY)
+                let outer = min(rect.width, rect.height) / 2
+                let inner = outer * innerRatio
+                let step = .pi / points
+                let vertexCount = Int((points * 2).rounded(.up))
+
+                var path = Path()
+                for i in 0..<vertexCount {
+                    let angle = Double(i) * step + rotation * .pi / 180 - .pi / 2
+                    let radius = i.isMultiple(of: 2) ? outer : inner
+                    let point = CGPoint(x: center.x + cos(angle) * radius, y: center.y + sin(angle) * radius)
+                    if i == 0 { path.move(to: point) } else { path.addLine(to: point) }
+                }
+                path.closeSubpath()
+                return path
+            }
+        }
+
+        /// A sine wave whose amplitude, frequency and phase are all animatable.
+        @Animatable
+        struct A017_Wave: Shape {
+            var amplitude: Double
+            var frequency: Double
+            var phase: Double
+            // Not animatable: an Int sample count can't be interpolated, so it's excluded from animatableData.
+            @AnimatableIgnored var resolution: Int = 80
+
+            func path(in rect: CGRect) -> Path {
+                var path = Path()
+                path.move(to: CGPoint(x: 0, y: rect.maxY))
+                for i in 0...resolution {
+                    let x = rect.width * Double(i) / Double(resolution)
+                    let relative = x / rect.width
+                    let y = rect.midY + sin((relative * frequency + phase) * 2 * .pi) * amplitude * rect.height / 2
+                    path.addLine(to: CGPoint(x: x, y: y))
+                }
+                path.addLine(to: CGPoint(x: rect.width, y: rect.maxY))
+                path.closeSubpath()
+                return path
+            }
+        }
+
+        // MARK: - Demo
+
+        struct A017_AnimatableMacroDemo: View {
+
+            private enum StarPreset: CaseIterable, Identifiable {
+                case triangle
+                case star
+                case burst
+
+                var id: Self { self }
+
+                var title: String {
+                    switch self {
+                    case .triangle: "Triangle"
+                    case .star: "Star"
+                    case .burst: "Burst"
+                    }
+                }
+
+                var points: Double {
+                    switch self {
+                    case .triangle: 3
+                    case .star: 5
+                    case .burst: 8
+                    }
+                }
+
+                var innerRatio: Double {
+                    switch self {
+                    case .triangle: 0.5
+                    case .star: 0.42
+                    case .burst: 0.7
+                    }
+                }
+
+                var rotation: Double {
+                    switch self {
+                    case .triangle: 0
+                    case .star: 36
+                    case .burst: 90
+                    }
+                }
+            }
+
+            // MARK: - Star state
+            @State private var preset: StarPreset = .star
+
+            // MARK: - Wave state
+            @State private var isStormy = false
+
+            var body: some View {
+                ScrollView {
+                    VStack(spacing: 50) {
+                        starSection
+                        waveSection
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                }
+            }
+
+            // MARK: - 1. Morphing star
+
+            private var starSection: some View {
+                VStack(spacing: 16) {
+                    sectionTitle("Three properties, one macro")
+
+                    A017_Star(points: preset.points, innerRatio: preset.innerRatio, rotation: preset.rotation)
+                        .fill(
+                            LinearGradient(
+                                colors: [Color.mycolor.myYellow, Color.mycolor.myOrange],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                        .frame(width: 200, height: 200)
+
+                    HStack(spacing: 8) {
+                        ForEach(StarPreset.allCases) { item in
+                            Button(item.title) {
+                                withAnimation(.spring(duration: 0.8, bounce: 0.4)) { preset = item }
+                            }
+                            .buttonStyle(.bordered)
+                            .tint(preset == item ? Color.mycolor.myOrange : .secondary)
+                        }
+                    }
+                }
+            }
+
+            // MARK: - 2. Endless wave
+
+            private var waveSection: some View {
+                VStack(spacing: 16) {
+                    sectionTitle("Spring amplitude + frequency")
+
+                    // The timeline scrolls the phase every frame; the toggle springs amplitude and frequency.
+                    TimelineView(.animation) { context in
+                        A017_Wave(
+                            amplitude: isStormy ? 0.8 : 0.25,
+                            frequency: isStormy ? 3 : 1.5,
+                            phase: context.date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: 2) / 2
+                        )
+                        .fill(
+                            LinearGradient(
+                                colors: [Color.mycolor.myBlue, Color.mycolor.myPurple],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                    }
+                    .frame(height: 140)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+
+                    Toggle("Stormy sea", isOn: $isStormy.animation(.spring(duration: 1, bounce: 0.3)))
+                        .font(.subheadline)
+                }
+            }
+
+            // MARK: - Helpers
+
+            private func sectionTitle(_ text: String) -> some View {
+                Text(text)
+                    .font(.headline)
+                    .foregroundStyle(Color.mycolor.myAccent)
+            }
+        }
+        """,
+        minOS: .ios18
     )
 
     static let a016 = CodeSnippet(

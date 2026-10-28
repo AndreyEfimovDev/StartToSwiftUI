@@ -19,6 +19,8 @@ struct WhatsNews {
                     - B007: 3D Charts Explorer — Swift Charts in 3D: a surface plot and a point cloud you can rotate with a drag, with preset angles and perspective/orthographic projection
                     - B008: SF Symbols Draw Animations — symbols that draw and erase themselves like a pen stroke, animated variable draw, and gradient rendering from a single color
                     - B009: Glass Composer — a chat screen with Liquid Glass bars on top and bottom, messages fading softly behind the glass, and a switch between soft and hard scroll edges
+                    - A017: @Animatable Macro — custom shapes that morph smoothly without hand-written animatableData: a shape-shifting star and a springy wave
+                    - A018: Mesh Gradient — an endlessly flowing MeshGradient background with switchable palettes, smooth-colors toggle and visible control points
                     """
                 ),
                 News(

@@ -120,6 +120,8 @@
 		477968843091D7E0000EF41C /* B007_Charts3DExplorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477968833091D7E0000EF41C /* B007_Charts3DExplorer.swift */; };
 		477968863091EC60000EF41C /* B008_SymbolDrawAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477968853091EC60000EF41C /* B008_SymbolDrawAnimations.swift */; };
 		4779688830920153000EF41C /* B009_GlassComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4779688730920153000EF41C /* B009_GlassComposer.swift */; };
+		4779688A309206B3000EF41C /* A017_AnimatableMacro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47796889309206B3000EF41C /* A017_AnimatableMacro.swift */; };
+		4779688C30920B39000EF41C /* A018_MeshGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4779688B30920B39000EF41C /* A018_MeshGradient.swift */; };
 		477C74602ECFB0F300F77F5B /* WhatsNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477C745F2ECFB0E800F77F5B /* WhatsNews.swift */; };
 		478116462EBFF9DD00EF25F8 /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */; };
 		4781D72E2ED716AE00B74F85 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4781D72D2ED716AE00B74F85 /* Bundle.swift */; };
@@ -356,6 +358,8 @@
 		477968833091D7E0000EF41C /* B007_Charts3DExplorer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = B007_Charts3DExplorer.swift; sourceTree = "<group>"; };
 		477968853091EC60000EF41C /* B008_SymbolDrawAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = B008_SymbolDrawAnimations.swift; sourceTree = "<group>"; };
 		4779688730920153000EF41C /* B009_GlassComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = B009_GlassComposer.swift; sourceTree = "<group>"; };
+		47796889309206B3000EF41C /* A017_AnimatableMacro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A017_AnimatableMacro.swift; sourceTree = "<group>"; };
+		4779688B30920B39000EF41C /* A018_MeshGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A018_MeshGradient.swift; sourceTree = "<group>"; };
 		477C745F2ECFB0E800F77F5B /* WhatsNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNews.swift; sourceTree = "<group>"; };
 		478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
 		4781D72D2ED716AE00B74F85 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
@@ -659,12 +663,14 @@
 		474F1FE32F7BBC3000128E83 /* A011-A020 */ = {
 			isa = PBXGroup;
 			children = (
+				4779688B30920B39000EF41C /* A018_MeshGradient.swift */,
 				47586ED92F6E9B8A00C1E942 /* A011_ExpandbleTextEditor.swift */,
 				47586EDD2F6F03B400C1E942 /* A012_BottomTabsContainer.swift */,
 				474638102F67363300DF011B /* A013_RotatingCarousel.swift */,
 				474638002F66F27600DF011B /* A014_AnimationType.swift */,
 				47C09A992F8576ED0049858B /* A015_CardSwipe.swift */,
 				47C09A9B2F858F930049858B /* A016_IndeterminateProgressBar.swift */,
+				47796889309206B3000EF41C /* A017_AnimatableMacro.swift */,
 			);
 			path = "A011-A020";
 			sourceTree = "<group>";
@@ -1243,6 +1249,7 @@
 				474BFB952F3C8E46006E639B /* PostsViewModel.swift in Sources */,
 				477968863091EC60000EF41C /* B008_SymbolDrawAnimations.swift in Sources */,
 				47F38B1F2ED480B0006DEDBE /* DevData.swift in Sources */,
+				4779688A309206B3000EF41C /* A017_AnimatableMacro.swift in Sources */,
 				47BAF0A42E60613200287F10 /* SearchBarView.swift in Sources */,
 				4791CD862E6ED58B00687126 /* ShrinkIconButtonStyle.swift in Sources */,
 				47C09A9A2F8576ED0049858B /* A015_CardSwipe.swift in Sources */,
@@ -1252,6 +1259,7 @@
 				47C56FEC2EC9C66700F0796C /* NoticeDetailsView.swift in Sources */,
 				4773545D2E65D03A001DEDEE /* PostsFilterView.swift in Sources */,
 				47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */,
+				4779688C30920B39000EF41C /* A018_MeshGradient.swift in Sources */,
 				47B6E8122F5DFB3200EF7441 /* SnippetDetailsView.swift in Sources */,
 				47586EDA2F6E9B8A00C1E942 /* A011_ExpandbleTextEditor.swift in Sources */,
 				47FF42592EE556DB0069D232 /* TapHandler.swift in Sources */,
