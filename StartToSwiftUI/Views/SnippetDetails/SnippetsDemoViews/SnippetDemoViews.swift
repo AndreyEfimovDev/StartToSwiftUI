@@ -260,6 +260,28 @@ struct B001_LiquidGlassPlaygroundDemoView: View {
 }
 
 
+// MARK: - A019 Text Renderer
+struct A019_TextRendererDemoView: View {
+    let snippet: CodeSnippet
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+
+            A019_TextRendererDemo()
+                .frame(maxHeight: .infinity)
+                .padding(.horizontal)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
+
 // MARK: - A018 Mesh Gradient
 struct A018_MeshGradientDemoView: View {
     let snippet: CodeSnippet
