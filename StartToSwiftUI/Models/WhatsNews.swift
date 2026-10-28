@@ -17,6 +17,7 @@ struct WhatsNews {
                     title: "New Code Snippets",
                     newsText: """
                     - B007: 3D Charts Explorer — Swift Charts in 3D: a surface plot and a point cloud you can rotate with a drag, with preset angles and perspective/orthographic projection
+                    - B008: SF Symbols Draw Animations — symbols that draw and erase themselves like a pen stroke, variable draw driven by a slider, and gradient rendering from a single color
                     """
                 ),
                 News(
@@ -39,12 +40,12 @@ struct WhatsNews {
                 News(
                     title: "New Code Snippets",
                     newsText: """
-                    - B001: Liquid Glass Playground — hands-on tour of iOS 26's Liquid Glass material
-                    - B002: Album Player — mini-player accessory, Favorites, Search, and a sidebar on iPad, with new TabView APIs
-                    - B003: Rich Text Notes — TextEditor now supports AttributedString natively
-                    - B004: Mini Browser — native in-app web view backed by WebPage, with back/forward and a loading progress bar
-                    - B005: Zoom Navigation Transition — a grid card zooms into its detail screen, with Liquid Glass materializing as part of the same transition
-                    - B006: Immersive Hero Header — a hero image blurs and mirrors into the safe area around it, continuing behind the glass toolbar and, on iPad, the floating sidebar
+                    - B001: Liquid Glass Playground - hands-on tour of iOS 26's Liquid Glass material
+                    - B002: Album Player - mini-player accessory, Favorites, Search, and a sidebar on iPad, with new TabView APIs
+                    - B003: Rich Text Notes - TextEditor now supports AttributedString natively
+                    - B004: Mini Browser - native in-app web view backed by WebPage, with back/forward and a loading progress bar
+                    - B005: Zoom Navigation Transition - a grid card zooms into its detail screen, with Liquid Glass materializing as part of the same transition
+                    - B006: Immersive Hero Header - a hero image blurs and mirrors into the safe area around it, continuing behind the glass toolbar and, on iPad, the floating sidebar
                     """
                 ),
                 News(

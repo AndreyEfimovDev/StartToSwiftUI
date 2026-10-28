@@ -118,6 +118,7 @@
 		4773545D2E65D03A001DEDEE /* PostsFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773545C2E65D03A001DEDEE /* PostsFilterView.swift */; };
 		4773AC902F269D4B00A713EF /* PostStatusIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773AC8F2F269D4B00A713EF /* PostStatusIcons.swift */; };
 		477968843091D7E0000EF41C /* B007_Charts3DExplorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477968833091D7E0000EF41C /* B007_Charts3DExplorer.swift */; };
+		477968863091EC60000EF41C /* B008_SymbolDrawAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477968853091EC60000EF41C /* B008_SymbolDrawAnimations.swift */; };
 		477C74602ECFB0F300F77F5B /* WhatsNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477C745F2ECFB0E800F77F5B /* WhatsNews.swift */; };
 		478116462EBFF9DD00EF25F8 /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */; };
 		4781D72E2ED716AE00B74F85 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4781D72D2ED716AE00B74F85 /* Bundle.swift */; };
@@ -352,6 +353,7 @@
 		4773545C2E65D03A001DEDEE /* PostsFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsFilterView.swift; sourceTree = "<group>"; };
 		4773AC8F2F269D4B00A713EF /* PostStatusIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostStatusIcons.swift; sourceTree = "<group>"; };
 		477968833091D7E0000EF41C /* B007_Charts3DExplorer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = B007_Charts3DExplorer.swift; sourceTree = "<group>"; };
+		477968853091EC60000EF41C /* B008_SymbolDrawAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = B008_SymbolDrawAnimations.swift; sourceTree = "<group>"; };
 		477C745F2ECFB0E800F77F5B /* WhatsNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNews.swift; sourceTree = "<group>"; };
 		478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
 		4781D72D2ED716AE00B74F85 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
@@ -675,6 +677,7 @@
 				DEEAE72600E24ED3B6D22F50 /* B005_ZoomNavigationTransition.swift */,
 				FD997B75F749491A9154481A /* B006_ImmersiveHeroHeader.swift */,
 				477968833091D7E0000EF41C /* B007_Charts3DExplorer.swift */,
+				477968853091EC60000EF41C /* B008_SymbolDrawAnimations.swift */,
 			);
 			path = "B001-B010";
 			sourceTree = "<group>";
@@ -1235,6 +1238,7 @@
 				471DCBDE2EBBC68500AFA5F4 /* WhatsNew.swift in Sources */,
 				47656BFE2EE1EC4D00F45AA6 /* StudyProgressDetailsView.swift in Sources */,
 				474BFB952F3C8E46006E639B /* PostsViewModel.swift in Sources */,
+				477968863091EC60000EF41C /* B008_SymbolDrawAnimations.swift in Sources */,
 				47F38B1F2ED480B0006DEDBE /* DevData.swift in Sources */,
 				47BAF0A42E60613200287F10 /* SearchBarView.swift in Sources */,
 				4791CD862E6ED58B00687126 /* ShrinkIconButtonStyle.swift in Sources */,

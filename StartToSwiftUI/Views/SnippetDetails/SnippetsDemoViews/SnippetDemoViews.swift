@@ -13,6 +13,29 @@
 import SwiftUI
 
 
+// MARK: - B008 SF Symbols Draw Animations
+@available(iOS 26.0, *)
+struct B008_SymbolDrawAnimationsDemoView: View {
+    let snippet: CodeSnippet
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+
+            B008_SymbolDrawAnimationsDemo()
+                .frame(maxHeight: .infinity)
+                .padding(.horizontal)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
+
 // MARK: - B007 3D Charts Explorer
 @available(iOS 26.0, *)
 struct B007_Charts3DExplorerDemoView: View {

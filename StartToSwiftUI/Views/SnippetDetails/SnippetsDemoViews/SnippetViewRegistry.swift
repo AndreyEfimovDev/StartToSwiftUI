@@ -89,6 +89,13 @@ struct SnippetViewRegistry {
                 SnippetUnavailableView(snippet: snippet)
             }
 
+        case "B008":
+            if #available(iOS 26.0, *) {
+                B008_SymbolDrawAnimationsDemoView(snippet: snippet)
+            } else {
+                SnippetUnavailableView(snippet: snippet)
+            }
+
         default: SnippetNoPreviewView(snippet: snippet)
         }
     }
