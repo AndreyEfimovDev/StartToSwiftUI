@@ -13,6 +13,29 @@
 import SwiftUI
 
 
+// MARK: - B010 Concentric Corners
+@available(iOS 26.0, *)
+struct B010_ConcentricCornersDemoView: View {
+    let snippet: CodeSnippet
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+
+            B010_ConcentricCornersDemo()
+                .frame(maxHeight: .infinity)
+                .padding(.horizontal)
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
+
 // MARK: - B009 Glass Composer
 @available(iOS 26.0, *)
 struct B009_GlassComposerDemoView: View {

@@ -123,6 +123,7 @@
 		4779688A309206B3000EF41C /* A017_AnimatableMacro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47796889309206B3000EF41C /* A017_AnimatableMacro.swift */; };
 		4779688C30920B39000EF41C /* A018_MeshGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4779688B30920B39000EF41C /* A018_MeshGradient.swift */; };
 		4779688E30920D9E000EF41C /* A019_TextRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4779688D30920D9E000EF41C /* A019_TextRenderer.swift */; };
+		47796891309214E1000EF41C /* B010_ConcentricCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47796890309214E1000EF41C /* B010_ConcentricCorners.swift */; };
 		477C74602ECFB0F300F77F5B /* WhatsNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477C745F2ECFB0E800F77F5B /* WhatsNews.swift */; };
 		478116462EBFF9DD00EF25F8 /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */; };
 		4781D72E2ED716AE00B74F85 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4781D72D2ED716AE00B74F85 /* Bundle.swift */; };
@@ -362,6 +363,7 @@
 		47796889309206B3000EF41C /* A017_AnimatableMacro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A017_AnimatableMacro.swift; sourceTree = "<group>"; };
 		4779688B30920B39000EF41C /* A018_MeshGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A018_MeshGradient.swift; sourceTree = "<group>"; };
 		4779688D30920D9E000EF41C /* A019_TextRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A019_TextRenderer.swift; sourceTree = "<group>"; };
+		47796890309214E1000EF41C /* B010_ConcentricCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = B010_ConcentricCorners.swift; sourceTree = "<group>"; };
 		477C745F2ECFB0E800F77F5B /* WhatsNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNews.swift; sourceTree = "<group>"; };
 		478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
 		4781D72D2ED716AE00B74F85 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
@@ -457,14 +459,6 @@
 		F9F4273206F860CF4860C617 /* B001_LiquidGlassPlayground.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = B001_LiquidGlassPlayground.swift; sourceTree = "<group>"; };
 		FD997B75F749491A9154481A /* B006_ImmersiveHeroHeader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = B006_ImmersiveHeroHeader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		4779688F30920DB1000EF41C /* A021-A030 */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "A021-A030";
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		475997382E5C6901008E20F0 /* Frameworks */ = {
@@ -698,6 +692,7 @@
 				477968833091D7E0000EF41C /* B007_Charts3DExplorer.swift */,
 				477968853091EC60000EF41C /* B008_SymbolDrawAnimations.swift */,
 				4779688730920153000EF41C /* B009_GlassComposer.swift */,
+				47796890309214E1000EF41C /* B010_ConcentricCorners.swift */,
 			);
 			path = "B001-B010";
 			sourceTree = "<group>";
@@ -903,6 +898,20 @@
 			path = StudyProgress;
 			sourceTree = "<group>";
 		};
+		4779689230921531000EF41C /* A021-A030 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "A021-A030";
+			sourceTree = "<group>";
+		};
+		4779689330921543000EF41C /* B011-B020 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "B011-B020";
+			sourceTree = "<group>";
+		};
 		47870FBB2ECCB927004175E4 /* PostDrafts */ = {
 			isa = PBXGroup;
 			children = (
@@ -1000,8 +1009,9 @@
 			children = (
 				474F1FE22F7BBC0B00128E83 /* A001-A010 */,
 				474F1FE32F7BBC3000128E83 /* A011-A020 */,
-				4779688F30920DB1000EF41C /* A021-A030 */,
+				4779689230921531000EF41C /* A021-A030 */,
 				474F1FE42F7BBC5700128E83 /* B001-B010 */,
+				4779689330921543000EF41C /* B011-B020 */,
 				47B6E80F2F5DFB1700EF7441 /* SnippetViewRegistry.swift */,
 				47B6E8232F5EF3B700EF7441 /* SnippetsRepository.swift */,
 				47B6E8132F5DFB6800EF7441 /* SnippetDemoViews.swift */,
@@ -1106,9 +1116,6 @@
 			);
 			dependencies = (
 				47A331872F276734002883DD /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				4779688F30920DB1000EF41C /* A021-A030 */,
 			);
 			name = StartToSwiftUI;
 			packageProductDependencies = (
@@ -1273,6 +1280,7 @@
 				4732FB332EAA5A9E0062269D /* ActivityView.swift in Sources */,
 				474BFB912F3C8E20006E639B /* PostsViewModel+BackupRestore.swift in Sources */,
 				47C56FEC2EC9C66700F0796C /* NoticeDetailsView.swift in Sources */,
+				47796891309214E1000EF41C /* B010_ConcentricCorners.swift in Sources */,
 				4773545D2E65D03A001DEDEE /* PostsFilterView.swift in Sources */,
 				47BAF0A22E60485D00287F10 /* FavoriteButton.swift in Sources */,
 				4779688C30920B39000EF41C /* A018_MeshGradient.swift in Sources */,
