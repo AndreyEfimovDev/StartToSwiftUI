@@ -9,8 +9,6 @@ import SwiftUI
 import FirebaseAnalytics
 
 final class FBAnalyticsManager {
-#warning("Before deployment: ensure -FIRDebugEnabled is OFF in scheme arguments")
-
     init() { }
     
     func logEvent(name: String, params: [String:Any]? = nil) {

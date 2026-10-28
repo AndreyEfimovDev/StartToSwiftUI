@@ -37,8 +37,6 @@ struct PostsFilterView: View {
                 isFilterButtonPressed.toggle()
             }
         ) {
-#warning("Remove before deployment to App Store")
-            //                categoryFilter
             studyLevelFilter
             favouriteFilter
             typeFilter
