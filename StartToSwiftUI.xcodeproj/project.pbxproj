@@ -119,6 +119,7 @@
 		4773AC902F269D4B00A713EF /* PostStatusIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773AC8F2F269D4B00A713EF /* PostStatusIcons.swift */; };
 		477968843091D7E0000EF41C /* B007_Charts3DExplorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477968833091D7E0000EF41C /* B007_Charts3DExplorer.swift */; };
 		477968863091EC60000EF41C /* B008_SymbolDrawAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477968853091EC60000EF41C /* B008_SymbolDrawAnimations.swift */; };
+		4779688830920153000EF41C /* B009_GlassComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4779688730920153000EF41C /* B009_GlassComposer.swift */; };
 		477C74602ECFB0F300F77F5B /* WhatsNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477C745F2ECFB0E800F77F5B /* WhatsNews.swift */; };
 		478116462EBFF9DD00EF25F8 /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */; };
 		4781D72E2ED716AE00B74F85 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4781D72D2ED716AE00B74F85 /* Bundle.swift */; };
@@ -354,6 +355,7 @@
 		4773AC8F2F269D4B00A713EF /* PostStatusIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostStatusIcons.swift; sourceTree = "<group>"; };
 		477968833091D7E0000EF41C /* B007_Charts3DExplorer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = B007_Charts3DExplorer.swift; sourceTree = "<group>"; };
 		477968853091EC60000EF41C /* B008_SymbolDrawAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = B008_SymbolDrawAnimations.swift; sourceTree = "<group>"; };
+		4779688730920153000EF41C /* B009_GlassComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = B009_GlassComposer.swift; sourceTree = "<group>"; };
 		477C745F2ECFB0E800F77F5B /* WhatsNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNews.swift; sourceTree = "<group>"; };
 		478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
 		4781D72D2ED716AE00B74F85 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
@@ -678,6 +680,7 @@
 				FD997B75F749491A9154481A /* B006_ImmersiveHeroHeader.swift */,
 				477968833091D7E0000EF41C /* B007_Charts3DExplorer.swift */,
 				477968853091EC60000EF41C /* B008_SymbolDrawAnimations.swift */,
+				4779688730920153000EF41C /* B009_GlassComposer.swift */,
 			);
 			path = "B001-B010";
 			sourceTree = "<group>";
@@ -1253,6 +1256,7 @@
 				47586EDA2F6E9B8A00C1E942 /* A011_ExpandbleTextEditor.swift in Sources */,
 				47FF42592EE556DB0069D232 /* TapHandler.swift in Sources */,
 				475CC64D2F216B870099CAA6 /* DataSourcesProtocols.swift in Sources */,
+				4779688830920153000EF41C /* B009_GlassComposer.swift in Sources */,
 				4734367F2F4A345500CF00FA /* AppSyncStateModel.swift in Sources */,
 				474637FD2F6699F800DF011B /* A004_ShrinkingButton.swift in Sources */,
 				478DBECD2F70025A0097FC8A /* SnippetUnavailableView.swift in Sources */,

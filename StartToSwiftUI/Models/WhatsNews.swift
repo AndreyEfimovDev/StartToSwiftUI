@@ -17,7 +17,8 @@ struct WhatsNews {
                     title: "New Code Snippets",
                     newsText: """
                     - B007: 3D Charts Explorer — Swift Charts in 3D: a surface plot and a point cloud you can rotate with a drag, with preset angles and perspective/orthographic projection
-                    - B008: SF Symbols Draw Animations — symbols that draw and erase themselves like a pen stroke, variable draw driven by a slider, and gradient rendering from a single color
+                    - B008: SF Symbols Draw Animations — symbols that draw and erase themselves like a pen stroke, animated variable draw, and gradient rendering from a single color
+                    - B009: Glass Composer — a chat screen with Liquid Glass bars on top and bottom, messages fading softly behind the glass, and a switch between soft and hard scroll edges
                     """
                 ),
                 News(

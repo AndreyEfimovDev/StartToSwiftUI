@@ -13,6 +13,29 @@
 import SwiftUI
 
 
+// MARK: - B009 Glass Composer
+@available(iOS 26.0, *)
+struct B009_GlassComposerDemoView: View {
+    let snippet: CodeSnippet
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    SnippetDemoHeader(snippet: snippet)
+                        .padding()
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+
+            B009_GlassComposerDemo()
+                .frame(maxHeight: .infinity)
+                .padding([.horizontal, .bottom])
+        }
+        .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
+
 // MARK: - B008 SF Symbols Draw Animations
 @available(iOS 26.0, *)
 struct B008_SymbolDrawAnimationsDemoView: View {
