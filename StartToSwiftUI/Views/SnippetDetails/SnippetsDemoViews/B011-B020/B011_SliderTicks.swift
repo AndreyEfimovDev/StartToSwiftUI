@@ -36,13 +36,30 @@ struct B011_SliderTicksDemo: View {
 
     private var namedTicksSection: some View {
         section("Named ticks", value: "\(Int(brightness))%") {
-            Slider(value: $brightness, in: 0...100) {
-                Text("Brightness")
-            } ticks: {
-                SliderTick("Low", 0)
-                SliderTick("Mid", 50)
-                SliderTick("High", 100)
+            VStack(spacing: 4) {
+                Slider(value: $brightness, in: 0...100) {
+                    Text("Brightness")
+                } ticks: {
+                    SliderTick("Low", 0)
+                    SliderTick("Mid", 50)
+                    SliderTick("High", 100)
+                }
+
+                Text(brightnessLevel)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Color.mycolor.myBlue)
+                    .contentTransition(.opacity)
+                    .animation(.snappy, value: brightnessLevel)
             }
+        }
+    }
+
+    /// Name of the tick nearest to the thumb: boundaries lie halfway between ticks.
+    private var brightnessLevel: String {
+        switch brightness {
+        case ..<25: "Low"
+        case ..<75: "Mid"
+        default: "High"
         }
     }
 

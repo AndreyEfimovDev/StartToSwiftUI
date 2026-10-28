@@ -17,7 +17,7 @@ struct FavoriteButton: View {
         Button {
             completion()
         } label: {
-            Image(systemName: isFavorite == .yes ? "heart.fill" : "heart")
+            isFavorite.icon
                 .font(.body)
                 .foregroundStyle(isFavorite == .yes ? Color.mycolor.myYellow : Color.mycolor.mySecondary)
         }

@@ -16,7 +16,8 @@ struct SnippetsRepository {
     
     static let allDemoCodeSnippet: [CodeSnippet] = [
         a001, a002, a003, a004, a005, a006, a007, a008, a009, a010,
-        a011, a012, a013, a014, a015, a016, a017, a018, a019, b001, b002, b003, b004, b005, b006, b007, b008, b009, b010, b011
+        a011, a012, a013, a014, a015, a016, a017, a018, a019, b001,
+        b002, b003, b004, b005, b006, b007, b008, b009, b010, b011
     ]
 
     static let b011 = CodeSnippet(
@@ -57,13 +58,30 @@ struct SnippetsRepository {
 
             private var namedTicksSection: some View {
                 section("Named ticks", value: "\\(Int(brightness))%") {
-                    Slider(value: $brightness, in: 0...100) {
-                        Text("Brightness")
-                    } ticks: {
-                        SliderTick("Low", 0)
-                        SliderTick("Mid", 50)
-                        SliderTick("High", 100)
+                    VStack(spacing: 4) {
+                        Slider(value: $brightness, in: 0...100) {
+                            Text("Brightness")
+                        } ticks: {
+                            SliderTick("Low", 0)
+                            SliderTick("Mid", 50)
+                            SliderTick("High", 100)
+                        }
+
+                        Text(brightnessLevel)
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(Color.mycolor.myBlue)
+                            .contentTransition(.opacity)
+                            .animation(.snappy, value: brightnessLevel)
                     }
+                }
+            }
+
+            /// Name of the tick nearest to the thumb: boundaries lie halfway between ticks.
+            private var brightnessLevel: String {
+                switch brightness {
+                case ..<25: "Low"
+                case ..<75: "Mid"
+                default: "High"
                 }
             }
 
@@ -121,6 +139,7 @@ struct SnippetsRepository {
             private var enabledBoundsSection: some View {
                 section("Enabled bounds", value: "\\(Int((chargeLimit * 100).rounded()))%") {
                     // The full track is visible, but the thumb can only move within 50%...100%.
+                    // Range kept at 0...1: on iOS 26 enabledBounds with a wider range traps inside UISlider.
                     Slider(value: $chargeLimit, in: 0...1, enabledBounds: 0.5...1) {
                         Text("Charge limit")
                     } minimumValueLabel: {
@@ -258,7 +277,7 @@ struct SnippetsRepository {
                                 )
                             )
                             .overlay {
-                                Image("AppIcon_blue_3477F5")
+                                Image("A_1024x1024_PhosphateInline_3477F5_text")
                                     .resizable()
                                     .frame(width: 96, height: 96)
                                     .clipShape(RoundedRectangle(cornerRadius: 22))
@@ -395,7 +414,7 @@ struct SnippetsRepository {
                     }
                     .padding()
                 }
-                .defaultScrollAnchor(.bottom)
+                .defaultScrollAnchor(.bottom, for: .sizeChanges)
                 .scrollEdgeEffectStyle(edgeStyle.value, for: .all)
                 // Unlike safeAreaInset, safeAreaBar also extends the scroll edge effect under the bar.
                 .safeAreaBar(edge: .top) { header }
@@ -537,9 +556,8 @@ struct SnippetsRepository {
                 }
             }
 
+            // Multi-layer symbols: on single-layer ones Whole and By Layer look the same.
             private static let drawSymbols = ["cloud.sun.rain", "wind.snow", "sun.horizon", "checklist", "pencil.and.scribble", "list.bullet"]
-            private static let variableSymbols = ["cellularbars", "wifi", "speaker.wave.3"]
-            private static let levelSteps = 20
             private static let gradientSymbols: [(name: String, color: Color)] = [("flame.fill", .orange), ("drop.fill", .blue)]
 
             // MARK: - Draw On / Off state
@@ -549,19 +567,13 @@ struct SnippetsRepository {
             // MARK: - Transition state
             @State private var isDone = true
 
-            // MARK: - Variable Draw state
-            @State private var levelStep = 0
-
-            private var level: Double {
-                Double(levelStep) / Double(Self.levelSteps)
-            }
-
             var body: some View {
                 ScrollView {
                     VStack(spacing: 50) {
                         drawOnOffSection
                         drawTransitionSection
-                        variableDrawSection
+                        // A separate view: its 10 Hz updates redraw only this section, not the whole demo.
+                        B008_VariableDrawSection()
                         gradientSection
                     }
                     .frame(maxWidth: .infinity)
@@ -580,9 +592,11 @@ struct SnippetsRepository {
                             Image(systemName: name)
                                 .font(.system(size: 44))
                                 .foregroundStyle(Color.mycolor.myBlue)
+                                // Hierarchical shading makes each layer distinguishable while it draws.
                                 .symbolRenderingMode(.hierarchical)
                                 // While active the symbol is "erased" stroke by stroke;
                                 // deactivating plays it back, drawing the strokes in.
+                                // Half speed makes the difference between granularities visible.
                                 .symbolEffect(granularity.drawOff, options: .speed(0.5), isActive: isErased)
                                 .frame(height: 56)
                         }
@@ -625,54 +639,7 @@ struct SnippetsRepository {
                 }
             }
 
-            // MARK: - 3. Variable Draw
-
-            private var variableDrawSection: some View {
-                VStack(spacing: 16) {
-                    sectionTitle("Variable Draw")
-
-                    variableRow(title: "Color", mode: .color)
-                    variableRow(title: "Draw", mode: .draw)
-
-                    Text("variableValue: \\(level, format: .number.precision(.fractionLength(2)))")
-                        .font(.subheadline.monospacedDigit())
-                }
-                .task { await cycleLevel() }
-            }
-
-            private func cycleLevel() async {
-                var direction = 1
-                while true {
-                    do {
-                        try await Task.sleep(for: .milliseconds(100))
-                    } catch {
-                        return
-                    }
-                    if levelStep + direction > Self.levelSteps || levelStep + direction < 0 {
-                        direction = -direction
-                    }
-                    levelStep += direction
-                }
-            }
-
-            private func variableRow(title: String, mode: SymbolVariableValueMode) -> some View {
-                HStack {
-                    Text(title)
-                        .font(.subheadline)
-                        .frame(width: 60, alignment: .leading)
-
-                    ForEach(Self.variableSymbols, id: \\.self) { name in
-                        Image(systemName: name, variableValue: level)
-                            .font(.system(size: 36))
-                            .foregroundStyle(Color.mycolor.myOrange)
-                            // .color dims inactive layers; .draw trims each layer's path by the value.
-                            .symbolVariableValueMode(mode)
-                            .frame(maxWidth: .infinity)
-                    }
-                }
-            }
-
-            // MARK: - 4. Gradient rendering
+            // MARK: - 3. Gradient rendering
 
             private var gradientSection: some View {
                 VStack(spacing: 16) {
@@ -706,6 +673,71 @@ struct SnippetsRepository {
                 Text(text)
                     .font(.headline)
                     .foregroundStyle(Color.mycolor.myAccent)
+            }
+        }
+
+        // MARK: - Variable Draw
+
+        /// Symbols whose variable value cycles between 0 and 1, rendered with .color and .draw modes.
+        @available(iOS 26.0, *)
+        struct B008_VariableDrawSection: View {
+
+            private static let variableSymbols = ["cellularbars", "wifi", "speaker.wave.3"]
+            private static let levelSteps = 20
+
+            @State private var levelStep = 0
+
+            /// The variable value derived from an integer step, so it never accumulates floating-point drift.
+            private var level: Double {
+                Double(levelStep) / Double(Self.levelSteps)
+            }
+
+            var body: some View {
+                VStack(spacing: 16) {
+                    Text("Variable Draw")
+                        .font(.headline)
+                        .foregroundStyle(Color.mycolor.myAccent)
+
+                    variableRow(title: "Color", mode: .color)
+                    variableRow(title: "Draw", mode: .draw)
+
+                    Text("variableValue: \\(level, format: .number.precision(.fractionLength(2)))")
+                        .font(.subheadline.monospacedDigit())
+                }
+                .task { await cycleLevel() }
+            }
+
+            /// Ping-pongs the variable value between 0 and 1 until the view disappears.
+            private func cycleLevel() async {
+                var direction = 1
+                while true {
+                    do {
+                        try await Task.sleep(for: .milliseconds(100))
+                    } catch {
+                        return
+                    }
+                    if levelStep + direction > Self.levelSteps || levelStep + direction < 0 {
+                        direction = -direction
+                    }
+                    levelStep += direction
+                }
+            }
+
+            private func variableRow(title: String, mode: SymbolVariableValueMode) -> some View {
+                HStack {
+                    Text(title)
+                        .font(.subheadline)
+                        .frame(width: 60, alignment: .leading)
+
+                    ForEach(Self.variableSymbols, id: \\.self) { name in
+                        Image(systemName: name, variableValue: level)
+                            .font(.system(size: 36))
+                            .foregroundStyle(Color.mycolor.myOrange)
+                            // .color dims inactive layers; .draw trims each layer's path by the value.
+                            .symbolVariableValueMode(mode)
+                            .frame(maxWidth: .infinity)
+                    }
+                }
             }
         }
         """,

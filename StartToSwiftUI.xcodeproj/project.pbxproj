@@ -125,6 +125,8 @@
 		4779688E30920D9E000EF41C /* A019_TextRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4779688D30920D9E000EF41C /* A019_TextRenderer.swift */; };
 		47796891309214E1000EF41C /* B010_ConcentricCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47796890309214E1000EF41C /* B010_ConcentricCorners.swift */; };
 		47796895309217BB000EF41C /* B011_SliderTicks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47796894309217BB000EF41C /* B011_SliderTicks.swift */; };
+		4779689730922620000EF41C /* FiltersSheetComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4779689630922620000EF41C /* FiltersSheetComponents.swift */; };
+		4779689930922724000EF41C /* SnippetsFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4779689830922724000EF41C /* SnippetsFilterView.swift */; };
 		477C74602ECFB0F300F77F5B /* WhatsNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477C745F2ECFB0E800F77F5B /* WhatsNews.swift */; };
 		478116462EBFF9DD00EF25F8 /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */; };
 		4781D72E2ED716AE00B74F85 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4781D72D2ED716AE00B74F85 /* Bundle.swift */; };
@@ -366,6 +368,8 @@
 		4779688D30920D9E000EF41C /* A019_TextRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A019_TextRenderer.swift; sourceTree = "<group>"; };
 		47796890309214E1000EF41C /* B010_ConcentricCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = B010_ConcentricCorners.swift; sourceTree = "<group>"; };
 		47796894309217BB000EF41C /* B011_SliderTicks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = B011_SliderTicks.swift; sourceTree = "<group>"; };
+		4779689630922620000EF41C /* FiltersSheetComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersSheetComponents.swift; sourceTree = "<group>"; };
+		4779689830922724000EF41C /* SnippetsFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsFilterView.swift; sourceTree = "<group>"; };
 		477C745F2ECFB0E800F77F5B /* WhatsNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNews.swift; sourceTree = "<group>"; };
 		478116452EBFF9DD00EF25F8 /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
 		4781D72D2ED716AE00B74F85 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
@@ -556,6 +560,8 @@
 		473436362F449BC400CF00FA /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				4779689830922724000EF41C /* SnippetsFilterView.swift */,
+				4779689630922620000EF41C /* FiltersSheetComponents.swift */,
 				4791CE032E748DA200687126 /* AddEditPostView.swift */,
 				4773545C2E65D03A001DEDEE /* PostsFilterView.swift */,
 				47BAF0A32E60613200287F10 /* SearchBarView.swift */,
@@ -1322,6 +1328,7 @@
 				4734368A2F4B24FA00CF00FA /* FBPerformanceManager.swift in Sources */,
 				47939D792F4F2CDE00CBE432 /* DateFormater.swift in Sources */,
 				47BAF0CA2E635E2800287F10 /* Views.swift in Sources */,
+				4779689930922724000EF41C /* SnippetsFilterView.swift in Sources */,
 				47656C002EE1EF9500F45AA6 /* StudyProgressForLevel.swift in Sources */,
 				47B6E8202F5ECFC200EF7441 /* A002_TrimIndicator.swift in Sources */,
 				4725A52B2EDD757F00235C40 /* UIDevice.swift in Sources */,
@@ -1425,6 +1432,7 @@
 				4732FB372EAA63810062269D /* Constants.swift in Sources */,
 				4773AC902F269D4B00A713EF /* PostStatusIcons.swift in Sources */,
 				4791CDFC2E746FF100687126 /* EmailService.swift in Sources */,
+				4779689730922620000EF41C /* FiltersSheetComponents.swift in Sources */,
 				475997612E5CC0F8008E20F0 /* PostDetailsView.swift in Sources */,
 				47870FBA2ECC8628004175E4 /* Acknowledgements.swift in Sources */,
 				47B6E7F52F5D989100EF7441 /* FBAnalyticsManager.swift in Sources */,

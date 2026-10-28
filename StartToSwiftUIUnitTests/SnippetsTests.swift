@@ -20,9 +20,8 @@ import CoreData
   ViewModel favorites (mock store) — cache load, toggle, no store, refresh, iCloud change
   ViewModel + real store integration
 
- Category/platform filtering and sorting are intentionally not covered here —
- SnippetsViewModel no longer has selectedCategory/selectedSortOption/
- isFiltersEmpty/resetAllFilters (simplified to search + favorites only).
+  Filtering & sorting (pure functions) — iOS version, favourite, search, combined, sort options
+  ViewModel filters — default sort, reset, persistence, favourite filter reacts to toggle, random
 */
 
 @MainActor
@@ -100,6 +99,201 @@ final class SnippetsTests: XCTestCase {
         try await Task.sleep(nanoseconds: 400_000_000)
         vm.searchText = ""
         try await Task.sleep(nanoseconds: 400_000_000)
+        XCTAssertEqual(vm.filteredSnippets.count, vm.allSnippets.count)
+    }
+
+    // MARK: - SnippetsRepository — Series
+
+    /// Серия A — примеры для iOS 18, серия B — только для iOS 26+:
+    /// на этом соглашении держится фильтр по версии iOS.
+    func test_repository_seriesMatchesMinOS() {
+        for snippet in SnippetsRepository.allDemoCodeSnippet {
+            if snippet.id.hasPrefix("A") {
+                XCTAssertEqual(snippet.minOS, .ios18, snippet.id)
+            } else if snippet.id.hasPrefix("B") {
+                XCTAssertEqual(snippet.minOS, .ios26, snippet.id)
+            } else {
+                XCTFail("Unknown series: \(snippet.id)")
+            }
+        }
+    }
+
+    // MARK: - Filtering (pure function)
+
+    /// Тестовый сниппет: дата — `day` дней от 1970, чтобы задавать порядок сортировки.
+    private func makeSnippet(
+        _ id: String,
+        title: String = "Title",
+        intro: String = "Intro",
+        minOS: CodeSnippet.MinOS = .ios18,
+        day: Int = 0
+    ) -> CodeSnippet {
+        CodeSnippet(
+            id: id,
+            title: title,
+            intro: intro,
+            thanks: nil,
+            date: Date(timeIntervalSince1970: TimeInterval(day) * 86_400),
+            codeSnippet: "",
+            minOS: minOS
+        )
+    }
+
+    private var fixture: [CodeSnippet] {
+        [
+            makeSnippet("A1", title: "Shimmer Wave", intro: "Loading placeholder", minOS: .ios18, day: 2),
+            makeSnippet("A2", title: "Mask", intro: "Reveal with a GRADIENT", minOS: .ios18, day: 1),
+            makeSnippet("B1", title: "Glass Composer", intro: "Liquid Glass bars", minOS: .ios26, day: 3),
+            makeSnippet("B2", title: "Slider Ticks", intro: "Tick marks", minOS: .ios26, day: 0)
+        ]
+    }
+
+    private func ids(_ snippets: [CodeSnippet]) -> [String] {
+        snippets.map(\.id)
+    }
+
+    private func filter(
+        query: String = "",
+        minOS: CodeSnippet.MinOS? = nil,
+        favorite: FavoriteChoice? = nil,
+        favoriteIDs: Set<String> = []
+    ) -> [String] {
+        ids(SnippetsViewModel.filter(
+            fixture, query: query, minOS: minOS, favorite: favorite, favoriteIDs: favoriteIDs
+        ))
+    }
+
+    func test_filter_noFilters_keepsAllInOrder() {
+        XCTAssertEqual(filter(), ["A1", "A2", "B1", "B2"])
+    }
+
+    func test_filter_minOS_ios26_keepsOnlyIOS26() {
+        XCTAssertEqual(filter(minOS: .ios26), ["B1", "B2"])
+    }
+
+    func test_filter_minOS_ios18_keepsOnlyIOS18() {
+        XCTAssertEqual(filter(minOS: .ios18), ["A1", "A2"])
+    }
+
+    func test_filter_favoriteYes_keepsOnlyFavorites() {
+        XCTAssertEqual(filter(favorite: .yes, favoriteIDs: ["A2", "B1"]), ["A2", "B1"])
+    }
+
+    func test_filter_favoriteNo_keepsOnlyNonFavorites() {
+        XCTAssertEqual(filter(favorite: .no, favoriteIDs: ["A2", "B1"]), ["A1", "B2"])
+    }
+
+    func test_filter_favoriteYes_withoutFavorites_returnsEmpty() {
+        XCTAssertEqual(filter(favorite: .yes), [])
+    }
+
+    func test_filter_search_byTitle_caseInsensitive() {
+        XCTAssertEqual(filter(query: "SLIDER"), ["B2"])
+    }
+
+    func test_filter_search_byIntro_caseInsensitive() {
+        XCTAssertEqual(filter(query: "gradient"), ["A2"])
+    }
+
+    /// Раздел (category) у всех сниппетов — Constants.mainCategory.
+    func test_filter_search_byCategory() {
+        XCTAssertEqual(filter(query: Constants.mainCategory.lowercased()), ["A1", "A2", "B1", "B2"])
+    }
+
+    func test_filter_combined_minOSFavoriteAndQuery() {
+        // "glass" есть только у B1; B1 — iOS 26 и в избранном.
+        XCTAssertEqual(filter(query: "glass", minOS: .ios26, favorite: .yes, favoriteIDs: ["B1"]), ["B1"])
+        XCTAssertEqual(filter(query: "glass", minOS: .ios18, favorite: .yes, favoriteIDs: ["B1"]), [])
+        XCTAssertEqual(filter(query: "glass", minOS: .ios26, favorite: .no, favoriteIDs: ["B1"]), [])
+    }
+
+    // MARK: - Sorting (pure function)
+
+    func test_sort_newestFirst() {
+        let sorted = SnippetsViewModel.sort(fixture, option: .newestFirst, randomKeys: [:])
+        XCTAssertEqual(ids(sorted), ["B1", "A1", "A2", "B2"])
+    }
+
+    func test_sort_oldestFirst() {
+        let sorted = SnippetsViewModel.sort(fixture, option: .oldestFirst, randomKeys: [:])
+        XCTAssertEqual(ids(sorted), ["B2", "A2", "A1", "B1"])
+    }
+
+    /// "Original" — порядок из SnippetsRepository.
+    func test_sort_notSorted_keepsOriginalOrder() {
+        let sorted = SnippetsViewModel.sort(fixture, option: .notSorted, randomKeys: [:])
+        XCTAssertEqual(ids(sorted), ["A1", "A2", "B1", "B2"])
+    }
+
+    func test_sort_random_ordersByKeys() {
+        let keys = ["A1": 0.9, "A2": 0.1, "B1": 0.5, "B2": 0.3]
+        let sorted = SnippetsViewModel.sort(fixture, option: .random, randomKeys: keys)
+        XCTAssertEqual(ids(sorted), ["A2", "B2", "B1", "A1"])
+    }
+
+    // MARK: - SnippetsViewModel — Filters
+
+    func test_viewModel_defaultState_isNewestFirstAndFiltersEmpty() async throws {
+        try await Task.sleep(nanoseconds: 400_000_000)
+        XCTAssertEqual(vm.selectedSortOption, .newestFirst)
+        XCTAssertTrue(vm.isFiltersEmpty)
+        let dates = vm.filteredSnippets.map(\.date)
+        XCTAssertEqual(dates, dates.sorted(by: >))
+    }
+
+    func test_viewModel_minOSFilter_appliesToList() async throws {
+        vm.selectedMinOS = .ios26
+        try await Task.sleep(nanoseconds: 400_000_000)
+        XCTAssertFalse(vm.filteredSnippets.isEmpty)
+        XCTAssertTrue(vm.filteredSnippets.allSatisfy { $0.minOS == .ios26 })
+        XCTAssertFalse(vm.isFiltersEmpty)
+    }
+
+    func test_viewModel_resetAllFilters_restoresDefaults() {
+        vm.selectedMinOS = .ios18
+        vm.selectedFavorite = .yes
+        vm.selectedSortOption = .oldestFirst
+
+        vm.resetAllFilters()
+
+        XCTAssertNil(vm.selectedMinOS)
+        XCTAssertNil(vm.selectedFavorite)
+        XCTAssertEqual(vm.selectedSortOption, .newestFirst)
+        XCTAssertTrue(vm.isFiltersEmpty)
+    }
+
+    func test_viewModel_filters_persistBetweenInstances() {
+        vm.selectedMinOS = .ios26
+        vm.selectedFavorite = .no
+        vm.selectedSortOption = .oldestFirst
+
+        let restoredVM = SnippetsViewModel(services: .make())
+
+        XCTAssertEqual(restoredVM.selectedMinOS, .ios26)
+        XCTAssertEqual(restoredVM.selectedFavorite, .no)
+        XCTAssertEqual(restoredVM.selectedSortOption, .oldestFirst)
+    }
+
+    /// При фильтре "Favourite: Yes" снятие отметки сразу убирает строку:
+    /// favoriteIDs входит в пайплайн фильтрации.
+    func test_viewModel_unmarkFavorite_underYesFilter_removesRow() async throws {
+        let store = MockSnippetFavoritesStore()
+        let snippet = SnippetsRepository.a001
+        store.favoriteIDs = [snippet.id]
+        let testVM = SnippetsViewModel(favoritesStore: store, services: .make())
+        testVM.selectedFavorite = .yes
+        try await Task.sleep(nanoseconds: 400_000_000)
+        XCTAssertEqual(ids(testVM.filteredSnippets), [snippet.id])
+
+        testVM.favoriteToggle(snippet)
+
+        XCTAssertTrue(testVM.filteredSnippets.isEmpty)
+    }
+
+    func test_viewModel_randomSort_keepsSameSnippets() async throws {
+        vm.selectedSortOption = .random
+        try await Task.sleep(nanoseconds: 400_000_000)
+        XCTAssertEqual(Set(ids(vm.filteredSnippets)), Set(ids(vm.allSnippets)))
         XCTAssertEqual(vm.filteredSnippets.count, vm.allSnippets.count)
     }
 

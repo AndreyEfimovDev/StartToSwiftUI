@@ -177,13 +177,19 @@ enum FavoriteChoice: String, CaseIterable, Codable {
         }
     }
 
-    var icon: Image {
-        switch self { // "star.slash" : "star"
-        case .yes: return Image(systemName: "heart")
-        case .no: return Image(systemName: "heart.fill")
+    /// Имя SF Symbol для текущего состояния избранного — единый источник для всех экранов постов.
+    var iconName: String {
+        switch self {
+        case .yes: return "heart.fill"
+        case .no: return "heart"
         }
     }
-    
+
+    /// Иконка текущего состояния избранного, построенная из `iconName`.
+    var icon: Image {
+        Image(systemName: iconName)
+    }
+
     var color: Color {
         switch self {
         case .yes: return Color.mycolor.mySecondary

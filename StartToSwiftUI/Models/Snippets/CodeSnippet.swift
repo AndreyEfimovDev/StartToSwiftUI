@@ -41,7 +41,9 @@ struct CodeSnippet: Identifiable, Hashable {
         self.minOS = minOS
     }
     
-    enum MinOS {
+    /// String rawValue — для хранения выбранного фильтра в @AppStorage;
+    /// CaseIterable — для пикера в фильтрах.
+    enum MinOS: String, CaseIterable {
         case ios18
         case ios26
 
