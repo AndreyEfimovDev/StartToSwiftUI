@@ -11,17 +11,47 @@ struct WhatsNews {
 #warning("Add upated info before deployment to App Store")
     static let releases: [Release] = [
         Release(
+            release: "Release 1.9.0(14)",
+            news: [
+                News(
+                    title: "New Code Snippets",
+                    newsText: """
+                    - B007: 3D Charts Explorer - Swift Charts in 3D: a surface plot and a point cloud you can rotate with a drag, with preset angles and perspective/orthographic projection
+                    - B008: SF Symbols Draw Animations - symbols that draw and erase themselves like a pen stroke, animated variable draw, and gradient rendering from a single color
+                    - B009: Glass Composer - a chat screen with Liquid Glass bars on top and bottom, messages fading softly behind the glass, and a switch between soft and hard scroll edges
+                    - B010: Concentric Corners - nested shapes whose corners follow their container, compared with a fixed radius, plus per-corner fixed and concentric styles
+                    - B011: Slider Ticks - named, stepped and data-driven tick marks, a neutral value that fills from the center, and enabled bounds
+                    - A017: @Animatable Macro - custom shapes that morph smoothly without hand-written animatableData: a shape-shifting star and a springy wave
+                    - A018: Mesh Gradient - an endlessly flowing MeshGradient background with switchable palettes, smooth-colors toggle and visible control points
+                    - A019: Text Renderer - per-glyph text animation: a blur-and-rise reveal, a sine wave, and a custom attribute that animates only selected words
+                    """
+                ),
+                News(
+                    title: "Improved",
+                    newsText: """
+                    """
+                ),
+                News(
+                    title: "Fixed",
+                    newsText: """
+                    """
+                )
+
+            ]
+        ),
+        
+        Release(
             release: "Release 1.8.0(13)",
             news: [
                 News(
                     title: "New Code Snippets",
                     newsText: """
-                    - B001: Liquid Glass Playground — hands-on tour of iOS 26's Liquid Glass material
-                    - B002: Album Player — mini-player accessory, Favorites, Search, and a sidebar on iPad, with new TabView APIs
-                    - B003: Rich Text Notes — TextEditor now supports AttributedString natively
-                    - B004: Mini Browser — native in-app web view backed by WebPage, with back/forward and a loading progress bar
-                    - B005: Zoom Navigation Transition — a grid card zooms into its detail screen, with Liquid Glass materializing as part of the same transition
-                    - B006: Immersive Hero Header — a hero image blurs and mirrors into the safe area around it, continuing behind the glass toolbar and, on iPad, the floating sidebar
+                    - B001: Liquid Glass Playground - hands-on tour of iOS 26's Liquid Glass material
+                    - B002: Album Player - mini-player accessory, Favorites, Search, and a sidebar on iPad, with new TabView APIs
+                    - B003: Rich Text Notes - TextEditor now supports AttributedString natively
+                    - B004: Mini Browser - native in-app web view backed by WebPage, with back/forward and a loading progress bar
+                    - B005: Zoom Navigation Transition - a grid card zooms into its detail screen, with Liquid Glass materializing as part of the same transition
+                    - B006: Immersive Hero Header - a hero image blurs and mirrors into the safe area around it, continuing behind the glass toolbar and, on iPad, the floating sidebar
                     """
                 ),
                 News(

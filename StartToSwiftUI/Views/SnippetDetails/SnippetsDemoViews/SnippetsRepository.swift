@@ -16,8 +16,937 @@ struct SnippetsRepository {
     
     static let allDemoCodeSnippet: [CodeSnippet] = [
         a001, a002, a003, a004, a005, a006, a007, a008, a009, a010,
-        a011, a012, a013, a014, a015, a016, b001, b002, b003, b004, b005, b006
+        a011, a012, a013, a014, a015, a016, a017, a018, a019, b001, b002, b003, b004, b005, b006, b007, b008, b009, b010, b011
     ]
+
+    static let b011 = CodeSnippet(
+        id: "B011",
+        title: "Slider Ticks",
+        intro: "Slider learned new tricks in iOS 26: tick marks — named, generated for every step, or built from data with SliderTickContentForEach; a neutralValue that fills the track from a center point, perfect for balance or EQ controls; and enabledBounds, which shows the full range but lets the thumb move only within part of it.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 10, day: 28, hour: 19, minute: 0) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        @available(iOS 26.0, *)
+        struct B011_SliderTicksDemo: View {
+
+            private static let temperatures: [Double] = [16, 18, 20, 22, 24, 26, 28]
+
+            @State private var brightness = 50.0
+            @State private var rating = 3.0
+            @State private var temperature = 22.0
+            @State private var balance = 0.0
+            @State private var chargeLimit = 0.8
+
+            var body: some View {
+                ScrollView {
+                    VStack(spacing: 40) {
+                        namedTicksSection
+                        stepTicksSection
+                        dataTicksSection
+                        neutralValueSection
+                        enabledBoundsSection
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                }
+            }
+
+            // MARK: - 1. Named ticks
+
+            private var namedTicksSection: some View {
+                section("Named ticks", value: "\\(Int(brightness))%") {
+                    Slider(value: $brightness, in: 0...100) {
+                        Text("Brightness")
+                    } ticks: {
+                        SliderTick("Low", 0)
+                        SliderTick("Mid", 50)
+                        SliderTick("High", 100)
+                    }
+                }
+            }
+
+            // MARK: - 2. A tick on every step
+
+            private var stepTicksSection: some View {
+                section("Tick on every step", value: String(repeating: "★", count: Int(rating))) {
+                    // The closure is asked for a tick at each step value; nil skips it.
+                    Slider(value: $rating, in: 1...5, step: 1) {
+                        Text("Rating")
+                    } tick: { value in
+                        SliderTick(value)
+                    }
+                }
+            }
+
+            // MARK: - 3. Ticks from data
+
+            private var dataTicksSection: some View {
+                section("Ticks from data", value: "\\(Int(temperature))°") {
+                    Slider(value: $temperature, in: 16...28) {
+                        Text("Temperature")
+                    } ticks: {
+                        SliderTickContentForEach(Self.temperatures, id: \\.self) { value in
+                            SliderTick(value) {
+                                Text("\\(Int(value))")
+                            }
+                        }
+                    }
+                }
+            }
+
+            // MARK: - 4. Neutral value
+
+            private var neutralValueSection: some View {
+                section("Neutral value", value: balanceText) {
+                    // The track fills from the neutral value (center) toward the thumb, not from the minimum.
+                    Slider(value: $balance, in: -1...1, neutralValue: 0) {
+                        Text("Balance")
+                    } minimumValueLabel: {
+                        Text("L")
+                    } maximumValueLabel: {
+                        Text("R")
+                    }
+                }
+            }
+
+            private var balanceText: String {
+                if abs(balance) < 0.01 { return "Center" }
+                return balance < 0 ? "L \\(Int(-balance * 100))%" : "R \\(Int(balance * 100))%"
+            }
+
+            // MARK: - 5. Enabled bounds
+
+            private var enabledBoundsSection: some View {
+                section("Enabled bounds", value: "\\(Int((chargeLimit * 100).rounded()))%") {
+                    // The full track is visible, but the thumb can only move within 50%...100%.
+                    Slider(value: $chargeLimit, in: 0...1, enabledBounds: 0.5...1) {
+                        Text("Charge limit")
+                    } minimumValueLabel: {
+                        Image(systemName: "battery.25percent")
+                    } maximumValueLabel: {
+                        Image(systemName: "battery.100percent")
+                    }
+                }
+            }
+
+            // MARK: - Helpers
+
+            /// A titled block with the current value on the right and a control below.
+            /// - Parameters:
+            ///   - title: Section title.
+            ///   - value: Current value shown next to the title.
+            ///   - content: The slider.
+            private func section(_ title: String, value: String, @ViewBuilder content: () -> some View) -> some View {
+                VStack(spacing: 12) {
+                    HStack {
+                        Text(title)
+                            .font(.headline)
+                            .foregroundStyle(Color.mycolor.myAccent)
+                        Spacer()
+                        Text(value)
+                            .font(.subheadline.monospacedDigit())
+                            .foregroundStyle(.secondary)
+                    }
+                    content()
+                        .tint(Color.mycolor.myBlue)
+                }
+            }
+        }
+        """,
+        minOS: .ios26
+    )
+
+    static let b010 = CodeSnippet(
+        id: "B010",
+        title: "Concentric Corners",
+        intro: "In iOS 26 nested shapes keep their curves concentric: ConcentricRectangle reads the corner radius of the surrounding .containerShape and subtracts the inset, so inner corners share the outer corner's center — the way sheets follow the curve of the screen. Compare it with a fixed radius side by side, push the inset until the corners turn square and rescue them with .concentric(minimum:), then mix fixed and concentric corners per corner on a media card.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 10, day: 28, hour: 18, minute: 0) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        @available(iOS 26.0, *)
+        struct B010_ConcentricCornersDemo: View {
+
+            // MARK: - Comparison state
+            @State private var outerRadius: CGFloat = 40
+            @State private var inset: CGFloat = 12
+            @State private var keepsMinimum = false
+
+            var body: some View {
+                ScrollView {
+                    VStack(spacing: 50) {
+                        comparisonSection
+                        mixedCornersSection
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                }
+            }
+
+            // MARK: - 1. Fixed vs Concentric
+
+            private var comparisonSection: some View {
+                VStack(spacing: 16) {
+                    sectionTitle("Fixed vs Concentric")
+
+                    HStack(spacing: 16) {
+                        comparisonTile(title: "Fixed radius") {
+                            // Same radius as the container: the inner corners look too round.
+                            RoundedRectangle(cornerRadius: outerRadius)
+                                .fill(Color.mycolor.myRed.gradient)
+                        }
+                        comparisonTile(title: "Concentric") {
+                            // Radius = container radius − inset, so both curves share one center.
+                            ConcentricRectangle(corners: innerCorners)
+                                .fill(Color.mycolor.myGreen.gradient)
+                        }
+                    }
+
+                    VStack(spacing: 8) {
+                        LabeledContent("Container radius") {
+                            Slider(value: $outerRadius, in: 16...70)
+                        }
+                        LabeledContent("Inset") {
+                            Slider(value: $inset, in: 4...40)
+                        }
+                        Toggle("Minimum radius 10", isOn: $keepsMinimum)
+                    }
+                    .font(.subheadline)
+                }
+            }
+
+            /// Without a minimum, a large inset makes concentric corners shrink to square.
+            private var innerCorners: Edge.Corner.Style {
+                keepsMinimum ? .concentric(minimum: 10) : .concentric
+            }
+
+            /// A container with the given inner shape inset by the current padding.
+            /// - Parameters:
+            ///   - title: Caption below the tile.
+            ///   - inner: The shape drawn inside the container.
+            private func comparisonTile(title: String, @ViewBuilder inner: () -> some View) -> some View {
+                VStack(spacing: 8) {
+                    inner()
+                        .padding(inset)
+                        // Concentric shapes inside read their corners from this container shape.
+                        .containerShape(RoundedRectangle(cornerRadius: outerRadius))
+                        .background(RoundedRectangle(cornerRadius: outerRadius).fill(.quaternary))
+                        .frame(height: 160)
+
+                    Text(title)
+                        .font(.caption)
+                }
+            }
+
+            // MARK: - 2. Mixed corner styles
+
+            private var mixedCornersSection: some View {
+                VStack(spacing: 16) {
+                    sectionTitle("Mixed corner styles")
+
+                    VStack(spacing: 8) {
+                        // Top corners follow the card; bottom corners stay small, next to the buttons.
+                        ConcentricRectangle(uniformTopCorners: .concentric, uniformBottomCorners: .fixed(8))
+                            .fill(
+                                LinearGradient(
+                                    colors: [Color.mycolor.myBlue, Color.mycolor.myPurple],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .overlay {
+                                Image("AppIcon_blue_3477F5")
+                                    .resizable()
+                                    .frame(width: 96, height: 96)
+                                    .clipShape(RoundedRectangle(cornerRadius: 22))
+                                    .shadow(radius: 10)
+                            }
+                            .frame(height: 180)
+
+                        HStack(spacing: 8) {
+                            cardButton(
+                                "Share",
+                                systemImage: "square.and.arrow.up",
+                                shape: ConcentricRectangle(
+                                    topLeadingCorner: .fixed(8),
+                                    topTrailingCorner: .fixed(8),
+                                    bottomLeadingCorner: .concentric,
+                                    bottomTrailingCorner: .fixed(8)
+                                )
+                            )
+                            cardButton(
+                                "Save",
+                                systemImage: "heart",
+                                shape: ConcentricRectangle(
+                                    topLeadingCorner: .fixed(8),
+                                    topTrailingCorner: .fixed(8),
+                                    bottomLeadingCorner: .fixed(8),
+                                    bottomTrailingCorner: .concentric
+                                )
+                            )
+                        }
+                    }
+                    .padding(8)
+                    .containerShape(RoundedRectangle(cornerRadius: 32))
+                    .background(RoundedRectangle(cornerRadius: 32).fill(.quaternary))
+                }
+            }
+
+            /// A full-width button whose background uses the given concentric shape.
+            /// - Parameters:
+            ///   - title: Button title.
+            ///   - systemImage: SF Symbol name.
+            ///   - shape: Background shape; its outer corner follows the card.
+            private func cardButton(_ title: String, systemImage: String, shape: ConcentricRectangle) -> some View {
+                Button {} label: {
+                    Label(title, systemImage: systemImage)
+                        .font(.subheadline.weight(.semibold))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 14)
+                        .background(shape.fill(.background))
+                }
+                .buttonStyle(.plain)
+            }
+
+            // MARK: - Helpers
+
+            private func sectionTitle(_ text: String) -> some View {
+                Text(text)
+                    .font(.headline)
+                    .foregroundStyle(Color.mycolor.myAccent)
+            }
+        }
+        """,
+        minOS: .ios26
+    )
+
+    static let b009 = CodeSnippet(
+        id: "B009",
+        title: "Glass Composer",
+        intro: "A chat screen built the iOS 26 way: .safeAreaBar pins a Liquid Glass composer to the bottom and a control bar to the top — unlike safeAreaInset, it also extends the scroll edge effect under each bar, so messages fade out softly behind the glass. .scrollEdgeEffectStyle switches that edge between a soft blur and a hard divider, while a GlassEffectContainer groups the composer's glass pieces and .buttonStyle(.glassProminent) gives the send button a tinted glass look.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 10, day: 28, hour: 14, minute: 0) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        struct B009_Message: Identifiable {
+            let id = UUID()
+            let text: String
+            let isMine: Bool
+
+            static let samples: [B009_Message] = [
+                .init(text: "Hey! Have you tried the new Liquid Glass APIs?", isMine: false),
+                .init(text: "Yes — safeAreaBar is my favorite so far.", isMine: true),
+                .init(text: "What does it do differently from safeAreaInset?", isMine: false),
+                .init(text: "It insets the safe area too, but also extends the scroll edge effect under the bar.", isMine: true),
+                .init(text: "So messages fade out softly behind the composer?", isMine: false),
+                .init(text: "Exactly. Scroll up and watch the top and bottom edges.", isMine: true),
+                .init(text: "And the Soft / Hard switch?", isMine: false),
+                .init(text: "That's scrollEdgeEffectStyle — a gentle blur or a crisp divider.", isMine: true)
+            ]
+
+            static let replies = [
+                "Nice! 👍",
+                "Tell me more.",
+                "Liquid Glass looks great here.",
+                "Try switching to Hard and scroll again."
+            ]
+        }
+
+        @available(iOS 26.0, *)
+        struct B009_GlassComposerDemo: View {
+
+            private enum EdgeStyle: CaseIterable, Identifiable {
+                case soft
+                case hard
+
+                var id: Self { self }
+
+                var title: String {
+                    switch self {
+                    case .soft: "Soft"
+                    case .hard: "Hard"
+                    }
+                }
+
+                var value: ScrollEdgeEffectStyle {
+                    switch self {
+                    case .soft: .soft
+                    case .hard: .hard
+                    }
+                }
+            }
+
+            @State private var messages = B009_Message.samples
+            @State private var draft = ""
+            @State private var edgeStyle: EdgeStyle = .soft
+            // Each send gets a new token; .task(id:) cancels the previous pending reply.
+            @State private var replyToken: UUID?
+
+            var body: some View {
+                ScrollView {
+                    LazyVStack(spacing: 10) {
+                        ForEach(messages) { message in
+                            bubble(message)
+                        }
+                    }
+                    .padding()
+                }
+                .defaultScrollAnchor(.bottom)
+                .scrollEdgeEffectStyle(edgeStyle.value, for: .all)
+                // Unlike safeAreaInset, safeAreaBar also extends the scroll edge effect under the bar.
+                .safeAreaBar(edge: .top) { header }
+                .safeAreaBar(edge: .bottom) { composer }
+                .background(Color.mycolor.mySectionBackground)
+                .clipShape(RoundedRectangle(cornerRadius: 28))
+                .task(id: replyToken) { await sendReply() }
+            }
+
+            // MARK: - Bubble
+
+            private func bubble(_ message: B009_Message) -> some View {
+                Text(message.text)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 10)
+                    .foregroundStyle(message.isMine ? .white : .primary)
+                    .background(
+                        message.isMine ? AnyShapeStyle(Color.mycolor.myBlue) : AnyShapeStyle(.background),
+                        in: RoundedRectangle(cornerRadius: 18)
+                    )
+                    .frame(maxWidth: 280, alignment: message.isMine ? .trailing : .leading)
+                    .frame(maxWidth: .infinity, alignment: message.isMine ? .trailing : .leading)
+            }
+
+            // MARK: - Header
+
+            private var header: some View {
+                Picker("Edge effect", selection: $edgeStyle) {
+                    ForEach(EdgeStyle.allCases) { Text($0.title).tag($0) }
+                }
+                .pickerStyle(.segmented)
+                .frame(width: 200)
+                .padding(.top, 8)
+            }
+
+            // MARK: - Composer
+
+            private var composer: some View {
+                GlassEffectContainer(spacing: 12) {
+                    HStack(alignment: .bottom, spacing: 12) {
+                        // Fills the field with a suggested message.
+                        Button {
+                            draft = B009_Message.replies.randomElement() ?? ""
+                        } label: {
+                            Image(systemName: "sparkles")
+                                .font(.title3)
+                                .frame(width: 44, height: 44)
+                        }
+                        .glassEffect(.regular.interactive(), in: Circle())
+
+                        TextField("Message", text: $draft, axis: .vertical)
+                            .lineLimit(1...4)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                            .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 22))
+
+                        Button(action: send) {
+                            Image(systemName: "arrow.up")
+                                .font(.title3.bold())
+                                .frame(width: 32, height: 32)
+                        }
+                        .buttonStyle(.glassProminent)
+                        .buttonBorderShape(.circle)
+                        .tint(Color.mycolor.myBlue)
+                        .disabled(trimmedDraft.isEmpty)
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+            }
+
+            // MARK: - Actions
+
+            private var trimmedDraft: String {
+                draft.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+
+            /// Appends the draft as an outgoing message and schedules an auto-reply.
+            private func send() {
+                guard !trimmedDraft.isEmpty else { return }
+                withAnimation(.smooth) {
+                    messages.append(B009_Message(text: trimmedDraft, isMine: true))
+                }
+                draft = ""
+                replyToken = UUID()
+            }
+
+            /// Posts a canned reply after a short pause; cancelled if another message is sent first.
+            private func sendReply() async {
+                guard replyToken != nil else { return }
+                do {
+                    try await Task.sleep(for: .seconds(1.2))
+                } catch {
+                    return
+                }
+                withAnimation(.smooth) {
+                    messages.append(B009_Message(text: B009_Message.replies.randomElement() ?? "👍", isMine: false))
+                }
+            }
+        }
+        """,
+        minOS: .ios26
+    )
+
+    static let b008 = CodeSnippet(
+        id: "B008",
+        title: "SF Symbols Draw Animations",
+        intro: "SF Symbols 7 can draw themselves like a pen stroke. The new .drawOff / .drawOn effects erase and redraw a symbol as a whole, layer by layer, or path by path; .transition(.symbolEffect(.drawOn)) makes an inserted symbol draw itself in; .symbolVariableValueMode(.draw) turns a variable value into a partially drawn path instead of dimmed layers; and .symbolColorRenderingMode(.gradient) adds a subtle gradient derived from a single color.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 10, day: 28, hour: 13, minute: 0) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        @available(iOS 26.0, *)
+        struct B008_SymbolDrawAnimationsDemo: View {
+
+            /// How a Draw animation walks through the symbol's paths.
+            private enum Granularity: CaseIterable, Identifiable {
+                case wholeSymbol
+                case byLayer
+                case individually
+
+                var id: Self { self }
+
+                var title: String {
+                    switch self {
+                    case .wholeSymbol: "Whole"
+                    case .byLayer: "By Layer"
+                    case .individually: "Individually"
+                    }
+                }
+
+                var drawOff: DrawOffSymbolEffect {
+                    switch self {
+                    case .wholeSymbol: .drawOff.wholeSymbol
+                    case .byLayer: .drawOff.byLayer
+                    case .individually: .drawOff.individually
+                    }
+                }
+            }
+
+            private static let drawSymbols = ["cloud.sun.rain", "wind.snow", "sun.horizon", "checklist", "pencil.and.scribble", "list.bullet"]
+            private static let variableSymbols = ["cellularbars", "wifi", "speaker.wave.3"]
+            private static let levelSteps = 20
+            private static let gradientSymbols: [(name: String, color: Color)] = [("flame.fill", .orange), ("drop.fill", .blue)]
+
+            // MARK: - Draw On / Off state
+            @State private var isErased = false
+            @State private var granularity: Granularity = .byLayer
+
+            // MARK: - Transition state
+            @State private var isDone = true
+
+            // MARK: - Variable Draw state
+            @State private var levelStep = 0
+
+            private var level: Double {
+                Double(levelStep) / Double(Self.levelSteps)
+            }
+
+            var body: some View {
+                ScrollView {
+                    VStack(spacing: 50) {
+                        drawOnOffSection
+                        drawTransitionSection
+                        variableDrawSection
+                        gradientSection
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                }
+            }
+
+            // MARK: - 1. Draw On / Draw Off
+
+            private var drawOnOffSection: some View {
+                VStack(spacing: 16) {
+                    sectionTitle("Draw On / Draw Off")
+
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 20) {
+                        ForEach(Self.drawSymbols, id: \\.self) { name in
+                            Image(systemName: name)
+                                .font(.system(size: 44))
+                                .foregroundStyle(Color.mycolor.myBlue)
+                                .symbolRenderingMode(.hierarchical)
+                                // While active the symbol is "erased" stroke by stroke;
+                                // deactivating plays it back, drawing the strokes in.
+                                .symbolEffect(granularity.drawOff, options: .speed(0.5), isActive: isErased)
+                                .frame(height: 56)
+                        }
+                    }
+
+                    Picker("Granularity", selection: $granularity) {
+                        ForEach(Granularity.allCases) { Text($0.title).tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+
+                    Button(isErased ? "Draw" : "Erase") {
+                        isErased.toggle()
+                    }
+                    .buttonStyle(.glass)
+                }
+            }
+
+            // MARK: - 2. Draw-in transition
+
+            private var drawTransitionSection: some View {
+                VStack(spacing: 16) {
+                    sectionTitle("Draw-in Transition")
+
+                    ZStack {
+                        if isDone {
+                            Image(systemName: "checkmark.circle")
+                                .font(.system(size: 72))
+                                .foregroundStyle(Color.mycolor.myGreen)
+                                // Inserted symbols draw themselves in instead of fading.
+                                .transition(.symbolEffect(.drawOn.individually))
+                        }
+                    }
+                    .frame(height: 90)
+
+                    Button(isDone ? "Reset" : "Complete") {
+                        withAnimation { isDone.toggle() }
+                    }
+                    .buttonStyle(.glassProminent)
+                    .tint(Color.mycolor.myGreen)
+                }
+            }
+
+            // MARK: - 3. Variable Draw
+
+            private var variableDrawSection: some View {
+                VStack(spacing: 16) {
+                    sectionTitle("Variable Draw")
+
+                    variableRow(title: "Color", mode: .color)
+                    variableRow(title: "Draw", mode: .draw)
+
+                    Text("variableValue: \\(level, format: .number.precision(.fractionLength(2)))")
+                        .font(.subheadline.monospacedDigit())
+                }
+                .task { await cycleLevel() }
+            }
+
+            private func cycleLevel() async {
+                var direction = 1
+                while true {
+                    do {
+                        try await Task.sleep(for: .milliseconds(100))
+                    } catch {
+                        return
+                    }
+                    if levelStep + direction > Self.levelSteps || levelStep + direction < 0 {
+                        direction = -direction
+                    }
+                    levelStep += direction
+                }
+            }
+
+            private func variableRow(title: String, mode: SymbolVariableValueMode) -> some View {
+                HStack {
+                    Text(title)
+                        .font(.subheadline)
+                        .frame(width: 60, alignment: .leading)
+
+                    ForEach(Self.variableSymbols, id: \\.self) { name in
+                        Image(systemName: name, variableValue: level)
+                            .font(.system(size: 36))
+                            .foregroundStyle(Color.mycolor.myOrange)
+                            // .color dims inactive layers; .draw trims each layer's path by the value.
+                            .symbolVariableValueMode(mode)
+                            .frame(maxWidth: .infinity)
+                    }
+                }
+            }
+
+            // MARK: - 4. Gradient rendering
+
+            private var gradientSection: some View {
+                VStack(spacing: 16) {
+                    sectionTitle("Gradient Rendering")
+
+                    gradientRow(title: "Flat", mode: .flat)
+                    gradientRow(title: "Gradient", mode: .gradient)
+                }
+            }
+
+            private func gradientRow(title: String, mode: SymbolColorRenderingMode) -> some View {
+                HStack {
+                    Text(title)
+                        .font(.subheadline)
+                        .frame(width: 60, alignment: .leading)
+
+                    ForEach(Self.gradientSymbols, id: \\.name) { symbol in
+                        Image(systemName: symbol.name)
+                            .font(.system(size: 100))
+                            .foregroundStyle(symbol.color)
+                            // .gradient derives a subtle gradient from the single foreground color.
+                            .symbolColorRenderingMode(mode)
+                            .frame(maxWidth: .infinity)
+                    }
+                }
+            }
+
+            // MARK: - Helpers
+
+            private func sectionTitle(_ text: String) -> some View {
+                Text(text)
+                    .font(.headline)
+                    .foregroundStyle(Color.mycolor.myAccent)
+            }
+        }
+        """,
+        minOS: .ios26
+    )
+
+    static let b007 = CodeSnippet(
+        id: "B007",
+        title: "3D Charts Explorer",
+        intro: "Swift Charts goes 3D in iOS 26: Chart3D renders a mathematical surface with SurfacePlot (just a (x, z) -> y function) or a scatter of PointMark(x:y:z:) values. Bind .chart3DPose to a @State pose and the chart becomes interactive — drag to rotate it, or animate it to preset angles — while .chart3DCameraProjection switches between perspective and orthographic views and a height-based gradient colors the surface by its elevation.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 10, day: 28, hour: 12, minute: 0) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+        import Charts
+        import Spatial
+
+        // MARK: - Model
+
+        /// The mathematical surfaces SurfacePlot can draw — each one is just a (x, z) -> y function.
+        /// nonisolated + Sendable: SurfacePlot calls the function from a @Sendable closure off the main actor.
+        nonisolated enum B007_SurfaceShape: CaseIterable, Identifiable, Sendable {
+            case ripple
+            case saddle
+            case waves
+
+            var id: Self { self }
+
+            var title: String {
+                switch self {
+                case .ripple: "Ripple"
+                case .saddle: "Saddle"
+                case .waves: "Waves"
+                }
+            }
+
+            /// Height of the surface at the given (x, z) point.
+            func height(x: Double, z: Double) -> Double {
+                switch self {
+                case .ripple:
+                    let r = (x * x + z * z).squareRoot()
+                    return cos(r * 2) / (1 + r * 0.6)
+                case .saddle:
+                    return (x * x - z * z) / 9
+                case .waves:
+                    return sin(x * 1.5) * cos(z * 1.5)
+                }
+            }
+        }
+
+        /// A single point of the 3D scatter plot.
+        struct B007_Point: Identifiable {
+            let id: Int
+            let x: Double
+            let y: Double
+            let z: Double
+            let cluster: String
+
+            /// Three deterministic clusters, so the chart looks the same on every launch.
+            static let samples: [B007_Point] = {
+                let centers: [(name: String, x: Double, y: Double, z: Double)] = [
+                    ("Alpha", -1.5, 0.6, -1.0),
+                    ("Beta", 1.4, -0.4, 0.8),
+                    ("Gamma", 0.2, 0.9, 1.8)
+                ]
+                var points: [B007_Point] = []
+                for (c, center) in centers.enumerated() {
+                    for i in 0..<40 {
+                        let t = Double(i * 7 + c * 13)
+                        points.append(B007_Point(
+                            id: c * 100 + i,
+                            x: center.x + sin(t * 1.3) * 0.9,
+                            y: center.y + cos(t * 0.7) * 0.5,
+                            z: center.z + sin(t * 2.1) * 0.9,
+                            cluster: center.name
+                        ))
+                    }
+                }
+                return points
+            }()
+        }
+
+        // MARK: - Demo
+
+        @available(iOS 26.0, *)
+        struct B007_Charts3DExplorerDemo: View {
+
+            private enum Mode: CaseIterable, Identifiable {
+                case surface
+                case points
+                var id: Self { self }
+
+                var title: String {
+                    switch self {
+                    case .surface: "Surface"
+                    case .points: "Points"
+                    }
+                }
+            }
+
+            private enum Projection: CaseIterable, Identifiable {
+                case perspective
+                case orthographic
+                var id: Self { self }
+
+                var title: String {
+                    switch self {
+                    case .perspective: "Perspective"
+                    case .orthographic: "Orthographic"
+                    }
+                }
+
+                var value: Chart3DCameraProjection {
+                    switch self {
+                    case .perspective: .perspective
+                    case .orthographic: .orthographic
+                    }
+                }
+            }
+
+            private static let poses: [(title: String, pose: Chart3DPose)] = [
+                ("Default", .default),
+                ("Front", .front),
+                ("Top", .top),
+                ("Hero", Chart3DPose(azimuth: .degrees(-40), inclination: .degrees(25)))
+            ]
+
+            @State private var mode: Mode = .surface
+            @State private var shape: B007_SurfaceShape = .ripple
+            @State private var heightColored = true
+            @State private var projection: Projection = .perspective
+            // Bound with .chart3DPose — dragging the chart rotates it and writes the new pose back here.
+            @State private var pose: Chart3DPose = .default
+
+            var body: some View {
+                VStack(spacing: 16) {
+                    Picker("Mode", selection: $mode) {
+                        ForEach(Mode.allCases) { Text($0.title).tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+
+                    chart
+                        .frame(maxWidth: .infinity, minHeight: 320, maxHeight: .infinity)
+
+                    poseButtons
+                    controls
+                }
+                .padding(.vertical)
+            }
+
+            // MARK: - Chart
+
+            @ViewBuilder
+            private var chart: some View {
+                Group {
+                    switch mode {
+                    case .surface: surfaceChart
+                    case .points: pointsChart
+                    }
+                }
+                .chart3DPose($pose)
+                .chart3DCameraProjection(projection.value)
+                .chartXScale(domain: -3...3)
+                .chartZScale(domain: -3...3)
+            }
+
+            private var surfaceChart: some View {
+                // SurfacePlot samples the function over the X/Z scale domains.
+                let shape = shape
+                return Chart3D {
+                    SurfacePlot(x: "X", y: "Y", z: "Z") { x, z in
+                        shape.height(x: x, z: z)
+                    }
+                    .foregroundStyle(surfaceStyle)
+                    .roughness(0.3)
+                }
+                .chartYScale(domain: -1.5...1.5)
+            }
+
+            private var surfaceStyle: BasicChart3DSurfaceStyle {
+                heightColored
+                    ? .heightBased(
+                        Gradient(colors: [Color.mycolor.myBlue, Color.mycolor.myPurple, Color.mycolor.myOrange]),
+                        yRange: -1...1
+                    )
+                    : .normalBased
+            }
+
+            private var pointsChart: some View {
+                Chart3D(B007_Point.samples) { point in
+                    PointMark(
+                        x: .value("X", point.x),
+                        y: .value("Y", point.y),
+                        z: .value("Z", point.z)
+                    )
+                    .foregroundStyle(by: .value("Cluster", point.cluster))
+                }
+                .chartYScale(domain: -1.5...2.5)
+                .chartForegroundStyleScale([
+                    "Alpha": Color.mycolor.myBlue,
+                    "Beta": Color.mycolor.myOrange,
+                    "Gamma": Color.mycolor.myGreen
+                ])
+            }
+
+            // MARK: - Controls
+
+            private var poseButtons: some View {
+                HStack(spacing: 8) {
+                    ForEach(Self.poses, id: \\.title) { item in
+                        Button(item.title) {
+                            withAnimation(.smooth) { pose = item.pose }
+                        }
+                        .buttonStyle(.glass)
+                        .font(.footnote)
+                    }
+                }
+            }
+
+            private var controls: some View {
+                VStack(spacing: 12) {
+                    Picker("Projection", selection: $projection) {
+                        ForEach(Projection.allCases) { Text($0.title).tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+
+                    if mode == .surface {
+                        Picker("Shape", selection: $shape) {
+                            ForEach(B007_SurfaceShape.allCases) { Text($0.title).tag($0) }
+                        }
+                        .pickerStyle(.segmented)
+
+                        Toggle("Height-based gradient", isOn: $heightColored)
+                            .font(.subheadline)
+                    }
+                }
+            }
+        }
+        """,
+        minOS: .ios26
+    )
 
     static let b006 = CodeSnippet(
         id: "B006",
@@ -1165,6 +2094,530 @@ struct SnippetsRepository {
         }
         """,
         minOS: .ios26
+    )
+
+    static let a019 = CodeSnippet(
+        id: "A019",
+        title: "Text Renderer",
+        intro: "A TextRenderer takes over how a Text is drawn: SwiftUI hands it the laid-out lines, runs and individual glyphs, and you draw each one into a GraphicsContext with its own offset, opacity or filter. Three renderers here — a glyph-by-glyph reveal driven by an animatable value, a sine wave driven by a TimelineView, and a custom TextAttribute that animates only the marked words of a sentence while the rest stays still.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 10, day: 28, hour: 17, minute: 0) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        // MARK: - Renderers
+
+        /// Reveals glyphs one after another: each fades in, rises and sharpens.
+        /// `elapsed` is the animatable value — animating it from 0 plays the reveal.
+        struct A019_AppearRenderer: TextRenderer {
+            var elapsed: TimeInterval
+            var glyphDelay: TimeInterval = 0.04
+            var glyphDuration: TimeInterval = 0.5
+
+            var animatableData: Double {
+                get { elapsed }
+                set { elapsed = newValue }
+            }
+
+            // Extra room so risen and blurred glyphs aren't clipped.
+            var displayPadding: EdgeInsets {
+                EdgeInsets(top: 16, leading: 8, bottom: 16, trailing: 8)
+            }
+
+            func draw(layout: Text.Layout, in ctx: inout GraphicsContext) {
+                var index = 0
+                for line in layout {
+                    for run in line {
+                        for glyph in run {
+                            let start = Double(index) * glyphDelay
+                            let progress = min(max((elapsed - start) / glyphDuration, 0), 1)
+
+                            var copy = ctx
+                            copy.opacity = progress
+                            copy.translateBy(x: 0, y: (1 - progress) * 16)
+                            copy.addFilter(.blur(radius: (1 - progress) * 6))
+                            copy.draw(glyph)
+                            index += 1
+                        }
+                    }
+                }
+            }
+        }
+
+        /// Moves every glyph along a sine wave driven by the current time.
+        struct A019_WaveRenderer: TextRenderer {
+            var time: TimeInterval
+            var amplitude: CGFloat = 6
+
+            var displayPadding: EdgeInsets {
+                EdgeInsets(top: amplitude, leading: 0, bottom: amplitude, trailing: 0)
+            }
+
+            func draw(layout: Text.Layout, in ctx: inout GraphicsContext) {
+                var index = 0
+                for line in layout {
+                    for run in line {
+                        for glyph in run {
+                            var copy = ctx
+                            copy.translateBy(x: 0, y: sin(time * 4 + Double(index) * 0.5) * amplitude)
+                            copy.draw(glyph)
+                            index += 1
+                        }
+                    }
+                }
+            }
+        }
+
+        /// Marks the part of a Text that A019_EmphasisRenderer should animate.
+        struct A019_Emphasis: TextAttribute {}
+
+        /// Draws plain runs as is and makes runs marked with A019_Emphasis bounce and shift hue.
+        struct A019_EmphasisRenderer: TextRenderer {
+            var time: TimeInterval
+
+            var displayPadding: EdgeInsets {
+                EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0)
+            }
+
+            func draw(layout: Text.Layout, in ctx: inout GraphicsContext) {
+                for line in layout {
+                    for run in line {
+                        // A run carries the custom attribute it was built with.
+                        guard run[A019_Emphasis.self] != nil else {
+                            ctx.draw(run)
+                            continue
+                        }
+                        var emphasized = ctx
+                        emphasized.addFilter(.hueRotation(.degrees(time * 90)))
+                        for (index, glyph) in run.enumerated() {
+                            var copy = emphasized
+                            copy.translateBy(x: 0, y: -abs(sin(time * 3 + Double(index) * 0.35)) * 10)
+                            copy.draw(glyph)
+                        }
+                    }
+                }
+            }
+        }
+
+        // MARK: - Demo
+
+        struct A019_TextRendererDemo: View {
+
+            private static let message = "Every glyph has its own entrance"
+            private static let appearDuration = Double(message.count) * 0.04 + 0.5
+
+            @State private var elapsed: TimeInterval = 0
+            // Each tap bumps the counter; .task(id:) restarts the reveal from the beginning.
+            @State private var replayCount = 0
+
+            var body: some View {
+                ScrollView {
+                    VStack(spacing: 50) {
+                        appearSection
+                        waveSection
+                        emphasisSection
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                }
+            }
+
+            // MARK: - 1. Glyph-by-glyph reveal
+
+            private var appearSection: some View {
+                VStack(spacing: 16) {
+                    sectionTitle("Glyph-by-glyph reveal")
+
+                    Text(Self.message)
+                        .font(.title.bold())
+                        .multilineTextAlignment(.center)
+                        .foregroundStyle(Color.mycolor.myPurple)
+                        .textRenderer(A019_AppearRenderer(elapsed: elapsed))
+                        .task(id: replayCount) { await playReveal() }
+
+                    Button("Replay") { replayCount += 1 }
+                        .buttonStyle(.bordered)
+                }
+            }
+
+            /// Resets the reveal, then animates it to the end.
+            private func playReveal() async {
+                elapsed = 0
+                // Let the reset render first, otherwise both changes merge and nothing animates.
+                do {
+                    try await Task.sleep(for: .milliseconds(50))
+                } catch {
+                    return
+                }
+                withAnimation(.linear(duration: Self.appearDuration)) {
+                    elapsed = Self.appearDuration
+                }
+            }
+
+            // MARK: - 2. Wave
+
+            private var waveSection: some View {
+                VStack(spacing: 16) {
+                    sectionTitle("Wave")
+
+                    TimelineView(.animation) { context in
+                        Text("Riding the sine wave")
+                            .font(.title2.weight(.heavy))
+                            .foregroundStyle(Color.mycolor.myBlue)
+                            .textRenderer(A019_WaveRenderer(time: context.date.timeIntervalSinceReferenceDate))
+                    }
+                }
+            }
+
+            // MARK: - 3. Custom attribute
+
+            private var emphasisSection: some View {
+                VStack(spacing: 16) {
+                    sectionTitle("Animate only part of a Text")
+
+                    TimelineView(.animation) { context in
+                        Text("Make \\(Text("these words").customAttribute(A019_Emphasis()).foregroundStyle(Color.mycolor.myRed)) stand out")
+                            .font(.title2.bold())
+                            .textRenderer(A019_EmphasisRenderer(time: context.date.timeIntervalSinceReferenceDate))
+                    }
+                }
+            }
+
+            // MARK: - Helpers
+
+            private func sectionTitle(_ text: String) -> some View {
+                Text(text)
+                    .font(.headline)
+                    .foregroundStyle(Color.mycolor.myAccent)
+            }
+        }
+        """,
+        minOS: .ios18
+    )
+
+    static let a018 = CodeSnippet(
+        id: "A018",
+        title: "Mesh Gradient",
+        intro: "MeshGradient blends colors across a grid of control points instead of along a single line, giving the soft, organic backgrounds seen across iOS. Here a 3×3 mesh is driven by a TimelineView: the corners stay pinned, edge points slide along their edges and the center point drifts, so the colors flow endlessly. Switch palettes, compare smoothsColors on and off, and reveal the control points to see exactly what is moving.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 10, day: 28, hour: 16, minute: 0) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        struct A018_MeshGradientDemo: View {
+
+            private enum Palette: CaseIterable, Identifiable {
+                case sunset
+                case ocean
+                case aurora
+
+                var id: Self { self }
+
+                var title: String {
+                    switch self {
+                    case .sunset: "Sunset"
+                    case .ocean: "Ocean"
+                    case .aurora: "Aurora"
+                    }
+                }
+
+                /// Nine colors for the 3×3 grid, row by row from the top-left corner.
+                var colors: [Color] {
+                    switch self {
+                    case .sunset:
+                        [.purple, .pink, .orange,
+                         .indigo, .red, .orange,
+                         .purple, .pink, .yellow]
+                    case .ocean:
+                        [.indigo, .blue, .cyan,
+                         .blue, .teal, .mint,
+                         .indigo, .cyan, .teal]
+                    case .aurora:
+                        [.black, .indigo, .black,
+                         .green, .mint, .purple,
+                         .indigo, .teal, .black]
+                    }
+                }
+            }
+
+            @State private var palette: Palette = .sunset
+            @State private var smoothsColors = true
+            @State private var showsPoints = false
+
+            var body: some View {
+                ScrollView {
+                    VStack(spacing: 20) {
+                        // TimelineView redraws every frame, so the mesh points follow the clock.
+                        TimelineView(.animation) { context in
+                            let points = Self.points(at: context.date.timeIntervalSinceReferenceDate)
+
+                            MeshGradient(
+                                width: 3,
+                                height: 3,
+                                points: points,
+                                colors: palette.colors,
+                                smoothsColors: smoothsColors
+                            )
+                            .overlay {
+                                if showsPoints {
+                                    controlPoints(points)
+                                }
+                            }
+                        }
+                        .frame(height: 360)
+                        .clipShape(RoundedRectangle(cornerRadius: 28))
+                        .overlay {
+                            Text("Mesh Gradient")
+                                .font(.largeTitle.bold())
+                                .foregroundStyle(.white)
+                                .shadow(radius: 8)
+                        }
+
+                        Picker("Palette", selection: $palette.animation(.easeInOut(duration: 0.6))) {
+                            ForEach(Palette.allCases) { Text($0.title).tag($0) }
+                        }
+                        .pickerStyle(.segmented)
+
+                        Toggle("Smooth colors", isOn: $smoothsColors)
+                        Toggle("Show control points", isOn: $showsPoints)
+                    }
+                    .font(.subheadline)
+                    .padding()
+                }
+            }
+
+            // MARK: - Points
+
+            /// Positions of the 3×3 mesh points at the given moment.
+            ///
+            /// Corners stay pinned and edge points only slide along their edge,
+            /// so the gradient always covers the whole rectangle.
+            /// - Parameter time: Seconds, usually the timeline's current date.
+            /// - Returns: Nine points in unit coordinates, row by row from the top-left corner.
+            private static func points(at time: Double) -> [SIMD2<Float>] {
+                // Math stays in Double: the reference-date timestamp is too large for Float precision.
+                let t = time
+                func point(_ x: Double, _ y: Double) -> SIMD2<Float> { [Float(x), Float(y)] }
+                return [
+                    point(0, 0), point(0.5 + 0.3 * sin(t * 0.8), 0), point(1, 0),
+                    point(0, 0.5 + 0.3 * sin(t * 0.9)), point(0.5 + 0.25 * sin(t * 1.3), 0.5 + 0.25 * cos(t)), point(1, 0.5 + 0.3 * cos(t * 1.1)),
+                    point(0, 1), point(0.5 + 0.3 * cos(t * 0.7), 1), point(1, 1)
+                ]
+            }
+
+            /// Dots marking where each mesh point currently is.
+            private func controlPoints(_ points: [SIMD2<Float>]) -> some View {
+                GeometryReader { proxy in
+                    ForEach(points.indices, id: \\.self) { index in
+                        Circle()
+                            .fill(.white)
+                            .stroke(.black.opacity(0.4), lineWidth: 1)
+                            .frame(width: 12, height: 12)
+                            .position(
+                                x: CGFloat(points[index].x) * proxy.size.width,
+                                y: CGFloat(points[index].y) * proxy.size.height
+                            )
+                    }
+                }
+            }
+        }
+        """,
+        minOS: .ios18
+    )
+
+    static let a017 = CodeSnippet(
+        id: "A017",
+        title: "@Animatable Macro",
+        intro: "Custom shapes animate only through animatableData — and with several properties that meant hand-nesting AnimatablePair<AnimatablePair<…>, …> and its getter and setter. The @Animatable macro synthesizes all of it from the stored properties; @AnimatableIgnored opts out the ones that can't be interpolated. Here a star morphs its point count, depth and rotation with a single spring, and a wave springs its amplitude and frequency while a TimelineView keeps it flowing. The macro expands at compile time, so it needs Xcode 26 but runs on earlier iOS versions too.",
+        thanks: nil,
+        date: Date.from(year: 2026, month: 10, day: 28, hour: 15, minute: 0) ?? Date(),
+        codeSnippet: """
+        import SwiftUI
+
+        // MARK: - Shapes
+
+        /// A star (or polygon, when innerRatio is 1) with a fractional number of points,
+        /// so it can morph smoothly between, say, a triangle and an eight-point burst.
+        ///
+        /// Without the macro you'd hand-write the nested pair:
+        /// var animatableData: AnimatablePair<AnimatablePair<Double, Double>, Double>
+        @Animatable
+        struct A017_Star: Shape {
+            var points: Double
+            var innerRatio: Double
+            var rotation: Double
+
+            func path(in rect: CGRect) -> Path {
+                let center = CGPoint(x: rect.midX, y: rect.midY)
+                let outer = min(rect.width, rect.height) / 2
+                let inner = outer * innerRatio
+                let step = .pi / points
+                let vertexCount = Int((points * 2).rounded(.up))
+
+                var path = Path()
+                for i in 0..<vertexCount {
+                    let angle = Double(i) * step + rotation * .pi / 180 - .pi / 2
+                    let radius = i.isMultiple(of: 2) ? outer : inner
+                    let point = CGPoint(x: center.x + cos(angle) * radius, y: center.y + sin(angle) * radius)
+                    if i == 0 { path.move(to: point) } else { path.addLine(to: point) }
+                }
+                path.closeSubpath()
+                return path
+            }
+        }
+
+        /// A sine wave whose amplitude, frequency and phase are all animatable.
+        @Animatable
+        struct A017_Wave: Shape {
+            var amplitude: Double
+            var frequency: Double
+            var phase: Double
+            // Not animatable: an Int sample count can't be interpolated, so it's excluded from animatableData.
+            @AnimatableIgnored var resolution: Int = 80
+
+            func path(in rect: CGRect) -> Path {
+                var path = Path()
+                path.move(to: CGPoint(x: 0, y: rect.maxY))
+                for i in 0...resolution {
+                    let x = rect.width * Double(i) / Double(resolution)
+                    let relative = x / rect.width
+                    let y = rect.midY + sin((relative * frequency + phase) * 2 * .pi) * amplitude * rect.height / 2
+                    path.addLine(to: CGPoint(x: x, y: y))
+                }
+                path.addLine(to: CGPoint(x: rect.width, y: rect.maxY))
+                path.closeSubpath()
+                return path
+            }
+        }
+
+        // MARK: - Demo
+
+        struct A017_AnimatableMacroDemo: View {
+
+            private enum StarPreset: CaseIterable, Identifiable {
+                case triangle
+                case star
+                case burst
+
+                var id: Self { self }
+
+                var title: String {
+                    switch self {
+                    case .triangle: "Triangle"
+                    case .star: "Star"
+                    case .burst: "Burst"
+                    }
+                }
+
+                var points: Double {
+                    switch self {
+                    case .triangle: 3
+                    case .star: 5
+                    case .burst: 8
+                    }
+                }
+
+                var innerRatio: Double {
+                    switch self {
+                    case .triangle: 0.5
+                    case .star: 0.42
+                    case .burst: 0.7
+                    }
+                }
+
+                var rotation: Double {
+                    switch self {
+                    case .triangle: 0
+                    case .star: 36
+                    case .burst: 90
+                    }
+                }
+            }
+
+            // MARK: - Star state
+            @State private var preset: StarPreset = .star
+
+            // MARK: - Wave state
+            @State private var isStormy = false
+
+            var body: some View {
+                ScrollView {
+                    VStack(spacing: 50) {
+                        starSection
+                        waveSection
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                }
+            }
+
+            // MARK: - 1. Morphing star
+
+            private var starSection: some View {
+                VStack(spacing: 16) {
+                    sectionTitle("Three properties, one macro")
+
+                    A017_Star(points: preset.points, innerRatio: preset.innerRatio, rotation: preset.rotation)
+                        .fill(
+                            LinearGradient(
+                                colors: [Color.mycolor.myYellow, Color.mycolor.myOrange],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                        .frame(width: 200, height: 200)
+
+                    HStack(spacing: 8) {
+                        ForEach(StarPreset.allCases) { item in
+                            Button(item.title) {
+                                withAnimation(.spring(duration: 0.8, bounce: 0.4)) { preset = item }
+                            }
+                            .buttonStyle(.bordered)
+                            .tint(preset == item ? Color.mycolor.myOrange : .secondary)
+                        }
+                    }
+                }
+            }
+
+            // MARK: - 2. Endless wave
+
+            private var waveSection: some View {
+                VStack(spacing: 16) {
+                    sectionTitle("Spring amplitude + frequency")
+
+                    // The timeline scrolls the phase every frame; the toggle springs amplitude and frequency.
+                    TimelineView(.animation) { context in
+                        A017_Wave(
+                            amplitude: isStormy ? 0.8 : 0.25,
+                            frequency: isStormy ? 3 : 1.5,
+                            phase: context.date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: 2) / 2
+                        )
+                        .fill(
+                            LinearGradient(
+                                colors: [Color.mycolor.myBlue, Color.mycolor.myPurple],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                    }
+                    .frame(height: 140)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+
+                    Toggle("Stormy sea", isOn: $isStormy.animation(.spring(duration: 1, bounce: 0.3)))
+                        .font(.subheadline)
+                }
+            }
+
+            // MARK: - Helpers
+
+            private func sectionTitle(_ text: String) -> some View {
+                Text(text)
+                    .font(.headline)
+                    .foregroundStyle(Color.mycolor.myAccent)
+            }
+        }
+        """,
+        minOS: .ios18
     )
 
     static let a016 = CodeSnippet(
