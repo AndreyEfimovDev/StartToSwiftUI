@@ -177,13 +177,15 @@ enum FavoriteChoice: String, CaseIterable, Codable {
         }
     }
 
-    var icon: Image {
-        switch self { // "star.slash" : "star"
-        case .yes: return Image(systemName: "heart")
-        case .no: return Image(systemName: "heart.fill")
-        }
-    }
-    
+    // Не используется: FavoriteButton и свайп в MaterialsHomeView задают иконку сами.
+    // Оставлено для архива.
+//    var icon: Image {
+//        switch self {
+//        case .yes: return Image(systemName: "heart.fill")
+//        case .no: return Image(systemName: "heart")
+//        }
+//    }
+
     var color: Color {
         switch self {
         case .yes: return Color.mycolor.mySecondary

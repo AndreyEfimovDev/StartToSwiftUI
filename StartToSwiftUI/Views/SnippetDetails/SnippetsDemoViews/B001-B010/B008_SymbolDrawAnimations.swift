@@ -37,8 +37,6 @@ struct B008_SymbolDrawAnimationsDemo: View {
 
     // Multi-layer symbols: on single-layer ones Whole and By Layer look the same.
     private static let drawSymbols = ["cloud.sun.rain", "wind.snow", "sun.horizon", "checklist", "pencil.and.scribble", "list.bullet"]
-    private static let variableSymbols = ["cellularbars", "wifi", "speaker.wave.3"]
-    private static let levelSteps = 20
     private static let gradientSymbols: [(name: String, color: Color)] = [("flame.fill", .orange), ("drop.fill", .blue)]
 
     // MARK: - Draw On / Off state
@@ -48,20 +46,13 @@ struct B008_SymbolDrawAnimationsDemo: View {
     // MARK: - Transition state
     @State private var isDone = true
 
-    // MARK: - Variable Draw state
-    @State private var levelStep = 0
-
-    /// The variable value derived from an integer step, so it never accumulates floating-point drift.
-    private var level: Double {
-        Double(levelStep) / Double(Self.levelSteps)
-    }
-
     var body: some View {
         ScrollView {
             VStack(spacing: 50) {
                 drawOnOffSection
                 drawTransitionSection
-                variableDrawSection
+                // A separate view: its 10 Hz updates redraw only this section, not the whole demo.
+                B008_VariableDrawSection()
                 gradientSection
             }
             .frame(maxWidth: .infinity)
@@ -127,11 +118,64 @@ struct B008_SymbolDrawAnimationsDemo: View {
         }
     }
 
-    // MARK: - 3. Variable Draw
+    // MARK: - 3. Gradient rendering
 
-    private var variableDrawSection: some View {
+    private var gradientSection: some View {
         VStack(spacing: 16) {
-            sectionTitle("Variable Draw")
+            sectionTitle("Gradient Rendering")
+
+            gradientRow(title: "Flat", mode: .flat)
+            gradientRow(title: "Gradient", mode: .gradient)
+        }
+    }
+
+    private func gradientRow(title: String, mode: SymbolColorRenderingMode) -> some View {
+        HStack {
+            Text(title)
+                .font(.subheadline)
+                .frame(width: 60, alignment: .leading)
+
+            ForEach(Self.gradientSymbols, id: \.name) { symbol in
+                Image(systemName: symbol.name)
+                    .font(.system(size: 100))
+                    .foregroundStyle(symbol.color)
+                    // .gradient derives a subtle gradient from the single foreground color.
+                    .symbolColorRenderingMode(mode)
+                    .frame(maxWidth: .infinity)
+            }
+        }
+    }
+
+    // MARK: - Helpers
+
+    private func sectionTitle(_ text: String) -> some View {
+        Text(text)
+            .font(.headline)
+            .foregroundStyle(Color.mycolor.myAccent)
+    }
+}
+
+// MARK: - Variable Draw
+
+/// Symbols whose variable value cycles between 0 and 1, rendered with .color and .draw modes.
+@available(iOS 26.0, *)
+struct B008_VariableDrawSection: View {
+
+    private static let variableSymbols = ["cellularbars", "wifi", "speaker.wave.3"]
+    private static let levelSteps = 20
+
+    @State private var levelStep = 0
+
+    /// The variable value derived from an integer step, so it never accumulates floating-point drift.
+    private var level: Double {
+        Double(levelStep) / Double(Self.levelSteps)
+    }
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("Variable Draw")
+                .font(.headline)
+                .foregroundStyle(Color.mycolor.myAccent)
 
             variableRow(title: "Color", mode: .color)
             variableRow(title: "Draw", mode: .draw)
@@ -173,42 +217,6 @@ struct B008_SymbolDrawAnimationsDemo: View {
                     .frame(maxWidth: .infinity)
             }
         }
-    }
-
-    // MARK: - 4. Gradient rendering
-
-    private var gradientSection: some View {
-        VStack(spacing: 16) {
-            sectionTitle("Gradient Rendering")
-
-            gradientRow(title: "Flat", mode: .flat)
-            gradientRow(title: "Gradient", mode: .gradient)
-        }
-    }
-
-    private func gradientRow(title: String, mode: SymbolColorRenderingMode) -> some View {
-        HStack {
-            Text(title)
-                .font(.subheadline)
-                .frame(width: 60, alignment: .leading)
-
-            ForEach(Self.gradientSymbols, id: \.name) { symbol in
-                Image(systemName: symbol.name)
-                    .font(.system(size: 100))
-                    .foregroundStyle(symbol.color)
-                    // .gradient derives a subtle gradient from the single foreground color.
-                    .symbolColorRenderingMode(mode)
-                    .frame(maxWidth: .infinity)
-            }
-        }
-    }
-
-    // MARK: - Helpers
-
-    private func sectionTitle(_ text: String) -> some View {
-        Text(text)
-            .font(.headline)
-            .foregroundStyle(Color.mycolor.myAccent)
     }
 }
 
