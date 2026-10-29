@@ -47,3 +47,9 @@ protocol SnippetFavoritesStoreProtocol {
     func toggleSnippetFavorite(_ id: String)
 }
 
+/// Хранилище открытых сниппетов: неоткрытый сниппет считается новым.
+protocol SnippetViewedStoreProtocol {
+    func getSnippetViewedIDs() -> Set<String>
+    func markSnippetViewed(_ id: String)
+}
+

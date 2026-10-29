@@ -13,6 +13,7 @@ final class SnippetsViewModel: ObservableObject {
 
     // MARK: - Dependencies
     private let favoritesStore: SnippetFavoritesStoreProtocol?
+    private let viewedStore: SnippetViewedStoreProtocol?
     private let cloudChangeObserver: CloudChangeObserving?
     private let hapticManager = HapticManager.shared
     let analyticsManager: FBAnalyticsManager
@@ -27,6 +28,10 @@ final class SnippetsViewModel: ObservableObject {
     /// каждой перерисовке — читать базу на каждый вызов слишком дорого.
     /// Обновляется после переключения и при изменениях из iCloud.
     @Published private(set) var favoriteIDs: Set<String> = []
+
+    /// Кэш открытых сниппетов — по той же причине, что и favoriteIDs:
+    /// isNew вызывается на каждую строку при каждой перерисовке.
+    @Published private(set) var viewedIDs: Set<String> = []
 
     // MARK: - Filters (AppStorage — сохраняются между запусками)
     /// Сортировка по умолчанию — от новых к старым: так список выглядел
@@ -61,13 +66,16 @@ final class SnippetsViewModel: ObservableObject {
     // MARK: - Init
     init(
         favoritesStore: SnippetFavoritesStoreProtocol? = nil,
+        viewedStore: SnippetViewedStoreProtocol? = nil,
         cloudChangeObserver: CloudChangeObserving? = nil,
         services: AppServiceDependencies
     ) {
         self.favoritesStore = favoritesStore
+        self.viewedStore = viewedStore
         self.cloudChangeObserver = cloudChangeObserver
         self.analyticsManager = services.analyticsManager
         refreshFavorites()
+        refreshViewed()
         restoreFilters()
         setupSubscriptions()
         setupSubscriptionForChangesInCloud()
@@ -90,15 +98,34 @@ final class SnippetsViewModel: ObservableObject {
         favoriteIDs = favoritesStore?.getSnippetFavoriteIDs() ?? []
     }
 
+    // MARK: - Viewed (new snippets)
+    /// Сниппет новый, пока пользователь его не открыл.
+    func isNew(_ snippet: CodeSnippet) -> Bool {
+        !viewedIDs.contains(snippet.id)
+    }
+
+    /// Отмечает сниппет открытым; уже открытый не трогает хранилище.
+    func markViewed(_ snippet: CodeSnippet) {
+        guard let viewedStore, isNew(snippet) else { return }
+        viewedStore.markSnippetViewed(snippet.id)
+        refreshViewed()
+    }
+
+    /// Перечитывает открытые сниппеты из хранилища в кэш `viewedIDs`.
+    func refreshViewed() {
+        viewedIDs = viewedStore?.getSnippetViewedIDs() ?? []
+    }
+
     // MARK: - CloudKit Sync
     /// Отметки, поставленные на другом устройстве, приходят через iCloud —
     /// без этой подписки кэш избранного оставался бы устаревшим до перезапуска.
     private func setupSubscriptionForChangesInCloud() {
-        // Избранное хранится в AppSyncState.
+        // Избранное и открытые сниппеты хранятся в AppSyncState.
         cloudChangeObserver?.changes
             .filter { $0.contains(.appSyncState) }
             .sink { [weak self] _ in
                 self?.refreshFavorites()
+                self?.refreshViewed()
             }
             .store(in: &cancellables)
     }

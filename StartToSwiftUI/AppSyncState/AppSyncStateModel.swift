@@ -37,6 +37,15 @@ final class AppSyncState {
         set { snippetFavoriteIDsRaw = newValue.joined(separator: ",") }
     }
 
+    // Открытые пользователем сниппеты: сниппет, которого здесь нет, считается
+    // новым и мерцает в списке. Хранится так же, как избранное, — строкой
+    // через запятую, с тем же ограничением на запятую в ID.
+    var snippetViewedIDsRaw: String = ""
+    var snippetViewedIDs: [String] {
+        get { snippetViewedIDsRaw.isEmpty ? [] : snippetViewedIDsRaw.components(separatedBy: ",") }
+        set { snippetViewedIDsRaw = newValue.joined(separator: ",") }
+    }
+
     // For internal purposes:
     // - cleanupDuplicateAppStates()
     // - getOrCreateAppState()

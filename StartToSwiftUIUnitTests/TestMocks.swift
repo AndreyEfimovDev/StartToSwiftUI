@@ -55,6 +55,18 @@ final class MockAppSyncStateManager: AppSyncStateManagerProtocol {
     }
 }
 
+// MARK: - Mock: SnippetViewedStore
+final class MockSnippetViewedStore: SnippetViewedStoreProtocol {
+    var viewedIDs: Set<String> = []
+    var markedIDs: [String] = []
+
+    func getSnippetViewedIDs() -> Set<String> { viewedIDs }
+    func markSnippetViewed(_ id: String) {
+        markedIDs.append(id)
+        viewedIDs.insert(id)
+    }
+}
+
 // MARK: - Mock: SnippetFavoritesStore
 final class MockSnippetFavoritesStore: SnippetFavoritesStoreProtocol {
     var favoriteIDs: Set<String> = []
