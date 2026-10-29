@@ -17,6 +17,10 @@ struct SnippetsHomeView: View {
 
     private let hapticManager = HapticManager.shared
 
+    /// Тот же ключ, что у постов (PostsViewModel.shimmerWaveEnabled), —
+    /// один тумблер в Preferences на мерцание всего нового контента.
+    @AppStorage("shimmerWaveEnabled") private var shimmerWaveEnabled = true
+
     // MARK: - Splash vars
     private var splashTheme: Splash.Theme {
         .midnight(withFont: .init(size: 13))
@@ -91,6 +95,7 @@ struct SnippetsHomeView: View {
                 SnippetRowView(snippet: snippet, isFavorite: snippetvm.isFavorite(snippet))
                     .id(snippet.id)
                     .background(.black.opacity(0.001))
+                    .shimmerWave(enabled: shimmerWaveEnabled && snippetvm.isNew(snippet))
                     .onTapGesture { handleTap(on: snippet) }
                     .swipeActions(edge: .leading, allowsFullSwipe: true) {
                         leadingSwipeActions(for: snippet)
@@ -118,6 +123,7 @@ struct SnippetsHomeView: View {
             SnippetRowView(snippet: snippet, isFavorite: snippetvm.isFavorite(snippet))
                 .id(snippet.id)
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .shimmerWave(enabled: shimmerWaveEnabled && snippetvm.isNew(snippet))
                 .swipeActions(edge: .leading, allowsFullSwipe: true) {
                     leadingSwipeActions(for: snippet)
                 }

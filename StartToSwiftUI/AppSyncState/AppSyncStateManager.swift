@@ -150,6 +150,12 @@ class AppSyncStateManager: AppSyncStateManagerProtocol {
             .flatMap { $0.snippetFavoriteIDs }
         let uniqueFavorites = Array(Set(mergedFavorites)) // remove duplicates
         primaryState.snippetFavoriteIDs = uniqueFavorites // collect all id from unique favorites
+
+        // Открытые сниппеты — тоже объединение: открытый хоть на одном
+        // устройстве сниппет не должен снова стать новым.
+        let mergedViewed = sortedStates
+            .flatMap { $0.snippetViewedIDs }
+        primaryState.snippetViewedIDs = Array(Set(mergedViewed))
         
         log("  Combined data:", level: .info)
         
@@ -250,6 +256,24 @@ extension AppSyncStateManager: SnippetFavoritesStoreProtocol {
         } else {
             appState.snippetFavoriteIDs.append(id)
         }
+        saveContext()
+    }
+}
+
+// MARK: - Methods for Viewed Snippets
+extension AppSyncStateManager: SnippetViewedStoreProtocol {
+
+    func getSnippetViewedIDs() -> Set<String> {
+        let appState = getOrCreateAppState()
+        return Set(appState.snippetViewedIDs)
+    }
+
+    /// Уже открытый сниппет не сохраняется повторно — иначе каждое
+    /// открытие деталей давало бы лишнюю запись и синк через iCloud.
+    func markSnippetViewed(_ id: String) {
+        let appState = getOrCreateAppState()
+        guard !appState.snippetViewedIDs.contains(id) else { return }
+        appState.snippetViewedIDs.append(id)
         saveContext()
     }
 }

@@ -40,6 +40,9 @@ struct SnippetDetailsView: View {
             .sheet(isPresented: $showCodeSheet) { codeSheet }
             .onAppear {
                 snippetvm.analyticsManager.logScreen(name: "SnippetDetailsView_\(snippet.id)")
+                // На iPad деталь пересоздаётся при смене выбора (.id в StartView),
+                // так что onAppear срабатывает на каждый открытый сниппет.
+                snippetvm.markViewed(snippet)
             }
             .navigationTitle(snippet.id)
             .navigationBarTitleDisplayMode(.inline)

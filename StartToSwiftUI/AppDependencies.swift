@@ -67,6 +67,7 @@ struct AppDependencies {
             ),
             snippetsViewModel: SnippetsViewModel(
                 favoritesStore: stateManager,
+                viewedStore: stateManager,
                 cloudChangeObserver: cloudChangeObserver,
                 services: services
             ),

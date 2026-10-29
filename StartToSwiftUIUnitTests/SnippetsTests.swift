@@ -22,6 +22,7 @@ import CoreData
 
   Filtering & sorting (pure functions) — iOS version, favourite, search, combined, sort options
   ViewModel filters — default sort, reset, persistence, favourite filter reacts to toggle, random
+  Viewed (new snippets) — mock store: isNew, markViewed, no double write, iCloud change; real store: persist, merge duplicates
 */
 
 @MainActor
@@ -324,6 +325,7 @@ final class SnippetsTests: XCTestCase {
         let container = try await Self.sharedFavouritesContainer.value
         let stateManager = AppSyncStateManager(modelContext: container.mainContext)
         stateManager.getOrCreateAppState().snippetFavoriteIDs = []
+        stateManager.getOrCreateAppState().snippetViewedIDs = []
         return stateManager
     }
 
@@ -424,6 +426,108 @@ final class SnippetsTests: XCTestCase {
         observer.sendChange([.post, .notice])
 
         XCTAssertFalse(testVM.isFavorite(snippet))
+    }
+
+    // MARK: - SnippetsViewModel — Viewed (mock store)
+
+    func test_viewed_unopenedSnippet_isNew() {
+        let testVM = SnippetsViewModel(viewedStore: MockSnippetViewedStore(), services: .make())
+        XCTAssertTrue(testVM.isNew(SnippetsRepository.a001))
+    }
+
+    func test_viewed_init_loadsViewedFromStore() {
+        let store = MockSnippetViewedStore()
+        store.viewedIDs = [SnippetsRepository.a001.id]
+
+        let testVM = SnippetsViewModel(viewedStore: store, services: .make())
+
+        XCTAssertFalse(testVM.isNew(SnippetsRepository.a001))
+        XCTAssertTrue(testVM.isNew(SnippetsRepository.a002))
+    }
+
+    func test_viewed_markViewed_snippetIsNoLongerNew() {
+        let store = MockSnippetViewedStore()
+        let testVM = SnippetsViewModel(viewedStore: store, services: .make())
+        let snippet = SnippetsRepository.a001
+
+        testVM.markViewed(snippet)
+
+        XCTAssertFalse(testVM.isNew(snippet))
+        XCTAssertEqual(store.markedIDs, [snippet.id])
+    }
+
+    /// Повторное открытие не пишет в хранилище — лишняя запись ушла бы в iCloud.
+    func test_viewed_markViewedTwice_writesOnce() {
+        let store = MockSnippetViewedStore()
+        let testVM = SnippetsViewModel(viewedStore: store, services: .make())
+        let snippet = SnippetsRepository.a001
+
+        testVM.markViewed(snippet)
+        testVM.markViewed(snippet)
+
+        XCTAssertEqual(store.markedIDs, [snippet.id])
+    }
+
+    /// Без хранилища (превью) все сниппеты новые, отметка — no-op.
+    func test_viewed_withoutStore_allNewAndMarkIsNoOp() {
+        let snippet = SnippetsRepository.a001
+
+        vm.markViewed(snippet)
+
+        XCTAssertTrue(vm.isNew(snippet))
+    }
+
+    /// Сниппет, открытый на другом устройстве, перестаёт быть новым
+    /// после изменения AppSyncState из iCloud.
+    func test_viewed_appSyncStateChange_refreshesViewed() {
+        let store = MockSnippetViewedStore()
+        let observer = MockCloudChangeObserver()
+        let testVM = SnippetsViewModel(viewedStore: store, cloudChangeObserver: observer, services: .make())
+        let snippet = SnippetsRepository.a001
+        store.viewedIDs = [snippet.id]
+
+        observer.sendChange([.appSyncState])
+
+        XCTAssertFalse(testVM.isNew(snippet))
+    }
+
+    func test_viewed_otherEntityChange_doesNotRefreshViewed() {
+        let store = MockSnippetViewedStore()
+        let observer = MockCloudChangeObserver()
+        let testVM = SnippetsViewModel(viewedStore: store, cloudChangeObserver: observer, services: .make())
+        let snippet = SnippetsRepository.a001
+        store.viewedIDs = [snippet.id]
+
+        observer.sendChange([.post, .notice])
+
+        XCTAssertTrue(testVM.isNew(snippet))
+    }
+
+    // MARK: - Viewed store (AppSyncStateManager)
+
+    func test_viewedStore_markSnippetViewed_persistsOnce() async throws {
+        let store = try await makeFavoritesStore()
+
+        store.markSnippetViewed("A001")
+        store.markSnippetViewed("A001")
+
+        XCTAssertEqual(store.getOrCreateAppState().snippetViewedIDs, ["A001"])
+        XCTAssertEqual(store.getSnippetViewedIDs(), ["A001"])
+    }
+
+    /// Дубли AppSyncState (например, после синка двух устройств) сливаются
+    /// с объединением открытых сниппетов — открытый где-либо не станет новым.
+    func test_viewedStore_mergeDuplicates_unionsViewedIDs() async throws {
+        let store = try await makeFavoritesStore()
+        let container = try await Self.sharedFavouritesContainer.value
+        store.getOrCreateAppState().snippetViewedIDs = ["A001"]
+        let duplicate = AppSyncState()
+        duplicate.snippetViewedIDs = ["B007"]
+        container.mainContext.insert(duplicate)
+
+        XCTAssertEqual(store.getSnippetViewedIDs(), ["A001", "B007"])
+        let states = try container.mainContext.fetch(FetchDescriptor<AppSyncState>())
+        XCTAssertEqual(states.count, 1, "дубль должен быть удалён")
     }
 
     // MARK: - SnippetsViewModel — Favorites Integration
