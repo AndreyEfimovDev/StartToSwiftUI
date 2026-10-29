@@ -29,7 +29,7 @@ struct WhatsNews {
                 News(
                     title: "Improved",
                     newsText: """
-                    - Code Snippets - filters by iOS version and favourites, plus sort order (Newest, Oldest, Original, Random)
+                    - Code Snippets - filters by iOS version and favourites, plus sort order (Newest - default, Oldest, Original, Random)
                     - Code Snippets - new snippets are highlighted with a shimmer wave until you open them, synced across your devices
                     """
                 )
