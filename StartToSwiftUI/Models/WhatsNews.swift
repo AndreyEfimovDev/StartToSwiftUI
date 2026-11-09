@@ -11,6 +11,18 @@ struct WhatsNews {
 #warning("Add upated info before deployment to App Store")
     static let releases: [Release] = [
         Release(
+            release: "Release 1.9.1(15)",
+            news: [
+                News(
+                    title: "Fixed",
+                    newsText: """
+                    - Security update for Firebase (Cloud Firestore)
+                    """
+                )
+            ]
+        ),
+
+        Release(
             release: "Release 1.9.0(14)",
             news: [
                 News(
